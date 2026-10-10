@@ -33,6 +33,7 @@ interface Enrollment {
   departmentRemarks?: string;
   financeRemarks?: string;
   salesUserId?: string;
+  rejectedBySalesAdmin?: boolean;
   receiptUrl?: string;
   statusHistory: StatusHistoryEntry[];
   program: { name: string; code: string; courseType: string; feeStructures?: any[] };
@@ -161,8 +162,11 @@ export function SalesStudentPipelinePanel() {
   // so tell them apart: Finance sets financeRemarks, Sales Admin leaves a note.
   const isSalesAdminRejection = (e?: Enrollment) => {
     if (!e || e.status !== 'rejected' || e.financeRemarks) return false;
-    const last = (e.statusHistory || [])[(e.statusHistory || []).length - 1];
-    return !!last?.note && last.note.startsWith('Sales Admin rejected');
+    if (typeof e.rejectedBySalesAdmin === 'boolean') return e.rejectedBySalesAdmin;
+    const raw: any = e.statusHistory;
+    const list: any[] = Array.isArray(raw) ? raw : (raw && typeof raw === 'object' ? Object.values(raw) : []);
+    const last = list[list.length - 1];
+    return !!last?.note && String(last.note).startsWith('Sales Admin rejected');
   };
   const rejectedByLabel = (e?: Enrollment) => isSalesAdminRejection(e) ? 'Rejected by Sales Admin' : e?.financeRemarks ? 'Rejected by Finance' : 'Rejected';
   const statusCfg = (status: string, e?: Enrollment) => status === 'rejected'

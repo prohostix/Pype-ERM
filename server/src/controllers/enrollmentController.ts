@@ -275,7 +275,8 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
   // Operations rejection of an older application) goes to Operations as before.
   const org = await prisma.organization.findUnique({ where: { id: enrollment.organizationId } });
   const flowEnabled = (org?.metadata as any)?.enrollmentApprovalFlow === 'sales_admin_approval';
-  const history = Array.isArray(enrollment.statusHistory) ? (enrollment.statusHistory as any[]) : [];
+  const rawHist: any = enrollment.statusHistory;
+  const history: any[] = Array.isArray(rawHist) ? rawHist : (rawHist && typeof rawHist === 'object' ? Object.values(rawHist) : []);
   const wentThroughSalesAdmin = history.some((h: any) =>
     h?.status === 'sales_admin_review' || String(h?.note || '').startsWith('Sales Admin rejected')
   );
@@ -304,9 +305,7 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
       documents: student.documents ? (student.documents as any) : [],
       photo: student.photo,
       ...(isPhotoUpdated ? { photoStatus: 'pending' } : {}),
-      statusHistory: {
-        push: historyEntry
-      }
+      statusHistory: [...history, historyEntry] as any,
     }
   });
 

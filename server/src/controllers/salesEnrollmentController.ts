@@ -328,7 +328,8 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
     rejected: enrollments.filter((e: any) => e.status === 'rejected').length,
   };
 
-  res.status(200).json({ success: true, count: enrollments.length, summary, data: enrollments });
+  const data = enrollments.map((e: any) => ({ ...e, rejectedBySalesAdmin: isSalesAdminRejected(e) }));
+  res.status(200).json({ success: true, count: enrollments.length, summary, data });
 });
 
 // ─── Ops: Approve → finance_review (sales-led flow) ──────────────────────────
@@ -871,15 +872,14 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     where: { id },
     data: {
       status: newStatus,
-      statusHistory: {
-        push: {
-          status: newStatus,
-          actorId: salesUserId,
-          actorName: req.user.name,
-          timestamp: now.toISOString(),
-          note: note,
-        }
-      }
+      statusHistory: appendHistory(updatedEnrollment.statusHistory, {
+        status: newStatus,
+        actorId: salesUserId,
+        actorName: req.user.name,
+        actorRole: req.user.role,
+        timestamp: now.toISOString(),
+        note: note,
+      }) as any,
     }
   });
 
@@ -1000,10 +1000,16 @@ export const resubmitPaymentReceipt = asyncHandler(async (req: AuthRequest, res:
 
 // True when the application was rejected by a Sales Admin (Finance rejections
 // share the "rejected" status but always carry financeRemarks).
+// statusHistory is a plain JSON column. Some older code saved entries with
+// Prisma's list-only `push`, which stored {"push": {...}} instead of a list, so
+// accept either shape when reading and always write a real array.
+const historyList = (raw: any): any[] =>
+  Array.isArray(raw) ? raw : (raw && typeof raw === 'object' ? Object.values(raw) : []);
+const appendHistory = (raw: any, entry: any): any[] => [...historyList(raw), entry];
+
 const isSalesAdminRejected = (e: any): boolean => {
   if (e?.status !== 'rejected' || e?.financeRemarks) return false;
-  const raw = e?.statusHistory;
-  const hist: any[] = Array.isArray(raw) ? raw : (raw && typeof raw === 'object' ? Object.values(raw) : []);
+  const hist = historyList(e?.statusHistory);
   const last = hist[hist.length - 1];
   return String(last?.note || '').startsWith('Sales Admin rejected');
 };
@@ -1086,15 +1092,14 @@ export const approveBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Re
     where: { id: req.params.id },
     data: {
       status: 'document_review',
-      statusHistory: {
-        push: {
-          status: 'document_review',
-          actorId: req.user.id,
-          actorName: req.user.name,
-          timestamp: new Date().toISOString(),
-          note: 'Sales Admin approved application and forwarded to Operations.'
-        }
-      }
+      statusHistory: appendHistory(enrollment.statusHistory, {
+        status: 'document_review',
+        actorId: req.user.id,
+        actorName: req.user.name,
+        actorRole: req.user.role,
+        timestamp: new Date().toISOString(),
+        note: 'Sales Admin approved application and forwarded to Operations.'
+      }) as any,
     }
   });
   res.json({ success: true, data: updated, message: 'Application approved' });
@@ -1112,16 +1117,14 @@ export const rejectBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Res
     data: {
       status: 'rejected',
       departmentRemarks: remarks,
-      statusHistory: {
-        push: {
-          status: 'rejected',
-          actorId: req.user.id,
-          actorName: req.user.name,
-          actorRole: req.user.role,
-          timestamp: new Date().toISOString(),
-          note: `Sales Admin rejected: ${remarks || 'No remarks'}`
-        }
-      }
+      statusHistory: appendHistory(enrollment.statusHistory, {
+        status: 'rejected',
+        actorId: req.user.id,
+        actorName: req.user.name,
+        actorRole: req.user.role,
+        timestamp: new Date().toISOString(),
+        note: `Sales Admin rejected: ${remarks || 'No remarks'}`
+      }) as any,
     }
   });
   res.json({ success: true, data: updated, message: 'Application rejected' });
