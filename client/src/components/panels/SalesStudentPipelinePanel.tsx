@@ -32,6 +32,8 @@ interface Enrollment {
   enrolledAt?: string;
   departmentRemarks?: string;
   financeRemarks?: string;
+  salesUserId?: string;
+  receiptUrl?: string;
   statusHistory: StatusHistoryEntry[];
   program: { name: string; code: string; courseType: string; feeStructures?: any[] };
   studyCenter: { name: string; code: string };
@@ -61,7 +63,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.
   finance_review: { label: 'Finance Review', color: 'bg-blue-100 text-blue-700 border-blue-200', icon: <Clock className="w-3 h-3" /> },
   enrolled: { label: 'Enrolled', color: 'bg-green-100 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
   ops_rejected: { label: 'Rejected by Ops', color: 'bg-red-100 text-red-700 border-red-200', icon: <XCircle className="w-3 h-3" /> },
-  rejected: { label: 'Rejected by Finance', color: 'bg-red-100 text-red-700 border-red-200', icon: <XCircle className="w-3 h-3" /> },
+  rejected: { label: 'Rejected (Finance / Sales Admin)', color: 'bg-red-100 text-red-700 border-red-200', icon: <XCircle className="w-3 h-3" /> },
   submitted: { label: 'Submitted', color: 'bg-muted text-muted-foreground', icon: <Clock className="w-3 h-3" /> },
 };
 
@@ -93,6 +95,15 @@ export function SalesStudentPipelinePanel() {
   const [verifyingStudent, setVerifyingStudent] = useState<Enrollment | null>(null);
   const [verifyForm, setVerifyForm] = useState<any>({});
   const [isVerifying, setIsVerifying] = useState(false);
+
+  // Receipt-only re-upload after a Finance rejection (nothing else is editable)
+  const [receiptTarget, setReceiptTarget] = useState<Enrollment | null>(null);
+  const [newReceiptUrl, setNewReceiptUrl] = useState('');
+  const [uploadingReceipt, setUploadingReceipt] = useState(false);
+  const [submittingReceipt, setSubmittingReceipt] = useState(false);
+
+  const canReuploadReceipt = (e: Enrollment) =>
+    e.status === 'rejected' && !!e.financeRemarks && !!user?.id && e.salesUserId === user.id;
 
   const openVerifyDialog = (enrollment: Enrollment) => {
     setVerifyingStudent(enrollment);
@@ -146,7 +157,17 @@ export function SalesStudentPipelinePanel() {
     ).values()
   );
 
-  const statusCfg = (status: string) => STATUS_CONFIG[status] || { label: status.replace(/_/g, ' '), color: 'bg-muted text-muted-foreground', icon: <Clock className="w-3 h-3" /> };
+  // A Sales Admin rejection is stored with status "rejected" (same as Finance),
+  // so tell them apart: Finance sets financeRemarks, Sales Admin leaves a note.
+  const isSalesAdminRejection = (e?: Enrollment) => {
+    if (!e || e.status !== 'rejected' || e.financeRemarks) return false;
+    const last = (e.statusHistory || [])[(e.statusHistory || []).length - 1];
+    return !!last?.note && last.note.startsWith('Sales Admin rejected');
+  };
+  const rejectedByLabel = (e?: Enrollment) => isSalesAdminRejection(e) ? 'Rejected by Sales Admin' : e?.financeRemarks ? 'Rejected by Finance' : 'Rejected';
+  const statusCfg = (status: string, e?: Enrollment) => status === 'rejected'
+    ? { label: rejectedByLabel(e), color: 'bg-red-100 text-red-700 border-red-200', icon: <XCircle className="w-3 h-3" /> }
+    : STATUS_CONFIG[status] || { label: status.replace(/_/g, ' '), color: 'bg-muted text-muted-foreground', icon: <Clock className="w-3 h-3" /> };
 
   return (
     <div className="space-y-6">
@@ -198,7 +219,7 @@ export function SalesStudentPipelinePanel() {
             { key: 'document_review', label: 'Ops Review', color: 'text-yellow-600' },
             { key: 'finance_review', label: 'Finance', color: 'text-blue-600' },
             { key: 'enrolled', label: 'Enrolled', color: 'text-green-600' },
-            { key: 'ops_rejected', label: 'Ops/Fin. Rejected', color: 'text-red-600' },
+            { key: 'ops_rejected', label: 'Rejected', color: 'text-red-600' },
           ].map(({ key, label, color }) => (
             <button
               key={key}
@@ -272,7 +293,7 @@ export function SalesStudentPipelinePanel() {
       ) : (
         <div className="space-y-3">
           {filtered.map(e => {
-            const cfg = statusCfg(e.status);
+            const cfg = statusCfg(e.status, e);
             const isExpanded = expandedId === e.id;
             const history: StatusHistoryEntry[] = Array.isArray(e.statusHistory) ? e.statusHistory : [];
 
@@ -367,6 +388,25 @@ export function SalesStudentPipelinePanel() {
                           </a>
                         </Button>
                       </div>
+
+                      {/* Finance rejected the payment: only the receipt can be re-uploaded */}
+                      {canReuploadReceipt(e) && (
+                        <div className="mt-4">
+                          <Button
+                            variant="default"
+                            size="sm"
+                            className="bg-rose-600 hover:bg-rose-700"
+                            onClick={(evt) => {
+                              evt.stopPropagation();
+                              setNewReceiptUrl('');
+                              setReceiptTarget(e);
+                            }}
+                          >
+                            <UploadCloud className="w-4 h-4 mr-1.5" />
+                            Re-upload Payment Receipt
+                          </Button>
+                        </div>
+                      )}
 
                       {/* Verification Action */}
                       {(() => {
@@ -472,6 +512,81 @@ export function SalesStudentPipelinePanel() {
           })}
         </div>
       )}
+
+      {/* Re-upload payment receipt (after Finance rejection) */}
+      <Dialog open={!!receiptTarget} onOpenChange={(open) => { if (!open) setReceiptTarget(null); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Re-upload Payment Receipt</DialogTitle>
+          </DialogHeader>
+          {receiptTarget && (
+            <div className="space-y-4 py-2">
+              <div className="text-sm">
+                <p className="font-medium">{receiptTarget.studentName}</p>
+                <p className="text-muted-foreground">{receiptTarget.program?.name}</p>
+              </div>
+              <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                <p className="font-medium mb-0.5">Finance rejected this payment</p>
+                <p>{receiptTarget.financeRemarks}</p>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Only the payment receipt can be changed. All other details are locked.
+              </p>
+              <div className="space-y-1.5">
+                <Label>New Payment Receipt / Screenshot</Label>
+                <Input
+                  type="file"
+                  accept="image/*,application/pdf"
+                  disabled={uploadingReceipt}
+                  className="text-xs"
+                  onChange={async (ev) => {
+                    const file = ev.target.files?.[0];
+                    if (!file) return;
+                    setUploadingReceipt(true);
+                    const toastId = toast.loading('Uploading receipt...');
+                    try {
+                      const data = new FormData();
+                      data.append('file', file);
+                      const res = await api.post('/auth/upload', data, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                      });
+                      setNewReceiptUrl(res.data.url);
+                      toast.success('Receipt uploaded', { id: toastId });
+                    } catch (err) {
+                      toast.error('Failed to upload receipt', { id: toastId });
+                    } finally {
+                      setUploadingReceipt(false);
+                    }
+                  }}
+                />
+                {newReceiptUrl && <p className="text-xs text-green-600">New receipt ready to submit.</p>}
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setReceiptTarget(null)}>Cancel</Button>
+            <Button
+              disabled={!newReceiptUrl || uploadingReceipt || submittingReceipt}
+              onClick={async () => {
+                if (!receiptTarget) return;
+                setSubmittingReceipt(true);
+                try {
+                  await api.put(`/sales/student-applications/${receiptTarget.id}/resubmit-receipt`, { receiptUrl: newReceiptUrl });
+                  toast.success('Receipt re-uploaded and sent to Finance');
+                  setReceiptTarget(null);
+                  fetchPipeline();
+                } catch (e: any) {
+                  toast.error(e.response?.data?.message || 'Failed to re-upload receipt');
+                } finally {
+                  setSubmittingReceipt(false);
+                }
+              }}
+            >
+              {submittingReceipt ? 'Submitting...' : 'Submit to Finance'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Verification Dialog */}
       <Dialog open={verifyDialogOpen} onOpenChange={setVerifyDialogOpen}>

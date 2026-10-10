@@ -930,6 +930,72 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
   });
 });
 
+// ─── Sales: re-upload ONLY the payment receipt after Finance rejection ───────
+// Everything else on the application stays locked. Only the sales user who
+// created it can do this, and only while it sits in "rejected" with Finance's
+// remarks (a Finance rejection). It goes straight back to Finance review.
+export const resubmitPaymentReceipt = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id } = req.params;
+  const { receiptUrl } = req.body;
+
+  if (!receiptUrl || typeof receiptUrl !== 'string' || !receiptUrl.trim()) {
+    res.status(400).json({ success: false, message: 'Payment receipt is required.' });
+    return;
+  }
+
+  const enrollment = await prisma.enrollment.findUnique({ where: { id } });
+  if (!enrollment || enrollment.organizationId !== req.user.organizationId) {
+    res.status(404).json({ success: false, message: 'Enrollment not found' });
+    return;
+  }
+  if (!enrollment.salesUserId || enrollment.salesUserId !== req.user.id) {
+    res.status(403).json({ success: false, message: 'Only the sales user who created this application can re-upload its payment receipt.' });
+    return;
+  }
+  if (enrollment.status !== 'rejected' || !(enrollment as any).financeRemarks) {
+    res.status(409).json({ success: false, message: 'The payment receipt can only be re-uploaded after Finance has rejected the application.' });
+    return;
+  }
+
+  const now = new Date();
+  const history = Array.isArray(enrollment.statusHistory) ? [...(enrollment.statusHistory as any[])] : [];
+  history.push({
+    status: 'finance_review',
+    actorId: req.user.id,
+    actorName: req.user.name,
+    actorRole: req.user.role,
+    timestamp: now.toISOString(),
+    note: 'Payment receipt re-uploaded by Sales and sent back to Finance for verification.',
+  });
+
+  const updated = await prisma.enrollment.update({
+    where: { id },
+    data: { receiptUrl: receiptUrl.trim(), status: 'finance_review', statusHistory: history } as any,
+  });
+
+  try {
+    const financeAdmins = await prisma.user.findMany({
+      where: { organizationId: req.user.organizationId, role: { in: ['finance_admin', 'finance_sub_admin'] }, status: 'active' },
+      select: { id: true },
+    });
+    for (const admin of financeAdmins) {
+      await prisma.notification.create({
+        data: {
+          organizationId: req.user.organizationId,
+          userId: admin.id,
+          title: 'Payment Receipt Re-uploaded',
+          message: `${enrollment.studentName}'s payment receipt was re-uploaded by ${req.user.name}. Please verify the payment.`,
+          type: 'general',
+          priority: 'medium',
+          link: 'enrollments_finance',
+        },
+      });
+    }
+  } catch (_) { /* non-critical */ }
+
+  res.json({ success: true, message: 'Payment receipt re-uploaded and sent to Finance.', data: updated });
+});
+
 export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: Response) => {
   const baseWhere: any = {
     organizationId: req.user.organizationId,
@@ -1035,6 +1101,7 @@ export const rejectBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Res
           status: 'rejected',
           actorId: req.user.id,
           actorName: req.user.name,
+          actorRole: req.user.role,
           timestamp: new Date().toISOString(),
           note: `Sales Admin rejected: ${remarks || 'No remarks'}`
         }
