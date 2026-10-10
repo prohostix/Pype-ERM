@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Building2, TrendingUp, Users, BookOpen, MapPin, Target, Zap, ArrowUpRight } from 'lucide-react';
+import { Building2, TrendingUp, Users, BookOpen, MapPin, Target, Zap, ArrowUpRight, CheckCircle2, CalendarOff, ClipboardList, GraduationCap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -33,6 +33,12 @@ import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { BranchHierarchyPanel } from '@/components/panels/BranchHierarchyPanel';
 
+// Finance panels
+import { InvoicesPanel } from '@/components/panels/InvoicesPanel';
+import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
+import { ExpensesPanel } from '@/components/panels/ExpensesPanel';
+import { FinanceEnrollmentsPanel } from '@/components/panels/FinanceEnrollmentsPanel';
+
 export function getBranchManagerNavItems() {
   return [
     { id: '__branch_section', label: 'Branch Overview', isSection: true },
@@ -51,12 +57,19 @@ export function getBranchManagerNavItems() {
     { id: 'centers', label: 'Academic Partners' },
     { id: 'enrollment_review', label: 'Enrollment Review' },
     { id: 'sessions', label: 'Admission Sessions' },
+    { id: 'attendance', label: 'Team Attendance' },
+    { id: 'leaves', label: 'Leave Approvals' },
+    { id: '__finance_section', label: 'Finance', isSection: true },
+    { id: 'invoices', label: 'Invoices' },
+    { id: 'payments', label: 'Payments' },
+    { id: 'expenses', label: 'Expenses' },
+    { id: 'finance_enrollments', label: 'Finance Enrollments' },
     { id: '__shared_section', label: 'Management', isSection: true },
     { id: 'tasks', label: 'Tasks' },
     { id: 'announcements', label: 'Announcements' },
     { id: '__portal_section', label: 'My Portal', isSection: true },
     { id: 'my_leaves', label: 'My Leaves' },
-    { id: 'my_attendance', label: 'Attendance' },
+    { id: 'my_attendance', label: 'My Attendance' },
     { id: 'my_payslips', label: 'Pay Slips' },
     { id: 'holidays', label: 'Holidays' },
     { id: 'notice-board', label: 'Notice Board' },
@@ -120,6 +133,13 @@ export function ModernBranchManagerDashboard({ initialTab, onNavigate }: { initi
       case 'centers': return <StudyCentersPanel />;
       case 'enrollment_review': return <DeptEnrollmentReviewPanel />;
       case 'sessions': return <AdmissionSessionsPanel />;
+      case 'attendance': return <AttendancePanel />;
+      case 'leaves': return <LeavesPanel />;
+      // Finance
+      case 'invoices': return <InvoicesPanel />;
+      case 'payments': return <PaymentsPanel />;
+      case 'expenses': return <ExpensesPanel />;
+      case 'finance_enrollments': return <FinanceEnrollmentsPanel />;
       // Shared
       case 'tasks': return <TasksPanel />;
       case 'announcements': return <AnnouncementsPanel />;
@@ -171,12 +191,22 @@ function BranchOverview({ branch, metrics, leads, targets, loading, onNavigate }
         </Card>
       )}
 
-      {/* KPI row */}
+      {/* HR & Team KPI row */}
+      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Team & Attendance</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <BranchMetric title="Total Headcount" value={loading ? '...' : (metrics.totalEmployees || 0)} sub="Active in branch" icon={<Users className="w-4 h-4" />} color="primary" onClick={() => onNavigate('my_team')} />
+        <BranchMetric title="Present Today" value={loading ? '...' : (metrics.presentToday || 0)} sub="Checked in" icon={<CheckCircle2 className="w-4 h-4" />} color="success" onClick={() => onNavigate('attendance')} />
+        <BranchMetric title="On Leave" value={loading ? '...' : (metrics.onLeave || 0)} sub="Approved leave" icon={<CalendarOff className="w-4 h-4" />} color="warning" onClick={() => onNavigate('attendance')} />
+        <BranchMetric title="Pending Tasks" value={loading ? '...' : (metrics.pendingTasks || 0)} sub={metrics.overdueTasks ? `${metrics.overdueTasks} overdue` : 'on track'} icon={<ClipboardList className="w-4 h-4" />} color="info" onClick={() => onNavigate('tasks')} />
+      </div>
+
+      {/* Sales KPI row */}
+      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mt-6">Sales & Targets</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <BranchMetric title="Total Leads" value={loading ? '...' : totalLeads} sub={`${leads.filter((l:any) => l.status === 'new').length} new`} icon={<TrendingUp className="w-4 h-4" />} color="primary" onClick={() => onNavigate('leads')} />
         <BranchMetric title="Conversions" value={loading ? '...' : convertedLeads} sub={`${conversionRate}% rate`} icon={<Target className="w-4 h-4" />} color="success" onClick={() => onNavigate('leads')} />
         <BranchMetric title="Active Targets" value={loading ? '...' : activeTargets.length} sub="in progress" icon={<Zap className="w-4 h-4" />} color="warning" onClick={() => onNavigate('targets')} />
-        <BranchMetric title="Pending Tasks" value={loading ? '...' : (metrics.pendingTasks || 0)} sub={metrics.overdueTasks ? `${metrics.overdueTasks} overdue` : 'on track'} icon={<Users className="w-4 h-4" />} color="info" onClick={() => onNavigate('tasks')} />
+        <BranchMetric title="Students" value={loading ? '...' : (metrics.totalStudents || 0)} sub="Enrolled" icon={<GraduationCap className="w-4 h-4" />} color="info" onClick={() => onNavigate('students')} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

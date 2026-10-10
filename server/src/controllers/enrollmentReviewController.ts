@@ -25,12 +25,48 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
     status: statusFilter,
   };
 
+  // Enforce branch isolation
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    baseWhere.OR = [
+      { student: { branchId: req.user.branchId } },
+      { salesUser: { branchId: req.user.branchId } }
+    ];
+  }
+
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
 
     if (assignedIds.length > 0) {
+      delete baseWhere.OR;
+      delete baseWhere.student;
       baseWhere.salesUserId = { in: assignedIds };
+    }
+  } else if (req.user.role === 'ops_admin') {
+    if (req.user.branchId) {
+      const opsSubAdmins = await prisma.user.findMany({ 
+        where: { role: 'ops_sub_admin', organizationId: req.user.organizationId, branchId: req.user.branchId }, 
+        select: { assignedSalesUsers: true } 
+      });
+      
+      let assignedIds: string[] = [];
+      opsSubAdmins.forEach(sub => {
+        if (Array.isArray(sub.assignedSalesUsers)) {
+          assignedIds.push(...(sub.assignedSalesUsers as string[]));
+        }
+      });
+      
+      if (assignedIds.length > 0) {
+        const branchRestriction = baseWhere.OR || (baseWhere.student ? [{ student: baseWhere.student }] : []);
+        delete baseWhere.OR;
+        delete baseWhere.student;
+
+        baseWhere.OR = [
+          { salesUserId: { in: assignedIds } },
+          ...branchRestriction
+        ];
+      }
     }
   }
 
@@ -47,7 +83,28 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
     orderBy: { updatedAt: 'desc' },
   });
 
-  res.json({ success: true, count: enrollments.length, data: enrollments });
+  let enhancedEnrollments = enrollments;
+
+  if (['ops_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'].includes(req.user.role)) {
+    // Fetch all ops_sub_admins in the organization
+    const opsSubAdmins = await prisma.user.findMany({
+      where: { role: 'ops_sub_admin', organizationId: req.user.organizationId }
+    });
+
+    enhancedEnrollments = enrollments.map((e: any) => {
+      let assignedOpsSubAdminName = 'Unassigned';
+      if (e.salesUserId) {
+        const assignedSubAdmin = opsSubAdmins.find(sub => {
+          const assigned = Array.isArray(sub.assignedSalesUsers) ? sub.assignedSalesUsers as string[] : [];
+          return assigned.includes(e.salesUserId);
+        });
+        if (assignedSubAdmin) assignedOpsSubAdminName = assignedSubAdmin.name;
+      }
+      return { ...e, assignedOpsSubAdminName };
+    });
+  }
+
+  res.json({ success: true, count: enhancedEnrollments.length, data: enhancedEnrollments });
 });
 
 export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {

@@ -37,17 +37,18 @@ export const createOrganization = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const updateOrganization = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { enrollmentApprovalFlow, ...restData } = req.body;
+  const { enrollmentApprovalFlow, admissionPrefix, ...restData } = req.body;
   
   let updateData: any = { ...restData };
 
-  if (enrollmentApprovalFlow !== undefined) {
+  if (enrollmentApprovalFlow !== undefined || admissionPrefix !== undefined) {
     const existingOrg = await prisma.organization.findUnique({ where: { id: req.params.id } });
     const currentMetadata = (existingOrg?.metadata as any) || {};
-    updateData.metadata = {
-      ...currentMetadata,
-      enrollmentApprovalFlow
-    };
+    
+    if (enrollmentApprovalFlow !== undefined) currentMetadata.enrollmentApprovalFlow = enrollmentApprovalFlow;
+    if (admissionPrefix !== undefined) currentMetadata.admissionPrefix = admissionPrefix;
+
+    updateData.metadata = currentMetadata;
   }
 
   const organization = await prisma.organization.update({

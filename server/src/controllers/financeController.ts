@@ -11,9 +11,12 @@ export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) 
   if (req.query.studentId) where.studentId = req.query.studentId as string;
 
   // Branch-level isolation for invoices list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager', 'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
-    where.branchId = req.user.branchId;
+    where.OR = [
+      { student: { branchId: req.user.branchId } },
+      { studentId: null, centerId: null } // Fallback if some invoices are manually created
+    ];
   }
 
   const invoices = await prisma.invoice.findMany({
@@ -29,7 +32,21 @@ export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) 
 });
 export const getInvoice = asyncHandler(async (req: AuthRequest, res: Response) => {
   const invoice = await prisma.invoice.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId }
+    where: { id: req.params.id, organizationId: req.user.organizationId },
+    include: {
+      student: {
+        select: {
+          name: true,
+          email: true,
+          enrollmentNo: true,
+          program: { select: { name: true } },
+          university: { select: { name: true } }
+        }
+      },
+      center: { select: { name: true } },
+      organization: { select: { name: true, logo: true } },
+      payments: true
+    }
   });
   if (!invoice) {
     res.status(404).json({ success: false, message: 'Invoice not found' });
@@ -77,9 +94,14 @@ export const getPayments = asyncHandler(async (req: AuthRequest, res: Response) 
   const where: any = { organizationId: req.user.organizationId };
 
   // Branch-level isolation for payments list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager', 'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
-    where.branchId = req.user.branchId;
+    where.invoice = {
+      OR: [
+        { student: { branchId: req.user.branchId } },
+        { studentId: null, centerId: null }
+      ]
+    };
   }
 
   const payments = await prisma.paymentEntry.findMany({
@@ -280,9 +302,9 @@ export const deletePayment = asyncHandler(async (req: AuthRequest, res: Response
 export const getExpenses = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
   // Branch-level isolation
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager', 'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
-    where.branchId = req.user.branchId;
+    where.user = { branchId: req.user.branchId };
   }
   const expenses = await prisma.expenseClaim.findMany({ where });
   res.json({ success: true, count: expenses.length, data: expenses });
@@ -338,7 +360,7 @@ import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
   // Branch-level isolation
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager', 'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.branchId = req.user.branchId;
   }

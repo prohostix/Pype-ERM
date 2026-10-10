@@ -102,6 +102,7 @@ export function ModernOpsDashboard({ initialTab, onNavigate }: { initialTab?: st
       case 'email_notifications': return <EmailNotificationsPanel />;
 
       case 'tasks': return <TasksPanel />;
+      case 'leaves': return <LeavesPanel />;
 
       case 'student_report': return <StudentReportPanel />;
       case 'admission_report': return <AdmissionReportPanel />;
@@ -126,11 +127,12 @@ export function ModernOpsDashboard({ initialTab, onNavigate }: { initialTab?: st
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export function getOpsNavItems() {
-  return [
+export function getOpsNavItems(role?: string) {
+  const items = [
     { id: '__dashboard', label: 'Dashboard', isSection: true },
     { id: 'overview', label: 'Overview' },
     { id: 'team_permissions', label: 'Team Permissions' },
+
 
     { id: '__students', label: 'Students', isSection: true },
     { id: 'students', label: 'Student List' },
@@ -167,6 +169,7 @@ export function getOpsNavItems() {
 
     { id: '__tasks', label: 'Tasks', isSection: true },
     { id: 'tasks', label: 'My Tasks' },
+    { id: 'leaves', label: 'Leave Requests' },
     { id: 'meetings', label: 'Meetings' },
 
     { id: '__reports', label: 'Reports', isSection: true },
@@ -182,6 +185,12 @@ export function getOpsNavItems() {
     { id: 'holidays', label: 'Holidays' },
     { id: 'notice-board', label: 'Notice Board' },
   ];
+
+  if (role === 'ops_sub_admin') {
+    return items.filter(item => item.id !== 'team_permissions');
+  }
+
+  return items;
 }
 
 function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (tab: string) => void }) {

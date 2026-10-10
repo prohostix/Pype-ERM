@@ -140,12 +140,15 @@ export function BranchesPanel() {
   };
 
   const handleDelete = async (b: Branch) => {
-    if (!confirm(`Delete branch "${b.name}"? This will also remove its Sales and Operations departments.`)) return;
+    if (!confirm(`Delete branch "${b.name}"? This will also remove its associated departments.`)) return;
     try {
       await api.delete(`/org/branches/${b.id}`);
       toast.success('Branch deleted');
       fetchAll();
     } catch (e: any) {
+      if (e.isDeleteRequest) {
+        return;
+      }
       toast.error(e.response?.data?.message || 'Failed to delete branch');
     }
   };
@@ -154,7 +157,7 @@ export function BranchesPanel() {
   const openAssignManager = (b: Branch) => {
     setManagerTarget(b);
     setManagerUserId(b.branchManagerId?.id || '');
-    setSelectedDeptIds((b.additionalDeptIds || []).filter(Boolean).map(d => d.id));
+    setSelectedDeptIds((b.additionalDeptIds || []).filter(Boolean).map(d => typeof d === 'string' ? d : (d as any).id));
     setManagerDialog(true);
   };
 
@@ -179,7 +182,7 @@ export function BranchesPanel() {
   // ── Manage Departments (no manager change) ──
   const openManageDepts = (b: Branch) => {
     setDeptTarget(b);
-    setDeptSelection((b.additionalDeptIds || []).filter(Boolean).map(d => d.id));
+    setDeptSelection((b.additionalDeptIds || []).filter(Boolean).map(d => typeof d === 'string' ? d : (d as any).id));
     setDeptDialog(true);
   };
 

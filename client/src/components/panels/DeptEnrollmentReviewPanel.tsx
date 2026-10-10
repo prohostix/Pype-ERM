@@ -44,6 +44,8 @@ interface Enrollment {
   documents?: any[];
   photoStatus?: string;
   photo?: string;
+  salesUser?: { name: string };
+  assignedOpsSubAdminName?: string;
 }
 
 const STATUS_META: Record<string, { label: string; color: string }> = {
@@ -87,12 +89,16 @@ export function DeptEnrollmentReviewPanel() {
   const [filterBranch, setFilterBranch] = useState('');
   const [filterUniversity, setFilterUniversity] = useState('');
   const [filterBatch, setFilterBatch] = useState('');
+  const [filterSalesUser, setFilterSalesUser] = useState('');
+  const [filterSubAdmin, setFilterSubAdmin] = useState('');
   const [previewDoc, setPreviewDoc] = useState<{ url: string; index: number; type?: string; name?: string; status?: string } | null>(null);
 
   // unique lists from enrollments
   const branches = Array.from(new Set(enrollments.map(e => e?.studyCenter?.name).filter(Boolean))) as string[];
   const universities = Array.from(new Set(enrollments.map(e => e?.program?.university?.name).filter(Boolean))) as string[];
   const batches = Array.from(new Set(enrollments.map(e => e?.session?.name).filter(Boolean))) as string[];
+  const salesUsers = Array.from(new Set(enrollments.map(e => e?.salesUser?.name).filter(Boolean))) as string[];
+  const subAdmins = Array.from(new Set(enrollments.map(e => e?.assignedOpsSubAdminName).filter(Boolean))) as string[];
 
   const filteredEnrollments = enrollments.filter(e => {
     if (searchQuery) {
@@ -109,6 +115,8 @@ export function DeptEnrollmentReviewPanel() {
     if (filterBranch && e.studyCenter?.name !== filterBranch) return false;
     if (filterUniversity && e.program?.university?.name !== filterUniversity) return false;
     if (filterBatch && e.session?.name !== filterBatch) return false;
+    if (filterSalesUser && e.salesUser?.name !== filterSalesUser) return false;
+    if (filterSubAdmin && e.assignedOpsSubAdminName !== filterSubAdmin) return false;
 
     return true;
   });
@@ -277,6 +285,26 @@ export function DeptEnrollmentReviewPanel() {
             <option value="">Batch</option>
             {batches.map(b => <option key={b} value={b}>{b}</option>)}
           </select>
+          {salesUsers.length > 1 && (
+            <select
+              value={filterSalesUser}
+              onChange={(e) => setFilterSalesUser(e.target.value)}
+              className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm outline-none"
+            >
+              <option value="">Sales User</option>
+              {salesUsers.map(u => <option key={u} value={u}>{u}</option>)}
+            </select>
+          )}
+          {subAdmins.length > 1 && (
+            <select
+              value={filterSubAdmin}
+              onChange={(e) => setFilterSubAdmin(e.target.value)}
+              className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm outline-none"
+            >
+              <option value="">Sub Admin</option>
+              {subAdmins.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          )}
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -355,6 +383,12 @@ export function DeptEnrollmentReviewPanel() {
                           <span className="font-medium text-blue-600 flex items-center gap-0.5 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200/50"><User className="w-3 h-3" /> Sales: {e.salesUser.name}</span>
                         ) : (
                           <span className="font-medium text-slate-500 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200/50">Direct Enrollment</span>
+                        )}
+
+                        {e.assignedOpsSubAdminName && (
+                          <span className="font-medium text-purple-600 flex items-center gap-0.5 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200/50">
+                            <User className="w-3 h-3" /> Assigned To: {e.assignedOpsSubAdminName}
+                          </span>
                         )}
 
                         <span>{new Date(e.createdAt).toLocaleDateString('en-IN')}</span>

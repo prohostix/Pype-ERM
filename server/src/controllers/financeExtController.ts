@@ -109,15 +109,83 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       }
     });
     if (!invoice) { res.status(404).json({ success: false, message: 'Invoice not found' }); return; }
+
+    let overallProgramFee = invoice.total;
+    let overallPaid = invoice.payments.reduce((sum, p) => sum + p.amount, 0);
+    let universityFee = 0;
+
+    let actualStudentId = invoice.studentId;
+    let fallbackEnrollment: any = null;
+
+    if (!actualStudentId && invoice.payments.length > 0) {
+      const payment = invoice.payments[0];
+      const envPayment = await prisma.enrollmentPayment.findFirst({
+        where: { amount: payment.amount },
+        include: { enrollment: { include: { program: { include: { university: true } } } } }
+      });
+      if (envPayment && envPayment.enrollment) {
+        fallbackEnrollment = envPayment.enrollment;
+        if (fallbackEnrollment.studentId) {
+          actualStudentId = fallbackEnrollment.studentId;
+        }
+      }
+    }
+
+    let actualStudent: any = invoice.student;
+    if (actualStudentId && !actualStudent) {
+      actualStudent = await prisma.student.findUnique({ where: { id: actualStudentId }, include: { program: { include: { university: true } } } });
+    }
+
+    if (actualStudentId) {
+      const schedules = await prisma.paymentSchedule.findMany({ where: { studentId: actualStudentId } });
+      if (schedules.length > 0) {
+        overallProgramFee = schedules.reduce((acc, curr) => acc + curr.amount, 0);
+      }
+
+      const studentInvoices = await prisma.invoice.findMany({
+        where: { studentId: actualStudentId },
+        include: { payments: true }
+      });
+      overallPaid = studentInvoices.reduce((acc, inv) => acc + inv.payments.reduce((s, p) => s + p.amount, 0), 0);
+      
+      // If this invoice itself isn't linked to the student in DB yet, add its paid amount to the total
+      if (!invoice.studentId) {
+        overallPaid += invoice.payments.reduce((sum, p) => sum + p.amount, 0);
+      }
+    }
+
+    let targetProgramId = invoice.student?.programId || fallbackEnrollment?.programId;
+    if (targetProgramId) {
+      const feeStruct = await prisma.feeStructure.findFirst({
+        where: { programId: targetProgramId, organizationId: invoice.organizationId }
+      });
+      if (feeStruct) {
+        universityFee = feeStruct.universityFee || 0;
+      }
+    }
+
+    let studentName = actualStudent?.name || fallbackEnrollment?.studentName || 'N/A';
+    let studentDob = actualStudent?.dob || null;
+    let studentEmail = actualStudent?.email || fallbackEnrollment?.studentEmail || '';
+    let enrollmentNo = actualStudent?.enrollmentNo || fallbackEnrollment?.enrollmentNumber || '';
+    let admissionNo = actualStudent?.admissionNo || '';
+    
+    let activeProgram = actualStudent?.program || fallbackEnrollment?.program;
+    let activeSpecialisation = actualStudent?.specialisation || fallbackEnrollment?.specialisation;
+    let programName = activeProgram?.name ? `${activeProgram.name}${activeSpecialisation ? ` - ${activeSpecialisation}` : ''}` : '';
+    let universityName = activeProgram?.university?.name || '';
+
     data = {
       type: 'invoice',
       receiptNo: `RCP-${invoice.invoiceNo}`,
       date: invoice.paidAt || invoice.updatedAt,
-      studentName: invoice.student?.name || 'N/A',
-      studentEmail: invoice.student?.email || '',
-      enrollmentNo: invoice.student?.enrollmentNo || '',
-      program: invoice.student?.program?.name ? `${invoice.student.program.name}${invoice.student.specialisation ? ` - ${invoice.student.specialisation}` : ''}` : '',
-      university: invoice.student?.program?.university?.name || '',
+      studentName,
+      studentDob,
+      studentEmail,
+      enrollmentNo,
+      admissionNo,
+      program: programName,
+      university: universityName,
       center: invoice.center?.name || 'Direct',
       items: invoice.items,
       amount: invoice.amount,
@@ -126,7 +194,11 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       status: invoice.status,
       payments: invoice.payments,
       organization: invoice.organization,
-      balanceDue: Math.max(0, invoice.total - invoice.payments.reduce((sum, p) => sum + p.amount, 0))
+      balanceDue: Math.max(0, invoice.total - invoice.payments.reduce((sum, p) => sum + p.amount, 0)),
+      overallProgramFee,
+      overallPaid,
+      overallBalance: Math.max(0, overallProgramFee - overallPaid),
+      universityFee
     };
   } else if (paymentId) {
     const payment = await prisma.paymentEntry.findUnique({ where: { id: paymentId } });

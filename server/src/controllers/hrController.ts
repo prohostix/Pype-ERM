@@ -20,12 +20,21 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
   } else if (isHR) {
     // HR admins see all leaves except center_admin
     where.user = { role: { not: 'center_admin' } };
+    if (branchId) {
+      where.user.branchId = branchId;
+    }
   } else if (DEPT_MANAGER_ROLES.includes(role)) {
     // Department managers see leaves in their department plus their own leaves
     where.OR = [
       { employeeId: userId },
-      { departmentId: departmentId || '' }
+      { department: { managerId: userId } },
+      { user: { reportingTo: userId } },
+      { user: { department: { managerId: userId } } },
+      { user: { subDepartment: { managerId: userId } } }
     ];
+    if (departmentId) {
+      where.OR.push({ departmentId });
+    }
   } else if (branchId) {
     // Branch managers see leaves of employees in their branch plus their own leaves
     where.OR = [

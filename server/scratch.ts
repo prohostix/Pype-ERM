@@ -1,31 +1,15 @@
-import prisma from './src/lib/prisma.js';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 async function main() {
-  const users = await prisma.user.findMany({ where: { role: 'center_admin' }, take: 1 });
-  if (!users.length) return console.log("No center admin found");
-  const user = users[0];
-  console.log("Center Admin:", user.id, user.studyCenterId);
-
-  const allocations = await prisma.programAllocation.findMany({
-    where: { centerId: user.studyCenterId!, organizationId: user.organizationId, isActive: true },
-    include: { program: { include: { university: true } } }
+  const user = await prisma.user.findUnique({
+    where: { email: 'salessub@xyz.com' },
+    include: {
+      branch: true,
+      department: true
+    }
   });
-  console.log("Allocations:", allocations.length);
-  
-  const allocatedUniversityIds = Array.from(new Set(allocations.map(a => a.program?.universityId).filter(Boolean)));
-  console.log("Allocated Uni IDs:", allocatedUniversityIds);
-  
-  const universities = await prisma.university.findMany({
-    where: { organizationId: user.organizationId, id: { in: allocatedUniversityIds } },
-  });
-  
-  console.log("Filtered Universities length:", universities.length);
-  
-  const allUniversities = await prisma.university.findMany({
-    where: { organizationId: user.organizationId }
-  });
-  
-  console.log("All Universities length:", allUniversities.length);
+  console.log(JSON.stringify(user, null, 2));
 }
 
 main().catch(console.error).finally(() => prisma.$disconnect());

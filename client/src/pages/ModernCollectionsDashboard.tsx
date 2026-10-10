@@ -52,7 +52,8 @@ export function ModernCollectionsDashboard({ initialTab, onNavigate }: { initial
       case 'collections': return <CollectionsPanel />;
       case 'students': return <StudentsPanel isSalesMode={true} />; // Read/search view for collection follow-ups
       case 'tasks': return <TasksPanel />;
-      case 'my_leaves': return <LeavesPanel />;
+      case 'leaves': return <LeavesPanel />;
+      case 'my_leaves': return <LeavesPanel isMyPortal />;
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'holidays': return <HolidaysPanel />;
       case 'notice-board': return <NoticeBoardPanel />;
@@ -74,6 +75,7 @@ export function getCollectionsNavItems() {
     { id: 'collections', label: 'Collection Panel' },
     { id: 'students', label: 'Student Follow-up' },
     { id: 'tasks', label: 'Tasks' },
+    { id: 'leaves', label: 'Leave Approvals' },
     { id: 'my_leaves', label: 'My Leaves' },
     { id: 'my_attendance', label: 'Attendance' },
     { id: 'holidays', label: 'Holiday List' },

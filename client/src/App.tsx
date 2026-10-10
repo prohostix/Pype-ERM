@@ -468,7 +468,7 @@ function App() {
     }
 
     if (user.role === 'ops_admin' || user.role === 'ops_sub_admin') {
-      return getOpsNavItems();
+      return getOpsNavItems(user.role);
     }
 
     if (['finance_admin', 'finance_sub_admin', 'finance'].includes(user.role)) {
@@ -534,7 +534,7 @@ function App() {
         if (deptType) {
           if (isSubDeptManager) {
             switch (deptType) {
-              case 'operations': return getOpsNavItems();
+              case 'operations': return getOpsNavItems(user.role);
               case 'hr': return getHRNavItems();
               case 'finance': return getFinanceNavItems();
               case 'sales': return getSalesNavItems(true);

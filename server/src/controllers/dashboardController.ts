@@ -109,20 +109,30 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     }).catch(() => 0);
   }
 
-  if (['hr_admin', 'hr_sub_admin', 'ceo', 'org_admin'].includes(role)) {
+  if (['hr_admin', 'hr_sub_admin', 'ceo', 'org_admin', 'branch_manager'].includes(role)) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const endOfDay = new Date(today);
     endOfDay.setHours(23, 59, 59, 999);
 
-    if (metrics.totalEmployees === undefined) {
-      metrics.totalEmployees = await prisma.user.count({
-        where: { organizationId: orgId as string, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student'] } }, status: { not: 'resigned' } }
-      });
+    const userWhere: any = { organizationId: orgId as string, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student'] } }, status: { not: 'resigned' } };
+    const attendanceWhere: any = { organizationId: orgId as string, date: { gte: today, lte: endOfDay } };
+    const leaveWhere: any = { organizationId: orgId as string, status: 'pending' };
+    const profileWhere: any = { organizationId: orgId as string, probationEndDate: { lte: today }, confirmationDate: null, user: { status: 'active' } };
+
+    if (['hr_admin', 'hr_sub_admin', 'branch_manager'].includes(role) && req.user.branchId) {
+      userWhere.branchId = req.user.branchId;
+      attendanceWhere.user = { branchId: req.user.branchId };
+      leaveWhere.user = { branchId: req.user.branchId };
+      profileWhere.user = { ...profileWhere.user, branchId: req.user.branchId };
     }
 
-    metrics.presentToday = await prisma.attendance.count({ where: { organizationId: orgId as string, date: { gte: today, lte: endOfDay }, status: { in: ['present', 'late'] } } });
-    metrics.onLeave = await prisma.attendance.count({ where: { organizationId: orgId as string, date: { gte: today, lte: endOfDay }, status: 'leave' } });
+    if (metrics.totalEmployees === undefined) {
+      metrics.totalEmployees = await prisma.user.count({ where: userWhere });
+    }
+
+    metrics.presentToday = await prisma.attendance.count({ where: { ...attendanceWhere, status: { in: ['present', 'late'] } } });
+    metrics.onLeave = await prisma.attendance.count({ where: { ...attendanceWhere, status: 'leave' } });
     
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const todayName = days[today.getDay()];
@@ -155,16 +165,11 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
       metrics.absentToday = Math.max(0, metrics.totalEmployees - metrics.presentToday - metrics.onLeave);
     }
     
-    metrics.pendingLeaves = await prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'pending' } });
+    metrics.pendingLeaves = await prisma.leaveRequest.count({ where: leaveWhere });
     metrics.totalVacancies = await prisma.vacancy.count({ where: { organizationId: orgId, status: 'open' } });
 
     metrics.probationEnded = await prisma.employeeProfile.count({
-      where: {
-        organizationId: orgId as string,
-        probationEndDate: { lte: today },
-        confirmationDate: null,
-        user: { status: 'active' }
-      }
+      where: profileWhere
     });
   }
 

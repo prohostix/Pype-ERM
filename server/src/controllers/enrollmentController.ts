@@ -93,8 +93,48 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
     data.studyCenterId = req.user.studyCenterId;
   }
   
-  if (studentId) {
-    data.studentId = studentId;
+  let currentStudentId = studentId;
+
+  if (!currentStudentId) {
+    // Generate Admission Number for Provisional
+    const org = await prisma.organization.findUnique({ where: { id: req.user.organizationId } });
+    let admissionPrefix = 'ADM';
+    if (org?.metadata && (org.metadata as any).admissionPrefix) {
+      admissionPrefix = (org.metadata as any).admissionPrefix;
+    } else if (org?.name) {
+      admissionPrefix = org.name.substring(0, 3).toUpperCase();
+    }
+    
+    let isUnique = false;
+    let newAdmissionNo = '';
+    while (!isUnique) {
+      const randomStr = Math.floor(100000 + Math.random() * 900000).toString();
+      newAdmissionNo = `${admissionPrefix}-${randomStr}`;
+      const existing = await prisma.student.findFirst({ where: { admissionNo: newAdmissionNo } });
+      if (!existing) isUnique = true;
+    }
+
+    const program = await prisma.program.findUnique({ where: { id: rest.programId } });
+
+    const newStudent = await prisma.student.create({
+      data: {
+        name: rest.studentName,
+        email: rest.studentEmail,
+        phone: rest.studentPhone,
+        address: rest.studentAddress || 'Pending',
+        organizationId: req.user.organizationId,
+        centerId: req.user.studyCenterId || null,
+        universityId: program?.universityId || null,
+        programId: rest.programId,
+        sessionId: rest.sessionId,
+        admissionNo: newAdmissionNo,
+        status: rest.isProvisional ? 'provisional' : 'document_review'
+      }
+    });
+    currentStudentId = newStudent.id;
+    data.studentId = currentStudentId;
+  } else {
+    data.studentId = currentStudentId;
   }
 
   // Automatically attach salesUserId if the user is a staff member creating the enrollment
@@ -107,9 +147,26 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
   if (studentId) {
     const student = await prisma.student.findUnique({ where: { id: studentId } });
     if (student && !student.admissionNo) {
+      const org = await prisma.organization.findUnique({ where: { id: req.user.organizationId } });
+      let admissionPrefix = 'ADM';
+      if (org?.metadata && (org.metadata as any).admissionPrefix) {
+        admissionPrefix = (org.metadata as any).admissionPrefix;
+      } else if (org?.name) {
+        admissionPrefix = org.name.substring(0, 3).toUpperCase();
+      }
+      
+      let isUnique = false;
+      let newAdmissionNo = '';
+      while (!isUnique) {
+        const randomStr = Math.floor(100000 + Math.random() * 900000).toString();
+        newAdmissionNo = `${admissionPrefix}-${randomStr}`;
+        const existing = await prisma.student.findFirst({ where: { admissionNo: newAdmissionNo } });
+        if (!existing) isUnique = true;
+      }
+      
       await prisma.student.update({
         where: { id: studentId },
-        data: { admissionNo: `ADM${Date.now().toString().slice(-6)}` }
+        data: { admissionNo: newAdmissionNo }
       });
     }
   }
@@ -264,6 +321,27 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     });
   } else {
     isPhotoUpdated = !!photo;
+    
+    // Generate Admission Number
+    const org = await prisma.organization.findUnique({ where: { id: req.user.organizationId } });
+    let admissionPrefix = 'ADM';
+    if (org?.metadata && (org.metadata as any).admissionPrefix) {
+      admissionPrefix = (org.metadata as any).admissionPrefix;
+    } else if (org?.name) {
+      admissionPrefix = org.name.substring(0, 3).toUpperCase();
+    }
+    
+    let isUnique = false;
+    let newAdmissionNo = '';
+    while (!isUnique) {
+      const randomStr = Math.floor(100000 + Math.random() * 900000).toString();
+      newAdmissionNo = `${admissionPrefix}-${randomStr}`;
+      const existing = await prisma.student.findFirst({ where: { admissionNo: newAdmissionNo } });
+      if (!existing) isUnique = true;
+    }
+    
+    studentData.admissionNo = newAdmissionNo;
+
     student = await prisma.student.create({
       data: studentData
     });

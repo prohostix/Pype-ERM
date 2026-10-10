@@ -27,7 +27,7 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
   }
 
   // Branch-level isolation for students list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager', 'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.branchId = req.user.branchId;
   }
@@ -37,7 +37,7 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
     let allowedIds = [req.user.id];
     
     if (['sales_admin', 'sales_sub_admin'].includes(req.user.role)) {
-      const targetRoles = req.user.role === 'sales_admin' ? ['sales_sub_admin', 'sales', 'employee'] : ['sales', 'employee'];
+      const targetRoles = (req.user.role === 'sales_admin' ? ['sales_sub_admin', 'sales', 'employee'] : ['sales', 'employee']) as any;
       const subordinates = await prisma.user.findMany({
         where: { role: { in: targetRoles as any }, organizationId: req.user.organizationId },
         select: { id: true }
@@ -57,15 +57,51 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers as string[] : [];
     
     if (assignedIds.length > 0) {
-      const opsSubAdminFilter: any = { OR: [{ enrolledBy: { in: assignedIds } }, { referredBy: { in: assignedIds } }] };
+      delete where.branchId;
+
+      const opsSubAdminFilter: any = { 
+        OR: [
+          { enrolledBy: { in: assignedIds } }, 
+          { referredBy: { in: assignedIds } }
+        ] 
+      };
       if (!where.AND) where.AND = [];
       where.AND.push(opsSubAdminFilter);
+    }
+  } else if (req.user.role === 'ops_admin') {
+    if (req.user.branchId) {
+      const opsSubAdmins = await prisma.user.findMany({
+        where: { role: 'ops_sub_admin', organizationId: req.user.organizationId, branchId: req.user.branchId },
+        select: { assignedSalesUsers: true }
+      });
+      
+      let assignedIds: string[] = [];
+      opsSubAdmins.forEach(sub => {
+        if (Array.isArray(sub.assignedSalesUsers)) {
+          assignedIds.push(...(sub.assignedSalesUsers as string[]));
+        }
+      });
+      
+      if (assignedIds.length > 0) {
+        const branchRestriction = where.branchId;
+        delete where.branchId;
+
+        const opsAdminFilter: any = {
+          OR: [
+            { enrolledBy: { in: assignedIds } },
+            { referredBy: { in: assignedIds } },
+            { branchId: branchRestriction }
+          ]
+        };
+        if (!where.AND) where.AND = [];
+        where.AND.push(opsAdminFilter);
+      }
     }
   }
 
   const students = await prisma.student.findMany({
     where,
-    include: { enrollments: { include: { payment: true } }, program: true, center: true, university: true, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } } },
+    include: { enrolledByUser: true, enrollments: { include: { payment: true } }, program: true, center: true, university: true, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } } },
     orderBy: { createdAt: 'desc' }
   });
   res.status(200).json({ success: true, count: students.length, data: students });
@@ -73,11 +109,56 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
 
 export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
   let whereClause: any = { id: req.params.id };
+  // Enforce branch isolation for students list
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    whereClause.branchId = req.user.branchId;
+  }
+
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
-    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers as string[] : [];
+    
     if (assignedIds.length > 0) {
-      whereClause.OR = [{ enrolledBy: { in: assignedIds } }, { referredBy: { in: assignedIds } }];
+      delete whereClause.branchId;
+
+      const opsSubAdminFilter: any = { 
+        OR: [
+          { enrolledBy: { in: assignedIds } }, 
+          { referredBy: { in: assignedIds } }
+        ] 
+      };
+      if (!whereClause.AND) whereClause.AND = [];
+      whereClause.AND.push(opsSubAdminFilter);
+    }
+  } else if (req.user.role === 'ops_admin') {
+    if (req.user.branchId) {
+      const opsSubAdmins = await prisma.user.findMany({
+        where: { role: 'ops_sub_admin', organizationId: req.user.organizationId, branchId: req.user.branchId },
+        select: { assignedSalesUsers: true }
+      });
+      
+      let assignedIds: string[] = [];
+      opsSubAdmins.forEach(sub => {
+        if (Array.isArray(sub.assignedSalesUsers)) {
+          assignedIds.push(...(sub.assignedSalesUsers as string[]));
+        }
+      });
+      
+      if (assignedIds.length > 0) {
+        const branchRestriction = whereClause.branchId;
+        delete whereClause.branchId;
+
+        const opsAdminFilter: any = {
+          OR: [
+            { enrolledBy: { in: assignedIds } },
+            { referredBy: { in: assignedIds } },
+            { branchId: branchRestriction }
+          ]
+        };
+        if (!whereClause.AND) whereClause.AND = [];
+        whereClause.AND.push(opsAdminFilter);
+      }
     }
   }
 
@@ -249,7 +330,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : null,
       universityId: universityId || null,
       centerId: (resolvedCenterId && typeof resolvedCenterId === 'string' && resolvedCenterId.trim() !== '') ? resolvedCenterId : null,
-      branchId: (branchId && branchId.trim() !== '') ? branchId : null,
+      branchId: (branchId && branchId.trim() !== '') ? branchId : (req.user.branchId || null),
       organizationId: req.user.organizationId,
       credentials: { email, password: studentUser.password ? '(Existing Account)' : defaultPassword },
       admissionProgress: { 

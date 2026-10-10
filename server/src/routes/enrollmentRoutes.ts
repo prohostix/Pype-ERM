@@ -44,10 +44,10 @@ router.post('/:id/receipt', authorize('center_admin', 'sales_admin', 'sales_sub_
 router.put('/:id/provisional-complete', authorize('center_admin', 'org_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), completeProvisionalEnrollment);
 
 // Dept/Sub-dept manager review routes
-router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), getDeptReviewEnrollments);
-router.put('/review/:id/approve', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), approveDeptEnrollment);
-router.put('/review/:id/reject', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), rejectDeptEnrollment);
-router.put('/review/:id/documents/:docIndex/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), updateEnrollmentDocumentStatus);
-router.put('/review/:id/photo/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), updateEnrollmentPhotoStatus);
+router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), getDeptReviewEnrollments);
+router.put('/review/:id/approve', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), approveDeptEnrollment);
+router.put('/review/:id/reject', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), rejectDeptEnrollment);
+router.put('/review/:id/documents/:docIndex/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), updateEnrollmentDocumentStatus);
+router.put('/review/:id/photo/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), updateEnrollmentPhotoStatus);
 
 export default router;

@@ -108,8 +108,8 @@ export function ModernFinanceDashboard({ initialTab, onNavigate }: { initialTab?
       case 'collection_report': return <CollectionReportPanel />;
       case 'fee_pending_report': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Fee Pending Report Coming Soon</div>;
       case 'incentive_report': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Incentive Report Coming Soon</div>;
-      
-      case 'my_leave_request': return <LeavesPanel />;
+      case 'leaves': return <LeavesPanel />;
+      case 'my_leave_request': return <LeavesPanel isMyPortal />;
       case 'my_attendance': return <AttendancePanel isMyPortal={true} />;
       case 'notice_board': return <NoticeBoardPanel />;
       case 'pay_slips': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Pay Slips Coming Soon</div>;
@@ -152,6 +152,7 @@ export function getFinanceNavItems() {
     { id: 'payroll', label: 'Payroll' },
     { id: 'payroll_batches', label: 'Payroll Batches' },
     { id: 'salary_approval', label: 'Salary Approval' },
+    { id: 'leaves', label: 'Leave Approvals' },
     { id: 'payroll_history', label: 'Payroll History' },
     { id: 'incentive_approval', label: 'Incentive Approval' },
     

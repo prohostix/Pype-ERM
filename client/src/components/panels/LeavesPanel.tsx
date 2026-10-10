@@ -91,7 +91,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
   const isBranchManager = Boolean((user as any)?.isBranchManager);
   const isDeptManager = DEPT_MANAGER_ROLES.includes(role) || isBranchManager;
   const isHR = role === 'hr_admin' || role === 'hr_sub_admin';
-  const isEmployee = !isDeptManager && !isHR && role !== 'superadmin' && role !== 'org_admin' && role !== 'ceo';
+  const isEmployee = !isDeptManager && !isHR && role !== 'superadmin' && role !== 'org_admin' && role !== 'ceo' && role !== 'general_manager';
 
   const currentMonthStr = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
   const [selectedMonth, setSelectedMonth] = useState(currentMonthStr);
@@ -378,7 +378,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                 const cfg = STATUS_CONFIG[leave.status] || STATUS_CONFIG.pending;
                 const isExpanded = expanded === leave.id;
                 const isOwner = leave.employeeId === userId;
-                const isExecutive = role === 'ceo' || (role === 'general_manager' || role === 'branch_manager');
+                const isExecutive = role === 'ceo' || role === 'superadmin' || role === 'org_admin' || role === 'general_manager' || role === 'branch_manager';
                 const canDeptAct = !isOwner && ((isDeptManager && leave.status === 'pending') || (isHR && leave.status === 'pending'));
                 const canHRAct = !isOwner && ((isHR && leave.status === 'dept_approved') || (isExecutive && (leave.status === 'pending' || leave.status === 'dept_approved')));
                 const canWithdrawAct = !isOwner && leave.status === 'withdraw_pending' && (isHR || isExecutive);
@@ -479,9 +479,9 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                               {leave.hrRemarks && (
                                 <div className="space-y-1">
                                   <div className="flex items-center gap-2">
-                                    <span className="font-semibold text-foreground/80 text-xs uppercase tracking-wider">
-                                      {leave.hrApprover?.role === 'ceo' ? 'CEO' : leave.hrApprover?.(role === 'general_manager' || role === 'branch_manager') ? 'General Manager' : 'HR Admin'}
-                                    </span>
+                                      <span className="font-semibold text-foreground/80 text-xs uppercase tracking-wider">
+                                        {leave.hrApprover?.role === 'ceo' ? 'CEO' : (leave.hrApprover?.role === 'general_manager' || leave.hrApprover?.role === 'branch_manager') ? 'General Manager' : 'HR Admin'}
+                                      </span>
                                     {leave.hrApprover && (
                                       <span className="text-xs text-muted-foreground">— {leave.hrApprover.name}</span>
                                     )}

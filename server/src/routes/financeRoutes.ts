@@ -147,8 +147,8 @@ router.put('/wallet-topups/:id/approve', authorize('finance_admin', 'finance_sub
 router.put('/wallet-topups/:id/reject', authorize('finance_admin', 'finance_sub_admin'), rejectWalletTopUp);
 
 // Finance Enrollment Review
-router.get('/enrollments/all', authorize('finance_admin', 'finance_sub_admin'), getAllEnrollments);
-router.get('/enrollments', authorize('finance_admin', 'finance_sub_admin'), getFinanceEnrollments);
+router.get('/enrollments/all', authorize('finance_admin', 'finance_sub_admin', 'branch_manager', 'ceo', 'general_manager', 'org_admin'), getAllEnrollments);
+router.get('/enrollments', authorize('finance_admin', 'finance_sub_admin', 'branch_manager', 'ceo', 'general_manager', 'org_admin'), getFinanceEnrollments);
 router.put('/enrollments/:id/approve', authorize('finance_admin', 'finance_sub_admin'), approveFinanceEnrollment);
 router.put('/enrollments/:id/reject', authorize('finance_admin', 'finance_sub_admin'), rejectFinanceEnrollment);
 router.post('/enrollments/:id/verify-receipt', authorize('finance_admin', 'finance_sub_admin'), verifyReceipt);

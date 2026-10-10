@@ -7,7 +7,7 @@ import {
   deleteUser,
   getSubordinates,
   updateUserPermissions,
-  updateSalesAssignment,
+  updateSalesAssignment, updateOpsAssignment,
 } from '../controllers/userController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
@@ -36,6 +36,9 @@ router
 
 router
   .route('/:id/sales-assignment')
-  .put(authorize('superadmin', 'org_admin', 'ops_admin'), updateSalesAssignment);
+  .put(authorize('superadmin', 'org_admin', 'ops_admin', 'sales_admin'), updateSalesAssignment);
 
+router
+  .route('/:id/ops-assignment')
+  .put(authorize('superadmin', 'org_admin', 'finance_admin'), updateOpsAssignment);
 export default router;

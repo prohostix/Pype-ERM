@@ -83,7 +83,7 @@ export function Login() {
       {/* Top Left Logo Area */}
       <div className="absolute top-6 left-6 sm:top-8 sm:left-10 flex items-center gap-3">
         <div className="flex items-center justify-center">
-          <img src="/pype-logo.png" alt="Pype ERM" className="h-10 w-auto" />
+          <img src="/erm-logo-green.png" alt="Pype ERM" className="h-16 w-auto" />
         </div>
         <div className="text-xl tracking-tight flex gap-1.5 items-center mt-1">
           <span className="font-semibold text-slate-500">pype</span>

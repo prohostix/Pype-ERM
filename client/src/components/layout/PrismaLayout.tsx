@@ -248,7 +248,7 @@ export function PrismaLayout({
         <div className="h-[80px] flex items-center px-5 gap-3 relative z-10 border-b border-white/5">
           {/* Platform Branding */}
           <div className="flex flex-col items-center justify-center flex-shrink-0 min-w-[50px]">
-            <img src="/pype-logo.png" alt="Pype ERM Logo" className="h-10 w-auto opacity-90" style={{ filter: 'brightness(0) invert(1)' }} />
+            <img src="/erm-logo-white.png" alt="Pype ERM Logo" className="h-14 w-auto opacity-90" />
             {/* <span className="text-[8px] font-black tracking-[0.15em] text-slate-400 mt-1 uppercase">Pype ERM</span> */}
           </div>
 

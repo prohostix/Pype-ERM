@@ -30,6 +30,11 @@ export default function TeamPermissionsPanel() {
   const [assignedSalesForm, setAssignedSalesForm] = useState<string[]>([]);
   const [loadingSales, setLoadingSales] = useState(false);
 
+  const [opsDialogOpen, setOpsDialogOpen] = useState(false);
+  const [allOpsUsers, setAllOpsUsers] = useState<any[]>([]);
+  const [assignedOpsForm, setAssignedOpsForm] = useState<string[]>([]);
+  const [loadingOps, setLoadingOps] = useState(false);
+
   useEffect(() => {
     fetchSubordinates();
   }, []);
@@ -54,8 +59,10 @@ export default function TeamPermissionsPanel() {
       setLoadingSales(true);
       try {
         const res = await api.get('/users');
-        const salesRoles = ['sales_admin', 'sales_sub_admin', 'sales', 'employee'];
-        const filtered = (res.data.data || []).filter((user: any) => salesRoles.includes(user.role));
+        const filtered = (res.data.data || []).filter((user: any) => 
+          ['sales_admin', 'sales_sub_admin', 'sales'].includes(user.role) || 
+          (user.role === 'employee' && user.department?.type === 'sales')
+        );
         setAllSalesUsers(filtered);
       } catch (e: any) {
         toast.error('Failed to load sales users');
@@ -86,6 +93,48 @@ export default function TeamPermissionsPanel() {
     }
   };
 
+  const handleManageOps = async (u: any) => {
+    setSelectedUser(u);
+    setAssignedOpsForm(u.assignedOpsUsers || []);
+    setOpsDialogOpen(true);
+    if (allOpsUsers.length === 0) {
+      setLoadingOps(true);
+      try {
+        const res = await api.get('/users');
+        const filtered = (res.data.data || []).filter((user: any) => 
+          ['ops_admin', 'ops_sub_admin'].includes(user.role) || 
+          (user.role === 'employee' && user.department?.type === 'operations')
+        );
+        setAllOpsUsers(filtered);
+      } catch (e: any) {
+        toast.error('Failed to load operations users');
+      } finally {
+        setLoadingOps(false);
+      }
+    }
+  };
+
+  const toggleOpsUser = (userId: string) => {
+    setAssignedOpsForm(prev => 
+      prev.includes(userId) ? prev.filter(id => id !== userId) : [...prev, userId]
+    );
+  };
+
+  const handleSaveOps = async () => {
+    if (!selectedUser) return;
+    setSaving(true);
+    try {
+      await api.put(`/users/${selectedUser.id}/ops-assignment`, { assignedOpsUsers: assignedOpsForm });
+      toast.success("Operations assignments updated successfully");
+      setOpsDialogOpen(false);
+      fetchSubordinates();
+    } catch (e: any) {
+      toast.error(e.response?.data?.message || 'Failed to update assignments');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const getAvailablePermissions = (u: any) => {
     let items: any[] = [];
     const role = u.role || '';
@@ -93,7 +142,7 @@ export default function TeamPermissionsPanel() {
     const isSubDeptManager = Boolean(u.subDepartmentId);
 
     if (['ops_admin', 'ops_sub_admin'].includes(role)) {
-      items = getOpsNavItems();
+      items = getOpsNavItems(role);
     } else if (['finance_admin', 'finance_sub_admin', 'finance'].includes(role)) {
       items = getFinanceNavItems();
     } else if (role === 'hr_admin' || role === 'hr_sub_admin') {
@@ -117,7 +166,7 @@ export default function TeamPermissionsPanel() {
       if (deptType) {
         if (isSubDeptManager) {
           switch (deptType) {
-            case 'operations': items = getOpsNavItems(); break;
+            case 'operations': items = getOpsNavItems(role); break;
             case 'hr': items = getHRNavItems(); break;
             case 'finance': items = getFinanceNavItems(); break;
             case 'collections': items = getCollectionsNavItems(); break;
@@ -230,6 +279,10 @@ export default function TeamPermissionsPanel() {
     s.email?.toLowerCase().includes(search.toLowerCase())
   );
 
+  const availableSalesUsers = allSalesUsers.filter(user => {
+    return user.branchId === selectedUser?.branchId;
+  });
+
   return (
     <div className="space-y-6">
       <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-md rounded-2xl overflow-hidden bg-card">
@@ -301,9 +354,14 @@ export default function TeamPermissionsPanel() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2 flex-wrap xl:justify-end opacity-60 group-hover:opacity-100 transition-opacity mt-4 xl:mt-0 pt-4 xl:pt-0 border-t border-border/50 xl:border-none">
-                      {emp.role === 'ops_sub_admin' && (
+                      {['ops_admin', 'ops_sub_admin'].includes(emp.role) && (
                         <Button variant="outline" size="sm" onClick={() => handleManageSales(emp)} className="rounded-full shadow-sm px-4">
                           <Users className="w-4 h-4 mr-1.5 text-blue-500" /> Assign Sales Users
+                        </Button>
+                      )}
+                      {['finance_admin', 'finance_sub_admin'].includes(emp.role) && (
+                        <Button variant="outline" size="sm" onClick={() => handleManageOps(emp)} className="rounded-full shadow-sm px-4">
+                          <Users className="w-4 h-4 mr-1.5 text-purple-500" /> Assign Operations Users
                         </Button>
                       )}
                       <Button variant="outline" size="sm" onClick={() => handleManage(emp)} className="rounded-full shadow-sm px-4">
@@ -402,10 +460,10 @@ export default function TeamPermissionsPanel() {
             <div className="space-y-2 mt-4 h-64 overflow-y-auto pr-2">
               {loadingSales ? (
                 <p className="text-center text-sm text-muted-foreground py-4">Loading sales personnel...</p>
-              ) : allSalesUsers.length === 0 ? (
+              ) : availableSalesUsers.length === 0 ? (
                 <p className="text-center text-sm text-muted-foreground py-4">No sales users found.</p>
               ) : (
-                allSalesUsers.map(user => (
+                availableSalesUsers.map(user => (
                   <div key={user.id} className="flex items-center space-x-3 p-3 rounded-xl hover:bg-muted/50 transition-colors border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/60">
                     <Checkbox 
                       id={`sales-${user.id}`} 
@@ -416,7 +474,15 @@ export default function TeamPermissionsPanel() {
                       <Label htmlFor={`sales-${user.id}`} className="cursor-pointer font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                         {user.name}
                       </Label>
-                      <p className="text-xs text-muted-foreground mt-1 capitalize">{user.role.replace(/_/g, ' ')} • {user.email}</p>
+                      <p className="text-xs text-muted-foreground mt-1 capitalize">
+                        {user.role.replace(/_/g, ' ')} • {user.branch?.name ? (
+                          user.branch.name
+                        ) : user.department?.name ? (
+                          `${user.department.name} (Dept)`
+                        ) : (
+                          <span className="text-yellow-600 dark:text-yellow-500 font-medium">No Branch</span>
+                        )} • <span className="lowercase">{user.email}</span>
+                      </p>
                     </div>
                   </div>
                 ))
@@ -426,6 +492,74 @@ export default function TeamPermissionsPanel() {
             <DialogFooter className="mt-6 pt-4 border-t border-border/40">
               <Button variant="outline" className="rounded-full px-5" onClick={() => setSalesDialogOpen(false)} disabled={saving}>Cancel</Button>
               <Button className="rounded-full px-5 shadow-sm bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSaveSales} disabled={saving}>
+                {saving ? 'Saving...' : 'Save Assignments'}
+              </Button>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Ops Assignment Dialog */}
+      <Dialog open={opsDialogOpen} onOpenChange={setOpsDialogOpen}>
+        <DialogContent className="sm:max-w-[500px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
+          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-purple-500/10 rounded-xl">
+                <Users className="w-5 h-5 text-purple-600 dark:text-purple-500" />
+              </div>
+              <div className="text-left">
+                <DialogTitle className="text-xl font-bold">Assign Operations Users</DialogTitle>
+                <DialogDescription className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                  Assign operations personnel exclusively to {selectedUser?.name}.
+                </DialogDescription>
+              </div>
+            </div>
+          </DialogHeader>
+          
+          <div className="p-6">
+            <div className="bg-purple-50/50 dark:bg-purple-900/10 p-3 rounded-xl flex items-start gap-3 border border-purple-100 dark:border-purple-900/50 mb-4">
+              <AlertCircle className="w-5 h-5 text-purple-500 shrink-0 mt-0.5" />
+              <div className="text-sm">
+                <p className="font-semibold text-purple-700 dark:text-purple-400">Data Visibility</p>
+                <p className="text-purple-600/80 dark:text-purple-300/80 mt-0.5 text-xs">They will only see records from these assigned users or unassigned records.</p>
+              </div>
+            </div>
+
+            <div className="space-y-2 mt-4 h-64 overflow-y-auto pr-2">
+              {loadingOps ? (
+                <p className="text-center text-sm text-muted-foreground py-4">Loading operations personnel...</p>
+              ) : allOpsUsers.length === 0 ? (
+                <p className="text-center text-sm text-muted-foreground py-4">No operations users found.</p>
+              ) : (
+                allOpsUsers.map(user => (
+                  <div key={user.id} className="flex items-center space-x-3 p-3 rounded-xl hover:bg-muted/50 transition-colors border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/60">
+                    <Checkbox 
+                      id={`ops-${user.id}`} 
+                      checked={assignedOpsForm.includes(user.id)}
+                      onCheckedChange={() => toggleOpsUser(user.id)}
+                    />
+                    <div className="flex-1">
+                      <Label htmlFor={`ops-${user.id}`} className="cursor-pointer font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        {user.name}
+                      </Label>
+                      <p className="text-xs text-muted-foreground mt-1 capitalize">
+                        {user.role.replace(/_/g, ' ')} • {user.branch?.name ? (
+                          user.branch.name
+                        ) : user.department?.name ? (
+                          `${user.department.name} (Dept)`
+                        ) : (
+                          <span className="text-yellow-600 dark:text-yellow-500 font-medium">No Branch</span>
+                        )} • <span className="lowercase">{user.email}</span>
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <DialogFooter className="mt-6 pt-4 border-t border-border/40">
+              <Button variant="outline" className="rounded-full px-5" onClick={() => setOpsDialogOpen(false)} disabled={saving}>Cancel</Button>
+              <Button className="rounded-full px-5 shadow-sm bg-purple-600 hover:bg-purple-700 text-white" onClick={handleSaveOps} disabled={saving}>
                 {saving ? 'Saving...' : 'Save Assignments'}
               </Button>
             </DialogFooter>

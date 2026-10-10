@@ -154,6 +154,10 @@ export function DepartmentsPanel() {
       setIsDeleteDialogOpen(false);
       fetchData();
     } catch (error: any) {
+      if (error.isDeleteRequest) {
+        setIsDeleteDialogOpen(false);
+        return;
+      }
       toast.error(error.response?.data?.message || 'Failed to delete department');
       console.error(error);
     }

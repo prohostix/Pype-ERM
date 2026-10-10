@@ -365,6 +365,7 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
       <div className="flex items-center justify-between h-16 px-4 border-b border-slate-800">
         {!isCollapsed && (
           <div className="flex items-center gap-2 overflow-hidden">
+            <img src="/erm-logo-white.png" alt="ERM Logo" className="h-12 w-auto object-contain" />
           </div>
         )}
         <Button

@@ -39,9 +39,30 @@ export const getUniversities = asyncHandler(async (req: AuthRequest, res: Respon
       include: { allowedBranches: true }
     });
   }
-  const mapped = universities.map(u => ({
-    ...u,
-    allowedBranchIds: u.allowedBranches || []
+  const mapped = await Promise.all(universities.map(async (u) => {
+    let allocatedPartners: { id: string; name: string }[] = [];
+    if (u.isAcademicPartnerOnly) {
+      // Find StudyCenters that have programs from this university allocated to them
+      const allocations = await prisma.programAllocation.findMany({
+        where: {
+          organizationId: req.user.organizationId,
+          program: { universityId: u.id },
+          isActive: true
+        },
+        include: { center: { select: { id: true, name: true } } }
+      });
+      
+      const uniqueCenters = new Map();
+      allocations.forEach(a => {
+        if (a.center) uniqueCenters.set(a.center.id, a.center);
+      });
+      allocatedPartners = Array.from(uniqueCenters.values());
+    }
+    return {
+      ...u,
+      allowedBranchIds: u.allowedBranches || [],
+      allocatedPartners
+    };
   }));
   res.json({ success: true, count: mapped.length, data: mapped });
 });

@@ -267,6 +267,7 @@ model User {
   designations                  Designation[]          @relation("DesignationFilledBy")
   communicationLogs             CommunicationLog[]
   assignedSalesUsers            Json?                  @default("[]")
+  assignedOpsUsers              Json?                  @default("[]")
   fcmTokens                     UserFCMToken[]
   opsSubAdminAllocations        ProgramAllocation[]    @relation("OpsSubAdminAllocated")
 

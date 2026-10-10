@@ -41,9 +41,7 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 max-w-full w-full">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between relative">
           <div className="flex items-center gap-2 cursor-pointer">
-            <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center">
-              <img src="/pype-logo.png" alt="PYPE ERM Logo" className="w-6 h-6 object-contain invert brightness-0" />
-            </div>
+            <img src="/erm-logo-green.png" alt="PYPE ERM Logo" className="w-14 h-14 object-contain" />
             <span className="text-2xl font-extrabold tracking-tight text-slate-900">
               PYPE<span className="text-[#7b68ee]">.</span>
             </span>
@@ -330,9 +328,7 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
             <div className="col-span-2">
               <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-[#7b68ee] flex items-center justify-center">
-                  <img src="/pype-logo.png" alt="PYPE ERM Logo" className="w-5 h-5 object-contain invert brightness-0" />
-                </div>
+                <img src="/erm-logo-green.png" alt="PYPE ERM Logo" className="w-14 h-14 object-contain" />
                 <span className="text-xl font-extrabold tracking-tight text-slate-900">
                   PYPE.
                 </span>

@@ -14,7 +14,7 @@ const USER_SELECT = {
   assignedSalesUsers: true,
   allowSystemPunchIn: true, requireSelfiePunchIn: true, allowAnywherePunchIn: true, requiresAttendance: true,
   organization: { select: { id: true, name: true } },
-  department: { select: { id: true, name: true } },
+  department: { select: { id: true, name: true, type: true } },
   branch: { select: { id: true, name: true } },
 };
 
@@ -44,12 +44,7 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
 
   // Branch-level isolation for users list (admins and HR should see all branches)
   const globalRoles = [
-    'superadmin', 'org_admin', 'ceo', 'general_manager',
-    'hr_admin', 'hr_sub_admin',
-    'finance_admin', 'finance_sub_admin',
-    'ops_admin', 'ops_sub_admin',
-    'sales_admin', 'sales_sub_admin',
-    'collections_admin'
+    'superadmin', 'org_admin', 'ceo', 'general_manager'
   ];
   
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
@@ -285,8 +280,14 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
   // Exclude resigned employees from task assignees
   where.status = { not: 'resigned' };
 
+  // Enforce branch isolation for non-global roles
+  if (!['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole) && req.user.branchId) {
+    where.branchId = req.user.branchId;
+  }
+
   // Filter to only show direct subordinates for department-level admins
-  if (!['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'].includes(adminRole)) {
+  // HR admins should see all users in their branch, not just direct subordinates
+  if (!['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager', 'hr_admin', 'hr_sub_admin'].includes(adminRole)) {
     const currentUser = await prisma.user.findUnique({
       where: { id: req.user.id },
       select: { designations: { select: { id: true } } }
@@ -301,8 +302,13 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
           parentDesignationId: { in: designationIds }
         }
       };
-      // Modern Org Chart defines the true hierarchy, so we bypass legacy role restrictions
-      delete where.role;
+      // Modern Org Chart defines the true hierarchy, so we usually bypass legacy role restrictions
+      if (['finance_admin', 'finance_sub_admin'].includes(adminRole)) {
+        // Finance admins specifically requested not to see sales users in their subordinates
+        where.role = { notIn: ['sales', 'sales_sub_admin', 'sales_admin'] };
+      } else {
+        delete where.role;
+      }
     } else {
       // Fallback to legacy reportingTo field
       where.reportingTo = req.user.id;
@@ -326,6 +332,7 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
       subDepartmentId: true,
       branchId: true,
       assignedSalesUsers: true,
+      assignedOpsUsers: true,
       department: {
         select: {
           type: true
@@ -402,4 +409,20 @@ export const updateSalesAssignment = asyncHandler(async (req: AuthRequest, res: 
   });
 
   res.status(200).json({ success: true, data: user, message: 'Sales assignment updated successfully' });
+});
+
+export const updateOpsAssignment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { assignedOpsUsers } = req.body;
+  if (!Array.isArray(assignedOpsUsers)) {
+    res.status(400).json({ success: false, message: 'Assigned ops users must be an array' });
+    return;
+  }
+  
+  const user = await prisma.user.update({
+    where: { id: req.params.id },
+    data: { assignedOpsUsers },
+    select: { id: true, assignedOpsUsers: true }
+  });
+
+  res.status(200).json({ success: true, data: user, message: 'Operations assignment updated successfully' });
 });

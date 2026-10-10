@@ -17739,6 +17739,7 @@ export namespace Prisma {
     updatedAt: number
     permissions: number
     assignedSalesUsers: number
+    assignedOpsUsers: number
     _all: number
   }
 
@@ -17831,6 +17832,7 @@ export namespace Prisma {
     updatedAt?: true
     permissions?: true
     assignedSalesUsers?: true
+    assignedOpsUsers?: true
     _all?: true
   }
 
@@ -17936,6 +17938,7 @@ export namespace Prisma {
     updatedAt: Date
     permissions: JsonValue | null
     assignedSalesUsers: JsonValue | null
+    assignedOpsUsers: JsonValue | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -17985,6 +17988,7 @@ export namespace Prisma {
     updatedAt?: boolean
     permissions?: boolean
     assignedSalesUsers?: boolean
+    assignedOpsUsers?: boolean
     studentBatchTransfers?: boolean | User$studentBatchTransfersArgs<ExtArgs>
     approvedSessions?: boolean | User$approvedSessionsArgs<ExtArgs>
     createdSessions?: boolean | User$createdSessionsArgs<ExtArgs>
@@ -18107,6 +18111,7 @@ export namespace Prisma {
     updatedAt?: boolean
     permissions?: boolean
     assignedSalesUsers?: boolean
+    assignedOpsUsers?: boolean
     branch?: boolean | User$branchArgs<ExtArgs>
     department?: boolean | User$departmentArgs<ExtArgs>
     organization?: boolean | User$organizationArgs<ExtArgs>
@@ -18146,6 +18151,7 @@ export namespace Prisma {
     updatedAt?: boolean
     permissions?: boolean
     assignedSalesUsers?: boolean
+    assignedOpsUsers?: boolean
     branch?: boolean | User$branchArgs<ExtArgs>
     department?: boolean | User$departmentArgs<ExtArgs>
     organization?: boolean | User$organizationArgs<ExtArgs>
@@ -18185,9 +18191,10 @@ export namespace Prisma {
     updatedAt?: boolean
     permissions?: boolean
     assignedSalesUsers?: boolean
+    assignedOpsUsers?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "biometricId" | "allowSystemPunchIn" | "requireSelfiePunchIn" | "allowAnywherePunchIn" | "requiresAttendance" | "createdAt" | "updatedAt" | "permissions" | "assignedSalesUsers", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "biometricId" | "allowSystemPunchIn" | "requireSelfiePunchIn" | "allowAnywherePunchIn" | "requiresAttendance" | "createdAt" | "updatedAt" | "permissions" | "assignedSalesUsers" | "assignedOpsUsers", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     studentBatchTransfers?: boolean | User$studentBatchTransfersArgs<ExtArgs>
     approvedSessions?: boolean | User$approvedSessionsArgs<ExtArgs>
@@ -18422,6 +18429,7 @@ export namespace Prisma {
       updatedAt: Date
       permissions: Prisma.JsonValue | null
       assignedSalesUsers: Prisma.JsonValue | null
+      assignedOpsUsers: Prisma.JsonValue | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -18963,6 +18971,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly permissions: FieldRef<"User", 'Json'>
     readonly assignedSalesUsers: FieldRef<"User", 'Json'>
+    readonly assignedOpsUsers: FieldRef<"User", 'Json'>
   }
     
 
@@ -121939,7 +121948,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     permissions: 'permissions',
-    assignedSalesUsers: 'assignedSalesUsers'
+    assignedSalesUsers: 'assignedSalesUsers',
+    assignedOpsUsers: 'assignedOpsUsers'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -124539,6 +124549,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
     assignedSalesUsers?: JsonNullableFilter<"User">
+    assignedOpsUsers?: JsonNullableFilter<"User">
     studentBatchTransfers?: StudentBatchTransferListRelationFilter
     approvedSessions?: AdmissionSessionListRelationFilter
     createdSessions?: AdmissionSessionListRelationFilter
@@ -124660,6 +124671,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     permissions?: SortOrderInput | SortOrder
     assignedSalesUsers?: SortOrderInput | SortOrder
+    assignedOpsUsers?: SortOrderInput | SortOrder
     studentBatchTransfers?: StudentBatchTransferOrderByRelationAggregateInput
     approvedSessions?: AdmissionSessionOrderByRelationAggregateInput
     createdSessions?: AdmissionSessionOrderByRelationAggregateInput
@@ -124784,6 +124796,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
     assignedSalesUsers?: JsonNullableFilter<"User">
+    assignedOpsUsers?: JsonNullableFilter<"User">
     studentBatchTransfers?: StudentBatchTransferListRelationFilter
     approvedSessions?: AdmissionSessionListRelationFilter
     createdSessions?: AdmissionSessionListRelationFilter
@@ -124905,6 +124918,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     permissions?: SortOrderInput | SortOrder
     assignedSalesUsers?: SortOrderInput | SortOrder
+    assignedOpsUsers?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -124943,6 +124957,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     permissions?: JsonNullableWithAggregatesFilter<"User">
     assignedSalesUsers?: JsonNullableWithAggregatesFilter<"User">
+    assignedOpsUsers?: JsonNullableWithAggregatesFilter<"User">
   }
 
   export type EmployeeWhereInput = {
@@ -134132,6 +134147,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -134253,6 +134269,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -134360,6 +134377,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -134481,6 +134499,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -134595,6 +134614,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUpdateManyMutationInput = {
@@ -134620,6 +134640,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -134652,6 +134673,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type EmployeeCreateInput = {
@@ -145150,6 +145172,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     permissions?: SortOrder
     assignedSalesUsers?: SortOrder
+    assignedOpsUsers?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -168666,6 +168689,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -168785,6 +168809,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -171553,6 +171578,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
     assignedSalesUsers?: JsonNullableFilter<"User">
+    assignedOpsUsers?: JsonNullableFilter<"User">
   }
 
   export type VacancyUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -172313,6 +172339,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -172433,6 +172460,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -173084,6 +173112,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -173203,6 +173232,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -173352,6 +173382,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -173472,6 +173503,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -173720,6 +173752,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -173840,6 +173873,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -178830,6 +178864,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -178950,6 +178985,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -179061,6 +179097,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -179180,6 +179217,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -181591,6 +181629,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -181711,6 +181750,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -182327,6 +182367,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -182447,6 +182488,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -182756,6 +182798,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -182876,6 +182919,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -183034,6 +183078,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -183154,6 +183199,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -183265,6 +183311,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -183385,6 +183432,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -183553,6 +183601,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -183673,6 +183722,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -183992,6 +184042,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -184112,6 +184163,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -184229,6 +184281,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -184349,6 +184402,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -184529,6 +184583,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -184649,6 +184704,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -184942,6 +184998,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -185062,6 +185119,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -185365,6 +185423,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -185485,6 +185544,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -186367,6 +186427,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -186486,6 +186547,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -188877,6 +188939,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -188997,6 +189060,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -189289,6 +189353,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -189409,6 +189474,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -189520,6 +189586,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -189640,6 +189707,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -189816,6 +189884,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -189935,6 +190004,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -190394,6 +190464,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -190514,6 +190585,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -190818,6 +190890,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -190938,6 +191011,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -191055,6 +191129,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -191175,6 +191250,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -192019,6 +192095,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -192139,6 +192216,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -192250,6 +192328,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -192370,6 +192449,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -192715,6 +192795,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -192835,6 +192916,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -193534,6 +193616,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -193654,6 +193737,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -193771,6 +193855,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -193891,6 +193976,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -194254,6 +194340,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -194374,6 +194461,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -195812,6 +195900,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -195932,6 +196021,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -196241,6 +196331,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -196361,6 +196452,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -196467,6 +196559,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -196587,6 +196680,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -196890,6 +196984,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -197010,6 +197105,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -197484,6 +197580,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -197604,6 +197701,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -197913,6 +198011,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -198033,6 +198132,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -198320,6 +198420,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -198440,6 +198541,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -198749,6 +198851,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -198869,6 +198972,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -199213,6 +199317,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -199333,6 +199438,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -199705,6 +199811,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -199825,6 +199932,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -200356,6 +200464,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -200476,6 +200585,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -200587,6 +200697,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -200707,6 +200818,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -200818,6 +200930,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -200938,6 +201051,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -201304,6 +201418,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -201424,6 +201539,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -201541,6 +201657,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -201661,6 +201778,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -201778,6 +201896,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -201898,6 +202017,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -202191,6 +202311,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -202311,6 +202432,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -202422,6 +202544,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -202542,6 +202665,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -202834,6 +202958,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -202954,6 +203079,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -203076,6 +203202,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -203196,6 +203323,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -203313,6 +203441,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -203433,6 +203562,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -203737,6 +203867,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -203857,6 +203988,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -203963,6 +204095,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -204083,6 +204216,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -204194,6 +204328,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -204314,6 +204449,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -204425,6 +204561,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -204545,6 +204682,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -204837,6 +204975,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -204957,6 +205096,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -205068,6 +205208,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -205188,6 +205329,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -205310,6 +205452,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -205430,6 +205573,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -205547,6 +205691,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -205667,6 +205812,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -205784,6 +205930,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -205904,6 +206051,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -206208,6 +206356,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -206328,6 +206477,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -206445,6 +206595,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -206565,6 +206716,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -206671,6 +206823,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -206791,6 +206944,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -207419,6 +207573,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -207538,6 +207693,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -207755,6 +207911,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -207875,6 +208032,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -208492,6 +208650,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -208612,6 +208771,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -208961,6 +209121,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -209080,6 +209241,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -209439,6 +209601,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -209559,6 +209722,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -210394,6 +210558,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -210514,6 +210679,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -211056,6 +211222,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -211176,6 +211343,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -211479,6 +211647,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -211599,6 +211768,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -212380,6 +212550,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
     postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
@@ -212500,6 +212671,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
     postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
@@ -212611,6 +212783,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
@@ -212731,6 +212904,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
@@ -213596,6 +213770,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
     postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
@@ -213716,6 +213891,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
     postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
@@ -213833,6 +214009,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
@@ -213953,6 +214130,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
@@ -214558,6 +214736,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -214678,6 +214857,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -214789,6 +214969,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -214909,6 +215090,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -215254,6 +215436,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -215374,6 +215557,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -215485,6 +215669,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -215605,6 +215790,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -215987,6 +216173,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -216107,6 +216294,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -216254,6 +216442,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -216374,6 +216563,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -216491,6 +216681,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -216611,6 +216802,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -216974,6 +217166,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -217094,6 +217287,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -217211,6 +217405,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -217331,6 +217526,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -217737,6 +217933,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -217857,6 +218054,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -217994,6 +218192,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -218114,6 +218313,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -218225,6 +218425,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -218345,6 +218546,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -218648,6 +218850,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -218768,6 +218971,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -218885,6 +219089,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -219005,6 +219210,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -220172,6 +220378,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -220292,6 +220499,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -220698,6 +220906,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -220818,6 +221027,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -221148,6 +221358,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -221268,6 +221479,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -221626,6 +221838,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -221746,6 +221959,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -221852,6 +222066,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -221972,6 +222187,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -222275,6 +222491,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -222395,6 +222612,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -222869,6 +223087,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -222989,6 +223208,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -223298,6 +223518,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -223418,6 +223639,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -224073,6 +224295,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -224193,6 +224416,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -224502,6 +224726,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -224622,6 +224847,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -224909,6 +225135,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -225029,6 +225256,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -225140,6 +225368,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -225260,6 +225489,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -225569,6 +225799,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -225689,6 +225920,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -225806,6 +226038,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -225926,6 +226159,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -226213,6 +226447,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -226333,6 +226568,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -226444,6 +226680,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -226564,6 +226801,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -226926,6 +227164,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -227046,6 +227285,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -227163,6 +227403,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -227283,6 +227524,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -227448,6 +227690,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -227568,6 +227811,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -227679,6 +227923,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -227799,6 +228044,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -227910,6 +228156,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -228030,6 +228277,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -228322,6 +228570,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -228442,6 +228691,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -228641,6 +228891,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -228761,6 +229012,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -228878,6 +229130,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -228998,6 +229251,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -229115,6 +229369,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -229235,6 +229490,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -229539,6 +229795,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -229659,6 +229916,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -230306,6 +230564,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -230426,6 +230685,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -230949,6 +231209,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -231069,6 +231330,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -231594,6 +231856,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -231714,6 +231977,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -232006,6 +232270,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -232126,6 +232391,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -232248,6 +232514,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -232368,6 +232635,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -232672,6 +232940,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -232792,6 +233061,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -232898,6 +233168,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -233018,6 +233289,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -233310,6 +233582,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -233430,6 +233703,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -233541,6 +233815,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -233661,6 +233936,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -233783,6 +234059,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -233903,6 +234180,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -234207,6 +234485,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -234327,6 +234606,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -234444,6 +234724,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -234564,6 +234845,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -234670,6 +234952,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -234790,6 +235073,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -235093,6 +235377,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -235213,6 +235498,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -235506,6 +235792,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -235626,6 +235913,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -235737,6 +236025,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -235857,6 +236146,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -236304,6 +236594,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -236424,6 +236715,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -236541,6 +236833,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -236661,6 +236954,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -237291,6 +237585,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -237411,6 +237706,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -237720,6 +238016,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -237840,6 +238137,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -238426,6 +238724,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -238546,6 +238845,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -238929,6 +239229,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -239049,6 +239350,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -239171,6 +239473,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -239291,6 +239594,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -239692,6 +239996,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -239812,6 +240117,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -240148,6 +240454,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -240268,6 +240575,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -240632,6 +240940,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -240752,6 +241061,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -241006,6 +241316,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -241126,6 +241437,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -241589,6 +241901,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -241709,6 +242022,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -242002,6 +242316,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -242122,6 +242437,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -242480,6 +242796,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -242600,6 +242917,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -242954,6 +243272,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -243074,6 +243393,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -243536,6 +243856,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -243656,6 +243977,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -245358,6 +245680,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -245478,6 +245801,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -245589,6 +245913,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -245709,6 +246034,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -246012,6 +246338,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -246132,6 +246459,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -246249,6 +246577,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -246369,6 +246698,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -246896,6 +247226,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -247016,6 +247347,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -247384,6 +247716,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -247504,6 +247837,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -248364,6 +248698,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -248484,6 +248819,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -248955,6 +249291,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -249075,6 +249412,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -249729,6 +250067,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -249849,6 +250188,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -250158,6 +250498,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -250278,6 +250619,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -251132,6 +251474,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -251252,6 +251595,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -251374,6 +251718,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -251494,6 +251839,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -251600,6 +251946,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -251720,6 +252067,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -251971,6 +252319,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -252091,6 +252440,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -253617,6 +253967,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -253737,6 +254088,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -254046,6 +254398,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -254166,6 +254519,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -254272,6 +254626,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
@@ -254392,6 +254747,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
@@ -254514,6 +254870,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -254634,6 +254991,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -262024,6 +262382,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
     postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
@@ -262144,6 +262503,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
     createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
     postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
@@ -262585,6 +262945,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
     postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
@@ -262705,6 +263066,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
     postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
@@ -266165,6 +266527,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type VacancyCreateManyOrganizationInput = {
@@ -269382,6 +269745,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -269501,6 +269865,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -269614,6 +269979,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type VacancyUpdateWithoutOrganizationInput = {
@@ -270416,6 +270782,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type VacancyCreateManyDepartmentInput = {
@@ -270836,6 +271203,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -270955,6 +271323,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -271068,6 +271437,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type VacancyUpdateWithoutDepartmentInput = {
@@ -271126,6 +271496,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -271246,6 +271617,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -271359,6 +271731,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudentBatchTransferCreateManyTransferredByInput = {
@@ -272858,6 +273231,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type WalletTopUpCreateManyVerifierInput = {
@@ -277547,6 +277921,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -277666,6 +278041,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -277779,6 +278155,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type WalletTopUpUpdateWithoutVerifierInput = {
@@ -278294,6 +278671,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type AdmissionSessionUpdateWithoutUniversityInput = {
@@ -278801,6 +279179,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -278920,6 +279299,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -279033,6 +279413,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type SubDepartmentUpdateWithoutAssignedUniversitiesInput = {
@@ -280433,6 +280814,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type WalletTopUpCreateManyStudyCenterInput = {
@@ -281127,6 +281509,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -281246,6 +281629,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -281359,6 +281743,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type WalletTopUpUpdateWithoutStudyCenterInput = {
@@ -282606,6 +282991,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BiometricDeviceCreateManyBranchInput = {
@@ -282916,6 +283302,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -283035,6 +283422,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -283148,6 +283536,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UniversityUpdateWithoutAllowedBranchesInput = {
@@ -283316,6 +283705,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type AdmissionSessionUpdateWithoutSubDepartmentInput = {
@@ -283459,6 +283849,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -283578,6 +283969,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -283691,6 +284083,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterUpdateWithoutAssignedSubDeptsInput = {
@@ -284028,6 +284421,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
@@ -284148,6 +284542,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
     studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
     approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
     createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
@@ -284261,6 +284656,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type EnrollmentCreateManySessionInput = {

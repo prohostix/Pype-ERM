@@ -48,7 +48,7 @@ export function FeeStructuresPanel() {
       const [fRes, pRes, uRes, sRes] = await Promise.all([
         api.get('/finance/fees'),
         api.get('/operations/programs'),
-        api.get('/operations/universities'),
+        api.get('/operations/universities?all=true'),
         api.get('/operations/sessions')
       ]);
       console.log('FEES RESPONSE:', fRes.data.data);
@@ -283,7 +283,16 @@ export function FeeStructuresPanel() {
                         <Building2 className="w-6 h-6" />
                       </div>
                       <div>
-                        <p className="font-semibold">{u.name}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold">{u.name}</p>
+                          {u.isAcademicPartnerOnly && (
+                            <Badge variant="outline" className="text-[9px] h-4 px-1 bg-purple-50 text-purple-700 border-purple-200" title={(u as any).allocatedPartners?.map((p: any) => p.name).join(', ')}>
+                              {((u as any).allocatedPartners && (u as any).allocatedPartners.length > 0) 
+                                ? `Academic Partner (${(u as any).allocatedPartners.map((p: any) => p.name).join(', ')})` 
+                                : 'Academic Partner (Unallocated)'}
+                            </Badge>
+                          )}
+                        </div>
                         <p className="text-xs text-muted-foreground mt-1">{u.code}</p>
                       </div>
                     </button>

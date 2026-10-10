@@ -285,7 +285,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
   let allowedIds = [req.user.id];
 
   if (['sales_admin', 'sales_sub_admin'].includes(req.user.role)) {
-    const targetRoles = req.user.role === 'sales_admin' ? ['sales_sub_admin', 'sales', 'employee'] : ['sales', 'employee'];
+    const targetRoles = (req.user.role === 'sales_admin' ? ['sales_sub_admin', 'sales', 'employee'] : ['sales', 'employee']) as any;
     const subordinates = await prisma.user.findMany({
       where: { role: { in: targetRoles as any }, organizationId: orgId },
       select: { id: true }
@@ -452,6 +452,31 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
       generatedPassword = '(Existing student account)';
     }
 
+    let salesUserBranchId = null;
+    if (enrollment.salesUserId) {
+      const salesUser = await prisma.user.findUnique({ where: { id: enrollment.salesUserId }, select: { branchId: true } });
+      if (salesUser) salesUserBranchId = salesUser.branchId;
+    }
+
+    // Determine admission prefix
+    const org = await prisma.organization.findUnique({ where: { id: enrollment.organizationId } });
+    let admissionPrefix = 'ADM';
+    if (org?.metadata && (org.metadata as any).admissionPrefix) {
+      admissionPrefix = (org.metadata as any).admissionPrefix;
+    } else if (org?.name) {
+      admissionPrefix = org.name.substring(0, 3).toUpperCase();
+    }
+    
+    // Generate a unique admission number
+    let isUnique = false;
+    let newAdmissionNo = '';
+    while (!isUnique) {
+      const randomStr = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit random
+      newAdmissionNo = `${admissionPrefix}-${randomStr}`;
+      const existing = await prisma.student.findFirst({ where: { admissionNo: newAdmissionNo } });
+      if (!existing) isUnique = true;
+    }
+
     // 2. Provision Student record if not exists, or update existing to active
     let studentRecord = await prisma.student.findUnique({ where: { email: enrollment.studentEmail } });
     if (!studentRecord) {
@@ -459,6 +484,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
         data: {
           centerId: enrollment.studyCenterId,
           organizationId: enrollment.organizationId,
+          branchId: salesUserBranchId,
           name: enrollment.studentName,
           email: enrollment.studentEmail,
           phone: enrollment.studentPhone,
@@ -485,7 +511,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
           sessionId: enrollment.sessionId,
           status: 'active',
           referredBy: enrollment.salesUserId,
-          admissionNo: `ADM${Date.now().toString().slice(-6)}`,
+          admissionNo: newAdmissionNo,
           ...(generatedPassword !== '(Existing student account)' ? { credentials: { email: enrollment.studentEmail, password: generatedPassword } } : {})
         },
       });
@@ -495,7 +521,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
         where: { id: studentRecord.id },
         data: {
           status: 'active',
-          admissionNo: studentRecord.admissionNo || `ADM${Date.now().toString().slice(-6)}`
+          admissionNo: studentRecord.admissionNo || newAdmissionNo
         }
       });
     }

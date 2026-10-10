@@ -1,8 +1,14 @@
 import prisma from './src/lib/prisma.js';
 
 async function main() {
-  const orgs = await prisma.organization.findMany();
-  console.log("Orgs:", orgs.map(o => o.email));
+  try {
+    const orgs = await prisma.organization.findMany({
+      select: { id: true, name: true }
+    });
+    console.log(orgs);
+  } catch (e) {
+    console.error(e);
+  }
 }
 
-main().then(() => process.exit(0)).catch(e => { console.error(e); process.exit(1); });
+main();

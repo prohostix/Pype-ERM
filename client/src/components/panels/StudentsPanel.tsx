@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, Users, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X } from 'lucide-react';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -89,6 +89,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const [filterUniversityId, setFilterUniversityId] = useState('all');
   const [filterSessionId, setFilterSessionId] = useState('all');
   const [filterBranchId, setFilterBranchId] = useState('all');
+  const [filterSalesUser, setFilterSalesUser] = useState('all');
   const [sortBy, setSortBy] = useState('name');
 
   // Pagination State
@@ -97,7 +98,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeFilter, searchQuery, filterUniversityId, filterSessionId, filterBranchId, sortBy]);
+  }, [activeFilter, searchQuery, filterUniversityId, filterSessionId, filterBranchId, filterSalesUser, sortBy]);
 
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
@@ -1174,6 +1175,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     if (filterBranchId !== 'all') {
       const bId = typeof s.branchId === 'object' ? s.branchId?.id : s.branchId;
       if (bId !== filterBranchId) return false;
+    }
+
+    // Sales User Filter
+    if (filterSalesUser !== 'all') {
+      const suId = typeof s.enrolledBy === 'object' ? s.enrolledBy?.id : (s.enrolledBy || s.enrolledByUser?.id);
+      if (suId !== filterSalesUser) return false;
     }
 
     // Session Filter
@@ -2420,101 +2427,176 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       </div>
 
       {/* Tabs / Filtering Option */}
-      <Tabs defaultValue="all" onValueChange={(val) => setActiveFilter(val as any)}>
-        <TabsList>
-          <TabsTrigger value="all">All Students ({students.length})</TabsTrigger>
-          <TabsTrigger value="current">Current Students ({students.filter(s => s && !s.isPrevious).length})</TabsTrigger>
-          <TabsTrigger value="previous">Completed Students ({students.filter(s => s && s.isPrevious).length})</TabsTrigger>
+      <Tabs defaultValue="all" onValueChange={(val) => setActiveFilter(val as any)} className="w-full sm:w-auto mb-6">
+        <TabsList className="bg-slate-100/80 dark:bg-slate-800/80 p-1.5 rounded-2xl h-auto flex flex-col sm:flex-row shadow-inner border border-slate-200/50 dark:border-slate-700/50 gap-1">
+          <TabsTrigger value="all" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400 transition-all">
+            <div className="flex items-center justify-center gap-2">
+              <Users className="w-4 h-4" />
+              <span className="font-semibold">All Students</span>
+              <Badge variant="secondary" className="ml-1 bg-slate-200/70 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-2">
+                {students.length}
+              </Badge>
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="current" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-emerald-600 dark:data-[state=active]:text-emerald-400 transition-all">
+            <div className="flex items-center justify-center gap-2">
+              <GraduationCap className="w-4 h-4" />
+              <span className="font-semibold">Current</span>
+              <Badge variant="secondary" className="ml-1 bg-slate-200/70 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-2">
+                {students.filter(s => s && !s.isPrevious).length}
+              </Badge>
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="previous" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-amber-600 dark:data-[state=active]:text-amber-400 transition-all">
+            <div className="flex items-center justify-center gap-2">
+              <History className="w-4 h-4" />
+              <span className="font-semibold">Completed</span>
+              <Badge variant="secondary" className="ml-1 bg-slate-200/70 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-2">
+                {students.filter(s => s && s.isPrevious).length}
+              </Badge>
+            </div>
+          </TabsTrigger>
         </TabsList>
       </Tabs>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Student Directory</CardTitle>
+      <Card className="border-none shadow-2xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl overflow-hidden rounded-3xl ring-1 ring-slate-200/50 dark:ring-slate-800/50">
+        <CardHeader className="bg-gradient-to-r from-blue-500/10 via-indigo-500/5 to-purple-500/10 border-b border-slate-200/50 dark:border-slate-800/50 px-6 py-5">
+          <CardTitle className="flex items-center gap-2.5 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300">
+            <div className="p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200/50 dark:border-slate-700/50">
+              <Users className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            </div>
+            Student Directory
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
-            <div>
-              <Label className="text-xs text-muted-foreground block mb-1">Search Students (Name, Email, Enrollment, Center)</Label>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Type name, email, enrollment number..."
-                  className="pl-8 text-sm"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+        <CardContent className="p-6">
+          {/* Filters Section */}
+          <div className="bg-white dark:bg-slate-900/40 p-5 rounded-2xl border border-slate-100 dark:border-slate-800/60 shadow-sm mb-6">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ${salesUsers.length > 0 ? 'xl:grid-cols-6' : 'xl:grid-cols-5'} gap-4 xl:gap-5`}>
+              <div className="flex flex-col">
+                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">Search Students</Label>
+                <div className="relative group/search mt-auto">
+                  <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 group-focus-within/search:text-blue-500 transition-colors" />
+                  <Input
+                    placeholder="Name, email, roll no..."
+                    className="pl-9 h-9 text-sm bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-900 transition-all rounded-xl"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
               </div>
-            </div>
-            <div>
-              <Label className="text-xs text-muted-foreground block mb-1">Filter by University</Label>
-              <Select value={filterUniversityId} onValueChange={setFilterUniversityId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="All Universities" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Universities</SelectItem>
-                  {universities.filter((u: any) => u && u.id).map((u: any) => (
-                    <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label className="text-xs text-muted-foreground block mb-1">Filter by Branch</Label>
-              <Select value={filterBranchId} onValueChange={setFilterBranchId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="All Branches" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Branches</SelectItem>
-                  {branches.filter((b: any) => b && b.id).map((b: any) => (
-                    <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label className="text-xs text-muted-foreground block mb-1">Filter by Admission Session</Label>
-              <Select value={filterSessionId} onValueChange={setFilterSessionId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="All Sessions" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Sessions</SelectItem>
-                  {sessions.filter((s: any) => s && s.id).map((s: any) => (
-                    <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label className="text-xs text-muted-foreground block mb-1">Sort By</Label>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Sort By" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="name">Name</SelectItem>
-                  <SelectItem value="branch">Branch</SelectItem>
-                  <SelectItem value="enrollmentNo">Enrollment No.</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex flex-col">
+                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">University</Label>
+                <Select value={filterUniversityId} onValueChange={setFilterUniversityId}>
+                  <SelectTrigger className="h-9 mt-auto bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-xl hover:bg-white transition-colors">
+                    <SelectValue placeholder="All Universities" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Universities</SelectItem>
+                    {universities.filter((u: any) => u && u.id).map((u: any) => (
+                      <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col">
+                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">Branch</Label>
+                <Select value={filterBranchId} onValueChange={setFilterBranchId}>
+                  <SelectTrigger className="h-9 mt-auto bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-xl hover:bg-white transition-colors">
+                    <SelectValue placeholder="All Branches" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Branches</SelectItem>
+                    {branches.filter((b: any) => b && b.id).map((b: any) => (
+                      <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {salesUsers.length > 0 && (
+                <div className="flex flex-col relative">
+                  <Label className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-2 flex items-center gap-1.5 truncate">
+                    <Users className="w-3 h-3 shrink-0" /> Sales User
+                  </Label>
+                  <Select value={filterSalesUser} onValueChange={setFilterSalesUser}>
+                    <SelectTrigger className="h-9 mt-auto bg-blue-50/30 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/30 rounded-xl hover:bg-blue-50/50 transition-colors">
+                      <SelectValue placeholder="All Sales Users" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px] rounded-xl">
+                      <SelectItem value="all" className="font-medium">
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                            <Users className="w-3 h-3 text-slate-500" />
+                          </div>
+                          All Sales Users
+                        </div>
+                      </SelectItem>
+                      {salesUsers.filter((u: any) => u && u.id).map((u: any) => (
+                        <SelectItem key={u.id} value={u.id}>
+                           <div className="flex items-center gap-2">
+                             <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                               <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300">
+                                 {u.name.charAt(0).toUpperCase()}
+                               </span>
+                             </div>
+                             {u.name}
+                           </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              <div className="flex flex-col">
+                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">Admission Session</Label>
+                <Select value={filterSessionId} onValueChange={setFilterSessionId}>
+                  <SelectTrigger className="h-9 mt-auto bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-xl hover:bg-white transition-colors">
+                    <SelectValue placeholder="All Sessions" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Sessions</SelectItem>
+                    {sessions.filter((s: any) => s && s.id).map((s: any) => (
+                      <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col">
+                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">Sort By</Label>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="h-9 mt-auto bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-xl hover:bg-white transition-colors">
+                    <SelectValue placeholder="Sort By" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="name">Name</SelectItem>
+                    <SelectItem value="branch">Branch</SelectItem>
+                    <SelectItem value="enrollmentNo">Enrollment No.</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 
           {loading ? (
-            <div className="text-center py-8">Loading students database...</div>
+            <div className="flex flex-col items-center justify-center py-12 px-4 bg-white/40 dark:bg-slate-900/20 rounded-3xl border border-slate-100 dark:border-slate-800/40">
+              <RefreshCw className="w-8 h-8 text-blue-500 animate-spin mb-4" />
+              <p className="text-slate-600 dark:text-slate-400 font-medium">Loading student directory...</p>
+            </div>
           ) : filteredStudents.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No students found matching this criteria</div>
+            <div className="flex flex-col items-center justify-center py-16 px-4 bg-slate-50/50 dark:bg-slate-900/20 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
+              <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                <Search className="w-8 h-8 text-slate-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-1">No students found</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm max-w-sm text-center">Try adjusting your filters or search terms to find what you're looking for.</p>
+            </div>
           ) : (
             <div className="space-y-3">
               {/* Select all row */}
               {isOrgAdmin && paginatedStudents.length > 0 && (
-                <div className="flex items-center gap-2 px-1 pb-1 border-b">
+                <div className="flex items-center gap-2 px-3 pb-2">
                   <button
                     onClick={toggleSelectAll}
-                    className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
+                    className="flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors bg-white dark:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm"
                   >
                     {selectedStudentIds.size === paginatedStudents.length
                       ? <CheckSquare className="w-4 h-4 text-blue-600" />
@@ -2522,7 +2604,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                     <span>{selectedStudentIds.size === paginatedStudents.length ? 'Deselect all' : 'Select all on page'}</span>
                   </button>
                   {selectedStudentIds.size > 0 && (
-                    <span className="ml-auto text-xs text-blue-600 font-medium">{selectedStudentIds.size} selected</span>
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 ml-auto border-0">
+                      {selectedStudentIds.size} selected
+                    </Badge>
                   )}
                 </div>
               )}
@@ -2531,95 +2615,123 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 const programName = typeof student.programId === 'object' ? student.programId?.name : student.program?.name || '';
                 const universityName = typeof student.universityId === 'object' ? student.universityId?.name : student.university?.name || '';
                 const branchName = typeof student.branchId === 'object' ? student.branchId?.name : student.branch?.name || '';
+                const salesUserName = typeof student.enrolledBy === 'object' ? student.enrolledBy?.name : (student.enrolledByUser?.name || salesUsers.find((su: any) => su.id === student.enrolledBy)?.name);
+                
+                const isSelected = selectedStudentIds.has(student.id);
+
                 return (
-                  <div key={student.id} className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors gap-3 ${selectedStudentIds.has(student.id) ? 'ring-2 ring-blue-500 bg-blue-50/30 dark:bg-blue-900/10' : ''}`}>
-                    <div className="flex items-center gap-4">
-                      {/* Row number / Checkbox (org_admin only) */}
+                  <div key={student.id} className={`group flex flex-col xl:flex-row xl:items-center xl:justify-between p-4 bg-white dark:bg-slate-900 rounded-2xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${isSelected ? 'border-blue-400 shadow-blue-500/10 ring-4 ring-blue-50 dark:ring-blue-900/20 z-10 relative' : 'border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'}`}>
+                    <div className="flex items-start gap-4">
+                      {/* Row number / Checkbox */}
                       {isOrgAdmin ? (
                         <button
                           onClick={() => toggleStudentSelection(student.id)}
-                          className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-blue-600 transition-colors shrink-0"
+                          className="mt-2 w-6 h-6 flex items-center justify-center text-slate-300 hover:text-blue-500 transition-colors shrink-0"
                         >
-                          {selectedStudentIds.has(student.id)
+                          {isSelected
                             ? <CheckSquare className="w-5 h-5 text-blue-600" />
                             : <Square className="w-5 h-5" />}
                         </button>
                       ) : (
-                        <div className="w-6 text-center text-sm font-semibold text-slate-400 dark:text-slate-500 shrink-0">
+                        <div className="mt-2 w-6 text-center text-xs font-bold text-slate-300 dark:text-slate-600 shrink-0">
                           {(currentPage - 1) * itemsPerPage + index + 1}
                         </div>
                       )}
-                      <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center overflow-hidden border border-slate-200">
-                        {student.photo ? (
-                          <img
-                            src={api.getFileUrl(student.photo)}
-                            alt={student.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <GraduationCap className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      
+                      <div className="relative shrink-0">
+                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden border-2 ${isSelected ? 'border-blue-400 shadow-sm' : 'border-slate-100 dark:border-slate-800'} bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900`}>
+                          {student.photo ? (
+                            <img
+                              src={api.getFileUrl(student.photo)}
+                              alt={student.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <GraduationCap className={`w-6 h-6 ${isSelected ? 'text-blue-500' : 'text-slate-400'}`} />
+                          )}
+                        </div>
+                        {student.isPrevious && (
+                          <div className="absolute -bottom-2 -right-2 bg-amber-100 border-2 border-white dark:border-slate-900 rounded-full p-1" title="Previous Student">
+                            <History className="w-3 h-3 text-amber-600" />
+                          </div>
                         )}
                       </div>
-                      <div>
-                        <div className="font-semibold text-slate-850 dark:text-slate-100 flex items-center gap-2">
-                          {student.name}
-                          {student.isPrevious && <Badge variant="secondary" className="text-xs">Previous</Badge>}
+
+                      <div className="flex-1 min-w-0 pr-4">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="text-[15px] font-bold text-slate-900 dark:text-slate-100 truncate">
+                            {student.name}
+                          </h4>
+                          <Badge className={`px-2 py-0.5 text-[10px] uppercase tracking-wider border-0 font-bold ${STATUS_COLORS[student.status] || 'bg-slate-100 text-slate-600 dark:bg-slate-800'}`}>
+                            {statusLabel(student.status)}
+                          </Badge>
                         </div>
-                        <div className="text-sm text-muted-foreground font-medium mt-0.5">
-                          {student.enrollmentNo}{universityName ? ` • ${universityName}` : ''}{branchName ? ` • ${branchName}` : ''}{programName ? ` • ${programName}` : ''}{centerName ? ` • ${centerName}` : ''}
+                        
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-slate-500 dark:text-slate-400 mb-2">
+                          <span className="font-semibold text-slate-700 dark:text-slate-300">
+                            #{student.enrollmentNo || 'PENDING'}
+                          </span>
+                          <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+                          <span className="truncate max-w-[200px]" title={universityName}>{universityName}</span>
+                          {branchName && (
+                            <>
+                              <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+                              <span className="truncate max-w-[150px]">{branchName}</span>
+                            </>
+                          )}
                         </div>
-                        <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
-                          <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" /> {student.email}</span>
-                          {student.phone && <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5" /> {student.phone}</span>}
+
+                        <div className="flex flex-wrap items-center gap-3 text-[12px] font-medium">
+                          <a href={`mailto:${student.email}`} className="flex items-center gap-1.5 text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors bg-slate-50 dark:bg-slate-800/50 px-2 py-1 rounded-lg">
+                            <Mail className="w-3.5 h-3.5 text-slate-400" /> <span className="truncate max-w-[150px]">{student.email}</span>
+                          </a>
+                          {student.phone && (
+                            <a href={`tel:${student.phone}`} className="flex items-center gap-1.5 text-slate-500 hover:text-emerald-600 transition-colors bg-slate-50 dark:bg-slate-800/50 px-2 py-1 rounded-lg">
+                              <Phone className="w-3.5 h-3.5 text-slate-400" /> {student.phone}
+                            </a>
+                          )}
+                          {salesUserName && (
+                            <div className="flex items-center gap-1.5 bg-blue-50/50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-lg border border-blue-100/50 dark:border-blue-900/30">
+                              <Users className="w-3.5 h-3.5 text-blue-500/70" />
+                              <span>{salesUserName}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end">
-                      <Badge className={`hover:opacity-80 ${STATUS_COLORS[student.status] || 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 hover:bg-slate-100'}`}>
-                        {statusLabel(student.status)}
-                      </Badge>
-
-                      {/* View Profile */}
-                      <Button variant="default" size="icon" className="w-8 h-8" onClick={() => setViewingProfileStudent(student)} title="View Profile">
+                    <div className="mt-4 xl:mt-0 pt-4 xl:pt-0 border-t xl:border-t-0 border-slate-100 dark:border-slate-800 flex items-center justify-end gap-1.5 xl:pl-4 xl:ml-auto shrink-0">
+                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300" onClick={() => setViewingProfileStudent(student)} title="View Profile">
                         <Eye className="w-4 h-4" />
                       </Button>
-
-                      {/* Send system notification */}
-                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenNotif(student)} title="Send Notification">
-                        <Bell className="w-4 h-4 text-amber-500" />
+                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-amber-50 dark:hover:bg-amber-900/20 text-amber-600" onClick={() => handleOpenNotif(student)} title="Send Notification">
+                        <Bell className="w-4 h-4" />
                       </Button>
-
-                      {/* Send WhatsApp Click to chat */}
-                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenWhatsApp(student)} title="WhatsApp Message">
-                        <MessageSquare className="w-4 h-4 text-emerald-500" />
+                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-emerald-600" onClick={() => handleOpenWhatsApp(student)} title="WhatsApp Message">
+                        <MessageSquare className="w-4 h-4" />
                       </Button>
-
-                      {/* Manage Payment Schedule */}
-                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenSchedule(student)} title="Payment Schedule">
-                        <CalendarDays className="w-4 h-4 text-indigo-500" />
+                      <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-1" />
+                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-indigo-600" onClick={() => handleOpenSchedule(student)} title="Payment Schedule">
+                        <CalendarDays className="w-4 h-4" />
                       </Button>
-
-                      {/* Update Progress */}
-                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenProgress(student)} title="Update Progress">
-                        <TrendingUp className="w-4 h-4 text-emerald-600" />
+                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-cyan-50 dark:hover:bg-cyan-900/20 text-cyan-600" onClick={() => handleOpenCredentials(student)} title="Credentials">
+                        <Key className="w-4 h-4" />
                       </Button>
-
-                      {/* View/Change Credentials */}
-                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenCredentials(student)} title="View/Edit Credentials">
-                        <Key className="w-4 h-4 text-cyan-500" />
+                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-violet-50 dark:hover:bg-violet-900/20 text-violet-600" onClick={() => handleOpenEnrollHistory(student)} title="History">
+                        <History className="w-4 h-4" />
                       </Button>
-
-                      {/* Enrollment History */}
-                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenEnrollHistory(student)} title="Enrollment History">
-                        <History className="w-4 h-4 text-violet-500" />
-                      </Button>
-
+                      
+                      {(canWrite || canDelete) && <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-1" />}
+                      
                       {canWrite && (
-                        <Button variant="ghost" size="icon" className="w-8 h-8" onClick={() => handleEdit(student)}><Edit className="w-4 h-4" /></Button>
+                        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-900 dark:hover:text-white" onClick={() => handleEdit(student)}>
+                          <Edit className="w-4 h-4" />
+                        </Button>
                       )}
                       {canDelete && (
-                        <Button variant="ghost" size="icon" className="w-8 h-8 text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20" onClick={() => handleDelete(student.id)}><Trash2 className="w-4 h-4" /></Button>
+                        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-400 hover:text-rose-600" onClick={() => handleDelete(student.id)}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       )}
                     </div>
                   </div>
@@ -2628,30 +2740,32 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
               {/* Bulk Floating Action Bar */}
               {isOrgAdmin && selectedStudentIds.size > 0 && (
-                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-slate-900 text-white rounded-2xl shadow-2xl px-5 py-3 border border-slate-700">
-                  <span className="text-sm font-semibold">{selectedStudentIds.size} selected</span>
-                  <div className="w-px h-5 bg-slate-600" />
+                <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-slate-900/95 backdrop-blur-md text-white rounded-full shadow-2xl px-6 py-3 border border-slate-700/50 ring-4 ring-slate-900/10 animate-in slide-in-from-bottom-10 fade-in duration-300">
+                  <div className="flex items-center justify-center bg-blue-500 text-white font-bold w-6 h-6 rounded-full text-xs">
+                    {selectedStudentIds.size}
+                  </div>
+                  <span className="text-sm font-medium mr-2">Selected</span>
+                  <div className="w-px h-6 bg-slate-700" />
                   <Button
                     size="sm"
-                    variant="secondary"
-                    className="bg-blue-600 hover:bg-blue-700 text-white border-0 gap-1.5"
+                    className="bg-white/10 hover:bg-white/20 text-white border-0 gap-2 h-8 rounded-full transition-colors"
                     onClick={() => { setBulkActionUniversityId(''); setBulkActionProgramId(''); setBulkProgramDialogOpen(true); }}
                   >
                     <GraduationCap className="w-4 h-4" />
-                    Change University / Program
+                    <span className="hidden sm:inline">Change Course</span>
                   </Button>
                   <Button
                     size="sm"
-                    variant="secondary"
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white border-0 gap-1.5"
+                    className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 hover:text-emerald-200 border-0 gap-2 h-8 rounded-full transition-colors"
                     onClick={() => { setBulkPaymentAmount(''); setBulkPaymentNote(''); setBulkPaymentDialogOpen(true); }}
                   >
                     <DollarSign className="w-4 h-4" />
-                    Record Fee Received
+                    <span className="hidden sm:inline">Add Fee</span>
                   </Button>
+                  <div className="w-px h-6 bg-slate-700 ml-1" />
                   <button
                     onClick={() => setSelectedStudentIds(new Set())}
-                    className="ml-1 text-slate-400 hover:text-white transition-colors"
+                    className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors ml-1"
                     title="Clear selection"
                   >
                     <X className="w-4 h-4" />
@@ -2661,27 +2775,29 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
               {/* Pagination Controls */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between pt-4 pb-2 border-t mt-4">
-                  <div className="text-sm text-muted-foreground">
-                    Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} students
+                <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-800 mt-6 gap-4">
+                  <div className="text-sm font-medium text-slate-500">
+                    Showing <span className="text-slate-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="text-slate-900 dark:text-white">{Math.min(currentPage * itemsPerPage, filteredStudents.length)}</span> of <span className="text-slate-900 dark:text-white">{filteredStudents.length}</span> students
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center bg-slate-50 dark:bg-slate-900/50 rounded-xl p-1 border border-slate-200/60 dark:border-slate-800/60">
                     <Button
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
                       onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
+                      className="rounded-lg h-8 px-3 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                     >
                       Previous
                     </Button>
-                    <div className="text-sm font-medium px-2">
+                    <div className="text-sm font-semibold px-4 text-slate-700 dark:text-slate-300">
                       Page {currentPage} of {totalPages}
                     </div>
                     <Button
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
                       onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
+                      className="rounded-lg h-8 px-3 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                     >
                       Next
                     </Button>

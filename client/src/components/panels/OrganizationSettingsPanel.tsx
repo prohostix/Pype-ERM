@@ -18,7 +18,8 @@ export function OrganizationSettingsPanel() {
     phone: '',
     address: '',
     logo: '',
-    enrollmentApprovalFlow: 'direct'
+    enrollmentApprovalFlow: 'direct',
+    admissionPrefix: ''
   });
 
   useEffect(() => {
@@ -37,7 +38,8 @@ export function OrganizationSettingsPanel() {
           phone: org.phone || '',
           address: org.address || '',
           logo: org.logo || '',
-          enrollmentApprovalFlow: (org.metadata as any)?.enrollmentApprovalFlow || 'direct'
+          enrollmentApprovalFlow: (org.metadata as any)?.enrollmentApprovalFlow || 'direct',
+          admissionPrefix: (org.metadata as any)?.admissionPrefix || ''
         });
       }
     } catch (err) {
@@ -254,6 +256,15 @@ export function OrganizationSettingsPanel() {
               <p className="text-xs text-muted-foreground mt-1.5">
                 Determine if sales enrollments go directly to operations or if they require a sales admin's approval first.
               </p>
+            </div>
+            <div className="space-y-2 max-w-lg mt-4">
+              <Label>Student Admission Number Prefix</Label>
+              <Input
+                value={formData.admissionPrefix}
+                onChange={e => setFormData({ ...formData, admissionPrefix: e.target.value })}
+                placeholder="e.g. ADM or TIM (Leave empty for default)"
+              />
+              <p className="text-xs text-muted-foreground mt-1.5">Prefix added to auto-generated admission numbers. Defaults to first 3 letters of Org name if left blank.</p>
             </div>
           </div>
 

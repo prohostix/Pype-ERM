@@ -467,8 +467,10 @@ export const getAttendancesData = async (req: AuthRequest, forceStatus?: string)
   
   const userFilters: any = { role: { not: 'student' }, requiresAttendance: true };
 
-  if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
+  if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin', 'general_manager'].includes(req.user.role)) {
     // See all users
+  } else if (req.user.role === 'branch_manager' && req.user.branchId) {
+    userFilters.branchId = req.user.branchId;
   } else if (req.user.role === 'center_admin') {
     userFilters.OR = [];
     if (req.user.branchId) userFilters.OR.push({ branchId: req.user.branchId });
@@ -856,7 +858,7 @@ export const getActivityReport = asyncHandler(async (req: AuthRequest, res: Resp
     status: { not: 'resigned' }
   };
 
-  if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
+  if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin', 'general_manager'].includes(req.user.role)) {
     // See all users
   } else if (req.user.role === 'center_admin') {
     userFilters.OR = [];
@@ -1104,7 +1106,7 @@ export const getAttendanceByUserId = asyncHandler(async (req: AuthRequest, res: 
   
   // Authorization check
   const isSelf = req.user.id === userId;
-  const isPrivileged = ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo'].includes(req.user.role);
+  const isPrivileged = ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager', 'center_admin'].includes(req.user.role);
   
   if (!isSelf && !isPrivileged) {
     res.status(403).json({ success: false, message: "Not authorized to view this user's attendance" });
@@ -1147,7 +1149,7 @@ export const getMonthlyAttendanceSummary = asyncHandler(async (req: AuthRequest,
   
   // Authorization check
   const isSelf = req.user.id === userId;
-  const isPrivileged = ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'].includes(req.user.role);
+  const isPrivileged = ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager', 'center_admin'].includes(req.user.role);
   
   if (!isSelf && !isPrivileged) {
     res.status(403).json({ success: false, message: "Not authorized to view this user's attendance" });

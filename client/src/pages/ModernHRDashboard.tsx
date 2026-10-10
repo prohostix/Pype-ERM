@@ -111,7 +111,6 @@ export function getHRNavItems() {
     { id: 'overview', label: 'Overview' },
     { id: 'users', label: 'Users' },
     { id: 'employees', label: 'Employees' },
-    { id: 'team_permissions', label: 'Team Permissions' },
     { id: 'leaves', label: 'Leave Requests' },
     { id: 'attendance', label: 'Attendance' },
     { id: 'vacancies', label: 'Vacancies' },

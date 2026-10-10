@@ -85,11 +85,11 @@ export function ProvisionalFinancePanel() {
                           <DialogTitle>Receipt for {e.studentName}</DialogTitle>
                         </DialogHeader>
                         <div className="flex-1 bg-muted rounded-md overflow-hidden relative flex items-center justify-center">
-                          {e.receiptUrl ? (
-                            e.receiptUrl.toLowerCase().endsWith('.pdf') ? (
-                              <iframe src={e.receiptUrl} className="w-full h-full" />
+                          {e.provisionalReceiptUrl || e.receiptUrl ? (
+                            (e.provisionalReceiptUrl || e.receiptUrl).toLowerCase().endsWith('.pdf') ? (
+                              <iframe src={api.getFileUrl(e.provisionalReceiptUrl || e.receiptUrl)} className="w-full h-full" />
                             ) : (
-                              <img src={e.receiptUrl} alt="Receipt" className="max-w-full max-h-full object-contain" />
+                              <img src={api.getFileUrl(e.provisionalReceiptUrl || e.receiptUrl)} alt="Receipt" className="max-w-full max-h-full object-contain" />
                             )
                           ) : (
                             <p className="text-muted-foreground">No receipt uploaded.</p>

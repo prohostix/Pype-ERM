@@ -20,7 +20,7 @@ interface AttendancePanelProps {
 export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: AttendancePanelProps) {
   const { user } = useAuth();
   const isHR = !isMyPortal && (user?.role === 'hr_admin' || user?.role === 'hr_sub_admin');
-  const canViewAll = !isMyPortal && ['hr_admin', 'hr_sub_admin', 'org_admin', 'ceo'].includes(user?.role || '');
+  const canViewAll = !isMyPortal && ['hr_admin', 'hr_sub_admin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager', 'center_admin'].includes(user?.role || '');
   const [attendance, setAttendance] = useState<any[]>([]);
   const [calendarAttendance, setCalendarAttendance] = useState<any[]>([]);
   const [holidays, setHolidays] = useState<any[]>([]);

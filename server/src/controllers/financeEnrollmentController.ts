@@ -17,6 +17,28 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
     ];
   }
 
+  // Branch-level isolation for finance users
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    const branchCondition = { 
+      OR: [
+        { student: { branchId: req.user.branchId } },
+        { salesUser: { branchId: req.user.branchId } }
+      ]
+    };
+    if (where.OR) {
+      const searchOr = where.OR;
+      delete where.OR;
+      where.AND = [ { OR: searchOr }, branchCondition ];
+    } else {
+      where.OR = branchCondition.OR;
+    }
+  }
+
+  // Create a where clause for the summary that excludes the current status filter
+  const summaryWhere = { ...where };
+  delete summaryWhere.status;
+
   const [enrollments, summary] = await Promise.all([
     prisma.enrollment.findMany({
       where,
@@ -48,7 +70,7 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
     }),
     prisma.enrollment.groupBy({
       by: ['status'],
-      where: { organizationId: req.user.organizationId },
+      where: summaryWhere,
       _count: { status: true },
     }),
   ]);
@@ -62,8 +84,19 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
 });
 
 export const getFinanceEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = { organizationId: req.user.organizationId, status: 'finance_review' };
+  
+  // Enforce branch isolation for finance users
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    where.OR = [
+      { student: { branchId: req.user.branchId } },
+      { salesUser: { branchId: req.user.branchId } }
+    ];
+  }
+
   const enrollments = await prisma.enrollment.findMany({
-    where: { organizationId: req.user.organizationId, status: 'finance_review' },
+    where,
     include: { program: true, studyCenter: true, student: true },
     orderBy: { createdAt: 'asc' }
   });

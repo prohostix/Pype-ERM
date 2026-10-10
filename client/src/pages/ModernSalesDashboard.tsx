@@ -194,6 +194,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       case 'approval_requests': return <EscalationsPanel />;
       case 'admission_approval': return <SalesAdminReviewPanel />;
       case 'support_requests': return <ComplaintsPanel />;
+      case 'leaves': return <LeavesPanel />;
 
       // My Portal
       case 'my_profile': return <MyProfilePanel />;
@@ -265,6 +266,7 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
       { id: 'team_requests', label: 'Team Requests' },
       { id: 'admission_approval', label: 'Admission Approval' },
       { id: 'support_requests', label: 'Support Requests' },
+      { id: 'leaves', label: 'Leave Approvals' },
 
       { id: '__portal_section', label: 'My Portal', isSection: true },
       { id: 'my_profile', label: 'My Profile' },

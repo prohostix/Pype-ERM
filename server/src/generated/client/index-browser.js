@@ -197,7 +197,8 @@ exports.Prisma.UserScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   permissions: 'permissions',
-  assignedSalesUsers: 'assignedSalesUsers'
+  assignedSalesUsers: 'assignedSalesUsers',
+  assignedOpsUsers: 'assignedOpsUsers'
 };
 
 exports.Prisma.EmployeeScalarFieldEnum = {
