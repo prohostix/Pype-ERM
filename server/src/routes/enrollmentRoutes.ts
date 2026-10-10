@@ -41,7 +41,7 @@ router.get('/provisional', authorize('center_admin', 'sales_admin', 'sales_sub_a
 router.get('/my-center-status', authorize('center_admin'), getMyCenterStatus);
 router.post('/submit-payment', authorize('center_admin'), upload.single('proofFile'), submitMyCenterPayment);
 router.post('/:id/receipt', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), upload.single('receipt'), uploadReceipt);
-router.put('/:id/provisional-complete', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), completeProvisionalEnrollment);
+router.put('/:id/provisional-complete', authorize('center_admin', 'org_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), completeProvisionalEnrollment);
 
 // Dept/Sub-dept manager review routes
 router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), getDeptReviewEnrollments);

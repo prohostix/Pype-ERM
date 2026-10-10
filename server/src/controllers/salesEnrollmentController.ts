@@ -802,7 +802,9 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     return;
   }
 
-  if (enrollment.organizationId !== orgId || enrollment.salesUserId !== salesUserId) {
+  // The creating sales user, or (to re-request one they rejected) a Sales Admin.
+  const adminReopening = ['sales_admin', 'org_admin', 'superadmin'].includes(req.user.role) && isSalesAdminRejected(enrollment);
+  if (enrollment.organizationId !== orgId || (enrollment.salesUserId !== salesUserId && !adminReopening)) {
     res.status(403).json({ success: false, message: 'Not authorized to verify this enrollment' });
     return;
   }
@@ -996,10 +998,23 @@ export const resubmitPaymentReceipt = asyncHandler(async (req: AuthRequest, res:
   res.json({ success: true, message: 'Payment receipt re-uploaded and sent to Finance.', data: updated });
 });
 
+// True when the application was rejected by a Sales Admin (Finance rejections
+// share the "rejected" status but always carry financeRemarks).
+const isSalesAdminRejected = (e: any): boolean => {
+  if (e?.status !== 'rejected' || e?.financeRemarks) return false;
+  const raw = e?.statusHistory;
+  const hist: any[] = Array.isArray(raw) ? raw : (raw && typeof raw === 'object' ? Object.values(raw) : []);
+  const last = hist[hist.length - 1];
+  return String(last?.note || '').startsWith('Sales Admin rejected');
+};
+
 export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: Response) => {
+  // ?view=rejected -> applications this admin's team submitted that a Sales
+  // Admin rejected, so they can be edited and re-requested.
+  const wantRejected = req.query.view === 'rejected';
   const baseWhere: any = {
     organizationId: req.user.organizationId,
-    status: 'sales_admin_review'
+    status: wantRejected ? 'rejected' : 'sales_admin_review'
   };
 
   // sales_admin: find subordinates via designation hierarchy (OrgHierarchyPanel)
@@ -1057,7 +1072,8 @@ export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: R
     },
     orderBy: { updatedAt: 'desc' }
   });
-  res.json({ success: true, count: enrollments.length, data: enrollments });
+  const data = wantRejected ? enrollments.filter(isSalesAdminRejected) : enrollments;
+  res.json({ success: true, count: data.length, data });
 });
 
 export const approveBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Response) => {

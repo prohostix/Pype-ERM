@@ -269,11 +269,26 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     });
   }
 
+  // An application that Sales Admin rejected (or that already went through
+  // Sales Admin review) must go back to Sales Admin when Sales re-applies, if
+  // the org still requires Sales Admin approval. Everything else (e.g. an
+  // Operations rejection of an older application) goes to Operations as before.
+  const org = await prisma.organization.findUnique({ where: { id: enrollment.organizationId } });
+  const flowEnabled = (org?.metadata as any)?.enrollmentApprovalFlow === 'sales_admin_approval';
+  const history = Array.isArray(enrollment.statusHistory) ? (enrollment.statusHistory as any[]) : [];
+  const wentThroughSalesAdmin = history.some((h: any) =>
+    h?.status === 'sales_admin_review' || String(h?.note || '').startsWith('Sales Admin rejected')
+  );
+  const requiresSalesAdmin = flowEnabled && wentThroughSalesAdmin;
+  const nextStatus = requiresSalesAdmin ? 'sales_admin_review' : 'document_review';
+
   const historyEntry = {
-    status: 'document_review', 
+    status: nextStatus,
     changedAt: new Date().toISOString(),
     changedBy: req.user.id,
-    remarks: 'Provisional enrollment completed with full details by Sales'
+    remarks: requiresSalesAdmin
+      ? 'Re-applied by Sales with updated documents and sent back to Sales Admin for approval'
+      : 'Provisional enrollment completed with full details by Sales'
   };
 
   const updated = await prisma.enrollment.update({
@@ -281,7 +296,7 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     data: {
       studentId: student.id,
       isProvisional: false,
-      status: 'document_review',
+      status: nextStatus,
       studentName: student.name,
       studentEmail: student.email,
       studentPhone: student.phone,
@@ -294,6 +309,28 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
       }
     }
   });
+
+  if (requiresSalesAdmin) {
+    try {
+      const admins = await prisma.user.findMany({
+        where: { organizationId: enrollment.organizationId, role: 'sales_admin', status: 'active' },
+        select: { id: true },
+      });
+      for (const admin of admins) {
+        await prisma.notification.create({
+          data: {
+            organizationId: enrollment.organizationId,
+            userId: admin.id,
+            title: 'Application Re-applied for Sales Approval',
+            message: `${student.name}'s application was re-applied by ${req.user.name} with updated documents. Please review.`,
+            type: 'general',
+            priority: 'medium',
+            link: 'sales_enrollment_review',
+          },
+        });
+      }
+    } catch (_) { /* non-critical */ }
+  }
 
   res.json({ success: true, data: updated });
 });

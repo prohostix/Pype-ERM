@@ -500,9 +500,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     setSavingStudent(true);
     try {
       if (completingEnrollment) {
-        await api.put(`/enrollment/${completingEnrollment.id}/provisional-complete`, formData);
+        const completeRes = await api.put(`/enrollment/${completingEnrollment.id}/provisional-complete`, formData);
         const isReupload = completingEnrollment.status === 'rejected' || completingEnrollment.status === 'ops_rejected';
-        toast.success(isReupload ? 'Documents re-uploaded successfully and submitted to Operations' : 'Provisional enrollment completed successfully');
+        const sentTo = completeRes.data?.data?.status === 'sales_admin_review' ? 'Sales Admin for approval' : 'Operations';
+        toast.success(isReupload ? `Documents re-uploaded successfully and submitted to ${sentTo}` : 'Provisional enrollment completed successfully');
       } else if (editingId) {
         await api.put(`/students/${editingId}`, formData);
         toast.success('Student updated successfully');

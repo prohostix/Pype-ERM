@@ -8,11 +8,16 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { FileText, CheckCircle2, XCircle, Search, ExternalLink, Eye, User, Phone, Mail, Calendar, MapPin, GraduationCap, IndianRupee, Clock, Image } from 'lucide-react';
 import api from '@/lib/api';
+import { StudentsPanel } from './StudentsPanel';
 
 export function SalesAdminReviewPanel() {
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
+  const [view, setView] = useState<'pending' | 'rejected'>('pending');
+  // Re-requesting a rejected application opens the same full enrollment form
+  const [reopening, setReopening] = useState<any | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
   
   const [rejectDialog, setRejectDialog] = useState<{ open: boolean, id: string }>({ open: false, id: '' });
   const [remarks, setRemarks] = useState('');
@@ -21,12 +26,12 @@ export function SalesAdminReviewPanel() {
 
   useEffect(() => {
     fetchReviews();
-  }, []);
+  }, [view]);
 
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/sales/sales-admin-reviews');
+      const res = await api.get('/sales/sales-admin-reviews', { params: view === 'rejected' ? { view: 'rejected' } : {} });
       setEnrollments(res.data.data || []);
     } catch (err: any) {
       toast.error('Failed to load pending reviews');
@@ -105,6 +110,26 @@ export function SalesAdminReviewPanel() {
         </div>
       </div>
 
+      <div className="flex gap-2">
+        <Button size="sm" variant={view === 'pending' ? 'default' : 'outline'} onClick={() => setView('pending')}>Pending Review</Button>
+        <Button size="sm" variant={view === 'rejected' ? 'default' : 'outline'} onClick={() => setView('rejected')}>Rejected</Button>
+      </div>
+
+      {/* Same full enrollment form, every section editable; resubmits to Sales Admin review */}
+      <StudentsPanel
+        triggerOpen={formOpen}
+        isSalesMode={true}
+        hideList={true}
+        completingEnrollment={reopening}
+        onOpenChange={(open) => {
+          setFormOpen(open);
+          if (!open) {
+            setReopening(null);
+            fetchReviews();
+          }
+        }}
+      />
+
       <Card>
         <CardContent className="p-0">
           {loading ? (
@@ -115,7 +140,7 @@ export function SalesAdminReviewPanel() {
                 <CheckCircle2 className="w-8 h-8 text-slate-400" />
               </div>
               <h3 className="text-lg font-medium">All Caught Up!</h3>
-              <p className="text-muted-foreground mt-1">There are no applications pending your review.</p>
+              <p className="text-muted-foreground mt-1">{view === 'rejected' ? 'No rejected applications.' : 'There are no applications pending your review.'}</p>
             </div>
           ) : (
             <div className="divide-y">
@@ -127,6 +152,9 @@ export function SalesAdminReviewPanel() {
                       {enrollment.enrollmentNumber && <Badge variant="outline">{enrollment.enrollmentNumber}</Badge>}
                     </div>
                     <p className="text-sm text-muted-foreground">{enrollment.studentEmail} • {enrollment.studentPhone}</p>
+                    {view === 'rejected' && enrollment.departmentRemarks && (
+                      <p className="text-xs text-red-600 font-medium">Rejected: {enrollment.departmentRemarks}</p>
+                    )}
                     <div className="pt-2 flex flex-wrap gap-2 text-xs">
                       <span className="inline-flex items-center bg-indigo-50 text-indigo-700 px-2 py-1 rounded-md font-medium">
                         Program: {enrollment.program?.name || 'N/A'}
@@ -141,22 +169,34 @@ export function SalesAdminReviewPanel() {
                     <Button variant="outline" size="sm" onClick={() => setDetailDialog({ open: true, enrollment })}>
                       <Eye className="w-4 h-4 mr-2" /> View Details
                     </Button>
-                    <Button 
-                      variant="destructive" 
-                      size="sm" 
-                      disabled={processing}
-                      onClick={() => setRejectDialog({ open: true, id: enrollment.id })}
-                    >
-                      <XCircle className="w-4 h-4 mr-2" /> Reject
-                    </Button>
-                    <Button 
-                      className="bg-green-600 hover:bg-green-700 text-white" 
-                      size="sm"
-                      disabled={processing}
-                      onClick={() => handleApprove(enrollment.id)}
-                    >
-                      <CheckCircle2 className="w-4 h-4 mr-2" /> Approve
-                    </Button>
+                    {view === 'rejected' ? (
+                      <Button
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                        size="sm"
+                        onClick={() => { setReopening(enrollment); setFormOpen(true); }}
+                      >
+                        <FileText className="w-4 h-4 mr-2" /> Edit & Re-request
+                      </Button>
+                    ) : (
+                      <>
+                        <Button 
+                          variant="destructive" 
+                          size="sm" 
+                          disabled={processing}
+                          onClick={() => setRejectDialog({ open: true, id: enrollment.id })}
+                        >
+                          <XCircle className="w-4 h-4 mr-2" /> Reject
+                        </Button>
+                        <Button 
+                          className="bg-green-600 hover:bg-green-700 text-white" 
+                          size="sm"
+                          disabled={processing}
+                          onClick={() => handleApprove(enrollment.id)}
+                        >
+                          <CheckCircle2 className="w-4 h-4 mr-2" /> Approve
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
