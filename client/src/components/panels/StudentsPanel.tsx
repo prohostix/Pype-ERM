@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { uploadFormFile } from '@/lib/uploadFile';
 import { StudentProfilePanel } from './StudentProfilePanel';
 
 export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completingEnrollment, hideList }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean; completingEnrollment?: any; hideList?: boolean } = {}) {
@@ -1590,16 +1591,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           if (!file) return;
                           const toastId = toast.loading('Uploading photo...');
                           try {
-                            const uploadData = new FormData();
-                            uploadData.append('file', file);
-                            const res = await api.post('/auth/upload', uploadData, {
-                              headers: { 'Content-Type': 'multipart/form-data' }
-                            });
-                            setFormData({ ...formData, photo: res.data.url });
+                            const url = await uploadFormFile(file);
+                            setFormData((prev: any) => ({ ...prev, photo: url }));
                             toast.success('Photo uploaded successfully', { id: toastId });
-                          } catch (err) {
+                          } catch (err: any) {
                             console.error(err);
-                            toast.error('Failed to upload photo', { id: toastId });
+                            toast.error(err.message || 'Failed to upload photo', { id: toastId });
+                          } finally {
+                            e.target.value = ''; // lets the same file be chosen again after a failure
                           }
                         }}
                       />
@@ -1707,24 +1706,25 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                               type="file"
                               id={elementId}
                               className="hidden"
+ accept="image/*,.pdf,.doc,.docx"
                               onChange={async (e) => {
                                 const file = e.target.files?.[0];
                                 if (!file) return;
                                 const toastId = toast.loading(`Uploading ${docType}...`);
-                                try {
-                                  const uploadData = new FormData();
-                                  uploadData.append('file', file);
-                                  const res = await api.post('/auth/upload', uploadData, {
-                                    headers: { 'Content-Type': 'multipart/form-data' }
-                                  });
-                                  const newDocs = (formData.documents || []).filter((d: any) => d.type !== docType);
-                                  newDocs.push({ type: docType, url: res.data.url, label: docType === 'Other' ? customOtherName : undefined });
-                                  setFormData({ ...formData, documents: newDocs });
-                                  toast.success(`${docType} uploaded successfully`, { id: toastId });
-                                } catch (err) {
-                                  console.error(err);
-                                  toast.error(`Failed to upload ${docType}`, { id: toastId });
-                                }
+                          try {
+                            const url = await uploadFormFile(file);
+                            setFormData((prev: any) => {
+                              const newDocs = (prev.documents || []).filter((d: any) => d.type !== docType);
+                              newDocs.push({ type: docType, url, label: docType === 'Other' ? customOtherName : undefined });
+                              return { ...prev, documents: newDocs };
+                            });
+                            toast.success(`${docType} uploaded successfully`, { id: toastId });
+                          } catch (err: any) {
+                            console.error(err);
+                            toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
+                          } finally {
+                            e.target.value = '';
+                          }
                               }}
                             />
                             <Label
@@ -1794,17 +1794,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           onChange={async (e) => {
                             const file = e.target.files?.[0];
                             if (file) {
-                              const uploadData = new FormData();
-                              uploadData.append('file', file);
-                              uploadData.append('type', 'receipt');
+                              const toastId = toast.loading('Uploading receipt...');
                               try {
-                                const res = await api.post('/documents/upload', uploadData, {
-                                  headers: { 'Content-Type': 'multipart/form-data' }
-                                });
-                                setFormData({ ...formData, receiptUrl: res.data.url });
-                                toast.success('Receipt uploaded successfully');
+                                const url = await uploadFormFile(file, { endpoint: '/documents/upload', fields: { type: 'receipt' } });
+                                setFormData((prev: any) => ({ ...prev, receiptUrl: url }));
+                                toast.success('Receipt uploaded successfully', { id: toastId });
                               } catch (err: any) {
-                                toast.error('Failed to upload receipt');
+                                toast.error(err.message || 'Failed to upload receipt', { id: toastId });
+                              } finally {
+                                e.target.value = '';
                               }
                             }
                           }}
@@ -2183,18 +2181,16 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                                     const file = e.target.files?.[0];
                                     if (!file) return;
                                     const toastId = toast.loading('Uploading photo...');
-                                    try {
-                                      const data = new FormData();
-                                      data.append('file', file);
-                                      const res = await api.post('/auth/upload', data, {
-                                        headers: { 'Content-Type': 'multipart/form-data' }
-                                      });
-                                      setFormData({ ...formData, photo: res.data.url });
-                                      toast.success('Photo uploaded successfully', { id: toastId });
-                                    } catch (err) {
-                                      console.error(err);
-                                      toast.error('Failed to upload photo', { id: toastId });
-                                    }
+                          try {
+                            const url = await uploadFormFile(file);
+                            setFormData((prev: any) => ({ ...prev, photo: url }));
+                            toast.success('Photo uploaded successfully', { id: toastId });
+                          } catch (err: any) {
+                            console.error(err);
+                            toast.error(err.message || 'Failed to upload photo', { id: toastId });
+                          } finally {
+                            e.target.value = ''; // lets the same file be chosen again after a failure
+                          }
                                   }}
                                 />
                                 <Label
@@ -2292,24 +2288,25 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                                       type="file"
                                       id={elementId}
                                       className="hidden"
+ accept="image/*,.pdf,.doc,.docx"
                                       onChange={async (e) => {
                                         const file = e.target.files?.[0];
                                         if (!file) return;
                                         const toastId = toast.loading(`Uploading ${docType}...`);
-                                        try {
-                                          const uploadData = new FormData();
-                                          uploadData.append('file', file);
-                                          const res = await api.post('/auth/upload', uploadData, {
-                                            headers: { 'Content-Type': 'multipart/form-data' }
-                                          });
-                                          const newDocs = (formData.documents || []).filter((d: any) => d.type !== docType);
-                                          newDocs.push({ type: docType, url: res.data.url, label: docType === 'Other' ? customOtherName : undefined });
-                                          setFormData({ ...formData, documents: newDocs });
-                                          toast.success(`${docType} uploaded successfully`, { id: toastId });
-                                        } catch (err) {
-                                          console.error(err);
-                                          toast.error(`Failed to upload ${docType}`, { id: toastId });
-                                        }
+                          try {
+                            const url = await uploadFormFile(file);
+                            setFormData((prev: any) => {
+                              const newDocs = (prev.documents || []).filter((d: any) => d.type !== docType);
+                              newDocs.push({ type: docType, url, label: docType === 'Other' ? customOtherName : undefined });
+                              return { ...prev, documents: newDocs };
+                            });
+                            toast.success(`${docType} uploaded successfully`, { id: toastId });
+                          } catch (err: any) {
+                            console.error(err);
+                            toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
+                          } finally {
+                            e.target.value = '';
+                          }
                                       }}
                                     />
                                     <Label
@@ -2379,19 +2376,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                                   onChange={async (e) => {
                                     const file = e.target.files?.[0];
                                     if (file) {
-                                      const uploadData = new FormData();
-                                      uploadData.append('file', file);
-                                      uploadData.append('type', 'receipt');
-                                      try {
-                                        const res = await api.post('/documents/upload', uploadData, {
-                                          headers: { 'Content-Type': 'multipart/form-data' }
-                                        });
-                                        setFormData({ ...formData, receiptUrl: res.data.url });
-                                        toast.success('Receipt uploaded successfully');
-                                      } catch (err: any) {
-                                        toast.error('Failed to upload receipt');
-                                      }
-                                    }
+                              const toastId = toast.loading('Uploading receipt...');
+                              try {
+                                const url = await uploadFormFile(file, { endpoint: '/documents/upload', fields: { type: 'receipt' } });
+                                setFormData((prev: any) => ({ ...prev, receiptUrl: url }));
+                                toast.success('Receipt uploaded successfully', { id: toastId });
+                              } catch (err: any) {
+                                toast.error(err.message || 'Failed to upload receipt', { id: toastId });
+                              } finally {
+                                e.target.value = '';
+                              }
+                            }
                                   }}
                                 />
                               </div>
