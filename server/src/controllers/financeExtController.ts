@@ -136,6 +136,8 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       actualStudent = await prisma.student.findUnique({ where: { id: actualStudentId }, include: { program: { include: { university: true } } } });
     }
 
+    let studentPaymentHistory: any[] = [];
+
     if (actualStudentId) {
       const schedules = await prisma.paymentSchedule.findMany({ where: { studentId: actualStudentId } });
       if (schedules.length > 0) {
@@ -144,7 +146,8 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
 
       const studentInvoices = await prisma.invoice.findMany({
         where: { studentId: actualStudentId },
-        include: { payments: true }
+        include: { payments: true },
+        orderBy: { createdAt: 'asc' }
       });
       overallPaid = studentInvoices.reduce((acc, inv) => acc + inv.payments.reduce((s, p) => s + p.amount, 0), 0);
       
@@ -152,7 +155,60 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       if (!invoice.studentId) {
         overallPaid += invoice.payments.reduce((sum, p) => sum + p.amount, 0);
       }
+
+      // Collect all payments from student's invoices
+      studentInvoices.forEach(inv => {
+        inv.payments.forEach(p => {
+          studentPaymentHistory.push({
+            id: p.id,
+            date: p.receivedAt || p.createdAt,
+            amount: p.amount,
+            method: p.method || 'CASH',
+            referenceNo: p.referenceNo || `RCP-${inv.invoiceNo}`,
+            invoiceNo: inv.invoiceNo,
+            notes: p.notes || ''
+          });
+        });
+      });
+
+      // Include initial payment from student enrollment if present
+      const studentEnrollments = await prisma.enrollment.findMany({
+        where: { studentId: actualStudentId }
+      });
+      for (const enr of studentEnrollments) {
+        if (enr.initialPaymentAmount && enr.initialPaymentAmount > 0) {
+          const alreadyExists = studentPaymentHistory.some(p => Math.abs(p.amount - (enr.initialPaymentAmount || 0)) < 0.01);
+          if (!alreadyExists) {
+            studentPaymentHistory.unshift({
+              id: `enr-${enr.id}`,
+              date: enr.initialPaymentDate || enr.createdAt,
+              amount: enr.initialPaymentAmount,
+              method: 'ONLINE / DIRECT',
+              referenceNo: 'PROVISIONAL / ADMISSION',
+              invoiceNo: 'INIT-FEE',
+              notes: 'Initial Admission Payment'
+            });
+          }
+        }
+      }
     }
+
+    // Fallback if studentPaymentHistory is still empty but current invoice has payments
+    if (studentPaymentHistory.length === 0 && invoice.payments.length > 0) {
+      invoice.payments.forEach(p => {
+        studentPaymentHistory.push({
+          id: p.id,
+          date: p.receivedAt || p.createdAt,
+          amount: p.amount,
+          method: p.method || 'CASH',
+          referenceNo: p.referenceNo || `RCP-${invoice.invoiceNo}`,
+          invoiceNo: invoice.invoiceNo,
+          notes: p.notes || ''
+        });
+      });
+    }
+
+    studentPaymentHistory.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     let targetProgramId = invoice.student?.programId || fallbackEnrollment?.programId;
     let targetSpecialisation = actualStudent?.specialisation || fallbackEnrollment?.specialisation;
@@ -246,6 +302,7 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       total: invoice.total,
       status: invoice.status,
       payments: invoice.payments,
+      paymentHistory: studentPaymentHistory,
       organization: invoice.organization,
       balanceDue: Math.max(0, invoice.total - invoice.payments.reduce((sum, p) => sum + p.amount, 0)),
       totalFee,

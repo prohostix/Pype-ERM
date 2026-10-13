@@ -300,6 +300,11 @@ export function SalesStudentPipelinePanel() {
             const cfg = statusCfg(e.status, e);
             const isExpanded = expandedId === e.id;
             const history: StatusHistoryEntry[] = Array.isArray(e.statusHistory) ? e.statusHistory : [];
+            const docs = e.student?.documents || e.documents || [];
+            const photoStatus = e.student?.admissionProgress?.photoStatus;
+            const rejectedDocs = docs.filter((d: any) => d && d.status === 'rejected');
+            const hasRejectedPhoto = photoStatus === 'rejected';
+            const hasRejected = rejectedDocs.length > 0 || hasRejectedPhoto;
 
             return (
               <Card key={e.id} className="hover:border-primary/30 transition-colors">
@@ -323,27 +328,17 @@ export function SalesStudentPipelinePanel() {
                       </div>
 
                       {/* Rejected Items Notice */}
-                      {(() => {
-                        const docs = e.student?.documents || e.documents || [];
-                        const photoStatus = e.student?.admissionProgress?.photoStatus;
-                        const rejectedDocs = docs.filter((d: any) => d && d.status === 'rejected');
-                        const hasRejectedPhoto = photoStatus === 'rejected';
-
-                        if (rejectedDocs.length > 0 || hasRejectedPhoto) {
-                          return (
-                            <div className="mt-2 bg-red-50 border border-red-200 text-red-700 p-2 rounded text-xs">
-                              <strong>Action Required:</strong>
-                              <ul className="list-disc pl-4 mt-1">
-                                {hasRejectedPhoto && <li>Student Photo was rejected.</li>}
-                                {rejectedDocs.map((d: any, idx: number) => (
-                                  <li key={idx}>{d.type} was rejected.</li>
-                                ))}
-                              </ul>
-                            </div>
-                          );
-                        }
-                        return null;
-                      })()}
+                      {hasRejected && (
+                        <div className="mt-2 bg-red-50 border border-red-200 text-red-700 p-2 rounded text-xs">
+                          <strong>Action Required:</strong>
+                          <ul className="list-disc pl-4 mt-1">
+                            {hasRejectedPhoto && <li>Student Photo was rejected.</li>}
+                            {rejectedDocs.map((d: any, idx: number) => (
+                              <li key={idx}>{d.type} was rejected.</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
 
                       {/* Communication Options */}
                       <div className="flex flex-wrap items-center gap-2 mt-3">
@@ -432,34 +427,25 @@ export function SalesStudentPipelinePanel() {
                       )}
 
                       {/* Verification Action */}
-                      {(() => {
-                        const docs = e.student?.documents || e.documents || [];
-                        const photoStatus = e.student?.admissionProgress?.photoStatus;
-                        const hasRejected = docs.some((d: any) => d && d.status === 'rejected') || photoStatus === 'rejected';
-
-                        if (e.status === 'sales_verification_pending' || ((e.status === 'rejected' || e.status === 'ops_rejected') && hasRejected) || e.status === 'provisional_finance_verified') {
-                          return (
-                            <div className="mt-4">
-                              <Button variant="default" size="sm" className={cn("bg-purple-600 hover:bg-purple-700", hasRejected && "bg-rose-600 hover:bg-rose-700")} onClick={(evt) => {
-                                evt.stopPropagation();
-                                if (e.status === 'provisional_finance_verified') {
-                                  // Open full wizard
-                                  setVerifyingStudent(e);
-                                  setEnrollDialogOpen(true);
-                                } else {
-                                  openVerifyDialog(e);
-                                }
-                              }}>
-                                {e.status === 'provisional_finance_verified' ? 'Complete Enrollment' : hasRejected ? 'Re-upload Rejected Documents & Resubmit' : 'Verify & Submit to Ops'}
-                              </Button>
-                            </div>
-                          );
-                        }
-                        return null;
-                      })()}
+                      {(hasRejected || e.status === 'sales_verification_pending' || e.status === 'rejected' || e.status === 'ops_rejected' || e.status === 'provisional_finance_verified') && (
+                        <div className="mt-4">
+                          <Button variant="default" size="sm" className={cn("bg-purple-600 hover:bg-purple-700", hasRejected && "bg-rose-600 hover:bg-rose-700")} onClick={(evt) => {
+                            evt.stopPropagation();
+                            if (e.status === 'provisional_finance_verified') {
+                              // Open full wizard
+                              setVerifyingStudent(e);
+                              setEnrollDialogOpen(true);
+                            } else {
+                              openVerifyDialog(e);
+                            }
+                          }}>
+                            {e.status === 'provisional_finance_verified' ? 'Complete Enrollment' : hasRejected ? 'Re-upload Rejected Documents & Resubmit' : 'Verify & Submit to Ops'}
+                          </Button>
+                        </div>
+                      )}
 
                       {/* Current handler */}
-                      {e.status === 'document_review' && (
+                      {e.status === 'document_review' && !hasRejected && (
                         <p className="text-xs text-yellow-600 mt-1 font-medium">📋 Waiting for Operations review</p>
                       )}
                       {e.status === 'finance_review' && (

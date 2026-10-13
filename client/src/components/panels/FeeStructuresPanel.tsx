@@ -114,14 +114,23 @@ export function FeeStructuresPanel() {
   };
 
   const loadFeeForProgramAndSpecialisation = (p: any, spec: string | null) => {
-    const existing = fees.find(f => {
+    let existing = fees.find(f => {
       const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
       const sid = f.sessionId && typeof f.sessionId === 'object' ? f.sessionId.id : (f.sessionId ?? null);
       return pid === p.id && sid === (selectedSession?.id || null) && (f.specialisation || null) === spec;
     });
 
-    if (existing) {
+    if (!existing) {
+      existing = fees.find(f => {
+        const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
+        return pid === p.id && (f.specialisation || null) === spec;
+      });
+      if (existing) {
+        toast.info(`Pre-filled baseline fee from "${existing.sessionId ? (sessions.find((s: any) => s.id === (existing.sessionId?.id || existing.sessionId))?.name || 'Session') : 'Default'}".`);
+      }
+    }
 
+    if (existing) {
       setFormData({
         registrationFee: existing.registrationFee?.toString() || '0',
         tuitionFee: existing.tuitionFee?.toString() || '0',
@@ -144,7 +153,6 @@ export function FeeStructuresPanel() {
       })));
       setInstallments(Array.isArray(existing.installments) ? existing.installments : []);
     } else {
-
       setFormData({
         registrationFee: '0',
         tuitionFee: '0',
@@ -248,6 +256,7 @@ export function FeeStructuresPanel() {
 
   const progsForUniv = programs.filter(p => p.universityId === selectedUniv?.id);
   const sessionsForUniv = sessions.filter(s => 
+    !s.universityId ||
     s.universityId === selectedUniv?.id || 
     (s.programId && programs.find(p => p.id === s.programId)?.universityId === selectedUniv?.id)
   );
@@ -368,11 +377,16 @@ export function FeeStructuresPanel() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {progsForUniv.map(p => {
-                    const hasFee = fees.some(f => {
+                    const exactFee = fees.find(f => {
                       const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
                       const sid = f.sessionId && typeof f.sessionId === 'object' ? f.sessionId.id : (f.sessionId ?? null);
                       return pid === p.id && sid === (selectedSession?.id || null);
                     });
+                    const fallbackFee = !exactFee ? fees.find(f => {
+                      const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
+                      return pid === p.id;
+                    }) : null;
+
                     return (
                       <button
                         key={p.id}
@@ -389,9 +403,19 @@ export function FeeStructuresPanel() {
                           </div>
                         </div>
                         <div className="mt-auto pt-4 flex justify-between items-center">
-                           <Badge variant={hasFee ? 'default' : 'secondary'} className="text-[10px]">
-                             {hasFee ? 'Configured' : 'Not Configured'}
-                           </Badge>
+                          {exactFee ? (
+                            <Badge variant="default" className="text-[10px]">
+                              Configured
+                            </Badge>
+                          ) : fallbackFee ? (
+                            <Badge variant="outline" className="text-[10px] border-blue-500/30 text-blue-600 bg-blue-50/50 dark:bg-blue-950/30 dark:text-blue-400">
+                              Configured ({fallbackFee.sessionId ? (sessions.find((s: any) => s.id === (fallbackFee.sessionId?.id || fallbackFee.sessionId))?.name || 'Session') : 'Default'})
+                            </Badge>
+                          ) : (
+                            <Badge variant="secondary" className="text-[10px]">
+                              Not Configured
+                            </Badge>
+                          )}
                         </div>
                       </button>
                     );
@@ -416,11 +440,15 @@ export function FeeStructuresPanel() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {selectedProg.specialisations?.map((spec: string) => {
-                    const hasFee = fees.some(f => {
+                    const exactFee = fees.find(f => {
                       const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
                       const sid = f.sessionId && typeof f.sessionId === 'object' ? f.sessionId.id : (f.sessionId ?? null);
                       return pid === selectedProg.id && sid === (selectedSession?.id || null) && (f.specialisation || null) === spec;
                     });
+                    const fallbackFee = !exactFee ? fees.find(f => {
+                      const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
+                      return pid === selectedProg.id && (f.specialisation || null) === spec;
+                    }) : null;
                     return (
                       <button
                         key={spec}
@@ -439,9 +467,19 @@ export function FeeStructuresPanel() {
                           )}
                         </div>
                         <div className="mt-auto pt-4 flex justify-between items-center w-full">
-                           <Badge variant={hasFee ? 'default' : 'secondary'} className="text-[10px]">
-                             {hasFee ? 'Configured' : 'Not Configured'}
-                           </Badge>
+                          {exactFee ? (
+                            <Badge variant="default" className="text-[10px]">
+                              Configured
+                            </Badge>
+                          ) : fallbackFee ? (
+                            <Badge variant="outline" className="text-[10px] border-blue-500/30 text-blue-600 bg-blue-50/50 dark:bg-blue-950/30 dark:text-blue-400">
+                              Configured ({fallbackFee.sessionId ? (sessions.find((s: any) => s.id === (fallbackFee.sessionId?.id || fallbackFee.sessionId))?.name || 'Session') : 'Default'})
+                            </Badge>
+                          ) : (
+                            <Badge variant="secondary" className="text-[10px]">
+                              Not Configured
+                            </Badge>
+                          )}
                         </div>
                       </button>
                     );

@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { hashPassword, generateUserId } from '../utils/authUtils.js';
 
 export const getWallet = asyncHandler(async (req: AuthRequest, res: Response) => {
   const wallet = await prisma.studyCenterWallet.findUnique({ where: { studyCenterId: req.user.studyCenterId || '' } });
@@ -95,6 +96,14 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
   
   let currentStudentId = studentId;
 
+  if (!currentStudentId && rest.studentEmail) {
+    const existingStudent = await prisma.student.findUnique({ where: { email: rest.studentEmail } });
+    if (existingStudent) {
+      currentStudentId = existingStudent.id;
+      data.studentId = currentStudentId;
+    }
+  }
+
   if (!currentStudentId) {
     // Generate Admission Number for Provisional
     const org = await prisma.organization.findUnique({ where: { id: req.user.organizationId } });
@@ -115,6 +124,26 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
     }
 
     const program = await prisma.program.findUnique({ where: { id: rest.programId } });
+
+    // Ensure User account exists to satisfy Student_email_fkey foreign key constraint
+    let studentUser = await prisma.user.findUnique({ where: { email: rest.studentEmail } });
+    if (!studentUser) {
+      const generatedUid = await generateUserId();
+      const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
+      const hashedPassword = await hashPassword(defaultPassword);
+      studentUser = await prisma.user.create({
+        data: {
+          userId: generatedUid,
+          organizationId: req.user.organizationId,
+          email: rest.studentEmail,
+          password: hashedPassword,
+          name: rest.studentName,
+          role: 'student',
+          phone: rest.studentPhone || '',
+          status: 'active',
+        },
+      });
+    }
 
     const newStudent = await prisma.student.create({
       data: {
@@ -262,13 +291,24 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
   }
 
   // Find or create student user account for credentials
-  let studentUser = await prisma.user.findUnique({ where: { email } });
-  const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
-  if (!studentUser) {
-    // Note: generateUserId and hashPassword would normally be used here, but we can't easily import them.
-    // For this context, we will just create the user if missing, or we can skip creating the user account until Ops verifies.
-    // Ops verification usually creates the account, but we can do it here if needed.
-    // Actually, `createStudent` creates it. Let's just create the Student record.
+  const targetEmail = (email || enrollment.studentEmail || '').trim();
+  let studentUser = targetEmail ? await prisma.user.findUnique({ where: { email: targetEmail } }) : null;
+  if (!studentUser && targetEmail) {
+    const generatedUid = await generateUserId();
+    const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
+    const hashedPassword = await hashPassword(defaultPassword);
+    studentUser = await prisma.user.create({
+      data: {
+        userId: generatedUid,
+        organizationId: req.user.organizationId,
+        email: targetEmail,
+        password: hashedPassword,
+        name: name || enrollment.studentName,
+        role: 'student',
+        phone: phone || enrollment.studentPhone || '',
+        status: 'active',
+      },
+    });
   }
 
   const studentData: any = {
@@ -342,9 +382,17 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     
     studentData.admissionNo = newAdmissionNo;
 
-    student = await prisma.student.create({
-      data: studentData
-    });
+    const existingByEmail = await prisma.student.findUnique({ where: { email: studentData.email } });
+    if (existingByEmail) {
+      student = await prisma.student.update({
+        where: { id: existingByEmail.id },
+        data: studentData
+      });
+    } else {
+      student = await prisma.student.create({
+        data: studentData
+      });
+    }
   }
 
   // An application that Sales Admin rejected (or that already went through

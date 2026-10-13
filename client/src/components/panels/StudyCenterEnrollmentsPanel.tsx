@@ -142,16 +142,23 @@ export function StudyCenterEnrollmentsPanel() {
                         </div>
                       )}
 
-                      {(e.status === 'rejected' || e.status === 'ops_rejected') && (
-                        <div className="mt-4 pt-4 border-t">
-                          <Button size="sm" className="bg-rose-600 hover:bg-rose-700 font-semibold" onClick={() => {
-                            setVerifyingStudent(e);
-                            setEnrollDialogOpen(true);
-                          }}>
-                            <Upload className="w-4 h-4 mr-2" /> Re-upload Rejected Documents
-                          </Button>
-                        </div>
-                      )}
+                      {(() => {
+                        const docs = e.student?.documents || e.documents || [];
+                        const hasRejected = docs.some((d: any) => d && d.status === 'rejected') || e.photoStatus === 'rejected';
+                        if (e.status === 'rejected' || e.status === 'ops_rejected' || hasRejected) {
+                          return (
+                            <div className="mt-4 pt-4 border-t">
+                              <Button size="sm" className="bg-rose-600 hover:bg-rose-700 font-semibold" onClick={() => {
+                                setVerifyingStudent(e);
+                                setEnrollDialogOpen(true);
+                              }}>
+                                <Upload className="w-4 h-4 mr-2" /> Re-upload Rejected Documents
+                              </Button>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
                     </div>
                   </div>
                 </CardContent>
