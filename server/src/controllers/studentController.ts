@@ -494,6 +494,16 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
   const dataToUpdate: any = { ...req.body };
   delete dataToUpdate.id;
   delete dataToUpdate.email; // Do not allow updating primary email directly
+  delete dataToUpdate.organizationId; // a student never moves to another organization
+  // The enrollment form also sends fields that live on other models
+  // (e.g. receiptUrl belongs to the enrollment) plus the payment fields handled
+  // below. Prisma rejects the whole update on any unknown key, so keep only real
+  // student columns (and the payment fields that are folded into admissionProgress).
+  const studentColumns = new Set<string>(Object.values(Prisma.StudentScalarFieldEnum));
+  const folded = new Set(['paymentPlan', 'initialPaymentAmount', 'initialPaymentDate']);
+  for (const key of Object.keys(dataToUpdate)) {
+    if (!studentColumns.has(key) && !folded.has(key)) delete dataToUpdate[key];
+  }
 
   if (dataToUpdate.dob) dataToUpdate.dob = new Date(dataToUpdate.dob);
   if (dataToUpdate.admissionDate) dataToUpdate.admissionDate = new Date(dataToUpdate.admissionDate);
