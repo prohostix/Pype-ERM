@@ -32,15 +32,15 @@
     --error: 0 84% 60%;
     --info: 199 89% 48%;
 
-    /* Sidebar - always dark, same in light and dark mode */
-    --sidebar-background: 222 47% 11%;
-    --sidebar-foreground: 210 40% 92%;
-    --sidebar-primary: 243 75% 65%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 217 33% 17%;
-    --sidebar-accent-foreground: 210 40% 92%;
-    --sidebar-border: 217 33% 17%;
-    --sidebar-ring: 243 75% 65%;
+    /* Sidebar - always dark green, matching brand theme */
+    --sidebar-background: 145 55% 7%;
+    --sidebar-foreground: 140 20% 94%;
+    --sidebar-primary: 113 46% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 145 35% 14%;
+    --sidebar-accent-foreground: 140 30% 96%;
+    --sidebar-border: 145 30% 13%;
+    --sidebar-ring: 113 46% 50%;
   }
 
   .dark {
@@ -65,15 +65,15 @@
     --input: 217 33% 17.5%;
     --ring: 243 75% 65%;
 
-    /* Sidebar - slightly darker in dark mode */
-    --sidebar-background: 222 47% 4%;
-    --sidebar-foreground: 210 40% 92%;
-    --sidebar-primary: 243 75% 65%;
-    --sidebar-primary-foreground: 222 47% 6%;
-    --sidebar-accent: 217 33% 12%;
-    --sidebar-accent-foreground: 210 40% 92%;
-    --sidebar-border: 217 33% 12%;
-    --sidebar-ring: 243 75% 65%;
+    /* Sidebar - slightly darker dark green in dark mode */
+    --sidebar-background: 145 60% 4.5%;
+    --sidebar-foreground: 140 20% 94%;
+    --sidebar-primary: 113 46% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 145 35% 10%;
+    --sidebar-accent-foreground: 140 30% 96%;
+    --sidebar-border: 145 30% 9%;
+    --sidebar-ring: 113 46% 50%;
   }
 }
 

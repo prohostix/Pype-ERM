@@ -58,27 +58,31 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
   const paymentMethod = receipt.payments?.[0]?.method || 'CASH';
   const payAt = receipt.center || 'HEAD OFFICE';
 
+  const totalFeeAmount = receipt.totalFee ?? (receipt.overallProgramFee || receipt.universityFee || 0);
+  const totalRemittedAmount = receipt.overallPaid ?? totalPaid;
+  const balanceFeeAmount = Math.max(0, totalFeeAmount - totalRemittedAmount);
+
   const receiptContent = (
     <div style={{ fontFamily: '"Inter", "Helvetica Neue", sans-serif', width: '100%', margin: '0 auto', background: '#fff', color: '#1e293b', padding: '24px' }}>
       
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #e2e8f0', paddingBottom: '16px', marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #e2e8f0', paddingBottom: '16px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
           {logoUrl ? (
-            <img src={logoUrl} alt="Logo" style={{ height: '72px', objectFit: 'contain' }} />
+            <img src={logoUrl} alt="Logo" style={{ height: '64px', maxWidth: '200px', objectFit: 'contain' }} />
           ) : (
-            <div style={{ width: 72, height: 72, background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 28, fontWeight: 'bold' }}>
+            <div style={{ width: 64, height: 64, background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 26, fontWeight: 'bold' }}>
               {actualOrgName.charAt(0).toUpperCase()}
             </div>
           )}
           <div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>{actualOrgName}</div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>{actualOrgName}</div>
             <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 500, marginTop: '2px' }}>Cash Receipt</div>
           </div>
         </div>
-        <div style={{ textAlign: 'right', fontSize: '13px', color: '#475569', lineHeight: '1.6' }}>
+        <div style={{ textAlign: 'left', fontSize: '13px', color: '#475569', lineHeight: '1.6', maxWidth: '340px' }}>
           {receipt.organization?.address ? (
-            <div style={{ whiteSpace: 'pre-wrap' }}>{receipt.organization.address}</div>
+            <div style={{ whiteSpace: 'pre-wrap', textAlign: 'left' }}>{receipt.organization.address}</div>
           ) : (
             <>
               <div style={{ fontWeight: 600, color: '#0f172a' }}>2nd Floor Al Madeena Tower, Calicut</div>
@@ -183,15 +187,15 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
         <div style={{ width: '340px', background: '#fdf8f6', padding: '20px', borderRadius: '8px', border: '1px solid #fed7aa' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px dashed #fdba74' }}>
             <span style={{ fontSize: '13px', color: '#c2410c', fontWeight: 600 }}>Total Fee</span>
-            <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>₹{(receipt.universityFee || receipt.overallProgramFee || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>₹{totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px dashed #fdba74' }}>
             <span style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>Total Remitted Fee</span>
-            <span style={{ fontSize: '14px', color: '#16a34a', fontWeight: 700 }}>₹{(receipt.overallPaid || totalPaid).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            <span style={{ fontSize: '14px', color: '#16a34a', fontWeight: 700 }}>₹{totalRemittedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 800, textTransform: 'uppercase' }}>Balance Fee</span>
-            <span style={{ fontSize: '18px', color: Math.max(0, (receipt.universityFee || receipt.overallProgramFee || 0) - (receipt.overallPaid || totalPaid)) <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>₹{Math.max(0, (receipt.universityFee || receipt.overallProgramFee || 0) - (receipt.overallPaid || totalPaid)).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            <span style={{ fontSize: '18px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>₹{balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
           </div>
         </div>
       </div>

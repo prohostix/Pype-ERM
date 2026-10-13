@@ -3,6 +3,7 @@ import { Building2, Upload, Save, Globe } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import api from '@/lib/api';
@@ -229,13 +230,14 @@ export function OrganizationSettingsPanel() {
                   placeholder="e.g. +91 9876543210"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 sm:col-span-2">
                 <Label>Registered Address</Label>
-                <Input
+                <Textarea
                   required
+                  rows={3}
                   value={formData.address}
                   onChange={e => setFormData({ ...formData, address: e.target.value })}
-                  placeholder="e.g. 1st Floor, Building Block 4"
+                  placeholder="e.g. 1st Floor, Building Block 4, Knowledge Park, New Delhi"
                 />
               </div>
             </div>

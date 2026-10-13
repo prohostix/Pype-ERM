@@ -15,6 +15,7 @@ export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) 
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.OR = [
       { student: { branchId: req.user.branchId } },
+      { student: { enrolledByUser: { branchId: req.user.branchId } } },
       { studentId: null, centerId: null } // Fallback if some invoices are manually created
     ];
   }
@@ -38,13 +39,16 @@ export const getInvoice = asyncHandler(async (req: AuthRequest, res: Response) =
         select: {
           name: true,
           email: true,
+          phone: true,
+          admissionNo: true,
           enrollmentNo: true,
+          address: true,
           program: { select: { name: true } },
           university: { select: { name: true } }
         }
       },
-      center: { select: { name: true } },
-      organization: { select: { name: true, logo: true } },
+      center: { select: { name: true, code: true, email: true, contact: true, address: true, city: true, state: true } },
+      organization: { select: { name: true, logo: true, address: true, email: true, phone: true } },
       payments: true
     }
   });
@@ -99,6 +103,7 @@ export const getPayments = asyncHandler(async (req: AuthRequest, res: Response) 
     where.invoice = {
       OR: [
         { student: { branchId: req.user.branchId } },
+        { student: { enrolledByUser: { branchId: req.user.branchId } } },
         { studentId: null, centerId: null }
       ]
     };

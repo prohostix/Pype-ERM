@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, ShieldCheck, Zap, Sparkles } from 'lucide-react';
 
-const BlueRibbon = () => (
+const BrandRibbon = () => (
   <svg 
     className="absolute inset-0 w-full h-full object-cover pointer-events-none -z-10" 
     viewBox="0 0 1440 900" 
@@ -13,22 +13,22 @@ const BlueRibbon = () => (
   >
     <defs>
       <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#3b82f6" /> 
-        <stop offset="50%" stopColor="#93c5fd" /> 
-        <stop offset="100%" stopColor="#1d4ed8" /> 
+        <stop offset="0%" stopColor="#54b947" /> 
+        <stop offset="50%" stopColor="#8ae47e" /> 
+        <stop offset="100%" stopColor="#2c7722" /> 
       </linearGradient>
       <linearGradient id="ribbonGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.8" />
-        <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.9" />
+        <stop offset="0%" stopColor="#67cf57" stopOpacity="0.85" />
+        <stop offset="100%" stopColor="#1a4f15" stopOpacity="0.9" />
       </linearGradient>
       
       {/* Drop shadow for ribbon */}
       <filter id="ribbonShadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="20" stdDeviation="30" floodOpacity="0.15" floodColor="#1e3a8a"/>
+        <feDropShadow dx="0" dy="20" stdDeviation="30" floodOpacity="0.16" floodColor="#1a4f15"/>
       </filter>
     </defs>
     
-    <rect width="100%" height="100%" fill="#f8fafc" />
+    <rect width="100%" height="100%" fill="#f8fbf7" />
 
     {/* The ribbon stroke 1 */}
     <path 
@@ -78,16 +78,16 @@ export function Login() {
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4 sm:p-8 font-sans text-slate-900 overflow-hidden">
       
-      <BlueRibbon />
+      <BrandRibbon />
 
       {/* Top Left Logo Area */}
-      <div className="absolute top-6 left-6 sm:top-8 sm:left-10 flex items-center gap-3">
+      <div className="absolute top-6 left-6 sm:top-8 sm:left-10 flex items-center gap-3.5">
         <div className="flex items-center justify-center">
-          <img src="/erm-logo-green.png" alt="Pype ERM" className="h-16 w-auto" />
+          <img src="/erm-logo-green.png" alt="Pype ERM" className="h-20 sm:h-24 w-auto drop-shadow-sm" />
         </div>
-        <div className="text-xl tracking-tight flex gap-1.5 items-center mt-1">
-          <span className="font-semibold text-slate-500">pype</span>
-          <span className="font-black text-slate-800">ERM</span>
+        <div className="flex items-baseline gap-1.5 whitespace-nowrap select-none mt-1">
+          <span className="text-2xl sm:text-[28px] font-bold tracking-tight text-slate-500">pype</span>
+          <span className="text-[18px] sm:text-[21px] font-black tracking-wider text-slate-900">ERM</span>
         </div>
       </div>
 
@@ -109,7 +109,7 @@ export function Login() {
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-12 rounded-2xl border-white/60 bg-white/80 focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all text-base px-5"
+                className="h-12 rounded-2xl border-white/60 bg-white/80 focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all text-base px-5"
                 required
               />
             </div>
@@ -121,7 +121,7 @@ export function Login() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="h-12 rounded-2xl border-white/60 bg-white/80 focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all pr-12 text-base px-5"
+                className="h-12 rounded-2xl border-white/60 bg-white/80 focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all pr-12 text-base px-5"
                 required
               />
               <button
@@ -142,7 +142,7 @@ export function Login() {
             <div className="pt-2">
               <Button
                 type="submit"
-                className="w-full h-12 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl text-[15px] font-semibold shadow-lg transition-all"
+                className="w-full h-12 bg-slate-900 hover:bg-[#439c36] text-white rounded-2xl text-[15px] font-semibold shadow-lg hover:shadow-[#54b947]/20 transition-all duration-200"
                 disabled={isLoading}
               >
                 {isLoading ? 'Signing in...' : 'Sign in to account'}
@@ -151,23 +151,23 @@ export function Login() {
           </form>
         </div>
 
-        {/* Right Column: Text Only */}
-        <div className="hidden md:flex w-1/2 p-12 flex-col justify-end text-white relative overflow-hidden bg-[#0c1959]">
-          {/* Abstract Fluid Background matching uploaded image */}
+        {/* Right Column: Text & Graphic */}
+        <div className="hidden md:flex w-1/2 p-12 flex-col justify-end text-white relative overflow-hidden bg-[#091f14]">
+          {/* Abstract Fluid Background matching green branding */}
           <svg className="absolute inset-0 w-full h-full object-cover z-0" viewBox="0 0 400 600" preserveAspectRatio="none">
             <defs>
               <linearGradient id="waveBase" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#1e3a8a" />
-                <stop offset="100%" stopColor="#0B1120" />
+                <stop offset="0%" stopColor="#103822" />
+                <stop offset="100%" stopColor="#05150c" />
               </linearGradient>
               <linearGradient id="waveTop" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#3b82f6" />
-                <stop offset="50%" stopColor="#4f46e5" />
-                <stop offset="100%" stopColor="#312e81" />
+                <stop offset="0%" stopColor="#54b947" />
+                <stop offset="50%" stopColor="#2e8229" />
+                <stop offset="100%" stopColor="#124317" />
               </linearGradient>
               <linearGradient id="waveBottom" x1="100%" y1="100%" x2="0%" y2="0%">
-                <stop offset="0%" stopColor="#3b82f6" />
-                <stop offset="100%" stopColor="#1e3a8a" />
+                <stop offset="0%" stopColor="#54b947" />
+                <stop offset="100%" stopColor="#1a5323" />
               </linearGradient>
               <filter id="blurShadow">
                 <feDropShadow dx="10" dy="10" stdDeviation="20" floodColor="#000" floodOpacity="0.5"/>
@@ -178,19 +178,13 @@ export function Login() {
             <path d="M0,0 L220,0 C280,250 150,350 0,550 Z" fill="url(#waveTop)" filter="url(#blurShadow)" />
             <path d="M400,600 L100,600 C250,450 400,300 400,100 Z" fill="url(#waveBottom)" filter="url(#blurShadow)" />
             
-            <circle cx="50" cy="150" r="120" fill="#818cf8" filter="blur(80px)" opacity="0.3" />
-            <circle cx="350" cy="450" r="150" fill="#60a5fa" filter="blur(80px)" opacity="0.2" />
+            <circle cx="50" cy="150" r="120" fill="#54b947" filter="blur(80px)" opacity="0.35" />
+            <circle cx="350" cy="450" r="150" fill="#8ae47e" filter="blur(80px)" opacity="0.25" />
           </svg>
           
-          {/* Top Right Uploaded Logo */}
-          <div className="absolute top-10 right-10 z-20 bg-white/90 backdrop-blur p-2.5 rounded-2xl shadow-xl">
-            <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <line x1="20" y1="50" x2="80" y2="50" stroke="black" strokeWidth="16" />
-              <circle cx="50" cy="18" r="18" fill="#009660" />
-              <circle cx="50" cy="82" r="18" fill="#009660" />
-              <circle cx="18" cy="50" r="18" fill="#009660" />
-              <circle cx="82" cy="50" r="18" fill="#009660" />
-            </svg>
+          {/* Top Right Logo matching erm-logo-green.png */}
+          <div className="absolute top-10 right-10 z-20 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-white/40">
+            <img src="/erm-logo-green.png" alt="Pype ERM" className="w-12 h-12 object-contain" />
           </div>
           
           <div className="relative z-10 flex flex-col items-start text-left w-full pb-4">

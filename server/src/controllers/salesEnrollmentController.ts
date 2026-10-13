@@ -521,7 +521,8 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
         where: { id: studentRecord.id },
         data: {
           status: 'active',
-          admissionNo: studentRecord.admissionNo || newAdmissionNo
+          admissionNo: studentRecord.admissionNo || newAdmissionNo,
+          branchId: studentRecord.branchId || salesUserBranchId || undefined
         }
       });
     }

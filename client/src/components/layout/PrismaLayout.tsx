@@ -240,12 +240,12 @@ export function PrismaLayout({
 
       {/* Premium Sidebar */}
       <aside className={cn(
-        "fixed inset-y-0 left-0 w-[250px] flex flex-col z-50 transition-all duration-300 lg:relative lg:translate-x-0 rounded-r-[40px]",
-        "bg-slate-950 text-slate-100",
+        "fixed inset-y-0 left-0 w-[250px] flex flex-col z-50 transition-all duration-300 lg:relative lg:translate-x-0 rounded-r-[40px] border-r-0 border-0",
+        "bg-gradient-to-b from-[#0a2718] via-[#06190f] to-[#04120a] text-slate-100 shadow-2xl shadow-emerald-950/20",
         isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
       )}>
 
-        <div className="h-[80px] flex items-center px-5 gap-3 relative z-10 border-b border-white/5">
+        <div className="h-[80px] flex items-center px-5 gap-3 relative z-10 border-b border-emerald-900/30">
           {/* Platform Branding */}
           <div className="flex flex-col items-center justify-center flex-shrink-0 min-w-[50px]">
             <img src="/erm-logo-white.png" alt="Pype ERM Logo" className="h-14 w-auto opacity-90" />
@@ -261,7 +261,7 @@ export function PrismaLayout({
               <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="max-h-10 w-auto object-contain drop-shadow-sm self-start" />
             ) : (
               <div className="flex flex-col">
-                <span className="text-[9px] text-slate-400 uppercase font-bold tracking-widest truncate mb-0.5">Workspace</span>
+                <span className="text-[9px] text-emerald-400/80 uppercase font-bold tracking-widest truncate mb-0.5">Workspace</span>
                 <span className="font-bold text-[13px] leading-tight tracking-tight text-slate-100 truncate" title={user?.organization?.name || "Organization"}>
                   {user?.organization?.name || "Organization"}
                 </span>
@@ -281,25 +281,25 @@ export function PrismaLayout({
 
         <div className="p-4 relative z-10">
           <div className="relative group">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400/50 group-focus-within:text-indigo-400 transition-colors" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-400/60 group-focus-within:text-[#54b947] transition-colors" />
             <input
               placeholder="Search features..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-10 pl-10 pr-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm text-slate-200 outline-none focus:border-indigo-500/50 transition-all placeholder:text-slate-400/50"
+              className="w-full h-10 pl-10 pr-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm text-slate-200 outline-none focus:border-[#54b947]/60 focus:ring-1 focus:ring-[#54b947]/30 transition-all placeholder:text-slate-400/50"
             />
           </div>
         </div>
 
         <nav className="flex-1 overflow-y-auto pb-6 relative z-10 flex flex-col gap-1.5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <div className="px-6 mb-2 mt-4">
-            <span className="text-[10px] font-bold text-slate-400/70 uppercase tracking-[0.2em]">Main Navigation</span>
+            <span className="text-[10px] font-bold text-emerald-400/80 uppercase tracking-[0.2em]">Main Navigation</span>
           </div>
           {filteredTables.map((table) => {
             if (table.isSection) {
               return (
                 <div key={table.id} className="px-6 pt-5 pb-1">
-                  <span className="text-[10px] font-bold text-slate-400/70 uppercase tracking-[0.2em]">{table.label}</span>
+                  <span className="text-[10px] font-bold text-emerald-400/80 uppercase tracking-[0.2em]">{table.label}</span>
                 </div>
               );
             }
@@ -309,15 +309,15 @@ export function PrismaLayout({
                 key={table.id}
                 onClick={() => { onTableChange(table.id); setIsSidebarOpen(false); }}
                 className={cn(
-                  'min-h-[60px] py-3 w-[calc(100%_-_24px)] ml-6 pl-6 flex items-center gap-3.5 group relative text-sm text-left rounded-l-full outline-none focus:outline-none focus-visible:ring-0',
+                  'min-h-[60px] py-3 w-[calc(100%_-_24px_+_2px)] ml-6 pl-6 flex items-center gap-3.5 group relative text-sm text-left rounded-l-full outline-none focus:outline-none focus-visible:ring-0 border-0',
                   isActive
                     ? 'bg-background text-foreground font-semibold z-20'
-                    : 'bg-transparent text-slate-400 hover:bg-white/10 hover:text-slate-100 hover:z-20'
+                    : 'bg-transparent text-slate-300 hover:bg-white/10 hover:text-slate-100 hover:z-20'
                 )}
               >
                 {/* Top Curve */}
                 <svg className={cn(
-                  "absolute right-0 -top-8 w-8 h-8 pointer-events-none",
+                  "absolute -right-[1px] -top-8 w-8 h-8 pointer-events-none",
                   isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 )} style={{ fill: isActive ? 'hsl(var(--background))' : 'rgba(255,255,255,0.1)' }} viewBox="0 0 20 20">
                   <path d="M 0 20 A 20 20 0 0 0 20 0 L 20 20 Z" />
@@ -326,7 +326,7 @@ export function PrismaLayout({
                 <div className={cn(
                   "p-1.5 rounded-lg transition-all duration-300 shrink-0",
                   isActive
-                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                    ? "bg-[#54b947] text-white shadow-md shadow-[#54b947]/30"
                     : "bg-white/5 text-slate-400 group-hover:text-slate-100"
                 )}>
                   {table.icon}
@@ -335,7 +335,7 @@ export function PrismaLayout({
 
                 {/* Bottom Curve */}
                 <svg className={cn(
-                  "absolute right-0 -bottom-8 w-8 h-8 pointer-events-none",
+                  "absolute -right-[1px] -bottom-8 w-8 h-8 pointer-events-none",
                   isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 )} style={{ fill: isActive ? 'hsl(var(--background))' : 'rgba(255,255,255,0.1)' }} viewBox="0 0 20 20">
                   <path d="M 0 0 A 20 20 0 0 1 20 20 L 20 0 Z" />
@@ -345,22 +345,22 @@ export function PrismaLayout({
           })}
         </nav>
 
-        <div className="p-4 border-t border-white/10 relative z-10">
+        <div className="p-4 border-t border-emerald-900/30 relative z-10">
           <div className="flex items-center gap-3 px-2 py-2 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold shrink-0 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-[#54b947]/20 border border-[#54b947]/40 flex items-center justify-center text-[#8ae47e] font-bold shrink-0 shadow-sm">
               {userName?.charAt(0) || 'U'}
             </div>
             <div className="flex flex-col min-w-0">
               <span className="text-sm font-semibold truncate text-slate-200">{userName || 'User'}</span>
-              <span className="text-[10px] text-slate-400 font-medium truncate uppercase tracking-wider">{(userRole === 'student' ? 'student' : userRole)?.replace(/_/g, ' ')}</span>
+              <span className="text-[10px] text-emerald-400/90 font-medium truncate uppercase tracking-wider">{(userRole === 'student' ? 'student' : userRole)?.replace(/_/g, ' ')}</span>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={toggleTheme}
-              className="flex items-center justify-center gap-2 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-400 hover:text-slate-200 transition-all text-xs font-medium"
+              className="flex items-center justify-center gap-2 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-slate-100 transition-all text-xs font-medium"
             >
-              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {isDarkMode ? <Sun className="w-4 h-4 text-emerald-400" /> : <Moon className="w-4 h-4" />}
             </button>
             <button
               onClick={onLogout}
@@ -373,7 +373,7 @@ export function PrismaLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden relative min-w-0 bg-muted/20">
+      <main className="flex-1 flex flex-col overflow-hidden relative min-w-0 bg-background">
         <header className="h-14 sm:h-[72px] flex items-center px-4 lg:px-8 gap-3 sm:gap-4 bg-background/60 backdrop-blur-xl border-b border-border/40 sticky top-0 z-20 shadow-[0_4px_30px_rgba(0,0,0,0.03)] transition-all">
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
 

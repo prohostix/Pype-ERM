@@ -155,13 +155,66 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
     }
 
     let targetProgramId = invoice.student?.programId || fallbackEnrollment?.programId;
+    let targetSpecialisation = actualStudent?.specialisation || fallbackEnrollment?.specialisation;
+    let totalFee = 0;
+    let feeBreakdown: any = null;
+
     if (targetProgramId) {
-      const feeStruct = await prisma.feeStructure.findFirst({
-        where: { programId: targetProgramId, organizationId: invoice.organizationId }
-      });
+      let feeStruct = null;
+      if (targetSpecialisation) {
+        feeStruct = await prisma.feeStructure.findFirst({
+          where: { programId: targetProgramId, specialisation: targetSpecialisation, organizationId: invoice.organizationId }
+        });
+      }
+      if (!feeStruct) {
+        feeStruct = await prisma.feeStructure.findFirst({
+          where: { programId: targetProgramId, organizationId: invoice.organizationId }
+        });
+      }
       if (feeStruct) {
         universityFee = feeStruct.universityFee || 0;
+
+        let additionalTotal = 0;
+        let additionalFeesList: any[] = [];
+        if (Array.isArray(feeStruct.additionalFees)) {
+          additionalFeesList = feeStruct.additionalFees as any[];
+        } else if (typeof feeStruct.additionalFees === 'string') {
+          try {
+            const parsed = JSON.parse(feeStruct.additionalFees);
+            if (Array.isArray(parsed)) additionalFeesList = parsed;
+          } catch {}
+        }
+        additionalTotal = additionalFeesList.reduce((sum, f) => sum + (Number(f?.amount) || 0), 0);
+
+        const regFee = Number(feeStruct.registrationFee) || 0;
+        const tuitFee = Number(feeStruct.tuitionFee) || 0;
+        const exFee = Number(feeStruct.examFee) || 0;
+
+        let baseTotal = 0;
+        if (Array.isArray(feeStruct.yearlyFees) && (feeStruct.yearlyFees as any[]).length > 0) {
+          baseTotal = (feeStruct.yearlyFees as any[]).reduce((sum, yf) => {
+            return sum + (Number(yf.registrationFee) || 0) + (Number(yf.tuitionFee) || 0) + (Number(yf.examFee) || 0);
+          }, 0);
+        }
+        if (!baseTotal) {
+          baseTotal = regFee + tuitFee + exFee;
+        }
+
+        totalFee = baseTotal + additionalTotal;
+        feeBreakdown = {
+          registrationFee: regFee,
+          tuitionFee: tuitFee,
+          examFee: exFee,
+          additionalFees: additionalFeesList,
+          additionalTotal
+        };
       }
+    }
+
+    if (!totalFee && overallProgramFee) {
+      totalFee = overallProgramFee;
+    } else if (totalFee) {
+      overallProgramFee = totalFee;
     }
 
     let studentName = actualStudent?.name || fallbackEnrollment?.studentName || 'N/A';
@@ -195,6 +248,8 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       payments: invoice.payments,
       organization: invoice.organization,
       balanceDue: Math.max(0, invoice.total - invoice.payments.reduce((sum, p) => sum + p.amount, 0)),
+      totalFee,
+      feeBreakdown,
       overallProgramFee,
       overallPaid,
       overallBalance: Math.max(0, overallProgramFee - overallPaid),
