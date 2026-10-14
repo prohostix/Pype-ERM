@@ -1,6 +1,6 @@
 import express from 'express';
 import { protect, authorize } from '../middleware/auth.js';
-import { getMyClasses, getClassBatches, getMyBatches, getMyStudents, getModulesForClass, createModule, updateModule, deleteModule, createLesson, updateLesson, deleteLesson, assignTeacherToLesson, getLessonHistory,
+import { getMyClasses, getClassBatches, getMyBatches, getMyStudents, getModulesForClass, createModule, updateModule, deleteModule, createSubModule, updateSubModule, deleteSubModule, createLesson, updateLesson, deleteLesson, assignTeacherToLesson, getLessonHistory,
   getBatchSessions,
   uploadMaterial, deleteMaterial, getOrganizationFaculty, getMyAssignedLessons, startSession, getActiveSessions, getSessionStudents, submitSessionAttendance, endSession,
   punchInSession, punchOutSession, getFacultyAttendancesByClass, approveFacultyPunch, getClassReviews, getVideoAnalytics, getLessonAssessment, upsertLessonAssessment } from '../controllers/facultyPortalController.js';
@@ -31,6 +31,17 @@ router.route('/classes/:classId/video-analytics')
 router.route('/modules/:moduleId')
   .put(updateModule)
   .delete(deleteModule);
+
+// Sub-Modules Management
+router.route('/modules/:moduleId/submodules')
+  .post(createSubModule);
+
+router.route('/submodules/:subModuleId')
+  .put(updateSubModule)
+  .delete(deleteSubModule);
+
+router.route('/submodules/:subModuleId/lessons')
+  .post(createLesson);
 
 // Lessons Management
 router.route('/modules/:moduleId/lessons')

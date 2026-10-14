@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Eye, EyeOff, ShieldCheck, Zap, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, ShieldAlert, AlertCircle } from 'lucide-react';
+import { CaptchaVerification } from '@/components/auth/CaptchaVerification';
 
 const BrandRibbon = () => (
   <svg 
@@ -52,6 +53,17 @@ const BrandRibbon = () => (
   </svg>
 );
 
+// High-clarity alphanumeric characters (excludes ambiguous chars like 0, O, 1, I, l)
+const CAPTCHA_CHARS = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+
+const generateCaptchaCode = (length = 6): string => {
+  let code = '';
+  for (let i = 0; i < length; i++) {
+    code += CAPTCHA_CHARS.charAt(Math.floor(Math.random() * CAPTCHA_CHARS.length));
+  }
+  return code;
+};
+
 export function Login() {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
@@ -60,14 +72,97 @@ export function Login() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // Bot Protection States
+  const [captchaCode, setCaptchaCode] = useState('');
+  const [captchaInput, setCaptchaInput] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [lockoutSeconds, setLockoutSeconds] = useState(0);
+  const formMountTime = useRef<number>(Date.now());
+
+  // Generate initial captcha code on mount
+  const handleRegenerateCaptcha = useCallback(() => {
+    setCaptchaCode(generateCaptchaCode(6));
+  }, []);
+
+  useEffect(() => {
+    handleRegenerateCaptcha();
+  }, [handleRegenerateCaptcha]);
+
+  // Handle Lockout countdown timer
+  useEffect(() => {
+    if (lockoutSeconds <= 0) return;
+    const timer = setInterval(() => {
+      setLockoutSeconds((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setError('');
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [lockoutSeconds]);
+
+  // Is captcha matched in real-time
+  const isCaptchaMatched = Boolean(
+    captchaCode &&
+    captchaInput.trim().length === captchaCode.length &&
+    captchaInput.trim().toUpperCase() === captchaCode.toUpperCase()
+  );
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // 1. Lockout check
+    if (lockoutSeconds > 0) {
+      setError(`Too many failed attempts. Please wait ${lockoutSeconds} seconds.`);
+      return;
+    }
+
+    // 2. Honeypot check (Bots fill hidden fields automatically)
+    if (honeypot.trim() !== '') {
+      console.warn('Bot submission blocked via honeypot');
+      setError('Bot activity detected. Form submission blocked.');
+      return;
+    }
+
+    // 3. Human speed check (Automated scripts submit in milliseconds)
+    const timeSinceMount = Date.now() - formMountTime.current;
+    if (timeSinceMount < 500) {
+      setError('Submission too rapid. Please verify you are human and try again.');
+      return;
+    }
+
+    // 4. Captcha validation
+    if (!captchaInput || captchaInput.trim().toUpperCase() !== captchaCode.toUpperCase()) {
+      const nextFailed = failedAttempts + 1;
+      setFailedAttempts(nextFailed);
+
+      if (nextFailed >= 3) {
+        setLockoutSeconds(30);
+        setFailedAttempts(0);
+        setError('Too many failed verification attempts. Cooldown active for 30s.');
+      } else {
+        setError(`Incorrect verification code. (${3 - nextFailed} attempts remaining)`);
+      }
+
+      setCaptchaInput('');
+      handleRegenerateCaptcha();
+      return;
+    }
+
+    // 5. Proceed with credentials authentication
     setIsLoading(true);
 
     const success = await login(email, password);
     if (!success) {
       setError('Invalid email or password');
+      // Regenerate captcha for next attempt to prevent replay attacks
+      setCaptchaInput('');
+      handleRegenerateCaptcha();
     } else {
       window.history.replaceState({}, '', '/');
     }
@@ -95,14 +190,28 @@ export function Login() {
       <div className="w-full max-w-[1000px] min-h-[600px] bg-white/70 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] border border-white/60 overflow-hidden relative z-10 flex flex-col md:flex-row">
         
         {/* Left Column: Form */}
-        <div className="w-full md:w-1/2 p-10 sm:p-14 flex flex-col justify-center relative">
-          <div className="mb-10">
-            <h1 className="text-[32px] font-bold tracking-tight text-slate-900 mb-3">Sign in to your account</h1>
-            <p className="text-slate-500 text-[15px]">Welcome back! login with your credentials</p>
+        <div className="w-full md:w-1/2 p-8 sm:p-12 md:p-14 flex flex-col justify-center relative">
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-[30px] sm:text-[32px] font-bold tracking-tight text-slate-900 mb-2">Sign in to your account</h1>
+            <p className="text-slate-500 text-[14px] sm:text-[15px]">Welcome back! Login with your credentials</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Honeypot field (hidden off-screen for bot trapping) */}
+            <div className="opacity-0 absolute -z-50 pointer-events-none h-0 w-0 overflow-hidden" aria-hidden="true">
+              <label htmlFor="website_url_hp">Security Field</label>
+              <input
+                id="website_url_hp"
+                type="text"
+                name="website_url_hp"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="space-y-1.5">
               <Input
                 id="email"
                 type="email"
@@ -111,10 +220,11 @@ export function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="h-12 rounded-2xl border-white/60 bg-white/80 focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all text-base px-5"
                 required
+                disabled={lockoutSeconds > 0 || isLoading}
               />
             </div>
 
-            <div className="space-y-2 relative">
+            <div className="space-y-1.5 relative">
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
@@ -123,29 +233,55 @@ export function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="h-12 rounded-2xl border-white/60 bg-white/80 focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all pr-12 text-base px-5"
                 required
+                disabled={lockoutSeconds > 0 || isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
               >
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
 
+            {/* Visual Bot-Prevention CAPTCHA Section */}
+            <CaptchaVerification
+              code={captchaCode}
+              value={captchaInput}
+              onChange={setCaptchaInput}
+              onRefresh={handleRegenerateCaptcha}
+              isMatched={isCaptchaMatched}
+              disabled={lockoutSeconds > 0 || isLoading}
+            />
+
             {error && (
-              <div className="p-3 bg-red-50/90 border border-red-100 text-red-600 text-sm rounded-xl font-medium text-center">
-                {error}
+              <div className="p-3 bg-red-50/95 border border-red-200/80 text-red-600 text-sm rounded-xl font-medium flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <span>{error}</span>
               </div>
             )}
 
-            <div className="pt-2">
+            {lockoutSeconds > 0 && (
+              <div className="p-3 bg-amber-50/95 border border-amber-200 text-amber-800 text-xs rounded-xl font-medium flex items-center justify-center gap-2">
+                <ShieldAlert className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                <span>Security cooldown active. Please wait {lockoutSeconds} seconds.</span>
+              </div>
+            )}
+
+            <div className="pt-1.5">
               <Button
                 type="submit"
-                className="w-full h-12 bg-slate-900 hover:bg-[#439c36] text-white rounded-2xl text-[15px] font-semibold shadow-lg hover:shadow-[#54b947]/20 transition-all duration-200"
-                disabled={isLoading}
+                className="w-full h-12 bg-slate-900 hover:bg-[#439c36] text-white rounded-2xl text-[15px] font-semibold shadow-lg hover:shadow-[#54b947]/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isLoading || lockoutSeconds > 0}
               >
-                {isLoading ? 'Signing in...' : 'Sign in to account'}
+                {isLoading ? (
+                  'Signing in...'
+                ) : lockoutSeconds > 0 ? (
+                  `Cooldown (${lockoutSeconds}s)`
+                ) : (
+                  'Sign in to account'
+                )}
               </Button>
             </div>
           </form>

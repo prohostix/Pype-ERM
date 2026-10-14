@@ -5,6 +5,7 @@ import { Prisma } from '../generated/client/index.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { sendEmail } from '../utils/emailService.js';
+import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
 
 const SALES_ROLES = ['sales_admin', 'sales_sub_admin', 'sales', 'employee', 'student'];
 
@@ -209,6 +210,34 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     specialisation
   } = req.body;
   
+  const cleanEmail = normalizeEmail(email);
+  const cleanPhone = (phone || '').trim();
+
+  if (!cleanEmail) {
+    res.status(400).json({ success: false, message: 'Student email is required' });
+    return;
+  }
+  if (!cleanPhone) {
+    res.status(400).json({ success: false, message: 'Student phone number is required' });
+    return;
+  }
+
+  // Enforce uniqueness across existing students and active enrollments
+  const uniquenessCheck = await checkStudentOrEnrollmentExists({
+    email: cleanEmail,
+    phone: cleanPhone,
+    organizationId: req.user.organizationId
+  });
+
+  if (!uniquenessCheck.isUnique) {
+    res.status(400).json({
+      success: false,
+      message: uniquenessCheck.message,
+      field: uniquenessCheck.field
+    });
+    return;
+  }
+
   if (!programId || programId.trim() === '') {
     res.status(400).json({ success: false, message: 'Program is required' });
     return;
@@ -271,7 +300,9 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     }
   }
 
-  let studentUser = await prisma.user.findUnique({ where: { email } });
+  let studentUser = await prisma.user.findFirst({
+    where: { email: { equals: cleanEmail, mode: 'insensitive' } }
+  });
   const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
   if (!studentUser) {
     const generatedUid = await generateUserId();
@@ -280,11 +311,11 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       data: {
         userId: generatedUid,
         organizationId: req.user.organizationId,
-        email,
+        email: cleanEmail,
         password: hashedPassword,
         name,
         role: 'student', // Fallback role for student in UserRole enum
-        phone,
+        phone: cleanPhone,
         status: 'active',
       },
     });
@@ -300,8 +331,8 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
   const student = await prisma.student.create({
     data: {
       name,
-      email,
-      phone,
+      email: cleanEmail,
+      phone: cleanPhone,
       address: address || '',
       enrollmentNo: req.body.enrollmentNo ? req.body.enrollmentNo : null,
       admissionNo: admissionNo || null,
@@ -505,6 +536,19 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     if (!studentColumns.has(key) && !folded.has(key)) delete dataToUpdate[key];
   }
 
+  if (dataToUpdate.phone) {
+    const rawPhone = dataToUpdate.phone.trim();
+    const phoneCheck = await checkStudentOrEnrollmentExists({
+      phone: rawPhone,
+      excludeStudentId: req.params.id
+    });
+    if (!phoneCheck.isUnique) {
+      res.status(400).json({ success: false, message: phoneCheck.message, field: 'phone' });
+      return;
+    }
+    dataToUpdate.phone = rawPhone;
+  }
+
   if (dataToUpdate.dob) dataToUpdate.dob = new Date(dataToUpdate.dob);
   if (dataToUpdate.admissionDate) dataToUpdate.admissionDate = new Date(dataToUpdate.admissionDate);
   if ('enrollmentNo' in dataToUpdate) {
@@ -604,6 +648,9 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
     existed: [] as string[]
   };
 
+  const batchEmails = new Set<string>();
+  const batchPhones = new Set<string>();
+
   for (const s of students) {
     try {
       if (!s.email || !s.name) {
@@ -612,13 +659,30 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
         continue;
       }
 
-      // Check if student email is already registered
-      const existingStudent = await prisma.student.findUnique({ where: { email: s.email } });
-      if (existingStudent) {
+      const cleanEmail = normalizeEmail(s.email);
+      const rawPhone = (s.phone || '').trim();
+      const cleanPhone = normalizePhone(s.phone);
+
+      if (batchEmails.has(cleanEmail) || (cleanPhone && batchPhones.has(cleanPhone))) {
         results.skipped++;
-        results.existed.push(`Student with email ${s.email} already exists`);
+        results.existed.push(`Duplicate within import batch: ${s.name} (${s.email} / ${s.phone || 'No phone'})`);
         continue;
       }
+
+      const uniquenessCheck = await checkStudentOrEnrollmentExists({
+        email: cleanEmail,
+        phone: cleanPhone,
+        organizationId
+      });
+
+      if (!uniquenessCheck.isUnique) {
+        results.skipped++;
+        results.existed.push(`Student ${s.name}: ${uniquenessCheck.message}`);
+        continue;
+      }
+
+      batchEmails.add(cleanEmail);
+      if (cleanPhone) batchPhones.add(cleanPhone);
 
       // Resolve program
       let program = null;
@@ -1261,4 +1325,21 @@ export const bulkRecordPayment = asyncHandler(async (req: AuthRequest, res: Resp
     success: true,
     message: `Payment of ₹${amount} recorded for ${recorded} student(s)`
   });
+});
+
+export const checkStudentUniqueness = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const email = req.query.email as string | undefined;
+  const phone = req.query.phone as string | undefined;
+  const excludeStudentId = req.query.excludeStudentId as string | undefined;
+  const excludeEnrollmentId = req.query.excludeEnrollmentId as string | undefined;
+
+  const result = await checkStudentOrEnrollmentExists({
+    email,
+    phone,
+    organizationId: req.user.organizationId,
+    excludeStudentId,
+    excludeEnrollmentId
+  });
+
+  res.status(200).json({ success: true, ...result });
 });

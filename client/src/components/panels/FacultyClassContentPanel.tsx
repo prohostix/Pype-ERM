@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Plus, Edit, Trash2, Folder, FileText, Upload, Loader2, Download, BookOpen, ChevronDown, ChevronUp, User, UserPlus, Clock, Play, Users, CheckSquare } from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, Folder, FileText, Upload, Loader2, Download, BookOpen, ChevronDown, ChevronUp, User, UserPlus, Clock, Play, Users, CheckSquare, Layers, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 export function FacultyClassContentPanel({ academicClass, onBack }: { academicClass: any; onBack: () => void }) {
   const [modules, setModules] = useState<any[]>([]);
@@ -17,15 +18,23 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   const [batches, setBatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({});
+  const [expandedSubModules, setExpandedSubModules] = useState<Record<string, boolean>>({});
 
   // Module Modal
   const [moduleDialogOpen, setModuleDialogOpen] = useState(false);
   const [editingModuleId, setEditingModuleId] = useState<string | null>(null);
   const [moduleForm, setModuleForm] = useState({ title: '', description: '', order: '' });
 
+  // Sub-Module Modal
+  const [subModuleDialogOpen, setSubModuleDialogOpen] = useState(false);
+  const [activeModuleForSubModuleId, setActiveModuleForSubModuleId] = useState<string | null>(null);
+  const [editingSubModuleId, setEditingSubModuleId] = useState<string | null>(null);
+  const [subModuleForm, setSubModuleForm] = useState({ title: '', description: '', order: '' });
+
   // Lesson Modal
   const [lessonDialogOpen, setLessonDialogOpen] = useState(false);
   const [activeModuleId, setActiveModuleId] = useState<string | null>(null);
+  const [activeSubModuleId, setActiveSubModuleId] = useState<string | null>(null);
   const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
   const [lessonForm, setLessonForm] = useState({ title: '', description: '', order: '', videoUrl: '' });
 
@@ -86,11 +95,24 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
     setLoading(true);
     try {
       const res = await api.get(`/faculty-portal/classes/${academicClass.id}/modules`);
-      setModules(res.data.data || []);
+      const fetchedModules = res.data.data || [];
+      setModules(fetchedModules);
       
-      if (res.data.data?.length > 0 && Object.keys(expandedModules).length === 0) {
-        setExpandedModules({ [res.data.data[0].id]: true });
+      if (fetchedModules.length > 0 && Object.keys(expandedModules).length === 0) {
+        setExpandedModules({ [fetchedModules[0].id]: true });
       }
+
+      setExpandedSubModules(prev => {
+        const next = { ...prev };
+        fetchedModules.forEach((m: any) => {
+          m.subModules?.forEach((s: any) => {
+            if (next[s.id] === undefined) {
+              next[s.id] = true;
+            }
+          });
+        });
+        return next;
+      });
     } catch (err) {
       toast.error('Failed to fetch class modules');
     } finally {
@@ -119,6 +141,10 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
     setExpandedModules(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
+  const toggleSubModule = (id: string) => {
+    setExpandedSubModules(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
   // --- MODULE ACTIONS ---
   const handleModuleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,7 +165,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   };
 
   const handleDeleteModule = async (moduleId: string) => {
-    if (!confirm('Delete this module and ALL its lessons and materials?')) return;
+    if (!confirm('Delete this module and ALL its sub-modules, lessons and materials?')) return;
     try {
       await api.delete(`/faculty-portal/modules/${moduleId}`);
       toast.success('Module deleted');
@@ -151,20 +177,76 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
     }
   };
 
+  // --- SUB-MODULE ACTIONS ---
+  const handleSubModuleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const payload = { ...subModuleForm, order: subModuleForm.order ? parseInt(subModuleForm.order) : 0 };
+      if (editingSubModuleId) {
+        await api.put(`/faculty-portal/submodules/${editingSubModuleId}`, payload);
+        toast.success('Sub-module updated');
+      } else {
+        await api.post(`/faculty-portal/modules/${activeModuleForSubModuleId}/submodules`, payload);
+        toast.success('Sub-module created');
+      }
+      setSubModuleDialogOpen(false);
+      fetchModules();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to save sub-module');
+    }
+  };
+
+  const handleDeleteSubModule = async (subModuleId: string) => {
+    if (!confirm('Delete this sub-module and all its lessons and materials?')) return;
+    try {
+      await api.delete(`/faculty-portal/submodules/${subModuleId}`);
+      toast.success('Sub-module deleted');
+      fetchModules();
+    } catch (err: any) {
+      if (!err.isDeleteRequest) {
+        toast.error('Failed to delete sub-module');
+      }
+    }
+  };
+
+  // --- HELPERS FOR OPENING MODALS ---
+  const openAddLesson = (moduleId: string, subModuleId: string | null = null) => {
+    setActiveModuleId(moduleId);
+    setActiveSubModuleId(subModuleId);
+    setEditingLessonId(null);
+    setLessonForm({ title: '', description: '', order: '', videoUrl: '' });
+    setLessonDialogOpen(true);
+  };
+
+  const openAddSubModule = (moduleId: string) => {
+    setActiveModuleForSubModuleId(moduleId);
+    setEditingSubModuleId(null);
+    setSubModuleForm({ title: '', description: '', order: '' });
+    setSubModuleDialogOpen(true);
+  };
+
   // --- LESSON ACTIONS ---
   const handleLessonSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!activeModuleId && !activeSubModuleId) {
+      toast.error('Module is required');
+      return;
+    }
     try {
       const payload = { 
         ...lessonForm, 
-        order: lessonForm.order ? parseInt(lessonForm.order) : 0
+        order: lessonForm.order ? parseInt(lessonForm.order) : 0,
+        classSubModuleId: activeSubModuleId ? activeSubModuleId : null
       };
       
       if (editingLessonId) {
         await api.put(`/faculty-portal/lessons/${editingLessonId}`, payload);
         toast.success('Lesson updated');
       } else {
-        await api.post(`/faculty-portal/modules/${activeModuleId}/lessons`, payload);
+        const endpoint = activeSubModuleId 
+          ? `/faculty-portal/submodules/${activeSubModuleId}/lessons` 
+          : `/faculty-portal/modules/${activeModuleId}/lessons`;
+        await api.post(endpoint, payload);
         toast.success('Lesson created');
       }
       setLessonDialogOpen(false);
@@ -277,6 +359,79 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
     }
   };
 
+  const renderLessonRow = (lesson: any) => (
+    <div key={lesson.id} className="bg-background">
+      <div className="flex items-center justify-between p-3 px-5 bg-slate-50/60 dark:bg-slate-900/60 hover:bg-slate-100/60 dark:hover:bg-slate-900 transition-colors">
+        <div className="flex items-center gap-2.5">
+          <BookOpen className="w-4 h-4 text-indigo-500 shrink-0" />
+          <div>
+            <div className="flex items-center gap-2">
+              <h5 className="font-semibold text-sm leading-tight">{lesson.title}</h5>
+              {lesson.videoUrl && (
+                <Badge variant="outline" className="text-[10px] h-4.5 px-1.5 gap-1 border-indigo-200 text-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40 font-normal">
+                  <Video className="w-3 h-3" /> Video
+                </Badge>
+              )}
+            </div>
+            {lesson.description && (
+              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{lesson.description}</p>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <Button variant="ghost" size="sm" onClick={() => openAssessmentDialog(lesson)} className="h-7 text-xs">
+            <CheckSquare className="w-3 h-3 mr-1" /> Assessment
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => { setActiveLessonId(lesson.id); setMaterialForm({ title: '', description: '' }); setUploadFile(null); setMaterialDialogOpen(true); }} className="h-7 text-xs">
+            <Upload className="w-3 h-3 mr-1" /> Material
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => { 
+            setActiveModuleId(lesson.classModuleId);
+            setActiveSubModuleId(lesson.classSubModuleId || null);
+            setEditingLessonId(lesson.id); 
+            setLessonForm({ title: lesson.title, description: lesson.description || '', order: String(lesson.order), videoUrl: lesson.videoUrl || '' }); 
+            setLessonDialogOpen(true); 
+          }} className="h-7 w-7">
+            <Edit className="w-3 h-3" />
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => handleDeleteLesson(lesson.id)} className="h-7 w-7 text-red-500 hover:text-red-600 hover:bg-red-50">
+            <Trash2 className="w-3 h-3" />
+          </Button>
+        </div>
+      </div>
+      
+      <div className="px-9 py-2">
+        {lesson.materials && lesson.materials.length > 0 ? (
+          <div className="space-y-1 my-1.5">
+            {lesson.materials.map((mat: any) => (
+              <div key={mat.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 border border-transparent hover:border-border transition-colors">
+                <div className="flex items-center gap-3">
+                  <FileText className="w-4 h-4 text-emerald-500" />
+                  <div>
+                    <p className="font-medium text-sm leading-tight">{mat.title}</p>
+                    <p className="text-[10px] text-muted-foreground">{mat.fileName}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="icon" onClick={() => handleDownload(mat.fileUrl, mat.fileName)} className="h-7 w-7 text-indigo-600">
+                    <Download className="w-3.5 h-3.5" />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => handleDeleteMaterial(mat.id)} className="h-7 w-7 text-red-500 hover:bg-red-50">
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-muted-foreground py-1.5 italic">No materials uploaded for this lesson.</p>
+        )}
+      </div>
+    </div>
+  );
+
+  const currentModuleForDialog = modules.find(m => m.id === activeModuleId);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -288,7 +443,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
             <Folder className="w-5 h-5 text-indigo-500" />
             Class Content: {academicClass?.name}
           </h2>
-          <p className="text-muted-foreground text-sm">Manage curriculum modules, lessons, and upload materials</p>
+          <p className="text-muted-foreground text-sm">Manage curriculum modules, sub-modules, lessons, and upload materials</p>
         </div>
         <Button onClick={() => { setEditingModuleId(null); setModuleForm({ title: '', description: '', order: '' }); setModuleDialogOpen(true); }}>
           <Plus className="w-4 h-4 mr-2" /> Add Module
@@ -305,99 +460,215 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
             <p className="text-muted-foreground/80 text-sm mt-1">Create your first module to start organizing your syllabus.</p>
           </div>
         ) : (
-          modules.map((mod) => (
-            <Card key={mod.id} className="overflow-hidden border-border/60 shadow-sm">
-              <div className="bg-muted/30 p-4 border-b flex justify-between items-start hover:bg-muted/50 cursor-pointer" onClick={() => toggleModule(mod.id)}>
-                <div className="flex items-center gap-2">
-                  {expandedModules[mod.id] ? <ChevronUp className="w-5 h-5 text-muted-foreground" /> : <ChevronDown className="w-5 h-5 text-muted-foreground" />}
-                  <div>
-                    <h3 className="font-bold text-lg">{mod.title}</h3>
-                    {mod.description && <p className="text-sm text-muted-foreground mt-0.5">{mod.description}</p>}
+          modules.map((mod) => {
+            const directLessons = (mod.lessons || []).filter((l: any) => !l.classSubModuleId);
+            const subModules = mod.subModules || [];
+            const subModuleLessonsCount = subModules.reduce((acc: number, s: any) => acc + (s.lessons?.length || 0), 0);
+            const totalLessons = directLessons.length + subModuleLessonsCount;
+
+            return (
+              <Card key={mod.id} className="overflow-hidden border-border/60 shadow-sm">
+                <div className="bg-muted/30 p-4 border-b flex justify-between items-start hover:bg-muted/50 cursor-pointer" onClick={() => toggleModule(mod.id)}>
+                  <div className="flex items-center gap-2">
+                    {expandedModules[mod.id] ? <ChevronUp className="w-5 h-5 text-muted-foreground" /> : <ChevronDown className="w-5 h-5 text-muted-foreground" />}
+                    <div>
+                      <h3 className="font-bold text-lg">{mod.title}</h3>
+                      {mod.description && <p className="text-sm text-muted-foreground mt-0.5">{mod.description}</p>}
+                      <div className="flex items-center gap-2 mt-1">
+                        {subModules.length > 0 && (
+                          <Badge variant="outline" className="text-[10px] h-4.5 px-1.5 gap-1 font-normal text-violet-600 bg-violet-50/50 dark:bg-violet-950/40 border-violet-200 dark:border-violet-800">
+                            <Layers className="w-3 h-3" /> {subModules.length} Sub-Module{subModules.length !== 1 ? 's' : ''}
+                          </Badge>
+                        )}
+                        <Badge variant="secondary" className="text-[10px] h-4.5 px-1.5 gap-1 font-normal">
+                          <BookOpen className="w-3 h-3" /> {totalLessons} Lesson{totalLessons !== 1 ? 's' : ''}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
+                    <Button variant="outline" size="sm" onClick={() => openAddLesson(mod.id, null)}>
+                      <Plus className="w-4 h-4 mr-1" /> Add Direct Lesson
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => openAddSubModule(mod.id)}>
+                      <Plus className="w-4 h-4 mr-1" /> Add Sub-Module
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => { setEditingModuleId(mod.id); setModuleForm({ title: mod.title, description: mod.description || '', order: String(mod.order) }); setModuleDialogOpen(true); }}>
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => handleDeleteModule(mod.id)} className="text-red-500 hover:text-red-600 hover:bg-red-50">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
-                <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
-                  <Button variant="outline" size="sm" onClick={() => { setActiveModuleId(mod.id); setEditingLessonId(null); setLessonForm({ title: '', description: '', order: '', videoUrl: '' }); setLessonDialogOpen(true); }}>
-                    <Plus className="w-4 h-4 mr-1" /> Add Lesson
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={() => { setEditingModuleId(mod.id); setModuleForm({ title: mod.title, description: mod.description || '', order: String(mod.order) }); setModuleDialogOpen(true); }}>
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={() => handleDeleteModule(mod.id)} className="text-red-500 hover:text-red-600 hover:bg-red-50">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-              
-              {expandedModules[mod.id] && (
-                <CardContent className="p-0">
-                  {mod.lessons && mod.lessons.length > 0 ? (
-                    <div className="divide-y divide-border/50">
-                      {mod.lessons.map((lesson: any) => (
-                        <div key={lesson.id} className="bg-background">
-                          <div className="flex items-center justify-between p-3 px-6 bg-slate-50/50 dark:bg-slate-900/50">
+                
+                {expandedModules[mod.id] && (
+                  <CardContent className="p-4 space-y-5 bg-muted/10">
+                    {/* If module is completely empty (no submodules and no direct lessons) */}
+                    {subModules.length === 0 && directLessons.length === 0 ? (
+                      <div className="p-8 text-center border border-dashed rounded-lg bg-background/50">
+                        <Folder className="w-8 h-8 text-muted-foreground/40 mx-auto mb-2" />
+                        <p className="text-sm font-medium text-foreground">No lessons or sub-modules yet</p>
+                        <p className="text-xs text-muted-foreground mt-1 mb-4">
+                          You can upload direct module lessons or create sub-modules to organize your topics.
+                        </p>
+                        <div className="flex items-center justify-center gap-3">
+                          <Button variant="default" size="sm" onClick={() => openAddLesson(mod.id, null)}>
+                            <Plus className="w-3.5 h-3.5 mr-1.5" /> Add Direct Lesson
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => openAddSubModule(mod.id)}>
+                            <Plus className="w-3.5 h-3.5 mr-1.5" /> Add Sub-Module
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {/* Direct Module Lessons Section (Rendered on top) */}
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between px-1">
                             <div className="flex items-center gap-2">
-                              <BookOpen className="w-4 h-4 text-indigo-400" />
-                              <h4 className="font-semibold text-sm">{lesson.title}</h4>
+                              <BookOpen className="w-4 h-4 text-indigo-500" />
+                              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                Direct Module Lessons
+                              </h4>
+                              <Badge variant="secondary" className="text-[10px] h-4.5 px-1.5 font-normal">
+                                {directLessons.length} Lessons
+                              </Badge>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <Button variant="ghost" size="sm" onClick={() => openAssessmentDialog(lesson)} className="h-7 text-xs">
-                                <CheckSquare className="w-3 h-3 mr-1" /> Assessment
-                              </Button>
-                              <Button variant="ghost" size="sm" onClick={() => { setActiveLessonId(lesson.id); setMaterialForm({ title: '', description: '' }); setUploadFile(null); setMaterialDialogOpen(true); }} className="h-7 text-xs">
-                                <Upload className="w-3 h-3 mr-1" /> Material
-                              </Button>
-                              <Button variant="ghost" size="icon" onClick={() => { setEditingLessonId(lesson.id); setLessonForm({ title: lesson.title, description: lesson.description || '', order: String(lesson.order), videoUrl: lesson.videoUrl || '' }); setLessonDialogOpen(true); }} className="h-7 w-7">
-                                <Edit className="w-3 h-3" />
-                              </Button>
-                              <Button variant="ghost" size="icon" onClick={() => handleDeleteLesson(lesson.id)} className="h-7 w-7 text-red-500">
-                                <Trash2 className="w-3 h-3" />
-                              </Button>
-                            </div>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="h-7 text-xs"
+                              onClick={() => openAddLesson(mod.id, null)}
+                            >
+                              <Plus className="w-3.5 h-3.5 mr-1" /> Add Direct Lesson
+                            </Button>
                           </div>
-                          
-                          <div className="px-10 py-2">
-                            {lesson.materials && lesson.materials.length > 0 ? (
-                              <div className="space-y-1 my-2">
-                                {lesson.materials.map((mat: any) => (
-                                  <div key={mat.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 border border-transparent hover:border-border transition-colors">
+
+                          {directLessons.length > 0 ? (
+                            <div className="divide-y divide-border/50 border rounded-lg overflow-hidden bg-background shadow-xs">
+                              {directLessons.map((lesson: any) => renderLessonRow(lesson))}
+                            </div>
+                          ) : (
+                            <div className="p-4 text-center border border-dashed rounded-lg bg-background/40 text-xs text-muted-foreground">
+                              No direct lessons in this module. Click "+ Add Direct Lesson" above to add one directly under the module.
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Sub-Modules list (Rendered below direct lessons) */}
+                        {subModules.length > 0 && (
+                          <div className={cn("space-y-3", "mt-4 pt-4 border-t border-border/60")}>
+                            <div className="flex items-center justify-between px-1">
+                              <div className="flex items-center gap-2">
+                                <Layers className="w-4 h-4 text-violet-500" />
+                                <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                  Sub-Modules ({subModules.length})
+                                </h4>
+                              </div>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-7 text-xs text-violet-600 dark:text-violet-400 hover:text-violet-700 hover:bg-violet-50 dark:hover:bg-violet-950/50"
+                                onClick={() => openAddSubModule(mod.id)}
+                              >
+                                <Plus className="w-3.5 h-3.5 mr-1" /> Add Sub-Module
+                              </Button>
+                            </div>
+
+                            <div className="space-y-3">
+                              {subModules.map((sub: any) => (
+                                <div key={sub.id} className="border border-border/80 rounded-lg overflow-hidden bg-background shadow-xs">
+                                  {/* Sub-Module Header */}
+                                  <div 
+                                    className="p-3 px-4 bg-slate-50/70 dark:bg-slate-900/70 border-b flex items-center justify-between cursor-pointer hover:bg-slate-100/60 dark:hover:bg-slate-900 transition-colors"
+                                    onClick={() => toggleSubModule(sub.id)}
+                                  >
                                     <div className="flex items-center gap-3">
-                                      <FileText className="w-4 h-4 text-emerald-500" />
+                                      {expandedSubModules[sub.id] ? (
+                                        <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                                      ) : (
+                                        <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                                      )}
+                                      <div className="w-7 h-7 rounded-md bg-violet-100 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400 flex items-center justify-center shrink-0">
+                                        <Layers className="w-4 h-4" />
+                                      </div>
                                       <div>
-                                        <p className="font-medium text-sm leading-tight">{mat.title}</p>
-                                        <p className="text-[10px] text-muted-foreground">{mat.fileName}</p>
+                                        <div className="flex items-center gap-2">
+                                          <h4 className="font-semibold text-sm text-foreground">{sub.title}</h4>
+                                          <Badge variant="secondary" className="text-[10px] h-4.5 px-1.5 font-normal">
+                                            {sub.lessons?.length || 0} Lessons
+                                          </Badge>
+                                        </div>
+                                        {sub.description && (
+                                          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{sub.description}</p>
+                                        )}
                                       </div>
                                     </div>
-                                    <div className="flex items-center gap-1">
-                                      <Button variant="ghost" size="icon" onClick={() => handleDownload(mat.fileUrl, mat.fileName)} className="h-7 w-7 text-indigo-600">
-                                        <Download className="w-3.5 h-3.5" />
+
+                                    <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
+                                      <Button 
+                                        variant="outline" 
+                                        size="sm" 
+                                        className="h-7 text-xs"
+                                        onClick={() => openAddLesson(mod.id, sub.id)}
+                                      >
+                                        <Plus className="w-3.5 h-3.5 mr-1" /> Add Lesson
                                       </Button>
-                                      <Button variant="ghost" size="icon" onClick={() => handleDeleteMaterial(mat.id)} className="h-7 w-7 text-red-500 hover:bg-red-50">
+                                      <Button 
+                                        variant="ghost" 
+                                        size="icon" 
+                                        className="h-7 w-7"
+                                        onClick={() => {
+                                          setActiveModuleForSubModuleId(mod.id);
+                                          setEditingSubModuleId(sub.id);
+                                          setSubModuleForm({ title: sub.title, description: sub.description || '', order: String(sub.order) });
+                                          setSubModuleDialogOpen(true);
+                                        }}
+                                      >
+                                        <Edit className="w-3.5 h-3.5" />
+                                      </Button>
+                                      <Button 
+                                        variant="ghost" 
+                                        size="icon" 
+                                        className="h-7 w-7 text-red-500 hover:text-red-600 hover:bg-red-50"
+                                        onClick={() => handleDeleteSubModule(sub.id)}
+                                      >
                                         <Trash2 className="w-3.5 h-3.5" />
                                       </Button>
                                     </div>
                                   </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-xs text-muted-foreground py-2 italic">No materials uploaded for this lesson.</p>
-                            )}
+
+                                  {/* Lessons within this Sub-Module */}
+                                  {expandedSubModules[sub.id] && (
+                                    <div className="p-0">
+                                      {sub.lessons && sub.lessons.length > 0 ? (
+                                        <div className="divide-y divide-border/50">
+                                          {sub.lessons.map((lesson: any) => renderLessonRow(lesson))}
+                                        </div>
+                                      ) : (
+                                        <div className="p-5 text-center text-xs text-muted-foreground bg-background">
+                                          No lessons added to this sub-module yet. Click "+ Add Lesson" to start.
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="p-8 text-center text-sm text-muted-foreground bg-background">
-                      No lessons added to this module yet. Click "Add Lesson" to start.
-                    </div>
-                  )}
-                </CardContent>
-              )}
-            </Card>
-          ))
+                        )}
+                      </>
+                    )}
+                  </CardContent>
+                )}
+              </Card>
+            );
+          })
         )}
       </div>
 
-      {/* Module and Material Dialogs */}
+      {/* Module Modal */}
       <Dialog open={moduleDialogOpen} onOpenChange={setModuleDialogOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>{editingModuleId ? 'Edit Module' : 'Create Module'}</DialogTitle></DialogHeader>
@@ -419,10 +690,63 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
         </DialogContent>
       </Dialog>
 
+      {/* Sub-Module Modal */}
+      <Dialog open={subModuleDialogOpen} onOpenChange={setSubModuleDialogOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>{editingSubModuleId ? 'Edit Sub-Module' : 'Create Sub-Module'}</DialogTitle></DialogHeader>
+          <form onSubmit={handleSubModuleSubmit} className="space-y-4 pt-4">
+            <div className="space-y-2">
+              <Label>Sub-Module Title</Label>
+              <Input 
+                placeholder="e.g. 1.1 Variables and Data Types"
+                value={subModuleForm.title} 
+                onChange={e => setSubModuleForm({ ...subModuleForm, title: e.target.value })} 
+                required 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Description (Optional)</Label>
+              <Textarea 
+                placeholder="Brief summary of topics covered in this sub-module"
+                value={subModuleForm.description} 
+                onChange={e => setSubModuleForm({ ...subModuleForm, description: e.target.value })} 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Order</Label>
+              <Input 
+                type="number" 
+                value={subModuleForm.order} 
+                onChange={e => setSubModuleForm({ ...subModuleForm, order: e.target.value })} 
+              />
+            </div>
+            <Button type="submit" className="w-full">{editingSubModuleId ? 'Save Changes' : 'Create Sub-Module'}</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Lesson Modal */}
       <Dialog open={lessonDialogOpen} onOpenChange={setLessonDialogOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>{editingLessonId ? 'Edit Lesson' : 'Create Lesson'}</DialogTitle></DialogHeader>
           <form onSubmit={handleLessonSubmit} className="space-y-4 pt-4">
+            {currentModuleForDialog?.subModules && currentModuleForDialog.subModules.length > 0 && (
+              <div className="space-y-2">
+                <Label>Lesson Placement</Label>
+                <Select value={activeSubModuleId || 'none'} onValueChange={val => setActiveSubModuleId(val === 'none' ? null : val)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Placement" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">-- Direct Lesson (Directly Under Module) --</SelectItem>
+                    {currentModuleForDialog.subModules.map((s: any) => (
+                      <SelectItem key={s.id} value={s.id}>Sub-Module: {s.title}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-[11px] text-muted-foreground">Select whether this lesson belongs directly to the module or inside a specific sub-module.</p>
+              </div>
+            )}
             <div className="space-y-2">
               <Label>Lesson Title</Label>
               <Input value={lessonForm.title} onChange={e => setLessonForm({ ...lessonForm, title: e.target.value })} required />

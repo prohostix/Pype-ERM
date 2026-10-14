@@ -5,6 +5,7 @@ import { prisma } from '../config/postgres.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { sendEmail } from '../utils/emailService.js';
+import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
 
 // ─── Public: Validate invite token and get form data ─────────────────────────
 
@@ -187,12 +188,22 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
     return;
   }
 
-  // Check for duplicate email in same program+session
-  const existing = await prisma.enrollment.findFirst({
-    where: { studentEmail, programId, sessionId: session.id, organizationId: orgId },
+  const cleanEmail = normalizeEmail(studentEmail);
+  const cleanPhone = (studentPhone || '').trim();
+
+  // Enforce uniqueness across existing students and active enrollments
+  const uniquenessCheck = await checkStudentOrEnrollmentExists({
+    email: cleanEmail,
+    phone: cleanPhone,
+    organizationId: orgId
   });
-  if (existing) {
-    res.status(400).json({ success: false, message: 'An application with this email already exists for this program' });
+
+  if (!uniquenessCheck.isUnique) {
+    res.status(400).json({
+      success: false,
+      message: uniquenessCheck.message,
+      field: uniquenessCheck.field
+    });
     return;
   }
 
@@ -203,8 +214,8 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
     data: {
       organizationId: orgId,
       studentName,
-      studentEmail,
-      studentPhone,
+      studentEmail: cleanEmail,
+      studentPhone: cleanPhone,
       studentAddress: studentAddress || '',
       fatherName,
       dob: dob ? new Date(dob) : null,
@@ -712,12 +723,22 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
     return;
   }
 
-  // Check for duplicate
-  const existing = await prisma.enrollment.findFirst({
-    where: { studentEmail, programId, sessionId: session.id, organizationId: orgId },
+  const cleanEmail = normalizeEmail(studentEmail);
+  const cleanPhone = (studentPhone || '').trim();
+
+  // Enforce uniqueness across existing students and active enrollments
+  const uniquenessCheck = await checkStudentOrEnrollmentExists({
+    email: cleanEmail,
+    phone: cleanPhone,
+    organizationId: orgId
   });
-  if (existing) {
-    res.status(400).json({ success: false, message: 'An application with this email already exists for this program' });
+
+  if (!uniquenessCheck.isUnique) {
+    res.status(400).json({
+      success: false,
+      message: uniquenessCheck.message,
+      field: uniquenessCheck.field
+    });
     return;
   }
 
@@ -728,8 +749,8 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
     data: {
       organizationId: orgId,
       studentName,
-      studentEmail,
-      studentPhone,
+      studentEmail: cleanEmail,
+      studentPhone: cleanPhone,
       studentAddress,
       programId,
       studyCenterId: studyCenter?.id || null,

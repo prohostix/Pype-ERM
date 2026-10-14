@@ -114,6 +114,20 @@ export const getModulesForClass = asyncHandler(async (req: AuthRequest, res: Res
     where: { academicClassId: classId },
     orderBy: [ { order: 'asc' }, { createdAt: 'asc' } ],
     include: { 
+      subModules: {
+        orderBy: [ { order: 'asc' }, { createdAt: 'asc' } ],
+        include: {
+          lessons: {
+            include: { 
+              materials: true, 
+              faculty: { select: { id: true, name: true } },
+              batchAssignments: { include: { faculty: { select: { id: true, name: true } }, academicBatch: { select: { id: true, name: true } } } },
+              academicSessions: { select: { id: true, academicBatchId: true, status: true } }
+            }, 
+            orderBy: [ { order: 'asc' }, { createdAt: 'asc' } ] 
+          }
+        }
+      },
       lessons: { 
         include: { 
           materials: true, 
@@ -139,7 +153,7 @@ export const createModule = asyncHandler(async (req: AuthRequest, res: Response)
     data: {
       title,
       description,
-      order: order || 0,
+      order: order ? parseInt(String(order)) : 0,
       academicClassId: classId,
       organizationId: req.user.organizationId
     }
@@ -157,7 +171,11 @@ export const updateModule = asyncHandler(async (req: AuthRequest, res: Response)
 
   const updated = await prisma.classModule.update({
     where: { id: moduleId },
-    data: { title, description, order }
+    data: { 
+      title, 
+      description, 
+      order: order !== undefined ? parseInt(String(order)) : undefined 
+    }
   });
   res.status(200).json({ success: true, data: updated });
 });
@@ -172,21 +190,99 @@ export const deleteModule = asyncHandler(async (req: AuthRequest, res: Response)
   res.status(200).json({ success: true, message: 'Module deleted' });
 });
 
-// --- Lessons Management ---
-export const createLesson = asyncHandler(async (req: AuthRequest, res: Response) => {
+// --- Sub-Modules Management ---
+export const createSubModule = asyncHandler(async (req: AuthRequest, res: Response) => {
   if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
   const { moduleId } = req.params;
-  const { title, description, order, facultyId, videoUrl } = req.body;
+  const { title, description, order } = req.body;
 
   const mod = await prisma.classModule.findUnique({ where: { id: moduleId }, include: { academicClass: true } });
   if (!mod || mod.academicClass.inchargeId !== req.user.id) return res.status(404).json({ success: false, message: 'Module not found or unauthorized' });
+
+  const sub = await prisma.classSubModule.create({
+    data: {
+      title,
+      description,
+      order: order ? parseInt(String(order)) : 0,
+      classModuleId: moduleId,
+      organizationId: req.user.organizationId
+    }
+  });
+  res.status(201).json({ success: true, data: sub });
+});
+
+export const updateSubModule = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { subModuleId } = req.params;
+  const { title, description, order } = req.body;
+
+  const sub = await prisma.classSubModule.findUnique({
+    where: { id: subModuleId },
+    include: { classModule: { include: { academicClass: true } } }
+  });
+  if (!sub || sub.classModule.academicClass.inchargeId !== req.user.id) {
+    return res.status(404).json({ success: false, message: 'Sub-Module not found or unauthorized' });
+  }
+
+  const updated = await prisma.classSubModule.update({
+    where: { id: subModuleId },
+    data: {
+      title,
+      description,
+      order: order !== undefined ? parseInt(String(order)) : undefined
+    }
+  });
+  res.status(200).json({ success: true, data: updated });
+});
+
+export const deleteSubModule = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { subModuleId } = req.params;
+
+  const sub = await prisma.classSubModule.findUnique({
+    where: { id: subModuleId },
+    include: { classModule: { include: { academicClass: true } } }
+  });
+  if (!sub || sub.classModule.academicClass.inchargeId !== req.user.id) {
+    return res.status(404).json({ success: false, message: 'Sub-Module not found or unauthorized' });
+  }
+
+  await prisma.classSubModule.delete({ where: { id: subModuleId } });
+  res.status(200).json({ success: true, message: 'Sub-Module deleted' });
+});
+
+// --- Lessons Management ---
+export const createLesson = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { moduleId, subModuleId } = req.params;
+  const { title, description, order, facultyId, videoUrl, classSubModuleId } = req.body;
+
+  let targetModuleId = moduleId;
+  let targetSubModuleId = subModuleId || classSubModuleId || null;
+
+  if (targetSubModuleId) {
+    const sub = await prisma.classSubModule.findUnique({
+      where: { id: targetSubModuleId },
+      include: { classModule: { include: { academicClass: true } } }
+    });
+    if (!sub || sub.classModule.academicClass.inchargeId !== req.user.id) {
+      return res.status(404).json({ success: false, message: 'Sub-Module not found or unauthorized' });
+    }
+    targetModuleId = sub.classModuleId;
+  } else {
+    const mod = await prisma.classModule.findUnique({ where: { id: targetModuleId }, include: { academicClass: true } });
+    if (!mod || mod.academicClass.inchargeId !== req.user.id) {
+      return res.status(404).json({ success: false, message: 'Module not found or unauthorized' });
+    }
+  }
 
   const lesson = await prisma.moduleLesson.create({
     data: {
       title,
       description,
-      order: order || 0,
-      classModuleId: moduleId,
+      order: order ? parseInt(String(order)) : 0,
+      classModuleId: targetModuleId,
+      classSubModuleId: targetSubModuleId,
       facultyId: facultyId || null,
       videoUrl: videoUrl || null,
       organizationId: req.user.organizationId
@@ -199,14 +295,21 @@ export const createLesson = asyncHandler(async (req: AuthRequest, res: Response)
 export const updateLesson = asyncHandler(async (req: AuthRequest, res: Response) => {
   if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
   const { lessonId } = req.params;
-  const { title, description, order, facultyId, videoUrl } = req.body;
+  const { title, description, order, facultyId, videoUrl, classSubModuleId } = req.body;
 
   const lesson = await prisma.moduleLesson.findUnique({ where: { id: lessonId }, include: { classModule: { include: { academicClass: true } } } });
   if (!lesson || lesson.classModule.academicClass.inchargeId !== req.user.id) return res.status(404).json({ success: false, message: 'Lesson not found or unauthorized' });
 
   const updated = await prisma.moduleLesson.update({
     where: { id: lessonId },
-    data: { title, description, order, facultyId: facultyId || null, videoUrl: videoUrl || null },
+    data: { 
+      title, 
+      description, 
+      order: order !== undefined ? parseInt(String(order)) : undefined, 
+      facultyId: facultyId || null, 
+      videoUrl: videoUrl || null,
+      classSubModuleId: classSubModuleId !== undefined ? (classSubModuleId || null) : undefined
+    },
     include: { faculty: { select: { id: true, name: true } } }
   });
   res.status(200).json({ success: true, data: updated });

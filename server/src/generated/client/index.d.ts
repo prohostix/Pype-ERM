@@ -374,6 +374,11 @@ export type AcademicClass = $Result.DefaultSelection<Prisma.$AcademicClassPayloa
  */
 export type ClassModule = $Result.DefaultSelection<Prisma.$ClassModulePayload>
 /**
+ * Model ClassSubModule
+ * 
+ */
+export type ClassSubModule = $Result.DefaultSelection<Prisma.$ClassSubModulePayload>
+/**
  * Model ModuleLesson
  * 
  */
@@ -1670,6 +1675,16 @@ export class PrismaClient<
   get classModule(): Prisma.ClassModuleDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.classSubModule`: Exposes CRUD operations for the **ClassSubModule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClassSubModules
+    * const classSubModules = await prisma.classSubModule.findMany()
+    * ```
+    */
+  get classSubModule(): Prisma.ClassSubModuleDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.moduleLesson`: Exposes CRUD operations for the **ModuleLesson** model.
     * Example usage:
     * ```ts
@@ -2294,6 +2309,7 @@ export namespace Prisma {
     AcademicCenter: 'AcademicCenter',
     AcademicClass: 'AcademicClass',
     ClassModule: 'ClassModule',
+    ClassSubModule: 'ClassSubModule',
     ModuleLesson: 'ModuleLesson',
     Assessment: 'Assessment',
     AssessmentQuestion: 'AssessmentQuestion',
@@ -2321,7 +2337,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -7653,6 +7669,80 @@ export namespace Prisma {
           }
         }
       }
+      ClassSubModule: {
+        payload: Prisma.$ClassSubModulePayload<ExtArgs>
+        fields: Prisma.ClassSubModuleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClassSubModuleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClassSubModuleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload>
+          }
+          findFirst: {
+            args: Prisma.ClassSubModuleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClassSubModuleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload>
+          }
+          findMany: {
+            args: Prisma.ClassSubModuleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload>[]
+          }
+          create: {
+            args: Prisma.ClassSubModuleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload>
+          }
+          createMany: {
+            args: Prisma.ClassSubModuleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClassSubModuleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload>[]
+          }
+          delete: {
+            args: Prisma.ClassSubModuleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload>
+          }
+          update: {
+            args: Prisma.ClassSubModuleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload>
+          }
+          deleteMany: {
+            args: Prisma.ClassSubModuleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClassSubModuleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ClassSubModuleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload>[]
+          }
+          upsert: {
+            args: Prisma.ClassSubModuleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassSubModulePayload>
+          }
+          aggregate: {
+            args: Prisma.ClassSubModuleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClassSubModule>
+          }
+          groupBy: {
+            args: Prisma.ClassSubModuleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClassSubModuleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClassSubModuleCountArgs<ExtArgs>
+            result: $Utils.Optional<ClassSubModuleCountAggregateOutputType> | number
+          }
+        }
+      }
       ModuleLesson: {
         payload: Prisma.$ModuleLessonPayload<ExtArgs>
         fields: Prisma.ModuleLessonFieldRefs
@@ -8721,6 +8811,7 @@ export namespace Prisma {
     academicCenter?: AcademicCenterOmit
     academicClass?: AcademicClassOmit
     classModule?: ClassModuleOmit
+    classSubModule?: ClassSubModuleOmit
     moduleLesson?: ModuleLessonOmit
     assessment?: AssessmentOmit
     assessmentQuestion?: AssessmentQuestionOmit
@@ -8879,6 +8970,7 @@ export namespace Prisma {
     communicationLogs: number
     faculties: number
     classModules: number
+    classSubModules: number
     classMaterials: number
     moduleLessons: number
     lessonFacultyHistories: number
@@ -8953,6 +9045,7 @@ export namespace Prisma {
     communicationLogs?: boolean | OrganizationCountOutputTypeCountCommunicationLogsArgs
     faculties?: boolean | OrganizationCountOutputTypeCountFacultiesArgs
     classModules?: boolean | OrganizationCountOutputTypeCountClassModulesArgs
+    classSubModules?: boolean | OrganizationCountOutputTypeCountClassSubModulesArgs
     classMaterials?: boolean | OrganizationCountOutputTypeCountClassMaterialsArgs
     moduleLessons?: boolean | OrganizationCountOutputTypeCountModuleLessonsArgs
     lessonFacultyHistories?: boolean | OrganizationCountOutputTypeCountLessonFacultyHistoriesArgs
@@ -9431,6 +9524,13 @@ export namespace Prisma {
    */
   export type OrganizationCountOutputTypeCountClassModulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ClassModuleWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountClassSubModulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassSubModuleWhereInput
   }
 
   /**
@@ -11441,11 +11541,13 @@ export namespace Prisma {
 
   export type ClassModuleCountOutputType = {
     academicSessions: number
+    subModules: number
     lessons: number
   }
 
   export type ClassModuleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     academicSessions?: boolean | ClassModuleCountOutputTypeCountAcademicSessionsArgs
+    subModules?: boolean | ClassModuleCountOutputTypeCountSubModulesArgs
     lessons?: boolean | ClassModuleCountOutputTypeCountLessonsArgs
   }
 
@@ -11470,7 +11572,45 @@ export namespace Prisma {
   /**
    * ClassModuleCountOutputType without action
    */
+  export type ClassModuleCountOutputTypeCountSubModulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassSubModuleWhereInput
+  }
+
+  /**
+   * ClassModuleCountOutputType without action
+   */
   export type ClassModuleCountOutputTypeCountLessonsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ModuleLessonWhereInput
+  }
+
+
+  /**
+   * Count Type ClassSubModuleCountOutputType
+   */
+
+  export type ClassSubModuleCountOutputType = {
+    lessons: number
+  }
+
+  export type ClassSubModuleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lessons?: boolean | ClassSubModuleCountOutputTypeCountLessonsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ClassSubModuleCountOutputType without action
+   */
+  export type ClassSubModuleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModuleCountOutputType
+     */
+    select?: ClassSubModuleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ClassSubModuleCountOutputType without action
+   */
+  export type ClassSubModuleCountOutputTypeCountLessonsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ModuleLessonWhereInput
   }
 
@@ -11980,6 +12120,7 @@ export namespace Prisma {
     communicationLogs?: boolean | Organization$communicationLogsArgs<ExtArgs>
     faculties?: boolean | Organization$facultiesArgs<ExtArgs>
     classModules?: boolean | Organization$classModulesArgs<ExtArgs>
+    classSubModules?: boolean | Organization$classSubModulesArgs<ExtArgs>
     classMaterials?: boolean | Organization$classMaterialsArgs<ExtArgs>
     moduleLessons?: boolean | Organization$moduleLessonsArgs<ExtArgs>
     lessonFacultyHistories?: boolean | Organization$lessonFacultyHistoriesArgs<ExtArgs>
@@ -12111,6 +12252,7 @@ export namespace Prisma {
     communicationLogs?: boolean | Organization$communicationLogsArgs<ExtArgs>
     faculties?: boolean | Organization$facultiesArgs<ExtArgs>
     classModules?: boolean | Organization$classModulesArgs<ExtArgs>
+    classSubModules?: boolean | Organization$classSubModulesArgs<ExtArgs>
     classMaterials?: boolean | Organization$classMaterialsArgs<ExtArgs>
     moduleLessons?: boolean | Organization$moduleLessonsArgs<ExtArgs>
     lessonFacultyHistories?: boolean | Organization$lessonFacultyHistoriesArgs<ExtArgs>
@@ -12196,6 +12338,7 @@ export namespace Prisma {
       communicationLogs: Prisma.$CommunicationLogPayload<ExtArgs>[]
       faculties: Prisma.$FacultyPayload<ExtArgs>[]
       classModules: Prisma.$ClassModulePayload<ExtArgs>[]
+      classSubModules: Prisma.$ClassSubModulePayload<ExtArgs>[]
       classMaterials: Prisma.$ClassMaterialPayload<ExtArgs>[]
       moduleLessons: Prisma.$ModuleLessonPayload<ExtArgs>[]
       lessonFacultyHistories: Prisma.$LessonFacultyHistoryPayload<ExtArgs>[]
@@ -12679,6 +12822,7 @@ export namespace Prisma {
     communicationLogs<T extends Organization$communicationLogsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$communicationLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     faculties<T extends Organization$facultiesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$facultiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     classModules<T extends Organization$classModulesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$classModulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    classSubModules<T extends Organization$classSubModulesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$classSubModulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     classMaterials<T extends Organization$classMaterialsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$classMaterialsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassMaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     moduleLessons<T extends Organization$moduleLessonsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$moduleLessonsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ModuleLessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     lessonFacultyHistories<T extends Organization$lessonFacultyHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$lessonFacultyHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonFacultyHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -14747,6 +14891,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ClassModuleScalarFieldEnum | ClassModuleScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.classSubModules
+   */
+  export type Organization$classSubModulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    where?: ClassSubModuleWhereInput
+    orderBy?: ClassSubModuleOrderByWithRelationInput | ClassSubModuleOrderByWithRelationInput[]
+    cursor?: ClassSubModuleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClassSubModuleScalarFieldEnum | ClassSubModuleScalarFieldEnum[]
   }
 
   /**
@@ -106468,6 +106636,7 @@ export namespace Prisma {
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     academicSessions?: boolean | ClassModule$academicSessionsArgs<ExtArgs>
+    subModules?: boolean | ClassModule$subModulesArgs<ExtArgs>
     lessons?: boolean | ClassModule$lessonsArgs<ExtArgs>
     _count?: boolean | ClassModuleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["classModule"]>
@@ -106514,6 +106683,7 @@ export namespace Prisma {
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     academicSessions?: boolean | ClassModule$academicSessionsArgs<ExtArgs>
+    subModules?: boolean | ClassModule$subModulesArgs<ExtArgs>
     lessons?: boolean | ClassModule$lessonsArgs<ExtArgs>
     _count?: boolean | ClassModuleCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -106532,6 +106702,7 @@ export namespace Prisma {
       academicClass: Prisma.$AcademicClassPayload<ExtArgs>
       organization: Prisma.$OrganizationPayload<ExtArgs>
       academicSessions: Prisma.$AcademicSessionPayload<ExtArgs>[]
+      subModules: Prisma.$ClassSubModulePayload<ExtArgs>[]
       lessons: Prisma.$ModuleLessonPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -106940,6 +107111,7 @@ export namespace Prisma {
     academicClass<T extends AcademicClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AcademicClassDefaultArgs<ExtArgs>>): Prisma__AcademicClassClient<$Result.GetResult<Prisma.$AcademicClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     academicSessions<T extends ClassModule$academicSessionsArgs<ExtArgs> = {}>(args?: Subset<T, ClassModule$academicSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AcademicSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    subModules<T extends ClassModule$subModulesArgs<ExtArgs> = {}>(args?: Subset<T, ClassModule$subModulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     lessons<T extends ClassModule$lessonsArgs<ExtArgs> = {}>(args?: Subset<T, ClassModule$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ModuleLessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -107403,6 +107575,30 @@ export namespace Prisma {
   }
 
   /**
+   * ClassModule.subModules
+   */
+  export type ClassModule$subModulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    where?: ClassSubModuleWhereInput
+    orderBy?: ClassSubModuleOrderByWithRelationInput | ClassSubModuleOrderByWithRelationInput[]
+    cursor?: ClassSubModuleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClassSubModuleScalarFieldEnum | ClassSubModuleScalarFieldEnum[]
+  }
+
+  /**
    * ClassModule.lessons
    */
   export type ClassModule$lessonsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -107446,6 +107642,1180 @@ export namespace Prisma {
 
 
   /**
+   * Model ClassSubModule
+   */
+
+  export type AggregateClassSubModule = {
+    _count: ClassSubModuleCountAggregateOutputType | null
+    _avg: ClassSubModuleAvgAggregateOutputType | null
+    _sum: ClassSubModuleSumAggregateOutputType | null
+    _min: ClassSubModuleMinAggregateOutputType | null
+    _max: ClassSubModuleMaxAggregateOutputType | null
+  }
+
+  export type ClassSubModuleAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type ClassSubModuleSumAggregateOutputType = {
+    order: number | null
+  }
+
+  export type ClassSubModuleMinAggregateOutputType = {
+    id: string | null
+    classModuleId: string | null
+    title: string | null
+    description: string | null
+    order: number | null
+    organizationId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClassSubModuleMaxAggregateOutputType = {
+    id: string | null
+    classModuleId: string | null
+    title: string | null
+    description: string | null
+    order: number | null
+    organizationId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClassSubModuleCountAggregateOutputType = {
+    id: number
+    classModuleId: number
+    title: number
+    description: number
+    order: number
+    organizationId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ClassSubModuleAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type ClassSubModuleSumAggregateInputType = {
+    order?: true
+  }
+
+  export type ClassSubModuleMinAggregateInputType = {
+    id?: true
+    classModuleId?: true
+    title?: true
+    description?: true
+    order?: true
+    organizationId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClassSubModuleMaxAggregateInputType = {
+    id?: true
+    classModuleId?: true
+    title?: true
+    description?: true
+    order?: true
+    organizationId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClassSubModuleCountAggregateInputType = {
+    id?: true
+    classModuleId?: true
+    title?: true
+    description?: true
+    order?: true
+    organizationId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ClassSubModuleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClassSubModule to aggregate.
+     */
+    where?: ClassSubModuleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassSubModules to fetch.
+     */
+    orderBy?: ClassSubModuleOrderByWithRelationInput | ClassSubModuleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClassSubModuleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassSubModules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassSubModules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClassSubModules
+    **/
+    _count?: true | ClassSubModuleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClassSubModuleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClassSubModuleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClassSubModuleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClassSubModuleMaxAggregateInputType
+  }
+
+  export type GetClassSubModuleAggregateType<T extends ClassSubModuleAggregateArgs> = {
+        [P in keyof T & keyof AggregateClassSubModule]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClassSubModule[P]>
+      : GetScalarType<T[P], AggregateClassSubModule[P]>
+  }
+
+
+
+
+  export type ClassSubModuleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassSubModuleWhereInput
+    orderBy?: ClassSubModuleOrderByWithAggregationInput | ClassSubModuleOrderByWithAggregationInput[]
+    by: ClassSubModuleScalarFieldEnum[] | ClassSubModuleScalarFieldEnum
+    having?: ClassSubModuleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClassSubModuleCountAggregateInputType | true
+    _avg?: ClassSubModuleAvgAggregateInputType
+    _sum?: ClassSubModuleSumAggregateInputType
+    _min?: ClassSubModuleMinAggregateInputType
+    _max?: ClassSubModuleMaxAggregateInputType
+  }
+
+  export type ClassSubModuleGroupByOutputType = {
+    id: string
+    classModuleId: string
+    title: string
+    description: string | null
+    order: number
+    organizationId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: ClassSubModuleCountAggregateOutputType | null
+    _avg: ClassSubModuleAvgAggregateOutputType | null
+    _sum: ClassSubModuleSumAggregateOutputType | null
+    _min: ClassSubModuleMinAggregateOutputType | null
+    _max: ClassSubModuleMaxAggregateOutputType | null
+  }
+
+  type GetClassSubModuleGroupByPayload<T extends ClassSubModuleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClassSubModuleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClassSubModuleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClassSubModuleGroupByOutputType[P]>
+            : GetScalarType<T[P], ClassSubModuleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClassSubModuleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    classModuleId?: boolean
+    title?: boolean
+    description?: boolean
+    order?: boolean
+    organizationId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    lessons?: boolean | ClassSubModule$lessonsArgs<ExtArgs>
+    _count?: boolean | ClassSubModuleCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["classSubModule"]>
+
+  export type ClassSubModuleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    classModuleId?: boolean
+    title?: boolean
+    description?: boolean
+    order?: boolean
+    organizationId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["classSubModule"]>
+
+  export type ClassSubModuleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    classModuleId?: boolean
+    title?: boolean
+    description?: boolean
+    order?: boolean
+    organizationId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["classSubModule"]>
+
+  export type ClassSubModuleSelectScalar = {
+    id?: boolean
+    classModuleId?: boolean
+    title?: boolean
+    description?: boolean
+    order?: boolean
+    organizationId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ClassSubModuleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "classModuleId" | "title" | "description" | "order" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["classSubModule"]>
+  export type ClassSubModuleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    lessons?: boolean | ClassSubModule$lessonsArgs<ExtArgs>
+    _count?: boolean | ClassSubModuleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ClassSubModuleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+  export type ClassSubModuleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+
+  export type $ClassSubModulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClassSubModule"
+    objects: {
+      classModule: Prisma.$ClassModulePayload<ExtArgs>
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+      lessons: Prisma.$ModuleLessonPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      classModuleId: string
+      title: string
+      description: string | null
+      order: number
+      organizationId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["classSubModule"]>
+    composites: {}
+  }
+
+  type ClassSubModuleGetPayload<S extends boolean | null | undefined | ClassSubModuleDefaultArgs> = $Result.GetResult<Prisma.$ClassSubModulePayload, S>
+
+  type ClassSubModuleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClassSubModuleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClassSubModuleCountAggregateInputType | true
+    }
+
+  export interface ClassSubModuleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClassSubModule'], meta: { name: 'ClassSubModule' } }
+    /**
+     * Find zero or one ClassSubModule that matches the filter.
+     * @param {ClassSubModuleFindUniqueArgs} args - Arguments to find a ClassSubModule
+     * @example
+     * // Get one ClassSubModule
+     * const classSubModule = await prisma.classSubModule.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClassSubModuleFindUniqueArgs>(args: SelectSubset<T, ClassSubModuleFindUniqueArgs<ExtArgs>>): Prisma__ClassSubModuleClient<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ClassSubModule that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClassSubModuleFindUniqueOrThrowArgs} args - Arguments to find a ClassSubModule
+     * @example
+     * // Get one ClassSubModule
+     * const classSubModule = await prisma.classSubModule.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClassSubModuleFindUniqueOrThrowArgs>(args: SelectSubset<T, ClassSubModuleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClassSubModuleClient<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClassSubModule that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassSubModuleFindFirstArgs} args - Arguments to find a ClassSubModule
+     * @example
+     * // Get one ClassSubModule
+     * const classSubModule = await prisma.classSubModule.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClassSubModuleFindFirstArgs>(args?: SelectSubset<T, ClassSubModuleFindFirstArgs<ExtArgs>>): Prisma__ClassSubModuleClient<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClassSubModule that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassSubModuleFindFirstOrThrowArgs} args - Arguments to find a ClassSubModule
+     * @example
+     * // Get one ClassSubModule
+     * const classSubModule = await prisma.classSubModule.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClassSubModuleFindFirstOrThrowArgs>(args?: SelectSubset<T, ClassSubModuleFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClassSubModuleClient<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ClassSubModules that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassSubModuleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClassSubModules
+     * const classSubModules = await prisma.classSubModule.findMany()
+     * 
+     * // Get first 10 ClassSubModules
+     * const classSubModules = await prisma.classSubModule.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const classSubModuleWithIdOnly = await prisma.classSubModule.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClassSubModuleFindManyArgs>(args?: SelectSubset<T, ClassSubModuleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ClassSubModule.
+     * @param {ClassSubModuleCreateArgs} args - Arguments to create a ClassSubModule.
+     * @example
+     * // Create one ClassSubModule
+     * const ClassSubModule = await prisma.classSubModule.create({
+     *   data: {
+     *     // ... data to create a ClassSubModule
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClassSubModuleCreateArgs>(args: SelectSubset<T, ClassSubModuleCreateArgs<ExtArgs>>): Prisma__ClassSubModuleClient<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ClassSubModules.
+     * @param {ClassSubModuleCreateManyArgs} args - Arguments to create many ClassSubModules.
+     * @example
+     * // Create many ClassSubModules
+     * const classSubModule = await prisma.classSubModule.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClassSubModuleCreateManyArgs>(args?: SelectSubset<T, ClassSubModuleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClassSubModules and returns the data saved in the database.
+     * @param {ClassSubModuleCreateManyAndReturnArgs} args - Arguments to create many ClassSubModules.
+     * @example
+     * // Create many ClassSubModules
+     * const classSubModule = await prisma.classSubModule.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClassSubModules and only return the `id`
+     * const classSubModuleWithIdOnly = await prisma.classSubModule.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClassSubModuleCreateManyAndReturnArgs>(args?: SelectSubset<T, ClassSubModuleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ClassSubModule.
+     * @param {ClassSubModuleDeleteArgs} args - Arguments to delete one ClassSubModule.
+     * @example
+     * // Delete one ClassSubModule
+     * const ClassSubModule = await prisma.classSubModule.delete({
+     *   where: {
+     *     // ... filter to delete one ClassSubModule
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClassSubModuleDeleteArgs>(args: SelectSubset<T, ClassSubModuleDeleteArgs<ExtArgs>>): Prisma__ClassSubModuleClient<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ClassSubModule.
+     * @param {ClassSubModuleUpdateArgs} args - Arguments to update one ClassSubModule.
+     * @example
+     * // Update one ClassSubModule
+     * const classSubModule = await prisma.classSubModule.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClassSubModuleUpdateArgs>(args: SelectSubset<T, ClassSubModuleUpdateArgs<ExtArgs>>): Prisma__ClassSubModuleClient<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ClassSubModules.
+     * @param {ClassSubModuleDeleteManyArgs} args - Arguments to filter ClassSubModules to delete.
+     * @example
+     * // Delete a few ClassSubModules
+     * const { count } = await prisma.classSubModule.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClassSubModuleDeleteManyArgs>(args?: SelectSubset<T, ClassSubModuleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClassSubModules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassSubModuleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClassSubModules
+     * const classSubModule = await prisma.classSubModule.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClassSubModuleUpdateManyArgs>(args: SelectSubset<T, ClassSubModuleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClassSubModules and returns the data updated in the database.
+     * @param {ClassSubModuleUpdateManyAndReturnArgs} args - Arguments to update many ClassSubModules.
+     * @example
+     * // Update many ClassSubModules
+     * const classSubModule = await prisma.classSubModule.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ClassSubModules and only return the `id`
+     * const classSubModuleWithIdOnly = await prisma.classSubModule.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ClassSubModuleUpdateManyAndReturnArgs>(args: SelectSubset<T, ClassSubModuleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ClassSubModule.
+     * @param {ClassSubModuleUpsertArgs} args - Arguments to update or create a ClassSubModule.
+     * @example
+     * // Update or create a ClassSubModule
+     * const classSubModule = await prisma.classSubModule.upsert({
+     *   create: {
+     *     // ... data to create a ClassSubModule
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClassSubModule we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClassSubModuleUpsertArgs>(args: SelectSubset<T, ClassSubModuleUpsertArgs<ExtArgs>>): Prisma__ClassSubModuleClient<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ClassSubModules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassSubModuleCountArgs} args - Arguments to filter ClassSubModules to count.
+     * @example
+     * // Count the number of ClassSubModules
+     * const count = await prisma.classSubModule.count({
+     *   where: {
+     *     // ... the filter for the ClassSubModules we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClassSubModuleCountArgs>(
+      args?: Subset<T, ClassSubModuleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClassSubModuleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClassSubModule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassSubModuleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClassSubModuleAggregateArgs>(args: Subset<T, ClassSubModuleAggregateArgs>): Prisma.PrismaPromise<GetClassSubModuleAggregateType<T>>
+
+    /**
+     * Group by ClassSubModule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassSubModuleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClassSubModuleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClassSubModuleGroupByArgs['orderBy'] }
+        : { orderBy?: ClassSubModuleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClassSubModuleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClassSubModuleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClassSubModule model
+   */
+  readonly fields: ClassSubModuleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClassSubModule.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClassSubModuleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    classModule<T extends ClassModuleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClassModuleDefaultArgs<ExtArgs>>): Prisma__ClassModuleClient<$Result.GetResult<Prisma.$ClassModulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    lessons<T extends ClassSubModule$lessonsArgs<ExtArgs> = {}>(args?: Subset<T, ClassSubModule$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ModuleLessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClassSubModule model
+   */
+  interface ClassSubModuleFieldRefs {
+    readonly id: FieldRef<"ClassSubModule", 'String'>
+    readonly classModuleId: FieldRef<"ClassSubModule", 'String'>
+    readonly title: FieldRef<"ClassSubModule", 'String'>
+    readonly description: FieldRef<"ClassSubModule", 'String'>
+    readonly order: FieldRef<"ClassSubModule", 'Int'>
+    readonly organizationId: FieldRef<"ClassSubModule", 'String'>
+    readonly createdAt: FieldRef<"ClassSubModule", 'DateTime'>
+    readonly updatedAt: FieldRef<"ClassSubModule", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClassSubModule findUnique
+   */
+  export type ClassSubModuleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassSubModule to fetch.
+     */
+    where: ClassSubModuleWhereUniqueInput
+  }
+
+  /**
+   * ClassSubModule findUniqueOrThrow
+   */
+  export type ClassSubModuleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassSubModule to fetch.
+     */
+    where: ClassSubModuleWhereUniqueInput
+  }
+
+  /**
+   * ClassSubModule findFirst
+   */
+  export type ClassSubModuleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassSubModule to fetch.
+     */
+    where?: ClassSubModuleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassSubModules to fetch.
+     */
+    orderBy?: ClassSubModuleOrderByWithRelationInput | ClassSubModuleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClassSubModules.
+     */
+    cursor?: ClassSubModuleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassSubModules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassSubModules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClassSubModules.
+     */
+    distinct?: ClassSubModuleScalarFieldEnum | ClassSubModuleScalarFieldEnum[]
+  }
+
+  /**
+   * ClassSubModule findFirstOrThrow
+   */
+  export type ClassSubModuleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassSubModule to fetch.
+     */
+    where?: ClassSubModuleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassSubModules to fetch.
+     */
+    orderBy?: ClassSubModuleOrderByWithRelationInput | ClassSubModuleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClassSubModules.
+     */
+    cursor?: ClassSubModuleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassSubModules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassSubModules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClassSubModules.
+     */
+    distinct?: ClassSubModuleScalarFieldEnum | ClassSubModuleScalarFieldEnum[]
+  }
+
+  /**
+   * ClassSubModule findMany
+   */
+  export type ClassSubModuleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassSubModules to fetch.
+     */
+    where?: ClassSubModuleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassSubModules to fetch.
+     */
+    orderBy?: ClassSubModuleOrderByWithRelationInput | ClassSubModuleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClassSubModules.
+     */
+    cursor?: ClassSubModuleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassSubModules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassSubModules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClassSubModules.
+     */
+    distinct?: ClassSubModuleScalarFieldEnum | ClassSubModuleScalarFieldEnum[]
+  }
+
+  /**
+   * ClassSubModule create
+   */
+  export type ClassSubModuleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ClassSubModule.
+     */
+    data: XOR<ClassSubModuleCreateInput, ClassSubModuleUncheckedCreateInput>
+  }
+
+  /**
+   * ClassSubModule createMany
+   */
+  export type ClassSubModuleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClassSubModules.
+     */
+    data: ClassSubModuleCreateManyInput | ClassSubModuleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClassSubModule createManyAndReturn
+   */
+  export type ClassSubModuleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * The data used to create many ClassSubModules.
+     */
+    data: ClassSubModuleCreateManyInput | ClassSubModuleCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClassSubModule update
+   */
+  export type ClassSubModuleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ClassSubModule.
+     */
+    data: XOR<ClassSubModuleUpdateInput, ClassSubModuleUncheckedUpdateInput>
+    /**
+     * Choose, which ClassSubModule to update.
+     */
+    where: ClassSubModuleWhereUniqueInput
+  }
+
+  /**
+   * ClassSubModule updateMany
+   */
+  export type ClassSubModuleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClassSubModules.
+     */
+    data: XOR<ClassSubModuleUpdateManyMutationInput, ClassSubModuleUncheckedUpdateManyInput>
+    /**
+     * Filter which ClassSubModules to update
+     */
+    where?: ClassSubModuleWhereInput
+    /**
+     * Limit how many ClassSubModules to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClassSubModule updateManyAndReturn
+   */
+  export type ClassSubModuleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * The data used to update ClassSubModules.
+     */
+    data: XOR<ClassSubModuleUpdateManyMutationInput, ClassSubModuleUncheckedUpdateManyInput>
+    /**
+     * Filter which ClassSubModules to update
+     */
+    where?: ClassSubModuleWhereInput
+    /**
+     * Limit how many ClassSubModules to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClassSubModule upsert
+   */
+  export type ClassSubModuleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ClassSubModule to update in case it exists.
+     */
+    where: ClassSubModuleWhereUniqueInput
+    /**
+     * In case the ClassSubModule found by the `where` argument doesn't exist, create a new ClassSubModule with this data.
+     */
+    create: XOR<ClassSubModuleCreateInput, ClassSubModuleUncheckedCreateInput>
+    /**
+     * In case the ClassSubModule was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClassSubModuleUpdateInput, ClassSubModuleUncheckedUpdateInput>
+  }
+
+  /**
+   * ClassSubModule delete
+   */
+  export type ClassSubModuleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    /**
+     * Filter which ClassSubModule to delete.
+     */
+    where: ClassSubModuleWhereUniqueInput
+  }
+
+  /**
+   * ClassSubModule deleteMany
+   */
+  export type ClassSubModuleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClassSubModules to delete
+     */
+    where?: ClassSubModuleWhereInput
+    /**
+     * Limit how many ClassSubModules to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClassSubModule.lessons
+   */
+  export type ClassSubModule$lessonsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleLesson
+     */
+    select?: ModuleLessonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleLesson
+     */
+    omit?: ModuleLessonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleLessonInclude<ExtArgs> | null
+    where?: ModuleLessonWhereInput
+    orderBy?: ModuleLessonOrderByWithRelationInput | ModuleLessonOrderByWithRelationInput[]
+    cursor?: ModuleLessonWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ModuleLessonScalarFieldEnum | ModuleLessonScalarFieldEnum[]
+  }
+
+  /**
+   * ClassSubModule without action
+   */
+  export type ClassSubModuleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model ModuleLesson
    */
 
@@ -107468,6 +108838,7 @@ export namespace Prisma {
   export type ModuleLessonMinAggregateOutputType = {
     id: string | null
     classModuleId: string | null
+    classSubModuleId: string | null
     title: string | null
     description: string | null
     order: number | null
@@ -107481,6 +108852,7 @@ export namespace Prisma {
   export type ModuleLessonMaxAggregateOutputType = {
     id: string | null
     classModuleId: string | null
+    classSubModuleId: string | null
     title: string | null
     description: string | null
     order: number | null
@@ -107494,6 +108866,7 @@ export namespace Prisma {
   export type ModuleLessonCountAggregateOutputType = {
     id: number
     classModuleId: number
+    classSubModuleId: number
     title: number
     description: number
     order: number
@@ -107517,6 +108890,7 @@ export namespace Prisma {
   export type ModuleLessonMinAggregateInputType = {
     id?: true
     classModuleId?: true
+    classSubModuleId?: true
     title?: true
     description?: true
     order?: true
@@ -107530,6 +108904,7 @@ export namespace Prisma {
   export type ModuleLessonMaxAggregateInputType = {
     id?: true
     classModuleId?: true
+    classSubModuleId?: true
     title?: true
     description?: true
     order?: true
@@ -107543,6 +108918,7 @@ export namespace Prisma {
   export type ModuleLessonCountAggregateInputType = {
     id?: true
     classModuleId?: true
+    classSubModuleId?: true
     title?: true
     description?: true
     order?: true
@@ -107643,6 +109019,7 @@ export namespace Prisma {
   export type ModuleLessonGroupByOutputType = {
     id: string
     classModuleId: string
+    classSubModuleId: string | null
     title: string
     description: string | null
     order: number
@@ -107675,6 +109052,7 @@ export namespace Prisma {
   export type ModuleLessonSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     classModuleId?: boolean
+    classSubModuleId?: boolean
     title?: boolean
     description?: boolean
     order?: boolean
@@ -107684,6 +109062,7 @@ export namespace Prisma {
     updatedAt?: boolean
     videoUrl?: boolean
     classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    classSubModule?: boolean | ModuleLesson$classSubModuleArgs<ExtArgs>
     faculty?: boolean | ModuleLesson$facultyArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     academicSessions?: boolean | ModuleLesson$academicSessionsArgs<ExtArgs>
@@ -107698,6 +109077,7 @@ export namespace Prisma {
   export type ModuleLessonSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     classModuleId?: boolean
+    classSubModuleId?: boolean
     title?: boolean
     description?: boolean
     order?: boolean
@@ -107707,6 +109087,7 @@ export namespace Prisma {
     updatedAt?: boolean
     videoUrl?: boolean
     classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    classSubModule?: boolean | ModuleLesson$classSubModuleArgs<ExtArgs>
     faculty?: boolean | ModuleLesson$facultyArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["moduleLesson"]>
@@ -107714,6 +109095,7 @@ export namespace Prisma {
   export type ModuleLessonSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     classModuleId?: boolean
+    classSubModuleId?: boolean
     title?: boolean
     description?: boolean
     order?: boolean
@@ -107723,6 +109105,7 @@ export namespace Prisma {
     updatedAt?: boolean
     videoUrl?: boolean
     classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    classSubModule?: boolean | ModuleLesson$classSubModuleArgs<ExtArgs>
     faculty?: boolean | ModuleLesson$facultyArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["moduleLesson"]>
@@ -107730,6 +109113,7 @@ export namespace Prisma {
   export type ModuleLessonSelectScalar = {
     id?: boolean
     classModuleId?: boolean
+    classSubModuleId?: boolean
     title?: boolean
     description?: boolean
     order?: boolean
@@ -107740,9 +109124,10 @@ export namespace Prisma {
     videoUrl?: boolean
   }
 
-  export type ModuleLessonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "classModuleId" | "title" | "description" | "order" | "facultyId" | "organizationId" | "createdAt" | "updatedAt" | "videoUrl", ExtArgs["result"]["moduleLesson"]>
+  export type ModuleLessonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "classModuleId" | "classSubModuleId" | "title" | "description" | "order" | "facultyId" | "organizationId" | "createdAt" | "updatedAt" | "videoUrl", ExtArgs["result"]["moduleLesson"]>
   export type ModuleLessonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    classSubModule?: boolean | ModuleLesson$classSubModuleArgs<ExtArgs>
     faculty?: boolean | ModuleLesson$facultyArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     academicSessions?: boolean | ModuleLesson$academicSessionsArgs<ExtArgs>
@@ -107755,11 +109140,13 @@ export namespace Prisma {
   }
   export type ModuleLessonIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    classSubModule?: boolean | ModuleLesson$classSubModuleArgs<ExtArgs>
     faculty?: boolean | ModuleLesson$facultyArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }
   export type ModuleLessonIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
+    classSubModule?: boolean | ModuleLesson$classSubModuleArgs<ExtArgs>
     faculty?: boolean | ModuleLesson$facultyArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }
@@ -107768,6 +109155,7 @@ export namespace Prisma {
     name: "ModuleLesson"
     objects: {
       classModule: Prisma.$ClassModulePayload<ExtArgs>
+      classSubModule: Prisma.$ClassSubModulePayload<ExtArgs> | null
       faculty: Prisma.$FacultyPayload<ExtArgs> | null
       organization: Prisma.$OrganizationPayload<ExtArgs>
       academicSessions: Prisma.$AcademicSessionPayload<ExtArgs>[]
@@ -107780,6 +109168,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       classModuleId: string
+      classSubModuleId: string | null
       title: string
       description: string | null
       order: number
@@ -108183,6 +109572,7 @@ export namespace Prisma {
   export interface Prisma__ModuleLessonClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     classModule<T extends ClassModuleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClassModuleDefaultArgs<ExtArgs>>): Prisma__ClassModuleClient<$Result.GetResult<Prisma.$ClassModulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    classSubModule<T extends ModuleLesson$classSubModuleArgs<ExtArgs> = {}>(args?: Subset<T, ModuleLesson$classSubModuleArgs<ExtArgs>>): Prisma__ClassSubModuleClient<$Result.GetResult<Prisma.$ClassSubModulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     faculty<T extends ModuleLesson$facultyArgs<ExtArgs> = {}>(args?: Subset<T, ModuleLesson$facultyArgs<ExtArgs>>): Prisma__FacultyClient<$Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     academicSessions<T extends ModuleLesson$academicSessionsArgs<ExtArgs> = {}>(args?: Subset<T, ModuleLesson$academicSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AcademicSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -108222,6 +109612,7 @@ export namespace Prisma {
   interface ModuleLessonFieldRefs {
     readonly id: FieldRef<"ModuleLesson", 'String'>
     readonly classModuleId: FieldRef<"ModuleLesson", 'String'>
+    readonly classSubModuleId: FieldRef<"ModuleLesson", 'String'>
     readonly title: FieldRef<"ModuleLesson", 'String'>
     readonly description: FieldRef<"ModuleLesson", 'String'>
     readonly order: FieldRef<"ModuleLesson", 'Int'>
@@ -108628,6 +110019,25 @@ export namespace Prisma {
      * Limit how many ModuleLessons to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ModuleLesson.classSubModule
+   */
+  export type ModuleLesson$classSubModuleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassSubModule
+     */
+    select?: ClassSubModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassSubModule
+     */
+    omit?: ClassSubModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassSubModuleInclude<ExtArgs> | null
+    where?: ClassSubModuleWhereInput
   }
 
   /**
@@ -123290,9 +124700,24 @@ export namespace Prisma {
   export type ClassModuleScalarFieldEnum = (typeof ClassModuleScalarFieldEnum)[keyof typeof ClassModuleScalarFieldEnum]
 
 
+  export const ClassSubModuleScalarFieldEnum: {
+    id: 'id',
+    classModuleId: 'classModuleId',
+    title: 'title',
+    description: 'description',
+    order: 'order',
+    organizationId: 'organizationId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ClassSubModuleScalarFieldEnum = (typeof ClassSubModuleScalarFieldEnum)[keyof typeof ClassSubModuleScalarFieldEnum]
+
+
   export const ModuleLessonScalarFieldEnum: {
     id: 'id',
     classModuleId: 'classModuleId',
+    classSubModuleId: 'classSubModuleId',
     title: 'title',
     description: 'description',
     order: 'order',
@@ -124057,6 +125482,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogListRelationFilter
     faculties?: FacultyListRelationFilter
     classModules?: ClassModuleListRelationFilter
+    classSubModules?: ClassSubModuleListRelationFilter
     classMaterials?: ClassMaterialListRelationFilter
     moduleLessons?: ModuleLessonListRelationFilter
     lessonFacultyHistories?: LessonFacultyHistoryListRelationFilter
@@ -124147,6 +125573,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogOrderByRelationAggregateInput
     faculties?: FacultyOrderByRelationAggregateInput
     classModules?: ClassModuleOrderByRelationAggregateInput
+    classSubModules?: ClassSubModuleOrderByRelationAggregateInput
     classMaterials?: ClassMaterialOrderByRelationAggregateInput
     moduleLessons?: ModuleLessonOrderByRelationAggregateInput
     lessonFacultyHistories?: LessonFacultyHistoryOrderByRelationAggregateInput
@@ -124240,6 +125667,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogListRelationFilter
     faculties?: FacultyListRelationFilter
     classModules?: ClassModuleListRelationFilter
+    classSubModules?: ClassSubModuleListRelationFilter
     classMaterials?: ClassMaterialListRelationFilter
     moduleLessons?: ModuleLessonListRelationFilter
     lessonFacultyHistories?: LessonFacultyHistoryListRelationFilter
@@ -132323,6 +133751,7 @@ export namespace Prisma {
     academicClass?: XOR<AcademicClassScalarRelationFilter, AcademicClassWhereInput>
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     academicSessions?: AcademicSessionListRelationFilter
+    subModules?: ClassSubModuleListRelationFilter
     lessons?: ModuleLessonListRelationFilter
   }
 
@@ -132338,6 +133767,7 @@ export namespace Prisma {
     academicClass?: AcademicClassOrderByWithRelationInput
     organization?: OrganizationOrderByWithRelationInput
     academicSessions?: AcademicSessionOrderByRelationAggregateInput
+    subModules?: ClassSubModuleOrderByRelationAggregateInput
     lessons?: ModuleLessonOrderByRelationAggregateInput
   }
 
@@ -132356,6 +133786,7 @@ export namespace Prisma {
     academicClass?: XOR<AcademicClassScalarRelationFilter, AcademicClassWhereInput>
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     academicSessions?: AcademicSessionListRelationFilter
+    subModules?: ClassSubModuleListRelationFilter
     lessons?: ModuleLessonListRelationFilter
   }, "id">
 
@@ -132389,12 +133820,91 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ClassModule"> | Date | string
   }
 
+  export type ClassSubModuleWhereInput = {
+    AND?: ClassSubModuleWhereInput | ClassSubModuleWhereInput[]
+    OR?: ClassSubModuleWhereInput[]
+    NOT?: ClassSubModuleWhereInput | ClassSubModuleWhereInput[]
+    id?: StringFilter<"ClassSubModule"> | string
+    classModuleId?: StringFilter<"ClassSubModule"> | string
+    title?: StringFilter<"ClassSubModule"> | string
+    description?: StringNullableFilter<"ClassSubModule"> | string | null
+    order?: IntFilter<"ClassSubModule"> | number
+    organizationId?: StringFilter<"ClassSubModule"> | string
+    createdAt?: DateTimeFilter<"ClassSubModule"> | Date | string
+    updatedAt?: DateTimeFilter<"ClassSubModule"> | Date | string
+    classModule?: XOR<ClassModuleScalarRelationFilter, ClassModuleWhereInput>
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    lessons?: ModuleLessonListRelationFilter
+  }
+
+  export type ClassSubModuleOrderByWithRelationInput = {
+    id?: SortOrder
+    classModuleId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    order?: SortOrder
+    organizationId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    classModule?: ClassModuleOrderByWithRelationInput
+    organization?: OrganizationOrderByWithRelationInput
+    lessons?: ModuleLessonOrderByRelationAggregateInput
+  }
+
+  export type ClassSubModuleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ClassSubModuleWhereInput | ClassSubModuleWhereInput[]
+    OR?: ClassSubModuleWhereInput[]
+    NOT?: ClassSubModuleWhereInput | ClassSubModuleWhereInput[]
+    classModuleId?: StringFilter<"ClassSubModule"> | string
+    title?: StringFilter<"ClassSubModule"> | string
+    description?: StringNullableFilter<"ClassSubModule"> | string | null
+    order?: IntFilter<"ClassSubModule"> | number
+    organizationId?: StringFilter<"ClassSubModule"> | string
+    createdAt?: DateTimeFilter<"ClassSubModule"> | Date | string
+    updatedAt?: DateTimeFilter<"ClassSubModule"> | Date | string
+    classModule?: XOR<ClassModuleScalarRelationFilter, ClassModuleWhereInput>
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    lessons?: ModuleLessonListRelationFilter
+  }, "id">
+
+  export type ClassSubModuleOrderByWithAggregationInput = {
+    id?: SortOrder
+    classModuleId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    order?: SortOrder
+    organizationId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ClassSubModuleCountOrderByAggregateInput
+    _avg?: ClassSubModuleAvgOrderByAggregateInput
+    _max?: ClassSubModuleMaxOrderByAggregateInput
+    _min?: ClassSubModuleMinOrderByAggregateInput
+    _sum?: ClassSubModuleSumOrderByAggregateInput
+  }
+
+  export type ClassSubModuleScalarWhereWithAggregatesInput = {
+    AND?: ClassSubModuleScalarWhereWithAggregatesInput | ClassSubModuleScalarWhereWithAggregatesInput[]
+    OR?: ClassSubModuleScalarWhereWithAggregatesInput[]
+    NOT?: ClassSubModuleScalarWhereWithAggregatesInput | ClassSubModuleScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ClassSubModule"> | string
+    classModuleId?: StringWithAggregatesFilter<"ClassSubModule"> | string
+    title?: StringWithAggregatesFilter<"ClassSubModule"> | string
+    description?: StringNullableWithAggregatesFilter<"ClassSubModule"> | string | null
+    order?: IntWithAggregatesFilter<"ClassSubModule"> | number
+    organizationId?: StringWithAggregatesFilter<"ClassSubModule"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ClassSubModule"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ClassSubModule"> | Date | string
+  }
+
   export type ModuleLessonWhereInput = {
     AND?: ModuleLessonWhereInput | ModuleLessonWhereInput[]
     OR?: ModuleLessonWhereInput[]
     NOT?: ModuleLessonWhereInput | ModuleLessonWhereInput[]
     id?: StringFilter<"ModuleLesson"> | string
     classModuleId?: StringFilter<"ModuleLesson"> | string
+    classSubModuleId?: StringNullableFilter<"ModuleLesson"> | string | null
     title?: StringFilter<"ModuleLesson"> | string
     description?: StringNullableFilter<"ModuleLesson"> | string | null
     order?: IntFilter<"ModuleLesson"> | number
@@ -132404,6 +133914,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ModuleLesson"> | Date | string
     videoUrl?: StringNullableFilter<"ModuleLesson"> | string | null
     classModule?: XOR<ClassModuleScalarRelationFilter, ClassModuleWhereInput>
+    classSubModule?: XOR<ClassSubModuleNullableScalarRelationFilter, ClassSubModuleWhereInput> | null
     faculty?: XOR<FacultyNullableScalarRelationFilter, FacultyWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     academicSessions?: AcademicSessionListRelationFilter
@@ -132417,6 +133928,7 @@ export namespace Prisma {
   export type ModuleLessonOrderByWithRelationInput = {
     id?: SortOrder
     classModuleId?: SortOrder
+    classSubModuleId?: SortOrderInput | SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     order?: SortOrder
@@ -132426,6 +133938,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     videoUrl?: SortOrderInput | SortOrder
     classModule?: ClassModuleOrderByWithRelationInput
+    classSubModule?: ClassSubModuleOrderByWithRelationInput
     faculty?: FacultyOrderByWithRelationInput
     organization?: OrganizationOrderByWithRelationInput
     academicSessions?: AcademicSessionOrderByRelationAggregateInput
@@ -132442,6 +133955,7 @@ export namespace Prisma {
     OR?: ModuleLessonWhereInput[]
     NOT?: ModuleLessonWhereInput | ModuleLessonWhereInput[]
     classModuleId?: StringFilter<"ModuleLesson"> | string
+    classSubModuleId?: StringNullableFilter<"ModuleLesson"> | string | null
     title?: StringFilter<"ModuleLesson"> | string
     description?: StringNullableFilter<"ModuleLesson"> | string | null
     order?: IntFilter<"ModuleLesson"> | number
@@ -132451,6 +133965,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ModuleLesson"> | Date | string
     videoUrl?: StringNullableFilter<"ModuleLesson"> | string | null
     classModule?: XOR<ClassModuleScalarRelationFilter, ClassModuleWhereInput>
+    classSubModule?: XOR<ClassSubModuleNullableScalarRelationFilter, ClassSubModuleWhereInput> | null
     faculty?: XOR<FacultyNullableScalarRelationFilter, FacultyWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     academicSessions?: AcademicSessionListRelationFilter
@@ -132464,6 +133979,7 @@ export namespace Prisma {
   export type ModuleLessonOrderByWithAggregationInput = {
     id?: SortOrder
     classModuleId?: SortOrder
+    classSubModuleId?: SortOrderInput | SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     order?: SortOrder
@@ -132485,6 +134001,7 @@ export namespace Prisma {
     NOT?: ModuleLessonScalarWhereWithAggregatesInput | ModuleLessonScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"ModuleLesson"> | string
     classModuleId?: StringWithAggregatesFilter<"ModuleLesson"> | string
+    classSubModuleId?: StringNullableWithAggregatesFilter<"ModuleLesson"> | string | null
     title?: StringWithAggregatesFilter<"ModuleLesson"> | string
     description?: StringNullableWithAggregatesFilter<"ModuleLesson"> | string | null
     order?: IntWithAggregatesFilter<"ModuleLesson"> | number
@@ -133534,6 +135051,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -133623,6 +135141,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -133712,6 +135231,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -133801,6 +135321,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -142676,6 +144197,7 @@ export namespace Prisma {
     academicClass: AcademicClassCreateNestedOneWithoutModulesInput
     organization: OrganizationCreateNestedOneWithoutClassModulesInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutClassModuleInput
+    subModules?: ClassSubModuleCreateNestedManyWithoutClassModuleInput
     lessons?: ModuleLessonCreateNestedManyWithoutClassModuleInput
   }
 
@@ -142689,6 +144211,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutClassModuleInput
+    subModules?: ClassSubModuleUncheckedCreateNestedManyWithoutClassModuleInput
     lessons?: ModuleLessonUncheckedCreateNestedManyWithoutClassModuleInput
   }
 
@@ -142702,6 +144225,7 @@ export namespace Prisma {
     academicClass?: AcademicClassUpdateOneRequiredWithoutModulesNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutClassModulesNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutClassModuleNestedInput
+    subModules?: ClassSubModuleUpdateManyWithoutClassModuleNestedInput
     lessons?: ModuleLessonUpdateManyWithoutClassModuleNestedInput
   }
 
@@ -142715,6 +144239,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicSessions?: AcademicSessionUncheckedUpdateManyWithoutClassModuleNestedInput
+    subModules?: ClassSubModuleUncheckedUpdateManyWithoutClassModuleNestedInput
     lessons?: ModuleLessonUncheckedUpdateManyWithoutClassModuleNestedInput
   }
 
@@ -142749,6 +144274,85 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ClassSubModuleCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    classModule: ClassModuleCreateNestedOneWithoutSubModulesInput
+    organization: OrganizationCreateNestedOneWithoutClassSubModulesInput
+    lessons?: ModuleLessonCreateNestedManyWithoutClassSubModuleInput
+  }
+
+  export type ClassSubModuleUncheckedCreateInput = {
+    id?: string
+    classModuleId: string
+    title: string
+    description?: string | null
+    order?: number
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lessons?: ModuleLessonUncheckedCreateNestedManyWithoutClassSubModuleInput
+  }
+
+  export type ClassSubModuleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    classModule?: ClassModuleUpdateOneRequiredWithoutSubModulesNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutClassSubModulesNestedInput
+    lessons?: ModuleLessonUpdateManyWithoutClassSubModuleNestedInput
+  }
+
+  export type ClassSubModuleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    classModuleId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lessons?: ModuleLessonUncheckedUpdateManyWithoutClassSubModuleNestedInput
+  }
+
+  export type ClassSubModuleCreateManyInput = {
+    id?: string
+    classModuleId: string
+    title: string
+    description?: string | null
+    order?: number
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClassSubModuleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassSubModuleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    classModuleId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ModuleLessonCreateInput = {
     id?: string
     title: string
@@ -142758,6 +144362,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     videoUrl?: string | null
     classModule: ClassModuleCreateNestedOneWithoutLessonsInput
+    classSubModule?: ClassSubModuleCreateNestedOneWithoutLessonsInput
     faculty?: FacultyCreateNestedOneWithoutModuleLessonsInput
     organization: OrganizationCreateNestedOneWithoutModuleLessonsInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutModuleLessonInput
@@ -142771,6 +144376,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedCreateInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -142796,6 +144402,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     classModule?: ClassModuleUpdateOneRequiredWithoutLessonsNestedInput
+    classSubModule?: ClassSubModuleUpdateOneWithoutLessonsNestedInput
     faculty?: FacultyUpdateOneWithoutModuleLessonsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutModuleLessonsNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutModuleLessonNestedInput
@@ -142809,6 +144416,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -142828,6 +144436,7 @@ export namespace Prisma {
   export type ModuleLessonCreateManyInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -142851,6 +144460,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -144289,6 +145899,12 @@ export namespace Prisma {
     none?: ClassModuleWhereInput
   }
 
+  export type ClassSubModuleListRelationFilter = {
+    every?: ClassSubModuleWhereInput
+    some?: ClassSubModuleWhereInput
+    none?: ClassSubModuleWhereInput
+  }
+
   export type ClassMaterialListRelationFilter = {
     every?: ClassMaterialWhereInput
     some?: ClassMaterialWhereInput
@@ -144585,6 +146201,10 @@ export namespace Prisma {
   }
 
   export type ClassModuleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClassSubModuleOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -149399,6 +151019,52 @@ export namespace Prisma {
     isNot?: ClassModuleWhereInput
   }
 
+  export type ClassSubModuleCountOrderByAggregateInput = {
+    id?: SortOrder
+    classModuleId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    order?: SortOrder
+    organizationId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClassSubModuleAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type ClassSubModuleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    classModuleId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    order?: SortOrder
+    organizationId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClassSubModuleMinOrderByAggregateInput = {
+    id?: SortOrder
+    classModuleId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    order?: SortOrder
+    organizationId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClassSubModuleSumOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type ClassSubModuleNullableScalarRelationFilter = {
+    is?: ClassSubModuleWhereInput | null
+    isNot?: ClassSubModuleWhereInput | null
+  }
+
   export type AssessmentNullableScalarRelationFilter = {
     is?: AssessmentWhereInput | null
     isNot?: AssessmentWhereInput | null
@@ -149407,6 +151073,7 @@ export namespace Prisma {
   export type ModuleLessonCountOrderByAggregateInput = {
     id?: SortOrder
     classModuleId?: SortOrder
+    classSubModuleId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     order?: SortOrder
@@ -149424,6 +151091,7 @@ export namespace Prisma {
   export type ModuleLessonMaxOrderByAggregateInput = {
     id?: SortOrder
     classModuleId?: SortOrder
+    classSubModuleId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     order?: SortOrder
@@ -149437,6 +151105,7 @@ export namespace Prisma {
   export type ModuleLessonMinOrderByAggregateInput = {
     id?: SortOrder
     classModuleId?: SortOrder
+    classSubModuleId?: SortOrder
     title?: SortOrder
     description?: SortOrder
     order?: SortOrder
@@ -150462,6 +152131,13 @@ export namespace Prisma {
     connect?: ClassModuleWhereUniqueInput | ClassModuleWhereUniqueInput[]
   }
 
+  export type ClassSubModuleCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<ClassSubModuleCreateWithoutOrganizationInput, ClassSubModuleUncheckedCreateWithoutOrganizationInput> | ClassSubModuleCreateWithoutOrganizationInput[] | ClassSubModuleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ClassSubModuleCreateOrConnectWithoutOrganizationInput | ClassSubModuleCreateOrConnectWithoutOrganizationInput[]
+    createMany?: ClassSubModuleCreateManyOrganizationInputEnvelope
+    connect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+  }
+
   export type ClassMaterialCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<ClassMaterialCreateWithoutOrganizationInput, ClassMaterialUncheckedCreateWithoutOrganizationInput> | ClassMaterialCreateWithoutOrganizationInput[] | ClassMaterialUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: ClassMaterialCreateOrConnectWithoutOrganizationInput | ClassMaterialCreateOrConnectWithoutOrganizationInput[]
@@ -150963,6 +152639,13 @@ export namespace Prisma {
     connectOrCreate?: ClassModuleCreateOrConnectWithoutOrganizationInput | ClassModuleCreateOrConnectWithoutOrganizationInput[]
     createMany?: ClassModuleCreateManyOrganizationInputEnvelope
     connect?: ClassModuleWhereUniqueInput | ClassModuleWhereUniqueInput[]
+  }
+
+  export type ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<ClassSubModuleCreateWithoutOrganizationInput, ClassSubModuleUncheckedCreateWithoutOrganizationInput> | ClassSubModuleCreateWithoutOrganizationInput[] | ClassSubModuleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ClassSubModuleCreateOrConnectWithoutOrganizationInput | ClassSubModuleCreateOrConnectWithoutOrganizationInput[]
+    createMany?: ClassSubModuleCreateManyOrganizationInputEnvelope
+    connect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
   }
 
   export type ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput = {
@@ -151962,6 +153645,20 @@ export namespace Prisma {
     update?: ClassModuleUpdateWithWhereUniqueWithoutOrganizationInput | ClassModuleUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: ClassModuleUpdateManyWithWhereWithoutOrganizationInput | ClassModuleUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: ClassModuleScalarWhereInput | ClassModuleScalarWhereInput[]
+  }
+
+  export type ClassSubModuleUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<ClassSubModuleCreateWithoutOrganizationInput, ClassSubModuleUncheckedCreateWithoutOrganizationInput> | ClassSubModuleCreateWithoutOrganizationInput[] | ClassSubModuleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ClassSubModuleCreateOrConnectWithoutOrganizationInput | ClassSubModuleCreateOrConnectWithoutOrganizationInput[]
+    upsert?: ClassSubModuleUpsertWithWhereUniqueWithoutOrganizationInput | ClassSubModuleUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: ClassSubModuleCreateManyOrganizationInputEnvelope
+    set?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    disconnect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    delete?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    connect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    update?: ClassSubModuleUpdateWithWhereUniqueWithoutOrganizationInput | ClassSubModuleUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: ClassSubModuleUpdateManyWithWhereWithoutOrganizationInput | ClassSubModuleUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: ClassSubModuleScalarWhereInput | ClassSubModuleScalarWhereInput[]
   }
 
   export type ClassMaterialUpdateManyWithoutOrganizationNestedInput = {
@@ -152966,6 +154663,20 @@ export namespace Prisma {
     update?: ClassModuleUpdateWithWhereUniqueWithoutOrganizationInput | ClassModuleUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: ClassModuleUpdateManyWithWhereWithoutOrganizationInput | ClassModuleUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: ClassModuleScalarWhereInput | ClassModuleScalarWhereInput[]
+  }
+
+  export type ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<ClassSubModuleCreateWithoutOrganizationInput, ClassSubModuleUncheckedCreateWithoutOrganizationInput> | ClassSubModuleCreateWithoutOrganizationInput[] | ClassSubModuleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ClassSubModuleCreateOrConnectWithoutOrganizationInput | ClassSubModuleCreateOrConnectWithoutOrganizationInput[]
+    upsert?: ClassSubModuleUpsertWithWhereUniqueWithoutOrganizationInput | ClassSubModuleUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: ClassSubModuleCreateManyOrganizationInputEnvelope
+    set?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    disconnect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    delete?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    connect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    update?: ClassSubModuleUpdateWithWhereUniqueWithoutOrganizationInput | ClassSubModuleUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: ClassSubModuleUpdateManyWithWhereWithoutOrganizationInput | ClassSubModuleUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: ClassSubModuleScalarWhereInput | ClassSubModuleScalarWhereInput[]
   }
 
   export type ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput = {
@@ -163948,6 +165659,13 @@ export namespace Prisma {
     connect?: AcademicSessionWhereUniqueInput | AcademicSessionWhereUniqueInput[]
   }
 
+  export type ClassSubModuleCreateNestedManyWithoutClassModuleInput = {
+    create?: XOR<ClassSubModuleCreateWithoutClassModuleInput, ClassSubModuleUncheckedCreateWithoutClassModuleInput> | ClassSubModuleCreateWithoutClassModuleInput[] | ClassSubModuleUncheckedCreateWithoutClassModuleInput[]
+    connectOrCreate?: ClassSubModuleCreateOrConnectWithoutClassModuleInput | ClassSubModuleCreateOrConnectWithoutClassModuleInput[]
+    createMany?: ClassSubModuleCreateManyClassModuleInputEnvelope
+    connect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+  }
+
   export type ModuleLessonCreateNestedManyWithoutClassModuleInput = {
     create?: XOR<ModuleLessonCreateWithoutClassModuleInput, ModuleLessonUncheckedCreateWithoutClassModuleInput> | ModuleLessonCreateWithoutClassModuleInput[] | ModuleLessonUncheckedCreateWithoutClassModuleInput[]
     connectOrCreate?: ModuleLessonCreateOrConnectWithoutClassModuleInput | ModuleLessonCreateOrConnectWithoutClassModuleInput[]
@@ -163960,6 +165678,13 @@ export namespace Prisma {
     connectOrCreate?: AcademicSessionCreateOrConnectWithoutClassModuleInput | AcademicSessionCreateOrConnectWithoutClassModuleInput[]
     createMany?: AcademicSessionCreateManyClassModuleInputEnvelope
     connect?: AcademicSessionWhereUniqueInput | AcademicSessionWhereUniqueInput[]
+  }
+
+  export type ClassSubModuleUncheckedCreateNestedManyWithoutClassModuleInput = {
+    create?: XOR<ClassSubModuleCreateWithoutClassModuleInput, ClassSubModuleUncheckedCreateWithoutClassModuleInput> | ClassSubModuleCreateWithoutClassModuleInput[] | ClassSubModuleUncheckedCreateWithoutClassModuleInput[]
+    connectOrCreate?: ClassSubModuleCreateOrConnectWithoutClassModuleInput | ClassSubModuleCreateOrConnectWithoutClassModuleInput[]
+    createMany?: ClassSubModuleCreateManyClassModuleInputEnvelope
+    connect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
   }
 
   export type ModuleLessonUncheckedCreateNestedManyWithoutClassModuleInput = {
@@ -163999,6 +165724,20 @@ export namespace Prisma {
     deleteMany?: AcademicSessionScalarWhereInput | AcademicSessionScalarWhereInput[]
   }
 
+  export type ClassSubModuleUpdateManyWithoutClassModuleNestedInput = {
+    create?: XOR<ClassSubModuleCreateWithoutClassModuleInput, ClassSubModuleUncheckedCreateWithoutClassModuleInput> | ClassSubModuleCreateWithoutClassModuleInput[] | ClassSubModuleUncheckedCreateWithoutClassModuleInput[]
+    connectOrCreate?: ClassSubModuleCreateOrConnectWithoutClassModuleInput | ClassSubModuleCreateOrConnectWithoutClassModuleInput[]
+    upsert?: ClassSubModuleUpsertWithWhereUniqueWithoutClassModuleInput | ClassSubModuleUpsertWithWhereUniqueWithoutClassModuleInput[]
+    createMany?: ClassSubModuleCreateManyClassModuleInputEnvelope
+    set?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    disconnect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    delete?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    connect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    update?: ClassSubModuleUpdateWithWhereUniqueWithoutClassModuleInput | ClassSubModuleUpdateWithWhereUniqueWithoutClassModuleInput[]
+    updateMany?: ClassSubModuleUpdateManyWithWhereWithoutClassModuleInput | ClassSubModuleUpdateManyWithWhereWithoutClassModuleInput[]
+    deleteMany?: ClassSubModuleScalarWhereInput | ClassSubModuleScalarWhereInput[]
+  }
+
   export type ModuleLessonUpdateManyWithoutClassModuleNestedInput = {
     create?: XOR<ModuleLessonCreateWithoutClassModuleInput, ModuleLessonUncheckedCreateWithoutClassModuleInput> | ModuleLessonCreateWithoutClassModuleInput[] | ModuleLessonUncheckedCreateWithoutClassModuleInput[]
     connectOrCreate?: ModuleLessonCreateOrConnectWithoutClassModuleInput | ModuleLessonCreateOrConnectWithoutClassModuleInput[]
@@ -164027,6 +165766,20 @@ export namespace Prisma {
     deleteMany?: AcademicSessionScalarWhereInput | AcademicSessionScalarWhereInput[]
   }
 
+  export type ClassSubModuleUncheckedUpdateManyWithoutClassModuleNestedInput = {
+    create?: XOR<ClassSubModuleCreateWithoutClassModuleInput, ClassSubModuleUncheckedCreateWithoutClassModuleInput> | ClassSubModuleCreateWithoutClassModuleInput[] | ClassSubModuleUncheckedCreateWithoutClassModuleInput[]
+    connectOrCreate?: ClassSubModuleCreateOrConnectWithoutClassModuleInput | ClassSubModuleCreateOrConnectWithoutClassModuleInput[]
+    upsert?: ClassSubModuleUpsertWithWhereUniqueWithoutClassModuleInput | ClassSubModuleUpsertWithWhereUniqueWithoutClassModuleInput[]
+    createMany?: ClassSubModuleCreateManyClassModuleInputEnvelope
+    set?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    disconnect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    delete?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    connect?: ClassSubModuleWhereUniqueInput | ClassSubModuleWhereUniqueInput[]
+    update?: ClassSubModuleUpdateWithWhereUniqueWithoutClassModuleInput | ClassSubModuleUpdateWithWhereUniqueWithoutClassModuleInput[]
+    updateMany?: ClassSubModuleUpdateManyWithWhereWithoutClassModuleInput | ClassSubModuleUpdateManyWithWhereWithoutClassModuleInput[]
+    deleteMany?: ClassSubModuleScalarWhereInput | ClassSubModuleScalarWhereInput[]
+  }
+
   export type ModuleLessonUncheckedUpdateManyWithoutClassModuleNestedInput = {
     create?: XOR<ModuleLessonCreateWithoutClassModuleInput, ModuleLessonUncheckedCreateWithoutClassModuleInput> | ModuleLessonCreateWithoutClassModuleInput[] | ModuleLessonUncheckedCreateWithoutClassModuleInput[]
     connectOrCreate?: ModuleLessonCreateOrConnectWithoutClassModuleInput | ModuleLessonCreateOrConnectWithoutClassModuleInput[]
@@ -164041,10 +165794,86 @@ export namespace Prisma {
     deleteMany?: ModuleLessonScalarWhereInput | ModuleLessonScalarWhereInput[]
   }
 
+  export type ClassModuleCreateNestedOneWithoutSubModulesInput = {
+    create?: XOR<ClassModuleCreateWithoutSubModulesInput, ClassModuleUncheckedCreateWithoutSubModulesInput>
+    connectOrCreate?: ClassModuleCreateOrConnectWithoutSubModulesInput
+    connect?: ClassModuleWhereUniqueInput
+  }
+
+  export type OrganizationCreateNestedOneWithoutClassSubModulesInput = {
+    create?: XOR<OrganizationCreateWithoutClassSubModulesInput, OrganizationUncheckedCreateWithoutClassSubModulesInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutClassSubModulesInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type ModuleLessonCreateNestedManyWithoutClassSubModuleInput = {
+    create?: XOR<ModuleLessonCreateWithoutClassSubModuleInput, ModuleLessonUncheckedCreateWithoutClassSubModuleInput> | ModuleLessonCreateWithoutClassSubModuleInput[] | ModuleLessonUncheckedCreateWithoutClassSubModuleInput[]
+    connectOrCreate?: ModuleLessonCreateOrConnectWithoutClassSubModuleInput | ModuleLessonCreateOrConnectWithoutClassSubModuleInput[]
+    createMany?: ModuleLessonCreateManyClassSubModuleInputEnvelope
+    connect?: ModuleLessonWhereUniqueInput | ModuleLessonWhereUniqueInput[]
+  }
+
+  export type ModuleLessonUncheckedCreateNestedManyWithoutClassSubModuleInput = {
+    create?: XOR<ModuleLessonCreateWithoutClassSubModuleInput, ModuleLessonUncheckedCreateWithoutClassSubModuleInput> | ModuleLessonCreateWithoutClassSubModuleInput[] | ModuleLessonUncheckedCreateWithoutClassSubModuleInput[]
+    connectOrCreate?: ModuleLessonCreateOrConnectWithoutClassSubModuleInput | ModuleLessonCreateOrConnectWithoutClassSubModuleInput[]
+    createMany?: ModuleLessonCreateManyClassSubModuleInputEnvelope
+    connect?: ModuleLessonWhereUniqueInput | ModuleLessonWhereUniqueInput[]
+  }
+
+  export type ClassModuleUpdateOneRequiredWithoutSubModulesNestedInput = {
+    create?: XOR<ClassModuleCreateWithoutSubModulesInput, ClassModuleUncheckedCreateWithoutSubModulesInput>
+    connectOrCreate?: ClassModuleCreateOrConnectWithoutSubModulesInput
+    upsert?: ClassModuleUpsertWithoutSubModulesInput
+    connect?: ClassModuleWhereUniqueInput
+    update?: XOR<XOR<ClassModuleUpdateToOneWithWhereWithoutSubModulesInput, ClassModuleUpdateWithoutSubModulesInput>, ClassModuleUncheckedUpdateWithoutSubModulesInput>
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutClassSubModulesNestedInput = {
+    create?: XOR<OrganizationCreateWithoutClassSubModulesInput, OrganizationUncheckedCreateWithoutClassSubModulesInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutClassSubModulesInput
+    upsert?: OrganizationUpsertWithoutClassSubModulesInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutClassSubModulesInput, OrganizationUpdateWithoutClassSubModulesInput>, OrganizationUncheckedUpdateWithoutClassSubModulesInput>
+  }
+
+  export type ModuleLessonUpdateManyWithoutClassSubModuleNestedInput = {
+    create?: XOR<ModuleLessonCreateWithoutClassSubModuleInput, ModuleLessonUncheckedCreateWithoutClassSubModuleInput> | ModuleLessonCreateWithoutClassSubModuleInput[] | ModuleLessonUncheckedCreateWithoutClassSubModuleInput[]
+    connectOrCreate?: ModuleLessonCreateOrConnectWithoutClassSubModuleInput | ModuleLessonCreateOrConnectWithoutClassSubModuleInput[]
+    upsert?: ModuleLessonUpsertWithWhereUniqueWithoutClassSubModuleInput | ModuleLessonUpsertWithWhereUniqueWithoutClassSubModuleInput[]
+    createMany?: ModuleLessonCreateManyClassSubModuleInputEnvelope
+    set?: ModuleLessonWhereUniqueInput | ModuleLessonWhereUniqueInput[]
+    disconnect?: ModuleLessonWhereUniqueInput | ModuleLessonWhereUniqueInput[]
+    delete?: ModuleLessonWhereUniqueInput | ModuleLessonWhereUniqueInput[]
+    connect?: ModuleLessonWhereUniqueInput | ModuleLessonWhereUniqueInput[]
+    update?: ModuleLessonUpdateWithWhereUniqueWithoutClassSubModuleInput | ModuleLessonUpdateWithWhereUniqueWithoutClassSubModuleInput[]
+    updateMany?: ModuleLessonUpdateManyWithWhereWithoutClassSubModuleInput | ModuleLessonUpdateManyWithWhereWithoutClassSubModuleInput[]
+    deleteMany?: ModuleLessonScalarWhereInput | ModuleLessonScalarWhereInput[]
+  }
+
+  export type ModuleLessonUncheckedUpdateManyWithoutClassSubModuleNestedInput = {
+    create?: XOR<ModuleLessonCreateWithoutClassSubModuleInput, ModuleLessonUncheckedCreateWithoutClassSubModuleInput> | ModuleLessonCreateWithoutClassSubModuleInput[] | ModuleLessonUncheckedCreateWithoutClassSubModuleInput[]
+    connectOrCreate?: ModuleLessonCreateOrConnectWithoutClassSubModuleInput | ModuleLessonCreateOrConnectWithoutClassSubModuleInput[]
+    upsert?: ModuleLessonUpsertWithWhereUniqueWithoutClassSubModuleInput | ModuleLessonUpsertWithWhereUniqueWithoutClassSubModuleInput[]
+    createMany?: ModuleLessonCreateManyClassSubModuleInputEnvelope
+    set?: ModuleLessonWhereUniqueInput | ModuleLessonWhereUniqueInput[]
+    disconnect?: ModuleLessonWhereUniqueInput | ModuleLessonWhereUniqueInput[]
+    delete?: ModuleLessonWhereUniqueInput | ModuleLessonWhereUniqueInput[]
+    connect?: ModuleLessonWhereUniqueInput | ModuleLessonWhereUniqueInput[]
+    update?: ModuleLessonUpdateWithWhereUniqueWithoutClassSubModuleInput | ModuleLessonUpdateWithWhereUniqueWithoutClassSubModuleInput[]
+    updateMany?: ModuleLessonUpdateManyWithWhereWithoutClassSubModuleInput | ModuleLessonUpdateManyWithWhereWithoutClassSubModuleInput[]
+    deleteMany?: ModuleLessonScalarWhereInput | ModuleLessonScalarWhereInput[]
+  }
+
   export type ClassModuleCreateNestedOneWithoutLessonsInput = {
     create?: XOR<ClassModuleCreateWithoutLessonsInput, ClassModuleUncheckedCreateWithoutLessonsInput>
     connectOrCreate?: ClassModuleCreateOrConnectWithoutLessonsInput
     connect?: ClassModuleWhereUniqueInput
+  }
+
+  export type ClassSubModuleCreateNestedOneWithoutLessonsInput = {
+    create?: XOR<ClassSubModuleCreateWithoutLessonsInput, ClassSubModuleUncheckedCreateWithoutLessonsInput>
+    connectOrCreate?: ClassSubModuleCreateOrConnectWithoutLessonsInput
+    connect?: ClassSubModuleWhereUniqueInput
   }
 
   export type FacultyCreateNestedOneWithoutModuleLessonsInput = {
@@ -164147,6 +165976,16 @@ export namespace Prisma {
     upsert?: ClassModuleUpsertWithoutLessonsInput
     connect?: ClassModuleWhereUniqueInput
     update?: XOR<XOR<ClassModuleUpdateToOneWithWhereWithoutLessonsInput, ClassModuleUpdateWithoutLessonsInput>, ClassModuleUncheckedUpdateWithoutLessonsInput>
+  }
+
+  export type ClassSubModuleUpdateOneWithoutLessonsNestedInput = {
+    create?: XOR<ClassSubModuleCreateWithoutLessonsInput, ClassSubModuleUncheckedCreateWithoutLessonsInput>
+    connectOrCreate?: ClassSubModuleCreateOrConnectWithoutLessonsInput
+    upsert?: ClassSubModuleUpsertWithoutLessonsInput
+    disconnect?: ClassSubModuleWhereInput | boolean
+    delete?: ClassSubModuleWhereInput | boolean
+    connect?: ClassSubModuleWhereUniqueInput
+    update?: XOR<XOR<ClassSubModuleUpdateToOneWithWhereWithoutLessonsInput, ClassSubModuleUpdateWithoutLessonsInput>, ClassSubModuleUncheckedUpdateWithoutLessonsInput>
   }
 
   export type FacultyUpdateOneWithoutModuleLessonsNestedInput = {
@@ -169143,6 +170982,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     academicClass: AcademicClassCreateNestedOneWithoutModulesInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutClassModuleInput
+    subModules?: ClassSubModuleCreateNestedManyWithoutClassModuleInput
     lessons?: ModuleLessonCreateNestedManyWithoutClassModuleInput
   }
 
@@ -169155,6 +170995,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutClassModuleInput
+    subModules?: ClassSubModuleUncheckedCreateNestedManyWithoutClassModuleInput
     lessons?: ModuleLessonUncheckedCreateNestedManyWithoutClassModuleInput
   }
 
@@ -169165,6 +171006,38 @@ export namespace Prisma {
 
   export type ClassModuleCreateManyOrganizationInputEnvelope = {
     data: ClassModuleCreateManyOrganizationInput | ClassModuleCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ClassSubModuleCreateWithoutOrganizationInput = {
+    id?: string
+    title: string
+    description?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    classModule: ClassModuleCreateNestedOneWithoutSubModulesInput
+    lessons?: ModuleLessonCreateNestedManyWithoutClassSubModuleInput
+  }
+
+  export type ClassSubModuleUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    classModuleId: string
+    title: string
+    description?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lessons?: ModuleLessonUncheckedCreateNestedManyWithoutClassSubModuleInput
+  }
+
+  export type ClassSubModuleCreateOrConnectWithoutOrganizationInput = {
+    where: ClassSubModuleWhereUniqueInput
+    create: XOR<ClassSubModuleCreateWithoutOrganizationInput, ClassSubModuleUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type ClassSubModuleCreateManyOrganizationInputEnvelope = {
+    data: ClassSubModuleCreateManyOrganizationInput | ClassSubModuleCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -169213,6 +171086,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     videoUrl?: string | null
     classModule: ClassModuleCreateNestedOneWithoutLessonsInput
+    classSubModule?: ClassSubModuleCreateNestedOneWithoutLessonsInput
     faculty?: FacultyCreateNestedOneWithoutModuleLessonsInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutModuleLessonInput
     materials?: ClassMaterialCreateNestedManyWithoutModuleLessonInput
@@ -169225,6 +171099,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedCreateWithoutOrganizationInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -171805,6 +173680,36 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ClassModule"> | Date | string
   }
 
+  export type ClassSubModuleUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: ClassSubModuleWhereUniqueInput
+    update: XOR<ClassSubModuleUpdateWithoutOrganizationInput, ClassSubModuleUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<ClassSubModuleCreateWithoutOrganizationInput, ClassSubModuleUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type ClassSubModuleUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: ClassSubModuleWhereUniqueInput
+    data: XOR<ClassSubModuleUpdateWithoutOrganizationInput, ClassSubModuleUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type ClassSubModuleUpdateManyWithWhereWithoutOrganizationInput = {
+    where: ClassSubModuleScalarWhereInput
+    data: XOR<ClassSubModuleUpdateManyMutationInput, ClassSubModuleUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type ClassSubModuleScalarWhereInput = {
+    AND?: ClassSubModuleScalarWhereInput | ClassSubModuleScalarWhereInput[]
+    OR?: ClassSubModuleScalarWhereInput[]
+    NOT?: ClassSubModuleScalarWhereInput | ClassSubModuleScalarWhereInput[]
+    id?: StringFilter<"ClassSubModule"> | string
+    classModuleId?: StringFilter<"ClassSubModule"> | string
+    title?: StringFilter<"ClassSubModule"> | string
+    description?: StringNullableFilter<"ClassSubModule"> | string | null
+    order?: IntFilter<"ClassSubModule"> | number
+    organizationId?: StringFilter<"ClassSubModule"> | string
+    createdAt?: DateTimeFilter<"ClassSubModule"> | Date | string
+    updatedAt?: DateTimeFilter<"ClassSubModule"> | Date | string
+  }
+
   export type ClassMaterialUpsertWithWhereUniqueWithoutOrganizationInput = {
     where: ClassMaterialWhereUniqueInput
     update: XOR<ClassMaterialUpdateWithoutOrganizationInput, ClassMaterialUncheckedUpdateWithoutOrganizationInput>
@@ -171860,6 +173765,7 @@ export namespace Prisma {
     NOT?: ModuleLessonScalarWhereInput | ModuleLessonScalarWhereInput[]
     id?: StringFilter<"ModuleLesson"> | string
     classModuleId?: StringFilter<"ModuleLesson"> | string
+    classSubModuleId?: StringNullableFilter<"ModuleLesson"> | string | null
     title?: StringFilter<"ModuleLesson"> | string
     description?: StringNullableFilter<"ModuleLesson"> | string | null
     order?: IntFilter<"ModuleLesson"> | number
@@ -172039,6 +173945,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -172127,6 +174034,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -172630,6 +174538,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -172718,6 +174627,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -174049,6 +175959,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -174137,6 +176048,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -178741,6 +180653,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -178829,6 +180742,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -181500,6 +183414,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -181588,6 +183503,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -182244,6 +184160,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -182332,6 +184249,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -182669,6 +184587,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -182757,6 +184676,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -183892,6 +185812,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -183980,6 +185901,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -184880,6 +186802,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -184968,6 +186891,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -185289,6 +187213,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -185377,6 +187302,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -185720,6 +187646,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -185808,6 +187735,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -186208,6 +188136,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -186296,6 +188225,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -186979,6 +188909,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -187067,6 +188998,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -187511,6 +189443,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -187599,6 +189532,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -188168,6 +190102,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -188256,6 +190191,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -189230,6 +191166,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -189318,6 +191255,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -190761,6 +192699,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -190849,6 +192788,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -192619,6 +194559,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -192707,6 +194648,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -194152,6 +196094,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -194240,6 +196183,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -194912,6 +196856,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -195000,6 +196945,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -195405,6 +197351,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -195493,6 +197440,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -195777,6 +197725,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -195865,6 +197814,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -196202,6 +198152,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -196290,6 +198241,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -196850,6 +198802,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -196938,6 +198891,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -197281,6 +199235,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -197369,6 +199324,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -197457,6 +199413,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -197545,6 +199502,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -197882,6 +199840,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -197970,6 +199929,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -198297,6 +200257,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -198385,6 +200346,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -198722,6 +200684,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -198810,6 +200773,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -199194,6 +201158,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -199282,6 +201247,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -199682,6 +201648,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -199770,6 +201737,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -200097,6 +202065,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -200185,6 +202154,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -200289,6 +202259,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -200377,6 +202348,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -201221,6 +203193,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -201309,6 +203282,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -202193,6 +204167,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -202281,6 +204256,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -202835,6 +204811,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -202923,6 +204900,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -203738,6 +205716,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -203826,6 +205805,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -204852,6 +206832,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -204940,6 +206921,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -206227,6 +208209,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -206315,6 +208298,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -207171,6 +209155,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -207259,6 +209244,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -208271,6 +210257,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -208359,6 +210346,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -208941,6 +210929,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -209029,6 +211018,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -209898,6 +211888,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -209986,6 +211977,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -210307,6 +212299,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -210395,6 +212388,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -210978,6 +212972,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -211066,6 +213061,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -211513,6 +213509,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -211601,6 +213598,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -211944,6 +213942,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -212032,6 +214031,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -212177,6 +214177,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -212265,6 +214266,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -212432,6 +214434,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -212520,6 +214523,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -213074,6 +215078,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -213162,6 +215167,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -214306,6 +216312,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -214394,6 +216401,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -215260,6 +217268,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -215348,6 +217357,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -216978,6 +218988,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -217066,6 +219077,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -218716,6 +220728,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -218804,6 +220817,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -219386,6 +221400,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -219474,6 +221489,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -219592,6 +221608,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -219680,6 +221697,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -219891,6 +221909,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -219979,6 +221998,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -220164,6 +222184,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -220252,6 +222273,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -220680,6 +222702,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -220768,6 +222791,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -221235,6 +223259,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -221323,6 +223348,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -221709,6 +223735,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -221797,6 +223824,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -222357,6 +224385,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -222445,6 +224474,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -222788,6 +224818,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -222876,6 +224907,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -222964,6 +224996,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -223052,6 +225085,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -223389,6 +225423,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -223477,6 +225512,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -223804,6 +225840,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -223892,6 +225929,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -223996,6 +226034,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -224084,6 +226123,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -224172,6 +226212,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -224260,6 +226301,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -224597,6 +226639,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -224685,6 +226728,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -225012,6 +227056,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -225100,6 +227145,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -225670,6 +227716,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -225758,6 +227805,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -226324,6 +228372,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -226412,6 +228461,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -227035,6 +229085,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -227123,6 +229174,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -228447,6 +230499,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -228535,6 +230588,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -229666,6 +231720,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -229754,6 +231809,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -230201,6 +232257,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -230289,6 +232346,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -230446,6 +232504,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -230534,6 +232593,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -230855,6 +232915,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -230943,6 +233004,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -231506,6 +233568,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -231594,6 +233657,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -232147,6 +234211,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -232235,6 +234300,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -232811,6 +234877,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -232899,6 +234966,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -233459,6 +235527,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -233547,6 +235616,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -234356,6 +236426,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -234444,6 +236515,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -235243,6 +237315,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -235331,6 +237404,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -235674,6 +237748,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -235762,6 +237837,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -236407,6 +238483,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -236495,6 +238572,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -237227,6 +239305,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -237315,6 +239394,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -237462,6 +239542,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -237550,6 +239631,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -237887,6 +239969,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -237975,6 +240058,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -238302,6 +240386,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -238390,6 +240475,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -238547,6 +240633,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -238635,6 +240722,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -239106,6 +241194,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -239194,6 +241283,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -239867,6 +241957,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -239955,6 +242046,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -240331,6 +242423,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -240419,6 +242512,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -240811,6 +242905,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -240899,6 +242994,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -241607,6 +243703,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -241695,6 +243792,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -242198,6 +244296,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -242286,6 +244385,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -242607,6 +244707,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -242695,6 +244796,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -243093,6 +245195,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -243181,6 +245284,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -243563,6 +245667,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -243651,6 +245756,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -244153,6 +246259,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -244241,6 +246348,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -244506,6 +246614,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -244594,6 +246703,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -244882,6 +246992,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -244970,6 +247081,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -246204,6 +248316,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -246292,6 +248405,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -246874,6 +248988,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -246962,6 +249077,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -247050,6 +249166,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -247138,6 +249255,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -247528,6 +249646,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -247616,6 +249735,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -248092,6 +250212,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -248180,6 +250301,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -248445,6 +250567,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -248533,6 +250656,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -248989,6 +251113,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -249077,6 +251202,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -249588,6 +251714,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -249676,6 +251803,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -249944,6 +252072,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -250032,6 +252161,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -250369,6 +252499,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -250457,6 +252588,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -250784,6 +252916,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -250872,6 +253005,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -251160,6 +253294,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -251248,6 +253383,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -252740,6 +254876,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -252828,6 +254965,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -252981,6 +255119,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -253069,6 +255208,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -253212,6 +255352,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -253300,6 +255441,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -253533,6 +255675,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -253621,6 +255764,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -253844,6 +255988,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -253932,6 +256077,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -254269,6 +256415,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -254357,6 +256504,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -255156,6 +257304,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -255244,6 +257393,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -255441,6 +257591,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     videoUrl?: string | null
     classModule: ClassModuleCreateNestedOneWithoutLessonsInput
+    classSubModule?: ClassSubModuleCreateNestedOneWithoutLessonsInput
     organization: OrganizationCreateNestedOneWithoutModuleLessonsInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutModuleLessonInput
     materials?: ClassMaterialCreateNestedManyWithoutModuleLessonInput
@@ -255453,6 +257604,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedCreateWithoutFacultyInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -255764,6 +257916,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -255852,6 +258005,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -256116,6 +258270,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -256204,6 +258359,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -256348,6 +258504,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -256436,6 +258593,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -256656,6 +258814,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -256744,6 +258903,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -256859,6 +259019,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutClassModulesInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutClassModuleInput
+    subModules?: ClassSubModuleCreateNestedManyWithoutClassModuleInput
     lessons?: ModuleLessonCreateNestedManyWithoutClassModuleInput
   }
 
@@ -256871,6 +259032,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutClassModuleInput
+    subModules?: ClassSubModuleUncheckedCreateNestedManyWithoutClassModuleInput
     lessons?: ModuleLessonUncheckedCreateNestedManyWithoutClassModuleInput
   }
 
@@ -257086,6 +259248,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -257174,6 +259337,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -257345,6 +259509,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -257433,6 +259598,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -257495,6 +259661,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ClassSubModuleCreateWithoutClassModuleInput = {
+    id?: string
+    title: string
+    description?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutClassSubModulesInput
+    lessons?: ModuleLessonCreateNestedManyWithoutClassSubModuleInput
+  }
+
+  export type ClassSubModuleUncheckedCreateWithoutClassModuleInput = {
+    id?: string
+    title: string
+    description?: string | null
+    order?: number
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lessons?: ModuleLessonUncheckedCreateNestedManyWithoutClassSubModuleInput
+  }
+
+  export type ClassSubModuleCreateOrConnectWithoutClassModuleInput = {
+    where: ClassSubModuleWhereUniqueInput
+    create: XOR<ClassSubModuleCreateWithoutClassModuleInput, ClassSubModuleUncheckedCreateWithoutClassModuleInput>
+  }
+
+  export type ClassSubModuleCreateManyClassModuleInputEnvelope = {
+    data: ClassSubModuleCreateManyClassModuleInput | ClassSubModuleCreateManyClassModuleInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ModuleLessonCreateWithoutClassModuleInput = {
     id?: string
     title: string
@@ -257503,6 +259701,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     videoUrl?: string | null
+    classSubModule?: ClassSubModuleCreateNestedOneWithoutLessonsInput
     faculty?: FacultyCreateNestedOneWithoutModuleLessonsInput
     organization: OrganizationCreateNestedOneWithoutModuleLessonsInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutModuleLessonInput
@@ -257515,6 +259714,7 @@ export namespace Prisma {
 
   export type ModuleLessonUncheckedCreateWithoutClassModuleInput = {
     id?: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -257674,6 +259874,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -257762,6 +259963,7 @@ export namespace Prisma {
     examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -257785,6 +259987,22 @@ export namespace Prisma {
     data: XOR<AcademicSessionUpdateManyMutationInput, AcademicSessionUncheckedUpdateManyWithoutClassModuleInput>
   }
 
+  export type ClassSubModuleUpsertWithWhereUniqueWithoutClassModuleInput = {
+    where: ClassSubModuleWhereUniqueInput
+    update: XOR<ClassSubModuleUpdateWithoutClassModuleInput, ClassSubModuleUncheckedUpdateWithoutClassModuleInput>
+    create: XOR<ClassSubModuleCreateWithoutClassModuleInput, ClassSubModuleUncheckedCreateWithoutClassModuleInput>
+  }
+
+  export type ClassSubModuleUpdateWithWhereUniqueWithoutClassModuleInput = {
+    where: ClassSubModuleWhereUniqueInput
+    data: XOR<ClassSubModuleUpdateWithoutClassModuleInput, ClassSubModuleUncheckedUpdateWithoutClassModuleInput>
+  }
+
+  export type ClassSubModuleUpdateManyWithWhereWithoutClassModuleInput = {
+    where: ClassSubModuleScalarWhereInput
+    data: XOR<ClassSubModuleUpdateManyMutationInput, ClassSubModuleUncheckedUpdateManyWithoutClassModuleInput>
+  }
+
   export type ModuleLessonUpsertWithWhereUniqueWithoutClassModuleInput = {
     where: ModuleLessonWhereUniqueInput
     update: XOR<ModuleLessonUpdateWithoutClassModuleInput, ModuleLessonUncheckedUpdateWithoutClassModuleInput>
@@ -257801,6 +260019,510 @@ export namespace Prisma {
     data: XOR<ModuleLessonUpdateManyMutationInput, ModuleLessonUncheckedUpdateManyWithoutClassModuleInput>
   }
 
+  export type ClassModuleCreateWithoutSubModulesInput = {
+    id?: string
+    title: string
+    description?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicClass: AcademicClassCreateNestedOneWithoutModulesInput
+    organization: OrganizationCreateNestedOneWithoutClassModulesInput
+    academicSessions?: AcademicSessionCreateNestedManyWithoutClassModuleInput
+    lessons?: ModuleLessonCreateNestedManyWithoutClassModuleInput
+  }
+
+  export type ClassModuleUncheckedCreateWithoutSubModulesInput = {
+    id?: string
+    academicClassId: string
+    title: string
+    description?: string | null
+    order?: number
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutClassModuleInput
+    lessons?: ModuleLessonUncheckedCreateNestedManyWithoutClassModuleInput
+  }
+
+  export type ClassModuleCreateOrConnectWithoutSubModulesInput = {
+    where: ClassModuleWhereUniqueInput
+    create: XOR<ClassModuleCreateWithoutSubModulesInput, ClassModuleUncheckedCreateWithoutSubModulesInput>
+  }
+
+  export type OrganizationCreateWithoutClassSubModulesInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.OrganizationStatus
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionCreateNestedManyWithoutOrganizationInput
+    studentAcademicAttendances?: StudentAcademicAttendanceCreateNestedManyWithoutOrganizationInput
+    academicCenters?: AcademicCenterCreateNestedManyWithoutOrganizationInput
+    academicClasses?: AcademicClassCreateNestedManyWithoutOrganizationInput
+    academicBatches?: AcademicBatchCreateNestedManyWithoutOrganizationInput
+    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+    branches?: BranchCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
+    leads?: LeadCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
+    license?: LicenseCreateNestedOneWithoutOrganizationsInput
+    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
+    polls?: PollCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
+    students?: StudentCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
+    targets?: TargetCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
+    faculties?: FacultyCreateNestedManyWithoutOrganizationInput
+    classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
+    moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
+    lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
+    batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
+    studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutClassSubModulesInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.OrganizationStatus
+    licenseId?: string | null
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    academicCenters?: AcademicCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    academicClasses?: AcademicClassUncheckedCreateNestedManyWithoutOrganizationInput
+    academicBatches?: AcademicBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
+    classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+    studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutClassSubModulesInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutClassSubModulesInput, OrganizationUncheckedCreateWithoutClassSubModulesInput>
+  }
+
+  export type ModuleLessonCreateWithoutClassSubModuleInput = {
+    id?: string
+    title: string
+    description?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    videoUrl?: string | null
+    classModule: ClassModuleCreateNestedOneWithoutLessonsInput
+    faculty?: FacultyCreateNestedOneWithoutModuleLessonsInput
+    organization: OrganizationCreateNestedOneWithoutModuleLessonsInput
+    academicSessions?: AcademicSessionCreateNestedManyWithoutModuleLessonInput
+    materials?: ClassMaterialCreateNestedManyWithoutModuleLessonInput
+    facultyHistory?: LessonFacultyHistoryCreateNestedManyWithoutModuleLessonInput
+    batchAssignments?: BatchLessonAssignmentCreateNestedManyWithoutModuleLessonInput
+    videoLogs?: StudentVideoLogCreateNestedManyWithoutModuleLessonInput
+    assessment?: AssessmentCreateNestedOneWithoutLessonInput
+  }
+
+  export type ModuleLessonUncheckedCreateWithoutClassSubModuleInput = {
+    id?: string
+    classModuleId: string
+    title: string
+    description?: string | null
+    order?: number
+    facultyId?: string | null
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    videoUrl?: string | null
+    academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutModuleLessonInput
+    materials?: ClassMaterialUncheckedCreateNestedManyWithoutModuleLessonInput
+    facultyHistory?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutModuleLessonInput
+    batchAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutModuleLessonInput
+    videoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutModuleLessonInput
+    assessment?: AssessmentUncheckedCreateNestedOneWithoutLessonInput
+  }
+
+  export type ModuleLessonCreateOrConnectWithoutClassSubModuleInput = {
+    where: ModuleLessonWhereUniqueInput
+    create: XOR<ModuleLessonCreateWithoutClassSubModuleInput, ModuleLessonUncheckedCreateWithoutClassSubModuleInput>
+  }
+
+  export type ModuleLessonCreateManyClassSubModuleInputEnvelope = {
+    data: ModuleLessonCreateManyClassSubModuleInput | ModuleLessonCreateManyClassSubModuleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ClassModuleUpsertWithoutSubModulesInput = {
+    update: XOR<ClassModuleUpdateWithoutSubModulesInput, ClassModuleUncheckedUpdateWithoutSubModulesInput>
+    create: XOR<ClassModuleCreateWithoutSubModulesInput, ClassModuleUncheckedCreateWithoutSubModulesInput>
+    where?: ClassModuleWhereInput
+  }
+
+  export type ClassModuleUpdateToOneWithWhereWithoutSubModulesInput = {
+    where?: ClassModuleWhereInput
+    data: XOR<ClassModuleUpdateWithoutSubModulesInput, ClassModuleUncheckedUpdateWithoutSubModulesInput>
+  }
+
+  export type ClassModuleUpdateWithoutSubModulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicClass?: AcademicClassUpdateOneRequiredWithoutModulesNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutClassModulesNestedInput
+    academicSessions?: AcademicSessionUpdateManyWithoutClassModuleNestedInput
+    lessons?: ModuleLessonUpdateManyWithoutClassModuleNestedInput
+  }
+
+  export type ClassModuleUncheckedUpdateWithoutSubModulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    academicClassId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUncheckedUpdateManyWithoutClassModuleNestedInput
+    lessons?: ModuleLessonUncheckedUpdateManyWithoutClassModuleNestedInput
+  }
+
+  export type OrganizationUpsertWithoutClassSubModulesInput = {
+    update: XOR<OrganizationUpdateWithoutClassSubModulesInput, OrganizationUncheckedUpdateWithoutClassSubModulesInput>
+    create: XOR<OrganizationCreateWithoutClassSubModulesInput, OrganizationUncheckedCreateWithoutClassSubModulesInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutClassSubModulesInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutClassSubModulesInput, OrganizationUncheckedUpdateWithoutClassSubModulesInput>
+  }
+
+  export type OrganizationUpdateWithoutClassSubModulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUpdateManyWithoutOrganizationNestedInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUpdateManyWithoutOrganizationNestedInput
+    academicCenters?: AcademicCenterUpdateManyWithoutOrganizationNestedInput
+    academicClasses?: AcademicClassUpdateManyWithoutOrganizationNestedInput
+    academicBatches?: AcademicBatchUpdateManyWithoutOrganizationNestedInput
+    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
+    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
+    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
+    faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
+    classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
+    moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
+    lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
+    studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutClassSubModulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicCenters?: AcademicCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicClasses?: AcademicClassUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicBatches?: AcademicBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
+    classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type ModuleLessonUpsertWithWhereUniqueWithoutClassSubModuleInput = {
+    where: ModuleLessonWhereUniqueInput
+    update: XOR<ModuleLessonUpdateWithoutClassSubModuleInput, ModuleLessonUncheckedUpdateWithoutClassSubModuleInput>
+    create: XOR<ModuleLessonCreateWithoutClassSubModuleInput, ModuleLessonUncheckedCreateWithoutClassSubModuleInput>
+  }
+
+  export type ModuleLessonUpdateWithWhereUniqueWithoutClassSubModuleInput = {
+    where: ModuleLessonWhereUniqueInput
+    data: XOR<ModuleLessonUpdateWithoutClassSubModuleInput, ModuleLessonUncheckedUpdateWithoutClassSubModuleInput>
+  }
+
+  export type ModuleLessonUpdateManyWithWhereWithoutClassSubModuleInput = {
+    where: ModuleLessonScalarWhereInput
+    data: XOR<ModuleLessonUpdateManyMutationInput, ModuleLessonUncheckedUpdateManyWithoutClassSubModuleInput>
+  }
+
   export type ClassModuleCreateWithoutLessonsInput = {
     id?: string
     title: string
@@ -257811,6 +260533,7 @@ export namespace Prisma {
     academicClass: AcademicClassCreateNestedOneWithoutModulesInput
     organization: OrganizationCreateNestedOneWithoutClassModulesInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutClassModuleInput
+    subModules?: ClassSubModuleCreateNestedManyWithoutClassModuleInput
   }
 
   export type ClassModuleUncheckedCreateWithoutLessonsInput = {
@@ -257823,11 +260546,39 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutClassModuleInput
+    subModules?: ClassSubModuleUncheckedCreateNestedManyWithoutClassModuleInput
   }
 
   export type ClassModuleCreateOrConnectWithoutLessonsInput = {
     where: ClassModuleWhereUniqueInput
     create: XOR<ClassModuleCreateWithoutLessonsInput, ClassModuleUncheckedCreateWithoutLessonsInput>
+  }
+
+  export type ClassSubModuleCreateWithoutLessonsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    classModule: ClassModuleCreateNestedOneWithoutSubModulesInput
+    organization: OrganizationCreateNestedOneWithoutClassSubModulesInput
+  }
+
+  export type ClassSubModuleUncheckedCreateWithoutLessonsInput = {
+    id?: string
+    classModuleId: string
+    title: string
+    description?: string | null
+    order?: number
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClassSubModuleCreateOrConnectWithoutLessonsInput = {
+    where: ClassSubModuleWhereUniqueInput
+    create: XOR<ClassSubModuleCreateWithoutLessonsInput, ClassSubModuleUncheckedCreateWithoutLessonsInput>
   }
 
   export type FacultyCreateWithoutModuleLessonsInput = {
@@ -257965,6 +260716,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
@@ -258053,6 +260805,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -258284,6 +261037,7 @@ export namespace Prisma {
     academicClass?: AcademicClassUpdateOneRequiredWithoutModulesNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutClassModulesNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutClassModuleNestedInput
+    subModules?: ClassSubModuleUpdateManyWithoutClassModuleNestedInput
   }
 
   export type ClassModuleUncheckedUpdateWithoutLessonsInput = {
@@ -258296,6 +261050,40 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicSessions?: AcademicSessionUncheckedUpdateManyWithoutClassModuleNestedInput
+    subModules?: ClassSubModuleUncheckedUpdateManyWithoutClassModuleNestedInput
+  }
+
+  export type ClassSubModuleUpsertWithoutLessonsInput = {
+    update: XOR<ClassSubModuleUpdateWithoutLessonsInput, ClassSubModuleUncheckedUpdateWithoutLessonsInput>
+    create: XOR<ClassSubModuleCreateWithoutLessonsInput, ClassSubModuleUncheckedCreateWithoutLessonsInput>
+    where?: ClassSubModuleWhereInput
+  }
+
+  export type ClassSubModuleUpdateToOneWithWhereWithoutLessonsInput = {
+    where?: ClassSubModuleWhereInput
+    data: XOR<ClassSubModuleUpdateWithoutLessonsInput, ClassSubModuleUncheckedUpdateWithoutLessonsInput>
+  }
+
+  export type ClassSubModuleUpdateWithoutLessonsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    classModule?: ClassModuleUpdateOneRequiredWithoutSubModulesNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutClassSubModulesNestedInput
+  }
+
+  export type ClassSubModuleUncheckedUpdateWithoutLessonsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    classModuleId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FacultyUpsertWithoutModuleLessonsInput = {
@@ -258450,6 +261238,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
@@ -258538,6 +261327,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -258666,6 +261456,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     videoUrl?: string | null
     classModule: ClassModuleCreateNestedOneWithoutLessonsInput
+    classSubModule?: ClassSubModuleCreateNestedOneWithoutLessonsInput
     faculty?: FacultyCreateNestedOneWithoutModuleLessonsInput
     organization: OrganizationCreateNestedOneWithoutModuleLessonsInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutModuleLessonInput
@@ -258678,6 +261469,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedCreateWithoutAssessmentInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -258776,6 +261568,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     classModule?: ClassModuleUpdateOneRequiredWithoutLessonsNestedInput
+    classSubModule?: ClassSubModuleUpdateOneWithoutLessonsNestedInput
     faculty?: FacultyUpdateOneWithoutModuleLessonsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutModuleLessonsNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutModuleLessonNestedInput
@@ -258788,6 +261581,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateWithoutAssessmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -259371,6 +262165,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     videoUrl?: string | null
     classModule: ClassModuleCreateNestedOneWithoutLessonsInput
+    classSubModule?: ClassSubModuleCreateNestedOneWithoutLessonsInput
     faculty?: FacultyCreateNestedOneWithoutModuleLessonsInput
     organization: OrganizationCreateNestedOneWithoutModuleLessonsInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutModuleLessonInput
@@ -259383,6 +262178,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedCreateWithoutVideoLogsInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -259485,6 +262281,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -259573,6 +262370,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -259739,6 +262537,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     classModule?: ClassModuleUpdateOneRequiredWithoutLessonsNestedInput
+    classSubModule?: ClassSubModuleUpdateOneWithoutLessonsNestedInput
     faculty?: FacultyUpdateOneWithoutModuleLessonsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutModuleLessonsNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutModuleLessonNestedInput
@@ -259751,6 +262550,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateWithoutVideoLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -259859,6 +262659,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -259947,6 +262748,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -259962,6 +262764,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     videoUrl?: string | null
     classModule: ClassModuleCreateNestedOneWithoutLessonsInput
+    classSubModule?: ClassSubModuleCreateNestedOneWithoutLessonsInput
     faculty?: FacultyCreateNestedOneWithoutModuleLessonsInput
     organization: OrganizationCreateNestedOneWithoutModuleLessonsInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutModuleLessonInput
@@ -259974,6 +262777,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedCreateWithoutFacultyHistoryInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -260235,6 +263039,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
@@ -260323,6 +263128,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -260354,6 +263160,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     classModule?: ClassModuleUpdateOneRequiredWithoutLessonsNestedInput
+    classSubModule?: ClassSubModuleUpdateOneWithoutLessonsNestedInput
     faculty?: FacultyUpdateOneWithoutModuleLessonsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutModuleLessonsNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutModuleLessonNestedInput
@@ -260366,6 +263173,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateWithoutFacultyHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -260651,6 +263459,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
@@ -260739,6 +263548,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -260754,6 +263564,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     videoUrl?: string | null
     classModule: ClassModuleCreateNestedOneWithoutLessonsInput
+    classSubModule?: ClassSubModuleCreateNestedOneWithoutLessonsInput
     faculty?: FacultyCreateNestedOneWithoutModuleLessonsInput
     organization: OrganizationCreateNestedOneWithoutModuleLessonsInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutModuleLessonInput
@@ -260766,6 +263577,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedCreateWithoutMaterialsInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -260921,6 +263733,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
@@ -261009,6 +263822,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -261040,6 +263854,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     classModule?: ClassModuleUpdateOneRequiredWithoutLessonsNestedInput
+    classSubModule?: ClassSubModuleUpdateOneWithoutLessonsNestedInput
     faculty?: FacultyUpdateOneWithoutModuleLessonsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutModuleLessonsNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutModuleLessonNestedInput
@@ -261052,6 +263867,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateWithoutMaterialsInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -261219,6 +264035,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
@@ -261307,6 +264124,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -261497,6 +264315,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -261585,6 +264404,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -261974,6 +264794,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -262062,6 +264883,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -263257,6 +266079,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     videoUrl?: string | null
     classModule: ClassModuleCreateNestedOneWithoutLessonsInput
+    classSubModule?: ClassSubModuleCreateNestedOneWithoutLessonsInput
     faculty?: FacultyCreateNestedOneWithoutModuleLessonsInput
     organization: OrganizationCreateNestedOneWithoutModuleLessonsInput
     academicSessions?: AcademicSessionCreateNestedManyWithoutModuleLessonInput
@@ -263269,6 +266092,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedCreateWithoutBatchAssignmentsInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -263424,6 +266248,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -263512,6 +266337,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -263588,6 +266414,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     classModule?: ClassModuleUpdateOneRequiredWithoutLessonsNestedInput
+    classSubModule?: ClassSubModuleUpdateOneWithoutLessonsNestedInput
     faculty?: FacultyUpdateOneWithoutModuleLessonsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutModuleLessonsNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutModuleLessonNestedInput
@@ -263600,6 +266427,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateWithoutBatchAssignmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -263767,6 +266595,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -263855,6 +266684,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -263905,6 +266735,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     academicClass: AcademicClassCreateNestedOneWithoutModulesInput
     organization: OrganizationCreateNestedOneWithoutClassModulesInput
+    subModules?: ClassSubModuleCreateNestedManyWithoutClassModuleInput
     lessons?: ModuleLessonCreateNestedManyWithoutClassModuleInput
   }
 
@@ -263917,6 +266748,7 @@ export namespace Prisma {
     organizationId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    subModules?: ClassSubModuleUncheckedCreateNestedManyWithoutClassModuleInput
     lessons?: ModuleLessonUncheckedCreateNestedManyWithoutClassModuleInput
   }
 
@@ -263934,6 +266766,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     videoUrl?: string | null
     classModule: ClassModuleCreateNestedOneWithoutLessonsInput
+    classSubModule?: ClassSubModuleCreateNestedOneWithoutLessonsInput
     faculty?: FacultyCreateNestedOneWithoutModuleLessonsInput
     organization: OrganizationCreateNestedOneWithoutModuleLessonsInput
     materials?: ClassMaterialCreateNestedManyWithoutModuleLessonInput
@@ -263946,6 +266779,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedCreateWithoutAcademicSessionsInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -264192,6 +267026,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -264280,6 +267115,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -264387,6 +267223,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicClass?: AcademicClassUpdateOneRequiredWithoutModulesNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutClassModulesNestedInput
+    subModules?: ClassSubModuleUpdateManyWithoutClassModuleNestedInput
     lessons?: ModuleLessonUpdateManyWithoutClassModuleNestedInput
   }
 
@@ -264399,6 +267236,7 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subModules?: ClassSubModuleUncheckedUpdateManyWithoutClassModuleNestedInput
     lessons?: ModuleLessonUncheckedUpdateManyWithoutClassModuleNestedInput
   }
 
@@ -264422,6 +267260,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     classModule?: ClassModuleUpdateOneRequiredWithoutLessonsNestedInput
+    classSubModule?: ClassSubModuleUpdateOneWithoutLessonsNestedInput
     faculty?: FacultyUpdateOneWithoutModuleLessonsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutModuleLessonsNestedInput
     materials?: ClassMaterialUpdateManyWithoutModuleLessonNestedInput
@@ -264434,6 +267273,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateWithoutAcademicSessionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -264704,6 +267544,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -264792,6 +267633,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -265070,6 +267912,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
@@ -265158,6 +268001,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
     faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
     classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
     classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
@@ -265448,6 +268292,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -265536,6 +268381,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -266614,6 +269460,16 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ClassSubModuleCreateManyOrganizationInput = {
+    id?: string
+    classModuleId: string
+    title: string
+    description?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ClassMaterialCreateManyOrganizationInput = {
     id?: string
     moduleLessonId: string
@@ -266630,6 +269486,7 @@ export namespace Prisma {
   export type ModuleLessonCreateManyOrganizationInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -270235,6 +273092,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicClass?: AcademicClassUpdateOneRequiredWithoutModulesNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutClassModuleNestedInput
+    subModules?: ClassSubModuleUpdateManyWithoutClassModuleNestedInput
     lessons?: ModuleLessonUpdateManyWithoutClassModuleNestedInput
   }
 
@@ -270247,12 +273105,45 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicSessions?: AcademicSessionUncheckedUpdateManyWithoutClassModuleNestedInput
+    subModules?: ClassSubModuleUncheckedUpdateManyWithoutClassModuleNestedInput
     lessons?: ModuleLessonUncheckedUpdateManyWithoutClassModuleNestedInput
   }
 
   export type ClassModuleUncheckedUpdateManyWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     academicClassId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassSubModuleUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    classModule?: ClassModuleUpdateOneRequiredWithoutSubModulesNestedInput
+    lessons?: ModuleLessonUpdateManyWithoutClassSubModuleNestedInput
+  }
+
+  export type ClassSubModuleUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    classModuleId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lessons?: ModuleLessonUncheckedUpdateManyWithoutClassSubModuleNestedInput
+  }
+
+  export type ClassSubModuleUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    classModuleId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -270308,6 +273199,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     classModule?: ClassModuleUpdateOneRequiredWithoutLessonsNestedInput
+    classSubModule?: ClassSubModuleUpdateOneWithoutLessonsNestedInput
     faculty?: FacultyUpdateOneWithoutModuleLessonsNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutModuleLessonNestedInput
     materials?: ClassMaterialUpdateManyWithoutModuleLessonNestedInput
@@ -270320,6 +273212,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -270338,6 +273231,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateManyWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -270528,6 +273422,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
@@ -270616,6 +273511,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
     faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
     classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
     classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -285490,6 +288386,7 @@ export namespace Prisma {
   export type ModuleLessonCreateManyFacultyInput = {
     id?: string
     classModuleId: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -285773,6 +288670,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     classModule?: ClassModuleUpdateOneRequiredWithoutLessonsNestedInput
+    classSubModule?: ClassSubModuleUpdateOneWithoutLessonsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutModuleLessonsNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutModuleLessonNestedInput
     materials?: ClassMaterialUpdateManyWithoutModuleLessonNestedInput
@@ -285785,6 +288683,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateWithoutFacultyInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -285803,6 +288702,7 @@ export namespace Prisma {
   export type ModuleLessonUncheckedUpdateManyWithoutFacultyInput = {
     id?: StringFieldUpdateOperationsInput | string
     classModuleId?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -286268,6 +289168,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutClassModulesNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutClassModuleNestedInput
+    subModules?: ClassSubModuleUpdateManyWithoutClassModuleNestedInput
     lessons?: ModuleLessonUpdateManyWithoutClassModuleNestedInput
   }
 
@@ -286280,6 +289181,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicSessions?: AcademicSessionUncheckedUpdateManyWithoutClassModuleNestedInput
+    subModules?: ClassSubModuleUncheckedUpdateManyWithoutClassModuleNestedInput
     lessons?: ModuleLessonUncheckedUpdateManyWithoutClassModuleNestedInput
   }
 
@@ -286312,8 +289214,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ClassSubModuleCreateManyClassModuleInput = {
+    id?: string
+    title: string
+    description?: string | null
+    order?: number
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ModuleLessonCreateManyClassModuleInput = {
     id?: string
+    classSubModuleId?: string | null
     title: string
     description?: string | null
     order?: number
@@ -286383,6 +289296,38 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ClassSubModuleUpdateWithoutClassModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutClassSubModulesNestedInput
+    lessons?: ModuleLessonUpdateManyWithoutClassSubModuleNestedInput
+  }
+
+  export type ClassSubModuleUncheckedUpdateWithoutClassModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lessons?: ModuleLessonUncheckedUpdateManyWithoutClassSubModuleNestedInput
+  }
+
+  export type ClassSubModuleUncheckedUpdateManyWithoutClassModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ModuleLessonUpdateWithoutClassModuleInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -286391,6 +289336,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    classSubModule?: ClassSubModuleUpdateOneWithoutLessonsNestedInput
     faculty?: FacultyUpdateOneWithoutModuleLessonsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutModuleLessonsNestedInput
     academicSessions?: AcademicSessionUpdateManyWithoutModuleLessonNestedInput
@@ -286403,6 +289349,7 @@ export namespace Prisma {
 
   export type ModuleLessonUncheckedUpdateWithoutClassModuleInput = {
     id?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
@@ -286421,6 +289368,71 @@ export namespace Prisma {
 
   export type ModuleLessonUncheckedUpdateManyWithoutClassModuleInput = {
     id?: StringFieldUpdateOperationsInput | string
+    classSubModuleId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    facultyId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ModuleLessonCreateManyClassSubModuleInput = {
+    id?: string
+    classModuleId: string
+    title: string
+    description?: string | null
+    order?: number
+    facultyId?: string | null
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    videoUrl?: string | null
+  }
+
+  export type ModuleLessonUpdateWithoutClassSubModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    classModule?: ClassModuleUpdateOneRequiredWithoutLessonsNestedInput
+    faculty?: FacultyUpdateOneWithoutModuleLessonsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutModuleLessonsNestedInput
+    academicSessions?: AcademicSessionUpdateManyWithoutModuleLessonNestedInput
+    materials?: ClassMaterialUpdateManyWithoutModuleLessonNestedInput
+    facultyHistory?: LessonFacultyHistoryUpdateManyWithoutModuleLessonNestedInput
+    batchAssignments?: BatchLessonAssignmentUpdateManyWithoutModuleLessonNestedInput
+    videoLogs?: StudentVideoLogUpdateManyWithoutModuleLessonNestedInput
+    assessment?: AssessmentUpdateOneWithoutLessonNestedInput
+  }
+
+  export type ModuleLessonUncheckedUpdateWithoutClassSubModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    classModuleId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    facultyId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    academicSessions?: AcademicSessionUncheckedUpdateManyWithoutModuleLessonNestedInput
+    materials?: ClassMaterialUncheckedUpdateManyWithoutModuleLessonNestedInput
+    facultyHistory?: LessonFacultyHistoryUncheckedUpdateManyWithoutModuleLessonNestedInput
+    batchAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutModuleLessonNestedInput
+    videoLogs?: StudentVideoLogUncheckedUpdateManyWithoutModuleLessonNestedInput
+    assessment?: AssessmentUncheckedUpdateOneWithoutLessonNestedInput
+  }
+
+  export type ModuleLessonUncheckedUpdateManyWithoutClassSubModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    classModuleId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number

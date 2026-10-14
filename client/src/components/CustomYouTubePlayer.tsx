@@ -3,6 +3,9 @@ import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, Settings, Check } fr
 
 interface CustomYouTubePlayerProps {
   videoUrl: string;
+  onPlay?: () => void;
+  onEnded?: () => void;
+  onHeartbeat?: (duration: number) => void;
 }
 
 declare global {
@@ -60,7 +63,14 @@ const extractVideoId = (url: string) => {
   return videoId;
 };
 
-export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoUrl }) => {
+export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoUrl, onPlay, onEnded, onHeartbeat }) => {
+  const onPlayRef = useRef(onPlay);
+  onPlayRef.current = onPlay;
+  const onEndedRef = useRef(onEnded);
+  onEndedRef.current = onEnded;
+  const onHeartbeatRef = useRef(onHeartbeat);
+  onHeartbeatRef.current = onHeartbeat;
+
   const videoId = extractVideoId(videoUrl);
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<any>(null);
@@ -148,10 +158,12 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
             setHasStarted(true);
             setIsEnded(false);
             updateQualityLevels(event.target);
+            onPlayRef.current?.();
           }
           if (event.data === window.YT.PlayerState.ENDED) {
             setIsPlaying(false);
             setIsEnded(true);
+            onEndedRef.current?.();
           }
         },
         onPlaybackQualityChange: (event: any) => {
@@ -171,6 +183,16 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
       }, 250);
     }
     return () => clearInterval(interval);
+  }, [isPlaying]);
+
+  useEffect(() => {
+    let heartbeatInterval: NodeJS.Timeout;
+    if (isPlaying) {
+      heartbeatInterval = setInterval(() => {
+        onHeartbeatRef.current?.(10);
+      }, 10000);
+    }
+    return () => clearInterval(heartbeatInterval);
   }, [isPlaying]);
 
   const handlePlayPause = () => {

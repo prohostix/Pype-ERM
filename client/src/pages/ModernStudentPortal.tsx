@@ -140,7 +140,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
   const [paymentAmount, setPaymentAmount] = useState('');
   const [paying, setPaying] = useState(false);
   const [markingAttendance, setMarkingAttendance] = useState<string | null>(null);
-  const [selectedCurriculumLesson, setSelectedCurriculumLesson] = useState<{ cls: any, mod: any, lesson: any } | null>(null);
+  const [selectedCurriculumLesson, setSelectedCurriculumLesson] = useState<{ cls: any, mod: any, subMod?: any, lesson: any } | null>(null);
 
   // Lesson Assessment State
   const [lessonAssessment, setLessonAssessment] = useState<any>(null);
@@ -279,6 +279,28 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
     }
   }, [selectedCurriculumLesson]);
 
+  const handleVideoHeartbeat = async (lessonId: string, duration: number = 10) => {
+    try {
+      await api.post('/student-portal/video-heartbeat', { moduleLessonId: lessonId, watchDuration: duration });
+      // If current lesson wasn't marked watched, refresh data to update progress
+      if (selectedCurriculumLesson && selectedCurriculumLesson.lesson.id === lessonId && !selectedCurriculumLesson.lesson.isVideoWatched) {
+        fetchStudentData();
+      }
+    } catch (err) {
+      console.error('Failed to send heartbeat:', err);
+    }
+  };
+
+  const handleMarkVideoCompleted = async (lessonId: string) => {
+    try {
+      await api.post('/student-portal/video-heartbeat', { moduleLessonId: lessonId, watchDuration: 60 });
+      toast.success('Video marked as watched!');
+      await fetchStudentData();
+    } catch (err: any) {
+      toast.error('Failed to mark video as completed');
+    }
+  };
+
   const handleSubmitAssessment = async () => {
     if (!selectedCurriculumLesson || !lessonAssessment) return;
     
@@ -299,6 +321,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
          if(res2.data?.data) setLessonAssessment(res2.data.data);
       });
       setTakingAssessment(false);
+      await fetchStudentData();
     } catch(err: any) {
       toast.error(err.response?.data?.message || 'Failed to submit assessment');
     } finally {
@@ -337,21 +360,95 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
 
       let fetchedClasses = classesRes.data.data || [];
 
-      // Compute sequential learning lock status
+      // Compute sequential learning lock status across classes and lessons
+      let previousClassCompleted = true; // First class starts unlocked
+
       fetchedClasses = fetchedClasses.map((cls: any) => {
-        let previousCompleted = true; // First lesson is always unlocked
+        // Class is locked if the previous class was not 100% completed
+        cls.isLocked = !previousClassCompleted;
+
+        let previousLessonCompleted = !cls.isLocked; // First lesson is unlocked only if class is unlocked
+        let totalLessons = 0;
+        let completedLessons = 0;
+
         cls.modules = cls.modules?.map((mod: any) => {
+          // 1. Direct module lessons first
           mod.lessons = mod.lessons?.map((lesson: any) => {
-            lesson.isLocked = !previousCompleted;
-            previousCompleted = !!lesson.isCompleted;
+            totalLessons++;
+            if (lesson.isCompleted) completedLessons++;
+
+            lesson.isLocked = !previousLessonCompleted;
+            previousLessonCompleted = previousLessonCompleted && !!lesson.isCompleted;
             return lesson;
           });
+
+          // 2. Sub-modules lessons next
+          if (mod.subModules && mod.subModules.length > 0) {
+            mod.subModules = mod.subModules.map((sub: any) => {
+              sub.lessons = sub.lessons?.map((lesson: any) => {
+                totalLessons++;
+                if (lesson.isCompleted) completedLessons++;
+
+                lesson.isLocked = !previousLessonCompleted;
+                previousLessonCompleted = previousLessonCompleted && !!lesson.isCompleted;
+                return lesson;
+              });
+              return sub;
+            });
+          }
           return mod;
         });
+
+        cls.totalLessons = totalLessons;
+        cls.completedLessons = completedLessons;
+        cls.progressPercentage = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 100;
+        cls.isCompleted = totalLessons > 0 ? completedLessons === totalLessons : true;
+
+        // Next class only unlocks if this class is 100% completed
+        previousClassCompleted = previousClassCompleted && cls.isCompleted;
+
         return cls;
       });
 
       setClasses(fetchedClasses);
+
+      // Preserve / refresh currently selected lesson or auto-select first unlocked pending lesson
+      setSelectedCurriculumLesson((prev: any) => {
+        if (prev) {
+          for (const c of fetchedClasses) {
+            for (const m of c.modules || []) {
+              const directMatch = (m.lessons || []).find((l: any) => l.id === prev.lesson.id);
+              if (directMatch) {
+                return { cls: c, mod: m, subMod: null, lesson: directMatch };
+              }
+              for (const s of m.subModules || []) {
+                const subMatch = (s.lessons || []).find((l: any) => l.id === prev.lesson.id);
+                if (subMatch) {
+                  return { cls: c, mod: m, subMod: s, lesson: subMatch };
+                }
+              }
+            }
+          }
+        }
+
+        // Auto-select the first accessible unfinished lesson
+        for (const c of fetchedClasses) {
+          if (c.isLocked) continue;
+          for (const m of c.modules || []) {
+            const firstDirect = (m.lessons || []).find((l: any) => !l.isLocked && !l.isCompleted) || (m.lessons || []).find((l: any) => !l.isLocked);
+            if (firstDirect) {
+              return { cls: c, mod: m, subMod: null, lesson: firstDirect };
+            }
+            for (const s of m.subModules || []) {
+              const firstSub = (s.lessons || []).find((l: any) => !l.isLocked && !l.isCompleted) || (s.lessons || []).find((l: any) => !l.isLocked);
+              if (firstSub) {
+                return { cls: c, mod: m, subMod: s, lesson: firstSub };
+              }
+            }
+          }
+        }
+        return prev;
+      });
     } catch (error) {
       console.error('Failed to fetch student data:', error);
       setIsNotStudent(true);
@@ -1399,7 +1496,18 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                         {selectedCurriculumLesson.lesson.videoUrl ? (
                           <div ref={playerContainerRef} className="relative w-full aspect-video bg-black flex flex-col items-center justify-center group overflow-hidden rounded-xl">
                             <div className="absolute inset-0 w-full h-full">
-                              <CustomYouTubePlayer videoUrl={selectedCurriculumLesson.lesson.videoUrl} />
+                              <CustomYouTubePlayer 
+                                videoUrl={selectedCurriculumLesson.lesson.videoUrl} 
+                                onPlay={() => {
+                                  api.post('/student-portal/video-view', { moduleLessonId: selectedCurriculumLesson.lesson.id }).catch(console.error);
+                                }}
+                                onHeartbeat={(duration) => {
+                                  handleVideoHeartbeat(selectedCurriculumLesson.lesson.id, duration);
+                                }}
+                                onEnded={() => {
+                                  handleMarkVideoCompleted(selectedCurriculumLesson.lesson.id);
+                                }}
+                              />
                             </div>
                             {/* Big Play Button Overlay Removed */}
                           </div>
@@ -1422,6 +1530,14 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                               <Badge variant="outline" className="text-[10px] font-bold text-foreground/70 bg-muted/50 tracking-wide uppercase px-2.5 py-0.5">
                                 {selectedCurriculumLesson.mod.title}
                               </Badge>
+                              {selectedCurriculumLesson.subMod?.title && (
+                                <>
+                                  <span className="text-muted-foreground/40 text-xs">/</span>
+                                  <Badge variant="outline" className="text-[10px] font-bold text-violet-600 dark:text-violet-400 bg-violet-500/10 border-violet-500/20 tracking-wide uppercase px-2.5 py-0.5">
+                                    {selectedCurriculumLesson.subMod.title}
+                                  </Badge>
+                                </>
+                              )}
                             </div>
                             <div className="flex items-start justify-between gap-6">
                               <h2 className="text-3xl lg:text-4xl font-extrabold text-foreground leading-tight tracking-tight">{selectedCurriculumLesson.lesson.title}</h2>
@@ -1440,6 +1556,53 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                             {selectedCurriculumLesson.lesson.description && (
                               <p className="text-foreground/70 font-medium text-base leading-relaxed mt-2 mb-4 max-w-4xl">{selectedCurriculumLesson.lesson.description}</p>
                             )}
+
+                            {/* Progression Requirements Tracker */}
+                            <div className="p-4 rounded-2xl border border-border/70 bg-muted/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-1 mb-2 shadow-sm">
+                              <div className="flex flex-wrap items-center gap-2 text-xs">
+                                <span className="font-bold text-muted-foreground uppercase tracking-wider text-[10px] mr-1">Completion Criteria:</span>
+                                {selectedCurriculumLesson.lesson.videoUrl && (
+                                  <Badge variant="outline" className={cn(
+                                    "gap-1.5 py-1 px-3 text-xs font-semibold rounded-lg",
+                                    selectedCurriculumLesson.lesson.isVideoWatched 
+                                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                                      : "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                                  )}>
+                                    {selectedCurriculumLesson.lesson.isVideoWatched ? <CheckCircle className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+                                    {selectedCurriculumLesson.lesson.isVideoWatched ? "Video Watched" : "Video Required"}
+                                  </Badge>
+                                )}
+                                {selectedCurriculumLesson.lesson.hasAssessment && (
+                                  <Badge variant="outline" className={cn(
+                                    "gap-1.5 py-1 px-3 text-xs font-semibold rounded-lg",
+                                    selectedCurriculumLesson.lesson.assessmentPassed
+                                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                                      : "border-violet-500/30 bg-violet-500/10 text-violet-600 dark:text-violet-400"
+                                  )}>
+                                    {selectedCurriculumLesson.lesson.assessmentPassed ? <CheckCircle className="w-3.5 h-3.5" /> : <CheckSquare className="w-3.5 h-3.5" />}
+                                    {selectedCurriculumLesson.lesson.assessmentPassed 
+                                      ? `Assessment Passed (${selectedCurriculumLesson.lesson.lastScore ?? 100}%)` 
+                                      : `Assessment Required (Min ${selectedCurriculumLesson.lesson.passingScore}%)`}
+                                  </Badge>
+                                )}
+                                {!selectedCurriculumLesson.lesson.videoUrl && !selectedCurriculumLesson.lesson.hasAssessment && (
+                                  <Badge variant="outline" className="border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 gap-1.5 py-1 px-3 text-xs font-semibold rounded-lg">
+                                    <CheckCircle className="w-3.5 h-3.5" /> Complete
+                                  </Badge>
+                                )}
+                              </div>
+
+                              {selectedCurriculumLesson.lesson.videoUrl && !selectedCurriculumLesson.lesson.isVideoWatched && (
+                                <Button 
+                                  size="sm" 
+                                  variant="outline" 
+                                  className="text-xs h-8 gap-1.5 shrink-0 self-start sm:self-auto hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 dark:hover:bg-emerald-950/30 rounded-lg" 
+                                  onClick={() => handleMarkVideoCompleted(selectedCurriculumLesson.lesson.id)}
+                                >
+                                  <CheckCircle className="w-3.5 h-3.5 text-emerald-500" /> Mark Video as Watched
+                                </Button>
+                              )}
+                            </div>
                             
                             {/* Embedded Assessment inside Video Card */}
                             {loadingAssessment ? (
@@ -1671,10 +1834,33 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                       <div className="py-4">
                         {classes.map((cls: any, clsIdx: number) => (
                           <div key={cls.id} className={cn("bg-transparent", clsIdx > 0 && "mt-6")}>
-                            <div className="px-5 py-2 mb-2 flex items-center gap-2 sticky top-0 bg-card/95 backdrop-blur z-10">
-                              <div className="w-1.5 h-4 bg-primary rounded-full"></div>
-                              <h4 className="font-semibold text-sm text-foreground tracking-tight">{cls.name}</h4>
+                            <div className="px-5 py-2.5 mb-2 flex items-center justify-between sticky top-0 bg-card/95 backdrop-blur z-10 border-b border-border/30">
+                              <div className="flex items-center gap-2">
+                                <div className={cn("w-1.5 h-4 rounded-full", cls.isLocked ? "bg-muted-foreground/30" : cls.isCompleted ? "bg-emerald-500" : "bg-primary")}></div>
+                                <h4 className={cn("font-bold text-sm tracking-tight", cls.isLocked ? "text-muted-foreground/60" : "text-foreground")}>{cls.name}</h4>
+                              </div>
+                              <div className="flex items-center gap-1.5">
+                                {cls.isLocked ? (
+                                  <Badge variant="outline" className="text-[10px] gap-1 border-muted bg-muted/40 text-muted-foreground font-semibold px-2 py-0.5">
+                                    <Lock className="w-2.5 h-2.5" /> Locked
+                                  </Badge>
+                                ) : cls.isCompleted ? (
+                                  <Badge variant="outline" className="text-[10px] gap-1 border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold px-2 py-0.5">
+                                    <CheckCircle className="w-2.5 h-2.5" /> 100% Done
+                                  </Badge>
+                                ) : (
+                                  <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 bg-primary/5 text-primary font-bold px-2 py-0.5">
+                                    {cls.progressPercentage || 0}% Done
+                                  </Badge>
+                                )}
+                              </div>
                             </div>
+                            {cls.isLocked && (
+                              <div className="mx-4 mb-3 p-2.5 rounded-xl bg-muted/30 border border-border/40 flex items-center gap-2 text-[11px] text-muted-foreground">
+                                <Lock className="w-3.5 h-3.5 text-muted-foreground/70 shrink-0" />
+                                <span>Complete 100% of preceding classes and pass all quizzes to unlock.</span>
+                              </div>
+                            )}
                             <div className="flex flex-col gap-4">
                               {cls.modules?.length === 0 ? (
                                 <div className="px-6 py-3 text-xs text-muted-foreground italic">No modules available</div>
@@ -1698,20 +1884,19 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                     
                                     {/* Lessons List - Collapsible */}
                                     <div className={cn(
-                                      "flex flex-col gap-0.5 ml-1 border-l border-border/50 pl-2 overflow-hidden transition-all duration-300 ease-in-out",
-                                      expandedModules[mod.id] ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                                      "flex flex-col gap-1 ml-1 border-l border-border/50 pl-2 overflow-hidden transition-all duration-300 ease-in-out",
+                                      expandedModules[mod.id] ? "max-h-[3000px] opacity-100" : "max-h-0 opacity-0"
                                     )}>
-                                      {mod.lessons?.length === 0 ? (
-                                        <div className="px-3 py-2 text-xs text-muted-foreground/60 italic">No lessons</div>
-                                      ) : (
-                                        mod.lessons?.map((lesson: any) => {
+                                      {/* Direct Lessons (Rendered on top) */}
+                                      {mod.lessons && mod.lessons.length > 0 ? (
+                                        mod.lessons.map((lesson: any) => {
                                           const isSelected = selectedCurriculumLesson?.lesson.id === lesson.id;
                                           const isLocked = lesson.isLocked;
                                           return (
                                             <button
                                               key={lesson.id}
                                               disabled={isLocked}
-                                              onClick={() => !isLocked && setSelectedCurriculumLesson({ cls, mod, lesson })}
+                                              onClick={() => !isLocked && setSelectedCurriculumLesson({ cls, mod, subMod: null, lesson })}
                                               className={cn(
                                                 "text-left px-3 py-2.5 text-sm transition-all flex flex-col gap-1 w-full rounded-lg relative group",
                                                 isSelected
@@ -1734,14 +1919,87 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                                 {lesson.isCompleted && <CheckCircle className={cn("w-3.5 h-3.5 flex-shrink-0 mt-0.5", isSelected ? "text-primary" : "text-emerald-500/80")} />}
                                                 {isLocked && <Lock className="w-3 h-3 flex-shrink-0 mt-0.5 text-muted-foreground/40" />}
                                               </div>
-                                              <div className={cn("flex items-center gap-3 text-[10px] font-medium uppercase tracking-wider mt-0.5", isSelected ? "text-primary/70" : "text-muted-foreground/60")}>
+                                              <div className={cn("flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-wider mt-0.5 flex-wrap", isSelected ? "text-primary/70" : "text-muted-foreground/60")}>
                                                 {lesson.videoUrl && <span className="flex items-center gap-1"><Video className="w-3 h-3" /> Video</span>}
+                                                {lesson.hasAssessment && (
+                                                  <span className={cn("flex items-center gap-1", lesson.assessmentPassed ? "text-emerald-600 dark:text-emerald-400 font-semibold" : "text-violet-600 dark:text-violet-400 font-semibold")}>
+                                                    <CheckSquare className="w-3 h-3" /> {lesson.assessmentPassed ? "Quiz Passed" : "Quiz"}
+                                                  </span>
+                                                )}
                                                 {lesson.materials?.length > 0 && <span className="flex items-center gap-1"><FileText className="w-3 h-3" /> Docs</span>}
-                                                {!lesson.videoUrl && (!lesson.materials || lesson.materials.length === 0) && <span>Lecture</span>}
+                                                {!lesson.videoUrl && !lesson.hasAssessment && (!lesson.materials || lesson.materials.length === 0) && <span>Lecture</span>}
                                               </div>
                                             </button>
                                           );
                                         })
+                                      ) : null}
+
+                                      {/* Sub-Modules if any (Rendered below direct lessons) */}
+                                      {mod.subModules && mod.subModules.length > 0 ? (
+                                        <div className={mod.lessons && mod.lessons.length > 0 ? "mt-2 pt-2 border-t border-border/40" : ""}>
+                                          {mod.subModules.map((sub: any) => (
+                                            <div key={sub.id} className="mb-2 last:mb-0">
+                                              <div className="px-2 py-1 flex items-center gap-1.5 text-foreground/80">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-violet-500 shrink-0"></div>
+                                                <span className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase line-clamp-1">{sub.title}</span>
+                                              </div>
+                                              <div className="flex flex-col gap-0.5 ml-1 border-l border-border/40 pl-2">
+                                                {sub.lessons?.length === 0 ? (
+                                                  <div className="px-3 py-1 text-[11px] text-muted-foreground/60 italic">No lessons</div>
+                                                ) : (
+                                                  sub.lessons?.map((lesson: any) => {
+                                                    const isSelected = selectedCurriculumLesson?.lesson.id === lesson.id;
+                                                    const isLocked = lesson.isLocked;
+                                                    return (
+                                                      <button
+                                                        key={lesson.id}
+                                                        disabled={isLocked}
+                                                        onClick={() => !isLocked && setSelectedCurriculumLesson({ cls, mod, subMod: sub, lesson })}
+                                                        className={cn(
+                                                          "text-left px-3 py-2 text-sm transition-all flex flex-col gap-0.5 w-full rounded-lg relative group",
+                                                          isSelected
+                                                            ? "bg-primary/10 text-primary"
+                                                            : isLocked 
+                                                              ? "bg-transparent text-muted-foreground/40 cursor-not-allowed"
+                                                              : "bg-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                                                        )}
+                                                      >
+                                                        {isSelected && (
+                                                          <div className="absolute -left-[9px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary ring-4 ring-card"></div>
+                                                        )}
+                                                        <div className="flex items-start justify-between w-full gap-2">
+                                                          <span className={cn(
+                                                            "font-medium line-clamp-2 leading-tight",
+                                                            isSelected ? "text-primary" : isLocked ? "text-muted-foreground/40" : "text-foreground/80 group-hover:text-foreground"
+                                                          )}>
+                                                            {lesson.title}
+                                                          </span>
+                                                          {lesson.isCompleted && <CheckCircle className={cn("w-3.5 h-3.5 flex-shrink-0 mt-0.5", isSelected ? "text-primary" : "text-emerald-500/80")} />}
+                                                          {isLocked && <Lock className="w-3 h-3 flex-shrink-0 mt-0.5 text-muted-foreground/40" />}
+                                                        </div>
+                                                        <div className={cn("flex items-center gap-2.5 text-[10px] font-medium uppercase tracking-wider mt-0.5 flex-wrap", isSelected ? "text-primary/70" : "text-muted-foreground/60")}>
+                                                          {lesson.videoUrl && <span className="flex items-center gap-1"><Video className="w-3 h-3" /> Video</span>}
+                                                          {lesson.hasAssessment && (
+                                                            <span className={cn("flex items-center gap-1", lesson.assessmentPassed ? "text-emerald-600 dark:text-emerald-400 font-semibold" : "text-violet-600 dark:text-violet-400 font-semibold")}>
+                                                              <CheckSquare className="w-3 h-3" /> {lesson.assessmentPassed ? "Quiz Passed" : "Quiz"}
+                                                            </span>
+                                                          )}
+                                                          {lesson.materials?.length > 0 && <span className="flex items-center gap-1"><FileText className="w-3 h-3" /> Docs</span>}
+                                                          {!lesson.videoUrl && !lesson.hasAssessment && (!lesson.materials || lesson.materials.length === 0) && <span>Lecture</span>}
+                                                        </div>
+                                                      </button>
+                                                    );
+                                                  })
+                                                )}
+                                              </div>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      ) : null}
+
+                                      {/* Empty state */}
+                                      {(!mod.lessons || mod.lessons.length === 0) && (!mod.subModules || mod.subModules.length === 0) && (
+                                        <div className="px-3 py-2 text-xs text-muted-foreground/60 italic">No lessons</div>
                                       )}
                                     </div>
                                   </div>

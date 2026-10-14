@@ -117,6 +117,24 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
           modules: {
             orderBy: { order: 'asc' },
             include: {
+              subModules: {
+                orderBy: { order: 'asc' },
+                include: {
+                  lessons: {
+                    orderBy: { order: 'asc' },
+                    include: {
+                      materials: true,
+                      academicSessions: {
+                        include: {
+                          attendances: {
+                            where: { studentId: student.id }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               lessons: {
                 orderBy: { order: 'asc' },
                 include: {
@@ -144,14 +162,42 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
       programIds: { has: student.programId || '' },
       academicCenter: { type: 'online' }
     },
+    orderBy: { createdAt: 'asc' },
     include: {
       modules: {
         orderBy: { order: 'asc' },
         include: {
+          subModules: {
+            orderBy: { order: 'asc' },
+            include: {
+              lessons: {
+                orderBy: { order: 'asc' },
+                include: {
+                  materials: true,
+                  assessment: {
+                    include: {
+                      studentAttempts: {
+                        where: { studentId: student.id },
+                        orderBy: { createdAt: 'desc' }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           lessons: {
             orderBy: { order: 'asc' },
             include: {
-              materials: true
+              materials: true,
+              assessment: {
+                include: {
+                  studentAttempts: {
+                    where: { studentId: student.id },
+                    orderBy: { createdAt: 'desc' }
+                  }
+                }
+              }
             }
           }
         }
@@ -167,27 +213,35 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
   // Format Offline Classes
   const offlineResultData = batches.filter(b => b.academicClass).map(batch => {
     const classData = batch.academicClass;
+    const formatOfflineLesson = (lesson: any) => {
+      const session = lesson.academicSessions.find((s: any) => s.status === 'COMPLETED' && s.academicBatchId === batch.id);
+      const isCompleted = !!session;
+      const myAttendance = session?.attendances?.[0] || null;
+      return {
+        id: lesson.id,
+        title: lesson.title,
+        description: lesson.description,
+        isCompleted,
+        sessionId: session?.id || null,
+        myRating: myAttendance?.rating || null,
+        myReview: myAttendance?.review || null,
+        canRate: isCompleted && myAttendance,
+        materials: isCompleted ? lesson.materials : [],
+        videoUrl: lesson.videoUrl || null
+      };
+    };
+
     const formattedModules = classData.modules.map((mod: any) => ({
       id: mod.id,
       title: mod.title,
       description: mod.description,
-      lessons: mod.lessons.map((lesson: any) => {
-        const session = lesson.academicSessions.find((s: any) => s.status === 'COMPLETED' && s.academicBatchId === batch.id);
-        const isCompleted = !!session;
-        const myAttendance = session?.attendances?.[0] || null;
-        return {
-          id: lesson.id,
-          title: lesson.title,
-          description: lesson.description,
-          isCompleted,
-          sessionId: session?.id || null,
-          myRating: myAttendance?.rating || null,
-          myReview: myAttendance?.review || null,
-          canRate: isCompleted && myAttendance,
-          materials: isCompleted ? lesson.materials : [],
-          videoUrl: lesson.videoUrl || null
-        };
-      })
+      subModules: (mod.subModules || []).map((sub: any) => ({
+        id: sub.id,
+        title: sub.title,
+        description: sub.description,
+        lessons: sub.lessons.map(formatOfflineLesson)
+      })),
+      lessons: (mod.lessons || []).filter((l: any) => !l.classSubModuleId).map(formatOfflineLesson)
     }));
 
     return {
@@ -200,27 +254,46 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
 
   // Format Online Classes
   const onlineResultData = onlineClasses.map(classData => {
+    const formatOnlineLesson = (lesson: any) => {
+      const log = videoLogs.find(l => l.moduleLessonId === lesson.id);
+      const isVideoWatched = !lesson.videoUrl || !!(log && log.watchDuration > 0);
+      const hasAssessment = !!lesson.assessment;
+      const attempts = lesson.assessment?.studentAttempts || [];
+      const assessmentPassed = hasAssessment ? attempts.some((att: any) => att.passed) : true;
+      const lastScore = attempts.length > 0 ? attempts[0].score : null;
+      const isCompleted = isVideoWatched && assessmentPassed;
+
+      return {
+        id: lesson.id,
+        title: lesson.title,
+        description: lesson.description,
+        isCompleted: isCompleted,
+        isVideoWatched,
+        hasAssessment,
+        assessmentPassed,
+        passingScore: lesson.assessment?.passingScore ?? 50,
+        lastScore,
+        attemptsCount: attempts.length,
+        sessionId: null,
+        myRating: null,
+        myReview: null,
+        canRate: false,
+        materials: lesson.materials || [],
+        videoUrl: lesson.videoUrl || null
+      };
+    };
+
     const formattedModules = classData.modules.map((mod: any) => ({
       id: mod.id,
       title: mod.title,
       description: mod.description,
-      lessons: mod.lessons.map((lesson: any) => {
-        const log = videoLogs.find(l => l.moduleLessonId === lesson.id);
-        const isCompleted = log && log.watchDuration > 0; // Consider completed if watched at all
-
-        return {
-          id: lesson.id,
-          title: lesson.title,
-          description: lesson.description,
-          isCompleted: isCompleted,
-          sessionId: null,
-          myRating: null,
-          myReview: null,
-          canRate: false,
-          materials: lesson.materials || [],
-          videoUrl: lesson.videoUrl || null
-        };
-      })
+      subModules: (mod.subModules || []).map((sub: any) => ({
+        id: sub.id,
+        title: sub.title,
+        description: sub.description,
+        lessons: sub.lessons.map(formatOnlineLesson)
+      })),
+      lessons: (mod.lessons || []).filter((l: any) => !l.classSubModuleId).map(formatOnlineLesson)
     }));
 
     return {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, BookOpen, Clock, Play, UserPlus, Users, Loader2, User, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Play, UserPlus, Users, Loader2, User, CheckCircle2, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -170,6 +170,103 @@ export function FacultyBatchDashboardPanel({ academicClass, academicBatch, onBac
     }
   };
 
+  const renderLesson = (lesson: any) => {
+    // determine teacher for this batch
+    const batchAssignment = lesson.batchAssignments?.find((ba: any) => ba.academicBatchId === academicBatch.id);
+    const teacherId = batchAssignment?.facultyId || lesson.facultyId;
+    const teacher = facultyList.find(f => f.id === teacherId);
+    const isOngoing = lesson.academicSessions?.some((s: any) => s.academicBatchId === academicBatch.id && s.status === 'IN_PROGRESS');
+    const isCompleted = lesson.academicSessions?.some((s: any) => s.academicBatchId === academicBatch.id && s.status === 'COMPLETED');
+
+    return (
+      <div key={lesson.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
+        <div className="flex-1 space-y-1">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded bg-indigo-100 flex items-center justify-center">
+              <BookOpen className="w-4 h-4 text-indigo-400" />
+            </div>
+            <h4 className="font-semibold text-sm">{lesson.title}</h4>
+            {isOngoing && (
+              <span className="inline-flex items-center gap-1 text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded border border-red-200 uppercase font-bold tracking-wider">
+                <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                Live
+              </span>
+            )}
+            {isCompleted && (
+              <span className="inline-flex items-center gap-1 text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded border border-emerald-200 uppercase font-bold tracking-wider">
+                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                Completed
+              </span>
+            )}
+          </div>
+          {lesson.description && (
+            <p className="text-xs text-muted-foreground ml-8">{lesson.description}</p>
+          )}
+        </div>
+        
+        <div className="flex flex-col sm:items-end gap-3 shrink-0">
+          <div className="flex items-center gap-3 text-xs">
+            <div className="flex items-center gap-1 text-slate-500">
+              <span className="font-medium">
+                Teacher: 
+              </span>
+              {teacher ? (
+                <span className="font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full">
+                  {teacher.name} {batchAssignment ? '(Assigned to Batch)' : '(Default)'}
+                </span>
+              ) : (
+                <span className="font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
+                  Unassigned
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => fetchHistory(lesson)} className="h-8 text-xs text-slate-600">
+              <Clock className="w-3.5 h-3.5 mr-1" /> History
+            </Button>
+            {isCompleted && (
+              <Button variant="outline" size="sm" onClick={() => {
+                const session = lesson.academicSessions?.find((s: any) => s.academicBatchId === academicBatch.id && s.status === 'COMPLETED');
+                if (session) fetchAttendance(session.id);
+              }} className="h-8 text-xs text-blue-600 border-blue-200 hover:bg-blue-50">
+                <Users className="w-3.5 h-3.5 mr-1" /> Attendance
+              </Button>
+            )}
+            <Button 
+              variant={isCompleted ? "secondary" : "outline"} 
+              size="sm" 
+              onClick={() => { 
+                setStartClassLesson(lesson); 
+                setStartClassDialogOpen(true); 
+              }} 
+              disabled={isOngoing || isCompleted} 
+              className={`h-8 text-xs ${isCompleted ? 'bg-slate-100 text-slate-500 hover:bg-slate-100' : 'text-emerald-600 border-emerald-200 hover:bg-emerald-50'}`}
+            >
+              {isCompleted ? (
+                <><CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Completed</>
+              ) : isOngoing ? (
+                <><Play className="w-3.5 h-3.5 mr-1" /> Live Session</>
+              ) : (
+                <><Play className="w-3.5 h-3.5 mr-1" /> Start Lesson</>
+              )}
+            </Button>
+            {!isCompleted && (
+              <Button variant="default" size="sm" onClick={() => { 
+                setAssignLesson(lesson); 
+                setSelectedFacultyId(teacherId || 'none');
+                setAssignReason(''); 
+                setAssignDialogOpen(true); 
+              }} className="h-8 text-xs">
+                <UserPlus className="w-3.5 h-3.5 mr-1" /> Assign Teacher
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -189,136 +286,81 @@ export function FacultyBatchDashboardPanel({ academicClass, academicBatch, onBac
         {loading ? (
           <div className="p-12 text-center text-muted-foreground">Loading curriculum...</div>
         ) : modules.length > 0 ? (
-          modules.map((mod, index) => (
-            <Card key={mod.id} className="overflow-hidden border-indigo-100 dark:border-indigo-900/30">
-              <div 
-                className="flex items-center justify-between p-4 bg-white dark:bg-slate-950 cursor-pointer hover:bg-slate-50 transition-colors"
-                onClick={() => toggleModule(mod.id)}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
-                    {index + 1}
+          modules.map((mod, index) => {
+            const totalLessons = (mod.lessons?.length || 0) + (mod.subModules?.reduce((acc: number, s: any) => acc + (s.lessons?.length || 0), 0) || 0);
+
+            return (
+              <Card key={mod.id} className="overflow-hidden border-indigo-100 dark:border-indigo-900/30">
+                <div 
+                  className="flex items-center justify-between p-4 bg-white dark:bg-slate-950 cursor-pointer hover:bg-slate-50 transition-colors"
+                  onClick={() => toggleModule(mod.id)}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
+                      {index + 1}
+                    </div>
+                    <div>
+                      <h3 className="font-bold">{mod.title}</h3>
+                      <p className="text-xs text-muted-foreground">{mod.description}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold">{mod.title}</h3>
-                    <p className="text-xs text-muted-foreground">{mod.description}</p>
+                  <div className="flex items-center gap-4">
+                    <Badge variant="secondary">{totalLessons} Lessons</Badge>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <Badge variant="secondary">{mod.lessons?.length || 0} Lessons</Badge>
-                </div>
-              </div>
 
-              {expandedModules[mod.id] && (
-                <CardContent className="p-0 border-t">
-                  {mod.lessons && mod.lessons.length > 0 ? (
-                    <div className="divide-y">
-                      {mod.lessons.map((lesson: any) => {
-                        // determine teacher for this batch
-                        const batchAssignment = lesson.batchAssignments?.find((ba: any) => ba.academicBatchId === academicBatch.id);
-                        const teacherId = batchAssignment?.facultyId || lesson.facultyId;
-                        const teacher = facultyList.find(f => f.id === teacherId);
-                        const isOngoing = lesson.academicSessions?.some((s: any) => s.academicBatchId === academicBatch.id && s.status === 'IN_PROGRESS');
-                        const isCompleted = lesson.academicSessions?.some((s: any) => s.academicBatchId === academicBatch.id && s.status === 'COMPLETED');
-
-                        return (
-                          <div key={lesson.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
-                            <div className="flex-1 space-y-1">
-                              <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 rounded bg-indigo-100 flex items-center justify-center">
-                                  <BookOpen className="w-4 h-4 text-indigo-400" />
-                                </div>
-                                <h4 className="font-semibold text-sm">{lesson.title}</h4>
-                                {isOngoing && (
-                                  <span className="inline-flex items-center gap-1 text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded border border-red-200 uppercase font-bold tracking-wider">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                                    Live
-                                  </span>
-                                )}
-                                {isCompleted && (
-                                  <span className="inline-flex items-center gap-1 text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded border border-emerald-200 uppercase font-bold tracking-wider">
-                                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                                    Completed
-                                  </span>
-                                )}
-                              </div>
-                              {lesson.description && (
-                                <p className="text-xs text-muted-foreground ml-8">{lesson.description}</p>
-                              )}
-                            </div>
-                            
-                            <div className="flex flex-col sm:items-end gap-3 shrink-0">
-                              <div className="flex items-center gap-3 text-xs">
-                                <div className="flex items-center gap-1 text-slate-500">
-                                  <span className="font-medium">
-                                    Teacher: 
-                                  </span>
-                                  {teacher ? (
-                                    <span className="font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full">
-                                      {teacher.name} {batchAssignment ? '(Assigned to Batch)' : '(Default)'}
-                                    </span>
-                                  ) : (
-                                    <span className="font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
-                                      Unassigned
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="flex flex-wrap items-center gap-2">
-                                <Button variant="outline" size="sm" onClick={() => fetchHistory(lesson)} className="h-8 text-xs text-slate-600">
-                                  <Clock className="w-3.5 h-3.5 mr-1" /> History
-                                </Button>
-                                {isCompleted && (
-                                  <Button variant="outline" size="sm" onClick={() => {
-                                    const session = lesson.academicSessions?.find((s: any) => s.academicBatchId === academicBatch.id && s.status === 'COMPLETED');
-                                    if (session) fetchAttendance(session.id);
-                                  }} className="h-8 text-xs text-blue-600 border-blue-200 hover:bg-blue-50">
-                                    <Users className="w-3.5 h-3.5 mr-1" /> Attendance
-                                  </Button>
-                                )}
-                                <Button 
-                                  variant={isCompleted ? "secondary" : "outline"} 
-                                  size="sm" 
-                                  onClick={() => { 
-                                    setStartClassLesson(lesson); 
-                                    setStartClassDialogOpen(true); 
-                                  }} 
-                                  disabled={isOngoing || isCompleted} 
-                                  className={`h-8 text-xs ${isCompleted ? 'bg-slate-100 text-slate-500 hover:bg-slate-100' : 'text-emerald-600 border-emerald-200 hover:bg-emerald-50'}`}
-                                >
-                                  {isCompleted ? (
-                                    <><CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Completed</>
-                                  ) : isOngoing ? (
-                                    <><Play className="w-3.5 h-3.5 mr-1" /> Live Session</>
-                                  ) : (
-                                    <><Play className="w-3.5 h-3.5 mr-1" /> Start Lesson</>
-                                  )}
-                                </Button>
-                                {!isCompleted && (
-                                  <Button variant="default" size="sm" onClick={() => { 
-                                    setAssignLesson(lesson); 
-                                    setSelectedFacultyId(teacherId || 'none');
-                                    setAssignReason(''); 
-                                    setAssignDialogOpen(true); 
-                                  }} className="h-8 text-xs">
-                                    <UserPlus className="w-3.5 h-3.5 mr-1" /> Assign Teacher
-                                  </Button>
-                                )}
-                              </div>
-                            </div>
+                {expandedModules[mod.id] && (
+                  <CardContent className="p-0 border-t">
+                    {/* Direct lessons if any (Rendered on top) */}
+                    {mod.lessons && mod.lessons.filter((l: any) => !l.classSubModuleId).length > 0 ? (
+                      <div>
+                        {mod.subModules && mod.subModules.length > 0 && (
+                          <div className="bg-slate-50/50 px-4 py-1.5 border-b text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+                            Direct Module Lessons
                           </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <div className="p-8 text-center text-sm text-muted-foreground bg-background">
-                      No lessons added to this module yet. (Go to Module Configuration to add lessons).
-                    </div>
-                  )}
-                </CardContent>
-              )}
-            </Card>
-          ))
+                        )}
+                        <div className="divide-y">
+                          {mod.lessons.filter((l: any) => !l.classSubModuleId).map((lesson: any) => renderLesson(lesson))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {/* Render Sub-Modules (Rendered below direct lessons) */}
+                    {mod.subModules && mod.subModules.length > 0 ? (
+                      <div className={mod.lessons && mod.lessons.filter((l: any) => !l.classSubModuleId).length > 0 ? "border-t" : ""}>
+                        {mod.subModules.map((sub: any) => (
+                          <div key={sub.id} className="border-b last:border-b-0">
+                            <div className="bg-slate-50/80 dark:bg-slate-900/80 px-4 py-2 border-b flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <Layers className="w-3.5 h-3.5 text-violet-500" />
+                                <span className="font-semibold text-xs text-foreground uppercase tracking-wider">{sub.title}</span>
+                                {sub.description && <span className="text-xs text-muted-foreground hidden sm:inline">• {sub.description}</span>}
+                              </div>
+                              <Badge variant="outline" className="text-[10px] h-4.5 px-1.5">{sub.lessons?.length || 0} Lessons</Badge>
+                            </div>
+                            {sub.lessons && sub.lessons.length > 0 ? (
+                              <div className="divide-y">
+                                {sub.lessons.map((lesson: any) => renderLesson(lesson))}
+                              </div>
+                            ) : (
+                              <div className="p-4 text-center text-xs text-muted-foreground">No lessons in this sub-module.</div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    {/* Empty module state */}
+                    {(!mod.subModules || mod.subModules.length === 0) && (!mod.lessons || mod.lessons.filter((l: any) => !l.classSubModuleId).length === 0) && (
+                      <div className="p-8 text-center text-sm text-muted-foreground bg-background">
+                        No lessons added to this module yet.
+                      </div>
+                    )}
+                  </CardContent>
+                )}
+              </Card>
+            );
+          })
         ) : (
           <div className="p-12 text-center border rounded-lg bg-background">
             <BookOpen className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />

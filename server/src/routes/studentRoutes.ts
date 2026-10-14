@@ -21,6 +21,7 @@ import {
   getStudentEnrollments,
   updateDocumentStatus,
   updatePhotoStatus,
+  checkStudentUniqueness,
 } from '../controllers/studentController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
@@ -28,6 +29,9 @@ import { upload } from '../middleware/upload.js';
 const router = express.Router();
 
 router.use(protect);
+
+// Student uniqueness validation
+router.get('/check-unique', checkStudentUniqueness);
 
 // Internal marks routes (must come before /:id routes)
 router.route('/marks').get(getInternalMarks).post(authorize('ops_admin', 'employee'), createInternalMark);

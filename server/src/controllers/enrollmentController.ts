@@ -3,6 +3,7 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
+import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
 
 export const getWallet = asyncHandler(async (req: AuthRequest, res: Response) => {
   const wallet = await prisma.studyCenterWallet.findUnique({ where: { studyCenterId: req.user.studyCenterId || '' } });
@@ -95,14 +96,44 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
   }
   
   let currentStudentId = studentId;
+  const cleanEmail = normalizeEmail(rest.studentEmail);
+  const cleanPhone = (rest.studentPhone || '').trim();
 
-  if (!currentStudentId && rest.studentEmail) {
-    const existingStudent = await prisma.student.findUnique({ where: { email: rest.studentEmail } });
-    if (existingStudent) {
-      currentStudentId = existingStudent.id;
-      data.studentId = currentStudentId;
+  // Enforce uniqueness: block duplicate enrollment if student or active enrollment with same email/phone exists
+  const uniquenessCheck = await checkStudentOrEnrollmentExists({
+    email: cleanEmail,
+    phone: cleanPhone,
+    organizationId: req.user.organizationId,
+    excludeStudentId: currentStudentId || undefined
+  });
+
+  if (!uniquenessCheck.isUnique) {
+    res.status(400).json({
+      success: false,
+      message: uniquenessCheck.message,
+      field: uniquenessCheck.field
+    });
+    return;
+  }
+
+  if (currentStudentId) {
+    const existingActiveEnrollment = await prisma.enrollment.findFirst({
+      where: {
+        studentId: currentStudentId,
+        status: { notIn: ['rejected', 'cancelled'] }
+      }
+    });
+    if (existingActiveEnrollment) {
+      res.status(400).json({
+        success: false,
+        message: 'Enrollment already exists'
+      });
+      return;
     }
   }
+
+  data.studentEmail = cleanEmail;
+  data.studentPhone = cleanPhone;
 
   if (!currentStudentId) {
     // Generate Admission Number for Provisional
@@ -149,8 +180,8 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
     const newStudent = await prisma.student.create({
       data: {
         name: rest.studentName,
-        email: rest.studentEmail,
-        phone: rest.studentPhone,
+        email: cleanEmail,
+        phone: cleanPhone,
         address: rest.studentAddress || 'Pending',
         organizationId: req.user.organizationId,
         centerId: req.user.studyCenterId || null,
@@ -159,7 +190,7 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
         programId: rest.programId,
         sessionId: rest.sessionId,
         admissionNo: newAdmissionNo,
-        credentials: { email: rest.studentEmail, password: defaultPassword },
+        credentials: { email: cleanEmail, password: defaultPassword },
         enrolledBy: req.user.id,
         status: rest.isProvisional ? 'provisional' : 'document_review'
       }

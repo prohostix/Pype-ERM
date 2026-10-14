@@ -91,6 +91,7 @@ model Organization {
   communicationLogs          CommunicationLog[]
   faculties                  Faculty[]
   classModules               ClassModule[]
+  classSubModules            ClassSubModule[]
   classMaterials             ClassMaterial[]
   moduleLessons              ModuleLesson[]
   lessonFacultyHistories     LessonFacultyHistory[]
@@ -2039,9 +2040,27 @@ model ClassModule {
   academicSessions AcademicSession[]
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
+  subModules       ClassSubModule[]
   lessons          ModuleLesson[]
 
   @@index([academicClassId])
+  @@index([organizationId])
+}
+
+model ClassSubModule {
+  id               String         @id @default(uuid())
+  classModuleId    String
+  classModule      ClassModule    @relation(fields: [classModuleId], references: [id], onDelete: Cascade)
+  title            String
+  description      String?
+  order            Int            @default(0)
+  organizationId   String
+  organization     Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  lessons          ModuleLesson[]
+
+  @@index([classModuleId])
   @@index([organizationId])
 }
 
@@ -2049,6 +2068,8 @@ model ModuleLesson {
   id               String                  @id @default(uuid())
   classModuleId    String
   classModule      ClassModule             @relation(fields: [classModuleId], references: [id], onDelete: Cascade)
+  classSubModuleId String?
+  classSubModule   ClassSubModule?         @relation(fields: [classSubModuleId], references: [id], onDelete: Cascade)
   title            String
   description      String?
   order            Int                     @default(0)
@@ -2067,6 +2088,7 @@ model ModuleLesson {
   assessment       Assessment?
 
   @@index([classModuleId])
+  @@index([classSubModuleId])
   @@index([facultyId])
   @@index([organizationId])
 }
