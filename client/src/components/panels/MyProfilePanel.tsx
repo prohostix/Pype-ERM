@@ -8,8 +8,8 @@ import { User, Mail, Phone, Briefcase, Building2, MapPin, Hash, ShieldCheck, Clo
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
+import { uploadFormFile } from '@/lib/uploadFile';
 
-const MAX_AVATAR_BYTES = 5 * 1024 * 1024; // matches the server upload limit
 const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
 export function MyProfilePanel() {
@@ -90,26 +90,16 @@ export function MyProfilePanel() {
       toast.error('Please choose a JPG, PNG, WEBP or GIF image');
       return;
     }
-    if (file.size > MAX_AVATAR_BYTES) {
-      toast.error('Image must be 5 MB or smaller');
-      return;
-    }
 
     setUploading(true);
+    const toastId = toast.loading('Compressing & updating profile picture...');
     try {
-      const fd = new FormData();
-      fd.append('file', file);
-      const upload = await api.post('/auth/upload', fd, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      const url: string | undefined = upload.data?.url;
-      if (!url) throw new Error('Upload returned no file URL');
-
+      const url = await uploadFormFile(file);
       await api.updateProfile({ avatar: url });
       await refreshUser();
-      toast.success('Profile picture updated');
+      toast.success('Profile picture updated', { id: toastId });
     } catch (err: any) {
-      toast.error(err.response?.data?.message || err.message || 'Failed to update profile picture');
+      toast.error(err.response?.data?.message || err.message || 'Failed to update profile picture', { id: toastId });
     } finally {
       setUploading(false);
     }

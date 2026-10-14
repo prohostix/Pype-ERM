@@ -7,9 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { uploadFormFile } from '@/lib/uploadFile';
 
 interface University {
   id: string;
@@ -821,17 +821,13 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                     onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (!file) return;
-                      const toastId = toast.loading('Uploading photo...');
+                      const toastId = toast.loading('Compressing & uploading photo...');
                       try {
-                        const uploadData = new FormData();
-                        uploadData.append('file', file);
-                        const res = await api.post('/auth/upload', uploadData, {
-                          headers: { 'Content-Type': 'multipart/form-data' }
-                        });
-                        setForm({ ...form, photo: res.data.url });
+                        const url = await uploadFormFile(file);
+                        setForm({ ...form, photo: url });
                         toast.success('Photo uploaded successfully', { id: toastId });
-                      } catch (err) {
-                        toast.error('Failed to upload photo', { id: toastId });
+                      } catch (err: any) {
+                        toast.error(err.message || 'Failed to upload photo', { id: toastId });
                       }
                     }}
                   />
@@ -904,19 +900,15 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                           onChange={async (e) => {
                             const file = e.target.files?.[0];
                             if (!file) return;
-                            const toastId = toast.loading(`Uploading ${docType}...`);
+                            const toastId = toast.loading(`Compressing & uploading ${docType}...`);
                             try {
-                              const uploadData = new FormData();
-                              uploadData.append('file', file);
-                              const res = await api.post('/auth/upload', uploadData, {
-                                headers: { 'Content-Type': 'multipart/form-data' }
-                              });
+                              const url = await uploadFormFile(file);
                               const newDocs = form.documents.filter((d: any) => d.type !== docType);
-                              newDocs.push({ type: docType, url: res.data.url, label: docType === 'Other' ? customOtherName : undefined });
+                              newDocs.push({ type: docType, url, label: docType === 'Other' ? customOtherName : undefined });
                               setForm({ ...form, documents: newDocs });
                               toast.success(`${docType} uploaded successfully`, { id: toastId });
-                            } catch (err) {
-                              toast.error(`Failed to upload ${docType}`, { id: toastId });
+                            } catch (err: any) {
+                              toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
                             }
                           }}
                         />
@@ -976,15 +968,13 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                           onChange={async (e) => {
                             const file = e.target.files?.[0];
                             if (!file) return;
-                            const tid = toast.loading('Uploading receipt...');
+                            const tid = toast.loading('Compressing & uploading receipt...');
                             try {
-                              const fd = new FormData();
-                              fd.append('file', file);
-                              const res = await api.post('/auth/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
-                              setForm(f => ({ ...f, receiptUrl: res.data.url }));
+                              const url = await uploadFormFile(file);
+                              setForm(f => ({ ...f, receiptUrl: url }));
                               toast.success('Receipt uploaded', { id: tid });
-                            } catch {
-                              toast.error('Upload failed', { id: tid });
+                            } catch (err: any) {
+                              toast.error(err.message || 'Upload failed', { id: tid });
                             }
                           }}
                         />

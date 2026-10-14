@@ -7,9 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
-import { toast } from 'sonner';
 import { StudentsPanel } from './StudentsPanel';
 import { useAuth } from '@/hooks/useAuth';
+import { uploadFormFile } from '@/lib/uploadFile';
 
 interface StatusHistoryEntry {
   status: string;
@@ -559,17 +559,13 @@ export function SalesStudentPipelinePanel() {
                     const file = ev.target.files?.[0];
                     if (!file) return;
                     setUploadingReceipt(true);
-                    const toastId = toast.loading('Uploading receipt...');
+                    const toastId = toast.loading('Compressing & uploading receipt...');
                     try {
-                      const data = new FormData();
-                      data.append('file', file);
-                      const res = await api.post('/auth/upload', data, {
-                        headers: { 'Content-Type': 'multipart/form-data' }
-                      });
-                      setNewReceiptUrl(res.data.url);
+                      const url = await uploadFormFile(file);
+                      setNewReceiptUrl(url);
                       toast.success('Receipt uploaded', { id: toastId });
-                    } catch (err) {
-                      toast.error('Failed to upload receipt', { id: toastId });
+                    } catch (err: any) {
+                      toast.error(err.message || 'Failed to upload receipt', { id: toastId });
                     } finally {
                       setUploadingReceipt(false);
                     }
@@ -753,17 +749,13 @@ export function SalesStudentPipelinePanel() {
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (!file) return;
-                          const toastId = toast.loading('Uploading photo...');
+                          const toastId = toast.loading('Compressing & uploading photo...');
                           try {
-                            const data = new FormData();
-                            data.append('file', file);
-                            const res = await api.post('/auth/upload', data, {
-                              headers: { 'Content-Type': 'multipart/form-data' }
-                            });
-                            setVerifyForm({ ...verifyForm, photo: res.data.url });
+                            const url = await uploadFormFile(file);
+                            setVerifyForm({ ...verifyForm, photo: url });
                             toast.success('Photo uploaded successfully', { id: toastId });
-                          } catch (err) {
-                            toast.error('Failed to upload photo', { id: toastId });
+                          } catch (err: any) {
+                            toast.error(err.message || 'Failed to upload photo', { id: toastId });
                           }
                         }}
                       />
@@ -801,25 +793,20 @@ export function SalesStudentPipelinePanel() {
                             onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (!file) return;
-                              const toastId = toast.loading(`Uploading ${docType}...`);
+                              const toastId = toast.loading(`Compressing & uploading ${docType}...`);
                               try {
-                                const uploadData = new FormData();
-                                uploadData.append('file', file);
-                                const res = await api.post('/auth/upload', uploadData, {
-                                  headers: { 'Content-Type': 'multipart/form-data' }
-                                });
+                                const url = await uploadFormFile(file);
                                 const newDocs = (verifyForm.documents || []).filter((d: any) => d.type !== docType);
                                 newDocs.push({
                                   type: docType,
-                                  url: res.data.url,
+                                  url: url,
                                   label: docType === 'Other' ? 'Other Document' : docType,
                                   status: 'pending'
                                 });
                                 setVerifyForm({ ...verifyForm, documents: newDocs });
                                 toast.success(`${docType} uploaded successfully`, { id: toastId });
-                              } catch (err) {
-                                console.error(err);
-                                toast.error(`Failed to upload ${docType}`, { id: toastId });
+                              } catch (err: any) {
+                                toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
                               }
                             }}
                           />
@@ -888,17 +875,13 @@ export function SalesStudentPipelinePanel() {
                           onChange={async (e) => {
                             const file = e.target.files?.[0];
                             if (!file) return;
-                            const toastId = toast.loading('Uploading receipt...');
+                            const toastId = toast.loading('Compressing & uploading receipt...');
                             try {
-                              const data = new FormData();
-                              data.append('file', file);
-                              const res = await api.post('/auth/upload', data, {
-                                headers: { 'Content-Type': 'multipart/form-data' }
-                              });
-                              setVerifyForm({ ...verifyForm, receiptUrl: res.data.url });
+                              const url = await uploadFormFile(file);
+                              setVerifyForm({ ...verifyForm, receiptUrl: url });
                               toast.success('Receipt uploaded', { id: toastId });
-                            } catch (err) {
-                              toast.error('Failed to upload receipt', { id: toastId });
+                            } catch (err: any) {
+                              toast.error(err.message || 'Failed to upload receipt', { id: toastId });
                             }
                           }}
                         />

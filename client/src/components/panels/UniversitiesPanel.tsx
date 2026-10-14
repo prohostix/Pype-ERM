@@ -13,6 +13,7 @@ import { ProgramFormDialog } from '../forms/ProgramFormDialog';
 import { SessionFormDialog } from '../forms/SessionFormDialog';
 import { UniversityDetailPanel } from './UniversityDetailPanel';
 import { toast } from 'sonner';
+import { uploadFormFile } from '@/lib/uploadFile';
 
 interface Branch { id: string; name: string; code: string; }
 interface University {
@@ -186,18 +187,13 @@ export function UniversitiesPanel() {
                       onChange={async (e) => {
                         const file = e.target.files?.[0];
                         if (!file) return;
-                        const toastId = toast.loading('Uploading logo...');
+                        const toastId = toast.loading('Compressing & uploading logo...');
                         try {
-                          const uploadData = new FormData();
-                          uploadData.append('file', file);
-                          const res = await api.post('/auth/upload', uploadData, {
-                            headers: { 'Content-Type': 'multipart/form-data' }
-                          });
-                          setFormData(prev => ({ ...prev, logo: res.data.url }));
+                          const url = await uploadFormFile(file);
+                          setFormData(prev => ({ ...prev, logo: url }));
                           toast.success('Logo uploaded successfully!', { id: toastId });
-                        } catch (err) {
-                          console.error(err);
-                          toast.error('Failed to upload logo', { id: toastId });
+                        } catch (err: any) {
+                          toast.error(err.message || 'Failed to upload logo', { id: toastId });
                         }
                       }}
                     />

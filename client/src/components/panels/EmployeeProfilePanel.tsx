@@ -17,6 +17,7 @@ import {
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
+import { uploadFormFile } from '@/lib/uploadFile';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface KPI {
@@ -299,17 +300,14 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
   const uploadDocument = async (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const formData = new FormData();
-    formData.append('file', file);
     setSaving(true);
+    const toastId = toast.loading('Compressing & uploading file...');
     try {
-      const res = await api.post('/auth/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-      if (res.data.success) {
-        setDocumentsForm((prev: Record<string, any>) => ({ ...prev, [field]: res.data.fileUrl }));
-        toast.success('File uploaded');
-      }
-    } catch {
-      toast.error('Upload failed');
+      const url = await uploadFormFile(file);
+      setDocumentsForm((prev: Record<string, any>) => ({ ...prev, [field]: url }));
+      toast.success('File uploaded successfully', { id: toastId });
+    } catch (err: any) {
+      toast.error(err.message || 'Upload failed', { id: toastId });
     } finally {
       setSaving(false);
     }

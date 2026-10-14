@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { uploadFormFile } from '@/lib/uploadFile';
 
 export function OrganizationSettingsPanel() {
   const { user } = useAuth();
@@ -107,16 +108,11 @@ export function OrganizationSettingsPanel() {
 
         const toastId = toast.loading(width !== img.width ? 'Compressing and uploading logo...' : 'Uploading logo...');
         try {
-          const uploadData = new FormData();
-          uploadData.append('file', compressedFile);
-          const res = await api.post('/auth/upload', uploadData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-          });
-          setFormData(prev => ({ ...prev, logo: res.data.url }));
+          const url = await uploadFormFile(compressedFile);
+          setFormData(prev => ({ ...prev, logo: url }));
           toast.success('Logo uploaded successfully!', { id: toastId });
-        } catch (err) {
-          console.error(err);
-          toast.error('Failed to upload logo', { id: toastId });
+        } catch (err: any) {
+          toast.error(err.message || 'Failed to upload logo', { id: toastId });
         }
       }, mimeType, 0.9);
     };
