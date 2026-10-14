@@ -886,19 +886,31 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     }
   });
 
-  const org = await prisma.organization.findUnique({ where: { id: orgId } });
-  const metadata = org?.metadata as any;
-  const requiresSalesAdmin = metadata?.enrollmentApprovalFlow === 'sales_admin_approval';
-  
-  const newStatus = requiresSalesAdmin ? 'sales_admin_review' : 'document_review';
-  const note = requiresSalesAdmin 
-    ? 'Sales user verified application and forwarded to Sales Admin for approval.'
-    : 'Sales user verified/resubmitted application and forwarded to Operations for document verification.';
+  const isFinanceRejection = (enrollment.status === 'rejected' && !!enrollment.financeRemarks) ||
+    (enrollment.status === 'rejected' && !!(enrollment as any).financeReviewedBy);
+
+  let newStatus: string;
+  let note: string;
+
+  if (isFinanceRejection) {
+    newStatus = 'finance_review';
+    note = 'Payment receipt re-uploaded by Sales and forwarded directly back to Finance for verification.';
+  } else {
+    const org = await prisma.organization.findUnique({ where: { id: orgId } });
+    const metadata = org?.metadata as any;
+    const requiresSalesAdmin = metadata?.enrollmentApprovalFlow === 'sales_admin_approval';
+    
+    newStatus = requiresSalesAdmin ? 'sales_admin_review' : 'document_review';
+    note = requiresSalesAdmin 
+      ? 'Sales user verified application and forwarded to Sales Admin for approval.'
+      : 'Sales user verified/resubmitted application and forwarded to Operations for document verification.';
+  }
 
   const finalEnrollment = await prisma.enrollment.update({
     where: { id },
     data: {
       status: newStatus,
+      ...(isFinanceRejection ? { financeRemarks: null, receiptVerified: false, departmentRemarks: null } : {}),
       statusHistory: appendHistory(updatedEnrollment.statusHistory, {
         status: newStatus,
         actorId: salesUserId,
@@ -928,31 +940,58 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     });
   }
 
-  // Notify ops admins
-  try {
-    const roleToNotify = requiresSalesAdmin ? 'sales_admin' : 'ops_admin';
-    const adminsToNotify = await prisma.user.findMany({
-      where: { organizationId: orgId, role: roleToNotify, status: 'active' },
-      select: { id: true },
-    });
-    for (const admin of adminsToNotify) {
-      await prisma.notification.create({
-        data: {
-          organizationId: orgId,
-          userId: admin.id,
-          title: requiresSalesAdmin ? 'New Student Application for Sales Approval' : 'New Student Application for Review',
-          message: `${finalEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review.`,
-          type: 'general',
-          priority: 'medium',
-          link: requiresSalesAdmin ? 'sales_enrollment_review' : 'enrollment_review',
-        },
+  // Notify admins
+  if (isFinanceRejection) {
+    try {
+      const financeAdmins = await prisma.user.findMany({
+        where: { organizationId: orgId, role: { in: ['finance_admin', 'finance_sub_admin'] }, status: 'active' },
+        select: { id: true },
       });
-    }
-  } catch (_) { /* non-critical */ }
+      for (const admin of financeAdmins) {
+        await prisma.notification.create({
+          data: {
+            organizationId: orgId,
+            userId: admin.id,
+            title: 'Payment Receipt Re-uploaded',
+            message: `${finalEnrollment.studentName}'s payment receipt was re-uploaded by ${req.user.name}. Please verify the payment.`,
+            type: 'general',
+            priority: 'medium',
+            link: 'enrollments_finance',
+          },
+        });
+      }
+    } catch (_) { /* non-critical */ }
+  } else {
+    try {
+      const org = await prisma.organization.findUnique({ where: { id: orgId } });
+      const metadata = org?.metadata as any;
+      const requiresSalesAdmin = metadata?.enrollmentApprovalFlow === 'sales_admin_approval';
+      const roleToNotify = requiresSalesAdmin ? 'sales_admin' : 'ops_admin';
+      const adminsToNotify = await prisma.user.findMany({
+        where: { organizationId: orgId, role: roleToNotify, status: 'active' },
+        select: { id: true },
+      });
+      for (const admin of adminsToNotify) {
+        await prisma.notification.create({
+          data: {
+            organizationId: orgId,
+            userId: admin.id,
+            title: requiresSalesAdmin ? 'New Student Application for Sales Approval' : 'New Student Application for Review',
+            message: `${finalEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review.`,
+            type: 'general',
+            priority: 'medium',
+            link: requiresSalesAdmin ? 'sales_enrollment_review' : 'enrollment_review',
+          },
+        });
+      }
+    } catch (_) { /* non-critical */ }
+  }
 
   res.json({ 
     success: true, 
-    message: requiresSalesAdmin 
+    message: isFinanceRejection
+      ? 'Payment receipt re-uploaded and sent directly to Finance.'
+      : newStatus === 'sales_admin_review'
       ? 'Enrollment verified and submitted to Sales Admin.' 
       : 'Enrollment verified and submitted to Operations.', 
     data: finalEnrollment 
@@ -977,8 +1016,10 @@ export const resubmitPaymentReceipt = asyncHandler(async (req: AuthRequest, res:
     res.status(404).json({ success: false, message: 'Enrollment not found' });
     return;
   }
-  if (!enrollment.salesUserId || enrollment.salesUserId !== req.user.id) {
-    res.status(403).json({ success: false, message: 'Only the sales user who created this application can re-upload its payment receipt.' });
+  const canReupload = enrollment.salesUserId === req.user.id ||
+    ['sales_admin', 'superadmin', 'org_admin', 'branch_manager'].includes(req.user.role);
+  if (!canReupload) {
+    res.status(403).json({ success: false, message: 'You are not authorized to re-upload this payment receipt.' });
     return;
   }
   if (enrollment.status !== 'rejected' || !(enrollment as any).financeRemarks) {
@@ -999,7 +1040,14 @@ export const resubmitPaymentReceipt = asyncHandler(async (req: AuthRequest, res:
 
   const updated = await prisma.enrollment.update({
     where: { id },
-    data: { receiptUrl: receiptUrl.trim(), status: 'finance_review', statusHistory: history } as any,
+    data: { 
+      receiptUrl: receiptUrl.trim(), 
+      status: 'finance_review', 
+      financeRemarks: null,
+      departmentRemarks: null,
+      receiptVerified: false,
+      statusHistory: history 
+    } as any,
   });
 
   try {
@@ -1119,6 +1167,7 @@ export const approveBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Re
     where: { id: req.params.id },
     data: {
       status: 'document_review',
+      departmentRemarks: null,
       statusHistory: appendHistory(enrollment.statusHistory, {
         status: 'document_review',
         actorId: req.user.id,

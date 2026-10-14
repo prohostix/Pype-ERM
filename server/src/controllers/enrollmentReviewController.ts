@@ -127,6 +127,7 @@ export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: 
     where: { id: req.params.id },
     data: {
       status: 'finance_review',
+      departmentRemarks: null,
       departmentReviewedBy: req.user.id,
       departmentReviewedAt: new Date(),
       statusHistory: {

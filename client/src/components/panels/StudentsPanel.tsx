@@ -475,6 +475,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       setFormStep(3); // Redirect to documents step
       return;
     }
+    const unreplacedRejectedDocs = (formData.documents || []).filter((d: any) => d && d.status === 'rejected');
+    if (unreplacedRejectedDocs.length > 0) {
+      toast.error(`Please re-upload rejected documents: ${unreplacedRejectedDocs.map((d: any) => d.type).join(', ')}`);
+      setFormStep(3); // Redirect to documents step
+      return;
+    }
     // Receipt is mandatory
     if (!formData.receiptUrl || formData.receiptUrl.trim() === '') {
       toast.error('Please upload the Fee Payment Receipt');
@@ -503,9 +509,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     try {
       if (completingEnrollment) {
         const completeRes = await api.put(`/enrollment/${completingEnrollment.id}/provisional-complete`, formData);
-        const isReupload = completingEnrollment.status === 'rejected' || completingEnrollment.status === 'ops_rejected';
-        const sentTo = completeRes.data?.data?.status === 'sales_admin_review' ? 'Sales Admin for approval' : 'Operations';
-        toast.success(isReupload ? `Documents re-uploaded successfully and submitted to ${sentTo}` : 'Provisional enrollment completed successfully');
+        const isProv = !!completingEnrollment.isProvisional;
+        const sentTo = completeRes.data?.data?.status === 'sales_admin_review' ? 'Sales Admin for approval' : 'Operations for review';
+        if (isProv) {
+          toast.success(`Provisional enrollment completed successfully and submitted to ${sentTo}`);
+        } else {
+          toast.success(`Documents re-uploaded successfully and submitted to ${sentTo}`);
+        }
       } else if (editingId) {
         await api.put(`/students/${editingId}`, formData);
         toast.success('Student updated successfully');
@@ -1714,8 +1724,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           try {
                             const url = await uploadFormFile(file);
                             setFormData((prev: any) => {
-                              const newDocs = (prev.documents || []).filter((d: any) => d.type !== docType);
-                              newDocs.push({ type: docType, url, label: docType === 'Other' ? customOtherName : undefined });
+                              const newDocs = (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase());
+                              newDocs.push({ 
+                                type: docType, 
+                                url, 
+                                label: docType === 'Other' ? customOtherName : undefined,
+                                status: 'pending'
+                              });
                               return { ...prev, documents: newDocs };
                             });
                             toast.success(`${docType} uploaded successfully`, { id: toastId });
@@ -2296,8 +2311,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           try {
                             const url = await uploadFormFile(file);
                             setFormData((prev: any) => {
-                              const newDocs = (prev.documents || []).filter((d: any) => d.type !== docType);
-                              newDocs.push({ type: docType, url, label: docType === 'Other' ? customOtherName : undefined });
+                              const newDocs = (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase());
+                              newDocs.push({ 
+                                type: docType, 
+                                url, 
+                                label: docType === 'Other' ? customOtherName : undefined,
+                                status: 'pending'
+                              });
                               return { ...prev, documents: newDocs };
                             });
                             toast.success(`${docType} uploaded successfully`, { id: toastId });

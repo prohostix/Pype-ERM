@@ -184,6 +184,23 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
   // Provision student/user account post-approval
   await provisionStudentAfterApproval(enrollment.id);
   
+  // Notify sales user
+  try {
+    if (enrollment.salesUserId) {
+      await prisma.notification.create({
+        data: {
+          organizationId: enrollment.organizationId,
+          userId: enrollment.salesUserId,
+          title: '🎉 Student Enrolled & Credentials Generated!',
+          message: `${enrollment.studentName} has been verified by Finance and successfully enrolled.`,
+          type: 'general',
+          priority: 'high',
+          link: 'student-applications',
+        },
+      });
+    }
+  } catch (_) { /* non-critical */ }
+
   // Refetch the updated enrollment with provisioned student info
   const updatedEnrollment = await prisma.enrollment.findUnique({
     where: { id: enrollment.id },
@@ -206,6 +223,24 @@ export const rejectFinanceEnrollment = asyncHandler(async (req: AuthRequest, res
       }
     }
   });
+
+  // Notify sales user
+  try {
+    if (enrollment.salesUserId) {
+      await prisma.notification.create({
+        data: {
+          organizationId: enrollment.organizationId,
+          userId: enrollment.salesUserId,
+          title: 'Payment Receipt Rejected',
+          message: `${enrollment.studentName}'s payment receipt was rejected by Finance. Reason: ${req.body.remarks || 'Receipt rejected'}. Please re-upload the receipt.`,
+          type: 'general',
+          priority: 'high',
+          link: 'student-applications',
+        },
+      });
+    }
+  } catch (_) { /* non-critical */ }
+
   res.json({ success: true, data: enrollment });
 });
 
@@ -308,30 +343,58 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
     });
   }
 
-  // Update enrollment
+  const now = new Date();
   const historyEntry = {
-    status: 'document_review',
-    changedAt: new Date().toISOString(),
+    status: 'enrolled',
+    changedAt: now.toISOString(),
     changedBy: req.user.id,
     actorName: req.user.name,
     actorRole: req.user.role,
-    remarks: 'Receipt verified by Finance'
+    remarks: 'Receipt verified by Finance & student enrolled'
   };
 
   const updatedEnrollment = await prisma.enrollment.update({
     where: { id: enrollment.id },
     data: {
       receiptVerified: true,
-      receiptVerifiedAt: new Date(),
+      receiptVerifiedAt: now,
       receiptVerifiedBy: req.user.id,
-      status: 'document_review', // Move forward
+      status: 'enrolled',
+      enrolledAt: now,
+      financeReviewedBy: req.user.id,
+      financeReviewedAt: now,
       statusHistory: {
         push: historyEntry
       }
     }
   });
 
-  res.json({ success: true, data: updatedEnrollment });
+  // Provision student/user account post-approval
+  await provisionStudentAfterApproval(updatedEnrollment.id);
+
+  // Notify sales user
+  try {
+    if (updatedEnrollment.salesUserId) {
+      await prisma.notification.create({
+        data: {
+          organizationId: updatedEnrollment.organizationId,
+          userId: updatedEnrollment.salesUserId,
+          title: '🎉 Student Enrolled & Credentials Generated!',
+          message: `${updatedEnrollment.studentName}'s payment receipt has been verified by Finance and the student is officially enrolled.`,
+          type: 'general',
+          priority: 'high',
+          link: 'student-applications',
+        },
+      });
+    }
+  } catch (_) { /* non-critical */ }
+
+  const finalEnrollment = await prisma.enrollment.findUnique({
+    where: { id: updatedEnrollment.id },
+    include: { program: true, studyCenter: true }
+  });
+
+  res.json({ success: true, data: finalEnrollment || updatedEnrollment });
 });
 
 export const getProvisionalEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -419,6 +482,23 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
       }
     }
   });
+
+  // Notify sales user
+  try {
+    if (enrollment.salesUserId) {
+      await prisma.notification.create({
+        data: {
+          organizationId: enrollment.organizationId,
+          userId: enrollment.salesUserId,
+          title: 'Provisional Receipt Verified',
+          message: `${enrollment.studentName}'s provisional fee receipt was verified by Finance. Please complete the student application.`,
+          type: 'general',
+          priority: 'high',
+          link: 'student-applications',
+        },
+      });
+    }
+  } catch (_) { /* non-critical */ }
 
   res.json({ success: true, data: updatedEnrollment });
 });

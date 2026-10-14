@@ -104,7 +104,10 @@ export function SalesStudentPipelinePanel() {
   const [submittingReceipt, setSubmittingReceipt] = useState(false);
 
   const canReuploadReceipt = (e: Enrollment) =>
-    e.status === 'rejected' && !!e.financeRemarks && !!user?.id && e.salesUserId === user.id;
+    e.status === 'rejected' &&
+    !!e.financeRemarks &&
+    !!user?.id &&
+    (e.salesUserId === user.id || ['sales_admin', 'superadmin', 'org_admin', 'branch_manager'].includes(user?.role || ''));
 
   const openVerifyDialog = (enrollment: Enrollment) => {
     setVerifyingStudent(enrollment);
@@ -407,8 +410,8 @@ export function SalesStudentPipelinePanel() {
                         </div>
                       )}
 
-                      {/* Sales Admin rejected it: the creating sales user can edit everything in the same form and re-request */}
-                      {isSalesAdminRejection(e) && !!user?.id && e.salesUserId === user.id && (
+                      {/* Sales Admin rejected it: the creating sales user or sales admin/manager can edit everything in the same form and re-request */}
+                      {isSalesAdminRejection(e) && !!user?.id && (e.salesUserId === user.id || ['sales_admin', 'superadmin', 'org_admin', 'branch_manager'].includes(user?.role || '')) && (
                         <div className="mt-4">
                           <Button
                             variant="default"
@@ -426,10 +429,10 @@ export function SalesStudentPipelinePanel() {
                         </div>
                       )}
 
-                      {/* Verification Action */}
-                      {(hasRejected || e.status === 'sales_verification_pending' || e.status === 'rejected' || e.status === 'ops_rejected' || e.status === 'provisional_finance_verified') && (
+                      {/* Verification Action (Only for Ops rejection, provisional verified, or link verification) */}
+                      {!isSalesAdminRejection(e) && !canReuploadReceipt(e) && !e.financeRemarks && (hasRejected || e.status === 'sales_verification_pending' || e.status === 'rejected' || e.status === 'ops_rejected' || e.status === 'provisional_finance_verified') && (
                         <div className="mt-4">
-                          <Button variant="default" size="sm" className={cn("bg-purple-600 hover:bg-purple-700", hasRejected && "bg-rose-600 hover:bg-rose-700")} onClick={(evt) => {
+                          <Button variant="default" size="sm" className={cn("bg-purple-600 hover:bg-purple-700", (hasRejected || e.status === 'ops_rejected' || e.status === 'rejected') && "bg-rose-600 hover:bg-rose-700")} onClick={(evt) => {
                             evt.stopPropagation();
                             if (e.status === 'provisional_finance_verified') {
                               // Open full wizard
@@ -439,7 +442,11 @@ export function SalesStudentPipelinePanel() {
                               openVerifyDialog(e);
                             }
                           }}>
-                            {e.status === 'provisional_finance_verified' ? 'Complete Enrollment' : hasRejected ? 'Re-upload Rejected Documents & Resubmit' : 'Verify & Submit to Ops'}
+                            {e.status === 'provisional_finance_verified' 
+                              ? 'Complete Enrollment' 
+                              : (hasRejected || e.status === 'ops_rejected' || e.status === 'rejected') 
+                              ? 'Re-upload Rejected Documents & Resubmit' 
+                              : 'Verify & Submit to Ops'}
                           </Button>
                         </div>
                       )}

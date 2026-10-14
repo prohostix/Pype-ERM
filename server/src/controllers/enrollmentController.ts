@@ -127,10 +127,11 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
 
     // Ensure User account exists to satisfy Student_email_fkey foreign key constraint
     let studentUser = await prisma.user.findUnique({ where: { email: rest.studentEmail } });
+    const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
+    const hashedPassword = await hashPassword(defaultPassword);
+
     if (!studentUser) {
       const generatedUid = await generateUserId();
-      const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
-      const hashedPassword = await hashPassword(defaultPassword);
       studentUser = await prisma.user.create({
         data: {
           userId: generatedUid,
@@ -153,10 +154,13 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
         address: rest.studentAddress || 'Pending',
         organizationId: req.user.organizationId,
         centerId: req.user.studyCenterId || null,
+        branchId: req.user.branchId || null,
         universityId: program?.universityId || null,
         programId: rest.programId,
         sessionId: rest.sessionId,
         admissionNo: newAdmissionNo,
+        credentials: { email: rest.studentEmail, password: defaultPassword },
+        enrolledBy: req.user.id,
         status: rest.isProvisional ? 'provisional' : 'document_review'
       }
     });
@@ -172,6 +176,29 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
   }
   
   const enrollment = await prisma.enrollment.create({ data });
+
+  // Notify finance admins for provisional enrollments
+  if (rest.isProvisional) {
+    try {
+      const financeAdmins = await prisma.user.findMany({
+        where: { organizationId: req.user.organizationId, role: { in: ['finance_admin', 'finance_sub_admin'] }, status: 'active' },
+        select: { id: true },
+      });
+      for (const admin of financeAdmins) {
+        await prisma.notification.create({
+          data: {
+            organizationId: req.user.organizationId,
+            userId: admin.id,
+            title: 'New Provisional Enrollment',
+            message: `${rest.studentName} has been provisionally enrolled and is awaiting fee receipt verification.`,
+            type: 'general',
+            priority: 'medium',
+            link: 'provisional_verifications',
+          },
+        });
+      }
+    } catch (_) { /* non-critical */ }
+  }
 
   if (studentId) {
     const student = await prisma.student.findUnique({ where: { id: studentId } });
@@ -326,7 +353,7 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     altPhone: altPhone || null,
     pinCode: pinCode || null,
     photo: photo || null,
-    documents: documents || [],
+    documents: (documents || []).map((d: any) => (d && d.status === 'rejected' ? { ...d, status: 'pending' } : d)),
     gender: gender || null,
     category: category || null,
     maritalStatus: maritalStatus || null,
@@ -339,6 +366,7 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     sessionId: enrollment.sessionId,
     universityId: enrollment.program?.universityId || null,
     centerId: enrollment.studyCenterId,
+    branchId: req.user.branchId || null,
     organizationId: req.user.organizationId,
     enrolledBy: enrollment.salesUserId || req.user.id
   };
@@ -351,6 +379,9 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     });
     let admissionProgress = (existingStudent?.admissionProgress as any) || {};
     if (photo && photo !== existingStudent?.photo) {
+      admissionProgress = { ...admissionProgress, photoStatus: 'pending' };
+      isPhotoUpdated = true;
+    } else if (admissionProgress?.photoStatus === 'rejected') {
       admissionProgress = { ...admissionProgress, photoStatus: 'pending' };
       isPhotoUpdated = true;
     }
@@ -395,27 +426,50 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     }
   }
 
-  // An application that Sales Admin rejected (or that already went through
-  // Sales Admin review) must go back to Sales Admin when Sales re-applies, if
-  // the org still requires Sales Admin approval. Everything else (e.g. an
-  // Operations rejection of an older application) goes to Operations as before.
+  // Routing logic:
+  // 1) If Finance rejected the payment receipt, re-uploading must return directly to Finance (finance_review).
+  // 2) If Sales Admin explicitly rejected it, re-applying must go back to Sales Admin for approval.
+  // 3) If it's a first-time provisional completion and org requires sales admin approval, send to Sales Admin.
+  // 4) In all other cases (including Operations document rejection), it goes to Operations (document_review).
+  const isFinanceRejection = (enrollment.status === 'rejected' && !!enrollment.financeRemarks) ||
+    (enrollment.status === 'rejected' && !!(enrollment as any).financeReviewedBy);
+
   const org = await prisma.organization.findUnique({ where: { id: enrollment.organizationId } });
   const flowEnabled = (org?.metadata as any)?.enrollmentApprovalFlow === 'sales_admin_approval';
   const rawHist: any = enrollment.statusHistory;
   const history: any[] = Array.isArray(rawHist) ? rawHist : (rawHist && typeof rawHist === 'object' ? Object.values(rawHist) : []);
-  const wentThroughSalesAdmin = history.some((h: any) =>
-    h?.status === 'sales_admin_review' || String(h?.note || '').startsWith('Sales Admin rejected')
+  
+  const lastRejection = [...history].reverse().find((h: any) => 
+    h?.status === 'rejected' || h?.status === 'ops_rejected'
   );
-  const requiresSalesAdmin = flowEnabled && wentThroughSalesAdmin;
-  const nextStatus = requiresSalesAdmin ? 'sales_admin_review' : 'document_review';
+  const wasRejectedBySalesAdmin = !isFinanceRejection && !!lastRejection?.note && String(lastRejection.note).startsWith('Sales Admin rejected');
+
+  let nextStatus = 'document_review';
+  let remarksNote = enrollment.isProvisional 
+    ? 'Provisional enrollment completed with full details by Sales' 
+    : 'Re-applied by Sales with updated documents and forwarded to Operations';
+
+  if (isFinanceRejection) {
+    nextStatus = 'finance_review';
+    remarksNote = 'Payment receipt re-uploaded by Sales and forwarded directly back to Finance for verification';
+  } else if (flowEnabled) {
+    if (wasRejectedBySalesAdmin) {
+      nextStatus = 'sales_admin_review';
+      remarksNote = 'Re-applied by Sales with updated documents and sent back to Sales Admin for approval';
+    } else if (enrollment.isProvisional && !history.some((h: any) => h?.status === 'sales_admin_review')) {
+      nextStatus = 'sales_admin_review';
+      remarksNote = 'Provisional enrollment completed with full details by Sales and sent to Sales Admin for approval';
+    }
+  }
+
+  const requiresFinance = nextStatus === 'finance_review';
+  const requiresSalesAdmin = nextStatus === 'sales_admin_review';
 
   const historyEntry = {
     status: nextStatus,
     changedAt: new Date().toISOString(),
     changedBy: req.user.id,
-    remarks: requiresSalesAdmin
-      ? 'Re-applied by Sales with updated documents and sent back to Sales Admin for approval'
-      : 'Provisional enrollment completed with full details by Sales'
+    remarks: remarksNote
   };
 
   const updated = await prisma.enrollment.update({
@@ -430,12 +484,35 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
       studentAddress: student.address,
       documents: student.documents ? (student.documents as any) : [],
       photo: student.photo,
+      ...(req.body.receiptUrl ? { receiptUrl: String(req.body.receiptUrl).trim() } : {}),
+      ...(req.body.initialPaymentAmount ? { initialPaymentAmount: Number(req.body.initialPaymentAmount) } : {}),
+      ...(isFinanceRejection ? { financeRemarks: null, receiptVerified: false, departmentRemarks: null } : {}),
       ...(isPhotoUpdated ? { photoStatus: 'pending' } : {}),
       statusHistory: [...history, historyEntry] as any,
     }
   });
 
-  if (requiresSalesAdmin) {
+  if (requiresFinance) {
+    try {
+      const financeAdmins = await prisma.user.findMany({
+        where: { organizationId: enrollment.organizationId, role: { in: ['finance_admin', 'finance_sub_admin'] }, status: 'active' },
+        select: { id: true },
+      });
+      for (const admin of financeAdmins) {
+        await prisma.notification.create({
+          data: {
+            organizationId: enrollment.organizationId,
+            userId: admin.id,
+            title: 'Payment Receipt Re-uploaded',
+            message: `${student.name}'s payment receipt was re-uploaded by ${req.user.name}. Please verify the payment.`,
+            type: 'general',
+            priority: 'medium',
+            link: 'enrollments_finance',
+          },
+        });
+      }
+    } catch (_) { /* non-critical */ }
+  } else if (requiresSalesAdmin) {
     try {
       const admins = await prisma.user.findMany({
         where: { organizationId: enrollment.organizationId, role: 'sales_admin', status: 'active' },
@@ -451,6 +528,26 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
             type: 'general',
             priority: 'medium',
             link: 'sales_enrollment_review',
+          },
+        });
+      }
+    } catch (_) { /* non-critical */ }
+  } else {
+    try {
+      const opsUsers = await prisma.user.findMany({
+        where: { organizationId: enrollment.organizationId, role: { in: ['ops_admin', 'ops_sub_admin'] }, status: 'active' },
+        select: { id: true },
+      });
+      for (const op of opsUsers) {
+        await prisma.notification.create({
+          data: {
+            organizationId: enrollment.organizationId,
+            userId: op.id,
+            title: 'Student Documents Submitted to Operations',
+            message: `${student.name}'s application with updated details/documents was submitted by ${req.user.name}. Please review.`,
+            type: 'general',
+            priority: 'medium',
+            link: 'enrollment_review',
           },
         });
       }

@@ -52,6 +52,7 @@ const STATUS_META: Record<string, { label: string; color: string; icon: React.Re
   receipt_submitted:   { label: 'Receipt Uploaded', color: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400',       icon: <FileText className="w-3 h-3" /> },
   document_review:     { label: 'Doc Review',       color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',         icon: <AlertCircle className="w-3 h-3" /> },
   finance_review:      { label: 'Finance Review',   color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', icon: <Clock className="w-3 h-3" /> },
+  sales_admin_review:  { label: 'Admin Review',     color: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400', icon: <Clock className="w-3 h-3" /> },
   enrolled:            { label: 'Enrolled',         color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',     icon: <CheckCircle className="w-3 h-3" /> },
   rejected:            { label: 'Rejected',         color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',             icon: <XCircle className="w-3 h-3" /> },
   department_rejected: { label: 'Dept Rejected',    color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',             icon: <Ban className="w-3 h-3" /> },
@@ -109,6 +110,9 @@ export function FinanceEnrollmentsPanel() {
     try {
       await api.put(`/finance/enrollments/${id}/approve`);
       toast.success('Student enrolled successfully');
+      if (viewStudent?.id === id) {
+        setViewStudent(null);
+      }
       fetchData();
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to approve');
@@ -121,6 +125,9 @@ export function FinanceEnrollmentsPanel() {
       toast.success('Enrollment rejected');
       setRejectDialog({ open: false, id: '' });
       setRemarks('');
+      if (viewStudent?.id === rejectDialog.id) {
+        setViewStudent(null);
+      }
       fetchData();
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to reject');
@@ -130,7 +137,7 @@ export function FinanceEnrollmentsPanel() {
   const handleVerifyReceipt = async (id: string) => {
     try {
       await api.post(`/finance/enrollments/${id}/verify-receipt`);
-      toast.success('Receipt verified and payment recorded successfully');
+      toast.success('Receipt verified and student enrolled successfully');
       setViewStudent(null);
       fetchData();
     } catch (e: any) {
@@ -506,11 +513,21 @@ export function FinanceEnrollmentsPanel() {
                         <div className="flex-1">
                           <p className="text-sm font-medium mb-1">Receipt Uploaded</p>
                           {!viewStudent.receiptVerified ? (
-                            <Button size="sm" onClick={() => handleVerifyReceipt(viewStudent.id)}>
-                              Verify Receipt & Record Payment
-                            </Button>
+                            <div className="flex flex-wrap items-center gap-2 mt-2">
+                              <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleVerifyReceipt(viewStudent.id)}>
+                                <CheckCircle className="w-3.5 h-3.5 mr-1" />
+                                Verify Receipt & Enroll
+                              </Button>
+                              <Button size="sm" variant="outline" className="text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => {
+                                setRejectDialog({ open: true, id: viewStudent.id });
+                                setRemarks('');
+                              }}>
+                                <XCircle className="w-3.5 h-3.5 mr-1" />
+                                Reject Receipt
+                              </Button>
+                            </div>
                           ) : (
-                            <p className="text-xs text-muted-foreground">Receipt has been verified and payment recorded.</p>
+                            <p className="text-xs text-muted-foreground mt-1">Receipt has been verified and student enrolled.</p>
                           )}
                         </div>
                       </>
