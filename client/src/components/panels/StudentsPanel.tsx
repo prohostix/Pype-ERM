@@ -361,7 +361,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         fatherPhone: student.fatherPhone || '',
         motherName: student.motherName || '',
         motherPhone: student.motherPhone || '',
-        receiptUrl: completingEnrollment.receiptUrl || student.receiptUrl || '',
+        receiptUrl: completingEnrollment.receiptUrl || completingEnrollment.provisionalReceiptUrl || (student.enrollments || []).find((e: any) => e.receiptUrl || e.provisionalReceiptUrl)?.receiptUrl || (student.admissionProgress as any)?.receiptUrl || student.receiptUrl || '',
       }));
       // Optionally pre-select the sales user if not in sales mode
       if (completingEnrollment.salesUserId) {
@@ -481,13 +481,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       setFormStep(3); // Redirect to documents step
       return;
     }
-    // Receipt is mandatory
-    if (!formData.receiptUrl || formData.receiptUrl.trim() === '') {
+    // Receipt is mandatory for new students (unless marked as previous student) or when completing an enrollment
+    const isReceiptMandatory = Boolean(completingEnrollment) || (!editingId && !formData.isPrevious);
+    if (isReceiptMandatory && (!formData.receiptUrl || formData.receiptUrl.trim() === '')) {
       toast.error('Please upload the Fee Payment Receipt');
       setFormStep(4);
       return;
     }
-    if (getActiveFeeStructure()) {
+    if (!formData.isPrevious && !editingId && getActiveFeeStructure()) {
       if (!formData.initialPaymentAmount || Number(formData.initialPaymentAmount) <= 0) {
         toast.error('Please enter the Initial Fee Amount');
         setFormStep(0);
@@ -549,6 +550,38 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       (typeof student.programId === 'object' ? student.programId?.universityId : null) ||
       '';
 
+    const enrollmentWithReceipt = (student.enrollments || []).find((e: any) => e.receiptUrl || e.provisionalReceiptUrl);
+    const latestEnrollment = (student.enrollments && student.enrollments.length > 0)
+      ? student.enrollments[student.enrollments.length - 1]
+      : null;
+    const resolvedEnrollment = enrollmentWithReceipt || latestEnrollment;
+
+    const resolvedReceiptUrl =
+      resolvedEnrollment?.receiptUrl ||
+      resolvedEnrollment?.provisionalReceiptUrl ||
+      (student.admissionProgress as any)?.receiptUrl ||
+      (student.documents || []).find((d: any) => d.type?.toLowerCase() === 'receipt')?.url ||
+      student.receiptUrl ||
+      '';
+
+    const resolvedPaymentPlan =
+      (student.admissionProgress as any)?.paymentPlan ||
+      resolvedEnrollment?.paymentPlan ||
+      'full';
+
+    const resolvedInitialPaymentAmount =
+      (student.admissionProgress as any)?.initialPaymentAmount ??
+      resolvedEnrollment?.initialPaymentAmount ??
+      '';
+
+    const rawInitialDate =
+      (student.admissionProgress as any)?.initialPaymentDate ||
+      resolvedEnrollment?.initialPaymentDate;
+
+    const resolvedInitialPaymentDate = rawInitialDate
+      ? new Date(rawInitialDate).toISOString().split('T')[0]
+      : '';
+
     setEditingId(studentId);
     setFormStep(0);
     setFormData({
@@ -577,11 +610,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       motherName: student.motherName || '',
       motherPhone: student.motherPhone || '',
       documents: student.documents || [],
-      receiptUrl: student.receiptUrl || '',
+      receiptUrl: resolvedReceiptUrl,
       centerId: centerId?.toString() || '',
-      paymentPlan: (student.admissionProgress as any)?.paymentPlan || 'full',
-      initialPaymentAmount: (student.admissionProgress as any)?.initialPaymentAmount || '',
-      initialPaymentDate: (student.admissionProgress as any)?.initialPaymentDate || '',
+      paymentPlan: resolvedPaymentPlan,
+      initialPaymentAmount: resolvedInitialPaymentAmount,
+      initialPaymentDate: resolvedInitialPaymentDate,
     });
     const otherDoc = (student.documents || []).find((d: any) => d.type === 'Other');
     setCustomOtherName(otherDoc?.label || '');
@@ -1788,12 +1821,31 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   </p>
 
                   <div className="border rounded-xl p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/50 space-y-4">
-                    <Label className="font-semibold text-sm">Upload Receipt *</Label>
+                    <Label className="font-semibold text-sm">
+                      Upload Receipt {(!editingId && !formData.isPrevious) ? '*' : '(Optional for existing/previous)'}
+                    </Label>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                       {formData.receiptUrl && (
-                        <div className="w-16 h-16 rounded overflow-hidden border">
-                          <img src={api.getFileUrl(formData.receiptUrl)} alt="Receipt Preview" className="w-full h-full object-cover" />
+                        <div className="flex items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-lg border">
+                          <div className="w-14 h-14 rounded overflow-hidden border bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0">
+                            {formData.receiptUrl.toLowerCase().endsWith('.pdf') ? (
+                              <FileText className="w-7 h-7 text-rose-500" />
+                            ) : (
+                              <img src={api.getFileUrl(formData.receiptUrl)} alt="Receipt Preview" className="w-full h-full object-cover" />
+                            )}
+                          </div>
+                          <div className="min-w-0 flex flex-col pr-2">
+                            <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">Payment Receipt</span>
+                            <a
+                              href={api.getFileUrl(formData.receiptUrl)}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-xs text-primary hover:underline inline-flex items-center gap-1 mt-0.5"
+                            >
+                              <Eye className="w-3.5 h-3.5" /> View Receipt
+                            </a>
+                          </div>
                         </div>
                       )}
                       <div className="flex-1">
@@ -2375,12 +2427,31 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           </p>
 
                           <div className="border rounded-xl p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/50 space-y-4">
-                            <Label className="font-semibold text-sm">Upload Receipt *</Label>
+                            <Label className="font-semibold text-sm">
+                              Upload Receipt {(!editingId && !formData.isPrevious) ? '*' : '(Optional for existing/previous)'}
+                            </Label>
 
-                            <div className="flex items-center gap-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                               {formData.receiptUrl && (
-                                <div className="w-16 h-16 rounded overflow-hidden border">
-                                  <img src={api.getFileUrl(formData.receiptUrl)} alt="Receipt Preview" className="w-full h-full object-cover" />
+                                <div className="flex items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-lg border">
+                                  <div className="w-14 h-14 rounded overflow-hidden border bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0">
+                                    {formData.receiptUrl.toLowerCase().endsWith('.pdf') ? (
+                                      <FileText className="w-7 h-7 text-rose-500" />
+                                    ) : (
+                                      <img src={api.getFileUrl(formData.receiptUrl)} alt="Receipt Preview" className="w-full h-full object-cover" />
+                                    )}
+                                  </div>
+                                  <div className="min-w-0 flex flex-col pr-2">
+                                    <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">Payment Receipt</span>
+                                    <a
+                                      href={api.getFileUrl(formData.receiptUrl)}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="text-xs text-primary hover:underline inline-flex items-center gap-1 mt-0.5"
+                                    >
+                                      <Eye className="w-3.5 h-3.5" /> View Receipt
+                                    </a>
+                                  </div>
                                 </div>
                               )}
                               <div className="flex-1">

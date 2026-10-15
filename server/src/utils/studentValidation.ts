@@ -118,6 +118,7 @@ export async function checkStudentOrEnrollmentExists(
         studentEmail: { equals: cleanEmail, mode: 'insensitive' },
         status: { notIn: ['rejected', 'cancelled'] },
         ...(options.excludeEnrollmentId ? { id: { not: options.excludeEnrollmentId } } : {}),
+        ...(options.excludeStudentId ? { NOT: { studentId: options.excludeStudentId } } : {}),
       },
       select: { id: true, studentName: true, studentEmail: true, studentPhone: true, status: true, isProvisional: true }
     });
@@ -149,6 +150,7 @@ export async function checkStudentOrEnrollmentExists(
         ],
         status: { notIn: ['rejected', 'cancelled'] },
         ...(options.excludeEnrollmentId ? { id: { not: options.excludeEnrollmentId } } : {}),
+        ...(options.excludeStudentId ? { NOT: { studentId: options.excludeStudentId } } : {}),
       },
       select: { id: true, studentName: true, studentEmail: true, studentPhone: true, status: true, isProvisional: true }
     });

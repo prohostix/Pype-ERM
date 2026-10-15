@@ -531,44 +531,66 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
   // below. Prisma rejects the whole update on any unknown key, so keep only real
   // student columns (and the payment fields that are folded into admissionProgress).
   const studentColumns = new Set<string>(Object.values(Prisma.StudentScalarFieldEnum));
-  const folded = new Set(['paymentPlan', 'initialPaymentAmount', 'initialPaymentDate']);
+  const folded = new Set(['paymentPlan', 'initialPaymentAmount', 'initialPaymentDate', 'receiptUrl']);
   for (const key of Object.keys(dataToUpdate)) {
     if (!studentColumns.has(key) && !folded.has(key)) delete dataToUpdate[key];
   }
 
   if (dataToUpdate.phone) {
     const rawPhone = dataToUpdate.phone.trim();
-    const phoneCheck = await checkStudentOrEnrollmentExists({
-      phone: rawPhone,
-      excludeStudentId: req.params.id
-    });
-    if (!phoneCheck.isUnique) {
-      res.status(400).json({ success: false, message: phoneCheck.message, field: 'phone' });
-      return;
+    const cleanPhone = normalizePhone(rawPhone);
+    const existingPhone = normalizePhone(studentExists.phone);
+
+    // Only run uniqueness check if the phone number was changed!
+    if (cleanPhone && cleanPhone !== existingPhone) {
+      const phoneCheck = await checkStudentOrEnrollmentExists({
+        phone: rawPhone,
+        excludeStudentId: req.params.id
+      });
+      if (!phoneCheck.isUnique) {
+        res.status(400).json({ success: false, message: phoneCheck.message, field: 'phone' });
+        return;
+      }
+
+      // Also update studentPhone on related enrollments
+      await prisma.enrollment.updateMany({
+        where: { studentId: req.params.id },
+        data: { studentPhone: rawPhone }
+      });
     }
     dataToUpdate.phone = rawPhone;
   }
 
-  if (dataToUpdate.dob) dataToUpdate.dob = new Date(dataToUpdate.dob);
-  if (dataToUpdate.admissionDate) dataToUpdate.admissionDate = new Date(dataToUpdate.admissionDate);
+  if ('dob' in dataToUpdate) {
+    dataToUpdate.dob = (dataToUpdate.dob && String(dataToUpdate.dob).trim() !== '') ? new Date(dataToUpdate.dob) : null;
+  }
+  if ('admissionDate' in dataToUpdate) {
+    dataToUpdate.admissionDate = (dataToUpdate.admissionDate && String(dataToUpdate.admissionDate).trim() !== '') ? new Date(dataToUpdate.admissionDate) : null;
+  }
+  if ('admissionNo' in dataToUpdate) {
+    dataToUpdate.admissionNo = (dataToUpdate.admissionNo && String(dataToUpdate.admissionNo).trim() !== '') ? String(dataToUpdate.admissionNo).trim() : null;
+  }
+  if ('specialisation' in dataToUpdate) {
+    dataToUpdate.specialisation = (dataToUpdate.specialisation && String(dataToUpdate.specialisation).trim() !== '') ? String(dataToUpdate.specialisation).trim() : null;
+  }
   if ('enrollmentNo' in dataToUpdate) {
-    dataToUpdate.enrollmentNo = dataToUpdate.enrollmentNo ? dataToUpdate.enrollmentNo : null;
+    dataToUpdate.enrollmentNo = (dataToUpdate.enrollmentNo && String(dataToUpdate.enrollmentNo).trim() !== '') ? String(dataToUpdate.enrollmentNo).trim() : null;
   }
   if ('centerId' in dataToUpdate) {
-    dataToUpdate.centerId = (dataToUpdate.centerId && dataToUpdate.centerId.trim() !== '') ? dataToUpdate.centerId : null;
+    dataToUpdate.centerId = (dataToUpdate.centerId && String(dataToUpdate.centerId).trim() !== '') ? String(dataToUpdate.centerId).trim() : null;
   }
   if ('branchId' in dataToUpdate) {
-    dataToUpdate.branchId = (dataToUpdate.branchId && dataToUpdate.branchId.trim() !== '') ? dataToUpdate.branchId : null;
+    dataToUpdate.branchId = (dataToUpdate.branchId && String(dataToUpdate.branchId).trim() !== '') ? String(dataToUpdate.branchId).trim() : null;
   }
   if ('sessionId' in dataToUpdate) {
-    dataToUpdate.sessionId = (dataToUpdate.sessionId && dataToUpdate.sessionId.trim() !== '') ? dataToUpdate.sessionId : null;
+    dataToUpdate.sessionId = (dataToUpdate.sessionId && String(dataToUpdate.sessionId).trim() !== '') ? String(dataToUpdate.sessionId).trim() : null;
   }
 
   if ('universityId' in dataToUpdate) {
-    dataToUpdate.universityId = (dataToUpdate.universityId && dataToUpdate.universityId.trim() !== '') ? dataToUpdate.universityId : null;
+    dataToUpdate.universityId = (dataToUpdate.universityId && String(dataToUpdate.universityId).trim() !== '') ? String(dataToUpdate.universityId).trim() : null;
   }
   
-  if (dataToUpdate.paymentPlan || dataToUpdate.initialPaymentAmount !== undefined || dataToUpdate.initialPaymentDate !== undefined) {
+  if (dataToUpdate.paymentPlan || dataToUpdate.initialPaymentAmount !== undefined || dataToUpdate.initialPaymentDate !== undefined || dataToUpdate.receiptUrl !== undefined) {
     dataToUpdate.admissionProgress = {
       ...(typeof studentExists.admissionProgress === 'object' && studentExists.admissionProgress !== null ? studentExists.admissionProgress : {}),
     };
@@ -581,9 +603,19 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     if (dataToUpdate.initialPaymentDate !== undefined) {
       dataToUpdate.admissionProgress.initialPaymentDate = dataToUpdate.initialPaymentDate || null;
     }
+    if (dataToUpdate.receiptUrl !== undefined) {
+      dataToUpdate.admissionProgress.receiptUrl = dataToUpdate.receiptUrl || null;
+      if (dataToUpdate.receiptUrl && typeof dataToUpdate.receiptUrl === 'string' && dataToUpdate.receiptUrl.trim() !== '') {
+        await prisma.enrollment.updateMany({
+          where: { studentId: req.params.id },
+          data: { receiptUrl: dataToUpdate.receiptUrl.trim() }
+        });
+      }
+    }
     delete dataToUpdate.paymentPlan;
     delete dataToUpdate.initialPaymentAmount;
     delete dataToUpdate.initialPaymentDate;
+    delete dataToUpdate.receiptUrl;
   }
 
   const student = await prisma.student.update({
