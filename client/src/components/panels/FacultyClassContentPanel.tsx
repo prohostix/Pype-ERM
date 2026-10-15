@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Plus, Edit, Trash2, Folder, FileText, Upload, Loader2, Download, BookOpen, ChevronDown, ChevronUp, User, UserPlus, Clock, Play, Users, CheckSquare, Layers, Video } from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, Folder, FileText, Upload, Loader2, Download, BookOpen, ChevronDown, ChevronUp, User, UserPlus, Clock, Play, Users, CheckSquare, Layers, Video, AlertTriangle, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { shrinkImage } from '@/lib/uploadFile';
 
 export function FacultyClassContentPanel({ academicClass, onBack }: { academicClass: any; onBack: () => void }) {
   const [modules, setModules] = useState<any[]>([]);
@@ -70,10 +71,21 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   // Material Modal
   const [materialDialogOpen, setMaterialDialogOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [compressing, setCompressing] = useState(false);
   const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
   const [materialForm, setMaterialForm] = useState({ title: '', description: '' });
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const materialExt = (uploadFile?.name.split('.').pop() || '').toLowerCase();
+  const isMaterialImage = ['jpeg', 'jpg', 'png', 'webp', 'gif'].includes(materialExt);
+  const MAX_MATERIAL_BYTES = 1950 * 1024; // 1950 KB (~2 MB) limit
+  const isMaterialOverSize = uploadFile ? uploadFile.size > MAX_MATERIAL_BYTES : false;
+  const materialSizeFormatted = uploadFile
+    ? uploadFile.size > 1024 * 1024
+      ? `${(uploadFile.size / (1024 * 1024)).toFixed(2)} MB`
+      : `${(uploadFile.size / 1024).toFixed(1)} KB`
+    : '';
 
   // Assessment Modal
   const [assessmentDialogOpen, setAssessmentDialogOpen] = useState(false);
@@ -274,23 +286,50 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
     e.preventDefault();
     if (!uploadFile || !activeLessonId) return toast.error('Please select a file');
 
+    let fileToUpload = uploadFile;
+
+    // Auto-compress image files if they exceed budget
+    if (isMaterialImage && uploadFile.size > MAX_MATERIAL_BYTES) {
+      setCompressing(true);
+      try {
+        fileToUpload = await shrinkImage(uploadFile, MAX_MATERIAL_BYTES);
+      } catch (err) {
+        console.warn('Image shrink fallback:', err);
+      } finally {
+        setCompressing(false);
+      }
+    }
+
+    // Hard block if file is still over size limit (e.g., large PDF or document)
+    if (fileToUpload.size > MAX_MATERIAL_BYTES) {
+      const sizeMB = (fileToUpload.size / (1024 * 1024)).toFixed(2);
+      return toast.error(`File is too large (${sizeMB} MB). Maximum allowed size is 2 MB. Please compress your document before uploading.`);
+    }
+
     setUploading(true);
     try {
       const fd = new FormData();
-      fd.append('file', uploadFile);
+      fd.append('file', fileToUpload);
       fd.append('title', materialForm.title);
       fd.append('description', materialForm.description);
 
       await api.post(`/faculty-portal/lessons/${activeLessonId}/materials`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      toast.success('Material uploaded');
+      toast.success('Material uploaded successfully');
       setMaterialDialogOpen(false);
+      setUploadFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
       fetchModules();
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Upload failed');
+      if (err?.response?.status === 413 || err?.message?.includes('413') || err?.response?.data?.message?.includes('too large')) {
+        toast.error('The file exceeds the 2 MB server limit. Please compress or select a smaller file.');
+      } else {
+        toast.error(err.response?.data?.message || 'Upload failed');
+      }
     } finally {
       setUploading(false);
+      setCompressing(false);
     }
   };
 
@@ -382,7 +421,13 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
           <Button variant="ghost" size="sm" onClick={() => openAssessmentDialog(lesson)} className="h-7 text-xs">
             <CheckSquare className="w-3 h-3 mr-1" /> Assessment
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => { setActiveLessonId(lesson.id); setMaterialForm({ title: '', description: '' }); setUploadFile(null); setMaterialDialogOpen(true); }} className="h-7 text-xs">
+          <Button variant="ghost" size="sm" onClick={() => { 
+            setActiveLessonId(lesson.id); 
+            setMaterialForm({ title: '', description: '' }); 
+            setUploadFile(null); 
+            if (fileInputRef.current) fileInputRef.current.value = '';
+            setMaterialDialogOpen(true); 
+          }} className="h-7 text-xs">
             <Upload className="w-3 h-3 mr-1" /> Material
           </Button>
           <Button variant="ghost" size="icon" onClick={() => { 
@@ -774,24 +819,133 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
       </Dialog>
 
       <Dialog open={materialDialogOpen} onOpenChange={setMaterialDialogOpen}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Upload Material</DialogTitle></DialogHeader>
-          <form onSubmit={handleMaterialSubmit} className="space-y-4 pt-4">
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Upload className="w-5 h-5 text-indigo-600" />
+              Upload Lesson Material
+            </DialogTitle>
+          </DialogHeader>
+
+          {/* Persistent File Size & Format Notice */}
+          <div className="rounded-lg border border-amber-200/90 bg-amber-50/70 dark:border-amber-900/40 dark:bg-amber-950/20 p-3 text-xs text-amber-900 dark:text-amber-300">
+            <div className="flex items-start gap-2.5">
+              <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="font-semibold text-amber-950 dark:text-amber-200">
+                  Maximum File Size Limit: 2 MB
+                </p>
+                <p className="text-amber-800/90 dark:text-amber-400/90 leading-relaxed text-[11px]">
+                  Files larger than 2 MB will be rejected by the server. Please compress PDF documents before uploading. Images (JPG/PNG) will be compressed automatically.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <form onSubmit={handleMaterialSubmit} className="space-y-4 pt-1">
             <div className="space-y-2">
               <Label>Title</Label>
-              <Input value={materialForm.title} onChange={e => setMaterialForm({ ...materialForm, title: e.target.value })} required />
+              <Input 
+                value={materialForm.title} 
+                onChange={e => setMaterialForm({ ...materialForm, title: e.target.value })} 
+                placeholder="e.g. Chapter 1 Notes, Reference Slides" 
+                required 
+              />
             </div>
+
             <div className="space-y-2">
               <Label>Description (Optional)</Label>
-              <Textarea value={materialForm.description} onChange={e => setMaterialForm({ ...materialForm, description: e.target.value })} />
+              <Textarea 
+                value={materialForm.description} 
+                onChange={e => setMaterialForm({ ...materialForm, description: e.target.value })} 
+                placeholder="Brief summary of this study material..." 
+                rows={2} 
+              />
             </div>
+
             <div className="space-y-2">
-              <Label>File</Label>
-              <Input type="file" ref={fileInputRef} onChange={e => setUploadFile(e.target.files?.[0] || null)} required />
+              <div className="flex items-center justify-between">
+                <Label>File Attachment</Label>
+                <span className="text-[11px] font-medium text-slate-500">Max: 2 MB</span>
+              </div>
+              <Input 
+                type="file" 
+                ref={fileInputRef} 
+                accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp"
+                onChange={e => setUploadFile(e.target.files?.[0] || null)} 
+                required 
+              />
+              <p className="text-[11px] text-muted-foreground">
+                Supported: PDF, Word (DOC/DOCX), Excel, CSV, Images (JPG, PNG, WebP)
+              </p>
             </div>
-            <Button type="submit" className="w-full" disabled={uploading}>
-              {uploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
-              {uploading ? 'Uploading...' : 'Upload File'}
+
+            {/* Selected File Status and Warnings */}
+            {uploadFile && (
+              <div className="space-y-2">
+                {isMaterialOverSize && !isMaterialImage && (
+                  <div className="rounded-lg border border-red-200 bg-red-50 dark:border-red-900/50 dark:bg-red-950/30 p-3 text-xs text-red-700 dark:text-red-400">
+                    <div className="flex items-start gap-2.5">
+                      <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+                      <div className="space-y-1">
+                        <p className="font-bold">
+                          File size exceeds 2 MB limit ({materialSizeFormatted})
+                        </p>
+                        <p className="text-red-600/90 dark:text-red-400/90 text-[11px] leading-relaxed">
+                          This document exceeds the server&apos;s 2 MB upload limit and cannot be uploaded. Please compress your PDF/document or select a file under 2 MB.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {isMaterialOverSize && isMaterialImage && (
+                  <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-900/50 dark:bg-blue-950/30 p-2.5 text-xs text-blue-800 dark:text-blue-300">
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-blue-600 shrink-0" />
+                      <span className="text-[11px]">
+                        Image is {materialSizeFormatted}. It will be automatically compressed to under 2 MB during upload.
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {!isMaterialOverSize && (
+                  <div className="rounded-lg border border-emerald-200 bg-emerald-50 dark:border-emerald-900/50 dark:bg-emerald-950/30 p-2.5 text-xs text-emerald-800 dark:text-emerald-300 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5 font-medium truncate max-w-[260px]">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span className="truncate">{uploadFile.name}</span>
+                      <span className="text-[11px] text-emerald-700 font-normal">({materialSizeFormatted})</span>
+                    </span>
+                    <Badge variant="outline" className="text-emerald-700 bg-emerald-100/50 border-emerald-300 text-[10px] h-5 shrink-0">
+                      Within Limit
+                    </Badge>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <Button 
+              type="submit" 
+              className={cn("w-full transition-all", isMaterialOverSize && !isMaterialImage && "opacity-60 cursor-not-allowed")} 
+              disabled={uploading || compressing || (isMaterialOverSize && !isMaterialImage)}
+            >
+              {uploading || compressing ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  {compressing ? 'Optimizing Image...' : 'Uploading File...'}
+                </>
+              ) : isMaterialOverSize && !isMaterialImage ? (
+                <>
+                  <AlertCircle className="w-4 h-4 mr-2" />
+                  File Exceeds 2 MB Limit
+                </>
+              ) : (
+                <>
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload File
+                </>
+              )}
             </Button>
           </form>
         </DialogContent>

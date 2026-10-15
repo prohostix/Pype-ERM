@@ -1,7 +1,7 @@
 import api from '@/lib/api';
 
-// Target budget is 950 KB so that multipart headers stay comfortably under the 1 MB Nginx limit.
-const TARGET_MAX_BYTES = 950 * 1024;
+// Target budget is 1950 KB so that multipart headers stay comfortably under the 2 MB limit.
+export const TARGET_MAX_BYTES = 1950 * 1024;
 const ALLOWED = ['jpeg', 'jpg', 'png', 'gif', 'webp', 'svg', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'csv'];
 const RESIZABLE = ['jpeg', 'jpg', 'png', 'webp', 'gif'];
 
@@ -49,7 +49,7 @@ async function loadImage(file: File): Promise<{
 }
 
 /**
- * Adaptively shrinks and compresses any image in the browser so it fits under the target size (<= 950 KB).
+ * Adaptively shrinks and compresses any image in the browser so it fits under the target size (<= 1950 KB).
  * Uses progressive multi-pass degradation (adjusting resolution and JPEG quality) while maintaining visual clarity.
  */
 export async function shrinkImage(file: File, maxBytes = TARGET_MAX_BYTES): Promise<File> {
@@ -113,7 +113,7 @@ export async function shrinkImage(file: File, maxBytes = TARGET_MAX_BYTES): Prom
 }
 
 /**
- * Uploads a form file after verifying and compressing it to <= 1 MB.
+ * Uploads a form file after verifying and compressing it to <= 2 MB.
  * Returns the uploaded file URL.
  */
 export async function uploadFormFile(
@@ -129,17 +129,17 @@ export async function uploadFormFile(
     );
   }
 
-  // 1. Compress image to fit under 950 KB (1 MB)
+  // 1. Compress image to fit under 1950 KB (2 MB)
   const file = await shrinkImage(original, TARGET_MAX_BYTES);
 
   // 2. Validate final file size
   if (file.size > TARGET_MAX_BYTES) {
     if (ext === 'pdf') {
       throw new Error(
-        `This PDF is ${mb(file.size)}. The maximum allowed size is 1 MB. Please compress this PDF or upload as an image (JPG/PNG), which is compressed automatically.`
+        `This PDF is ${mb(file.size)}. The maximum allowed size is 2 MB. Please compress this PDF or upload as an image (JPG/PNG), which is compressed automatically.`
       );
     }
-    throw new Error(`This file is ${mb(file.size)}. The maximum allowed size is 1 MB.`);
+    throw new Error(`This file is ${mb(file.size)}. The maximum allowed size is 2 MB.`);
   }
 
   // 3. Send to server
@@ -159,7 +159,7 @@ export async function uploadFormFile(
     if (err?.response) {
       const status = err.response.status;
       const msg = err.response.data?.message;
-      if (status === 413) throw new Error('The file exceeds the 1 MB server limit. Please upload a smaller file.');
+      if (status === 413) throw new Error('The file exceeds the 2 MB server limit. Please upload a smaller file.');
       throw new Error(msg || `Upload failed (server error ${status}). Please try again.`);
     }
     if (err?.code === 'ECONNABORTED') throw new Error('The upload timed out. Check your connection and try again.');

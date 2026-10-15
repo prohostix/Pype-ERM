@@ -116,7 +116,45 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
 
     let actualStudentId = invoice.studentId;
     let fallbackEnrollment: any = null;
+    let matchedEnrollment: any = null;
 
+    // 1. If invoice has payments, check enrollmentPayment to find exact enrollment linked to payment
+    if (invoice.payments.length > 0) {
+      const payment = invoice.payments[0];
+      const envPayment = await prisma.enrollmentPayment.findFirst({
+        where: {
+          amount: payment.amount,
+          ...(actualStudentId ? { enrollment: { studentId: actualStudentId } } : {})
+        },
+        include: { enrollment: { include: { program: { include: { university: true } } } } },
+        orderBy: { createdAt: 'desc' }
+      });
+      if (envPayment && envPayment.enrollment) {
+        matchedEnrollment = envPayment.enrollment;
+        if (!actualStudentId && matchedEnrollment.studentId) {
+          actualStudentId = matchedEnrollment.studentId;
+        }
+      }
+    }
+
+    // 2. If it is a provisional or admission invoice, find matching enrollment
+    const isProvisionalOrAdmission = invoice.invoiceNo?.startsWith('INV-PROV-') || 
+                                     invoice.invoiceNo?.startsWith('INV-AUTO-') ||
+                                     invoice.notes?.includes('Provisional') ||
+                                     invoice.notes?.includes('Admission');
+
+    if (!matchedEnrollment && isProvisionalOrAdmission && actualStudentId) {
+      matchedEnrollment = await prisma.enrollment.findFirst({
+        where: {
+          studentId: actualStudentId,
+          ...(invoice.invoiceNo?.startsWith('INV-PROV-') || invoice.notes?.includes('Provisional') ? { isProvisional: true } : {})
+        },
+        include: { program: { include: { university: true } } },
+        orderBy: { createdAt: 'desc' }
+      });
+    }
+
+    // 3. Fallback for unlinked invoice without studentId
     if (!actualStudentId && invoice.payments.length > 0) {
       const payment = invoice.payments[0];
       const envPayment = await prisma.enrollmentPayment.findFirst({
@@ -210,8 +248,21 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
 
     studentPaymentHistory.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-    let targetProgramId = invoice.student?.programId || fallbackEnrollment?.programId;
-    let targetSpecialisation = actualStudent?.specialisation || fallbackEnrollment?.specialisation;
+    // For academic schedule invoices (scheduleId present), respect the student's scheduled academic course.
+    // For admission / provisional invoices or unlinked receipts, prioritize the matched enrollment.
+    let activeProgram: any = null;
+    let activeSpecialisation: any = null;
+
+    if (invoice.scheduleId) {
+      activeProgram = actualStudent?.program || fallbackEnrollment?.program;
+      activeSpecialisation = actualStudent?.specialisation || fallbackEnrollment?.specialisation;
+    } else {
+      activeProgram = matchedEnrollment?.program || actualStudent?.program || fallbackEnrollment?.program;
+      activeSpecialisation = matchedEnrollment?.specialisation || actualStudent?.specialisation || fallbackEnrollment?.specialisation;
+    }
+
+    let targetProgramId = activeProgram?.id || invoice.student?.programId || fallbackEnrollment?.programId;
+    let targetSpecialisation = activeSpecialisation;
     let totalFee = 0;
     let feeBreakdown: any = null;
 
@@ -273,14 +324,12 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       overallProgramFee = totalFee;
     }
 
-    let studentName = actualStudent?.name || fallbackEnrollment?.studentName || 'N/A';
-    let studentDob = actualStudent?.dob || null;
-    let studentEmail = actualStudent?.email || fallbackEnrollment?.studentEmail || '';
-    let enrollmentNo = actualStudent?.enrollmentNo || fallbackEnrollment?.enrollmentNumber || '';
+    let studentName = actualStudent?.name || matchedEnrollment?.studentName || fallbackEnrollment?.studentName || 'N/A';
+    let studentDob = actualStudent?.dob || matchedEnrollment?.dob || null;
+    let studentEmail = actualStudent?.email || matchedEnrollment?.studentEmail || fallbackEnrollment?.studentEmail || '';
+    let enrollmentNo = actualStudent?.enrollmentNo || matchedEnrollment?.enrollmentNumber || fallbackEnrollment?.enrollmentNumber || '';
     let admissionNo = actualStudent?.admissionNo || '';
     
-    let activeProgram = actualStudent?.program || fallbackEnrollment?.program;
-    let activeSpecialisation = actualStudent?.specialisation || fallbackEnrollment?.specialisation;
     let programName = activeProgram?.name ? `${activeProgram.name}${activeSpecialisation ? ` - ${activeSpecialisation}` : ''}` : '';
     let universityName = activeProgram?.university?.name || '';
 
@@ -572,9 +621,20 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
         }
       },
       enrollments: {
+        where: {
+          status: { notIn: ['rejected', 'ops_rejected', 'cancelled'] }
+        },
         select: {
           paymentPlan: true,
-          initialPaymentAmount: true
+          initialPaymentAmount: true,
+          program: {
+            select: {
+              name: true,
+              university: {
+                select: { name: true }
+              }
+            }
+          }
         },
         orderBy: { createdAt: 'desc' },
         take: 1
@@ -609,8 +669,19 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       }
       return sum;
     }, 0);
-    
-    totalPaid += initialPayment;
+
+    // Check if initial payment was already invoiced/paid to prevent double counting
+    const hasInitialInvoice = student.invoices.some(inv =>
+      (inv.invoiceNo.startsWith('INV-AUTO') ||
+       inv.invoiceNo.startsWith('INV-PROV') ||
+       inv.notes?.toLowerCase().includes('initial') ||
+       inv.notes?.toLowerCase().includes('provisional')) &&
+      inv.payments.length > 0
+    );
+
+    if (!hasInitialInvoice && initialPayment > 0) {
+      totalPaid += initialPayment;
+    }
       
     let totalFee = scheduledFee;
     let breakdown: any[] = [];
@@ -715,12 +786,16 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
     const balance = totalFee - totalPaid;
     const status = (balance <= 0 && totalFee > 0) ? 'Completed' : 'Pending';
 
+    const latestEnrollment = student.enrollments?.[0];
+    const displayProgram = latestEnrollment?.program?.name || student.program?.name || 'N/A';
+    const displayUniversity = latestEnrollment?.program?.university?.name || student.university?.name || 'N/A';
+
     return {
       studentId: student.id,
       name: student.name,
       enrollmentNo: student.enrollmentNo,
-      programName: student.program?.name || 'N/A',
-      universityName: student.university?.name || 'N/A',
+      programName: displayProgram,
+      universityName: displayUniversity,
       branchName: student.branch?.name || 'N/A',
       paymentPlan,
       totalFee,
