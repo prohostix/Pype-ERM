@@ -52,7 +52,7 @@ JWT_EXPIRE=7d
 JWT_REFRESH_SECRET="production-refresh-secret-$(openssl rand -hex 16)"
 JWT_REFRESH_EXPIRE=30d
 CORS_ORIGIN="http://13.232.188.79"
-MAX_FILE_SIZE=10485760
+MAX_FILE_SIZE=26214400
 UPLOAD_PATH=./uploads
 RATE_LIMIT_WINDOW=15
 RATE_LIMIT_MAX_REQUESTS=1000
@@ -106,6 +106,7 @@ sudo tee /etc/nginx/sites-available/pype-erm > /dev/null <<'EOT'
 server {
     listen 80;
     server_name pypeerm.com www.pypeerm.com 13.232.188.79;
+    client_max_body_size 25M;
 
     location / {
         root /var/www/pype-erm/client/dist;

@@ -79,7 +79,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
 
   const materialExt = (uploadFile?.name.split('.').pop() || '').toLowerCase();
   const isMaterialImage = ['jpeg', 'jpg', 'png', 'webp', 'gif'].includes(materialExt);
-  const MAX_MATERIAL_BYTES = 1950 * 1024; // 1950 KB (~2 MB) limit
+  const MAX_MATERIAL_BYTES = 5 * 1024 * 1024; // 5 MB limit
   const isMaterialOverSize = uploadFile ? uploadFile.size > MAX_MATERIAL_BYTES : false;
   const materialSizeFormatted = uploadFile
     ? uploadFile.size > 1024 * 1024
@@ -303,7 +303,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
     // Hard block if file is still over size limit (e.g., large PDF or document)
     if (fileToUpload.size > MAX_MATERIAL_BYTES) {
       const sizeMB = (fileToUpload.size / (1024 * 1024)).toFixed(2);
-      return toast.error(`File is too large (${sizeMB} MB). Maximum allowed size is 2 MB. Please compress your document before uploading.`);
+      return toast.error(`File is too large (${sizeMB} MB). Maximum allowed size is 5 MB. Please compress your document before uploading.`);
     }
 
     setUploading(true);
@@ -323,7 +323,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
       fetchModules();
     } catch (err: any) {
       if (err?.response?.status === 413 || err?.message?.includes('413') || err?.response?.data?.message?.includes('too large')) {
-        toast.error('The file exceeds the 2 MB server limit. Please compress or select a smaller file.');
+        toast.error('The file exceeds the 5 MB server limit. Please compress or select a smaller file.');
       } else {
         toast.error(err.response?.data?.message || 'Upload failed');
       }
@@ -833,10 +833,10 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
               <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <p className="font-semibold text-amber-950 dark:text-amber-200">
-                  Maximum File Size Limit: 2 MB
+                  Maximum File Size Limit: 5 MB
                 </p>
                 <p className="text-amber-800/90 dark:text-amber-400/90 leading-relaxed text-[11px]">
-                  Files larger than 2 MB will be rejected by the server. Please compress PDF documents before uploading. Images (JPG/PNG) will be compressed automatically.
+                  Files larger than 5 MB will be rejected by the server. Please compress PDF documents before uploading. Images (JPG/PNG) will be compressed automatically.
                 </p>
               </div>
             </div>
@@ -866,7 +866,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label>File Attachment</Label>
-                <span className="text-[11px] font-medium text-slate-500">Max: 2 MB</span>
+                <span className="text-[11px] font-medium text-slate-500">Max: 5 MB</span>
               </div>
               <Input 
                 type="file" 
@@ -889,10 +889,10 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
                       <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
                       <div className="space-y-1">
                         <p className="font-bold">
-                          File size exceeds 2 MB limit ({materialSizeFormatted})
+                          File size exceeds 5 MB limit ({materialSizeFormatted})
                         </p>
                         <p className="text-red-600/90 dark:text-red-400/90 text-[11px] leading-relaxed">
-                          This document exceeds the server&apos;s 2 MB upload limit and cannot be uploaded. Please compress your PDF/document or select a file under 2 MB.
+                          This document exceeds the server&apos;s 5 MB upload limit and cannot be uploaded. Please compress your PDF/document or select a file under 5 MB.
                         </p>
                       </div>
                     </div>
@@ -904,7 +904,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
                     <div className="flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4 text-blue-600 shrink-0" />
                       <span className="text-[11px]">
-                        Image is {materialSizeFormatted}. It will be automatically compressed to under 2 MB during upload.
+                        Image is {materialSizeFormatted}. It will be automatically compressed to under 5 MB during upload.
                       </span>
                     </div>
                   </div>
@@ -938,7 +938,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
               ) : isMaterialOverSize && !isMaterialImage ? (
                 <>
                   <AlertCircle className="w-4 h-4 mr-2" />
-                  File Exceeds 2 MB Limit
+                  File Exceeds 5 MB Limit
                 </>
               ) : (
                 <>

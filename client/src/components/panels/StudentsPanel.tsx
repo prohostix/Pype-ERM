@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, Users, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, Calendar, ExternalLink, MessageSquare, Key, Download, User, Users, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X, RotateCcw, Filter, ChevronDown, Check } from 'lucide-react';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,11 +10,302 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { Checkbox } from '@/components/ui/checkbox';
+import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { uploadFormFile } from '@/lib/uploadFile';
 import { StudentProfilePanel } from './StudentProfilePanel';
+
+interface MultiSelectFilterOption {
+  value: string;
+  label: string;
+  count?: number;
+  dotColor?: string;
+  avatarText?: string;
+}
+
+interface MultiSelectFilterProps {
+  label: string;
+  icon?: React.ReactNode;
+  placeholder: string;
+  options: MultiSelectFilterOption[];
+  selected: string[];
+  onChange: (selected: string[]) => void;
+  className?: string;
+  triggerClassName?: string;
+}
+
+function MultiSelectFilter({
+  label,
+  icon,
+  placeholder,
+  options,
+  selected,
+  onChange,
+  className,
+  triggerClassName,
+}: MultiSelectFilterProps) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+
+  const filteredOptions = useMemo(() => {
+    if (!search.trim()) return options;
+    const q = search.toLowerCase();
+    return options.filter((o) => o.label.toLowerCase().includes(q));
+  }, [options, search]);
+
+  const toggleOption = (val: string) => {
+    if (selected.includes(val)) {
+      onChange(selected.filter((v) => v !== val));
+    } else {
+      onChange([...selected, val]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    const allValues = options.map((o) => o.value);
+    onChange(allValues);
+  };
+
+  const handleClear = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    onChange([]);
+  };
+
+  const triggerLabel = useMemo(() => {
+    if (selected.length === 0) {
+      return <span className="text-slate-500 dark:text-slate-400 truncate">{placeholder}</span>;
+    }
+    if (selected.length === 1) {
+      const match = options.find((o) => o.value === selected[0]);
+      return (
+        <span className="font-medium text-slate-800 dark:text-slate-100 truncate flex items-center gap-1.5">
+          {match?.dotColor && <span className={cn('w-2 h-2 rounded-full shrink-0', match.dotColor)} />}
+          {match?.avatarText && (
+            <span className="w-4 h-4 rounded-full bg-blue-100 dark:bg-blue-900/40 text-[9px] font-bold text-blue-700 dark:text-blue-300 flex items-center justify-center shrink-0">
+              {match.avatarText}
+            </span>
+          )}
+          <span className="truncate">{match?.label || selected[0]}</span>
+        </span>
+      );
+    }
+    return (
+      <span className="font-medium text-slate-800 dark:text-slate-100 truncate flex items-center gap-1.5">
+        <span className="truncate">{label}</span>
+        <Badge variant="secondary" className="px-1.5 py-0 h-4 text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 rounded-full">
+          {selected.length}
+        </Badge>
+      </span>
+    );
+  }, [selected, options, placeholder, label]);
+
+  return (
+    <div className={cn("flex flex-col", className)}>
+      <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate flex items-center justify-between">
+        <span className="flex items-center gap-1 truncate">
+          {icon}
+          {label}
+        </span>
+        {selected.length > 0 && (
+          <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 lowercase">
+            {selected.length} selected
+          </span>
+        )}
+      </Label>
+
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <div
+            role="combobox"
+            aria-expanded={open}
+            tabIndex={0}
+            onClick={() => setOpen(!open)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setOpen(!open);
+              }
+            }}
+            className={cn(
+              "h-9 mt-auto px-3 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-white dark:hover:bg-slate-900 transition-colors flex items-center justify-between gap-1.5 text-sm outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer select-none",
+              selected.length > 0 && "border-blue-300/80 dark:border-blue-800/80 bg-blue-50/20 dark:bg-blue-950/20",
+              triggerClassName
+            )}
+          >
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
+              {triggerLabel}
+            </div>
+
+            <div className="flex items-center gap-1 shrink-0 ml-1">
+              {selected.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="p-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+                  title={`Clear ${label} filter`}
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <ChevronDown className={cn("w-3.5 h-3.5 text-slate-400 transition-transform duration-200", open && "rotate-180")} />
+            </div>
+          </div>
+        </PopoverTrigger>
+
+        <PopoverContent className="w-72 p-3 rounded-2xl shadow-xl border-slate-200 dark:border-slate-800" align="start">
+          {/* Header */}
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100 dark:border-slate-800">
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+              {label} ({selected.length}/{options.length})
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleSelectAll}
+                className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+              >
+                Select All
+              </button>
+              <span className="text-slate-300 dark:text-slate-700 text-xs">•</span>
+              <button
+                type="button"
+                onClick={() => handleClear()}
+                disabled={selected.length === 0}
+                className={cn(
+                  "text-[11px] font-semibold cursor-pointer",
+                  selected.length > 0
+                    ? "text-red-600 dark:text-red-400 hover:underline"
+                    : "text-slate-300 dark:text-slate-600 cursor-not-allowed"
+                )}
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+
+          {/* Search box if options > 4 */}
+          {options.length > 4 && (
+            <div className="relative mb-2">
+              <Search className="absolute left-2.5 top-2 w-3.5 h-3.5 text-slate-400" />
+              <Input
+                placeholder={`Search ${label.toLowerCase()}...`}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="h-7 text-xs pl-8 pr-7 rounded-lg bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch('')}
+                  className="absolute right-2 top-1.5 p-0.5 text-slate-400 hover:text-slate-600 rounded"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Options List */}
+          <div className="max-h-56 overflow-y-auto space-y-1 pr-1 overscroll-contain">
+            {filteredOptions.length === 0 ? (
+              <div className="py-4 text-center text-xs text-slate-400">
+                No matching {label.toLowerCase()}
+              </div>
+            ) : (
+              filteredOptions.map((opt) => {
+                const isChecked = selected.includes(opt.value);
+                return (
+                  <div
+                    key={opt.value}
+                    onClick={() => toggleOption(opt.value)}
+                    className={cn(
+                      "flex items-center justify-between px-2 py-1.5 rounded-lg text-xs cursor-pointer select-none transition-colors",
+                      isChecked
+                        ? "bg-blue-50/70 text-blue-900 dark:bg-blue-950/40 dark:text-blue-200 font-medium"
+                        : "hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300"
+                    )}
+                  >
+                    <div className="flex items-center gap-2 min-w-0 flex-1 pr-2">
+                      <Checkbox
+                        checked={isChecked}
+                        onCheckedChange={() => toggleOption(opt.value)}
+                        className="shrink-0"
+                      />
+                      {opt.dotColor && (
+                        <span className={cn("w-2 h-2 rounded-full shrink-0", opt.dotColor)} />
+                      )}
+                      {opt.avatarText && (
+                        <span className="w-4 h-4 rounded-full bg-blue-100 dark:bg-blue-900/40 text-[9px] font-bold text-blue-700 dark:text-blue-300 flex items-center justify-center shrink-0">
+                          {opt.avatarText}
+                        </span>
+                      )}
+                      <span className="truncate">{opt.label}</span>
+                    </div>
+
+                    {opt.count !== undefined && (
+                      <span className={cn(
+                        "text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ml-1.5",
+                        isChecked
+                          ? "bg-blue-200/60 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500"
+                      )}>
+                        {opt.count}
+                      </span>
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          {/* Footer Bar */}
+          <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-slate-400">
+              {selected.length} of {options.length} chosen
+            </span>
+            <Button
+              type="button"
+              size="sm"
+              variant="default"
+              onClick={() => setOpen(false)}
+              className="h-6 text-xs px-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-none"
+            >
+              Apply
+            </Button>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
+interface SavedStudentFilters {
+  searchQuery?: string;
+  activeFilter?: string;
+  filterStatuses?: string[];
+  filterUniversityIds?: string[];
+  filterBranchIds?: string[];
+  filterSalesUsers?: string[];
+  filterSessionIds?: string[];
+  filterDatePreset?: string;
+  filterStartDate?: string;
+  filterEndDate?: string;
+  sortBy?: string;
+}
+
+const getSavedFilters = (key: string): SavedStudentFilters => {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return {};
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+};
 
 export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completingEnrollment, hideList }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean; completingEnrollment?: any; hideList?: boolean } = {}) {
   const { user } = useAuth();
@@ -85,13 +376,89 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     dueDate: ''
   });
 
-  const [activeFilter, setActiveFilter] = useState<'all' | 'current' | 'previous'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterUniversityId, setFilterUniversityId] = useState('all');
-  const [filterSessionId, setFilterSessionId] = useState('all');
-  const [filterBranchId, setFilterBranchId] = useState('all');
-  const [filterSalesUser, setFilterSalesUser] = useState('all');
-  const [sortBy, setSortBy] = useState('name');
+  const storageKey = isSalesMode ? 'students_panel_filters_sales' : 'students_panel_filters';
+
+  const [activeFilter, setActiveFilter] = useState<string>(() => {
+    const saved = getSavedFilters(storageKey);
+    return saved.activeFilter || 'all';
+  });
+  const [filterStatuses, setFilterStatuses] = useState<string[]>(() => {
+    const saved = getSavedFilters(storageKey);
+    return Array.isArray(saved.filterStatuses) ? saved.filterStatuses : [];
+  });
+  const [searchQuery, setSearchQuery] = useState(() => {
+    const saved = getSavedFilters(storageKey);
+    return saved.searchQuery || '';
+  });
+  const [filterUniversityIds, setFilterUniversityIds] = useState<string[]>(() => {
+    const saved = getSavedFilters(storageKey);
+    return Array.isArray(saved.filterUniversityIds) ? saved.filterUniversityIds : [];
+  });
+  const [filterSessionIds, setFilterSessionIds] = useState<string[]>(() => {
+    const saved = getSavedFilters(storageKey);
+    return Array.isArray(saved.filterSessionIds) ? saved.filterSessionIds : [];
+  });
+  const [filterBranchIds, setFilterBranchIds] = useState<string[]>(() => {
+    const saved = getSavedFilters(storageKey);
+    return Array.isArray(saved.filterBranchIds) ? saved.filterBranchIds : [];
+  });
+  const [filterSalesUsers, setFilterSalesUsers] = useState<string[]>(() => {
+    const saved = getSavedFilters(storageKey);
+    return Array.isArray(saved.filterSalesUsers) ? saved.filterSalesUsers : [];
+  });
+  const [sortBy, setSortBy] = useState(() => {
+    const saved = getSavedFilters(storageKey);
+    return saved.sortBy || 'name';
+  });
+
+  // Admission Date Range Filter State
+  const [filterDatePreset, setFilterDatePreset] = useState<string>(() => {
+    const saved = getSavedFilters(storageKey);
+    return saved.filterDatePreset || 'all';
+  });
+  const [filterStartDate, setFilterStartDate] = useState<string>(() => {
+    const saved = getSavedFilters(storageKey);
+    return saved.filterStartDate || '';
+  });
+  const [filterEndDate, setFilterEndDate] = useState<string>(() => {
+    const saved = getSavedFilters(storageKey);
+    return saved.filterEndDate || '';
+  });
+
+  // Save filters to localStorage whenever any filter changes
+  useEffect(() => {
+    const toSave: SavedStudentFilters = {
+      searchQuery,
+      activeFilter,
+      filterStatuses,
+      filterUniversityIds,
+      filterBranchIds,
+      filterSalesUsers,
+      filterSessionIds,
+      filterDatePreset,
+      filterStartDate,
+      filterEndDate,
+      sortBy,
+    };
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(toSave));
+    } catch (err) {
+      console.warn('Failed to save student filters to localStorage', err);
+    }
+  }, [
+    storageKey,
+    searchQuery,
+    activeFilter,
+    filterStatuses,
+    filterUniversityIds,
+    filterBranchIds,
+    filterSalesUsers,
+    filterSessionIds,
+    filterDatePreset,
+    filterStartDate,
+    filterEndDate,
+    sortBy,
+  ]);
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,7 +466,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeFilter, searchQuery, filterUniversityId, filterSessionId, filterBranchId, filterSalesUser, sortBy]);
+  }, [activeFilter, filterStatuses, searchQuery, filterUniversityIds, filterSessionIds, filterBranchIds, filterSalesUsers, sortBy, filterStartDate, filterEndDate]);
 
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
@@ -193,20 +560,229 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   };
 
   const STATUS_COLORS: Record<string, string> = {
-    payment_pending: 'bg-orange-100 text-orange-700',
-    document_review: 'bg-blue-100 text-blue-700',
-    dept_review: 'bg-purple-100 text-purple-700',
-    finance_review: 'bg-yellow-100 text-yellow-700',
-    university_review: 'bg-indigo-100 text-indigo-700',
-    enrolled: 'bg-green-100 text-green-700',
-    rejected: 'bg-red-100 text-red-700',
-    department_rejected: 'bg-red-100 text-red-700',
+    active: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60',
+    document_review: 'bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-200/60 dark:border-blue-800/60',
+    provisional: 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/60 dark:border-amber-800/60',
+    pending: 'bg-orange-100/80 text-orange-700 dark:bg-orange-950/40 dark:text-orange-400 border border-orange-200/60 dark:border-orange-800/60',
+    completed: 'bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400 border border-purple-200/60 dark:border-purple-800/60',
+    payment_pending: 'bg-orange-100 text-orange-700 dark:bg-orange-950/40 dark:text-orange-400 border border-orange-200/60 dark:border-orange-800/60',
+    receipt_submitted: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-400 border border-cyan-200/60 dark:border-cyan-800/60',
+    dept_review: 'bg-violet-100 text-violet-700 dark:bg-violet-950/40 dark:text-violet-400 border border-violet-200/60 dark:border-violet-800/60',
+    finance_review: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-950/40 dark:text-yellow-400 border border-yellow-200/60 dark:border-yellow-800/60',
+    sales_admin_review: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60',
+    university_review: 'bg-sky-100 text-sky-700 dark:bg-sky-950/40 dark:text-sky-400 border border-sky-200/60 dark:border-sky-800/60',
+    enrolled: 'bg-teal-100 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400 border border-teal-200/60 dark:border-teal-800/60',
+    dropped: 'bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400 border border-rose-200/60 dark:border-rose-800/60',
+    inactive: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700',
+    rejected: 'bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400 border border-red-200/60 dark:border-red-800/60',
+    department_rejected: 'bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400 border border-red-200/60 dark:border-red-800/60',
   };
 
   const statusLabel = (s: string) => {
+    if (!s) return 'Unknown';
     if (s === 'receipt_submitted') return 'Receipt Submitted & Ops Pending';
     if (s === 'document_review') return 'Ops Verification Pending';
+    if (s === 'dept_review') return 'Dept Review';
+    if (s === 'sales_admin_review') return 'Sales Admin Review';
+    if (s === 'finance_review') return 'Finance Review';
+    if (s === 'university_review') return 'University Review';
+    if (s === 'payment_pending') return 'Payment Pending';
+    if (s === 'department_rejected') return 'Dept Rejected';
     return s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  };
+
+  const ALL_STUDENT_STATES = [
+    { value: 'all', label: 'All Student States' },
+    { value: 'active', label: 'Active' },
+    { value: 'document_review', label: 'Ops Review (Document Review)' },
+    { value: 'provisional', label: 'Provisional' },
+    { value: 'pending', label: 'Pending' },
+    { value: 'completed', label: 'Completed / Graduated' },
+    { value: 'current', label: 'Current (Non-graduated)' },
+    { value: 'previous', label: 'Completed (Previous Students)' },
+    { value: 'payment_pending', label: 'Fee / Payment Pending' },
+    { value: 'receipt_submitted', label: 'Receipt Submitted' },
+    { value: 'dept_review', label: 'Department Review' },
+    { value: 'finance_review', label: 'Finance Review' },
+    { value: 'sales_admin_review', label: 'Sales Admin Review' },
+    { value: 'university_review', label: 'University Review' },
+    { value: 'enrolled', label: 'Enrolled' },
+    { value: 'dropped', label: 'Dropped' },
+    { value: 'inactive', label: 'Inactive' },
+    { value: 'rejected', label: 'Rejected' },
+    { value: 'department_rejected', label: 'Department Rejected' },
+  ];
+
+  const statusCounts = useMemo(() => {
+    const counts: Record<string, number> = {
+      all: students.length,
+      current: 0,
+      previous: 0,
+      completed: 0,
+    };
+    students.forEach(s => {
+      if (!s) return;
+      if (!s.isPrevious) counts.current = (counts.current || 0) + 1;
+      if (s.isPrevious) counts.previous = (counts.previous || 0) + 1;
+      const st = (s.status || 'pending').toLowerCase();
+      counts[st] = (counts[st] || 0) + 1;
+    });
+    // Ensure completed count reflects all completed/graduated students (status === 'completed' or isPrevious)
+    counts.completed = students.filter(s => s && ((s.status || '').toLowerCase() === 'completed' || s.isPrevious)).length;
+    return counts;
+  }, [students]);
+
+  const availableStatuses = useMemo(() => {
+    const knownKeys = new Set(ALL_STUDENT_STATES.map(s => s.value));
+    const list = [...ALL_STUDENT_STATES];
+
+    students.forEach(s => {
+      if (s && s.status) {
+        const lower = s.status.toLowerCase();
+        if (!knownKeys.has(lower)) {
+          knownKeys.add(lower);
+          list.push({
+            value: lower,
+            label: statusLabel(lower),
+          });
+        }
+      }
+    });
+
+    return list.map(item => {
+      let count = 0;
+      if (item.value === 'all') {
+        count = students.length;
+      } else if (item.value === 'current') {
+        count = students.filter(s => s && !s.isPrevious).length;
+      } else if (item.value === 'previous' || item.value === 'completed') {
+        count = students.filter(s => s && ((s.status || '').toLowerCase() === 'completed' || s.isPrevious)).length;
+      } else {
+        count = students.filter(s => s && (s.status || '').toLowerCase() === item.value).length;
+      }
+      return { ...item, count };
+    });
+  }, [students]);
+
+  const DATE_PRESETS = [
+    { value: 'all', label: 'All Time' },
+    { value: 'today', label: 'Today' },
+    { value: 'yesterday', label: 'Yesterday' },
+    { value: 'this_week', label: 'This Week' },
+    { value: 'this_month', label: 'This Month' },
+    { value: 'last_month', label: 'Last Month' },
+    { value: 'last_90_days', label: 'Last 90 Days' },
+    { value: 'this_year', label: 'This Year' },
+    { value: 'custom', label: 'Custom Range' },
+  ];
+
+  const handleDatePresetSelect = (preset: string) => {
+    setFilterDatePreset(preset);
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const formatYMD = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+    if (preset === 'all') {
+      setFilterStartDate('');
+      setFilterEndDate('');
+    } else if (preset === 'today') {
+      const todayStr = formatYMD(now);
+      setFilterStartDate(todayStr);
+      setFilterEndDate(todayStr);
+    } else if (preset === 'yesterday') {
+      const yest = new Date(now);
+      yest.setDate(yest.getDate() - 1);
+      const yestStr = formatYMD(yest);
+      setFilterStartDate(yestStr);
+      setFilterEndDate(yestStr);
+    } else if (preset === 'this_week') {
+      const startOfWeek = new Date(now);
+      const day = startOfWeek.getDay();
+      const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
+      startOfWeek.setDate(diff);
+      setFilterStartDate(formatYMD(startOfWeek));
+      setFilterEndDate(formatYMD(now));
+    } else if (preset === 'this_month') {
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      setFilterStartDate(formatYMD(startOfMonth));
+      setFilterEndDate(formatYMD(now));
+    } else if (preset === 'last_month') {
+      const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+      setFilterStartDate(formatYMD(startOfLastMonth));
+      setFilterEndDate(formatYMD(endOfLastMonth));
+    } else if (preset === 'last_90_days') {
+      const d90 = new Date(now);
+      d90.setDate(d90.getDate() - 90);
+      setFilterStartDate(formatYMD(d90));
+      setFilterEndDate(formatYMD(now));
+    } else if (preset === 'this_year') {
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+      setFilterStartDate(formatYMD(startOfYear));
+      setFilterEndDate(formatYMD(now));
+    }
+  };
+
+  const handleTabChange = (val: string) => {
+    setActiveFilter(val);
+    if (val === 'all') {
+      setFilterStatuses([]);
+    } else {
+      setFilterStatuses([val]);
+    }
+  };
+
+  const handleStatusesChange = (newStatuses: string[]) => {
+    setFilterStatuses(newStatuses);
+    if (newStatuses.length === 0) {
+      setActiveFilter('all');
+    } else if (newStatuses.length === 1) {
+      setActiveFilter(newStatuses[0]);
+    } else {
+      setActiveFilter('custom');
+    }
+  };
+
+  const isFiltered = 
+    searchQuery.trim() !== '' ||
+    filterStatuses.length > 0 ||
+    filterUniversityIds.length > 0 ||
+    filterBranchIds.length > 0 ||
+    filterSalesUsers.length > 0 ||
+    filterSessionIds.length > 0 ||
+    filterStartDate !== '' ||
+    filterEndDate !== '';
+
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (searchQuery.trim() !== '') count++;
+    if (filterStatuses.length > 0) count += filterStatuses.length;
+    if (filterUniversityIds.length > 0) count += filterUniversityIds.length;
+    if (filterBranchIds.length > 0) count += filterBranchIds.length;
+    if (filterSalesUsers.length > 0) count += filterSalesUsers.length;
+    if (filterSessionIds.length > 0) count += filterSessionIds.length;
+    if (filterStartDate !== '' || filterEndDate !== '') count++;
+    return count;
+  }, [searchQuery, filterStatuses, filterUniversityIds, filterBranchIds, filterSalesUsers, filterSessionIds, filterStartDate, filterEndDate]);
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setFilterStatuses([]);
+    setActiveFilter('all');
+    setFilterUniversityIds([]);
+    setFilterBranchIds([]);
+    setFilterSalesUsers([]);
+    setFilterSessionIds([]);
+    setFilterDatePreset('all');
+    setFilterStartDate('');
+    setFilterEndDate('');
+    setSortBy('name');
+    try {
+      localStorage.removeItem(storageKey);
+    } catch {
+      // ignore
+    }
+    toast.success('All filters cleared');
   };
 
   const handleOpenEnrollHistory = async (student: any) => {
@@ -1189,12 +1765,151 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     }
   };
 
+  const STATE_DOT_COLORS: Record<string, string> = {
+    active: 'bg-emerald-500',
+    document_review: 'bg-blue-500',
+    provisional: 'bg-amber-500',
+    pending: 'bg-orange-500',
+    completed: 'bg-purple-500',
+    current: 'bg-emerald-600',
+    previous: 'bg-purple-600',
+    payment_pending: 'bg-orange-500',
+    receipt_submitted: 'bg-cyan-500',
+    dept_review: 'bg-violet-500',
+    finance_review: 'bg-yellow-500',
+    sales_admin_review: 'bg-indigo-500',
+    university_review: 'bg-sky-500',
+    enrolled: 'bg-teal-500',
+    dropped: 'bg-rose-500',
+    inactive: 'bg-slate-400',
+    rejected: 'bg-red-500',
+    department_rejected: 'bg-red-600',
+  };
+
+  const stateOptions = useMemo(() => {
+    return availableStatuses
+      .filter((st) => st.value !== 'all')
+      .map((st) => ({
+        value: st.value,
+        label: st.label,
+        count: st.count,
+        dotColor: STATE_DOT_COLORS[st.value] || 'bg-slate-400',
+      }));
+  }, [availableStatuses]);
+
+  const universityOptions = useMemo(() => {
+    return universities
+      .filter((u: any) => u && u.id)
+      .map((u: any) => {
+        const count = students.filter((s) => {
+          if (!s) return false;
+          const uId =
+            s.universityId ||
+            (typeof s.program === 'object' ? s.program?.universityId : null) ||
+            (typeof s.programId === 'object' ? s.programId?.universityId : null);
+          return uId === u.id;
+        }).length;
+        return {
+          value: u.id,
+          label: u.name || 'Unnamed University',
+          count,
+        };
+      });
+  }, [universities, students]);
+
+  const branchOptions = useMemo(() => {
+    return branches
+      .filter((b: any) => b && b.id)
+      .map((b: any) => {
+        const count = students.filter((s) => {
+          if (!s) return false;
+          const bId = typeof s.branchId === 'object' ? s.branchId?.id : s.branchId;
+          return bId === b.id;
+        }).length;
+        return {
+          value: b.id,
+          label: b.name || 'Unnamed Branch',
+          count,
+        };
+      });
+  }, [branches, students]);
+
+  const salesUserOptions = useMemo(() => {
+    return salesUsers
+      .filter((su: any) => su && su.id)
+      .map((su: any) => {
+        const count = students.filter((s) => {
+          if (!s) return false;
+          const sUser =
+            typeof s.enrolledBy === 'object' ? s.enrolledBy?.id : (s.enrolledBy || s.enrolledByUser?.id);
+          return sUser === su.id;
+        }).length;
+        return {
+          value: su.id,
+          label: su.name || 'Unnamed Counselor',
+          avatarText: (su.name || 'U').charAt(0).toUpperCase(),
+          count,
+        };
+      });
+  }, [salesUsers, students]);
+
+  const sessionOptions = useMemo(() => {
+    return sessions
+      .filter((sess: any) => sess && sess.id)
+      .map((sess: any) => {
+        const count = students.filter((s) => {
+          if (!s) return false;
+          const sId = typeof s.sessionId === 'object' ? s.sessionId?.id : s.sessionId;
+          if (sId === sess.id) return true;
+          if (s.session && String(s.session).toLowerCase() === String(sess.name).toLowerCase()) return true;
+          return false;
+        }).length;
+        return {
+          value: sess.id,
+          label: sess.name || 'Unnamed Session',
+          count,
+        };
+      });
+  }, [sessions, students]);
+
   const filteredStudents = students.filter(s => {
     if (!s) return false;
 
-    // Status filter
-    if (activeFilter === 'current' && s.isPrevious) return false;
-    if (activeFilter === 'previous' && !s.isPrevious) return false;
+    // Status / State filter (multi-select)
+    if (filterStatuses.length > 0) {
+      const matchesStatus = filterStatuses.some((st) => {
+        if (st === 'current') return !s.isPrevious;
+        if (st === 'previous') return !!s.isPrevious;
+        if (st === 'completed') return (s.status || '').toLowerCase() === 'completed' || !!s.isPrevious;
+        return (s.status || '').toLowerCase() === st.toLowerCase();
+      });
+      if (!matchesStatus) return false;
+    } else {
+      // Fallback to activeFilter if filterStatuses is empty but activeFilter is set to specific tab
+      if (activeFilter === 'current' && s.isPrevious) return false;
+      if (activeFilter === 'previous' && !s.isPrevious) return false;
+      if (activeFilter === 'completed' && (s.status || '').toLowerCase() !== 'completed' && !s.isPrevious) return false;
+      if (activeFilter !== 'all' && activeFilter !== 'current' && activeFilter !== 'previous' && activeFilter !== 'completed' && activeFilter !== 'custom') {
+        if ((s.status || '').toLowerCase() !== activeFilter.toLowerCase()) return false;
+      }
+    }
+
+    // Admission Date Range Filter
+    if (filterStartDate || filterEndDate) {
+      const rawDate = s.admissionDate || s.createdAt;
+      if (!rawDate) return false;
+      try {
+        const d = new Date(rawDate);
+        if (isNaN(d.getTime())) return false;
+        const pad = (n: number) => String(n).padStart(2, '0');
+        const sDateStr = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+        if (filterStartDate && sDateStr < filterStartDate) return false;
+        if (filterEndDate && sDateStr > filterEndDate) return false;
+      } catch {
+        return false;
+      }
+    }
 
     // Search query filter
     if (searchQuery.trim() !== '') {
@@ -1207,41 +1922,39 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       if (!nameMatch && !emailMatch && !enrollMatch && !centerMatch) return false;
     }
 
-    // University Filter
-    if (filterUniversityId !== 'all') {
+    // University Filter (multi-select)
+    if (filterUniversityIds.length > 0) {
       const uId = s.universityId ||
         (typeof s.program === 'object' ? s.program?.universityId : null) ||
         (typeof s.programId === 'object' ? s.programId?.universityId : null);
-      if (uId !== filterUniversityId) return false;
+      if (!uId || !filterUniversityIds.includes(uId)) return false;
     }
 
-    // Branch Filter
-    if (filterBranchId !== 'all') {
+    // Branch Filter (multi-select)
+    if (filterBranchIds.length > 0) {
       const bId = typeof s.branchId === 'object' ? s.branchId?.id : s.branchId;
-      if (bId !== filterBranchId) return false;
+      if (!bId || !filterBranchIds.includes(bId)) return false;
     }
 
-    // Sales User Filter
-    if (filterSalesUser !== 'all') {
+    // Sales User Filter (multi-select)
+    if (filterSalesUsers.length > 0) {
       const suId = typeof s.enrolledBy === 'object' ? s.enrolledBy?.id : (s.enrolledBy || s.enrolledByUser?.id);
-      if (suId !== filterSalesUser) return false;
+      if (!suId || !filterSalesUsers.includes(suId)) return false;
     }
 
-    // Session Filter
-    if (filterSessionId !== 'all') {
+    // Session Filter (multi-select)
+    if (filterSessionIds.length > 0) {
       const sId = typeof s.sessionId === 'object' ? s.sessionId?.id : s.sessionId;
-      // also fallback to match session name if s.session string is present and sessionId is not object
-      if (sId !== filterSessionId) {
-        // If sId is not present, check if s.session string matches the selected session name
-        const selectedSession = sessions.find((sess: any) => sess.id === filterSessionId);
+      const matchesSession = filterSessionIds.some((selId) => {
+        if (sId === selId) return true;
+        // also fallback to match session name if s.session string is present
+        const selectedSession = sessions.find((sess: any) => sess.id === selId);
         if (selectedSession && s.session) {
-          if (String(s.session).toLowerCase() !== String(selectedSession.name).toLowerCase()) {
-            return false;
-          }
-        } else {
-          return false;
+          return String(s.session).toLowerCase() === String(selectedSession.name).toLowerCase();
         }
-      }
+        return false;
+      });
+      if (!matchesSession) return false;
     }
 
     return true;
@@ -1254,6 +1967,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       const enA = a.enrollmentNo || '';
       const enB = b.enrollmentNo || '';
       return enA.localeCompare(enB);
+    } else if (sortBy === 'admissionDate_desc') {
+      const dateA = new Date(a.admissionDate || a.createdAt || 0).getTime();
+      const dateB = new Date(b.admissionDate || b.createdAt || 0).getTime();
+      return dateB - dateA;
+    } else if (sortBy === 'admissionDate_asc') {
+      const dateA = new Date(a.admissionDate || a.createdAt || 0).getTime();
+      const dateB = new Date(b.admissionDate || b.createdAt || 0).getTime();
+      return dateA - dateB;
     } else {
       // Default to sorting by name
       const nameA = a.name || '';
@@ -1486,11 +2207,22 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                         <Label className="font-medium">Status</Label>
                         <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
                           <SelectTrigger><SelectValue placeholder="Select status..." /></SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="max-h-[300px]">
                             <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="document_review">Ops Verification (Doc Review)</SelectItem>
+                            <SelectItem value="provisional">Provisional</SelectItem>
                             <SelectItem value="pending">Pending</SelectItem>
                             <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="payment_pending">Fee Pending</SelectItem>
+                            <SelectItem value="receipt_submitted">Receipt Submitted</SelectItem>
+                            <SelectItem value="dept_review">Department Review</SelectItem>
+                            <SelectItem value="finance_review">Finance Review</SelectItem>
+                            <SelectItem value="sales_admin_review">Sales Admin Review</SelectItem>
+                            <SelectItem value="enrolled">Enrolled</SelectItem>
                             <SelectItem value="dropped">Dropped</SelectItem>
+                            <SelectItem value="inactive">Inactive</SelectItem>
+                            <SelectItem value="rejected">Rejected</SelectItem>
+                            <SelectItem value="department_rejected">Dept Rejected</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -2151,13 +2883,23 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                               <div>
                                 <Label className="font-medium">Status</Label>
                                 <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                                  <SelectTrigger><SelectValue /></SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="pending">Pending</SelectItem>
-                                    <SelectItem value="document_review">Document Review</SelectItem>
+                                  <SelectTrigger><SelectValue placeholder="Select status..." /></SelectTrigger>
+                                  <SelectContent className="max-h-[300px]">
                                     <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="inactive">Inactive</SelectItem>
+                                    <SelectItem value="document_review">Ops Verification (Doc Review)</SelectItem>
+                                    <SelectItem value="provisional">Provisional</SelectItem>
+                                    <SelectItem value="pending">Pending</SelectItem>
                                     <SelectItem value="completed">Completed</SelectItem>
+                                    <SelectItem value="payment_pending">Fee Pending</SelectItem>
+                                    <SelectItem value="receipt_submitted">Receipt Submitted</SelectItem>
+                                    <SelectItem value="dept_review">Department Review</SelectItem>
+                                    <SelectItem value="finance_review">Finance Review</SelectItem>
+                                    <SelectItem value="sales_admin_review">Sales Admin Review</SelectItem>
+                                    <SelectItem value="enrolled">Enrolled</SelectItem>
+                                    <SelectItem value="dropped">Dropped</SelectItem>
+                                    <SelectItem value="inactive">Inactive</SelectItem>
+                                    <SelectItem value="rejected">Rejected</SelectItem>
+                                    <SelectItem value="department_rejected">Dept Rejected</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
@@ -2513,32 +3255,68 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       </div>
 
       {/* Tabs / Filtering Option */}
-      <Tabs defaultValue="all" onValueChange={(val) => setActiveFilter(val as any)} className="w-full sm:w-auto mb-6">
-        <TabsList className="bg-slate-100/80 dark:bg-slate-800/80 p-1.5 rounded-2xl h-auto flex flex-col sm:flex-row shadow-inner border border-slate-200/50 dark:border-slate-700/50 gap-1">
-          <TabsTrigger value="all" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400 transition-all">
-            <div className="flex items-center justify-center gap-2">
-              <Users className="w-4 h-4" />
-              <span className="font-semibold">All Students</span>
-              <Badge variant="secondary" className="ml-1 bg-slate-200/70 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-2">
+      <Tabs value={activeFilter} onValueChange={(val) => handleTabChange(val as any)} className="w-full mb-6">
+        <TabsList className="bg-slate-100/80 dark:bg-slate-800/80 p-1.5 rounded-2xl h-auto flex flex-wrap gap-1.5 shadow-inner border border-slate-200/50 dark:border-slate-700/50">
+          <TabsTrigger value="all" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400 transition-all">
+            <div className="flex items-center justify-center gap-1.5">
+              <Users className="w-3.5 h-3.5" />
+              <span className="font-semibold text-xs">All Students</span>
+              <Badge variant="secondary" className="ml-1 bg-slate-200/70 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-1.5 text-[10px]">
                 {students.length}
               </Badge>
             </div>
           </TabsTrigger>
-          <TabsTrigger value="current" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-emerald-600 dark:data-[state=active]:text-emerald-400 transition-all">
-            <div className="flex items-center justify-center gap-2">
-              <GraduationCap className="w-4 h-4" />
-              <span className="font-semibold">Current</span>
-              <Badge variant="secondary" className="ml-1 bg-slate-200/70 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-2">
-                {students.filter(s => s && !s.isPrevious).length}
+          <TabsTrigger value="active" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-emerald-600 dark:data-[state=active]:text-emerald-400 transition-all">
+            <div className="flex items-center justify-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="font-semibold text-xs">Active</span>
+              <Badge variant="secondary" className="ml-1 bg-emerald-100/70 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 rounded-lg px-1.5 text-[10px]">
+                {statusCounts.active || 0}
               </Badge>
             </div>
           </TabsTrigger>
-          <TabsTrigger value="previous" className="rounded-xl px-4 py-2.5 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-amber-600 dark:data-[state=active]:text-amber-400 transition-all">
-            <div className="flex items-center justify-center gap-2">
-              <History className="w-4 h-4" />
-              <span className="font-semibold">Completed</span>
-              <Badge variant="secondary" className="ml-1 bg-slate-200/70 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-2">
-                {students.filter(s => s && s.isPrevious).length}
+          <TabsTrigger value="document_review" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400 transition-all">
+            <div className="flex items-center justify-center gap-1.5">
+              <FileText className="w-3.5 h-3.5" />
+              <span className="font-semibold text-xs">Doc Review</span>
+              <Badge variant="secondary" className="ml-1 bg-blue-100/70 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 rounded-lg px-1.5 text-[10px]">
+                {statusCounts.document_review || 0}
+              </Badge>
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="provisional" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-amber-600 dark:data-[state=active]:text-amber-400 transition-all">
+            <div className="flex items-center justify-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <span className="font-semibold text-xs">Provisional</span>
+              <Badge variant="secondary" className="ml-1 bg-amber-100/70 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 rounded-lg px-1.5 text-[10px]">
+                {statusCounts.provisional || 0}
+              </Badge>
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="pending" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-orange-600 dark:data-[state=active]:text-orange-400 transition-all">
+            <div className="flex items-center justify-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-orange-500" />
+              <span className="font-semibold text-xs">Pending</span>
+              <Badge variant="secondary" className="ml-1 bg-orange-100/70 dark:bg-orange-950/40 text-orange-700 dark:text-orange-400 rounded-lg px-1.5 text-[10px]">
+                {statusCounts.pending || 0}
+              </Badge>
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="completed" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-purple-600 dark:data-[state=active]:text-purple-400 transition-all">
+            <div className="flex items-center justify-center gap-1.5">
+              <History className="w-3.5 h-3.5" />
+              <span className="font-semibold text-xs">Completed</span>
+              <Badge variant="secondary" className="ml-1 bg-purple-100/70 dark:bg-purple-950/40 text-purple-700 dark:text-purple-400 rounded-lg px-1.5 text-[10px]">
+                {statusCounts.completed || 0}
+              </Badge>
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="current" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-300 transition-all">
+            <div className="flex items-center justify-center gap-1.5">
+              <GraduationCap className="w-3.5 h-3.5" />
+              <span className="font-semibold text-xs">Current</span>
+              <Badge variant="secondary" className="ml-1 bg-slate-200/70 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-1.5 text-[10px]">
+                {statusCounts.current || 0}
               </Badge>
             </div>
           </TabsTrigger>
@@ -2557,109 +3335,316 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         <CardContent className="p-6">
           {/* Filters Section */}
           <div className="bg-white dark:bg-slate-900/40 p-5 rounded-2xl border border-slate-100 dark:border-slate-800/60 shadow-sm mb-6">
+            {/* Filter Header with Title, Count & Clear All Button */}
+            <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100 dark:border-slate-800/70">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-lg">
+                  <Filter className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                    Filter & Search
+                  </h4>
+                  <p className="text-[11px] text-slate-400 font-normal">
+                    Multi-select state, university, branch, counselor, session & date
+                  </p>
+                </div>
+                {isFiltered && (
+                  <Badge variant="secondary" className="ml-1 bg-blue-100/70 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                    {activeFilterCount} active
+                  </Badge>
+                )}
+              </div>
+
+              {isFiltered && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleResetFilters}
+                  className="h-8 px-3 text-xs font-semibold text-red-600 hover:text-red-700 dark:text-red-400 bg-red-50/50 hover:bg-red-100/70 dark:bg-red-950/30 border border-red-200/80 dark:border-red-900/60 rounded-xl flex items-center gap-1.5 transition-colors shadow-xs"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Clear All Filters</span>
+                </Button>
+              )}
+            </div>
+
+            {/* Row 1: Search and Multi-Select Filters */}
             <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ${salesUsers.length > 0 ? 'xl:grid-cols-6' : 'xl:grid-cols-5'} gap-4 xl:gap-5`}>
+              {/* Search */}
               <div className="flex flex-col">
-                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">Search Students</Label>
+                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">
+                  Search Students
+                </Label>
                 <div className="relative group/search mt-auto">
                   <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 group-focus-within/search:text-blue-500 transition-colors" />
                   <Input
                     placeholder="Name, email, roll no..."
-                    className="pl-9 h-9 text-sm bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-900 transition-all rounded-xl"
+                    className="pl-9 pr-7 h-9 text-sm bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-900 transition-all rounded-xl"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
               </div>
-              <div className="flex flex-col">
-                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">University</Label>
-                <Select value={filterUniversityId} onValueChange={setFilterUniversityId}>
-                  <SelectTrigger className="h-9 mt-auto bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-xl hover:bg-white transition-colors">
-                    <SelectValue placeholder="All Universities" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Universities</SelectItem>
-                    {universities.filter((u: any) => u && u.id).map((u: any) => (
-                      <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col">
-                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">Branch</Label>
-                <Select value={filterBranchId} onValueChange={setFilterBranchId}>
-                  <SelectTrigger className="h-9 mt-auto bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-xl hover:bg-white transition-colors">
-                    <SelectValue placeholder="All Branches" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Branches</SelectItem>
-                    {branches.filter((b: any) => b && b.id).map((b: any) => (
-                      <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+
+              {/* Multi-Select: Student State */}
+              <MultiSelectFilter
+                label="Student State"
+                icon={<Filter className="w-3 h-3 text-slate-400" />}
+                placeholder="All Student States"
+                options={stateOptions}
+                selected={filterStatuses}
+                onChange={handleStatusesChange}
+              />
+
+              {/* Multi-Select: University */}
+              <MultiSelectFilter
+                label="University"
+                icon={<Building2 className="w-3 h-3 text-slate-400" />}
+                placeholder="All Universities"
+                options={universityOptions}
+                selected={filterUniversityIds}
+                onChange={setFilterUniversityIds}
+              />
+
+              {/* Multi-Select: Branch */}
+              <MultiSelectFilter
+                label="Branch"
+                icon={<Building2 className="w-3 h-3 text-slate-400" />}
+                placeholder="All Branches"
+                options={branchOptions}
+                selected={filterBranchIds}
+                onChange={setFilterBranchIds}
+              />
+
+              {/* Multi-Select: Sales User (if available) */}
               {salesUsers.length > 0 && (
-                <div className="flex flex-col relative">
-                  <Label className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-2 flex items-center gap-1.5 truncate">
-                    <Users className="w-3 h-3 shrink-0" /> Sales User
-                  </Label>
-                  <Select value={filterSalesUser} onValueChange={setFilterSalesUser}>
-                    <SelectTrigger className="h-9 mt-auto bg-blue-50/30 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/30 rounded-xl hover:bg-blue-50/50 transition-colors">
-                      <SelectValue placeholder="All Sales Users" />
+                <MultiSelectFilter
+                  label="Sales User"
+                  icon={<Users className="w-3 h-3 text-blue-500" />}
+                  placeholder="All Sales Users"
+                  options={salesUserOptions}
+                  selected={filterSalesUsers}
+                  onChange={setFilterSalesUsers}
+                  triggerClassName="bg-blue-50/30 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/30 hover:bg-blue-50/50"
+                />
+              )}
+
+              {/* Multi-Select: Admission Session */}
+              <MultiSelectFilter
+                label="Admission Session"
+                icon={<Calendar className="w-3 h-3 text-slate-400" />}
+                placeholder="All Sessions"
+                options={sessionOptions}
+                selected={filterSessionIds}
+                onChange={setFilterSessionIds}
+              />
+            </div>
+
+            {/* Row 2: Admission Date Range & Sort Toolbar */}
+            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              {/* Date Range Section */}
+              <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 flex-1">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 shrink-0">
+                  <CalendarDays className="w-3.5 h-3.5 text-blue-500" />
+                  <span>Admission Date:</span>
+                </div>
+                
+                {/* Date Preset Selector */}
+                <div className="w-[130px] shrink-0">
+                  <Select value={filterDatePreset} onValueChange={handleDatePresetSelect}>
+                    <SelectTrigger className="h-8 text-xs bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-lg hover:bg-white transition-colors">
+                      <SelectValue placeholder="Preset" />
                     </SelectTrigger>
-                    <SelectContent className="max-h-[300px] rounded-xl">
-                      <SelectItem value="all" className="font-medium">
-                        <div className="flex items-center gap-2">
-                          <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                            <Users className="w-3 h-3 text-slate-500" />
-                          </div>
-                          All Sales Users
-                        </div>
-                      </SelectItem>
-                      {salesUsers.filter((u: any) => u && u.id).map((u: any) => (
-                        <SelectItem key={u.id} value={u.id}>
-                           <div className="flex items-center gap-2">
-                             <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                               <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300">
-                                 {u.name.charAt(0).toUpperCase()}
-                               </span>
-                             </div>
-                             {u.name}
-                           </div>
+                    <SelectContent>
+                      {DATE_PRESETS.map((p) => (
+                        <SelectItem key={p.value} value={p.value} className="text-xs">
+                          {p.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-              )}
-              <div className="flex flex-col">
-                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">Admission Session</Label>
-                <Select value={filterSessionId} onValueChange={setFilterSessionId}>
-                  <SelectTrigger className="h-9 mt-auto bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-xl hover:bg-white transition-colors">
-                    <SelectValue placeholder="All Sessions" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Sessions</SelectItem>
-                    {sessions.filter((s: any) => s && s.id).map((s: any) => (
-                      <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+
+                {/* From Date */}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-slate-400">From</span>
+                  <Input
+                    type="date"
+                    className="h-8 text-xs w-[135px] bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-lg focus:bg-white transition-colors px-2"
+                    value={filterStartDate}
+                    onChange={(e) => {
+                      setFilterStartDate(e.target.value);
+                      setFilterDatePreset('custom');
+                    }}
+                  />
+                </div>
+
+                {/* To Date */}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-slate-400">To</span>
+                  <Input
+                    type="date"
+                    className="h-8 text-xs w-[135px] bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-lg focus:bg-white transition-colors px-2"
+                    value={filterEndDate}
+                    onChange={(e) => {
+                      setFilterEndDate(e.target.value);
+                      setFilterDatePreset('custom');
+                    }}
+                  />
+                </div>
+
+                {/* Clear Date Filter Button */}
+                {(filterStartDate || filterEndDate || filterDatePreset !== 'all') && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 px-2 text-xs text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg"
+                    onClick={() => {
+                      setFilterStartDate('');
+                      setFilterEndDate('');
+                      setFilterDatePreset('all');
+                    }}
+                    title="Clear date range"
+                  >
+                    <X className="w-3.5 h-3.5 mr-1 text-slate-400" />
+                    Clear Date
+                  </Button>
+                )}
               </div>
-              <div className="flex flex-col">
-                <Label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 truncate">Sort By</Label>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="h-9 mt-auto bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-xl hover:bg-white transition-colors">
-                    <SelectValue placeholder="Sort By" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="name">Name</SelectItem>
-                    <SelectItem value="branch">Branch</SelectItem>
-                    <SelectItem value="enrollmentNo">Enrollment No.</SelectItem>
-                  </SelectContent>
-                </Select>
+
+              {/* Right: Sort By & Reset Filters */}
+              <div className="flex items-center gap-2.5 shrink-0 self-end lg:self-center">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 shrink-0">Sort:</span>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="h-8 text-xs w-[170px] bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 rounded-lg hover:bg-white transition-colors">
+                      <SelectValue placeholder="Sort By" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="name" className="text-xs">Name (A-Z)</SelectItem>
+                      <SelectItem value="branch" className="text-xs">Branch</SelectItem>
+                      <SelectItem value="enrollmentNo" className="text-xs">Enrollment No.</SelectItem>
+                      <SelectItem value="admissionDate_desc" className="text-xs">Admission (Newest First)</SelectItem>
+                      <SelectItem value="admissionDate_asc" className="text-xs">Admission (Oldest First)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Reset Filters button */}
+                {isFiltered && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-8 px-2.5 text-xs text-red-600 dark:text-red-400 border-red-200 dark:border-red-900/50 bg-red-50/30 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg flex items-center gap-1.5"
+                    onClick={handleResetFilters}
+                    title="Clear all filters"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    Clear All
+                  </Button>
+                )}
               </div>
             </div>
+
+            {/* Active Filters Summary Pill Bar */}
+            {isFiltered && (
+              <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800/60 flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                  <span className="text-slate-400 font-medium">Active Filters ({activeFilterCount}):</span>
+                  
+                  <button
+                    type="button"
+                    onClick={handleResetFilters}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-semibold bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400 border border-red-200 dark:border-red-900 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors cursor-pointer"
+                    title="Clear all filters"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    Clear All
+                  </button>
+
+                  {filterStatuses.map(st => (
+                    <Badge key={st} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300 border border-blue-200/50">
+                      <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", STATE_DOT_COLORS[st] || 'bg-blue-500')} />
+                      State: {statusLabel(st)}
+                      <button type="button" onClick={() => handleStatusesChange(filterStatuses.filter(s => s !== st))} className="hover:bg-blue-200/50 rounded p-0.5">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+
+                  {(filterStartDate || filterEndDate) && (
+                    <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-300 border border-indigo-200/50">
+                      Admission: {filterStartDate || 'Any'} → {filterEndDate || 'Any'}
+                      <button type="button" onClick={() => { setFilterStartDate(''); setFilterEndDate(''); setFilterDatePreset('all'); }} className="hover:bg-indigo-200/50 rounded p-0.5">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  )}
+
+                  {searchQuery && (
+                    <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                      Search: "{searchQuery}"
+                      <button type="button" onClick={() => setSearchQuery('')} className="hover:bg-slate-200 rounded p-0.5">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  )}
+
+                  {filterUniversityIds.map(uId => (
+                    <Badge key={uId} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300 border border-purple-200/50">
+                      Uni: {universities.find((u: any) => u.id === uId)?.name || uId}
+                      <button type="button" onClick={() => setFilterUniversityIds(filterUniversityIds.filter(id => id !== uId))} className="hover:bg-purple-200/50 rounded p-0.5">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+
+                  {filterBranchIds.map(bId => (
+                    <Badge key={bId} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300 border border-emerald-200/50">
+                      Branch: {branches.find((b: any) => b.id === bId)?.name || bId}
+                      <button type="button" onClick={() => setFilterBranchIds(filterBranchIds.filter(id => id !== bId))} className="hover:bg-emerald-200/50 rounded p-0.5">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+
+                  {filterSalesUsers.map(suId => (
+                    <Badge key={suId} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-cyan-50 text-cyan-700 dark:bg-cyan-950/30 dark:text-cyan-300 border border-cyan-200/50">
+                      Sales: {salesUsers.find((u: any) => u.id === suId)?.name || suId}
+                      <button type="button" onClick={() => setFilterSalesUsers(filterSalesUsers.filter(id => id !== suId))} className="hover:bg-cyan-200/50 rounded p-0.5">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+
+                  {filterSessionIds.map(sId => (
+                    <Badge key={sId} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-300 border border-amber-200/50">
+                      Session: {sessions.find((s: any) => s.id === sId)?.name || sId}
+                      <button type="button" onClick={() => setFilterSessionIds(filterSessionIds.filter(id => id !== sId))} className="hover:bg-amber-200/50 rounded p-0.5">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+
+                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                  Showing <span className="font-bold text-slate-800 dark:text-slate-200">{filteredStudents.length}</span> of {students.length} students
+                </span>
+              </div>
+            )}
           </div>
 
           {loading ? (
@@ -2775,6 +3760,16 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                             <a href={`tel:${student.phone}`} className="flex items-center gap-1.5 text-slate-500 hover:text-emerald-600 transition-colors bg-slate-50 dark:bg-slate-800/50 px-2 py-1 rounded-lg">
                               <Phone className="w-3.5 h-3.5 text-slate-400" /> {student.phone}
                             </a>
+                          )}
+                          {(student.admissionDate || student.createdAt) && (
+                            <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-lg border border-slate-200/50 dark:border-slate-700/50" title={student.admissionDate ? 'Admission Date' : 'Registration Date'}>
+                              <CalendarDays className="w-3.5 h-3.5 text-blue-500/70" />
+                              <span>
+                                {student.admissionDate
+                                  ? `Adm: ${new Date(student.admissionDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`
+                                  : `Reg: ${new Date(student.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`}
+                              </span>
+                            </div>
                           )}
                           {salesUserName && (
                             <div className="flex items-center gap-1.5 bg-blue-50/50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-lg border border-blue-100/50 dark:border-blue-900/30">
