@@ -175,6 +175,7 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
     }
 
     let studentPaymentHistory: any[] = [];
+    let studentInvoices: any[] = [];
 
     if (actualStudentId) {
       const schedules = await prisma.paymentSchedule.findMany({ where: { studentId: actualStudentId } });
@@ -182,21 +183,21 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
         overallProgramFee = schedules.reduce((acc, curr) => acc + curr.amount, 0);
       }
 
-      const studentInvoices = await prisma.invoice.findMany({
+      studentInvoices = await prisma.invoice.findMany({
         where: { studentId: actualStudentId },
         include: { payments: true },
         orderBy: { createdAt: 'asc' }
       });
-      overallPaid = studentInvoices.reduce((acc, inv) => acc + inv.payments.reduce((s, p) => s + p.amount, 0), 0);
+      overallPaid = studentInvoices.reduce((acc: number, inv: any) => acc + (inv.payments || []).reduce((s: number, p: any) => s + p.amount, 0), 0);
       
       // If this invoice itself isn't linked to the student in DB yet, add its paid amount to the total
       if (!invoice.studentId) {
-        overallPaid += invoice.payments.reduce((sum, p) => sum + p.amount, 0);
+        overallPaid += invoice.payments.reduce((sum: number, p: any) => sum + p.amount, 0);
       }
 
       // Collect all payments from student's invoices
-      studentInvoices.forEach(inv => {
-        inv.payments.forEach(p => {
+      studentInvoices.forEach((inv: any) => {
+        (inv.payments || []).forEach((p: any) => {
           studentPaymentHistory.push({
             id: p.id,
             date: p.receivedAt || p.createdAt,
@@ -247,6 +248,10 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
     }
 
     studentPaymentHistory.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    if (studentPaymentHistory.length > 0) {
+      overallPaid = studentPaymentHistory.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
+    }
 
     // For academic schedule invoices (scheduleId present), respect the student's scheduled academic course.
     // For admission / provisional invoices or unlinked receipts, prioritize the matched enrollment.
@@ -333,10 +338,54 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
     let programName = activeProgram?.name ? `${activeProgram.name}${activeSpecialisation ? ` - ${activeSpecialisation}` : ''}` : '';
     let universityName = activeProgram?.university?.name || '';
 
+    // Determine the bill date:
+    // Take the latest transaction date FOR THIS SPECIFIC BILL / INVOICE
+    let billTransactionDate: Date | null = null;
+
+    // 1. Check direct payments recorded on this invoice
+    if (invoice.payments && invoice.payments.length > 0) {
+      const sortedThisPayments = [...invoice.payments].sort(
+        (a, b) => new Date(b.receivedAt || b.createdAt).getTime() - new Date(a.receivedAt || a.createdAt).getTime()
+      );
+      const latestPayment = sortedThisPayments[0];
+      const pDate = latestPayment?.receivedAt || latestPayment?.createdAt;
+      if (pDate) {
+        billTransactionDate = new Date(pDate);
+      }
+    }
+
+    // 2. If this invoice is a provisional or admission fee, check matched enrollment initial payment
+    if (!billTransactionDate && isProvisionalOrAdmission) {
+      const enrDate = matchedEnrollment?.initialPaymentDate || fallbackEnrollment?.initialPaymentDate;
+      if (enrDate) {
+        billTransactionDate = new Date(enrDate);
+      }
+    }
+
+    // 3. Check student payment history entries that belong specifically to this invoice
+    if (!billTransactionDate && studentPaymentHistory.length > 0) {
+      const currentInvNo = invoice.invoiceNo ? invoice.invoiceNo.replace('RCP-', '').trim() : '';
+      const matchingHistory = studentPaymentHistory.filter((p: any) => {
+        const pInv = (p.invoiceNo || '').replace('RCP-', '').trim();
+        const pRef = (p.referenceNo || '').replace('RCP-', '').trim();
+        return (currentInvNo && (pInv === currentInvNo || pRef === currentInvNo));
+      });
+      if (matchingHistory.length > 0) {
+        const lastMatching = matchingHistory[matchingHistory.length - 1];
+        if (lastMatching.date) billTransactionDate = new Date(lastMatching.date);
+      }
+    }
+
+    // Fallback only if no transaction was recorded for this bill
+    const latestTransactionDate = billTransactionDate || invoice.paidAt || invoice.createdAt || invoice.updatedAt;
+
     data = {
       type: 'invoice',
       receiptNo: `RCP-${invoice.invoiceNo}`,
-      date: invoice.paidAt || invoice.updatedAt,
+      date: latestTransactionDate,
+      billDate: latestTransactionDate,
+      latestBillDate: latestTransactionDate,
+      latestTransactionDate,
       studentName,
       studentDob,
       studentEmail,
@@ -364,7 +413,15 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
   } else if (paymentId) {
     const payment = await prisma.paymentEntry.findUnique({ where: { id: paymentId } });
     if (!payment) { res.status(404).json({ success: false, message: 'Payment not found' }); return; }
-    data = { type: 'payment', ...payment };
+    const paymentDate = payment.receivedAt || payment.createdAt;
+    data = { 
+      type: 'payment', 
+      receiptNo: payment.referenceNo ? `RCP-${payment.referenceNo}` : `RCP-${payment.id.slice(0, 8).toUpperCase()}`,
+      date: paymentDate,
+      billDate: paymentDate,
+      latestBillDate: paymentDate,
+      ...payment 
+    };
   }
 
   res.json({ success: true, data });

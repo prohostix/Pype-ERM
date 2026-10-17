@@ -29,7 +29,8 @@ export function PaymentsPanel() {
     invoiceId: '',
     amount: '',
     method: 'cash',
-    referenceNo: ''
+    referenceNo: '',
+    date: new Date().toISOString().split('T')[0]
   });
 
   useEffect(() => {
@@ -94,7 +95,8 @@ export function PaymentsPanel() {
       invoiceId: invoiceId?.toString() || '',
       amount: payment.amount?.toString() || '',
       method: payment.method || 'cash',
-      referenceNo: payment.referenceNo || ''
+      referenceNo: payment.referenceNo || '',
+      date: payment.receivedAt ? new Date(payment.receivedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
     });
     setDialogOpen(true);
   };
@@ -116,7 +118,7 @@ export function PaymentsPanel() {
     setSelectedStudentId('');
     setStudentSearch('');
     setStudentDropdownOpen(false);
-    setFormData({ invoiceId: '', amount: '', method: 'cash', referenceNo: '' });
+    setFormData({ invoiceId: '', amount: '', method: 'cash', referenceNo: '', date: new Date().toISOString().split('T')[0] });
   };
 
   const filteredStudents = students.filter((st) => {
@@ -271,9 +273,15 @@ export function PaymentsPanel() {
                 </div>
               </div>
 
-              <div>
-                <Label>Reference No</Label>
-                <Input value={formData.referenceNo} onChange={(e) => setFormData({ ...formData, referenceNo: e.target.value })} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label>Payment Date</Label>
+                  <Input type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} required />
+                </div>
+                <div>
+                  <Label>Reference No</Label>
+                  <Input value={formData.referenceNo} onChange={(e) => setFormData({ ...formData, referenceNo: e.target.value })} />
+                </div>
               </div>
 
               <div className="flex gap-2">
@@ -310,7 +318,7 @@ export function PaymentsPanel() {
                     <div className="flex-1">
                       <div className="font-semibold text-sm">₹{payment.amount.toLocaleString('en-IN')}</div>
                       <div className="text-xs text-muted-foreground mt-0.5">
-                        {payment.method?.toUpperCase()} • {payment.referenceNo || 'No reference'}
+                        {payment.method?.toUpperCase()} • {payment.referenceNo || 'No reference'} • {payment.receivedAt ? new Date(payment.receivedAt).toLocaleDateString('en-GB').replace(/\//g, '-') : ''}
                       </div>
                       {payment.invoice && (
                         <div className="text-xs text-muted-foreground mt-1">

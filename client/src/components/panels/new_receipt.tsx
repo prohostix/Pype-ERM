@@ -99,8 +99,8 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
             <span style={{ fontWeight: 'bold' }}>{receipt.receiptNo?.replace('RCP-', '')}</span>
           </div>
           <div style={{ display: 'flex', marginBottom: '8px' }}>
-            <span style={{ width: '120px' }}>DATE</span>
-            <span style={{ fontWeight: 'bold' }}>{new Date(receipt.date).toLocaleDateString('en-GB').replace(/\//g, '-')}</span>
+            <span style={{ width: '120px' }}>BILL DATE</span>
+            <span style={{ fontWeight: 'bold' }}>{receipt.latestTransactionDate || receipt.latestBillDate || receipt.billDate || receipt.date ? new Date(receipt.latestTransactionDate || receipt.latestBillDate || receipt.billDate || receipt.date).toLocaleDateString('en-GB').replace(/\//g, '-') : 'N/A'}</span>
           </div>
           <div style={{ display: 'flex' }}>
             <span style={{ width: '120px' }}>UNIVERSITY</span>

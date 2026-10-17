@@ -59,7 +59,9 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
   const payAt = receipt.center || 'HEAD OFFICE';
 
   const totalFeeAmount = receipt.totalFee ?? (receipt.overallProgramFee || receipt.universityFee || 0);
-  const totalRemittedAmount = receipt.overallPaid ?? totalPaid;
+  const totalRemittedAmount = (Array.isArray(receipt.paymentHistory) && receipt.paymentHistory.length > 0)
+    ? receipt.paymentHistory.reduce((sum: number, p: any) => sum + (Number(p.amount) || 0), 0)
+    : (receipt.overallPaid ?? totalPaid);
   const balanceFeeAmount = Math.max(0, totalFeeAmount - totalRemittedAmount);
 
   const paymentHistoryList = (Array.isArray(receipt.paymentHistory) && receipt.paymentHistory.length > 0)
@@ -74,6 +76,30 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
           invoiceNo: receipt.receiptNo?.replace('RCP-', '')
         }))
       : [];
+
+  // Find the transaction date for THIS bill
+  const currentInvoiceNo = (receipt.receiptNo || '').replace('RCP-', '').trim();
+  const matchingPayments = (receipt.payments && receipt.payments.length > 0)
+    ? [...receipt.payments].sort((a: any, b: any) => new Date(b.receivedAt || b.createdAt).getTime() - new Date(a.receivedAt || a.createdAt).getTime())
+    : [];
+
+  const matchingHistory = paymentHistoryList.filter((p: any) => {
+    if (!currentInvoiceNo) return false;
+    const pInv = (p.invoiceNo || '').replace('RCP-', '').trim();
+    const pRef = (p.referenceNo || '').replace('RCP-', '').trim();
+    return pInv === currentInvoiceNo || pRef === currentInvoiceNo;
+  });
+
+  const thisBillTransactionDate = matchingPayments[0]?.receivedAt 
+    || matchingPayments[0]?.createdAt 
+    || matchingHistory[matchingHistory.length - 1]?.date 
+    || receipt.latestTransactionDate 
+    || receipt.billDate 
+    || receipt.date;
+
+  const formattedBillDate = thisBillTransactionDate 
+    ? new Date(thisBillTransactionDate).toLocaleDateString('en-GB').replace(/\//g, '-') 
+    : 'N/A';
 
   const receiptContent = (
     <div style={{ fontFamily: '"Inter", "Helvetica Neue", sans-serif', width: '100%', margin: '0 auto', background: '#fff', color: '#1e293b', padding: '24px' }}>
@@ -122,8 +148,8 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
               <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.receiptNo?.replace('RCP-', '')}</span>
             </div>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '40px' }}>Date:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{new Date(receipt.date).toLocaleDateString('en-GB').replace(/\//g, '-')}</span>
+              <span style={{ color: '#64748b', width: '65px' }}>Bill Date:</span>
+              <span style={{ fontWeight: 700, color: '#0f172a' }}>{formattedBillDate}</span>
             </div>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ color: '#64748b', width: '90px' }}>Admission No:</span>

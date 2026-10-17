@@ -110,8 +110,8 @@ function ProformaReceiptDocument({ receipt, orgName }: { receipt: any; orgName: 
               <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.receiptNo?.replace('RCP-', '')}</span>
             </div>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '40px' }}>Date:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{new Date(receipt.date).toLocaleDateString('en-GB').replace(/\//g, '-')}</span>
+              <span style={{ color: '#64748b', width: '65px' }}>Bill Date:</span>
+              <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.latestTransactionDate || receipt.latestBillDate || receipt.billDate || receipt.date ? new Date(receipt.latestTransactionDate || receipt.latestBillDate || receipt.billDate || receipt.date).toLocaleDateString('en-GB').replace(/\//g, '-') : 'N/A'}</span>
             </div>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ color: '#64748b', width: '90px' }}>Admission No:</span>

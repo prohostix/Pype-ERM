@@ -25,7 +25,7 @@ export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) 
     include: {
       center: { select: { name: true } },
       student: { select: { name: true } },
-      payments: { select: { amount: true } }
+      payments: { select: { amount: true, receivedAt: true, createdAt: true } }
     },
     orderBy: { createdAt: 'desc' }
   });
@@ -193,6 +193,17 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
     const random = Math.floor(1000 + Math.random() * 9000);
     const invoiceNo = `INV-AUTO-${Date.now().toString().slice(-4)}-${random}`;
 
+    const rawDate = req.body.date || req.body.paymentDate || req.body.receivedAt;
+    let paymentDate = new Date();
+    if (rawDate) {
+      if (typeof rawDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+        paymentDate = new Date(`${rawDate}T12:00:00Z`);
+      } else {
+        const parsed = new Date(rawDate);
+        if (!isNaN(parsed.getTime())) paymentDate = parsed;
+      }
+    }
+
     const newInvoice = await prisma.invoice.create({
       data: {
         organizationId: req.user.organizationId,
@@ -204,6 +215,10 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
         tax: 0,
         total: invoiceTotal,
         status: 'approved',
+        createdAt: paymentDate,
+        dueDate: paymentDate,
+        paidAt: paymentDate,
+        notes: req.body.notes || undefined,
         items: [{
           description: feeDescription,
           quantity: 1,
@@ -220,11 +235,24 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
     return;
   }
 
+  const rawDate = req.body.date || req.body.paymentDate || req.body.receivedAt;
+  let paymentDate = new Date();
+  if (rawDate) {
+    if (typeof rawDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+      paymentDate = new Date(`${rawDate}T12:00:00Z`);
+    } else {
+      const parsed = new Date(rawDate);
+      if (!isNaN(parsed.getTime())) paymentDate = parsed;
+    }
+  }
+
   const payment = await prisma.paymentEntry.create({
     data: {
       amount: Number(req.body.amount),
       method: req.body.method || 'cash',
       referenceNo: req.body.referenceNo || null,
+      receivedAt: paymentDate,
+      notes: req.body.notes || null,
       invoiceId,
       organizationId: req.user.organizationId,
       receivedBy: req.user.id
@@ -244,17 +272,20 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
     } else if (totalPaid > 0) {
       newStatus = 'partial';
     }
-    if (newStatus !== invoice.status) {
+    if (newStatus !== invoice.status || totalPaid >= invoice.total) {
       await prisma.invoice.update({
         where: { id: invoice.id },
-        data: { status: newStatus, paidAt: totalPaid >= invoice.total ? new Date() : null }
+        data: { 
+          status: newStatus, 
+          paidAt: totalPaid >= invoice.total ? paymentDate : invoice.paidAt 
+        }
       });
     }
     
     if (newStatus === 'paid' && invoice.scheduleId) {
       await prisma.paymentSchedule.update({
         where: { id: invoice.scheduleId },
-        data: { status: 'paid', paidAt: new Date() }
+        data: { status: 'paid', paidAt: paymentDate }
       });
     }
   }
@@ -284,12 +315,21 @@ export const updatePayment = asyncHandler(async (req: AuthRequest, res: Response
     res.status(404).json({ success: false, message: 'Payment not found' });
     return;
   }
-  const { amount, method, referenceNo, notes } = req.body;
+  const { amount, method, referenceNo, notes, date, paymentDate, receivedAt } = req.body;
   const updateData: any = {};
   if (amount !== undefined) updateData.amount = Number(amount);
   if (method !== undefined) updateData.method = method;
   if (referenceNo !== undefined) updateData.referenceNo = referenceNo;
   if (notes !== undefined) updateData.notes = notes;
+  const rawDate = date || paymentDate || receivedAt;
+  if (rawDate !== undefined) {
+    if (typeof rawDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+      updateData.receivedAt = new Date(`${rawDate}T12:00:00Z`);
+    } else {
+      const parsed = new Date(rawDate);
+      if (!isNaN(parsed.getTime())) updateData.receivedAt = parsed;
+    }
+  }
   const payment = await prisma.paymentEntry.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: payment });
 });
