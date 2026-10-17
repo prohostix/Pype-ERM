@@ -622,6 +622,14 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     where: { id: req.params.id },
     data: dataToUpdate
   });
+
+  if (dataToUpdate.documents !== undefined) {
+    await prisma.enrollment.updateMany({
+      where: { studentId: req.params.id },
+      data: { documents: student.documents as any }
+    });
+  }
+
   res.status(200).json({ success: true, data: student });
 });
 
@@ -1050,6 +1058,11 @@ export const updateDocumentStatus = asyncHandler(async (req: AuthRequest, res: R
   const updatedStudent = await prisma.student.update({
     where: { id },
     data: { documents: currentDocs },
+  });
+
+  await prisma.enrollment.updateMany({
+    where: { studentId: id },
+    data: { documents: currentDocs }
   });
 
   res.status(200).json({ success: true, data: updatedStudent });

@@ -211,6 +211,13 @@ export const updateEnrollmentDocumentStatus = asyncHandler(async (req: AuthReque
     },
   });
 
+  if (enrollment.studentId) {
+    await prisma.student.update({
+      where: { id: enrollment.studentId },
+      data: { documents: currentDocs },
+    });
+  }
+
   res.json({ success: true, message: 'Document status updated', data: currentDocs[index] });
 });
 

@@ -833,14 +833,29 @@ export default function StudentApplicationPage() {
                                       {docType}
                                     </span>
                                     {existing?.url ? (
-                                      <a
-                                        href={getFileUrl(existing.url)}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-md font-medium hover:bg-primary/20 flex items-center transition-colors"
-                                      >
-                                        <CheckCircle className="w-3.5 h-3.5 mr-1" /> Uploaded
-                                      </a>
+                                      <div className="flex items-center gap-1.5">
+                                        <a
+                                          href={getFileUrl(existing.url)}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-md font-medium hover:bg-primary/20 flex items-center transition-colors"
+                                        >
+                                          <CheckCircle className="w-3.5 h-3.5 mr-1" /> Uploaded
+                                        </a>
+                                        {!isMandatory && (
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const newDocs = (form.documents || []).filter((d: any) => d.type !== docType);
+                                              setForm({ ...form, documents: newDocs });
+                                            }}
+                                            className="p-1 rounded text-rose-500 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                                            title="Remove document"
+                                          >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                          </button>
+                                        )}
+                                      </div>
                                     ) : (
                                       <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-1 rounded-md">Pending</span>
                                     )}

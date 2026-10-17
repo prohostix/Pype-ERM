@@ -911,6 +911,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   useEffect(() => {
     if (completingEnrollment) {
       const student = completingEnrollment.student || {};
+      const docs = (student.documents?.length ? student.documents : completingEnrollment.documents) || [];
+      const hasRejectedDocs = docs.some((d: any) => d && d.status === 'rejected');
+      const hasRejectedPhoto = (student.admissionProgress as any)?.photoStatus === 'rejected';
+      if (hasRejectedDocs) {
+        setFormStep(3);
+      } else if (hasRejectedPhoto) {
+        setFormStep(1);
+      }
       setFormData(prev => ({
         ...prev,
         name: completingEnrollment.studentName || student.name || '',
@@ -1001,11 +1009,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   const getEnrollmentConfig = () => {
     const defaultConf = { requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'], requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] };
-    const prog = filteredPrograms.find((p: any) => p.id === formData.programId);
-    if (!prog || !prog.university || !prog.university.enrollmentFormConfig) return defaultConf;
-    const conf = typeof prog.university.enrollmentFormConfig === 'string'
-      ? JSON.parse(prog.university.enrollmentFormConfig)
-      : prog.university.enrollmentFormConfig;
+    const prog = filteredPrograms.find((p: any) => p.id === formData.programId) || completingEnrollment?.program;
+    const uConfig = prog?.university?.enrollmentFormConfig || completingEnrollment?.university?.enrollmentFormConfig;
+    if (!uConfig) return defaultConf;
+    const conf = typeof uConfig === 'string'
+      ? JSON.parse(uConfig)
+      : uConfig;
     return {
       requiredFields: conf.requiredFields || defaultConf.requiredFields,
       requiredDocuments: conf.requiredDocuments || defaultConf.requiredDocuments
@@ -1018,7 +1027,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   };
 
   const isDocReq = (d: string) => {
-    return getEnrollmentConfig().requiredDocuments.some((req: string) => req.toLowerCase() === d.toLowerCase());
+    return getEnrollmentConfig().requiredDocuments.some((req: string) => 
+      req.toLowerCase() === d.toLowerCase() ||
+      (req.toLowerCase() === 'transfer certificate' && d.toLowerCase() === 'tc / migration / affidavit') ||
+      (req.toLowerCase() === 'tc / migration / affidavit' && d.toLowerCase() === 'transfer certificate')
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -1043,7 +1056,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     }
     const requiredDocs = getEnrollmentConfig().requiredDocuments;
     const missingDocs = requiredDocs.filter((docType: string) => {
-      const doc = (formData.documents || []).find((d: any) => d.type.toLowerCase() === docType.toLowerCase());
+      const doc = (formData.documents || []).find((d: any) => 
+        d.type.toLowerCase() === docType.toLowerCase() ||
+        (docType.toLowerCase() === 'transfer certificate' && d.type.toLowerCase() === 'tc / migration / affidavit') ||
+        (docType.toLowerCase() === 'tc / migration / affidavit' && d.type.toLowerCase() === 'transfer certificate')
+      );
       return !doc || !doc.url;
     });
     if (missingDocs.length > 0) {
@@ -1053,7 +1070,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     }
     const unreplacedRejectedDocs = (formData.documents || []).filter((d: any) => d && d.status === 'rejected');
     if (unreplacedRejectedDocs.length > 0) {
-      toast.error(`Please re-upload rejected documents: ${unreplacedRejectedDocs.map((d: any) => d.type).join(', ')}`);
+      toast.error(`Please re-upload or remove rejected documents: ${unreplacedRejectedDocs.map((d: any) => d.type).join(', ')}`);
       setFormStep(3); // Redirect to documents step
       return;
     }
@@ -2334,9 +2351,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                     <div className="flex-1 min-w-0">
                       <Label className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                         <span>Student Photo {isFieldReq('photo') && '*'}</span>
-                        {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && formData.photo === (completingEnrollment?.student?.photo || completingEnrollment?.photo) && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">Re-upload</span>}
+                        {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && formData.photo === (completingEnrollment?.student?.photo || completingEnrollment?.photo) && (
+                          <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
+                            {!isFieldReq('photo') ? 'Rejected (Optional)' : 'Re-upload'}
+                          </span>
+                        )}
                       </Label>
-                      {formData.photo ? (
+                      {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && formData.photo === (completingEnrollment?.student?.photo || completingEnrollment?.photo) ? (
+                        <p className="text-xs text-red-600 font-medium mt-1">
+                          ✕ Photo was rejected by Operations: {!isFieldReq('photo') ? 'Please re-upload or remove this photo' : 'Please re-upload a clearer image'}
+                        </p>
+                      ) : formData.photo ? (
                         <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
                           ✓ Photo Uploaded: {formData.photo.split('/').pop()}
                         </p>
@@ -2356,6 +2381,21 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                         >
                           View
                         </a>
+                      )}
+                      {formData.photo && !isFieldReq('photo') && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setFormData((prev: any) => ({ ...prev, photo: '' }));
+                            toast.success('Photo removed');
+                          }}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 text-xs font-medium cursor-pointer shadow-sm transition-colors"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          Remove
+                        </Button>
                       )}
                       <input
                         type="file"
@@ -2382,7 +2422,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                         className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
                       >
                         <Upload className="w-3 h-3" />
-                        {formData.photo ? 'Change Photo' : 'Upload Photo'}
+                        {formData.photo ? (completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' ? 'Re-upload' : 'Change Photo') : 'Upload Photo'}
                       </Label>
                     </div>
                   </div>
@@ -2450,9 +2490,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           <div className="flex-1 min-w-0">
                             <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                               <span>{docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}</span>
-                              {existing?.status === 'rejected' && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">Re-upload</span>}
+                              {existing?.status === 'rejected' && (
+                                <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
+                                  {isOptional ? 'Rejected (Optional)' : 'Re-upload'}
+                                </span>
+                              )}
                             </div>
-                            {existing?.url ? (
+                            {existing?.status === 'rejected' ? (
+                              <div className="text-xs text-red-600 font-medium mt-1">
+                                ✕ Rejected by Operations: {isOptional ? 'Please re-upload or click Remove' : 'Please re-upload this required document'}
+                              </div>
+                            ) : existing?.url ? (
                               <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
                                 ✓ Uploaded: {existing.url.split('/').pop()}
                               </div>
@@ -2477,34 +2525,55 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                                 View
                               </a>
                             )}
+                            {existing?.url && isOptional && (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setFormData((prev: any) => ({
+                                    ...prev,
+                                    documents: (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase())
+                                  }));
+                                  if (docType === 'Other') {
+                                    setCustomOtherName('');
+                                  }
+                                  toast.success(`${docType} removed`);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 text-xs font-medium cursor-pointer shadow-sm transition-colors"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                                Remove
+                              </Button>
+                            )}
                             <input
                               type="file"
                               id={elementId}
                               className="hidden"
- accept="image/*,.pdf,.doc,.docx"
+                              accept="image/*,.pdf,.doc,.docx"
                               onChange={async (e) => {
                                 const file = e.target.files?.[0];
                                 if (!file) return;
                                 const toastId = toast.loading(`Uploading ${docType}...`);
-                          try {
-                            const url = await uploadFormFile(file);
-                            setFormData((prev: any) => {
-                              const newDocs = (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase());
-                              newDocs.push({ 
-                                type: docType, 
-                                url, 
-                                label: docType === 'Other' ? customOtherName : undefined,
-                                status: 'pending'
-                              });
-                              return { ...prev, documents: newDocs };
-                            });
-                            toast.success(`${docType} uploaded successfully`, { id: toastId });
-                          } catch (err: any) {
-                            console.error(err);
-                            toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
-                          } finally {
-                            e.target.value = '';
-                          }
+                                try {
+                                  const url = await uploadFormFile(file);
+                                  setFormData((prev: any) => {
+                                    const newDocs = (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase());
+                                    newDocs.push({ 
+                                      type: docType, 
+                                      url, 
+                                      label: docType === 'Other' ? customOtherName : undefined,
+                                      status: 'pending'
+                                    });
+                                    return { ...prev, documents: newDocs };
+                                  });
+                                  toast.success(`${docType} uploaded successfully`, { id: toastId });
+                                } catch (err: any) {
+                                  console.error(err);
+                                  toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
+                                } finally {
+                                  e.target.value = '';
+                                }
                               }}
                             />
                             <Label
@@ -2512,7 +2581,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                               className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
                             >
                               <Upload className="w-3 h-3" />
-                              {existing?.url ? 'Change File' : 'Upload File'}
+                              {existing?.url ? (existing.status === 'rejected' ? 'Re-upload' : 'Change File') : 'Upload File'}
                             </Label>
                           </div>
                         </div>
@@ -3066,9 +3135,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                                   <div className="flex-1 min-w-0">
                                     <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                                       <span>{docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}</span>
-                                      {existing?.status === 'rejected' && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">Re-upload</span>}
+                                      {existing?.status === 'rejected' && (
+                                        <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
+                                          {isOptional ? 'Rejected (Optional)' : 'Re-upload'}
+                                        </span>
+                                      )}
                                     </div>
-                                    {existing?.url ? (
+                                    {existing?.status === 'rejected' ? (
+                                      <div className="text-xs text-red-600 font-medium mt-1">
+                                        ✕ Rejected by Operations: {isOptional ? 'Please re-upload or click Remove' : 'Please re-upload this required document'}
+                                      </div>
+                                    ) : existing?.url ? (
                                       <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
                                         ✓ Uploaded: {existing.url.split('/').pop()}
                                       </div>
@@ -3093,34 +3170,55 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                                         View
                                       </a>
                                     )}
+                                    {existing?.url && isOptional && (
+                                      <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                          setFormData((prev: any) => ({
+                                            ...prev,
+                                            documents: (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase())
+                                          }));
+                                          if (docType === 'Other') {
+                                            setCustomOtherName('');
+                                          }
+                                          toast.success(`${docType} removed`);
+                                        }}
+                                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 text-xs font-medium cursor-pointer shadow-sm transition-colors"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                        Remove
+                                      </Button>
+                                    )}
                                     <input
                                       type="file"
                                       id={elementId}
                                       className="hidden"
- accept="image/*,.pdf,.doc,.docx"
+                                      accept="image/*,.pdf,.doc,.docx"
                                       onChange={async (e) => {
                                         const file = e.target.files?.[0];
                                         if (!file) return;
                                         const toastId = toast.loading(`Uploading ${docType}...`);
-                          try {
-                            const url = await uploadFormFile(file);
-                            setFormData((prev: any) => {
-                              const newDocs = (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase());
-                              newDocs.push({ 
-                                type: docType, 
-                                url, 
-                                label: docType === 'Other' ? customOtherName : undefined,
-                                status: 'pending'
-                              });
-                              return { ...prev, documents: newDocs };
-                            });
-                            toast.success(`${docType} uploaded successfully`, { id: toastId });
-                          } catch (err: any) {
-                            console.error(err);
-                            toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
-                          } finally {
-                            e.target.value = '';
-                          }
+                                        try {
+                                          const url = await uploadFormFile(file);
+                                          setFormData((prev: any) => {
+                                            const newDocs = (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase());
+                                            newDocs.push({ 
+                                              type: docType, 
+                                              url, 
+                                              label: docType === 'Other' ? customOtherName : undefined,
+                                              status: 'pending'
+                                            });
+                                            return { ...prev, documents: newDocs };
+                                          });
+                                          toast.success(`${docType} uploaded successfully`, { id: toastId });
+                                        } catch (err: any) {
+                                          console.error(err);
+                                          toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
+                                        } finally {
+                                          e.target.value = '';
+                                        }
                                       }}
                                     />
                                     <Label
@@ -3128,7 +3226,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                                       className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
                                     >
                                       <Upload className="w-3 h-3" />
-                                      {existing?.url ? 'Change File' : 'Upload File'}
+                                      {existing?.url ? (existing.status === 'rejected' ? 'Re-upload' : 'Change File') : 'Upload File'}
                                     </Label>
                                   </div>
                                 </div>

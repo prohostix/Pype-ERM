@@ -766,24 +766,34 @@ export function SalesStudentPipelinePanel() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
                     const existing = (verifyForm.documents || []).find((d: any) => d.type === docType);
+                    const requiredDocs: string[] = verifyingStudent?.program?.university?.enrollmentFormConfig?.requiredDocuments || ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'];
+                    const isOptional = !requiredDocs.some((req: string) => 
+                      req.toLowerCase() === docType.toLowerCase() ||
+                      (req.toLowerCase() === 'transfer certificate' && docType.toLowerCase() === 'tc / migration / affidavit') ||
+                      (req.toLowerCase() === 'tc / migration / affidavit' && docType.toLowerCase() === 'transfer certificate')
+                    );
                     const elementId = `sales-doc-upload-${docType.replace(/\s+/g, '-')}`;
                     return (
                       <div key={docType} className="p-3 rounded-lg border bg-slate-50 dark:bg-slate-900/10 flex flex-col justify-between">
                         <div className="flex justify-between items-start mb-2">
-                          <span className="text-sm font-medium">{docType}</span>
+                          <span className="text-sm font-medium">
+                            {docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}
+                          </span>
                           {existing?.url && (
                             <a
                               href={api.getFileUrl(existing.url)}
                               target="_blank"
                               rel="noreferrer"
-                              className={cn("text-xs hover:underline", existing.status === 'rejected' ? "text-red-600" : "text-primary")}
+                              className={cn("text-xs hover:underline", existing.status === 'rejected' ? "text-red-600 font-semibold" : "text-primary")}
                             >
                               View
                             </a>
                           )}
                         </div>
                         {existing?.status === 'rejected' && (
-                          <p className="text-xs text-red-600 mb-2 font-medium bg-red-50 p-1 rounded">Rejected. Please re-upload.</p>
+                          <p className="text-xs text-red-600 mb-2 font-medium bg-red-50 p-1 rounded">
+                            ✕ Rejected: {isOptional ? 'Please re-upload or click Remove' : 'Please re-upload'}
+                          </p>
                         )}
                         <div>
                           <input
@@ -810,13 +820,31 @@ export function SalesStudentPipelinePanel() {
                               }
                             }}
                           />
-                          <Label
-                            htmlFor={elementId}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border bg-white dark:bg-slate-800 hover:bg-slate-100 cursor-pointer text-xs font-semibold shadow-sm transition-all w-full justify-center"
-                          >
-                            <Upload className="w-3.5 h-3.5" />
-                            {existing?.url ? 'Change File' : 'Upload File'}
-                          </Label>
+                          <div className="flex items-center gap-2">
+                            {existing?.url && isOptional && (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  const newDocs = (verifyForm.documents || []).filter((d: any) => d.type !== docType);
+                                  setVerifyForm({ ...verifyForm, documents: newDocs });
+                                  toast.success(`${docType} removed`);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 text-xs font-medium cursor-pointer shadow-sm transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                Remove
+                              </Button>
+                            )}
+                            <Label
+                              htmlFor={elementId}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border bg-white dark:bg-slate-800 hover:bg-slate-100 cursor-pointer text-xs font-semibold shadow-sm transition-all flex-1 justify-center"
+                            >
+                              <Upload className="w-3.5 h-3.5" />
+                              {existing?.url ? (existing.status === 'rejected' ? 'Re-upload' : 'Change File') : 'Upload File'}
+                            </Label>
+                          </div>
                         </div>
                       </div>
                     );
