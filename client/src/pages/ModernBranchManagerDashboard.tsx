@@ -146,7 +146,7 @@ export function ModernBranchManagerDashboard({ initialTab, onNavigate }: { initi
       case 'tasks': return <TasksPanel />;
       case 'announcements': return <AnnouncementsPanel />;
       // Portal
-      case 'my_leaves': return <LeavesPanel />;
+      case 'my_leaves': return <LeavesPanel isMyPortal />; // her own leaves only
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'my_payslips': return <PayrollPanel />;
       case 'holidays': return <HolidaysPanel />;
