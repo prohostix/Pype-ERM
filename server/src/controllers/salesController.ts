@@ -211,6 +211,15 @@ export const getTeamPerformance = asyncHandler(async (req: AuthRequest, res: Res
     }
   }
 
+  // A branch manager's team is the staff of their own branch.
+  if (req.user.role === 'branch_manager' && req.user.branchId) {
+    whereClause.branchId = req.user.branchId;
+  }
+
+  // Team performance is about staff: never include student accounts (an
+  // organization can have thousands, which made this call take ~20 seconds).
+  whereClause.role = { not: 'student' };
+
   // Exclude resigned from team performance
   whereClause.status = { not: 'resigned' };
 
