@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 
 const getDocUrl = (url: string) => {
@@ -79,6 +80,9 @@ function InfoField({ label, value }: { label: string; value?: string | null }) {
 }
 
 export function DeptEnrollmentReviewPanel() {
+  const { user } = useAuth();
+  // Branch managers can look at applications but not approve or reject them.
+  const readOnly = user?.role === 'branch_manager';
   const [tab, setTab] = useState<'pending' | 'completed'>('pending');
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(false);
@@ -405,7 +409,7 @@ export function DeptEnrollmentReviewPanel() {
                     <Button size="sm" variant="outline" className="text-primary border-primary/30 hover:bg-primary/10" onClick={() => setViewStudent(e)}>
                       <Eye className="w-4 h-4 mr-1" />View
                     </Button>
-                    {tab === 'pending' && (
+                    {tab === 'pending' && !readOnly && (
                       <>
                         <Button
                           size="sm"
@@ -478,7 +482,7 @@ export function DeptEnrollmentReviewPanel() {
                       </div>
                     )}
                   </div>
-                  {tab === 'pending' && (viewStudent.student?.photo || viewStudent.photo) && (!(viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) || (viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) === 'pending') && (
+                  {tab === 'pending' && !readOnly && (viewStudent.student?.photo || viewStudent.photo) && (!(viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) || (viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) === 'pending') && (
                     <div className="flex gap-1 w-full mt-1">
                       <button
                         onClick={() => handlePhotoAction(viewStudent.student?.id, viewStudent.id, 'approved')}
@@ -646,7 +650,7 @@ export function DeptEnrollmentReviewPanel() {
                               <p className="text-xs text-muted-foreground truncate">{doc.name || 'Click to preview'}</p>
                             </div>
                           </button>
-                          {tab === 'pending' && (!doc.status || doc.status === 'pending') && (
+                          {tab === 'pending' && !readOnly && (!doc.status || doc.status === 'pending') && (
                             <div className="flex border-t divide-x bg-muted/20 overflow-hidden rounded-b-lg">
                               <button
                                 onClick={() => handleDocAction(viewStudent.student?.id, viewStudent.id, i, 'approved')}
@@ -681,7 +685,7 @@ export function DeptEnrollmentReviewPanel() {
             <DialogTitle className="flex items-center justify-between">
               <span>{previewDoc?.type || 'Document Preview'}</span>
               <div className="flex items-center gap-2 mr-6">
-                {viewStudent && tab === 'pending' && previewDoc?.index !== -1 && (!previewDoc?.status || previewDoc?.status === 'pending') && (
+                {viewStudent && tab === 'pending' && !readOnly && previewDoc?.index !== -1 && (!previewDoc?.status || previewDoc?.status === 'pending') && (
                   <>
                     <Button
                       size="sm"
