@@ -124,6 +124,8 @@ export function ModernBranchManagerDashboard({ initialTab, onNavigate }: { initi
       case 'leads': return <LeadsPanel />;
       case 'targets': return <TargetsPanel endpoint="/sales/targets" title="Branch Targets" />;
       case 'invite_links': return <SalesInvitePanel />;
+      // The page URL maps the "My Team" menu item (my_team) to the tab name "team".
+      case 'team':
       case 'my_team': return <TeamPerformancePanel />;
       case 'branch_centers_sales': return <SalesCentersPanel />;
       // Ops
