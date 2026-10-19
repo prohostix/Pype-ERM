@@ -21,8 +21,73 @@ export const getEscalations = asyncHandler(async (req: AuthRequest, res: Respons
   res.json({ success: true, count: escalations.length, data: escalations });
 });
 
+// Handle an escalation. The screens send { action, resolution, newDeadline, reassignTo }
+// (action = resolve | reassign | extend | justify) rather than database columns, so
+// translate that into the escalation's own fields and, where it applies, its task.
 export const handleEscalation = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const escalation = await prisma.escalation.update({ where: { id: req.params.id }, data: req.body });
+  const existing = await prisma.escalation.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId },
+  });
+  if (!existing) {
+    res.status(404).json({ success: false, message: 'Escalation not found' });
+    return;
+  }
+
+  const { action, resolution, newDeadline, reassignTo } = req.body || {};
+  const now = new Date();
+  const data: any = {};
+
+  switch (action) {
+    case 'resolve':
+    case 'justify':
+      if (!resolution || !String(resolution).trim()) {
+        res.status(400).json({ success: false, message: 'Resolution notes are required' });
+        return;
+      }
+      data.resolution = String(resolution).trim();
+      break;
+    case 'extend': {
+      const d = newDeadline ? new Date(newDeadline) : null;
+      if (!d || isNaN(d.getTime())) {
+        res.status(400).json({ success: false, message: 'A valid new deadline is required' });
+        return;
+      }
+      if (existing.taskId) {
+        await prisma.task.update({ where: { id: existing.taskId }, data: { targetDate: d } });
+      }
+      data.resolution = `Deadline extended to ${d.toISOString().split('T')[0]}`;
+      break;
+    }
+    case 'reassign': {
+      if (!reassignTo) {
+        res.status(400).json({ success: false, message: 'Choose who to reassign this to' });
+        return;
+      }
+      const target = await prisma.user.findFirst({
+        where: { id: String(reassignTo), organizationId: req.user.organizationId },
+        select: { id: true, name: true },
+      });
+      if (!target) {
+        res.status(400).json({ success: false, message: 'That user was not found in your organization' });
+        return;
+      }
+      if (existing.taskId) {
+        await prisma.task.update({ where: { id: existing.taskId }, data: { assignedTo: target.id } });
+      }
+      data.resolution = `Reassigned to ${target.name}`;
+      break;
+    }
+    default:
+      res.status(400).json({ success: false, message: 'Unknown action' });
+      return;
+  }
+
+  data.status = 'resolved';
+  data.resolvedAt = now;
+  data.resolvedBy = req.user.id;
+  data.handledBy = req.user.id;
+
+  const escalation = await prisma.escalation.update({ where: { id: existing.id }, data });
   res.json({ success: true, data: escalation });
 });
 

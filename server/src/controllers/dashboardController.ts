@@ -16,7 +16,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     metrics.activeOrganizations = await prisma.organization.count({ where: { status: 'active' } });
   }
 
-  if (['superadmin', 'ceo', 'org_admin'].includes(role)) {
+  if (['superadmin', 'ceo', 'general_manager', 'org_admin'].includes(role)) {
     metrics.totalEmployees = await prisma.user.count({
       where: { ...orgQuery, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student'] } }, status: { not: 'resigned' } }
     });
@@ -27,7 +27,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     metrics.totalPrograms = await prisma.program.count({ where: orgQuery });
   }
 
-  if (['ops_admin', 'ops_sub_admin', 'ceo', 'org_admin'].includes(role)) {
+  if (['ops_admin', 'ops_sub_admin', 'ceo', 'general_manager', 'org_admin'].includes(role)) {
     let studentWhere: any = { ...orgQuery };
     let enrollmentWhere: any = { ...orgQuery };
 
@@ -109,7 +109,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     }).catch(() => 0);
   }
 
-  if (['hr_admin', 'hr_sub_admin', 'ceo', 'org_admin', 'branch_manager'].includes(role)) {
+  if (['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'org_admin', 'branch_manager'].includes(role)) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const endOfDay = new Date(today);
@@ -173,7 +173,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     });
   }
 
-  if (['finance_admin', 'finance_sub_admin', 'ceo', 'org_admin'].includes(role)) {
+  if (['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'org_admin'].includes(role)) {
     const invoices = await prisma.invoice.findMany({ where: { organizationId: orgId, status: 'paid' }, select: { total: true } });
     metrics.totalRevenue = invoices.reduce((sum, inv) => sum + inv.total, 0);
     metrics.pendingInvoices = await prisma.invoice.count({ where: { organizationId: orgId, status: { in: ['draft', 'sent'] } } });
@@ -181,7 +181,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     metrics.pendingExpenses = await prisma.expenseClaim.count({ where: { organizationId: orgId, status: 'pending' } });
   }
 
-  if (['sales_admin', 'sales_sub_admin', 'ceo'].includes(role)) {
+  if (['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager'].includes(role)) {
     metrics.totalLeads = await prisma.lead.count({ where: { organizationId: orgId } });
     metrics.convertedLeads = await prisma.lead.count({ where: { organizationId: orgId, status: 'converted' } });
   }
@@ -194,7 +194,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     metrics.completedTasks = await prisma.task.count({ where: { ...taskWhere, status: 'completed' } });
   }
 
-  if (role === 'ceo') {
+  if (role === 'ceo' || role === 'general_manager') {
     metrics.activeEscalations = await prisma.escalation.count({ where: { organizationId: orgId, status: 'active' } });
   }
 
