@@ -1,7 +1,13 @@
 #!/bin/bash
 set -e
 
-PEM_KEY="/Users/apple/Documents/ProHostix/credentials/pypeerm.pem"
+if [ -f "/Users/retro/Downloads/pypeerm.pem" ]; then
+  PEM_KEY="/Users/retro/Downloads/pypeerm.pem"
+elif [ -f "/Users/apple/Documents/ProHostix/credentials/pypeerm.pem" ]; then
+  PEM_KEY="/Users/apple/Documents/ProHostix/credentials/pypeerm.pem"
+else
+  PEM_KEY="$HOME/Downloads/pypeerm.pem"
+fi
 SERVER_USER="ubuntu"
 SERVER_IP="13.232.188.79"
 TARGET_DIR="/var/www/pype-erm"

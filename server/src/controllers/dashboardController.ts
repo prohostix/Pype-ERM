@@ -207,7 +207,11 @@ export const getFinanceOverviewMetrics = asyncHandler(async (req: AuthRequest, r
   const branchId = req.query.branchId as string;
 
   const whereBase: any = { organizationId: orgId };
-  const branchFilter = (branchId && branchId !== 'all') ? branchId : undefined;
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  let branchFilter = (branchId && branchId !== 'all') ? branchId : undefined;
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    branchFilter = req.user.branchId;
+  }
 
   // Date filtering
   let dateFilter = {};

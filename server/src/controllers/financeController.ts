@@ -155,6 +155,15 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
       return;
     }
 
+    // Branch-level isolation check
+    const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+    if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+      if (student.branchId && student.branchId !== req.user.branchId) {
+        res.status(403).json({ success: false, message: 'Access denied: Student belongs to another branch' });
+        return;
+      }
+    }
+
     // Attempt to resolve program fee structure from db
     let invoiceTotal = Number(req.body.amount);
     let feeDescription = 'Program Admission Fees / Custom Invoice Item';
@@ -964,6 +973,18 @@ export const getCollectionReport = asyncHandler(async (req: AuthRequest, res: Re
   const { startDate, endDate, receivedBy } = req.query;
 
   const where: any = { organizationId };
+
+  // Branch-level isolation for finance users
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    where.invoice = {
+      OR: [
+        { student: { branchId: req.user.branchId } },
+        { student: { enrolledByUser: { branchId: req.user.branchId } } },
+        { studentId: null, centerId: null }
+      ]
+    };
+  }
 
   if (startDate && endDate) {
     where.receivedAt = {
