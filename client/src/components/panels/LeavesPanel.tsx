@@ -91,7 +91,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
   const isBranchManager = Boolean((user as any)?.isBranchManager);
   const isDeptManager = DEPT_MANAGER_ROLES.includes(role) || isBranchManager;
   const isHR = role === 'hr_admin' || role === 'hr_sub_admin';
-  const isEmployee = !isDeptManager && !isHR && role !== 'superadmin' && role !== 'org_admin' && role !== 'ceo' && role !== 'general_manager';
+  const isEmployee = !isDeptManager && !isHR && role !== 'superadmin' && role !== 'org_admin' && role !== 'ceo' && role !== 'general_manager' && role !== 'branch_manager';
 
   const currentMonthStr = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
   const [selectedMonth, setSelectedMonth] = useState(currentMonthStr);

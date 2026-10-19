@@ -611,7 +611,7 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'faculty'];
+    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'branch_manager', 'faculty'];
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student' && user?.role !== 'center_student';
