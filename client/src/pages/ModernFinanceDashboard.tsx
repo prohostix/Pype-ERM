@@ -331,12 +331,12 @@ function OverviewContent({ onNavigate }: any) {
                 {lists.recentCollections.map((c: any) => (
                   <div key={c.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
                     <div>
-                      <p className="font-medium text-sm">{c.student?.name || 'Unknown'}</p>
+                      <p className="font-medium text-sm">{c.student?.name || c.invoice?.student?.name || 'Unknown'}</p>
                       <p className="text-xs text-muted-foreground">{new Date(c.createdAt).toLocaleDateString()}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-bold text-success">₹{c.amount}</p>
-                      <Badge variant="outline" className="text-[10px] uppercase">{c.paymentMode}</Badge>
+                      <Badge variant="outline" className="text-[10px] uppercase">{c.paymentMode || c.method || 'PAID'}</Badge>
                     </div>
                   </div>
                 ))}
@@ -356,7 +356,7 @@ function OverviewContent({ onNavigate }: any) {
                   <div key={e.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
                     <div>
                       <p className="font-medium text-sm">{e.category}</p>
-                      <p className="text-xs text-muted-foreground">{e.employee?.user?.name || 'Unknown'}</p>
+                      <p className="text-xs text-muted-foreground">{e.employee?.user?.name || e.user?.name || 'Unknown'}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-bold text-error">₹{e.amount}</p>

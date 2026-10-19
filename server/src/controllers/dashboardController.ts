@@ -351,6 +351,17 @@ export const getFinanceOverviewMetrics = asyncHandler(async (req: AuthRequest, r
     include: { user: true },
   });
 
+  const formattedRecentCollections = recentCollections.map(c => ({
+    ...c,
+    student: c.invoice?.student,
+    paymentMode: c.method
+  }));
+
+  const formattedRecentExpenses = recentExpenses.map(e => ({
+    ...e,
+    employee: { user: e.user }
+  }));
+
   // Charts data
   // 1. Collection Overview (Current Week)
   const startOfThisWeek = new Date();
@@ -422,8 +433,8 @@ export const getFinanceOverviewMetrics = asyncHandler(async (req: AuthRequest, r
         myTargetValue
       },
       lists: {
-        recentCollections,
-        recentExpenses,
+        recentCollections: formattedRecentCollections,
+        recentExpenses: formattedRecentExpenses,
         upcomingCommittedPayments: []
       },
       charts: {
