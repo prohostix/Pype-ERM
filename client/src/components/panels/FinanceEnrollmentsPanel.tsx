@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
 
 const getDocUrl = (url: string) => {
   return api.getFileUrl(url);
@@ -69,6 +70,9 @@ const FILTER_TABS = [
 ];
 
 export function FinanceEnrollmentsPanel() {
+  const { user } = useAuth();
+  // Only Finance can approve, reject or verify; everyone else (CEO, General Manager, Branch Manager) views.
+  const canAct = ['finance_admin', 'finance_sub_admin'].includes(user?.role || '');
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(false);
@@ -286,7 +290,7 @@ export function FinanceEnrollmentsPanel() {
                         <Button size="sm" variant="outline" className="h-7 text-xs text-primary border-primary/30 hover:bg-primary/10" onClick={() => setViewStudent(e)}>
                           <Eye className="w-3 h-3 mr-1" />View
                         </Button>
-                        {e.status === 'finance_review' && (
+                        {canAct && e.status === 'finance_review' && (
                           <>
                             <Button size="sm" variant="outline" className="h-7 text-xs text-green-600 border-green-300 hover:bg-green-50 dark:hover:bg-green-900/20" onClick={() => handleApprove(e.id)}>
                               <CheckCircle className="w-3 h-3 mr-1" />Enroll
@@ -512,7 +516,7 @@ export function FinanceEnrollmentsPanel() {
                         </a>
                         <div className="flex-1">
                           <p className="text-sm font-medium mb-1">Receipt Uploaded</p>
-                          {!viewStudent.receiptVerified ? (
+                          {!viewStudent.receiptVerified && canAct ? (
                             <div className="flex flex-wrap items-center gap-2 mt-2">
                               <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleVerifyReceipt(viewStudent.id)}>
                                 <CheckCircle className="w-3.5 h-3.5 mr-1" />
@@ -527,7 +531,7 @@ export function FinanceEnrollmentsPanel() {
                               </Button>
                             </div>
                           ) : (
-                            <p className="text-xs text-muted-foreground mt-1">Receipt has been verified and student enrolled.</p>
+                            <p className="text-xs text-muted-foreground mt-1">{viewStudent.receiptVerified ? 'Receipt has been verified and student enrolled.' : 'Awaiting verification by Finance.'}</p>
                           )}
                         </div>
                       </>

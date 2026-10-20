@@ -81,8 +81,8 @@ function InfoField({ label, value }: { label: string; value?: string | null }) {
 
 export function DeptEnrollmentReviewPanel() {
   const { user } = useAuth();
-  // Branch managers can look at applications but not approve or reject them.
-  const readOnly = user?.role === 'branch_manager';
+  // Branch managers, the CEO and the General Manager can look at applications but not approve or reject them.
+  const readOnly = ['branch_manager', 'ceo', 'general_manager'].includes(user?.role || '');
   const [tab, setTab] = useState<'pending' | 'completed'>('pending');
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(false);

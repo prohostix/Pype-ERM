@@ -1,10 +1,33 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { AssetStatus, AssetType } from '../generated/client';
 
-export const getAssets = async (req: Request, res: Response) => {
+
+// Assets belong to a user, so an asset is visible to the caller only when its
+// user is in the caller's organization (and, for a branch manager, branch).
+const assetScope = (req: AuthRequest): any => {
+  if (req.user.role === 'superadmin') return {};
+  const user: any = { organizationId: req.user.organizationId };
+  if (req.user.role === 'branch_manager' && req.user.branchId) user.branchId = req.user.branchId;
+  return { user };
+};
+
+// Who an asset may be assigned to: any staff account in scope (not students).
+const findAssignableUser = (req: AuthRequest, userId: string) =>
+  prisma.user.findFirst({
+    where: {
+      id: userId,
+      role: { not: 'student' },
+      ...(req.user.role === 'superadmin' ? {} : assetScope(req).user),
+    },
+    select: { id: true },
+  });
+
+export const getAssets = async (req: AuthRequest, res: Response) => {
   try {
     const assets = await prisma.asset.findMany({
+      where: assetScope(req),
       include: {
         user: {
           select: {
@@ -30,7 +53,7 @@ export const getAssets = async (req: Request, res: Response) => {
   }
 };
 
-export const createAsset = async (req: Request, res: Response) => {
+export const createAsset = async (req: AuthRequest, res: Response) => {
   try {
     const { 
       type, 
@@ -49,6 +72,10 @@ export const createAsset = async (req: Request, res: Response) => {
 
     if (!type || !userId) {
       return res.status(400).json({ success: false, message: 'Type and Assigned User are required' });
+    }
+
+    if (!(await findAssignableUser(req, userId))) {
+      return res.status(400).json({ success: false, message: 'That user was not found in your organization.' });
     }
 
     const newAsset = await prisma.asset.create({
@@ -80,7 +107,7 @@ export const createAsset = async (req: Request, res: Response) => {
   }
 };
 
-export const updateAsset = async (req: Request, res: Response) => {
+export const updateAsset = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { 
@@ -98,10 +125,14 @@ export const updateAsset = async (req: Request, res: Response) => {
       returnedDate 
     } = req.body;
 
-    const asset = await prisma.asset.findUnique({ where: { id } });
+    const asset = await prisma.asset.findFirst({ where: { id, ...assetScope(req) } });
 
     if (!asset) {
       return res.status(404).json({ success: false, message: 'Asset not found' });
+    }
+
+    if (userId && userId !== asset.userId && !(await findAssignableUser(req, userId))) {
+      return res.status(400).json({ success: false, message: 'That user was not found in your organization.' });
     }
 
     const updatedAsset = await prisma.asset.update({
@@ -134,11 +165,11 @@ export const updateAsset = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteAsset = async (req: Request, res: Response) => {
+export const deleteAsset = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
 
-    const asset = await prisma.asset.findUnique({ where: { id } });
+    const asset = await prisma.asset.findFirst({ where: { id, ...assetScope(req) } });
 
     if (!asset) {
       return res.status(404).json({ success: false, message: 'Asset not found' });
