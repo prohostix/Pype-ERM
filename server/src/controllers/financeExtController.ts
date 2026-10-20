@@ -277,6 +277,7 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
     let targetSpecialisation = activeSpecialisation;
     let totalFee = 0;
     let feeBreakdown: any = null;
+    let feeStructureMissing = false;
 
     if (targetProgramId) {
       let feeStruct = null;
@@ -330,6 +331,9 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       }
     }
 
+    // No fee structure for the program and no payment schedule to fall back on.
+    feeStructureMissing = !feeBreakdown && !totalFee && !(overallProgramFee && overallProgramFee !== invoice.total);
+
     if (!totalFee && overallProgramFee) {
       totalFee = overallProgramFee;
     } else if (totalFee) {
@@ -367,6 +371,7 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       organization: invoice.organization,
       balanceDue: Math.max(0, invoice.total - invoice.payments.reduce((sum, p) => sum + p.amount, 0)),
       totalFee,
+      feeStructureMissing,
       feeBreakdown,
       overallProgramFee,
       overallPaid,
