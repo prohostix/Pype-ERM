@@ -145,12 +145,12 @@ router.route('/leave-allocations/:userId')
 // Smart Payroll Generation (uses salary configs + late deductions)
 router.post('/payroll/generate-smart', authorize('hr_admin', 'hr_sub_admin'), generateSmartPayroll);
 
-// Employee Profiles (KPI / KRA / Salary details)
-router.get('/employee-profiles/:userId', authorize('hr_admin', 'hr_sub_admin'), getEmployeeProfile);
-router.put('/employee-profiles/:userId', authorize('hr_admin', 'hr_sub_admin'), upsertEmployeeProfile);
-router.patch('/employee-profiles/:userId/kpis', authorize('hr_admin', 'hr_sub_admin'), updateKPIs);
-router.patch('/employee-profiles/:userId/kras', authorize('hr_admin', 'hr_sub_admin'), updateKRAs);
-router.patch('/employee-profiles/:userId/salary', authorize('hr_admin', 'hr_sub_admin'), updateSalaryDetails);
+// Employee Profiles (KPI / KRA / Salary details / Work Location)
+router.get('/employee-profiles/:userId', authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), getEmployeeProfile);
+router.put('/employee-profiles/:userId', authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), upsertEmployeeProfile);
+router.patch('/employee-profiles/:userId/kpis', authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), updateKPIs);
+router.patch('/employee-profiles/:userId/kras', authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), updateKRAs);
+router.patch('/employee-profiles/:userId/salary', authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), updateSalaryDetails);
 
 // Announcements (HR creates, all org members can read)
 router.get('/announcements', getAnnouncements);

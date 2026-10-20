@@ -255,7 +255,8 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
       ceoPanelId: true,
       department: { select: { id: true, name: true, type: true } },
       subDepartment: { select: { id: true, name: true } },
-      employeeProfileDetail: { select: { joinDate: true, probationEndDate: true } },
+      branch: { select: { id: true, name: true, city: true } },
+      employeeProfileDetail: { select: { joinDate: true, probationEndDate: true, workLocation: true } },
       organization: true,
     }
   });
