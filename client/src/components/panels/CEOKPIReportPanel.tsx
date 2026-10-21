@@ -49,8 +49,8 @@ function StarRow({ value }: { value?: number }) {
 }
 
 function KpiBar({ kpi }: { kpi: KPI }) {
-  const pct = Math.min(100, Math.round((kpi.achieved / kpi.target) * 100));
-  const st = KPI_STATUS[kpi.status];
+  const pct = kpi.target > 0 ? Math.min(100, Math.round((kpi.achieved / kpi.target) * 100)) : 0;
+  const st = KPI_STATUS[kpi.status] || KPI_STATUS.on_track;
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between text-xs">
@@ -185,7 +185,17 @@ export function CEOKPIReportPanel() {
     setLoading(true);
     try {
       const res = await api.get('/ceo/kpi-kra-report');
-      setData(res.data.data || []);
+      // Fill any missing pieces so one odd record can never blank the page.
+      const rows: any[] = Array.isArray(res.data.data) ? res.data.data : [];
+      setData(rows.map((r: any) => ({
+        ...r,
+        name: r?.name || 'Employee',
+        department: r?.department || '',
+        kpis: Array.isArray(r?.kpis) ? r.kpis : [],
+        kras: Array.isArray(r?.kras) ? r.kras : [],
+        kpiSummary: r?.kpiSummary || { total: 0, achieved: 0, atRisk: 0, missed: 0, avgPct: 0 },
+        kraSummary: r?.kraSummary || { total: 0, avgRating: null, totalWeightage: 0 },
+      })));
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to load KPI/KRA report');
     } finally {
@@ -198,8 +208,8 @@ export function CEOKPIReportPanel() {
   const filtered = data.filter(emp => {
     const matchSearch = !search ||
       emp.name.toLowerCase().includes(search.toLowerCase()) ||
-      emp.department.toLowerCase().includes(search.toLowerCase()) ||
-      emp.designation?.toLowerCase().includes(search.toLowerCase());
+      (emp.department || '').toLowerCase().includes(search.toLowerCase()) ||
+      (emp.designation || '').toLowerCase().includes(search.toLowerCase());
 
     if (tab === 'at_risk') return matchSearch && emp.kpiSummary.atRisk > 0;
     if (tab === 'missed')  return matchSearch && emp.kpiSummary.missed > 0;

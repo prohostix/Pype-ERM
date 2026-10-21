@@ -224,14 +224,87 @@ export const assignTask = asyncHandler(async (req: AuthRequest, res: Response) =
   res.status(201).json({ success: true, data: task });
 });
 
+// Org-wide KPI / KRA report. The panel reads each employee as
+// { name, department, kpis, kpiSummary, kras, kraSummary, ... }, so build that
+// shape here from the stored employee profiles (kpis / kras are JSON lists).
 export const getKPIKRAReport = asyncHandler(async (req: AuthRequest, res: Response) => {
   const profiles = await prisma.employeeProfile.findMany({
-    where: { organizationId: req.user.organizationId },
+    where: { organizationId: req.user.organizationId, user: { status: { not: 'resigned' } } },
     include: {
-      user: { select: { name: true, email: true, department: true } }
-    }
+      user: {
+        select: {
+          id: true, name: true, email: true, designation: true, role: true, status: true,
+          department: { select: { name: true } },
+        },
+      },
+    },
   });
-  res.json({ success: true, data: profiles });
+
+  const num = (v: any) => (Number.isFinite(Number(v)) ? Number(v) : 0);
+
+  const data = profiles.map((p: any) => {
+    const kpis: any[] = (Array.isArray(p.kpis) ? p.kpis : []).filter((k: any) => k && typeof k === 'object');
+    const kras: any[] = (Array.isArray(p.kras) ? p.kras : []).filter((k: any) => k && typeof k === 'object');
+
+    const kpiList = kpis.map((k, i) => {
+      const target = num(k.target);
+      const achieved = num(k.achieved);
+      const status = ['on_track', 'at_risk', 'achieved', 'missed'].includes(k.status)
+        ? k.status
+        : (target > 0 && achieved >= target ? 'achieved' : 'on_track');
+      return {
+        id: String(k.id ?? `${p.id}-kpi-${i}`),
+        title: String(k.title ?? 'KPI'),
+        description: k.description,
+        target,
+        achieved,
+        unit: String(k.unit ?? ''),
+        period: String(k.period ?? ''),
+        status,
+      };
+    });
+    const kraList = kras.map((k, i) => ({
+      id: String(k.id ?? `${p.id}-kra-${i}`),
+      area: String(k.area ?? 'KRA'),
+      description: k.description,
+      weightage: num(k.weightage),
+      rating: k.rating == null || k.rating === '' ? undefined : num(k.rating),
+      remarks: k.remarks,
+    }));
+
+    const pcts = kpiList.map(k => (k.target > 0 ? Math.min(100, (k.achieved / k.target) * 100) : 0));
+    const rated = kraList.filter(k => k.rating !== undefined);
+
+    return {
+      userId: p.user?.id ?? p.userId,
+      name: p.user?.name ?? 'Employee',
+      email: p.user?.email ?? '',
+      designation: p.user?.designation ?? undefined,
+      role: p.user?.role ?? '',
+      department: p.user?.department?.name ?? '',
+      status: p.user?.status ?? '',
+      overallRating: p.overallRating ?? undefined,
+      lastReviewDate: p.lastReviewDate ?? undefined,
+      nextReviewDate: p.nextReviewDate ?? undefined,
+      reviewRemarks: p.reviewRemarks ?? undefined,
+      kpis: kpiList,
+      kpiSummary: {
+        total: kpiList.length,
+        achieved: kpiList.filter(k => k.status === 'achieved').length,
+        atRisk: kpiList.filter(k => k.status === 'at_risk').length,
+        missed: kpiList.filter(k => k.status === 'missed').length,
+        avgPct: pcts.length ? Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length) : 0,
+      },
+      kras: kraList,
+      kraSummary: {
+        total: kraList.length,
+        avgRating: rated.length ? (rated.reduce((a, k) => a + (k.rating || 0), 0) / rated.length).toFixed(1) : null,
+        totalWeightage: kraList.reduce((a, k) => a + k.weightage, 0),
+      },
+    };
+  });
+
+  res.json({ success: true, data });
 });
 
 export const getCenterOnboardingOverview = asyncHandler(async (req: AuthRequest, res: Response) => {
