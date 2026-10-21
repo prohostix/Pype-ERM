@@ -47,7 +47,10 @@ export function AppDownloadPage() {
 
   // Compute full direct download URL
   const baseUrl = api.getBaseUrl().replace(/\/$/, '');
-  const downloadEndpoint = `${baseUrl}/app-releases/download/mobile`;
+  // /download is the Pype ERM page; /download?platform=psc or eca serves that app's own APK.
+  const requested = new URLSearchParams(window.location.search).get('platform') || 'mobile';
+  const platform = ['mobile', 'psc', 'eca'].includes(requested) ? requested : 'mobile';
+  const downloadEndpoint = `${baseUrl}/app-releases/download/${platform}`;
   const downloadUrl = downloadEndpoint.startsWith('http') 
     ? downloadEndpoint 
     : `${window.location.origin}${downloadEndpoint}`;
@@ -55,7 +58,7 @@ export function AppDownloadPage() {
   const fetchRelease = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/app-releases/latest?platform=mobile');
+      const res = await api.get(`/app-releases/latest?platform=${platform}`);
       if (res.data) {
         setManifest(res.data);
       }
