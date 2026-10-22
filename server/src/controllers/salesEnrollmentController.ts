@@ -879,14 +879,14 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     return;
   }
 
-  // The creating sales user, or (to re-request one they rejected) a Sales Admin.
-  const adminReopening = ['sales_admin', 'org_admin', 'superadmin'].includes(req.user.role) && isSalesAdminRejected(enrollment);
-  if (enrollment.organizationId !== orgId || (enrollment.salesUserId !== salesUserId && !adminReopening)) {
+  // The creating sales user, or Sales Admin / Org Admin / Super Admin
+  const isPrivilegedAdmin = ['sales_admin', 'org_admin', 'superadmin'].includes(req.user.role);
+  if (enrollment.organizationId !== orgId || (enrollment.salesUserId !== salesUserId && !isPrivilegedAdmin)) {
     res.status(403).json({ success: false, message: 'Not authorized to verify this enrollment' });
     return;
   }
 
-  const allowedStatuses = ['sales_verification_pending', 'document_review', 'rejected', 'ops_rejected'];
+  const allowedStatuses = ['sales_verification_pending', 'document_review', 'rejected', 'ops_rejected', 'department_rejected'];
   if (!allowedStatuses.includes(enrollment.status)) {
     res.status(400).json({ success: false, message: 'Enrollment cannot be resubmitted from its current status.' });
     return;
@@ -904,14 +904,19 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
 
   const now = new Date();
 
+  // Reset any rejected document status to pending on resubmission
+  const cleanDocuments = Array.isArray(documents)
+    ? documents.map((d: any) => (d && d.status === 'rejected' ? { ...d, status: 'pending', remarks: undefined } : d))
+    : enrollment.documents;
+
   // Update enrollment with new details and move to document_review
   const updatedEnrollment = await prisma.enrollment.update({
     where: { id },
     data: {
-      studentName: studentName || enrollment.studentName,
-      studentEmail: studentEmail || enrollment.studentEmail,
-      studentPhone: studentPhone || enrollment.studentPhone,
-      studentAddress: studentAddress || enrollment.studentAddress,
+      studentName: studentName || req.body.name || enrollment.studentName,
+      studentEmail: studentEmail || req.body.email || enrollment.studentEmail,
+      studentPhone: studentPhone || req.body.phone || enrollment.studentPhone,
+      studentAddress: studentAddress || req.body.address || enrollment.studentAddress,
       fatherName: fatherName !== undefined ? fatherName : enrollment.fatherName,
       dob: dob ? new Date(dob) : enrollment.dob,
       altPhone: altPhone !== undefined ? altPhone : enrollment.altPhone,
@@ -927,7 +932,7 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
       fatherPhone: fatherPhone !== undefined ? fatherPhone : enrollment.fatherPhone,
       guardianName: guardianName !== undefined ? guardianName : enrollment.guardianName,
       familyPhone: familyPhone !== undefined ? familyPhone : enrollment.familyPhone,
-      documents: documents !== undefined ? documents : enrollment.documents,
+      documents: (cleanDocuments !== undefined ? cleanDocuments : enrollment.documents) as any,
       photo: photo !== undefined ? photo : enrollment.photo,
       receiptUrl: receiptUrl !== undefined ? receiptUrl : enrollment.receiptUrl,
       paymentPlan: paymentPlan || enrollment.paymentPlan,
@@ -1033,8 +1038,8 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
       status: newStatus,
       documents: cleanedDocs as any,
       photoStatus: newPhotoStatus,
-      ...(isFinanceRejection ? { financeRemarks: null, receiptVerified: false, departmentRemarks: null } : {}),
-      ...(wasRejectedByOperations ? { departmentRemarks: null } : {}),
+      departmentRemarks: null,
+      ...(isFinanceRejection ? { financeRemarks: null, receiptVerified: false } : {}),
       statusHistory: appendHistory(updatedEnrollment.statusHistory, {
         status: newStatus,
         actorId: salesUserId,

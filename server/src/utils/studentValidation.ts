@@ -538,7 +538,7 @@ export async function checkStudentOrEnrollmentExists(
     const enrollmentCandidates = await prisma.enrollment.findMany({
       where: {
         studentEmail: { equals: cleanEmail, mode: 'insensitive' },
-        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'completed', 'graduated', 'alumni'] },
+        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'department_rejected', 'completed', 'graduated', 'alumni'] },
         ...(options.excludeEnrollmentId ? { id: { not: options.excludeEnrollmentId } } : {}),
         ...(options.excludeStudentId ? { NOT: { studentId: options.excludeStudentId } } : {}),
       },
@@ -565,7 +565,7 @@ export async function checkStudentOrEnrollmentExists(
           { studentPhone: cleanPhone },
           ...(cleanPhone.length >= 10 ? [{ studentPhone: { contains: cleanPhone.slice(-10) } }] : [])
         ],
-        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'completed', 'graduated', 'alumni'] },
+        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'department_rejected', 'completed', 'graduated', 'alumni'] },
         ...(options.excludeEnrollmentId ? { id: { not: options.excludeEnrollmentId } } : {}),
         ...(options.excludeStudentId ? { NOT: { studentId: options.excludeStudentId } } : {}),
       },
