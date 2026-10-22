@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, CheckCircle, XCircle, Eye, FileText, User, Search, Download, School } from 'lucide-react';
+import { RefreshCw, CheckCircle, XCircle, Eye, FileText, User, Search, Download, School, GraduationCap } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -47,6 +48,8 @@ interface Enrollment {
   photo?: string;
   salesUser?: { name: string };
   assignedOpsSubAdminName?: string;
+  isUpgrade?: boolean;
+  previousProgramId?: string;
 }
 
 const STATUS_META: Record<string, { label: string; color: string }> = {
@@ -54,11 +57,13 @@ const STATUS_META: Record<string, { label: string; color: string }> = {
   receipt_submitted: { label: 'Receipt Submitted & Ops Pending', color: 'bg-amber-100 text-amber-700 border border-amber-200' },
   document_review: { label: 'Document Review', color: 'bg-blue-100 text-blue-700' },
   dept_review: { label: 'Dept Review', color: 'bg-purple-100 text-purple-700' },
+  ops_upgrade_verification: { label: 'Upgrade Verification', color: 'bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold' },
   finance_review: { label: 'Finance Review', color: 'bg-yellow-100 text-yellow-700' },
   university_review: { label: 'Univ. Review', color: 'bg-indigo-100 text-indigo-700' },
   enrolled: { label: 'Enrolled', color: 'bg-green-100 text-green-700' },
   rejected: { label: 'Rejected', color: 'bg-red-100 text-red-700' },
   department_rejected: { label: 'Dept Rejected', color: 'bg-red-100 text-red-700' },
+  ops_rejected: { label: 'Ops Rejected', color: 'bg-red-100 text-red-700' },
 };
 
 function StatusBadge({ status }: { status: string }) {
@@ -374,6 +379,11 @@ export function DeptEnrollmentReviewPanel() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <StatusBadge status={e.status} />
+                        {(e.isUpgrade || e.status === 'ops_upgrade_verification') && (
+                          <Badge className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] uppercase font-bold tracking-wider">
+                            🎓 Program Upgrade
+                          </Badge>
+                        )}
                         {e.enrollmentNumber && <span className="text-xs font-mono text-muted-foreground">{e.enrollmentNumber}</span>}
                       </div>
                       <h4 className="font-semibold">{e.studentName}</h4>
@@ -457,6 +467,41 @@ export function DeptEnrollmentReviewPanel() {
           </DialogHeader>
           {viewStudent && (
             <div className="space-y-6 pb-2">
+
+              {/* Program Upgrade Comparison Card */}
+              {Boolean(viewStudent.isUpgrade || viewStudent.status === 'ops_upgrade_verification') && (
+                <div className="p-4 rounded-2xl border-2 border-emerald-300 dark:border-emerald-700 bg-emerald-50/50 dark:bg-emerald-950/20 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="w-5 h-5 text-emerald-600" />
+                    <h4 className="text-sm font-bold text-emerald-900 dark:text-emerald-200 uppercase tracking-wider">
+                      Completed Student Program Upgrade Request
+                    </h4>
+                    <Badge className="bg-emerald-600 text-white text-[10px] ml-auto font-bold tracking-wider">Alumni Upgrade</Badge>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-emerald-200 dark:border-emerald-800 text-xs">
+                    <div>
+                      <span className="font-semibold text-slate-500 uppercase block mb-1">Previous Completed Program</span>
+                      <p className="font-bold text-slate-900 dark:text-slate-100 text-sm">
+                        {viewStudent.student?.program?.name || 'Previous Program'}
+                      </p>
+                      <p className="text-slate-500 mt-0.5">
+                        {viewStudent.student?.program?.university?.name || viewStudent.student?.university?.name || 'Partner University'}
+                      </p>
+                      <p className="text-slate-500">Enrollment / Roll No: {viewStudent.student?.enrollmentNo || viewStudent.student?.admissionNo || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-emerald-700 dark:text-emerald-400 uppercase block mb-1">Target New Program Applied</span>
+                      <p className="font-bold text-emerald-950 dark:text-emerald-100 text-sm">
+                        {viewStudent.program?.name || 'New Program'}
+                      </p>
+                      <p className="text-emerald-800 dark:text-emerald-300 mt-0.5">
+                        {viewStudent.program?.university?.name} • Session: {viewStudent.session?.name || 'Current'}
+                      </p>
+                      <p className="text-slate-500">Sales Representative: {viewStudent.salesUser?.name || 'Direct'}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Photo + Identity */}
               <div className="flex gap-5 items-start">

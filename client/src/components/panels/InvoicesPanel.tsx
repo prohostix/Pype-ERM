@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, FileText, Download, Printer } from 'lucide-react';
+import { Plus, Edit, Trash2, FileText, Download, Printer, Search, Calendar, Users, X, RefreshCw, CheckSquare, ArrowUpDown, Building2, User } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import html2pdf from 'html2pdf.js';
@@ -63,6 +65,13 @@ function ProformaReceiptDocument({ receipt, orgName }: { receipt: any; orgName: 
   const totalRemittedAmount = receipt.overallPaid ?? totalPaid;
   const balanceFeeAmount = Math.max(0, totalFeeAmount - totalRemittedAmount);
 
+  const hasPartnerStudents = Array.isArray(receipt.items) && receipt.items.some((it: any) => it.studentName || it.studentId);
+  const isPartnerInvoice = Boolean(
+    receipt.centerDetails ||
+    hasPartnerStudents ||
+    (!receipt.studentId && (!receipt.studentName || receipt.studentName === 'N/A') && receipt.center)
+  );
+
   const receiptContent = (
     <div style={{ fontFamily: '"Inter", "Helvetica Neue", sans-serif', width: '100%', margin: '0 auto', background: '#fff', color: '#1e293b', padding: '24px' }}>
       
@@ -96,110 +105,212 @@ function ProformaReceiptDocument({ receipt, orgName }: { receipt: any; orgName: 
         </div>
       </div>
 
-      <div style={{ textAlign: 'center', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px', fontSize: '18px', color: '#2563eb', marginBottom: '20px', textShadow: '0 1px 2px rgba(37,99,235,0.1)' }}>Proforma Invoice</div>
-
-      {/* Details section grouped for readability (Column-wise stacked) */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '36px' }}>
-        
-        {/* Receipt / Invoice Details */}
-        <div style={{ border: '1px solid #bfdbfe', borderRadius: '8px', overflow: 'hidden' }}>
-          <div style={{ background: '#eff6ff', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#1e40af', textTransform: 'uppercase', borderBottom: '1px solid #bfdbfe', letterSpacing: '0.5px' }}>Invoice Details</div>
-          <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '80px' }}>Invoice No:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.receiptNo?.replace('RCP-', '')}</span>
-            </div>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '65px' }}>Bill Date:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.latestTransactionDate || receipt.latestBillDate || receipt.billDate || receipt.date ? new Date(receipt.latestTransactionDate || receipt.latestBillDate || receipt.billDate || receipt.date).toLocaleDateString('en-GB').replace(/\//g, '-') : 'N/A'}</span>
-            </div>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '90px' }}>Admission No:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.admissionNo || receipt.enrollmentNo || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Student Details */}
-        <div style={{ border: '1px solid #e9d5ff', borderRadius: '8px', overflow: 'hidden' }}>
-          <div style={{ background: '#faf5ff', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#6b21a8', textTransform: 'uppercase', borderBottom: '1px solid #e9d5ff', letterSpacing: '0.5px' }}>Student Details</div>
-          <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
-            <div style={{ flex: 2, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '80px' }}>Name:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.studentName !== 'N/A' ? receipt.studentName : 'N/A'}</span>
-            </div>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '90px' }}>Date of Birth:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.studentDob ? new Date(receipt.studentDob).toLocaleDateString('en-GB').replace(/\//g, '-') : 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Academic Details */}
-        <div style={{ border: '1px solid #bbf7d0', borderRadius: '8px', overflow: 'hidden' }}>
-          <div style={{ background: '#f0fdf4', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#166534', textTransform: 'uppercase', borderBottom: '1px solid #bbf7d0', letterSpacing: '0.5px' }}>Academic Details</div>
-          <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '80px' }}>University:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a', textTransform: 'uppercase' }}>{receipt.university || 'N/A'}</span>
-            </div>
-            <div style={{ flex: 1.5, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '60px' }}>Course:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a', textTransform: 'uppercase' }}>{receipt.program || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
+      <div style={{ textAlign: 'center', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px', fontSize: '18px', color: '#2563eb', marginBottom: '20px', textShadow: '0 1px 2px rgba(37,99,235,0.1)' }}>
+        Proforma Invoice
       </div>
+
+      {isPartnerInvoice ? (
+        /* Academic Partner Info Cards */
+        <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+          {/* Invoice Details */}
+          <div style={{ flex: 1, border: '1px solid #bfdbfe', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ background: '#eff6ff', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#1e40af', textTransform: 'uppercase', borderBottom: '1px solid #bfdbfe', letterSpacing: '0.5px' }}>Invoice Details</div>
+            <div style={{ display: 'flex', flexDirection: 'column', padding: '10px 12px', fontSize: '13px', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Invoice No:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.receiptNo?.replace('RCP-', '')}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Bill Date:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.latestTransactionDate || receipt.latestBillDate || receipt.billDate || receipt.date ? new Date(receipt.latestTransactionDate || receipt.latestBillDate || receipt.billDate || receipt.date).toLocaleDateString('en-GB').replace(/\//g, '-') : 'N/A'}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Due Date:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.dueDate ? new Date(receipt.dueDate).toLocaleDateString('en-GB').replace(/\//g, '-') : 'On Receipt'}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Status:</span>
+                <span style={{ fontWeight: 700, color: receipt.status === 'paid' ? '#16a34a' : '#2563eb', textTransform: 'uppercase' }}>{receipt.status || 'DRAFT'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Academic Partner Details */}
+          <div style={{ flex: 1.4, border: '1px solid #fed7aa', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ background: '#fff7ed', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#c2410c', textTransform: 'uppercase', borderBottom: '1px solid #fed7aa', letterSpacing: '0.5px' }}>Billed To: Academic Partner</div>
+            <div style={{ display: 'flex', flexDirection: 'column', padding: '10px 12px', fontSize: '13px', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Partner:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.centerDetails?.name || receipt.center || 'Academic Partner'}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Center Code:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.centerDetails?.code || '—'}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Contact:</span>
+                <span style={{ fontWeight: 600, color: '#334155' }}>
+                  {[receipt.centerDetails?.contact, receipt.centerDetails?.email].filter(Boolean).join(' • ') || '—'}
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Address:</span>
+                <span style={{ fontWeight: 500, color: '#334155', flex: 1 }}>
+                  {[receipt.centerDetails?.address, receipt.centerDetails?.city, receipt.centerDetails?.state].filter(Boolean).join(', ') || '—'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Student Info Cards */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '36px' }}>
+          {/* Receipt / Invoice Details */}
+          <div style={{ border: '1px solid #bfdbfe', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ background: '#eff6ff', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#1e40af', textTransform: 'uppercase', borderBottom: '1px solid #bfdbfe', letterSpacing: '0.5px' }}>Invoice Details</div>
+            <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '80px' }}>Invoice No:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.receiptNo?.replace('RCP-', '')}</span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '65px' }}>Bill Date:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.latestTransactionDate || receipt.latestBillDate || receipt.billDate || receipt.date ? new Date(receipt.latestTransactionDate || receipt.latestBillDate || receipt.billDate || receipt.date).toLocaleDateString('en-GB').replace(/\//g, '-') : 'N/A'}</span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Admission No:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.admissionNo || receipt.enrollmentNo || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Student Details */}
+          <div style={{ border: '1px solid #e9d5ff', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ background: '#faf5ff', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#6b21a8', textTransform: 'uppercase', borderBottom: '1px solid #e9d5ff', letterSpacing: '0.5px' }}>Student Details</div>
+            <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
+              <div style={{ flex: 2, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '80px' }}>Name:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.studentName !== 'N/A' ? receipt.studentName : 'N/A'}</span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Date of Birth:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.studentDob ? new Date(receipt.studentDob).toLocaleDateString('en-GB').replace(/\//g, '-') : 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Academic Details */}
+          <div style={{ border: '1px solid #bbf7d0', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ background: '#f0fdf4', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#166534', textTransform: 'uppercase', borderBottom: '1px solid #bbf7d0', letterSpacing: '0.5px' }}>Academic Details</div>
+            <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '80px' }}>University:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a', textTransform: 'uppercase' }}>{receipt.university || 'N/A'}</span>
+              </div>
+              <div style={{ flex: 1.5, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '60px' }}>Course:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a', textTransform: 'uppercase' }}>{receipt.program || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Table */}
       <div style={{ borderRadius: '8px', border: '1px solid #2563eb', overflow: 'hidden', marginBottom: '20px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ background: '#2563eb' }}>
-              <th style={{ padding: '10px 16px', textAlign: 'left', fontSize: '12px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Particulars</th>
-              <th style={{ padding: '10px 16px', textAlign: 'right', fontSize: '12px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '200px' }}>Amount (₹)</th>
+              <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '40px' }}>#</th>
+              <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                {hasPartnerStudents ? 'Enrolled Student Particulars' : 'Particulars'}
+              </th>
+              {hasPartnerStudents && <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Course / Program</th>}
+              {hasPartnerStudents && <th style={{ padding: '10px 14px', textAlign: 'center', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '120px' }}>Enrolled Date</th>}
+              <th style={{ padding: '10px 14px', textAlign: 'right', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '150px' }}>Amount (₹)</th>
             </tr>
           </thead>
           <tbody>
             {(Array.isArray(receipt.items) ? receipt.items : []).map((item: any, i: number) => (
-              <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                <td style={{ padding: '12px 16px', fontSize: '14px', color: '#0f172a', fontWeight: 600, textTransform: 'uppercase' }}>{item.description || item.name}</td>
-                <td style={{ padding: '12px 16px', textAlign: 'right', fontSize: '14px', color: '#0f172a', fontWeight: 700 }}>{(item.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <tr key={i} style={{ borderBottom: '1px solid #f1f5f9', background: i % 2 === 0 ? '#ffffff' : '#f8fafc' }}>
+                <td style={{ padding: '10px 14px', fontSize: '13px', color: '#64748b' }}>{i + 1}</td>
+                <td style={{ padding: '10px 14px', fontSize: '13px', color: '#0f172a', fontWeight: 600 }}>
+                  <div>{item.studentName || item.description || item.name}</div>
+                  {item.enrollmentNo && <div style={{ fontSize: '11px', color: '#2563eb', fontWeight: 500, marginTop: '2px' }}>#{item.enrollmentNo}</div>}
+                </td>
+                {hasPartnerStudents && <td style={{ padding: '10px 14px', fontSize: '13px', color: '#334155' }}>{item.programName || '—'}</td>}
+                {hasPartnerStudents && <td style={{ padding: '10px 14px', fontSize: '12px', color: '#64748b', textAlign: 'center' }}>{item.date || '—'}</td>}
+                <td style={{ padding: '10px 14px', textAlign: 'right', fontSize: '13px', color: '#0f172a', fontWeight: 700 }}>{(item.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
               </tr>
             ))}
+            {Boolean(receipt.tax && Number(receipt.tax) > 0) && (
+              <tr style={{ background: '#f8fafc', borderTop: '1px solid #e2e8f0' }}>
+                <td colSpan={hasPartnerStudents ? 4 : 2} style={{ padding: '8px 14px', fontSize: '13px', color: '#475569', fontWeight: 600, textAlign: 'right' }}>Tax / GST:</td>
+                <td style={{ padding: '8px 14px', textAlign: 'right', fontSize: '13px', color: '#475569', fontWeight: 700 }}>₹{Number(receipt.tax).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              </tr>
+            )}
             <tr style={{ background: '#eff6ff', borderTop: '2px solid #2563eb' }}>
-              <td style={{ padding: '12px 16px', fontSize: '14px', color: '#1e40af', fontWeight: 800, textAlign: 'right', textTransform: 'uppercase' }}>Total Amount</td>
-              <td style={{ padding: '12px 16px', textAlign: 'right', fontSize: '16px', color: '#1e40af', fontWeight: 900 }}>₹{(receipt.total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td colSpan={hasPartnerStudents ? 4 : 2} style={{ padding: '12px 14px', fontSize: '13px', color: '#1e40af', fontWeight: 800, textAlign: 'right', textTransform: 'uppercase' }}>
+                Total Amount {hasPartnerStudents ? `(${receipt.items?.length || 0} Students)` : ''}
+              </td>
+              <td style={{ padding: '12px 14px', textAlign: 'right', fontSize: '16px', color: '#1e40af', fontWeight: 900 }}>₹{(receipt.total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       {/* Payment & Summary */}
-      <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: '13px', color: '#475569', lineHeight: '1.8' }}>
-            <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Amount in Words:</span> <span>{numberToWords(receipt.total || 0)}</span></div>
-            <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Payment Mode:</span> <span>{paymentMethod.toUpperCase()}</span></div>
-            <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Paid At:</span> <span>{payAt.toUpperCase()}</span></div>
+      {isPartnerInvoice ? (
+        <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '13px', color: '#475569', lineHeight: '1.8' }}>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Amount in Words:</span> <span>{numberToWords(receipt.total || 0)}</span></div>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Academic Partner:</span> <span>{receipt.centerDetails?.name || receipt.center || 'Academic Partner'}</span></div>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Payment Status:</span> <span style={{ fontWeight: 700, textTransform: 'uppercase', color: receipt.status === 'paid' ? '#16a34a' : '#2563eb' }}>{receipt.status || 'DRAFT'}</span></div>
+            </div>
           </div>
-        </div>
 
-        <div style={{ width: '340px', background: '#fdf8f6', padding: '20px', borderRadius: '8px', border: '1px solid #fed7aa' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px dashed #fdba74' }}>
-            <span style={{ fontSize: '13px', color: '#c2410c', fontWeight: 600 }}>Total Fee</span>
-            <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>{receipt.feeStructureMissing ? 'Fee not set up' : `₹${totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px dashed #fdba74' }}>
-            <span style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>Total Remitted Fee</span>
-            <span style={{ fontSize: '14px', color: '#16a34a', fontWeight: 700 }}>₹{totalRemittedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 800, textTransform: 'uppercase' }}>Balance Fee</span>
-            <span style={{ fontSize: '18px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>{receipt.feeStructureMissing ? '—' : `₹${balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
+          <div style={{ width: '320px', background: '#f8fafc', padding: '16px 20px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px dashed #cbd5e1' }}>
+              <span style={{ fontSize: '13px', color: '#475569', fontWeight: 600 }}>Subtotal</span>
+              <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 700 }}>₹{((receipt.amount ?? receipt.total) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px dashed #cbd5e1' }}>
+              <span style={{ fontSize: '13px', color: '#475569', fontWeight: 600 }}>Tax / GST</span>
+              <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 700 }}>₹{(Number(receipt.tax) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '14px', color: '#1e40af', fontWeight: 800, textTransform: 'uppercase' }}>Grand Total</span>
+              <span style={{ fontSize: '18px', color: '#1e40af', fontWeight: 900 }}>₹{(receipt.total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '13px', color: '#475569', lineHeight: '1.8' }}>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Amount in Words:</span> <span>{numberToWords(receipt.total || 0)}</span></div>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Payment Mode:</span> <span>{paymentMethod.toUpperCase()}</span></div>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Paid At:</span> <span>{payAt.toUpperCase()}</span></div>
+            </div>
+          </div>
+
+          <div style={{ width: '340px', background: '#fdf8f6', padding: '20px', borderRadius: '8px', border: '1px solid #fed7aa' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px dashed #fdba74' }}>
+              <span style={{ fontSize: '13px', color: '#c2410c', fontWeight: 600 }}>Total Fee</span>
+              <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>{receipt.feeStructureMissing ? 'Fee not set up' : `₹${totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px dashed #fdba74' }}>
+              <span style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>Total Remitted Fee</span>
+              <span style={{ fontSize: '14px', color: '#16a34a', fontWeight: 700 }}>₹{totalRemittedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 800, textTransform: 'uppercase' }}>Balance Fee</span>
+              <span style={{ fontSize: '18px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>{receipt.feeStructureMissing ? '—' : `₹${balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '24px', paddingTop: '16px', borderTop: '2px dashed #e2e8f0', fontSize: '13px', color: '#475569' }}>
@@ -247,9 +358,19 @@ export function InvoicesPanel() {
   const [loadingProforma, setLoadingProforma] = useState(false);
   const [orgName, setOrgName] = useState('Organisation');
 
-  // Search states
+  // Student search states
   const [studentSearch, setStudentSearch] = useState('');
   const [studentDropdownOpen, setStudentDropdownOpen] = useState(false);
+
+  // Academic Partner enrolled students state
+  const [partnerStudents, setPartnerStudents] = useState<any[]>([]);
+  const [loadingPartnerStudents, setLoadingPartnerStudents] = useState(false);
+  const [partnerSearch, setPartnerSearch] = useState('');
+  const [partnerStartDate, setPartnerStartDate] = useState('');
+  const [partnerEndDate, setPartnerEndDate] = useState('');
+  const [partnerSortOrder, setPartnerSortOrder] = useState<'date_desc' | 'date_asc' | 'name_asc'>('date_desc');
+  const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
+  const [studentFeeOverrides, setStudentFeeOverrides] = useState<Record<string, number>>({});
 
   // Service Type states
   const [serviceType, setServiceType] = useState<'admission' | 'other'>('other');
@@ -277,6 +398,62 @@ export function InvoicesPanel() {
     fetchFees();
     api.get('/auth/me').then(r => setOrgName(r.data?.data?.organization?.name || 'Organisation')).catch(() => {});
   }, []);
+
+  const fetchPartnerStudents = async (centerId: string, startDate?: string, endDate?: string) => {
+    if (!centerId) {
+      setPartnerStudents([]);
+      return;
+    }
+    setLoadingPartnerStudents(true);
+    try {
+      const params: any = { centerId };
+      if (startDate) params.startDate = startDate;
+      if (endDate) params.endDate = endDate;
+      const res = await api.get('/students', { params });
+      setPartnerStudents(res.data.data || []);
+    } catch (err) {
+      console.error('Failed to fetch partner students:', err);
+    } finally {
+      setLoadingPartnerStudents(false);
+    }
+  };
+
+  useEffect(() => {
+    if (billingTarget === 'center' && formData.centerId) {
+      fetchPartnerStudents(formData.centerId, partnerStartDate, partnerEndDate);
+    } else {
+      setPartnerStudents([]);
+    }
+  }, [billingTarget, formData.centerId, partnerStartDate, partnerEndDate]);
+
+  const getStudentFee = (st: any) => {
+    if (!st) return 0;
+    const pId = st.programId || st.program?.id;
+    const spec = st.specialisation;
+    let matched = fees.find((f: any) => {
+      const fProgId = typeof f.programId === 'object' ? f.programId?.id : f.programId;
+      return fProgId === pId && f.specialisation === spec;
+    });
+    if (!matched && spec) {
+      matched = fees.find((f: any) => {
+        const fProgId = typeof f.programId === 'object' ? f.programId?.id : f.programId;
+        return fProgId === pId && !f.specialisation;
+      });
+    }
+    if (!matched) {
+      matched = fees.find((f: any) => {
+        const fProgId = typeof f.programId === 'object' ? f.programId?.id : f.programId;
+        return fProgId === pId;
+      });
+    }
+    if (!matched) return 0;
+
+    if (Array.isArray(matched.yearlyFees) && matched.yearlyFees.length > 0) {
+      const ySum = matched.yearlyFees.reduce((acc: number, y: any) => acc + (Number(y.amount) || Number(y.total) || 0), 0);
+      if (ySum > 0) return ySum;
+    }
+    return (matched.registrationFee || 0) + (matched.tuitionFee || 0) + (matched.examFee || 0);
+  };
 
   const openProforma = async (invoice: any) => {
     setLoadingProforma(true);
@@ -373,7 +550,6 @@ export function InvoicesPanel() {
           setSelectedUnivId(student.universityId.toString());
         }
         if (student.programId) {
-          // ensure the universities are updated before setting program ID to avoid select constraints
           setTimeout(() => setSelectedProgId(student.programId.toString()), 50);
         }
       }
@@ -423,6 +599,15 @@ export function InvoicesPanel() {
   }, [selectedProgId, serviceType, fees, programs, universities, selectedUnivId]);
 
   const calcTotal = () => {
+    if (billingTarget === 'center' && selectedStudentIds.length > 0) {
+      const selectedPartnerStudents = partnerStudents.filter(st => selectedStudentIds.includes(st.id));
+      const amount = selectedPartnerStudents.reduce((sum, st) => {
+        const fee = studentFeeOverrides[st.id] ?? getStudentFee(st);
+        return sum + fee;
+      }, 0);
+      const tax = Number(formData.tax) || 0;
+      return { amount, total: amount + tax };
+    }
     const qty = Number(formData.itemQty) || 0;
     const rate = Number(formData.itemRate) || 0;
     const tax = Number(formData.tax) || 0;
@@ -432,20 +617,50 @@ export function InvoicesPanel() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { amount, total } = calcTotal();
+    let itemsPayload: any[] = [];
+    let amountPayload = 0;
+    const taxPayload = Number(formData.tax) || 0;
+    let totalPayload = 0;
+
+    if (billingTarget === 'center' && selectedStudentIds.length > 0) {
+      const selectedStudents = partnerStudents.filter(st => selectedStudentIds.includes(st.id));
+      itemsPayload = selectedStudents.map(st => {
+        const fee = studentFeeOverrides[st.id] ?? getStudentFee(st);
+        const enrDate = st.enrolledAt || st.admissionDate || st.createdAt;
+        return {
+          studentId: st.id,
+          studentName: st.name,
+          enrollmentNo: st.enrollmentNo || '',
+          programName: st.program?.name || 'Program',
+          date: enrDate ? new Date(enrDate).toLocaleDateString('en-GB') : '',
+          description: `${st.name} (${st.enrollmentNo ? '#' + st.enrollmentNo : 'Pending'}) - ${st.program?.name || 'Program'}`,
+          quantity: 1,
+          rate: fee,
+          amount: fee
+        };
+      });
+      amountPayload = itemsPayload.reduce((sum, item) => sum + item.amount, 0);
+      totalPayload = amountPayload + taxPayload;
+    } else {
+      const { amount, total } = calcTotal();
+      itemsPayload = [{
+        description: formData.itemDescription || (billingTarget === 'center' ? 'Academic Partner Invoice Item' : 'Student Invoice Item'),
+        quantity: Number(formData.itemQty) || 1,
+        rate: Number(formData.itemRate) || 0,
+        amount
+      }];
+      amountPayload = amount;
+      totalPayload = total;
+    }
+
     const payload: any = {
       centerId: formData.centerId || null,
       studentId: billingTarget === 'student' ? formData.studentId : null,
       invoiceNo: formData.invoiceNo,
-      items: [{
-        description: formData.itemDescription,
-        quantity: Number(formData.itemQty),
-        rate: Number(formData.itemRate),
-        amount
-      }],
-      amount,
-      tax: Number(formData.tax),
-      total,
+      items: itemsPayload,
+      amount: amountPayload,
+      tax: taxPayload,
+      total: totalPayload,
       status: formData.status
     };
     if (formData.dueDate) payload.dueDate = formData.dueDate;
@@ -459,6 +674,7 @@ export function InvoicesPanel() {
       setDialogOpen(false);
       resetForm();
       fetchInvoices();
+      toast.success(editingId ? 'Invoice updated successfully' : 'Invoice created successfully');
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to save invoice');
     }
@@ -469,8 +685,26 @@ export function InvoicesPanel() {
     const studentId = typeof inv.studentId === 'object' ? inv.studentId?.id : inv.studentId;
     const firstItem = inv.items?.[0] || {};
     setEditingId(inv.id);
-    setBillingTarget(inv.studentId ? 'student' : 'center');
-    setServiceType('other'); // Default back to custom view on editing
+    const isStudentBilling = Boolean(studentId);
+    setBillingTarget(isStudentBilling ? 'student' : 'center');
+    setServiceType('other');
+
+    const hasStudentItems = Array.isArray(inv.items) && inv.items.some((it: any) => it.studentId);
+    if (!isStudentBilling && hasStudentItems) {
+      const studentIds = inv.items.map((it: any) => it.studentId).filter(Boolean);
+      setSelectedStudentIds(studentIds);
+      const overrides: Record<string, number> = {};
+      inv.items.forEach((it: any) => {
+        if (it.studentId && it.amount !== undefined) {
+          overrides[it.studentId] = Number(it.amount);
+        }
+      });
+      setStudentFeeOverrides(overrides);
+    } else {
+      setSelectedStudentIds([]);
+      setStudentFeeOverrides({});
+    }
+
     setFormData({
       centerId: centerId?.toString() || '',
       studentId: studentId?.toString() || '',
@@ -505,6 +739,12 @@ export function InvoicesPanel() {
     setSelectedProgId('');
     setStudentSearch('');
     setStudentDropdownOpen(false);
+    setSelectedStudentIds([]);
+    setStudentFeeOverrides({});
+    setPartnerSearch('');
+    setPartnerStartDate('');
+    setPartnerEndDate('');
+    setPartnerStudents([]);
     setFormData({
       centerId: '',
       studentId: '',
@@ -518,7 +758,7 @@ export function InvoicesPanel() {
     });
   };
 
-  const { total } = calcTotal();
+  const { total, amount: currentSubtotal } = calcTotal();
 
   const filteredStudents = students.filter((st) => {
     const q = studentSearch.toLowerCase();
@@ -533,6 +773,48 @@ export function InvoicesPanel() {
   const selectedStudent = students.find((st) => st.id === formData.studentId);
   const filteredPrograms = selectedUnivId ? programs.filter(p => p.universityId === selectedUnivId) : [];
 
+  const filteredPartnerStudents = partnerStudents
+    .filter(st => {
+      const q = partnerSearch.toLowerCase().trim();
+      if (!q) return true;
+      return (
+        st.name?.toLowerCase().includes(q) ||
+        st.email?.toLowerCase().includes(q) ||
+        st.enrollmentNo?.toLowerCase().includes(q) ||
+        st.admissionNo?.toLowerCase().includes(q) ||
+        st.program?.name?.toLowerCase().includes(q)
+      );
+    })
+    .sort((a, b) => {
+      if (partnerSortOrder === 'name_asc') {
+        return (a.name || '').localeCompare(b.name || '');
+      }
+      const dateA = new Date(a.enrolledAt || a.admissionDate || a.createdAt || 0).getTime();
+      const dateB = new Date(b.enrolledAt || b.admissionDate || b.createdAt || 0).getTime();
+      if (partnerSortOrder === 'date_asc') return dateA - dateB;
+      return dateB - dateA;
+    });
+
+  const handleToggleSelectAllPartner = (checked: boolean) => {
+    if (checked) {
+      const allIds = Array.from(new Set([...selectedStudentIds, ...filteredPartnerStudents.map(s => s.id)]));
+      setSelectedStudentIds(allIds);
+    } else {
+      const filteredIds = new Set(filteredPartnerStudents.map(s => s.id));
+      setSelectedStudentIds(selectedStudentIds.filter(id => !filteredIds.has(id)));
+    }
+  };
+
+  const handleToggleStudent = (id: string) => {
+    setSelectedStudentIds(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+  };
+
+  const partnerItemsSubtotal = partnerStudents
+    .filter(st => selectedStudentIds.includes(st.id))
+    .reduce((sum, st) => sum + (studentFeeOverrides[st.id] ?? getStudentFee(st)), 0);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -544,7 +826,7 @@ export function InvoicesPanel() {
           <DialogTrigger asChild>
             <Button><Plus className="w-4 h-4 mr-2" />Add Invoice</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogContent className={cn("max-h-[92vh] overflow-y-auto transition-all w-full", billingTarget === 'center' ? "sm:max-w-4xl md:max-w-5xl lg:max-w-6xl w-[95vw]" : "sm:max-w-2xl w-[90vw]")}>
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Invoice' : 'Add New Invoice'}</DialogTitle>
             </DialogHeader>
@@ -559,12 +841,13 @@ export function InvoicesPanel() {
                       setBillingTarget('center');
                       setFormData(prev => ({ ...prev, studentId: '' }));
                     }}
-                    className={`flex-1 py-2 px-4 rounded-md border text-sm font-medium transition-colors ${
+                    className={`flex-1 py-2 px-4 rounded-md border text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
                       billingTarget === 'center'
                         ? 'bg-primary text-primary-foreground border-primary'
                         : 'bg-background hover:bg-muted text-muted-foreground'
                     }`}
                   >
+                    <Building2 className="w-4 h-4" />
                     Academic Partner
                   </button>
                   <button
@@ -573,12 +856,13 @@ export function InvoicesPanel() {
                       setBillingTarget('student');
                       setFormData(prev => ({ ...prev, centerId: '' }));
                     }}
-                    className={`flex-1 py-2 px-4 rounded-md border text-sm font-medium transition-colors ${
+                    className={`flex-1 py-2 px-4 rounded-md border text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
                       billingTarget === 'student'
                         ? 'bg-primary text-primary-foreground border-primary'
                         : 'bg-background hover:bg-muted text-muted-foreground'
                     }`}
                   >
+                    <User className="w-4 h-4" />
                     Student
                   </button>
                 </div>
@@ -586,18 +870,240 @@ export function InvoicesPanel() {
 
               {/* Center Selector */}
               {billingTarget === 'center' ? (
-                <div>
-                  <Label>Academic Partner</Label>
-                  <Select value={formData.centerId} onValueChange={(v) => setFormData({ ...formData, centerId: v })}>
-                    <SelectTrigger><SelectValue placeholder="Select center" /></SelectTrigger>
-                    <SelectContent>
-                      {centers.filter(c => c?.id).map((c) => (
-                        <SelectItem key={c.id} value={c.id.toString()}>
-                          {c.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <div className="space-y-4">
+                  <div>
+                    <Label>Academic Partner</Label>
+                    <Select
+                      value={formData.centerId}
+                      onValueChange={(v) => {
+                        const selCenter = centers.find(c => c.id === v);
+                        const code = selCenter?.code || selCenter?.name?.replace(/[^a-zA-Z0-9]/g, '').slice(0, 4).toUpperCase() || 'AP';
+                        setFormData(prev => ({
+                          ...prev,
+                          centerId: v,
+                          invoiceNo: prev.invoiceNo && !prev.invoiceNo.startsWith('INV-AP-') ? prev.invoiceNo : `INV-AP-${code}-${Date.now().toString().slice(-4)}`
+                        }));
+                        setSelectedStudentIds([]);
+                      }}
+                    >
+                      <SelectTrigger><SelectValue placeholder="Select Academic Partner" /></SelectTrigger>
+                      <SelectContent>
+                        {centers.filter(c => c?.id).map((c) => (
+                          <SelectItem key={c.id} value={c.id.toString()}>
+                            {c.name} {c.code ? `(${c.code})` : ''}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {formData.centerId && (
+                    <div className="border rounded-xl p-3.5 bg-slate-50/60 dark:bg-slate-900/40 space-y-3">
+                      <div className="flex items-center justify-between flex-wrap gap-2">
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-primary" />
+                          <span className="font-semibold text-sm">Enrolled Students Billing Selection</span>
+                          <Badge variant="secondary" className="text-xs">
+                            {partnerStudents.length} Available
+                          </Badge>
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Select enrolled students to populate itemized proforma billing
+                        </div>
+                      </div>
+
+                      {/* Filters: Search, Date Range, Sort */}
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                        <div className="relative flex-1 min-w-[200px]">
+                          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                          <Input
+                            className="pl-8 h-8 text-xs bg-background"
+                            placeholder="Search by student name, enrollment no, course..."
+                            value={partnerSearch}
+                            onChange={(e) => setPartnerSearch(e.target.value)}
+                          />
+                          {partnerSearch && (
+                            <button
+                              type="button"
+                              onClick={() => setPartnerSearch('')}
+                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Date Range Filtering */}
+                        <div className="flex items-center gap-1.5 bg-background border rounded-md px-2 py-1 text-xs">
+                          <Calendar className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                          <input
+                            type="date"
+                            className="bg-transparent border-none outline-none focus:ring-0 text-foreground text-xs"
+                            value={partnerStartDate}
+                            onChange={(e) => setPartnerStartDate(e.target.value)}
+                            title="Start Date"
+                          />
+                          <span className="text-muted-foreground px-0.5">to</span>
+                          <input
+                            type="date"
+                            className="bg-transparent border-none outline-none focus:ring-0 text-foreground text-xs"
+                            value={partnerEndDate}
+                            onChange={(e) => setPartnerEndDate(e.target.value)}
+                            title="End Date"
+                          />
+                          {(partnerStartDate || partnerEndDate) && (
+                            <button
+                              type="button"
+                              onClick={() => { setPartnerStartDate(''); setPartnerEndDate(''); }}
+                              className="text-muted-foreground hover:text-foreground ml-1"
+                              title="Clear date filter"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Sort Order */}
+                        <Select value={partnerSortOrder} onValueChange={(v: any) => setPartnerSortOrder(v)}>
+                          <SelectTrigger className="h-8 text-xs w-[145px] bg-background">
+                            <ArrowUpDown className="w-3 h-3 mr-1 text-muted-foreground" />
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="date_desc">Newest Enrolled</SelectItem>
+                            <SelectItem value="date_asc">Oldest Enrolled</SelectItem>
+                            <SelectItem value="name_asc">Name A-Z</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Students List Table */}
+                      <div className="border rounded-lg overflow-hidden bg-background">
+                        <div className="max-h-80 overflow-y-auto divide-y">
+                          <div className="flex items-center justify-between px-3 py-2 bg-muted/60 text-xs font-semibold text-muted-foreground sticky top-0 z-10 border-b">
+                            <div className="flex items-center gap-2">
+                              <Checkbox
+                                checked={
+                                  filteredPartnerStudents.length > 0 &&
+                                  filteredPartnerStudents.every(st => selectedStudentIds.includes(st.id))
+                                }
+                                onCheckedChange={(checked) => handleToggleSelectAllPartner(Boolean(checked))}
+                                aria-label="Select all"
+                              />
+                              <span>Student Particulars</span>
+                            </div>
+                            <div className="flex items-center gap-6 pr-2">
+                              <span className="hidden sm:inline-block w-48 text-left">Course / Program</span>
+                              <span className="hidden sm:inline-block w-28 text-center">Enrolled Date</span>
+                              <span className="w-28 text-right">Fee (₹)</span>
+                            </div>
+                          </div>
+
+                          {loadingPartnerStudents ? (
+                            <div className="p-8 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
+                              <RefreshCw className="w-3.5 h-3.5 animate-spin text-primary" /> Loading enrolled students...
+                            </div>
+                          ) : filteredPartnerStudents.length === 0 ? (
+                            <div className="p-6 text-center text-xs text-muted-foreground">
+                              No students found enrolled under this Academic Partner matching the filters.
+                            </div>
+                          ) : (
+                            filteredPartnerStudents.map((st) => {
+                              const isSelected = selectedStudentIds.includes(st.id);
+                              const fee = studentFeeOverrides[st.id] ?? getStudentFee(st);
+                              const enrDate = st.enrolledAt || st.admissionDate || st.createdAt;
+                              const dateStr = enrDate ? new Date(enrDate).toLocaleDateString('en-GB') : '—';
+                              return (
+                                <div
+                                  key={st.id}
+                                  className={cn(
+                                    "flex items-center justify-between px-3 py-2.5 text-xs hover:bg-muted/40 transition-colors cursor-pointer",
+                                    isSelected && "bg-primary/5 hover:bg-primary/10"
+                                  )}
+                                  onClick={() => handleToggleStudent(st.id)}
+                                >
+                                  <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                                    <div onClick={(e) => e.stopPropagation()}>
+                                      <Checkbox
+                                        checked={isSelected}
+                                        onCheckedChange={() => handleToggleStudent(st.id)}
+                                      />
+                                    </div>
+                                    <div className="min-w-0">
+                                      <div className="font-semibold text-foreground truncate">{st.name}</div>
+                                      <div className="text-[11px] text-muted-foreground flex items-center gap-1.5 flex-wrap">
+                                        {st.enrollmentNo ? (
+                                          <span className="font-mono text-primary font-medium">#{st.enrollmentNo}</span>
+                                        ) : (
+                                          <span className="text-amber-600 bg-amber-50 dark:bg-amber-950/40 px-1 rounded text-[10px]">Pending Enroll #</span>
+                                        )}
+                                        {st.email && <span>• {st.email}</span>}
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex items-center gap-6 shrink-0 pr-2" onClick={(e) => e.stopPropagation()}>
+                                    <div className="hidden sm:block w-48 truncate text-muted-foreground" title={st.program?.name || 'Program'}>
+                                      {st.program?.name || 'Program'}
+                                    </div>
+                                    <div className="hidden sm:block w-28 text-center text-muted-foreground">
+                                      {dateStr}
+                                    </div>
+                                    <div className="w-28 text-right font-semibold text-foreground">
+                                      ₹{fee.toLocaleString('en-IN')}
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Selection Summary Footer */}
+                      <div className="flex items-center justify-between pt-1 text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-foreground">
+                            {selectedStudentIds.length} of {filteredPartnerStudents.length} students selected
+                          </span>
+                          {selectedStudentIds.length > 0 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 px-2 text-[11px] text-muted-foreground hover:text-foreground"
+                              onClick={() => setSelectedStudentIds([])}
+                            >
+                              Clear Selection
+                            </Button>
+                          )}
+                          {filteredPartnerStudents.length > 0 && selectedStudentIds.length < filteredPartnerStudents.length && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 px-2 text-[11px] text-primary hover:text-primary/80"
+                              onClick={() => handleToggleSelectAllPartner(true)}
+                            >
+                              Select All ({filteredPartnerStudents.length})
+                            </Button>
+                          )}
+                        </div>
+                        <div className="font-semibold text-primary">
+                          Subtotal: ₹{partnerItemsSubtotal.toLocaleString('en-IN')}
+                        </div>
+                      </div>
+
+                      {selectedStudentIds.length > 0 && (
+                        <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300 flex items-center justify-between">
+                          <span>
+                            ✓ <strong>{selectedStudentIds.length} enrolled students</strong> selected. An itemized line item will be created for each student in the invoice.
+                          </span>
+                          <span className="font-bold">Total: ₹{partnerItemsSubtotal.toLocaleString('en-IN')}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ) : (
                 /* Searchable Student Dropdown */
@@ -655,105 +1161,115 @@ export function InvoicesPanel() {
                 </div>
               )}
 
-              {/* Service Type Dropdown */}
-              <div>
-                <Label>Service Type</Label>
-                <Select value={serviceType} onValueChange={(val: 'admission' | 'other') => setServiceType(val)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="other">Custom Invoice Item</SelectItem>
-                    <SelectItem value="admission">Admission / Program Fees</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Admission details dropdowns */}
-              {serviceType === 'admission' ? (
-                <div className="flex flex-col gap-4 border p-3 rounded-lg bg-muted/20">
+              {/* Service Type Dropdown - only for Student billing */}
+              {billingTarget === 'student' && (
+                <>
                   <div>
-                    <Label>University</Label>
-                    <Select value={selectedUnivId} onValueChange={(val) => { setSelectedUnivId(val); setSelectedProgId(''); }}>
-                      <SelectTrigger className="w-full"><SelectValue placeholder="Select university" /></SelectTrigger>
+                    <Label>Service Type</Label>
+                    <Select value={serviceType} onValueChange={(val: 'admission' | 'other') => setServiceType(val)}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>
-                        {universities.map(u => (
-                          <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                        ))}
+                        <SelectItem value="other">Custom Invoice Item</SelectItem>
+                        <SelectItem value="admission">Admission / Program Fees</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
-                    <Label>Program</Label>
-                    <Select value={selectedProgId} onValueChange={setSelectedProgId} disabled={!selectedUnivId}>
-                      <SelectTrigger className="w-full"><SelectValue placeholder={selectedUnivId ? 'Select program' : 'Select university first'} /></SelectTrigger>
-                      <SelectContent>
-                        {filteredPrograms.map(p => (
-                          <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+
+                  {/* Admission details dropdowns */}
+                  {serviceType === 'admission' ? (
+                    <div className="flex flex-col gap-4 border p-3 rounded-lg bg-muted/20">
+                      <div>
+                        <Label>University</Label>
+                        <Select value={selectedUnivId} onValueChange={(val) => { setSelectedUnivId(val); setSelectedProgId(''); }}>
+                          <SelectTrigger className="w-full"><SelectValue placeholder="Select university" /></SelectTrigger>
+                          <SelectContent>
+                            {universities.map(u => (
+                              <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Program</Label>
+                        <Select value={selectedProgId} onValueChange={setSelectedProgId} disabled={!selectedUnivId}>
+                          <SelectTrigger className="w-full"><SelectValue placeholder={selectedUnivId ? 'Select program' : 'Select university first'} /></SelectTrigger>
+                          <SelectContent>
+                            {filteredPrograms.map(p => (
+                              <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  ) : null}
+                </>
+              )}
+
+              {/* Invoice Number, Due Date, and Status in responsive columns */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <Label>Invoice No</Label>
+                  <Input value={formData.invoiceNo} onChange={(e) => setFormData({ ...formData, invoiceNo: e.target.value })} required placeholder="e.g. INV-001" />
                 </div>
-              ) : null}
-
-              <div>
-                <Label>Invoice No</Label>
-                <Input value={formData.invoiceNo} onChange={(e) => setFormData({ ...formData, invoiceNo: e.target.value })} required placeholder="e.g. INV-001" />
+                <div>
+                  <Label>Due Date (optional)</Label>
+                  <Input type="date" value={formData.dueDate} onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Status</Label>
+                  <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="draft">Draft</SelectItem>
+                      <SelectItem value="sent">Sent</SelectItem>
+                      <SelectItem value="paid">Paid</SelectItem>
+                      <SelectItem value="overdue">Overdue</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
-              <div>
-                <Label>Item Description</Label>
-                <Input value={formData.itemDescription} onChange={(e) => setFormData({ ...formData, itemDescription: e.target.value })} required />
-              </div>
+              {/* Custom Line Item Inputs - only if NO students are selected in partner billing, or if billing to student */}
+              {!(billingTarget === 'center' && selectedStudentIds.length > 0) && (
+                <>
+                  <div>
+                    <Label>Item Description</Label>
+                    <Input value={formData.itemDescription} onChange={(e) => setFormData({ ...formData, itemDescription: e.target.value })} required={!(billingTarget === 'center' && selectedStudentIds.length > 0)} />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {serviceType === 'other' || billingTarget === 'center' ? (
+                      <div>
+                        <Label>Quantity</Label>
+                        <Input type="number" min="1" value={formData.itemQty} onChange={(e) => setFormData({ ...formData, itemQty: e.target.value })} required />
+                      </div>
+                    ) : (
+                      <div className="flex flex-col justify-end pb-2">
+                        <span className="text-xs text-emerald-600 font-medium">✓ Qty lock: 1 for Admission</span>
+                      </div>
+                    )}
+                    <div>
+                      <Label>Rate (₹)</Label>
+                      <Input type="number" min="0" value={formData.itemRate} onChange={(e) => setFormData({ ...formData, itemRate: e.target.value })} required />
+                    </div>
+                  </div>
+                </>
+              )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {serviceType === 'other' ? (
-                  <div>
-                    <Label>Quantity</Label>
-                    <Input type="number" min="1" value={formData.itemQty} onChange={(e) => setFormData({ ...formData, itemQty: e.target.value })} required />
-                  </div>
-                ) : (
-                  <div className="flex flex-col justify-end pb-2">
-                    <span className="text-xs text-emerald-600 font-medium">✓ Qty lock: 1 for Admission</span>
-                  </div>
-                )}
                 <div>
-                  <Label>Rate</Label>
-                  <Input type="number" min="0" value={formData.itemRate} onChange={(e) => setFormData({ ...formData, itemRate: e.target.value })} required />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label>Tax</Label>
+                  <Label>Tax / GST (₹)</Label>
                   <Input type="number" min="0" value={formData.tax} onChange={(e) => setFormData({ ...formData, tax: e.target.value })} />
                 </div>
                 <div>
                   <Label>Total (auto)</Label>
-                  <Input value={total.toFixed(2)} readOnly className="bg-muted" />
+                  <Input value={total.toFixed(2)} readOnly className="bg-muted font-bold text-foreground" />
                 </div>
               </div>
 
-              <div>
-                <Label>Due Date (optional)</Label>
-                <Input type="date" value={formData.dueDate} onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })} />
-              </div>
-
-              <div>
-                <Label>Status</Label>
-                <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="sent">Sent</SelectItem>
-                    <SelectItem value="paid">Paid</SelectItem>
-                    <SelectItem value="overdue">Overdue</SelectItem>
-                    <SelectItem value="cancelled">Cancelled</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
+              <div className="flex gap-2 pt-2">
+                <Button type="submit" className="flex-1">Save Invoice</Button>
                 <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
               </div>
             </form>
@@ -779,9 +1295,11 @@ export function InvoicesPanel() {
               {paginatedInvoices.map((inv) => {
                 const centerName = inv.center?.name || (typeof inv.centerId === 'object' ? inv.centerId?.name : '');
                 const studentName = inv.student?.name;
+                const itemCount = Array.isArray(inv.items) ? inv.items.length : 1;
+                const hasStudentItems = Array.isArray(inv.items) && inv.items.some((it: any) => it.studentName || it.studentId);
                 const billingDisplay = studentName
                   ? `Student: ${studentName}${centerName ? ` (${centerName})` : ''}`
-                  : `Center: ${centerName}`;
+                  : `Academic Partner: ${centerName || 'Direct'}${hasStudentItems ? ` (${itemCount} students)` : ''}`;
                 return (
                   <div key={inv.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
                     <div className="flex items-center gap-4">
@@ -791,7 +1309,7 @@ export function InvoicesPanel() {
                       <div>
                         <div className="font-medium">{inv.invoiceNo}</div>
                         <div className="text-sm text-muted-foreground">
-                          {billingDisplay} • Total: ₹{inv.total}
+                          {billingDisplay} • Total: ₹{Number(inv.total || 0).toLocaleString('en-IN')}
                           {inv.dueDate && ` • Due: ${new Date(inv.dueDate).toLocaleDateString()}`}
                         </div>
                       </div>

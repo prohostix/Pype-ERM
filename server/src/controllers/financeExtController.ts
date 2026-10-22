@@ -410,6 +410,16 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       program: programName,
       university: universityName,
       center: invoice.center?.name || 'Direct',
+      centerDetails: invoice.center ? {
+        id: invoice.center.id,
+        name: invoice.center.name,
+        code: invoice.center.code,
+        address: invoice.center.address,
+        contact: invoice.center.contact,
+        email: invoice.center.email,
+        city: invoice.center.city,
+        state: invoice.center.state
+      } : null,
       items: invoice.items,
       amount: invoice.amount,
       tax: invoice.tax,

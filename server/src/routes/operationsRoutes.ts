@@ -107,7 +107,7 @@ router.route('/announcements/:id')
 
 // Onboarding — program allocation
 router.route('/centers/:id/allocations')
-  .get(authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), getProgramAllocations)
+  .get(authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin', 'finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'), getProgramAllocations)
   .post(authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), allocateProgram);
 router.put('/centers/:id/ops-sub-admin', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), updateCenterOpsSubAdmin);
 router.delete('/centers/:id/allocations/:allocId', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), removeAllocation);

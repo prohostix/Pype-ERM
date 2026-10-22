@@ -18,6 +18,7 @@ import {
   bulkUpdateProgram,
   bulkRecordPayment,
   updateAdmissionProgress,
+  updateStudentAcademicProgress,
   getStudentEnrollments,
   updateDocumentStatus,
   updatePhotoStatus,
@@ -50,6 +51,7 @@ router.put('/:id/photo/status', authorize('org_admin', 'superadmin', 'ops_admin'
 router.route('/').get(getStudents).post(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin', 'general_manager'), createStudent);
 router.route('/:id').get(getStudent).put(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudent).delete(authorize('org_admin', 'superadmin'), deleteStudent);
 router.put('/:id/progress/:stepId', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), upload.single('proof'), updateAdmissionProgress);
+router.put('/:id/academic-progress', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudentAcademicProgress);
 router.put('/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), approveStudent);
 router.get('/:id/enrollments', getStudentEnrollments);
 

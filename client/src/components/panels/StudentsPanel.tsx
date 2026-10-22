@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, Calendar, ExternalLink, MessageSquare, Key, Download, User, Users, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X, RotateCcw, Filter, ChevronDown, Check } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, Calendar, ExternalLink, MessageSquare, Key, Download, User, Users, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X, RotateCcw, Filter, ChevronDown, Check, UserCheck, XCircle, AlertCircle, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -743,7 +743,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     }
   };
 
-  const isFiltered = 
+  const isFiltered =
     searchQuery.trim() !== '' ||
     filterStatuses.length > 0 ||
     filterUniversityIds.length > 0 ||
@@ -862,6 +862,252 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     initialPaymentAmount: '',
     initialPaymentDate: '',
   });
+
+  const [upgradeCheck, setUpgradeCheck] = useState<{
+    loading: boolean;
+    isCompleted?: boolean;
+    isInProgress?: boolean;
+    canUpgrade?: boolean;
+    message?: string;
+    studentData?: any;
+    previousProgram?: any;
+    activeEnrollment?: any;
+  } | null>(null);
+
+  const [phoneCheck, setPhoneCheck] = useState<{
+    loading: boolean;
+    checked: boolean;
+    isAvailable?: boolean;
+    isCompleted?: boolean;
+    isInProgress?: boolean;
+    canUpgrade?: boolean;
+    message?: string;
+    studentData?: any;
+    previousProgram?: any;
+    activeEnrollment?: any;
+  }>({ loading: false, checked: false });
+
+  const [emailCheck, setEmailCheck] = useState<{
+    loading: boolean;
+    checked: boolean;
+    isAvailable?: boolean;
+    isCompleted?: boolean;
+    isInProgress?: boolean;
+    canUpgrade?: boolean;
+    message?: string;
+    studentData?: any;
+    previousProgram?: any;
+    activeEnrollment?: any;
+  }>({ loading: false, checked: false });
+
+  const [conflictBasis, setConflictBasis] = useState<'none' | 'prompt'>('none');
+
+  const applyStudentDataToForm = (studentData: any, isUpgradeEligible: boolean) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      name: prev.name?.trim() ? prev.name : (studentData.name || ''),
+      email: studentData.email || prev.email || '',
+      phone: studentData.phone || prev.phone || '',
+      ...(isUpgradeEligible ? {
+        address: prev.address?.trim() ? prev.address : (studentData.address || ''),
+        dob: prev.dob || (studentData.dob ? new Date(studentData.dob).toISOString().split('T')[0] : ''),
+        altPhone: prev.altPhone || studentData.altPhone || '',
+        pinCode: prev.pinCode || studentData.pinCode || '',
+        gender: prev.gender || studentData.gender || '',
+        religion: prev.religion || studentData.religion || '',
+        caste: prev.caste || studentData.caste || '',
+        maritalStatus: prev.maritalStatus || studentData.maritalStatus || '',
+        employmentStatus: prev.employmentStatus || studentData.employmentStatus || '',
+        fatherName: prev.fatherName || studentData.fatherName || '',
+        fatherPhone: prev.fatherPhone || studentData.fatherPhone || '',
+        motherName: prev.motherName || studentData.motherName || '',
+        motherPhone: prev.motherPhone || studentData.motherPhone || '',
+        guardianName: prev.guardianName || studentData.guardianName || '',
+        familyPhone: prev.familyPhone || studentData.familyPhone || '',
+        photo: prev.photo || studentData.photo || '',
+        documents: (studentData.documents && studentData.documents.length) ? studentData.documents : (prev.documents || []),
+        isPrevious: true,
+        isUpgrade: true,
+        existingStudentId: studentData.id
+      } : {})
+    }));
+  };
+
+  const handleChooseBasis = (basis: 'email' | 'phone') => {
+    if (basis === 'email') {
+      if (emailCheck.studentData) {
+        setConflictBasis('none');
+        setUpgradeCheck(emailCheck);
+        setPhoneCheck(emailCheck);
+        applyStudentDataToForm(emailCheck.studentData, Boolean(emailCheck.canUpgrade || emailCheck.isCompleted));
+        toast.success(`Switched to ${emailCheck.studentData.name}'s existing record (from Email).`);
+      }
+    } else {
+      // Continue with phone (new student): keep phone, clear email
+      setConflictBasis('none');
+      setFormData((prev: any) => ({ ...prev, email: '' }));
+      setEmailCheck({ loading: false, checked: false });
+      if (phoneCheck.isAvailable) {
+        setUpgradeCheck(null);
+      }
+      toast.info(`Please enter a different email address for phone ${formData.phone}.`);
+    }
+  };
+
+  // 1. Phone availability and matching check
+  useEffect(() => {
+    if (completingEnrollment || editingId) return;
+    const cleanPhone = formData.phone?.trim();
+
+    if (!cleanPhone || cleanPhone.length < 7) {
+      setPhoneCheck({ loading: false, checked: false });
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        setPhoneCheck(prev => ({ ...prev, loading: true }));
+        const res = await api.get('/students/check-unique', {
+          params: { phone: cleanPhone, programId: formData.programId || undefined }
+        });
+
+        if (res.data) {
+          const { isUnique, isCompleted, isInProgress, canUpgrade, studentData, previousProgram, activeEnrollment, message } = res.data;
+          if (!isUnique) {
+            if (studentData) {
+              const matchInfo = {
+                loading: false,
+                checked: true,
+                isAvailable: false,
+                isCompleted,
+                isInProgress,
+                canUpgrade,
+                message,
+                studentData,
+                previousProgram,
+                activeEnrollment
+              };
+              setPhoneCheck(matchInfo);
+              setUpgradeCheck(matchInfo);
+
+              // Auto-prefill data from the phone match!
+              applyStudentDataToForm(studentData, Boolean(canUpgrade || isCompleted));
+            } else {
+              setPhoneCheck({
+                loading: false,
+                checked: true,
+                isAvailable: false,
+                isCompleted: false,
+                isInProgress: false,
+                canUpgrade: false,
+                message: message || 'This phone number is already registered in the system.',
+                studentData: null,
+                previousProgram: null,
+                activeEnrollment: null
+              });
+              setUpgradeCheck(null);
+            }
+          } else {
+            setPhoneCheck({
+              loading: false,
+              checked: true,
+              isAvailable: true
+            });
+            if (!emailCheck.studentData) {
+              setUpgradeCheck(null);
+            }
+          }
+        }
+      } catch (err) {
+        setPhoneCheck({ loading: false, checked: false });
+      }
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [formData.phone, completingEnrollment, editingId, formData.programId]);
+
+  // 2. Email availability and matching check (with conflict detection)
+  useEffect(() => {
+    if (completingEnrollment || editingId) return;
+    const cleanEmail = formData.email?.trim();
+
+    if (!cleanEmail || !cleanEmail.includes('@') || cleanEmail.length < 5) {
+      setEmailCheck({ loading: false, checked: false });
+      setConflictBasis('none');
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        setEmailCheck(prev => ({ ...prev, loading: true }));
+        const res = await api.get('/students/check-unique', {
+          params: { email: cleanEmail, programId: formData.programId || undefined }
+        });
+
+        if (res.data) {
+          const { isUnique, isCompleted, isInProgress, canUpgrade, studentData, previousProgram, activeEnrollment, message } = res.data;
+          if (!isUnique) {
+            if (studentData) {
+              const matchInfo = {
+                loading: false,
+                checked: true,
+                isAvailable: false,
+                isCompleted,
+                isInProgress,
+                canUpgrade,
+                message,
+                studentData,
+                previousProgram,
+                activeEnrollment
+              };
+              setEmailCheck(matchInfo);
+
+              // Check if this is the SAME student already matched by phone:
+              const isSameAsPhoneMatch = phoneCheck.studentData && phoneCheck.studentData.id === studentData.id;
+              if (isSameAsPhoneMatch) {
+                setConflictBasis('none');
+                setUpgradeCheck(matchInfo);
+              } else if (phoneCheck.isAvailable || (phoneCheck.studentData && phoneCheck.studentData.id !== studentData.id)) {
+                // CONFLICT! Phone is new or different student, but email belongs to an existing student!
+                setConflictBasis('prompt');
+              } else {
+                setUpgradeCheck(matchInfo);
+                applyStudentDataToForm(studentData, Boolean(canUpgrade || isCompleted));
+              }
+            } else {
+              setEmailCheck({
+                loading: false,
+                checked: true,
+                isAvailable: false,
+                isCompleted: false,
+                isInProgress: false,
+                canUpgrade: false,
+                message: message || 'This email address is already registered in the system.',
+                studentData: null,
+                previousProgram: null,
+                activeEnrollment: null
+              });
+              setConflictBasis('none');
+            }
+          } else {
+            setEmailCheck({
+              loading: false,
+              checked: true,
+              isAvailable: true
+            });
+            setConflictBasis('none');
+            if (phoneCheck.isAvailable) {
+              setUpgradeCheck(null);
+            }
+          }
+        }
+      } catch (err) {
+        setEmailCheck({ loading: false, checked: false });
+      }
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [formData.email, phoneCheck.studentData?.id, phoneCheck.isAvailable, completingEnrollment, editingId, formData.programId]);
 
 
 
@@ -1027,36 +1273,208 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   };
 
   const isDocReq = (d: string) => {
-    return getEnrollmentConfig().requiredDocuments.some((req: string) => 
+    return getEnrollmentConfig().requiredDocuments.some((req: string) =>
       req.toLowerCase() === d.toLowerCase() ||
       (req.toLowerCase() === 'transfer certificate' && d.toLowerCase() === 'tc / migration / affidavit') ||
       (req.toLowerCase() === 'tc / migration / affidavit' && d.toLowerCase() === 'transfer certificate')
     );
   };
 
+  const [verifyingStudentCheck, setVerifyingStudentCheck] = useState(false);
+
+  const isNewStudentWizard = !editingId && !completingEnrollment;
+  const stepsList = isNewStudentWizard
+    ? [
+      { label: 'Verify Student', type: 'verify', icon: UserCheck },
+      { label: 'Admission Info', type: 'admission', icon: BookOpen },
+      { label: 'Personal Details', type: 'personal', icon: User },
+      { label: 'Family Info', type: 'family', icon: Building2 },
+      { label: 'Documents', type: 'documents', icon: FileText },
+      { label: 'Payment Receipt', type: 'receipt', icon: CreditCard },
+    ]
+    : [
+      { label: 'Admission Info', type: 'admission', icon: BookOpen },
+      { label: 'Personal Details', type: 'personal', icon: User },
+      { label: 'Family Info', type: 'family', icon: Building2 },
+      { label: 'Documents', type: 'documents', icon: FileText },
+      { label: 'Payment Receipt', type: 'receipt', icon: CreditCard },
+    ];
+
+  const currentStepInfo = stepsList[formStep] || stepsList[0];
+  const currentStepType = currentStepInfo?.type || 'admission';
+  const maxStepIndex = stepsList.length - 1;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const redirectToStep = (type: 'verify' | 'admission' | 'personal' | 'family' | 'documents' | 'receipt') => {
+      const idx = stepsList.findIndex(s => s.type === type);
+      if (idx !== -1) setFormStep(idx);
+    };
+
+    // If on verification step:
+    if (currentStepType === 'verify') {
+      const cleanPhone = formData.phone?.trim();
+      const cleanEmail = formData.email?.trim();
+
+      if (!cleanPhone) {
+        toast.error("Please enter the student's phone number to verify.");
+        return;
+      }
+      if (cleanPhone.replace(/\D/g, '').length < 7) {
+        toast.error('Please enter a valid phone number (at least 7 digits)');
+        return;
+      }
+      if (!cleanEmail) {
+        toast.error("Please enter the student's email address to verify.");
+        return;
+      }
+      if (!cleanEmail.includes('@') || !cleanEmail.includes('.')) {
+        toast.error('Please enter a valid email address');
+        return;
+      }
+
+      // Check if there is an unresolved basis conflict between email and phone:
+      if (conflictBasis === 'prompt') {
+        toast.error('Please choose whether to continue with Email or Phone before proceeding.');
+        return;
+      }
+
+      // If checks are currently loading:
+      if (phoneCheck.loading || emailCheck.loading) {
+        toast.info('Verifying student details, please wait a moment...');
+        return;
+      }
+
+      // 0. If taken by another org or staff account: BLOCK!
+      if (phoneCheck.checked && !phoneCheck.isAvailable && !phoneCheck.studentData) {
+        toast.error(phoneCheck.message || 'This phone number is already registered in the system.');
+        return;
+      }
+      if (emailCheck.checked && !emailCheck.isAvailable && !emailCheck.studentData) {
+        toast.error(emailCheck.message || 'This email address is already registered in the system.');
+        return;
+      }
+
+      // 1. If student already exists and is IN PROGRESS: BLOCK!
+      if (upgradeCheck?.isInProgress || phoneCheck.isInProgress || emailCheck.isInProgress) {
+        toast.error(upgradeCheck?.message || phoneCheck?.message || emailCheck?.message || 'This student already exists in progress, cannot enroll');
+        return;
+      }
+
+      // 2. If student is COMPLETED / ELIGIBLE FOR UPGRADE: PREFILL past data and proceed!
+      const effectiveMatch = (phoneCheck.studentData && !phoneCheck.isAvailable)
+        ? phoneCheck
+        : ((emailCheck.studentData && !emailCheck.isAvailable) ? emailCheck : upgradeCheck);
+
+      if (effectiveMatch?.canUpgrade || effectiveMatch?.isCompleted) {
+        if (effectiveMatch.studentData) {
+          applyStudentDataToForm(effectiveMatch.studentData, true);
+        }
+        toast.success(`Completed student verified: ${effectiveMatch.studentData?.name || 'Student'}. Previous details prefilled!`);
+        redirectToStep('admission');
+        return;
+      }
+
+      // 3. Fallback immediate check if neither was checked yet
+      if (!phoneCheck.checked || !emailCheck.checked) {
+        setVerifyingStudentCheck(true);
+        try {
+          // Check phone
+          const pRes = await api.get('/students/check-unique', { params: { phone: cleanPhone } });
+          if (pRes.data && !pRes.data.isUnique) {
+            if (pRes.data.studentData) {
+              const pMatch = pRes.data;
+              setPhoneCheck({ loading: false, checked: true, ...pMatch });
+              setUpgradeCheck(pMatch);
+              applyStudentDataToForm(pMatch.studentData, Boolean(pMatch.canUpgrade || pMatch.isCompleted));
+
+              if (pMatch.isInProgress) {
+                toast.error(pMatch.message || 'This student already exists in progress, cannot enroll');
+                return;
+              }
+              if (pMatch.canUpgrade || pMatch.isCompleted) {
+                toast.success(`Completed student verified: ${pMatch.studentData?.name || 'Student'}. Previous details prefilled!`);
+                redirectToStep('admission');
+                return;
+              }
+            } else {
+              setPhoneCheck({ loading: false, checked: true, isAvailable: false, message: pRes.data.message });
+              toast.error(pRes.data.message || 'This phone number is already registered in the system.');
+              return;
+            }
+          }
+
+          // Check email
+          const eRes = await api.get('/students/check-unique', { params: { email: cleanEmail } });
+          if (eRes.data && !eRes.data.isUnique) {
+            if (eRes.data.studentData) {
+              const eMatch = eRes.data;
+              setEmailCheck({ loading: false, checked: true, ...eMatch });
+
+              // Conflict check
+              if (pRes.data?.isUnique || (pRes.data?.studentData && pRes.data.studentData.id !== eMatch.studentData.id)) {
+                setConflictBasis('prompt');
+                toast.error('Email ID is registered to an existing student. Please select which basis to continue.');
+                return;
+              }
+
+              if (eMatch.isInProgress) {
+                toast.error(eMatch.message || 'This student already exists in progress, cannot enroll');
+                return;
+              }
+              if (eMatch.canUpgrade || eMatch.isCompleted) {
+                setUpgradeCheck(eMatch);
+                applyStudentDataToForm(eMatch.studentData, true);
+                toast.success(`Completed student verified: ${eMatch.studentData?.name || 'Student'}. Previous details prefilled!`);
+                redirectToStep('admission');
+                return;
+              }
+            } else {
+              setEmailCheck({ loading: false, checked: true, isAvailable: false, message: eRes.data.message });
+              toast.error(eRes.data.message || 'This email address is already registered in the system.');
+              return;
+            }
+          }
+        } catch (err: any) {
+          console.error('Failed to verify student details:', err);
+          toast.error(err.response?.data?.message || 'Failed to verify student details');
+          return;
+        } finally {
+          setVerifyingStudentCheck(false);
+        }
+      }
+
+      // 4. If student is NEW (both phone and email available)
+      if (!formData.name?.trim()) {
+        toast.error("Please enter the student's full name to continue.");
+        return;
+      }
+
+      toast.info('New student verified. Please select admission details.');
+      redirectToStep('admission');
+      return;
+    }
+
     // If we're not on the final step, just advance to the next step.
-    // Because the button is type="submit", the browser will natively validate 
-    // all fields in the CURRENT step before this function even fires!
-    if (formStep < 4) {
+    if (formStep < maxStepIndex) {
       setFormStep(formStep + 1);
       return;
     }
 
     if (!formData.programId || formData.programId.trim() === '') {
       toast.error('Please select a Program');
+      redirectToStep('admission');
       return;
     }
     if (isFieldReq('photo') && (!formData.photo || formData.photo.trim() === '')) {
       toast.error('Please upload a Student Photo');
-      setFormStep(1); // Redirect to personal step
+      redirectToStep('personal');
       return;
     }
     const requiredDocs = getEnrollmentConfig().requiredDocuments;
     const missingDocs = requiredDocs.filter((docType: string) => {
-      const doc = (formData.documents || []).find((d: any) => 
+      const doc = (formData.documents || []).find((d: any) =>
         d.type.toLowerCase() === docType.toLowerCase() ||
         (docType.toLowerCase() === 'transfer certificate' && d.type.toLowerCase() === 'tc / migration / affidavit') ||
         (docType.toLowerCase() === 'tc / migration / affidavit' && d.type.toLowerCase() === 'transfer certificate')
@@ -1065,58 +1483,64 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     });
     if (missingDocs.length > 0) {
       toast.error(`Please upload all required documents. Missing: ${missingDocs.join(', ')}`);
-      setFormStep(3); // Redirect to documents step
+      redirectToStep('documents');
       return;
     }
     const unreplacedRejectedDocs = (formData.documents || []).filter((d: any) => d && d.status === 'rejected');
     if (unreplacedRejectedDocs.length > 0) {
-      toast.error(`Please re-upload or remove rejected documents: ${unreplacedRejectedDocs.map((d: any) => d.type).join(', ')}`);
-      setFormStep(3); // Redirect to documents step
+      toast.error(`Please re-upload rejected documents: ${unreplacedRejectedDocs.map((d: any) => d.type).join(', ')}`);
+      redirectToStep('documents');
       return;
     }
     // Receipt is mandatory for new students (unless marked as previous student) or when completing an enrollment
     const isReceiptMandatory = Boolean(completingEnrollment) || (!editingId && !formData.isPrevious);
     if (isReceiptMandatory && (!formData.receiptUrl || formData.receiptUrl.trim() === '')) {
       toast.error('Please upload the Fee Payment Receipt');
-      setFormStep(4);
+      redirectToStep('receipt');
       return;
     }
     if (!formData.isPrevious && !editingId && getActiveFeeStructure()) {
       if (!formData.initialPaymentAmount || Number(formData.initialPaymentAmount) <= 0) {
         toast.error('Please enter the Initial Fee Amount');
-        setFormStep(0);
+        redirectToStep('admission');
         return;
       }
 
       if (!formData.initialPaymentDate || formData.initialPaymentDate.trim() === '') {
         toast.error('Please enter the Payment Date for the initial fee');
-        setFormStep(0);
+        redirectToStep('admission');
         return;
       }
-    }
-
-    if (formStep < 4) {
-      setFormStep(4);
-      return;
     }
     setSavingStudent(true);
     try {
       if (completingEnrollment) {
         const completeRes = await api.put(`/enrollment/${completingEnrollment.id}/provisional-complete`, formData);
         const isProv = !!completingEnrollment.isProvisional;
-        const sentTo = completeRes.data?.data?.status === 'sales_admin_review' ? 'Sales Admin for approval' : 'Operations for review';
-        if (isProv) {
-          toast.success(`Provisional enrollment completed successfully and submitted to ${sentTo}`);
+        const isUpgrade = Boolean(completingEnrollment.isUpgrade || completeRes.data?.data?.isUpgrade);
+        if (isUpgrade) {
+          toast.success('Upgrade documents re-uploaded and sent to Operations for verification');
         } else {
-          toast.success(`Documents re-uploaded successfully and submitted to ${sentTo}`);
+          const sentTo = completeRes.data?.data?.status === 'sales_admin_review' ? 'Sales Admin for approval' : 'Operations for review';
+          if (isProv) {
+            toast.success(`Provisional enrollment completed successfully and submitted to ${sentTo}`);
+          } else {
+            toast.success(`Documents re-uploaded successfully and submitted to ${sentTo}`);
+          }
         }
       } else if (editingId) {
         await api.put(`/students/${editingId}`, formData);
         toast.success('Student updated successfully');
       } else {
-        const payload = { ...formData, isPipelineApplication: true };
+        const isUpgrade = Boolean(upgradeCheck?.canUpgrade || upgradeCheck?.isCompleted || formData.isUpgrade);
+        const payload = {
+          ...formData,
+          isPipelineApplication: true,
+          isUpgrade,
+          existingStudentId: upgradeCheck?.studentData?.id || formData.existingStudentId
+        };
         await api.post('/students', payload);
-        toast.success('Student added successfully and sent to pipeline for review');
+        toast.success(isUpgrade ? 'Upgrade application submitted directly to Operations for verification' : 'Student added successfully and sent to pipeline for review');
       }
       handleDialogOpenChange(false);
       resetForm();
@@ -1231,6 +1655,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const resetForm = () => {
     setEditingId(null);
     setFormStep(0);
+    setUpgradeCheck(null);
+    setPhoneCheck({ loading: false, checked: false });
+    setEmailCheck({ loading: false, checked: false });
+    setConflictBasis('none');
+    setVerifyingStudentCheck(false);
     setCustomOtherName('');
     setFormData({
       isPrevious: false,
@@ -2003,704 +2432,944 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const totalPages = Math.max(1, Math.ceil(filteredStudents.length / itemsPerPage));
   const paginatedStudents = filteredStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  if (triggerOpen !== undefined) {
-    return (
-      <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
-        <DialogContent className="max-w-3xl max-h-[92vh] flex flex-col">
-          <DialogHeader className="pb-2 border-b">
-            <DialogTitle className="text-lg">{editingId || completingEnrollment ? 'Update Student Enrollment' : 'Add New Student Record'}</DialogTitle>
-            {/* Step indicator */}
-            <div className="flex items-center gap-1 pt-2">
-              {['Admission Info', 'Personal Details', 'Family Info', 'Documents', 'Payment Receipt'].map((step, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setFormStep(i)}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${formStep === i
-                    ? 'bg-primary text-primary-foreground shadow'
-                    : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'
-                    }`}
-                >
-                  {i === 0 && <BookOpen className="w-3 h-3" />}
-                  {i === 1 && <User className="w-3 h-3" />}
-                  {i === 2 && <Building2 className="w-3 h-3" />}
-                  {i === 3 && <FileText className="w-3 h-3" />}
-                  {i === 4 && <CreditCard className="w-3 h-3" />}
-                  {step}
-                </button>
-              ))}
+  const renderStudentFormModalContent = () => (
+    <DialogContent className="max-w-3xl w-full sm:max-w-3xl h-[100dvh] sm:h-auto sm:max-h-[92vh] flex flex-col rounded-none sm:rounded-xl">
+      <DialogHeader className="pb-2 border-b">
+        <DialogTitle className="text-lg">{editingId || completingEnrollment ? 'Update Student Enrollment' : 'Add New Student Record'}</DialogTitle>
+        {/* Step indicator */}
+        <div className="flex items-center gap-1 pt-2 overflow-x-auto pb-1">
+          {stepsList.map((step, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => {
+                if (isNewStudentWizard && formStep === 0 && i > 0) {
+                  const hasPhone = Boolean(formData.phone?.trim() && formData.phone.trim().replace(/\D/g, '').length >= 7);
+                  const hasEmail = Boolean(formData.email?.trim() && formData.email.includes('@'));
+                  if (!hasPhone || !hasEmail) {
+                    toast.error('Please enter valid student phone number and email address before continuing');
+                    return;
+                  }
+                  if (conflictBasis === 'prompt') {
+                    toast.error('Please resolve the email/phone conflict before continuing');
+                    return;
+                  }
+                  if (upgradeCheck?.isInProgress || phoneCheck.isInProgress || emailCheck.isInProgress) {
+                    toast.error('This student already exists in progress, cannot enroll');
+                    return;
+                  }
+                }
+                setFormStep(i);
+              }}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all shrink-0 ${formStep === i
+                ? 'bg-primary text-primary-foreground shadow'
+                : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'
+                }`}
+            >
+              <step.icon className="w-3 h-3" />
+              {step.label}
+            </button>
+          ))}
+        </div>
+      </DialogHeader>
+
+      <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+        <div className="flex-1 overflow-y-auto pr-2 max-h-[60vh] space-y-4 py-3">
+
+          {/* ── STEP 0: STUDENT VERIFICATION (FOR NEW ENROLLMENTS) ── */}
+          {currentStepType === 'verify' && (
+            <div className="space-y-5 animate-in fade-in duration-200">
+              <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/70 dark:bg-blue-950/30 dark:border-blue-900">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-lg">
+                    <UserCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-blue-900 dark:text-blue-200 text-sm">Step 1: Student Verification</h3>
+                    <p className="text-xs text-blue-700 dark:text-blue-400 mt-0.5">
+                      Enter the phone number to check availability. If existing, student data is prefilled. If unique, continue with email.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sequential Inputs: Phone Number, Email ID, Full Name */}
+              <div className="space-y-4">
+                {/* 1. Phone Input */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="font-medium flex items-center gap-1.5 text-sm">
+                      <Phone className="w-4 h-4 text-primary" /> Phone Number <span className="text-rose-500">*</span>
+                    </Label>
+                    {phoneCheck.loading && (
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <RefreshCw className="w-3 h-3 animate-spin text-primary" /> Checking availability...
+                      </span>
+                    )}
+                    {!phoneCheck.loading && phoneCheck.checked && phoneCheck.isAvailable && (
+                      <Badge variant="outline" className="text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 text-[11px] font-semibold flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Phone Available
+                      </Badge>
+                    )}
+                    {!phoneCheck.loading && phoneCheck.checked && !phoneCheck.isAvailable && phoneCheck.studentData && (
+                      <Badge variant="outline" className="text-blue-700 bg-blue-50 dark:bg-blue-950/40 border-blue-300 text-[11px] font-semibold flex items-center gap-1">
+                        <UserCheck className="w-3 h-3 text-blue-600" /> Existing: {phoneCheck.studentData.name}
+                      </Badge>
+                    )}
+                    {!phoneCheck.loading && phoneCheck.checked && !phoneCheck.isAvailable && !phoneCheck.studentData && (
+                      <Badge variant="outline" className="text-rose-700 bg-rose-50 dark:bg-rose-950/40 border-rose-300 text-[11px] font-semibold flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3 text-rose-600" /> Phone Already Taken
+                      </Badge>
+                    )}
+                  </div>
+                  <Input
+                    className="h-11 font-medium text-sm"
+                    placeholder="e.g. 9876543210"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  />
+                  <p className="text-[11px] text-muted-foreground">
+                    Primary mobile number to verify availability or auto-fill existing student record
+                  </p>
+                </div>
+
+                {/* 2. Email Input */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="font-medium flex items-center gap-1.5 text-sm">
+                      <Mail className="w-4 h-4 text-primary" /> Email Address <span className="text-rose-500">*</span>
+                      {phoneCheck.studentData?.email && formData.email === phoneCheck.studentData.email && (
+                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">(auto-prefilled)</span>
+                      )}
+                    </Label>
+                    {emailCheck.loading && (
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <RefreshCw className="w-3 h-3 animate-spin text-primary" /> Checking availability...
+                      </span>
+                    )}
+                    {!emailCheck.loading && emailCheck.checked && emailCheck.isAvailable && (
+                      <Badge variant="outline" className="text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 text-[11px] font-semibold flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Email Available
+                      </Badge>
+                    )}
+                    {!emailCheck.loading && emailCheck.checked && !emailCheck.isAvailable && emailCheck.studentData && conflictBasis === 'prompt' && (
+                      <Badge variant="outline" className="text-amber-800 bg-amber-50 dark:bg-amber-950/40 border-amber-300 text-[11px] font-semibold flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3 text-amber-600" /> Email Already Taken
+                      </Badge>
+                    )}
+                    {!emailCheck.loading && emailCheck.checked && !emailCheck.isAvailable && !emailCheck.studentData && (
+                      <Badge variant="outline" className="text-rose-700 bg-rose-50 dark:bg-rose-950/40 border-rose-300 text-[11px] font-semibold flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3 text-rose-600" /> Email Already Taken
+                      </Badge>
+                    )}
+                  </div>
+                  <Input
+                    type="email"
+                    className="h-11 font-medium text-sm"
+                    placeholder="e.g. student@example.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
+                  <p className="text-[11px] text-muted-foreground">
+                    Registered email address for student communications and portal credentials
+                  </p>
+                </div>
+
+                {/* Conflict Resolution Banner (When email is already taken by a different student) */}
+                {conflictBasis === 'prompt' && emailCheck.studentData && (
+                  <div className="p-4 rounded-xl border-2 border-amber-300 bg-amber-50/90 dark:bg-amber-950/40 dark:border-amber-700 space-y-3 animate-in fade-in slide-in-from-top-2 duration-300 shadow-sm">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-amber-100 dark:bg-amber-900 rounded-lg text-amber-700 dark:text-amber-300 shrink-0 mt-0.5">
+                        <AlertTriangle className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-bold text-amber-950 dark:text-amber-200 text-sm">
+                            Email ID Already Registered
+                          </h4>
+                          <Badge className="bg-amber-600 text-white text-[10px] uppercase font-bold">Conflict</Badge>
+                        </div>
+                        <p className="text-xs text-amber-900 dark:text-amber-300 mt-1 leading-relaxed">
+                          The email ID <strong>{formData.email}</strong> is already taken by <strong>{emailCheck.studentData.name}</strong> (Registered Phone: <strong>{emailCheck.studentData.phone || 'N/A'}</strong>). On which basis do you want to continue?
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-1 pl-11">
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={() => handleChooseBasis('email')}
+                        className="bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs shadow-sm flex items-center gap-1.5"
+                      >
+                        <Mail className="w-3.5 h-3.5" /> Continue with Email ({emailCheck.studentData.name})
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleChooseBasis('phone')}
+                        className="border-amber-400 text-amber-900 hover:bg-amber-100 dark:text-amber-200 dark:hover:bg-amber-900/40 font-semibold text-xs flex items-center gap-1.5"
+                      >
+                        <Phone className="w-3.5 h-3.5" /> Continue with Phone ({formData.phone})
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. Full Name Input */}
+                <div className="space-y-1.5">
+                  <Label className="font-medium flex items-center gap-1.5 text-sm">
+                    <User className="w-4 h-4 text-muted-foreground" /> Student Full Name <span className="text-rose-500">*</span>
+                    {formData.name && (phoneCheck.studentData?.name === formData.name || emailCheck.studentData?.name === formData.name) && (
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">(auto-prefilled)</span>
+                    )}
+                  </Label>
+                  <Input
+                    className="h-11 text-sm font-medium"
+                    placeholder="Student full legal name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  />
+                  <p className="text-[11px] text-muted-foreground">Full legal name of the student as per ID documents</p>
+                </div>
+              </div>
+
+              {/* Status Alerts */}
+              {upgradeCheck && !upgradeCheck.loading && (
+                <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                  {upgradeCheck.isInProgress ? (
+                    <div className="p-4 bg-rose-50 dark:bg-rose-950/40 border-2 border-rose-300 dark:border-rose-700 rounded-xl flex items-start gap-3.5 shadow-sm">
+                      <div className="p-2 bg-rose-100 dark:bg-rose-900 rounded-lg text-rose-700 dark:text-rose-300 shrink-0 mt-0.5">
+                        <XCircle className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="font-bold text-rose-900 dark:text-rose-200 text-sm">
+                            This student already exists in progress, cannot enroll
+                          </h4>
+                          <Badge className="bg-rose-600 text-white text-[10px] uppercase font-bold tracking-wider">In Progress</Badge>
+                        </div>
+                        <p className="text-xs text-rose-800 dark:text-rose-300 mt-1 leading-relaxed">
+                          <strong>{upgradeCheck.studentData?.name || formData.name || 'Student'}</strong> already has an active enrollment in <strong>{upgradeCheck.activeEnrollment?.programName || upgradeCheck.previousProgram?.name || 'their current program'}</strong> ({upgradeCheck.activeEnrollment?.status?.replace(/_/g, ' ') || 'Active'}). Under policy, a student cannot enroll in another program while currently in progress.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (upgradeCheck.canUpgrade || upgradeCheck.isCompleted) ? (
+                    <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-300 dark:border-emerald-700 rounded-xl flex items-start gap-3.5 shadow-sm">
+                      <div className="p-2 bg-emerald-100 dark:bg-emerald-900 rounded-lg text-emerald-700 dark:text-emerald-300 shrink-0 mt-0.5">
+                        <GraduationCap className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="font-bold text-emerald-900 dark:text-emerald-200 text-sm">
+                            Existing Completed Student Identified (Eligible for Upgrade)
+                          </h4>
+                          <Badge className="bg-emerald-600 text-white text-[10px] uppercase font-bold tracking-wider">Completed</Badge>
+                        </div>
+                        <p className="text-xs text-emerald-800 dark:text-emerald-300 mt-1 leading-relaxed">
+                          <strong>{upgradeCheck.studentData?.name}</strong> has completed <strong>{upgradeCheck.previousProgram?.name || 'their previous program'}</strong> ({upgradeCheck.previousProgram?.universityName || 'University'}). Previous biographical, family, and document data will be prefilled upon continuing.
+                        </p>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              )}
+
+              {/* Both Available Notification */}
+              {!upgradeCheck?.studentData && phoneCheck.checked && phoneCheck.isAvailable && emailCheck.checked && emailCheck.isAvailable && conflictBasis === 'none' && (
+                <div className="p-3 bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-xl flex items-center gap-2.5 text-xs text-emerald-800 dark:text-emerald-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Both phone number and email address are available. You can proceed with new enrollment.</span>
+                </div>
+              )}
             </div>
-          </DialogHeader>
+          )}
 
-          <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-            <div className="flex-1 overflow-y-auto pr-2 max-h-[60vh] space-y-4 py-3">
-
-              {/* ── STEP 0: ADMISSION INFO ── */}
-              {formStep === 0 && (
-                <div className="space-y-4">
-                  {/* Previous student toggle - only show for non-sales admins */}
-                  {!isSalesMode && !['sales_admin', 'sales_sub_admin'].includes(user?.role || '') && (
-                    <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
-                      <input
-                        type="checkbox"
-                        id="isPreviousMain"
-                        checked={formData.isPrevious}
-                        onChange={(e) => setFormData({ ...formData, isPrevious: e.target.checked })}
-                        className="w-4 h-4 rounded border-slate-300 accent-amber-600"
-                      />
-                      <div>
-                        <Label htmlFor="isPreviousMain" className="cursor-pointer font-semibold text-amber-800 dark:text-amber-400">Mark as Previous Student</Label>
-                        <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Enable this for students admitted before the system was set up</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Branch & University */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {!isSalesMode && !['sales_admin', 'sales_sub_admin'].includes(user?.role || '') ? (
-                      <>
-                        <div>
-                          <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                          <Select value={formData.branchId} onValueChange={(v) => setFormData({ ...formData, branchId: v === '__none__' ? '' : v })}>
-                            <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="__none__">— No Branch —</SelectItem>
-                              {branches.filter((b: any) => b && b.id).map((b: any) => (
-                                <SelectItem key={b.id} value={b.id}>{b.name} ({b.code})</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label className="font-medium">University *</Label>
-                          <Select value={formData.universityId} onValueChange={(v) => setFormData({ ...formData, universityId: v, programId: '' })}>
-                            <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
-                            <SelectContent>
-                              {universities.filter((u: any) => u && u.id).map((u: any) => (
-                                <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="col-span-2">
-                        <Label className="font-medium">University *</Label>
-                        <Select value={formData.universityId} onValueChange={(v) => setFormData({ ...formData, universityId: v, programId: '' })}>
-                          <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
-                          <SelectContent>
-                            {universities.filter((u: any) => u && u.id).map((u: any) => (
-                              <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Program & Session */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label className="font-medium">Program *</Label>
-                      <Select value={formData.programId} onValueChange={(v) => setFormData({ ...formData, programId: v, specialisation: '' })} disabled={!formData.universityId}>
-                        <SelectTrigger>
-                          <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {filteredPrograms.filter((p: any) => p && p.id).map((p: any) => (
-                            <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
-                          ))}
-                          {filteredPrograms.length === 0 && (
-                            <div className="px-3 py-2 text-sm text-muted-foreground">No programs found for this university</div>
-                          )}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label className="font-medium">Session <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                      <Select value={formData.sessionId} onValueChange={(v) => setFormData({ ...formData, sessionId: v === '__none__' ? '' : v })} disabled={!formData.programId}>
-                        <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="__none__">— No Session —</SelectItem>
-                          {sessions.filter((s: any) => s && s.id && (!s.universityId || s.universityId === programs.find((p: any) => p.id === formData.programId)?.universityId || s.programId === formData.programId)).map((s: any) => (
-                            <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {/* Specialisation (if applicable) */}
-                  {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations?.length > 0 && (
-                    <div className="mt-4">
-                      <Label className="font-medium">Specialisation *</Label>
-                      <Select value={formData.specialisation} onValueChange={(v) => setFormData({ ...formData, specialisation: v })}>
-                        <SelectTrigger><SelectValue placeholder="Select specialisation..." /></SelectTrigger>
-                        <SelectContent>
-                          {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations.map((spec: string) => (
-                            <SelectItem key={spec} value={spec}>{spec}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-
-                  {/* Payment Plan & Fee */}
-                  {getActiveFeeStructure() && (
-                    <>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                        <div>
-                          <Label className="font-medium">Payment Plan *</Label>
-                          <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({ ...formData, paymentPlan: v })}>
-                            <SelectTrigger><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="full">Full (One Time)</SelectItem>
-                              <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label className="font-medium">Initial Fee Amount *</Label>
-                          <Input
-                            type="number"
-                            placeholder="e.g. 5000"
-                            value={formData.initialPaymentAmount || ''}
-                            onChange={e => setFormData({ ...formData, initialPaymentAmount: e.target.value })}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                        <div>
-                          <Label className="font-medium">Payment Date *</Label>
-                          <Input
-                            type="date"
-                            value={formData.initialPaymentDate || ''}
-                            onChange={e => setFormData({ ...formData, initialPaymentDate: e.target.value })}
-                            required
-                          />
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  {renderFeeDisplay()}
-
-                  {/* Enrollment & Admission Numbers */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label className="font-medium">Enrollment Number <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                      <Input
-                        placeholder="e.g. PYPEER001"
-                        value={formData.enrollmentNo}
-                        onChange={(e) => setFormData({ ...formData, enrollmentNo: e.target.value })}
-                      />
-                    </div>
-                    {editingId && (
-                      <div>
-                        <Label className="font-medium">Admission Number</Label>
-                        <Input
-                          placeholder="Auto-generated on save"
-                          value={formData.admissionNo || ''}
-                          readOnly
-                          className="bg-slate-50 cursor-not-allowed text-muted-foreground"
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Admission Date & Status */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label className="font-medium">Admission Date</Label>
-                      <Input
-                        type="date"
-                        value={formData.admissionDate}
-                        onChange={(e) => setFormData({ ...formData, admissionDate: e.target.value })}
-                      />
-                    </div>
-                    {editingId && (
-                      <div>
-                        <Label className="font-medium">Status</Label>
-                        <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                          <SelectTrigger><SelectValue placeholder="Select status..." /></SelectTrigger>
-                          <SelectContent className="max-h-[300px]">
-                            <SelectItem value="active">Active</SelectItem>
-                            <SelectItem value="document_review">Ops Verification (Doc Review)</SelectItem>
-                            <SelectItem value="provisional">Provisional</SelectItem>
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="completed">Completed</SelectItem>
-                            <SelectItem value="payment_pending">Fee Pending</SelectItem>
-                            <SelectItem value="receipt_submitted">Receipt Submitted</SelectItem>
-                            <SelectItem value="dept_review">Department Review</SelectItem>
-                            <SelectItem value="finance_review">Finance Review</SelectItem>
-                            <SelectItem value="sales_admin_review">Sales Admin Review</SelectItem>
-                            <SelectItem value="enrolled">Enrolled</SelectItem>
-                            <SelectItem value="dropped">Dropped</SelectItem>
-                            <SelectItem value="inactive">Inactive</SelectItem>
-                            <SelectItem value="rejected">Rejected</SelectItem>
-                            <SelectItem value="department_rejected">Dept Rejected</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
+          {/* ── STEP 1: ADMISSION INFO ── */}
+          {currentStepType === 'admission' && (
+            <div className="space-y-4">
+              {/* Previous student toggle - only show for non-sales admins */}
+              {!isSalesMode && !['sales_admin', 'sales_sub_admin'].includes(user?.role || '') && (
+                <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
+                  <input
+                    type="checkbox"
+                    id="isPreviousMain"
+                    checked={formData.isPrevious}
+                    onChange={(e) => setFormData({ ...formData, isPrevious: e.target.checked })}
+                    className="w-4 h-4 rounded border-slate-300 accent-amber-600"
+                  />
+                  <div>
+                    <Label htmlFor="isPreviousMain" className="cursor-pointer font-semibold text-amber-800 dark:text-amber-400">Mark as Previous Student</Label>
+                    <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Enable this for students admitted before the system was set up</p>
                   </div>
                 </div>
               )}
 
-              {/* ── STEP 1: PERSONAL DETAILS ── */}
-              {formStep === 1 && (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Branch & University */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {!isSalesMode && !['sales_admin', 'sales_sub_admin'].includes(user?.role || '') ? (
+                  <>
                     <div>
-                      <Label className="font-medium">Full Name *</Label>
-                      <Input
-                        placeholder="Student's name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        required
-                      />
+                      <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
+                      <Select value={formData.branchId} onValueChange={(v) => setFormData({ ...formData, branchId: v === '__none__' ? '' : v })}>
+                        <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="__none__">— No Branch —</SelectItem>
+                          {branches.filter((b: any) => b && b.id).map((b: any) => (
+                            <SelectItem key={b.id} value={b.id}>{b.name} ({b.code})</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
-                      <Label className="font-medium">Email Address {isFieldReq('email') && '*'}</Label>
+                      <Label className="font-medium">University *</Label>
+                      <Select value={formData.universityId} onValueChange={(v) => setFormData({ ...formData, universityId: v, programId: '' })}>
+                        <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
+                        <SelectContent>
+                          {universities.filter((u: any) => u && u.id).map((u: any) => (
+                            <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </>
+                ) : (
+                  <div className="col-span-2">
+                    <Label className="font-medium">University *</Label>
+                    <Select value={formData.universityId} onValueChange={(v) => setFormData({ ...formData, universityId: v, programId: '' })}>
+                      <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
+                      <SelectContent>
+                        {universities.filter((u: any) => u && u.id).map((u: any) => (
+                          <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+
+              {/* Program & Session */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="font-medium">Program *</Label>
+                  <Select value={formData.programId} onValueChange={(v) => setFormData({ ...formData, programId: v, specialisation: '' })} disabled={!formData.universityId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {filteredPrograms.filter((p: any) => p && p.id).map((p: any) => (
+                        <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
+                      ))}
+                      {filteredPrograms.length === 0 && (
+                        <div className="px-3 py-2 text-sm text-muted-foreground">No programs found for this university</div>
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label className="font-medium">Session <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
+                  <Select value={formData.sessionId} onValueChange={(v) => setFormData({ ...formData, sessionId: v === '__none__' ? '' : v })} disabled={!formData.programId}>
+                    <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__none__">— No Session —</SelectItem>
+                      {sessions.filter((s: any) => s && s.id && (!s.universityId || s.universityId === programs.find((p: any) => p.id === formData.programId)?.universityId || s.programId === formData.programId)).map((s: any) => (
+                        <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Specialisation (if applicable) */}
+              {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations?.length > 0 && (
+                <div className="mt-4">
+                  <Label className="font-medium">Specialisation *</Label>
+                  <Select value={formData.specialisation} onValueChange={(v) => setFormData({ ...formData, specialisation: v })}>
+                    <SelectTrigger><SelectValue placeholder="Select specialisation..." /></SelectTrigger>
+                    <SelectContent>
+                      {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations.map((spec: string) => (
+                        <SelectItem key={spec} value={spec}>{spec}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              {/* Payment Plan & Fee */}
+              {getActiveFeeStructure() && (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <Label className="font-medium">Payment Plan *</Label>
+                      <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({ ...formData, paymentPlan: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="full">Full (One Time)</SelectItem>
+                          <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="font-medium">Initial Fee Amount *</Label>
                       <Input
-                        type="email"
-                        placeholder="student@example.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        required={isFieldReq('email')}
+                        type="number"
+                        placeholder="e.g. 5000"
+                        value={formData.initialPaymentAmount || ''}
+                        onChange={e => setFormData({ ...formData, initialPaymentAmount: e.target.value })}
+                        required
                       />
                     </div>
                   </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                     <div>
-                      <Label className="font-medium">Phone Number *</Label>
-                      <Input
-                        placeholder="Primary phone"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label className="font-medium">Date of Birth {isFieldReq('dob') && '*'}</Label>
+                      <Label className="font-medium">Payment Date *</Label>
                       <Input
                         type="date"
-                        value={formData.dob}
-                        onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-                        required={isFieldReq('dob')}
+                        value={formData.initialPaymentDate || ''}
+                        onChange={e => setFormData({ ...formData, initialPaymentDate: e.target.value })}
+                        required
                       />
                     </div>
                   </div>
+                </>
+              )}
 
+              {renderFeeDisplay()}
+
+              {/* Enrollment & Admission Numbers */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="font-medium">Enrollment Number <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
+                  <Input
+                    placeholder="e.g. PYPEER001"
+                    value={formData.enrollmentNo}
+                    onChange={(e) => setFormData({ ...formData, enrollmentNo: e.target.value })}
+                  />
+                </div>
+                {editingId && (
                   <div>
-                    <Label className="font-medium">Home Address {isFieldReq('address') && '*'}</Label>
-                    <Textarea
-                      placeholder="Permanent address"
-                      value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      required={isFieldReq('address')}
+                    <Label className="font-medium">Admission Number</Label>
+                    <Input
+                      placeholder="Auto-generated on save"
+                      value={formData.admissionNo || ''}
+                      readOnly
+                      className="bg-slate-50 cursor-not-allowed text-muted-foreground"
                     />
                   </div>
+                )}
+              </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label className="font-medium">Pincode {isFieldReq('pinCode') && '*'}</Label>
-                      <Input
-                        placeholder="6-digit pincode"
-                        value={formData.pinCode}
-                        onChange={(e) => setFormData({ ...formData, pinCode: e.target.value })}
-                        required={isFieldReq('pinCode')}
-                      />
-                    </div>
-                    <div>
-                      <Label className="font-medium">Alternative Phone {isFieldReq('altPhone') && '*'}</Label>
-                      <Input
-                        placeholder="Secondary phone"
-                        value={formData.altPhone}
-                        onChange={(e) => setFormData({ ...formData, altPhone: e.target.value })}
-                        required={isFieldReq('altPhone')}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label className="font-medium">Religion {isFieldReq('religion') && '*'}</Label>
-                      <Input
-                        placeholder="e.g. Christian, Hindu, Muslim"
-                        value={formData.religion}
-                        onChange={(e) => setFormData({ ...formData, religion: e.target.value })}
-                        required={isFieldReq('religion')}
-                      />
-                    </div>
-                    <div>
-                      <Label className="font-medium">Caste / Category {isFieldReq('caste') && '*'}</Label>
-                      <Input
-                        placeholder="e.g. General, OBC, SC, ST"
-                        value={formData.caste}
-                        onChange={(e) => setFormData({ ...formData, caste: e.target.value })}
-                        required={isFieldReq('caste')}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Photo upload */}
-                  <div className="p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 flex items-center justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <Label className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                        <span>Student Photo {isFieldReq('photo') && '*'}</span>
-                        {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && formData.photo === (completingEnrollment?.student?.photo || completingEnrollment?.photo) && (
-                          <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
-                            {!isFieldReq('photo') ? 'Rejected (Optional)' : 'Re-upload'}
-                          </span>
-                        )}
-                      </Label>
-                      {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && formData.photo === (completingEnrollment?.student?.photo || completingEnrollment?.photo) ? (
-                        <p className="text-xs text-red-600 font-medium mt-1">
-                          ✕ Photo was rejected by Operations: {!isFieldReq('photo') ? 'Please re-upload or remove this photo' : 'Please re-upload a clearer image'}
-                        </p>
-                      ) : formData.photo ? (
-                        <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
-                          ✓ Photo Uploaded: {formData.photo.split('/').pop()}
-                        </p>
-                      ) : (
-                        <p className={`text-xs ${isFieldReq('photo') ? 'text-rose-500' : 'text-muted-foreground'} font-medium mt-1`}>
-                          {isFieldReq('photo') ? '⚠️ Required (direct upload)' : 'Optional'}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      {formData.photo && (
-                        <a
-                          href={api.getFileUrl(formData.photo)}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
-                        >
-                          View
-                        </a>
-                      )}
-                      {formData.photo && !isFieldReq('photo') && (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setFormData((prev: any) => ({ ...prev, photo: '' }));
-                            toast.success('Photo removed');
-                          }}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 text-xs font-medium cursor-pointer shadow-sm transition-colors"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                          Remove
-                        </Button>
-                      )}
-                      <input
-                        type="file"
-                        id="student-photo-main"
-                        className="hidden"
-                        onChange={async (e) => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-                          const toastId = toast.loading('Uploading photo...');
-                          try {
-                            const url = await uploadFormFile(file);
-                            setFormData((prev: any) => ({ ...prev, photo: url }));
-                            toast.success('Photo uploaded successfully', { id: toastId });
-                          } catch (err: any) {
-                            console.error(err);
-                            toast.error(err.message || 'Failed to upload photo', { id: toastId });
-                          } finally {
-                            e.target.value = ''; // lets the same file be chosen again after a failure
-                          }
-                        }}
-                      />
-                      <Label
-                        htmlFor="student-photo-main"
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
-                      >
-                        <Upload className="w-3 h-3" />
-                        {formData.photo ? (completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' ? 'Re-upload' : 'Change Photo') : 'Upload Photo'}
-                      </Label>
-                    </div>
-                  </div>
+              {/* Admission Date & Status */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="font-medium">Admission Date</Label>
+                  <Input
+                    type="date"
+                    value={formData.admissionDate}
+                    onChange={(e) => setFormData({ ...formData, admissionDate: e.target.value })}
+                  />
                 </div>
-              )}
-
-              {/* ── STEP 2: FAMILY INFO ── */}
-              {formStep === 2 && (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label className="font-medium">Father's Name {isFieldReq('fatherName') && '*'}</Label>
-                      <Input
-                        placeholder="Father's full name"
-                        value={formData.fatherName}
-                        onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })}
-                        required={isFieldReq('fatherName')}
-                      />
-                    </div>
-                    <div>
-                      <Label className="font-medium">Father's Phone {isFieldReq('fatherPhone') && '*'}</Label>
-                      <Input
-                        placeholder="Father's phone"
-                        value={formData.fatherPhone}
-                        onChange={(e) => setFormData({ ...formData, fatherPhone: e.target.value })}
-                        required={isFieldReq('fatherPhone')}
-                      />
-                    </div>
+                {editingId && (
+                  <div>
+                    <Label className="font-medium">Status</Label>
+                    <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
+                      <SelectTrigger><SelectValue placeholder="Select status..." /></SelectTrigger>
+                      <SelectContent className="max-h-[300px]">
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="document_review">Ops Verification (Doc Review)</SelectItem>
+                        <SelectItem value="provisional">Provisional</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="completed">Completed</SelectItem>
+                        <SelectItem value="payment_pending">Fee Pending</SelectItem>
+                        <SelectItem value="receipt_submitted">Receipt Submitted</SelectItem>
+                        <SelectItem value="dept_review">Department Review</SelectItem>
+                        <SelectItem value="finance_review">Finance Review</SelectItem>
+                        <SelectItem value="sales_admin_review">Sales Admin Review</SelectItem>
+                        <SelectItem value="enrolled">Enrolled</SelectItem>
+                        <SelectItem value="dropped">Dropped</SelectItem>
+                        <SelectItem value="inactive">Inactive</SelectItem>
+                        <SelectItem value="rejected">Rejected</SelectItem>
+                        <SelectItem value="department_rejected">Dept Rejected</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
+                )}
+              </div>
+            </div>
+          )}
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label className="font-medium">Mother's Name {isFieldReq('motherName') && '*'}</Label>
-                      <Input
-                        placeholder="Mother's full name"
-                        value={formData.motherName}
-                        onChange={(e) => setFormData({ ...formData, motherName: e.target.value })}
-                        required={isFieldReq('motherName')}
-                      />
-                    </div>
-                    <div>
-                      <Label className="font-medium">Mother's Phone {isFieldReq('motherPhone') && '*'}</Label>
-                      <Input
-                        placeholder="Mother's phone"
-                        value={formData.motherPhone}
-                        onChange={(e) => setFormData({ ...formData, motherPhone: e.target.value })}
-                        required={isFieldReq('motherPhone')}
-                      />
-                    </div>
-                  </div>
+          {/* ── STEP 2: PERSONAL DETAILS ── */}
+          {currentStepType === 'personal' && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="font-medium">Full Name *</Label>
+                  <Input
+                    placeholder="Student's name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                  />
                 </div>
-              )}
+                <div>
+                  <Label className="font-medium">Email Address {isFieldReq('email') && '*'}</Label>
+                  <Input
+                    type="email"
+                    placeholder="student@example.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required={isFieldReq('email')}
+                  />
+                </div>
+              </div>
 
-              {/* ── STEP 3: DOCUMENTS ── */}
-              {formStep === 3 && (
-                <div className="space-y-4">
-                  <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
-                  {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
-                    const isOptional = !isDocReq(docType);
-                    const existing = (formData.documents || []).find((d: any) => d.type.toLowerCase() === docType.toLowerCase());
-                    const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
-                    return (
-                      <div key={docType} className="space-y-2">
-                        <div className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                              <span>{docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}</span>
-                              {existing?.status === 'rejected' && (
-                                <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
-                                  {isOptional ? 'Rejected (Optional)' : 'Re-upload'}
-                                </span>
-                              )}
-                            </div>
-                            {existing?.status === 'rejected' ? (
-                              <div className="text-xs text-red-600 font-medium mt-1">
-                                ✕ Rejected by Operations: {isOptional ? 'Please re-upload or click Remove' : 'Please re-upload this required document'}
-                              </div>
-                            ) : existing?.url ? (
-                              <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
-                                ✓ Uploaded: {existing.url.split('/').pop()}
-                              </div>
-                            ) : isOptional ? (
-                              <div className="text-xs text-muted-foreground font-medium mt-1">
-                                Optional
-                              </div>
-                            ) : (
-                              <div className="text-xs text-rose-500 font-medium mt-1">
-                                ⚠️ Required
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            {existing?.url && (
-                              <a
-                                href={api.getFileUrl(existing.url)}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
-                              >
-                                View
-                              </a>
-                            )}
-                            {existing?.url && isOptional && (
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  setFormData((prev: any) => ({
-                                    ...prev,
-                                    documents: (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase())
-                                  }));
-                                  if (docType === 'Other') {
-                                    setCustomOtherName('');
-                                  }
-                                  toast.success(`${docType} removed`);
-                                }}
-                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 text-xs font-medium cursor-pointer shadow-sm transition-colors"
-                              >
-                                <Trash2 className="w-3 h-3" />
-                                Remove
-                              </Button>
-                            )}
-                            <input
-                              type="file"
-                              id={elementId}
-                              className="hidden"
-                              accept="image/*,.pdf,.doc,.docx"
-                              onChange={async (e) => {
-                                const file = e.target.files?.[0];
-                                if (!file) return;
-                                const toastId = toast.loading(`Uploading ${docType}...`);
-                                try {
-                                  const url = await uploadFormFile(file);
-                                  setFormData((prev: any) => {
-                                    const newDocs = (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase());
-                                    newDocs.push({ 
-                                      type: docType, 
-                                      url, 
-                                      label: docType === 'Other' ? customOtherName : undefined,
-                                      status: 'pending'
-                                    });
-                                    return { ...prev, documents: newDocs };
-                                  });
-                                  toast.success(`${docType} uploaded successfully`, { id: toastId });
-                                } catch (err: any) {
-                                  console.error(err);
-                                  toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
-                                } finally {
-                                  e.target.value = '';
-                                }
-                              }}
-                            />
-                            <Label
-                              htmlFor={elementId}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
-                            >
-                              <Upload className="w-3 h-3" />
-                              {existing?.url ? (existing.status === 'rejected' ? 'Re-upload' : 'Change File') : 'Upload File'}
-                            </Label>
-                          </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="font-medium">Phone Number *</Label>
+                  <Input
+                    placeholder="Primary phone"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label className="font-medium">Date of Birth {isFieldReq('dob') && '*'}</Label>
+                  <Input
+                    type="date"
+                    value={formData.dob}
+                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                    required={isFieldReq('dob')}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label className="font-medium">Home Address {isFieldReq('address') && '*'}</Label>
+                <Textarea
+                  placeholder="Permanent address"
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  required={isFieldReq('address')}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="font-medium">Pincode {isFieldReq('pinCode') && '*'}</Label>
+                  <Input
+                    placeholder="6-digit pincode"
+                    value={formData.pinCode}
+                    onChange={(e) => setFormData({ ...formData, pinCode: e.target.value })}
+                    required={isFieldReq('pinCode')}
+                  />
+                </div>
+                <div>
+                  <Label className="font-medium">Alternative Phone {isFieldReq('altPhone') && '*'}</Label>
+                  <Input
+                    placeholder="Secondary phone"
+                    value={formData.altPhone}
+                    onChange={(e) => setFormData({ ...formData, altPhone: e.target.value })}
+                    required={isFieldReq('altPhone')}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="font-medium">Religion {isFieldReq('religion') && '*'}</Label>
+                  <Input
+                    placeholder="e.g. Christian, Hindu, Muslim"
+                    value={formData.religion}
+                    onChange={(e) => setFormData({ ...formData, religion: e.target.value })}
+                    required={isFieldReq('religion')}
+                  />
+                </div>
+                <div>
+                  <Label className="font-medium">Caste / Category {isFieldReq('caste') && '*'}</Label>
+                  <Input
+                    placeholder="e.g. General, OBC, SC, ST"
+                    value={formData.caste}
+                    onChange={(e) => setFormData({ ...formData, caste: e.target.value })}
+                    required={isFieldReq('caste')}
+                  />
+                </div>
+              </div>
+
+              {/* Photo upload */}
+              <div className="p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 flex items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <Label className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <span>Student Photo {isFieldReq('photo') && '*'}</span>
+                    {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && formData.photo === (completingEnrollment?.student?.photo || completingEnrollment?.photo) && (
+                      <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
+                        {!isFieldReq('photo') ? 'Rejected (Optional)' : 'Re-upload'}
+                      </span>
+                    )}
+                  </Label>
+                  {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && formData.photo === (completingEnrollment?.student?.photo || completingEnrollment?.photo) ? (
+                    <p className="text-xs text-red-600 font-medium mt-1">
+                      ✕ Photo was rejected by Operations: {!isFieldReq('photo') ? 'Please re-upload or remove this photo' : 'Please re-upload a clearer image'}
+                    </p>
+                  ) : formData.photo ? (
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
+                      ✓ Photo Uploaded: {formData.photo.split('/').pop()}
+                    </p>
+                  ) : (
+                    <p className={`text-xs ${isFieldReq('photo') ? 'text-rose-500' : 'text-muted-foreground'} font-medium mt-1`}>
+                      {isFieldReq('photo') ? '⚠️ Required (direct upload)' : 'Optional'}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  {formData.photo && (
+                    <a
+                      href={api.getFileUrl(formData.photo)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
+                    >
+                      View
+                    </a>
+                  )}
+                  {formData.photo && !isFieldReq('photo') && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setFormData((prev: any) => ({ ...prev, photo: '' }));
+                        toast.success('Photo removed');
+                      }}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 text-xs font-medium cursor-pointer shadow-sm transition-colors"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      Remove
+                    </Button>
+                  )}
+                  <input
+                    type="file"
+                    id="student-photo-main"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const toastId = toast.loading('Uploading photo...');
+                      try {
+                        const url = await uploadFormFile(file);
+                        setFormData((prev: any) => ({ ...prev, photo: url }));
+                        toast.success('Photo uploaded successfully', { id: toastId });
+                      } catch (err: any) {
+                        console.error(err);
+                        toast.error(err.message || 'Failed to upload photo', { id: toastId });
+                      } finally {
+                        e.target.value = ''; // lets the same file be chosen again after a failure
+                      }
+                    }}
+                  />
+                  <Label
+                    htmlFor="student-photo-main"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
+                  >
+                    <Upload className="w-3 h-3" />
+                    {formData.photo ? (completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' ? 'Re-upload' : 'Change Photo') : 'Upload Photo'}
+                  </Label>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── STEP 3: FAMILY INFO ── */}
+          {currentStepType === 'family' && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="font-medium">Father's Name {isFieldReq('fatherName') && '*'}</Label>
+                  <Input
+                    placeholder="Father's full name"
+                    value={formData.fatherName}
+                    onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })}
+                    required={isFieldReq('fatherName')}
+                  />
+                </div>
+                <div>
+                  <Label className="font-medium">Father's Phone {isFieldReq('fatherPhone') && '*'}</Label>
+                  <Input
+                    placeholder="Father's phone"
+                    value={formData.fatherPhone}
+                    onChange={(e) => setFormData({ ...formData, fatherPhone: e.target.value })}
+                    required={isFieldReq('fatherPhone')}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="font-medium">Mother's Name {isFieldReq('motherName') && '*'}</Label>
+                  <Input
+                    placeholder="Mother's full name"
+                    value={formData.motherName}
+                    onChange={(e) => setFormData({ ...formData, motherName: e.target.value })}
+                    required={isFieldReq('motherName')}
+                  />
+                </div>
+                <div>
+                  <Label className="font-medium">Mother's Phone {isFieldReq('motherPhone') && '*'}</Label>
+                  <Input
+                    placeholder="Mother's phone"
+                    value={formData.motherPhone}
+                    onChange={(e) => setFormData({ ...formData, motherPhone: e.target.value })}
+                    required={isFieldReq('motherPhone')}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── STEP 4: DOCUMENTS ── */}
+          {currentStepType === 'documents' && (
+            <div className="space-y-4">
+              <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
+              {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                const isOptional = !isDocReq(docType);
+                const existing = (formData.documents || []).find((d: any) => d.type.toLowerCase() === docType.toLowerCase());
+                const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
+                return (
+                  <div key={docType} className="space-y-2">
+                    <div className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                          <span>{docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}</span>
+                          {existing?.status === 'rejected' && (
+                            <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
+                              {isOptional ? 'Rejected (Optional)' : 'Re-upload'}
+                            </span>
+                          )}
                         </div>
-                        {docType === 'Other' && (
-                          <div className="pl-2 pr-2">
-                            <Label htmlFor="customOtherDocName" className="text-xs text-muted-foreground font-semibold">Custom label for Other document (optional)</Label>
-                            <Input
-                              id="customOtherDocName"
-                              placeholder="e.g. Experience Certificate, TC alternative..."
-                              className="h-8 text-xs mt-1"
-                              value={customOtherName}
-                              onChange={(e) => {
-                                const nextVal = e.target.value;
-                                setCustomOtherName(nextVal);
-                                // Update label in existing document array if already uploaded
-                                const hasOther = (formData.documents || []).find((d: any) => d.type === 'Other');
-                                if (hasOther) {
-                                  const newDocs = (formData.documents || []).map((d: any) =>
-                                    d.type === 'Other' ? { ...d, label: nextVal } : d
-                                  );
-                                  setFormData({ ...formData, documents: newDocs });
-                                }
-                              }}
-                            />
+                        {existing?.status === 'rejected' ? (
+                          <div className="text-xs text-red-600 font-medium mt-1">
+                            ✕ Rejected by Operations: {isOptional ? 'Please re-upload or click Remove' : 'Please re-upload this required document'}
+                          </div>
+                        ) : existing?.url ? (
+                          <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
+                            ✓ Uploaded: {existing.url.split('/').pop()}
+                          </div>
+                        ) : isOptional ? (
+                          <div className="text-xs text-muted-foreground font-medium mt-1">
+                            Optional
+                          </div>
+                        ) : (
+                          <div className="text-xs text-rose-500 font-medium mt-1">
+                            ⚠️ Required
                           </div>
                         )}
                       </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* ── STEP 4: PAYMENT RECEIPT ── */}
-              {formStep === 4 && (
-                <div className="space-y-4">
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Upload the fee payment receipt. Once uploaded, it will be sent to the Finance team for verification.
-                  </p>
-
-                  <div className="border rounded-xl p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/50 space-y-4">
-                    <Label className="font-semibold text-sm">
-                      Upload Receipt {(!editingId && !formData.isPrevious) ? '*' : '(Optional for existing/previous)'}
-                    </Label>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                      {formData.receiptUrl && (
-                        <div className="flex items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-lg border">
-                          <div className="w-14 h-14 rounded overflow-hidden border bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0">
-                            {formData.receiptUrl.toLowerCase().endsWith('.pdf') ? (
-                              <FileText className="w-7 h-7 text-rose-500" />
-                            ) : (
-                              <img src={api.getFileUrl(formData.receiptUrl)} alt="Receipt Preview" className="w-full h-full object-cover" />
-                            )}
-                          </div>
-                          <div className="min-w-0 flex flex-col pr-2">
-                            <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">Payment Receipt</span>
-                            <a
-                              href={api.getFileUrl(formData.receiptUrl)}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-xs text-primary hover:underline inline-flex items-center gap-1 mt-0.5"
-                            >
-                              <Eye className="w-3.5 h-3.5" /> View Receipt
-                            </a>
-                          </div>
-                        </div>
-                      )}
-                      <div className="flex-1">
-                        <Label htmlFor="receipt-upload" className="inline-flex items-center justify-center px-4 py-2 border rounded-md text-sm font-medium cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                          <Upload className="w-4 h-4 mr-2" />
-                          {formData.receiptUrl ? 'Change Receipt' : 'Upload File'}
-                        </Label>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {existing?.url && (
+                          <a
+                            href={api.getFileUrl(existing.url)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
+                          >
+                            View
+                          </a>
+                        )}
+                        {existing?.url && isOptional && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setFormData((prev: any) => ({
+                                ...prev,
+                                documents: (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase())
+                              }));
+                              if (docType === 'Other') {
+                                setCustomOtherName('');
+                              }
+                              toast.success(`${docType} removed`);
+                            }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 text-xs font-medium cursor-pointer shadow-sm transition-colors"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                            Remove
+                          </Button>
+                        )}
                         <input
                           type="file"
-                          id="receipt-upload"
+                          id={elementId}
                           className="hidden"
-                          accept="image/*,.pdf"
+                          accept="image/*,.pdf,.doc,.docx"
                           onChange={async (e) => {
                             const file = e.target.files?.[0];
-                            if (file) {
-                              const toastId = toast.loading('Uploading receipt...');
-                              try {
-                                const url = await uploadFormFile(file, { endpoint: '/documents/upload', fields: { type: 'receipt' } });
-                                setFormData((prev: any) => ({ ...prev, receiptUrl: url }));
-                                toast.success('Receipt uploaded successfully', { id: toastId });
-                              } catch (err: any) {
-                                toast.error(err.message || 'Failed to upload receipt', { id: toastId });
-                              } finally {
-                                e.target.value = '';
-                              }
+                            if (!file) return;
+                            const toastId = toast.loading(`Uploading ${docType}...`);
+                            try {
+                              const url = await uploadFormFile(file);
+                              setFormData((prev: any) => {
+                                const newDocs = (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase());
+                                newDocs.push({
+                                  type: docType,
+                                  url,
+                                  label: docType === 'Other' ? customOtherName : undefined,
+                                  status: 'pending'
+                                });
+                                return { ...prev, documents: newDocs };
+                              });
+                              toast.success(`${docType} uploaded successfully`, { id: toastId });
+                            } catch (err: any) {
+                              console.error(err);
+                              toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
+                            } finally {
+                              e.target.value = '';
+                            }
+                          }}
+                        />
+                        <Label
+                          htmlFor={elementId}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
+                        >
+                          <Upload className="w-3 h-3" />
+                          {existing?.url ? (existing.status === 'rejected' ? 'Re-upload' : 'Change File') : 'Upload File'}
+                        </Label>
+                      </div>
+                    </div>
+                    {docType === 'Other' && (
+                      <div className="pl-2 pr-2">
+                        <Label htmlFor="customOtherDocName" className="text-xs text-muted-foreground font-semibold">Custom label for Other document (optional)</Label>
+                        <Input
+                          id="customOtherDocName"
+                          placeholder="e.g. Experience Certificate, TC alternative..."
+                          className="h-8 text-xs mt-1"
+                          value={customOtherName}
+                          onChange={(e) => {
+                            const nextVal = e.target.value;
+                            setCustomOtherName(nextVal);
+                            // Update label in existing document array if already uploaded
+                            const hasOther = (formData.documents || []).find((d: any) => d.type === 'Other');
+                            if (hasOther) {
+                              const newDocs = (formData.documents || []).map((d: any) =>
+                                d.type === 'Other' ? { ...d, label: nextVal } : d
+                              );
+                              setFormData({ ...formData, documents: newDocs });
                             }
                           }}
                         />
                       </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ── STEP 5: PAYMENT RECEIPT ── */}
+          {currentStepType === 'receipt' && (
+            <div className="space-y-4">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Upload the fee payment receipt. Once uploaded, it will be sent to the Finance team for verification.
+              </p>
+
+              <div className="border rounded-xl p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/50 space-y-4">
+                <Label className="font-semibold text-sm">
+                  Upload Receipt {(!editingId && !formData.isPrevious) ? '*' : '(Optional for existing/previous)'}
+                </Label>
+
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                  {formData.receiptUrl && (
+                    <div className="flex items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-lg border">
+                      <div className="w-14 h-14 rounded overflow-hidden border bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0">
+                        {formData.receiptUrl.toLowerCase().endsWith('.pdf') ? (
+                          <FileText className="w-7 h-7 text-rose-500" />
+                        ) : (
+                          <img src={api.getFileUrl(formData.receiptUrl)} alt="Receipt Preview" className="w-full h-full object-cover" />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex flex-col pr-2">
+                        <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">Payment Receipt</span>
+                        <a
+                          href={api.getFileUrl(formData.receiptUrl)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs text-primary hover:underline inline-flex items-center gap-1 mt-0.5"
+                        >
+                          <Eye className="w-3.5 h-3.5" /> View Receipt
+                        </a>
+                      </div>
                     </div>
+                  )}
+                  <div className="flex-1">
+                    <Label htmlFor="receipt-upload" className="inline-flex items-center justify-center px-4 py-2 border rounded-md text-sm font-medium cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                      <Upload className="w-4 h-4 mr-2" />
+                      {formData.receiptUrl ? 'Change Receipt' : 'Upload File'}
+                    </Label>
+                    <input
+                      type="file"
+                      id="receipt-upload"
+                      className="hidden"
+                      accept="image/*,.pdf"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const toastId = toast.loading('Uploading receipt...');
+                          try {
+                            const url = await uploadFormFile(file, { endpoint: '/documents/upload', fields: { type: 'receipt' } });
+                            setFormData((prev: any) => ({ ...prev, receiptUrl: url }));
+                            toast.success('Receipt uploaded successfully', { id: toastId });
+                          } catch (err: any) {
+                            toast.error(err.message || 'Failed to upload receipt', { id: toastId });
+                          } finally {
+                            e.target.value = '';
+                          }
+                        }
+                      }}
+                    />
                   </div>
                 </div>
-              )}
-
+              </div>
             </div>
+          )}
 
-            {/* Footer buttons */}
-            <div className="flex items-center justify-between pt-3 border-t mt-3">
-              <Button type="button" variant="outline" onClick={() => setFormStep(Math.max(0, formStep - 1))} disabled={formStep === 0}>
-                ← Back
-              </Button>
-              <div className="text-xs text-muted-foreground">Step {formStep + 1} of 5</div>
-              {formStep < 4 ? (
-                <Button type="submit">
-                  Next <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
+        </div>
+
+        {/* Footer buttons */}
+        <div className="flex items-center justify-between pt-3 border-t mt-3">
+          <Button type="button" variant="outline" onClick={() => setFormStep(Math.max(0, formStep - 1))} disabled={formStep === 0}>
+            ← Back
+          </Button>
+          <div className="text-xs text-muted-foreground">Step {formStep + 1} of {stepsList.length}</div>
+          {formStep < maxStepIndex ? (
+            <Button type="submit" disabled={verifyingStudentCheck || (currentStepType === 'verify' && conflictBasis === 'prompt')}>
+              {verifyingStudentCheck ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> Verifying...
+                </>
+              ) : upgradeCheck?.isInProgress && currentStepType === 'verify' ? (
+                <>
+                  <XCircle className="w-4 h-4 mr-1 text-rose-200" /> Next (In Progress)
+                </>
               ) : (
-                <Button type="submit" className="bg-primary" disabled={savingStudent}>
-                  {savingStudent ? 'Saving...' : (editingId ? 'Update Student' : 'Save Student')}
-                </Button>
+                <>
+                  Next <ChevronRight className="w-4 h-4 ml-1" />
+                </>
               )}
-            </div>
-          </form>
-        </DialogContent>
+            </Button>
+          ) : (
+            <Button type="submit" className="bg-primary" disabled={savingStudent}>
+              {savingStudent ? 'Saving...' : (editingId ? 'Update Student' : 'Save Student')}
+            </Button>
+          )}
+        </div>
+      </form>
+    </DialogContent>
+  );
+
+  if (triggerOpen !== undefined) {
+    return (
+      <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
+        {renderStudentFormModalContent()}
       </Dialog>
     );
   }
@@ -2734,618 +3403,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 <DialogTrigger asChild>
                   <Button size="sm"><Plus className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Add Student</span></Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-3xl w-full sm:max-w-3xl h-[100dvh] sm:h-auto sm:max-h-[92vh] flex flex-col rounded-none sm:rounded-xl">
-                  <DialogHeader className="pb-2 border-b">
-                    <DialogTitle className="text-lg">{editingId || completingEnrollment ? 'Update Student Enrollment' : 'Add New Student Record'}</DialogTitle>
-                    {/* Step indicator */}
-                    <div className="flex items-center gap-1 pt-2">
-                      {['Admission Info', 'Personal Details', 'Family Info', 'Documents', 'Payment Receipt'].map((step, i) => (
-                        <button
-                          key={i}
-                          type="button"
-                          onClick={() => setFormStep(i)}
-                          className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${formStep === i
-                            ? 'bg-primary text-primary-foreground shadow'
-                            : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'
-                            }`}
-                        >
-                          {i === 0 && <BookOpen className="w-3 h-3" />}
-                          {i === 1 && <User className="w-3 h-3" />}
-                          {i === 2 && <Building2 className="w-3 h-3" />}
-                          {i === 3 && <FileText className="w-3 h-3" />}
-                          {i === 4 && <CreditCard className="w-3 h-3" />}
-                          {step}
-                        </button>
-                      ))}
-                    </div>
-                  </DialogHeader>
-
-                  <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-                    <div className="flex-1 overflow-y-auto pr-2 max-h-[60vh] space-y-4 py-3">
-
-                      {/* ── STEP 0: ADMISSION INFO ── */}
-                      {formStep === 0 && (
-                        <div className="space-y-4">
-                          {/* Previous student toggle - only show for non-sales admins */}
-                          {!isSalesMode && !['sales_admin', 'sales_sub_admin'].includes(user?.role || '') && (
-                            <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
-                              <input
-                                type="checkbox"
-                                id="isPreviousMain"
-                                checked={formData.isPrevious}
-                                onChange={(e) => setFormData({ ...formData, isPrevious: e.target.checked })}
-                                className="w-4 h-4 rounded border-slate-300 accent-amber-600"
-                              />
-                              <div>
-                                <Label htmlFor="isPreviousMain" className="cursor-pointer font-semibold text-amber-800 dark:text-amber-400">Mark as Previous Student</Label>
-                                <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Enable this for students admitted before the system was set up</p>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Branch & University */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {!isSalesMode && !['sales_admin', 'sales_sub_admin'].includes(user?.role || '') ? (
-                              <>
-                                <div>
-                                  <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                                  <Select value={formData.branchId} onValueChange={(v) => setFormData({ ...formData, branchId: v === '__none__' ? '' : v })}>
-                                    <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="__none__">— No Branch —</SelectItem>
-                                      {branches.filter((b: any) => b && b.id).map((b: any) => (
-                                        <SelectItem key={b.id} value={b.id}>{b.name} ({b.code})</SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div>
-                                  <Label className="font-medium">University *</Label>
-                                  <Select value={formData.universityId} onValueChange={(v) => setFormData({ ...formData, universityId: v, programId: '' })}>
-                                    <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
-                                    <SelectContent>
-                                      {universities.filter((u: any) => u && u.id).map((u: any) => (
-                                        <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                              </>
-                            ) : (
-                              <div className="col-span-2">
-                                <Label className="font-medium">University *</Label>
-                                <Select value={formData.universityId} onValueChange={(v) => setFormData({ ...formData, universityId: v, programId: '' })}>
-                                  <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
-                                  <SelectContent>
-                                    {universities.filter((u: any) => u && u.id).map((u: any) => (
-                                      <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Program & Session */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                              <Label className="font-medium">Program *</Label>
-                              <Select value={formData.programId} onValueChange={(v) => setFormData({ ...formData, programId: v, specialisation: '' })} disabled={!formData.universityId}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {filteredPrograms.filter((p: any) => p && p.id).map((p: any) => (
-                                    <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
-                                  ))}
-                                  {filteredPrograms.length === 0 && (
-                                    <div className="px-3 py-2 text-sm text-muted-foreground">No programs found for this university</div>
-                                  )}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div>
-                              <Label className="font-medium">Session <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                              <Select value={formData.sessionId} onValueChange={(v) => setFormData({ ...formData, sessionId: v === '__none__' ? '' : v })} disabled={!formData.programId}>
-                                <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="__none__">— No Session —</SelectItem>
-                                  {sessions.filter((s: any) => s && s.id && (!s.universityId || s.universityId === programs.find((p: any) => p.id === formData.programId)?.universityId || s.programId === formData.programId)).map((s: any) => (
-                                    <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
-
-                          {/* Specialisation (if applicable) */}
-                          {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations?.length > 0 && (
-                            <div className="mt-4">
-                              <Label className="font-medium">Specialisation *</Label>
-                              <Select value={formData.specialisation} onValueChange={(v) => setFormData({ ...formData, specialisation: v })}>
-                                <SelectTrigger><SelectValue placeholder="Select specialisation..." /></SelectTrigger>
-                                <SelectContent>
-                                  {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations.map((spec: string) => (
-                                    <SelectItem key={spec} value={spec}>{spec}</SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          )}
-
-                          {/* Payment Plan & Fee */}
-                          {getActiveFeeStructure() && (
-                            <>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                                <div>
-                                  <Label className="font-medium">Payment Plan *</Label>
-                                  <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({ ...formData, paymentPlan: v })}>
-                                    <SelectTrigger><SelectValue /></SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="full">Full (One Time)</SelectItem>
-                                      <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                                <div>
-                                  <Label className="font-medium">Initial Fee Amount *</Label>
-                                  <Input
-                                    type="number"
-                                    placeholder="e.g. 5000"
-                                    value={formData.initialPaymentAmount || ''}
-                                    onChange={e => setFormData({ ...formData, initialPaymentAmount: e.target.value })}
-                                    required
-                                  />
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                                <div>
-                                  <Label className="font-medium">Payment Date *</Label>
-                                  <Input
-                                    type="date"
-                                    value={formData.initialPaymentDate || ''}
-                                    onChange={e => setFormData({ ...formData, initialPaymentDate: e.target.value })}
-                                    required
-                                  />
-                                </div>
-                              </div>
-                            </>
-                          )}
-
-                          {renderFeeDisplay()}
-
-                          {/* Enrollment & Admission Numbers */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                              <Label className="font-medium">Enrollment Number <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                              <Input
-                                placeholder="e.g. PYPEER001"
-                                value={formData.enrollmentNo || ''}
-                                onChange={(e) => setFormData({ ...formData, enrollmentNo: e.target.value })}
-                              />
-                            </div>
-                            {editingId && (
-                              <div>
-                                <Label className="font-medium">Admission Number</Label>
-                                <Input
-                                  placeholder="Auto-generated on save"
-                                  value={formData.admissionNo || ''}
-                                  readOnly
-                                  className="bg-slate-50 cursor-not-allowed text-muted-foreground"
-                                />
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Admission Date & Status */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                              <Label className="font-medium">{formData.isPrevious ? 'Previous Admission Date *' : 'Admission Date'}</Label>
-                              <Input
-                                type="date"
-                                value={formData.admissionDate}
-                                onChange={(e) => setFormData({ ...formData, admissionDate: e.target.value })}
-                                required={formData.isPrevious}
-                              />
-                            </div>
-                            {editingId && (
-                              <div>
-                                <Label className="font-medium">Status</Label>
-                                <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                                  <SelectTrigger><SelectValue placeholder="Select status..." /></SelectTrigger>
-                                  <SelectContent className="max-h-[300px]">
-                                    <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="document_review">Ops Verification (Doc Review)</SelectItem>
-                                    <SelectItem value="provisional">Provisional</SelectItem>
-                                    <SelectItem value="pending">Pending</SelectItem>
-                                    <SelectItem value="completed">Completed</SelectItem>
-                                    <SelectItem value="payment_pending">Fee Pending</SelectItem>
-                                    <SelectItem value="receipt_submitted">Receipt Submitted</SelectItem>
-                                    <SelectItem value="dept_review">Department Review</SelectItem>
-                                    <SelectItem value="finance_review">Finance Review</SelectItem>
-                                    <SelectItem value="sales_admin_review">Sales Admin Review</SelectItem>
-                                    <SelectItem value="enrolled">Enrolled</SelectItem>
-                                    <SelectItem value="dropped">Dropped</SelectItem>
-                                    <SelectItem value="inactive">Inactive</SelectItem>
-                                    <SelectItem value="rejected">Rejected</SelectItem>
-                                    <SelectItem value="department_rejected">Dept Rejected</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* ── STEP 1: PERSONAL DETAILS ── */}
-                      {formStep === 1 && (
-                        <div className="space-y-4">
-                          <div>
-                            <Label className="font-medium">Full Name *</Label>
-                            <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required placeholder="Student's full name" />
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                              <Label className="font-medium">Email {isFieldReq('email') && '*'}</Label>
-                              <Input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required={isFieldReq('email')} placeholder="student@example.com" />
-                            </div>
-                            <div>
-                              <Label className="font-medium">Contact Number *</Label>
-                              <Input value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} required placeholder="10-digit mobile" />
-                            </div>
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                              <Label className="font-medium">Date of Birth {isFieldReq('dob') && '*'}</Label>
-                              <Input type="date" value={formData.dob} onChange={(e) => setFormData({ ...formData, dob: e.target.value })} required={isFieldReq('dob')} />
-                            </div>
-                            <div>
-                              <Label className="font-medium">Alternate Phone {isFieldReq('altPhone') && '*'}</Label>
-                              <Input value={formData.altPhone} onChange={(e) => setFormData({ ...formData, altPhone: e.target.value })} required={isFieldReq('altPhone')} placeholder="Optional" />
-                            </div>
-                          </div>
-                          <div>
-                            <Label className="font-medium">Address {isFieldReq('address') && '*'}</Label>
-                            <Textarea value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} required={isFieldReq('address')} placeholder="Full residential address" rows={2} />
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                              <Label className="font-medium">PIN Code {isFieldReq('pinCode') && '*'}</Label>
-                              <Input value={formData.pinCode} onChange={(e) => setFormData({ ...formData, pinCode: e.target.value })} required={isFieldReq('pinCode')} placeholder="6-digit PIN" maxLength={6} />
-                            </div>
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                              <Label className="font-medium">Religion {isFieldReq('religion') && '*'}</Label>
-                              <Input value={formData.religion} onChange={(e) => setFormData({ ...formData, religion: e.target.value })} required={isFieldReq('religion')} placeholder="e.g. Hindu, Muslim, Christian" />
-                            </div>
-                            <div>
-                              <Label className="font-medium">Caste / Category {isFieldReq('caste') && '*'}</Label>
-                              <Input value={formData.caste} onChange={(e) => setFormData({ ...formData, caste: e.target.value })} required={isFieldReq('caste')} placeholder="e.g. OBC, SC, ST, General" />
-                            </div>
-                          </div>
-                          {/* Photo */}
-                          <div>
-                            <Label className="font-medium font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                              <span>Student Photo {isFieldReq('photo') && '*'}</span>
-                              {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && formData.photo === (completingEnrollment?.student?.photo || completingEnrollment?.photo) && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">Re-upload</span>}
-                            </Label>
-                            <div className="flex items-center gap-4 mt-2 p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/20">
-                              {formData.photo ? (
-                                <div className="relative group cursor-pointer inline-block">
-                                  <img src={api.getFileUrl(formData.photo)} alt="Student" className="w-20 h-20 rounded-full object-cover border-2 border-primary/30" />
-                                  <button
-                                    type="button"
-                                    onClick={() => setFormData({ ...formData, photo: '' })}
-                                    className="absolute -top-1 -right-1 bg-rose-500 text-white rounded-full p-1 hover:bg-rose-600 transition-colors shadow-sm"
-                                    title="Remove Photo"
-                                  >
-                                    <Trash2 className="w-3.5 h-3.5" />
-                                  </button>
-                                </div>
-                              ) : (
-                                <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-2 border-dashed border-slate-350">
-                                  <User className="w-9 h-9 text-slate-400" />
-                                </div>
-                              )}
-                              <div className="flex-1 space-y-2">
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  required={!formData.photo}
-                                  id="studentPhotoUpload"
-                                  className="hidden"
-                                  onChange={async (e) => {
-                                    const file = e.target.files?.[0];
-                                    if (!file) return;
-                                    const toastId = toast.loading('Uploading photo...');
-                          try {
-                            const url = await uploadFormFile(file);
-                            setFormData((prev: any) => ({ ...prev, photo: url }));
-                            toast.success('Photo uploaded successfully', { id: toastId });
-                          } catch (err: any) {
-                            console.error(err);
-                            toast.error(err.message || 'Failed to upload photo', { id: toastId });
-                          } finally {
-                            e.target.value = ''; // lets the same file be chosen again after a failure
-                          }
-                                  }}
-                                />
-                                <Label
-                                  htmlFor="studentPhotoUpload"
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border bg-white dark:bg-slate-850 hover:bg-slate-50 cursor-pointer text-xs font-semibold shadow-sm transition-all"
-                                >
-                                  <Upload className="w-3.5 h-3.5" />
-                                  Select Photo
-                                </Label>
-                                <p className="text-[11px] text-muted-foreground">JPG, PNG allowed (Max 10MB)</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* ── STEP 2: FAMILY INFO ── */}
-                      {formStep === 2 && (
-                        <div className="space-y-5">
-                          <div className="p-4 rounded-xl border bg-blue-50/50 dark:bg-blue-950/10 space-y-4">
-                            <h4 className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                              <User className="w-4 h-4 text-blue-500" /> Father's Information
-                            </h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                              <div>
-                                <Label className="font-medium">Father's Name {isFieldReq('fatherName') && '*'}</Label>
-                                <Input value={formData.fatherName} onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })} required={isFieldReq('fatherName')} placeholder="Father's full name" />
-                              </div>
-                              <div>
-                                <Label className="font-medium">Father's Mobile {isFieldReq('fatherPhone') && '*'}</Label>
-                                <Input value={formData.fatherPhone} onChange={(e) => setFormData({ ...formData, fatherPhone: e.target.value })} required={isFieldReq('fatherPhone')} placeholder="10-digit mobile" />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="p-4 rounded-xl border bg-pink-50/50 dark:bg-pink-950/10 space-y-4">
-                            <h4 className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                              <User className="w-4 h-4 text-pink-500" /> Mother's Information
-                            </h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                              <div>
-                                <Label className="font-medium">Mother's Name {isFieldReq('motherName') && '*'}</Label>
-                                <Input value={formData.motherName} onChange={(e) => setFormData({ ...formData, motherName: e.target.value })} required={isFieldReq('motherName')} placeholder="Mother's full name" />
-                              </div>
-                              <div>
-                                <Label className="font-medium">Mother's Mobile {isFieldReq('motherPhone') && '*'}</Label>
-                                <Input value={formData.motherPhone} onChange={(e) => setFormData({ ...formData, motherPhone: e.target.value })} required={isFieldReq('motherPhone')} placeholder="10-digit mobile" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* ── STEP 3: DOCUMENTS ── */}
-                      {formStep === 3 && (
-                        <div className="space-y-4">
-                          <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
-                          {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
-                            const isOptional = !isDocReq(docType);
-                            const existing = (formData.documents || []).find((d: any) => d.type.toLowerCase() === docType.toLowerCase());
-                            const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}-2`;
-                            return (
-                              <div key={docType} className="space-y-2">
-                                <div className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
-                                  <div className="flex-1 min-w-0">
-                                    <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                                      <span>{docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}</span>
-                                      {existing?.status === 'rejected' && (
-                                        <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
-                                          {isOptional ? 'Rejected (Optional)' : 'Re-upload'}
-                                        </span>
-                                      )}
-                                    </div>
-                                    {existing?.status === 'rejected' ? (
-                                      <div className="text-xs text-red-600 font-medium mt-1">
-                                        ✕ Rejected by Operations: {isOptional ? 'Please re-upload or click Remove' : 'Please re-upload this required document'}
-                                      </div>
-                                    ) : existing?.url ? (
-                                      <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
-                                        ✓ Uploaded: {existing.url.split('/').pop()}
-                                      </div>
-                                    ) : isOptional ? (
-                                      <div className="text-xs text-muted-foreground font-medium mt-1">
-                                        Optional
-                                      </div>
-                                    ) : (
-                                      <div className="text-xs text-rose-500 font-medium mt-1">
-                                        ⚠️ Required
-                                      </div>
-                                    )}
-                                  </div>
-                                  <div className="flex items-center gap-2 shrink-0">
-                                    {existing?.url && (
-                                      <a
-                                        href={api.getFileUrl(existing.url)}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
-                                      >
-                                        View
-                                      </a>
-                                    )}
-                                    {existing?.url && isOptional && (
-                                      <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => {
-                                          setFormData((prev: any) => ({
-                                            ...prev,
-                                            documents: (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase())
-                                          }));
-                                          if (docType === 'Other') {
-                                            setCustomOtherName('');
-                                          }
-                                          toast.success(`${docType} removed`);
-                                        }}
-                                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 text-xs font-medium cursor-pointer shadow-sm transition-colors"
-                                      >
-                                        <Trash2 className="w-3 h-3" />
-                                        Remove
-                                      </Button>
-                                    )}
-                                    <input
-                                      type="file"
-                                      id={elementId}
-                                      className="hidden"
-                                      accept="image/*,.pdf,.doc,.docx"
-                                      onChange={async (e) => {
-                                        const file = e.target.files?.[0];
-                                        if (!file) return;
-                                        const toastId = toast.loading(`Uploading ${docType}...`);
-                                        try {
-                                          const url = await uploadFormFile(file);
-                                          setFormData((prev: any) => {
-                                            const newDocs = (prev.documents || []).filter((d: any) => d.type?.toLowerCase() !== docType.toLowerCase());
-                                            newDocs.push({ 
-                                              type: docType, 
-                                              url, 
-                                              label: docType === 'Other' ? customOtherName : undefined,
-                                              status: 'pending'
-                                            });
-                                            return { ...prev, documents: newDocs };
-                                          });
-                                          toast.success(`${docType} uploaded successfully`, { id: toastId });
-                                        } catch (err: any) {
-                                          console.error(err);
-                                          toast.error(err.message || `Failed to upload ${docType}`, { id: toastId });
-                                        } finally {
-                                          e.target.value = '';
-                                        }
-                                      }}
-                                    />
-                                    <Label
-                                      htmlFor={elementId}
-                                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
-                                    >
-                                      <Upload className="w-3 h-3" />
-                                      {existing?.url ? (existing.status === 'rejected' ? 'Re-upload' : 'Change File') : 'Upload File'}
-                                    </Label>
-                                  </div>
-                                </div>
-                                {docType === 'Other' && (
-                                  <div className="pl-2 pr-2">
-                                    <Label htmlFor="customOtherDocName" className="text-xs text-muted-foreground font-semibold">Custom label for Other document (optional)</Label>
-                                    <Input
-                                      id="customOtherDocName"
-                                      placeholder="e.g. Experience Certificate, TC alternative..."
-                                      className="h-8 text-xs mt-1"
-                                      value={customOtherName}
-                                      onChange={(e) => {
-                                        const nextVal = e.target.value;
-                                        setCustomOtherName(nextVal);
-                                        // Update label in existing document array if already uploaded
-                                        const hasOther = (formData.documents || []).find((d: any) => d.type === 'Other');
-                                        if (hasOther) {
-                                          const newDocs = (formData.documents || []).map((d: any) =>
-                                            d.type === 'Other' ? { ...d, label: nextVal } : d
-                                          );
-                                          setFormData({ ...formData, documents: newDocs });
-                                        }
-                                      }}
-                                    />
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-
-                      {/* ── STEP 4: PAYMENT RECEIPT ── */}
-                      {formStep === 4 && (
-                        <div className="space-y-4">
-                          <p className="text-sm text-slate-600 dark:text-slate-400">
-                            Upload the fee payment receipt. Once uploaded, it will be sent to the Finance team for verification.
-                          </p>
-
-                          <div className="border rounded-xl p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/50 space-y-4">
-                            <Label className="font-semibold text-sm">
-                              Upload Receipt {(!editingId && !formData.isPrevious) ? '*' : '(Optional for existing/previous)'}
-                            </Label>
-
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                              {formData.receiptUrl && (
-                                <div className="flex items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-lg border">
-                                  <div className="w-14 h-14 rounded overflow-hidden border bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0">
-                                    {formData.receiptUrl.toLowerCase().endsWith('.pdf') ? (
-                                      <FileText className="w-7 h-7 text-rose-500" />
-                                    ) : (
-                                      <img src={api.getFileUrl(formData.receiptUrl)} alt="Receipt Preview" className="w-full h-full object-cover" />
-                                    )}
-                                  </div>
-                                  <div className="min-w-0 flex flex-col pr-2">
-                                    <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">Payment Receipt</span>
-                                    <a
-                                      href={api.getFileUrl(formData.receiptUrl)}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="text-xs text-primary hover:underline inline-flex items-center gap-1 mt-0.5"
-                                    >
-                                      <Eye className="w-3.5 h-3.5" /> View Receipt
-                                    </a>
-                                  </div>
-                                </div>
-                              )}
-                              <div className="flex-1">
-                                <Label htmlFor="receipt-upload-2" className="inline-flex items-center justify-center px-4 py-2 border rounded-md text-sm font-medium cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                                  <Upload className="w-4 h-4 mr-2" />
-                                  {formData.receiptUrl ? 'Change Receipt' : 'Upload File'}
-                                </Label>
-                                <input
-                                  type="file"
-                                  id="receipt-upload-2"
-                                  className="hidden"
-                                  accept="image/*,.pdf"
-                                  onChange={async (e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) {
-                              const toastId = toast.loading('Uploading receipt...');
-                              try {
-                                const url = await uploadFormFile(file, { endpoint: '/documents/upload', fields: { type: 'receipt' } });
-                                setFormData((prev: any) => ({ ...prev, receiptUrl: url }));
-                                toast.success('Receipt uploaded successfully', { id: toastId });
-                              } catch (err: any) {
-                                toast.error(err.message || 'Failed to upload receipt', { id: toastId });
-                              } finally {
-                                e.target.value = '';
-                              }
-                            }
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                    </div>
-
-                    {/* Footer buttons */}
-                    <div className="flex items-center justify-between pt-3 border-t mt-3">
-                      <Button type="button" variant="outline" onClick={() => setFormStep(Math.max(0, formStep - 1))} disabled={formStep === 0}>
-                        ← Back
-                      </Button>
-                      <div className="text-xs text-muted-foreground">Step {formStep + 1} of 5</div>
-                      {formStep < 4 ? (
-                        <Button type="submit">
-                          Next <ChevronRight className="w-4 h-4 ml-1" />
-                        </Button>
-                      ) : (
-                        <Button type="submit" className="bg-primary" disabled={savingStudent}>
-                          {savingStudent ? 'Saving...' : (editingId ? 'Update Student' : 'Save Student')}
-                        </Button>
-                      )}
-                    </div>
-                  </form>
-                </DialogContent>
+                {renderStudentFormModalContent()}
               </Dialog>
             </>
           )}
@@ -3557,7 +3615,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   <CalendarDays className="w-3.5 h-3.5 text-blue-500" />
                   <span>Admission Date:</span>
                 </div>
-                
+
                 {/* Date Preset Selector */}
                 <div className="w-[130px] shrink-0">
                   <Select value={filterDatePreset} onValueChange={handleDatePresetSelect}>
@@ -3662,7 +3720,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
               <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800/60 flex flex-wrap items-center justify-between gap-2">
                 <div className="flex flex-wrap items-center gap-1.5 text-xs">
                   <span className="text-slate-400 font-medium">Active Filters ({activeFilterCount}):</span>
-                  
+
                   <button
                     type="button"
                     onClick={handleResetFilters}
@@ -3785,7 +3843,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 const universityName = typeof student.universityId === 'object' ? student.universityId?.name : student.university?.name || '';
                 const branchName = typeof student.branchId === 'object' ? student.branchId?.name : student.branch?.name || '';
                 const salesUserName = typeof student.enrolledBy === 'object' ? student.enrolledBy?.name : (student.enrolledByUser?.name || salesUsers.find((su: any) => su.id === student.enrolledBy)?.name);
-                
+
                 const isSelected = selectedStudentIds.has(student.id);
 
                 return (
@@ -3806,7 +3864,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           {(currentPage - 1) * itemsPerPage + index + 1}
                         </div>
                       )}
-                      
+
                       <div className="relative shrink-0">
                         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden border-2 ${isSelected ? 'border-blue-400 shadow-sm' : 'border-slate-100 dark:border-slate-800'} bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900`}>
                           {student.photo ? (
@@ -3835,7 +3893,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                             {statusLabel(student.status)}
                           </Badge>
                         </div>
-                        
+
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-slate-500 dark:text-slate-400 mb-2">
                           <span className="font-semibold text-slate-700 dark:text-slate-300">
                             #{student.enrollmentNo || 'PENDING'}
@@ -3899,9 +3957,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                       <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-violet-50 dark:hover:bg-violet-900/20 text-violet-600" onClick={() => handleOpenEnrollHistory(student)} title="History">
                         <History className="w-4 h-4" />
                       </Button>
-                      
+
                       {(canWrite || canDelete) && <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-1" />}
-                      
+
                       {canWrite && (
                         <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-900 dark:hover:text-white" onClick={() => handleEdit(student)}>
                           <Edit className="w-4 h-4" />

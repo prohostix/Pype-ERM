@@ -52842,6 +52842,8 @@ export namespace Prisma {
     dob: Date | null
     fatherName: string | null
     isProvisional: boolean | null
+    isUpgrade: boolean | null
+    previousProgramId: string | null
     provisionalReceiptUrl: string | null
     pinCode: string | null
     gender: string | null
@@ -52897,6 +52899,8 @@ export namespace Prisma {
     dob: Date | null
     fatherName: string | null
     isProvisional: boolean | null
+    isUpgrade: boolean | null
+    previousProgramId: string | null
     provisionalReceiptUrl: string | null
     pinCode: string | null
     gender: string | null
@@ -52953,6 +52957,8 @@ export namespace Prisma {
     dob: number
     fatherName: number
     isProvisional: number
+    isUpgrade: number
+    previousProgramId: number
     provisionalReceiptUrl: number
     pinCode: number
     gender: number
@@ -52968,6 +52974,8 @@ export namespace Prisma {
     familyPhone: number
     photo: number
     documents: number
+    admissionProgress: number
+    academicProgress: number
     photoStatus: number
     receiptUrl: number
     receiptVerified: number
@@ -53019,6 +53027,8 @@ export namespace Prisma {
     dob?: true
     fatherName?: true
     isProvisional?: true
+    isUpgrade?: true
+    previousProgramId?: true
     provisionalReceiptUrl?: true
     pinCode?: true
     gender?: true
@@ -53074,6 +53084,8 @@ export namespace Prisma {
     dob?: true
     fatherName?: true
     isProvisional?: true
+    isUpgrade?: true
+    previousProgramId?: true
     provisionalReceiptUrl?: true
     pinCode?: true
     gender?: true
@@ -53130,6 +53142,8 @@ export namespace Prisma {
     dob?: true
     fatherName?: true
     isProvisional?: true
+    isUpgrade?: true
+    previousProgramId?: true
     provisionalReceiptUrl?: true
     pinCode?: true
     gender?: true
@@ -53145,6 +53159,8 @@ export namespace Prisma {
     familyPhone?: true
     photo?: true
     documents?: true
+    admissionProgress?: true
+    academicProgress?: true
     photoStatus?: true
     receiptUrl?: true
     receiptVerified?: true
@@ -53274,6 +53290,8 @@ export namespace Prisma {
     dob: Date | null
     fatherName: string | null
     isProvisional: boolean
+    isUpgrade: boolean
+    previousProgramId: string | null
     provisionalReceiptUrl: string | null
     pinCode: string | null
     gender: string | null
@@ -53289,6 +53307,8 @@ export namespace Prisma {
     familyPhone: string | null
     photo: string | null
     documents: JsonValue | null
+    admissionProgress: JsonValue | null
+    academicProgress: JsonValue | null
     photoStatus: string | null
     receiptUrl: string | null
     receiptVerified: boolean
@@ -53350,6 +53370,8 @@ export namespace Prisma {
     dob?: boolean
     fatherName?: boolean
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: boolean
     provisionalReceiptUrl?: boolean
     pinCode?: boolean
     gender?: boolean
@@ -53365,6 +53387,8 @@ export namespace Prisma {
     familyPhone?: boolean
     photo?: boolean
     documents?: boolean
+    admissionProgress?: boolean
+    academicProgress?: boolean
     photoStatus?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
@@ -53418,6 +53442,8 @@ export namespace Prisma {
     dob?: boolean
     fatherName?: boolean
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: boolean
     provisionalReceiptUrl?: boolean
     pinCode?: boolean
     gender?: boolean
@@ -53433,6 +53459,8 @@ export namespace Prisma {
     familyPhone?: boolean
     photo?: boolean
     documents?: boolean
+    admissionProgress?: boolean
+    academicProgress?: boolean
     photoStatus?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
@@ -53485,6 +53513,8 @@ export namespace Prisma {
     dob?: boolean
     fatherName?: boolean
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: boolean
     provisionalReceiptUrl?: boolean
     pinCode?: boolean
     gender?: boolean
@@ -53500,6 +53530,8 @@ export namespace Prisma {
     familyPhone?: boolean
     photo?: boolean
     documents?: boolean
+    admissionProgress?: boolean
+    academicProgress?: boolean
     photoStatus?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
@@ -53552,6 +53584,8 @@ export namespace Prisma {
     dob?: boolean
     fatherName?: boolean
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: boolean
     provisionalReceiptUrl?: boolean
     pinCode?: boolean
     gender?: boolean
@@ -53567,6 +53601,8 @@ export namespace Prisma {
     familyPhone?: boolean
     photo?: boolean
     documents?: boolean
+    admissionProgress?: boolean
+    academicProgress?: boolean
     photoStatus?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
@@ -53577,7 +53613,7 @@ export namespace Prisma {
     paymentPlan?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "specialisation" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "isProvisional" | "provisionalReceiptUrl" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "photoStatus" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "specialisation" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "isProvisional" | "isUpgrade" | "previousProgramId" | "provisionalReceiptUrl" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "admissionProgress" | "academicProgress" | "photoStatus" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -53663,6 +53699,8 @@ export namespace Prisma {
       dob: Date | null
       fatherName: string | null
       isProvisional: boolean
+      isUpgrade: boolean
+      previousProgramId: string | null
       provisionalReceiptUrl: string | null
       pinCode: string | null
       gender: string | null
@@ -53678,6 +53716,8 @@ export namespace Prisma {
       familyPhone: string | null
       photo: string | null
       documents: Prisma.JsonValue | null
+      admissionProgress: Prisma.JsonValue | null
+      academicProgress: Prisma.JsonValue | null
       photoStatus: string | null
       receiptUrl: string | null
       receiptVerified: boolean
@@ -54151,6 +54191,8 @@ export namespace Prisma {
     readonly dob: FieldRef<"Enrollment", 'DateTime'>
     readonly fatherName: FieldRef<"Enrollment", 'String'>
     readonly isProvisional: FieldRef<"Enrollment", 'Boolean'>
+    readonly isUpgrade: FieldRef<"Enrollment", 'Boolean'>
+    readonly previousProgramId: FieldRef<"Enrollment", 'String'>
     readonly provisionalReceiptUrl: FieldRef<"Enrollment", 'String'>
     readonly pinCode: FieldRef<"Enrollment", 'String'>
     readonly gender: FieldRef<"Enrollment", 'String'>
@@ -54166,6 +54208,8 @@ export namespace Prisma {
     readonly familyPhone: FieldRef<"Enrollment", 'String'>
     readonly photo: FieldRef<"Enrollment", 'String'>
     readonly documents: FieldRef<"Enrollment", 'Json'>
+    readonly admissionProgress: FieldRef<"Enrollment", 'Json'>
+    readonly academicProgress: FieldRef<"Enrollment", 'Json'>
     readonly photoStatus: FieldRef<"Enrollment", 'String'>
     readonly receiptUrl: FieldRef<"Enrollment", 'String'>
     readonly receiptVerified: FieldRef<"Enrollment", 'Boolean'>
@@ -123906,6 +123950,8 @@ export namespace Prisma {
     dob: 'dob',
     fatherName: 'fatherName',
     isProvisional: 'isProvisional',
+    isUpgrade: 'isUpgrade',
+    previousProgramId: 'previousProgramId',
     provisionalReceiptUrl: 'provisionalReceiptUrl',
     pinCode: 'pinCode',
     gender: 'gender',
@@ -123921,6 +123967,8 @@ export namespace Prisma {
     familyPhone: 'familyPhone',
     photo: 'photo',
     documents: 'documents',
+    admissionProgress: 'admissionProgress',
+    academicProgress: 'academicProgress',
     photoStatus: 'photoStatus',
     receiptUrl: 'receiptUrl',
     receiptVerified: 'receiptVerified',
@@ -129367,6 +129415,8 @@ export namespace Prisma {
     dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableFilter<"Enrollment"> | string | null
     isProvisional?: BoolFilter<"Enrollment"> | boolean
+    isUpgrade?: BoolFilter<"Enrollment"> | boolean
+    previousProgramId?: StringNullableFilter<"Enrollment"> | string | null
     provisionalReceiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     pinCode?: StringNullableFilter<"Enrollment"> | string | null
     gender?: StringNullableFilter<"Enrollment"> | string | null
@@ -129382,6 +129432,8 @@ export namespace Prisma {
     familyPhone?: StringNullableFilter<"Enrollment"> | string | null
     photo?: StringNullableFilter<"Enrollment"> | string | null
     documents?: JsonNullableFilter<"Enrollment">
+    admissionProgress?: JsonNullableFilter<"Enrollment">
+    academicProgress?: JsonNullableFilter<"Enrollment">
     photoStatus?: StringNullableFilter<"Enrollment"> | string | null
     receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     receiptVerified?: BoolFilter<"Enrollment"> | boolean
@@ -129435,6 +129487,8 @@ export namespace Prisma {
     dob?: SortOrderInput | SortOrder
     fatherName?: SortOrderInput | SortOrder
     isProvisional?: SortOrder
+    isUpgrade?: SortOrder
+    previousProgramId?: SortOrderInput | SortOrder
     provisionalReceiptUrl?: SortOrderInput | SortOrder
     pinCode?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
@@ -129450,6 +129504,8 @@ export namespace Prisma {
     familyPhone?: SortOrderInput | SortOrder
     photo?: SortOrderInput | SortOrder
     documents?: SortOrderInput | SortOrder
+    admissionProgress?: SortOrderInput | SortOrder
+    academicProgress?: SortOrderInput | SortOrder
     photoStatus?: SortOrderInput | SortOrder
     receiptUrl?: SortOrderInput | SortOrder
     receiptVerified?: SortOrder
@@ -129507,6 +129563,8 @@ export namespace Prisma {
     dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableFilter<"Enrollment"> | string | null
     isProvisional?: BoolFilter<"Enrollment"> | boolean
+    isUpgrade?: BoolFilter<"Enrollment"> | boolean
+    previousProgramId?: StringNullableFilter<"Enrollment"> | string | null
     provisionalReceiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     pinCode?: StringNullableFilter<"Enrollment"> | string | null
     gender?: StringNullableFilter<"Enrollment"> | string | null
@@ -129522,6 +129580,8 @@ export namespace Prisma {
     familyPhone?: StringNullableFilter<"Enrollment"> | string | null
     photo?: StringNullableFilter<"Enrollment"> | string | null
     documents?: JsonNullableFilter<"Enrollment">
+    admissionProgress?: JsonNullableFilter<"Enrollment">
+    academicProgress?: JsonNullableFilter<"Enrollment">
     photoStatus?: StringNullableFilter<"Enrollment"> | string | null
     receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     receiptVerified?: BoolFilter<"Enrollment"> | boolean
@@ -129575,6 +129635,8 @@ export namespace Prisma {
     dob?: SortOrderInput | SortOrder
     fatherName?: SortOrderInput | SortOrder
     isProvisional?: SortOrder
+    isUpgrade?: SortOrder
+    previousProgramId?: SortOrderInput | SortOrder
     provisionalReceiptUrl?: SortOrderInput | SortOrder
     pinCode?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
@@ -129590,6 +129652,8 @@ export namespace Prisma {
     familyPhone?: SortOrderInput | SortOrder
     photo?: SortOrderInput | SortOrder
     documents?: SortOrderInput | SortOrder
+    admissionProgress?: SortOrderInput | SortOrder
+    academicProgress?: SortOrderInput | SortOrder
     photoStatus?: SortOrderInput | SortOrder
     receiptUrl?: SortOrderInput | SortOrder
     receiptVerified?: SortOrder
@@ -129640,6 +129704,8 @@ export namespace Prisma {
     dob?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     isProvisional?: BoolWithAggregatesFilter<"Enrollment"> | boolean
+    isUpgrade?: BoolWithAggregatesFilter<"Enrollment"> | boolean
+    previousProgramId?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     provisionalReceiptUrl?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     pinCode?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     gender?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
@@ -129655,6 +129721,8 @@ export namespace Prisma {
     familyPhone?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     photo?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     documents?: JsonNullableWithAggregatesFilter<"Enrollment">
+    admissionProgress?: JsonNullableWithAggregatesFilter<"Enrollment">
+    academicProgress?: JsonNullableWithAggregatesFilter<"Enrollment">
     photoStatus?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     receiptUrl?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     receiptVerified?: BoolWithAggregatesFilter<"Enrollment"> | boolean
@@ -139488,6 +139556,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -139503,6 +139573,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -139555,6 +139627,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -139570,6 +139644,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -139604,6 +139680,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -139619,6 +139697,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -139671,6 +139751,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -139686,6 +139768,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -139729,6 +139813,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -139744,6 +139830,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -139777,6 +139865,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -139792,6 +139882,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -139833,6 +139925,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -139848,6 +139942,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -148673,6 +148769,8 @@ export namespace Prisma {
     dob?: SortOrder
     fatherName?: SortOrder
     isProvisional?: SortOrder
+    isUpgrade?: SortOrder
+    previousProgramId?: SortOrder
     provisionalReceiptUrl?: SortOrder
     pinCode?: SortOrder
     gender?: SortOrder
@@ -148688,6 +148786,8 @@ export namespace Prisma {
     familyPhone?: SortOrder
     photo?: SortOrder
     documents?: SortOrder
+    admissionProgress?: SortOrder
+    academicProgress?: SortOrder
     photoStatus?: SortOrder
     receiptUrl?: SortOrder
     receiptVerified?: SortOrder
@@ -148733,6 +148833,8 @@ export namespace Prisma {
     dob?: SortOrder
     fatherName?: SortOrder
     isProvisional?: SortOrder
+    isUpgrade?: SortOrder
+    previousProgramId?: SortOrder
     provisionalReceiptUrl?: SortOrder
     pinCode?: SortOrder
     gender?: SortOrder
@@ -148788,6 +148890,8 @@ export namespace Prisma {
     dob?: SortOrder
     fatherName?: SortOrder
     isProvisional?: SortOrder
+    isUpgrade?: SortOrder
+    previousProgramId?: SortOrder
     provisionalReceiptUrl?: SortOrder
     pinCode?: SortOrder
     gender?: SortOrder
@@ -168608,6 +168712,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -168623,6 +168729,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -168673,6 +168781,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -168688,6 +168798,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -171926,6 +172038,8 @@ export namespace Prisma {
     dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableFilter<"Enrollment"> | string | null
     isProvisional?: BoolFilter<"Enrollment"> | boolean
+    isUpgrade?: BoolFilter<"Enrollment"> | boolean
+    previousProgramId?: StringNullableFilter<"Enrollment"> | string | null
     provisionalReceiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     pinCode?: StringNullableFilter<"Enrollment"> | string | null
     gender?: StringNullableFilter<"Enrollment"> | string | null
@@ -171941,6 +172055,8 @@ export namespace Prisma {
     familyPhone?: StringNullableFilter<"Enrollment"> | string | null
     photo?: StringNullableFilter<"Enrollment"> | string | null
     documents?: JsonNullableFilter<"Enrollment">
+    admissionProgress?: JsonNullableFilter<"Enrollment">
+    academicProgress?: JsonNullableFilter<"Enrollment">
     photoStatus?: StringNullableFilter<"Enrollment"> | string | null
     receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     receiptVerified?: BoolFilter<"Enrollment"> | boolean
@@ -177100,6 +177216,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -177115,6 +177233,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -177165,6 +177285,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -177180,6 +177302,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -177224,6 +177348,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -177239,6 +177365,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -177289,6 +177417,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -177304,6 +177434,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -177348,6 +177480,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -177363,6 +177497,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -177414,6 +177550,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -177429,6 +177567,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -177472,6 +177612,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -177487,6 +177629,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -177537,6 +177681,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -177552,6 +177698,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -177596,6 +177744,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -177611,6 +177761,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -177661,6 +177813,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -177676,6 +177830,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -189197,6 +189353,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -189212,6 +189370,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -189262,6 +189422,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -189277,6 +189439,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -190435,6 +190599,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -190450,6 +190616,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -190500,6 +190668,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -190515,6 +190685,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -193573,6 +193745,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -193588,6 +193762,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -193638,6 +193814,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -193653,6 +193831,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -215443,6 +215623,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -215458,6 +215640,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -215508,6 +215692,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -215523,6 +215709,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -247308,6 +247496,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -247323,6 +247513,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -247374,6 +247566,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -247389,6 +247583,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -247552,6 +247748,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -247567,6 +247765,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -247618,6 +247818,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -247633,6 +247835,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -268704,6 +268908,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -268719,6 +268925,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -270467,6 +270675,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -270482,6 +270692,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -270532,6 +270744,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -270547,6 +270761,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -270589,6 +270805,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -270604,6 +270822,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -274886,6 +275106,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -274901,6 +275123,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -274942,6 +275166,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -274957,6 +275183,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -274999,6 +275227,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -275014,6 +275244,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -275054,6 +275286,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -275069,6 +275303,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -275110,6 +275346,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -275125,6 +275363,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -276910,6 +277150,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -276925,6 +277167,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -276975,6 +277219,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -276990,6 +277236,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277032,6 +277280,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277047,6 +277297,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277080,6 +277332,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277095,6 +277349,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277145,6 +277401,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277160,6 +277418,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277202,6 +277462,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277217,6 +277479,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277250,6 +277514,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277265,6 +277531,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277316,6 +277584,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277331,6 +277601,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277373,6 +277645,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277388,6 +277662,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277420,6 +277696,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277435,6 +277713,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277485,6 +277765,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277500,6 +277782,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277542,6 +277826,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277557,6 +277843,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277590,6 +277878,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277605,6 +277895,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277655,6 +277947,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277670,6 +277964,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -277712,6 +278008,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -277727,6 +278025,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -282588,6 +282888,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -282603,6 +282905,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -282811,6 +283115,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -282826,6 +283132,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -282876,6 +283184,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -282891,6 +283201,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -282933,6 +283245,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -282948,6 +283262,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -283526,6 +283842,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -283541,6 +283859,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -283817,6 +284137,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -283832,6 +284154,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -283882,6 +284206,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -283897,6 +284223,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -283939,6 +284267,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -283954,6 +284284,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -284937,6 +285269,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -284952,6 +285286,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -285224,6 +285560,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -285239,6 +285577,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -285289,6 +285629,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -285304,6 +285646,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -285346,6 +285690,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -285361,6 +285707,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -287586,6 +287934,8 @@ export namespace Prisma {
     dob?: Date | string | null
     fatherName?: string | null
     isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
     provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
@@ -287601,6 +287951,8 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
@@ -287710,6 +288062,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -287725,6 +288079,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -287775,6 +288131,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -287790,6 +288148,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -287832,6 +288192,8 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -287847,6 +288209,8 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean

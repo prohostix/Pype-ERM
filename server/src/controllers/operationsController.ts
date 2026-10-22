@@ -49,14 +49,23 @@ export const getUniversities = asyncHandler(async (req: AuthRequest, res: Respon
           program: { universityId: u.id },
           isActive: true
         },
-        include: { center: { select: { id: true, name: true } } }
+        include: { center: { select: { id: true, name: true, code: true } } }
       });
       
       const uniqueCenters = new Map();
+      const centerPrograms = new Map<string, string[]>();
       allocations.forEach(a => {
-        if (a.center) uniqueCenters.set(a.center.id, a.center);
+        if (a.center) {
+          uniqueCenters.set(a.center.id, a.center);
+          const pList = centerPrograms.get(a.center.id) || [];
+          pList.push(a.programId);
+          centerPrograms.set(a.center.id, pList);
+        }
       });
-      allocatedPartners = Array.from(uniqueCenters.values());
+      allocatedPartners = Array.from(uniqueCenters.values()).map((c: any) => ({
+        ...c,
+        programIds: centerPrograms.get(c.id) || []
+      }));
     }
     return {
       ...u,

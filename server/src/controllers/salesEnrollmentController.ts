@@ -190,12 +190,19 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
 
   const cleanEmail = normalizeEmail(studentEmail);
   const cleanPhone = (studentPhone || '').trim();
+  const isUpgrade = Boolean(req.body.isUpgrade);
+  const existingStudentId = req.body.existingStudentId || (isUpgrade ? req.body.studentId : undefined);
 
   // Enforce uniqueness across existing students and active enrollments
   const uniquenessCheck = await checkStudentOrEnrollmentExists({
     email: cleanEmail,
     phone: cleanPhone,
-    organizationId: orgId
+    organizationId: orgId,
+    existingStudentId: isUpgrade && existingStudentId ? existingStudentId : undefined,
+    excludeStudentId: !isUpgrade && existingStudentId ? existingStudentId : undefined,
+    isUpgrade,
+    programId,
+    sessionId: session?.id
   });
 
   if (!uniquenessCheck.isUnique) {
@@ -328,6 +335,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
   // Build pipeline summary
   const summary = {
     total: enrollments.length,
+    ops_upgrade_verification: enrollments.filter((e: any) => e.status === 'ops_upgrade_verification').length,
     sales_admin_review: enrollments.filter((e: any) => e.status === 'sales_admin_review').length,
     sales_verification_pending: enrollments.filter((e: any) => e.status === 'sales_verification_pending').length,
     provisional_finance_pending: enrollments.filter((e: any) => e.status === 'provisional_finance_pending').length,
@@ -725,12 +733,19 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
 
   const cleanEmail = normalizeEmail(studentEmail);
   const cleanPhone = (studentPhone || '').trim();
+  const isUpgrade = Boolean(req.body.isUpgrade);
+  const existingStudentId = req.body.existingStudentId || (isUpgrade ? req.body.studentId : undefined);
 
   // Enforce uniqueness across existing students and active enrollments
   const uniquenessCheck = await checkStudentOrEnrollmentExists({
     email: cleanEmail,
     phone: cleanPhone,
-    organizationId: orgId
+    organizationId: orgId,
+    existingStudentId: isUpgrade && existingStudentId ? existingStudentId : undefined,
+    excludeStudentId: !isUpgrade && existingStudentId ? existingStudentId : undefined,
+    isUpgrade,
+    programId,
+    sessionId: session.id
   });
 
   if (!uniquenessCheck.isUnique) {
@@ -806,6 +821,19 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
   });
 });
 
+
+// Prisma's list-only `push`, which stored {"push": {...}} instead of a list, so
+// accept either shape when reading and always write a real array.
+const historyList = (raw: any): any[] =>
+  Array.isArray(raw) ? raw : (raw && typeof raw === 'object' ? Object.values(raw) : []);
+const appendHistory = (raw: any, entry: any): any[] => [...historyList(raw), entry];
+
+const isSalesAdminRejected = (e: any): boolean => {
+  if (e?.status !== 'rejected' || e?.financeRemarks) return false;
+  const hist = historyList(e?.statusHistory);
+  const last = hist[hist.length - 1];
+  return String(last?.note || '').startsWith('Sales Admin rejected');
+};
 
 // ─── Sales: Verify student enrollment from invite link ───────────────────────
 
@@ -910,12 +938,72 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
   const isFinanceRejection = (enrollment.status === 'rejected' && !!enrollment.financeRemarks) ||
     (enrollment.status === 'rejected' && !!(enrollment as any).financeReviewedBy);
 
+  const hist = historyList(enrollment.statusHistory);
+  const lastRejection = [...hist].reverse().find((h: any) =>
+    h?.status === 'rejected' || h?.status === 'ops_rejected'
+  );
+
+  const lastRejectionIndex = hist.map((h: any) => h?.status).lastIndexOf('rejected');
+  const lastApprovalIndex = hist.map((h: any) => String(h?.note || '').toLowerCase()).lastIndexOf('sales admin approved');
+  const wasRejectedBySalesAdmin = !isFinanceRejection &&
+    enrollment.status === 'rejected' &&
+    (isSalesAdminRejected(enrollment) || (
+      lastRejectionIndex !== -1 &&
+      String(hist[lastRejectionIndex]?.note || '').startsWith('Sales Admin rejected') &&
+      (lastApprovalIndex === -1 || lastApprovalIndex < lastRejectionIndex)
+    ));
+
+  // Operations rejection can happen from the main table (status === 'ops_rejected')
+  // OR from inside the review modal (photoStatus === 'rejected' or individual doc.status === 'rejected')
+  // OR if the enrollment was already at 'document_review' (it already passed Sales Admin earlier!)
+  const existingDocs = Array.isArray(enrollment.documents) ? (enrollment.documents as any[]) : [];
+  const studentProg = enrollment.studentId ? ((await prisma.student.findUnique({ where: { id: enrollment.studentId }, select: { admissionProgress: true } }))?.admissionProgress as any) : null;
+  const hasModalRejection = enrollment.photoStatus === 'rejected' ||
+    studentProg?.photoStatus === 'rejected' ||
+    existingDocs.some((d: any) => d && d.status === 'rejected');
+  
+  const wasAlreadyInOperations = enrollment.status === 'document_review' || enrollment.status === 'ops_rejected';
+  const hasPassedSalesAdmin = hist.some((h: any) => 
+    h?.status === 'document_review' || 
+    String(h?.note || '').toLowerCase().includes('sales admin approved')
+  );
+
+  const wasRejectedByOperations = enrollment.status === 'ops_rejected' ||
+    hasModalRejection ||
+    (wasAlreadyInOperations && !wasRejectedBySalesAdmin && !isFinanceRejection) ||
+    (hasPassedSalesAdmin && !wasRejectedBySalesAdmin && !isFinanceRejection) ||
+    (
+      !wasRejectedBySalesAdmin && !isFinanceRejection && (
+        lastRejection?.status === 'ops_rejected' ||
+        String(lastRejection?.note || '').startsWith('Operations rejected') ||
+        !!enrollment.departmentReviewedBy
+      )
+    );
+
+  const isAcademicPartner = Boolean(
+    enrollment.studyCenterId ||
+    req.user.studyCenterId ||
+    req.user.role === 'center_admin'
+  );
+
   let newStatus: string;
   let note: string;
 
   if (isFinanceRejection) {
     newStatus = 'finance_review';
     note = 'Payment receipt re-uploaded by Sales and forwarded directly back to Finance for verification.';
+  } else if (isAcademicPartner) {
+    newStatus = 'document_review';
+    note = 'Academic Partner enrollment forwarded directly to Operations for document verification.';
+  } else if (wasRejectedByOperations) {
+    // Operations rejected the documents/photo (either via main reject or inside the modal):
+    // Sales Admin already approved this previously. Once the sales user fixes the documents,
+    // route directly back to Operations (document_review) without bothering Sales Admin again!
+    newStatus = 'document_review';
+    note = 'Sales user updated documents/photos after Operations review and forwarded directly back to Operations for verification.';
+  } else if (wasRejectedBySalesAdmin) {
+    newStatus = 'sales_admin_review';
+    note = 'Sales user re-applied with updated details and forwarded back to Sales Admin for approval.';
   } else {
     const org = await prisma.organization.findUnique({ where: { id: orgId } });
     const metadata = org?.metadata as any;
@@ -927,11 +1015,26 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
       : 'Sales user verified/resubmitted application and forwarded to Operations for document verification.';
   }
 
+  // Reset any previously rejected doc statuses to 'pending' upon re-upload so Operations can re-evaluate
+  const incomingDocs = documents !== undefined ? documents : enrollment.documents;
+  const cleanedDocs = Array.isArray(incomingDocs)
+    ? incomingDocs.map((d: any) => ({
+        ...d,
+        status: d?.status === 'rejected' ? 'pending' : (d?.status || 'pending')
+      }))
+    : enrollment.documents;
+
+  const isPhotoUpdated = photo !== undefined && photo !== enrollment.photo;
+  const newPhotoStatus = (enrollment.photoStatus === 'rejected' || isPhotoUpdated) ? 'pending' : (enrollment.photoStatus || 'pending');
+
   const finalEnrollment = await prisma.enrollment.update({
     where: { id },
     data: {
       status: newStatus,
+      documents: cleanedDocs as any,
+      photoStatus: newPhotoStatus,
       ...(isFinanceRejection ? { financeRemarks: null, receiptVerified: false, departmentRemarks: null } : {}),
+      ...(wasRejectedByOperations ? { departmentRemarks: null } : {}),
       statusHistory: appendHistory(updatedEnrollment.statusHistory, {
         status: newStatus,
         actorId: salesUserId,
@@ -943,18 +1046,15 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     }
   });
 
-  // Handle enrollment status summary logic if it exists...
-
   if (finalEnrollment.studentId) {
-    // Reset photoStatus to pending if photo is being updated (or even if it's the same, it means a resubmit)
     const existingStudent = await prisma.student.findUnique({ where: { id: finalEnrollment.studentId } });
     const progress = (existingStudent?.admissionProgress as any) || {};
-    const newProgress = { ...progress, photoStatus: 'pending' };
+    const newProgress = { ...progress, photoStatus: newPhotoStatus };
 
     await prisma.student.update({
       where: { id: finalEnrollment.studentId },
       data: {
-        documents: documents !== undefined ? documents : finalEnrollment.documents,
+        documents: cleanedDocs as any,
         photo: photo !== undefined ? photo : finalEnrollment.photo,
         admissionProgress: newProgress,
       }
@@ -982,14 +1082,10 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
         });
       }
     } catch (_) { /* non-critical */ }
-  } else {
+  } else if (newStatus === 'document_review') {
     try {
-      const org = await prisma.organization.findUnique({ where: { id: orgId } });
-      const metadata = org?.metadata as any;
-      const requiresSalesAdmin = metadata?.enrollmentApprovalFlow === 'sales_admin_approval';
-      const roleToNotify = requiresSalesAdmin ? 'sales_admin' : 'ops_admin';
       const adminsToNotify = await prisma.user.findMany({
-        where: { organizationId: orgId, role: roleToNotify, status: 'active' },
+        where: { organizationId: orgId, role: { in: ['ops_admin', 'ops_sub_admin'] }, status: 'active' },
         select: { id: true },
       });
       for (const admin of adminsToNotify) {
@@ -997,11 +1093,34 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
           data: {
             organizationId: orgId,
             userId: admin.id,
-            title: requiresSalesAdmin ? 'New Student Application for Sales Approval' : 'New Student Application for Review',
+            title: wasRejectedByOperations ? 'Resubmitted Application for Operations Review' : 'New Student Application for Review',
+            message: wasRejectedByOperations
+              ? `${finalEnrollment.studentName}'s application was updated with corrected documents by ${req.user.name}. Please review.`
+              : `${finalEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review.`,
+            type: 'general',
+            priority: 'medium',
+            link: 'enrollment_review',
+          },
+        });
+      }
+    } catch (_) { /* non-critical */ }
+  } else {
+    // newStatus === 'sales_admin_review'
+    try {
+      const adminsToNotify = await prisma.user.findMany({
+        where: { organizationId: orgId, role: 'sales_admin', status: 'active' },
+        select: { id: true },
+      });
+      for (const admin of adminsToNotify) {
+        await prisma.notification.create({
+          data: {
+            organizationId: orgId,
+            userId: admin.id,
+            title: wasRejectedBySalesAdmin ? 'Application Re-applied for Sales Approval' : 'New Student Application for Sales Approval',
             message: `${finalEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review.`,
             type: 'general',
             priority: 'medium',
-            link: requiresSalesAdmin ? 'sales_enrollment_review' : 'enrollment_review',
+            link: 'sales_enrollment_review',
           },
         });
       }
@@ -1012,6 +1131,8 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     success: true, 
     message: isFinanceRejection
       ? 'Payment receipt re-uploaded and sent directly to Finance.'
+      : wasRejectedByOperations
+      ? 'Documents updated and sent directly back to Operations for review.'
       : newStatus === 'sales_admin_review'
       ? 'Enrollment verified and submitted to Sales Admin.' 
       : 'Enrollment verified and submitted to Operations.', 
@@ -1097,18 +1218,7 @@ export const resubmitPaymentReceipt = asyncHandler(async (req: AuthRequest, res:
 // True when the application was rejected by a Sales Admin (Finance rejections
 // share the "rejected" status but always carry financeRemarks).
 // statusHistory is a plain JSON column. Some older code saved entries with
-// Prisma's list-only `push`, which stored {"push": {...}} instead of a list, so
-// accept either shape when reading and always write a real array.
-const historyList = (raw: any): any[] =>
-  Array.isArray(raw) ? raw : (raw && typeof raw === 'object' ? Object.values(raw) : []);
-const appendHistory = (raw: any, entry: any): any[] => [...historyList(raw), entry];
-
-const isSalesAdminRejected = (e: any): boolean => {
-  if (e?.status !== 'rejected' || e?.financeRemarks) return false;
-  const hist = historyList(e?.statusHistory);
-  const last = hist[hist.length - 1];
-  return String(last?.note || '').startsWith('Sales Admin rejected');
-};
+// (helpers moved above verifySalesEnrollment)
 
 export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: Response) => {
   // ?view=rejected -> applications this admin's team submitted that a Sales

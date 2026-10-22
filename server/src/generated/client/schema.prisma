@@ -966,6 +966,8 @@ model Enrollment {
   dob                   DateTime?
   fatherName            String?
   isProvisional         Boolean            @default(false)
+  isUpgrade             Boolean            @default(false)
+  previousProgramId     String?
   provisionalReceiptUrl String?
   pinCode               String?
   gender                String?
@@ -981,6 +983,8 @@ model Enrollment {
   familyPhone           String?
   photo                 String?
   documents             Json?              @default("[]")
+  admissionProgress     Json?              @default("{}")
+  academicProgress      Json?              @default("[]")
   photoStatus           String?
   receiptUrl            String?
   receiptVerified       Boolean            @default(false)

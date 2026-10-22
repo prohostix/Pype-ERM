@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { RefreshCw, CheckCircle, XCircle, Search, GraduationCap, Clock, AlertCircle, Ban, Eye, FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -52,9 +53,9 @@ const STATUS_META: Record<string, { label: string; color: string; icon: React.Re
   payment_pending:     { label: 'Fee Pending',      color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', icon: <Clock className="w-3 h-3" /> },
   receipt_submitted:   { label: 'Receipt Uploaded', color: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400',       icon: <FileText className="w-3 h-3" /> },
   document_review:     { label: 'Doc Review',       color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',         icon: <AlertCircle className="w-3 h-3" /> },
-  finance_review:      { label: 'Finance Review',   color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', icon: <Clock className="w-3 h-3" /> },
-  sales_admin_review:  { label: 'Admin Review',     color: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400', icon: <Clock className="w-3 h-3" /> },
-  enrolled:            { label: 'Enrolled',         color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',     icon: <CheckCircle className="w-3 h-3" /> },
+  finance_review:      { label: 'Finance Review',      color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', icon: <Clock className="w-3 h-3" /> },
+  sales_admin_review:  { label: 'Sales Admin Review',color: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400', icon: <Clock className="w-3 h-3" /> },
+  enrolled:            { label: 'Enrolled',            color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',     icon: <CheckCircle className="w-3 h-3" /> },
   rejected:            { label: 'Rejected',         color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',             icon: <XCircle className="w-3 h-3" /> },
   department_rejected: { label: 'Dept Rejected',    color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',             icon: <Ban className="w-3 h-3" /> },
 };
@@ -358,7 +359,21 @@ export function FinanceEnrollmentsPanel() {
                 <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Program &amp; University</h4>
                 <div className="grid grid-cols-2 gap-3">
                   <Field label="Program" value={(viewStudent as any).program?.name ? `${(viewStudent as any).program.name} (${(viewStudent as any).program.code})` : getProgramName(viewStudent)} />
-                  <Field label="University" value={(viewStudent as any).program?.university?.name} />
+                  <Field 
+                    label="University" 
+                    value={
+                      (viewStudent as any).program?.university?.name ? (
+                        <span className="flex items-center gap-1.5 flex-wrap">
+                          <span>{(viewStudent as any).program.university.name}</span>
+                          {(viewStudent as any).program.university.isAcademicPartnerOnly && (
+                            <Badge variant="outline" className="text-[9px] h-3.5 px-1 bg-purple-50 text-purple-700 border-purple-200">
+                              Academic Partner
+                            </Badge>
+                          )}
+                        </span>
+                      ) : null
+                    } 
+                  />
                   <Field label="Univ. Code" value={(viewStudent as any).program?.university?.code} />
                   <Field label="Univ. Address" value={(viewStudent as any).program?.university?.address} />
                   <Field label="Session" value={(viewStudent as any).session?.name} />
@@ -550,7 +565,7 @@ export function FinanceEnrollmentsPanel() {
   );
 }
 
-function Field({ label, value }: { label: string; value?: string | null }) {
+function Field({ label, value }: { label: string; value?: React.ReactNode }) {
   return (
     <div>
       <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground block mb-0.5">{label}</span>

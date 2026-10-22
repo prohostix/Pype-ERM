@@ -16,6 +16,7 @@ import {
   getDeptReviewEnrollments,
   approveDeptEnrollment,
   rejectDeptEnrollment,
+  resubmitUpgradeEnrollment,
   updateEnrollmentDocumentStatus,
   updateEnrollmentPhotoStatus,
 } from '../controllers/enrollmentReviewController.js';
@@ -46,9 +47,10 @@ router.put('/:id/provisional-complete', authorize('center_admin', 'org_admin', '
 // Dept/Sub-dept manager review routes
 // Branch managers, the CEO and the General Manager can view applications under review but cannot approve or reject them.
 router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), getDeptReviewEnrollments);
-router.put('/review/:id/approve', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin'), approveDeptEnrollment);
-router.put('/review/:id/reject', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin'), rejectDeptEnrollment);
-router.put('/review/:id/documents/:docIndex/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin'), updateEnrollmentDocumentStatus);
-router.put('/review/:id/photo/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin'), updateEnrollmentPhotoStatus);
+router.put('/review/:id/approve', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), approveDeptEnrollment);
+router.put('/review/:id/reject', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), rejectDeptEnrollment);
+router.put('/review/:id/resubmit-upgrade', authorize('sales_admin', 'sales_sub_admin', 'employee', 'center_admin', 'org_admin'), resubmitUpgradeEnrollment);
+router.put('/review/:id/documents/:docIndex/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), updateEnrollmentDocumentStatus);
+router.put('/review/:id/photo/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), updateEnrollmentPhotoStatus);
 
 export default router;

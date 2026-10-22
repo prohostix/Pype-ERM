@@ -242,9 +242,12 @@ class ApiService {
     return response.data;
   }
 
-  async updateStudentProgress(id: string, stepId: string, data: FormData) {
+  async updateStudentProgress(id: string, stepId: string, data: FormData, enrollmentId?: string) {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_BASE_URL}/students/${id}/progress/${stepId}`, {
+    const url = enrollmentId
+      ? `${API_BASE_URL}/students/${id}/progress/${stepId}?enrollmentId=${encodeURIComponent(enrollmentId)}`
+      : `${API_BASE_URL}/students/${id}/progress/${stepId}`;
+    const response = await fetch(url, {
       method: 'PUT',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
       body: data,
@@ -254,6 +257,11 @@ class ApiService {
       throw { response: { data: resData } };
     }
     return resData;
+  }
+
+  async updateStudentAcademicProgress(id: string, data: { enrollmentId?: string; academicProgress: any[] }) {
+    const response = await this.api.put(`/students/${id}/academic-progress`, data);
+    return response.data;
   }
 
   async uploadDocument(data: FormData) {

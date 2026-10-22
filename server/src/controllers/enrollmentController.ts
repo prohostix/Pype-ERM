@@ -98,13 +98,18 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
   let currentStudentId = studentId;
   const cleanEmail = normalizeEmail(rest.studentEmail);
   const cleanPhone = (rest.studentPhone || '').trim();
+  const isUpgrade = Boolean(req.body.isUpgrade || rest.isUpgrade);
 
   // Enforce uniqueness: block duplicate enrollment if student or active enrollment with same email/phone exists
   const uniquenessCheck = await checkStudentOrEnrollmentExists({
     email: cleanEmail,
     phone: cleanPhone,
     organizationId: req.user.organizationId,
-    excludeStudentId: currentStudentId || undefined
+    existingStudentId: isUpgrade && currentStudentId ? currentStudentId : undefined,
+    excludeStudentId: !isUpgrade && currentStudentId ? currentStudentId : undefined,
+    isUpgrade,
+    programId: data.programId,
+    sessionId: data.sessionId
   });
 
   if (!uniquenessCheck.isUnique) {
@@ -116,11 +121,11 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
     return;
   }
 
-  if (currentStudentId) {
+  if (currentStudentId && !isUpgrade) {
     const existingActiveEnrollment = await prisma.enrollment.findFirst({
       where: {
         studentId: currentStudentId,
-        status: { notIn: ['rejected', 'cancelled'] }
+        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'completed', 'graduated', 'alumni'] }
       }
     });
     if (existingActiveEnrollment) {
@@ -461,10 +466,11 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
   }
 
   // Routing logic:
-  // 1) If Finance rejected the payment receipt, re-uploading must return directly to Finance (finance_review).
-  // 2) If Sales Admin explicitly rejected it, re-applying must go back to Sales Admin for approval.
-  // 3) If it's a first-time provisional completion and org requires sales admin approval, send to Sales Admin.
-  // 4) In all other cases (including Operations document rejection), it goes to Operations (document_review).
+  // 1) If this is an upgrade enrollment, route to ops_upgrade_verification for Operations review.
+  // 2) If Finance rejected the payment receipt, re-uploading must return directly to Finance (finance_review).
+  // 3) If Sales Admin explicitly rejected it, re-applying must go back to Sales Admin for approval.
+  // 4) If it's a first-time provisional completion and org requires sales admin approval, send to Sales Admin.
+  // 5) In all other cases (including Operations document rejection), it goes to Operations (document_review).
   const isFinanceRejection = (enrollment.status === 'rejected' && !!enrollment.financeRemarks) ||
     (enrollment.status === 'rejected' && !!(enrollment as any).financeReviewedBy);
 
@@ -473,24 +479,74 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
   const rawHist: any = enrollment.statusHistory;
   const history: any[] = Array.isArray(rawHist) ? rawHist : (rawHist && typeof rawHist === 'object' ? Object.values(rawHist) : []);
   
-  const lastRejection = [...history].reverse().find((h: any) => 
-    h?.status === 'rejected' || h?.status === 'ops_rejected'
+  // Check if student has any modal document or photo rejection from Operations
+  const existingDocs = Array.isArray(enrollment.documents) ? (enrollment.documents as any[]) : [];
+  const studentProg = (student?.admissionProgress as any) || {};
+  const hasModalRejection = enrollment.photoStatus === 'rejected' ||
+    studentProg?.photoStatus === 'rejected' ||
+    existingDocs.some((d: any) => d && d.status === 'rejected');
+
+  const wasAlreadyInOperations = enrollment.status === 'document_review' || enrollment.status === 'ops_rejected';
+  const hasPassedSalesAdmin = history.some((h: any) => 
+    h?.status === 'document_review' || 
+    String(h?.note || '').toLowerCase().includes('sales admin approved')
   );
-  const wasRejectedBySalesAdmin = !isFinanceRejection && !!lastRejection?.note && String(lastRejection.note).startsWith('Sales Admin rejected');
+
+  // An enrollment is ONLY rejected by Sales Admin if its current status is 'rejected' (not in Operations)
+  // AND the last rejection note was from Sales Admin, AND Sales Admin has not approved it since.
+  const lastRejectionIndex = history.map((h: any) => h?.status).lastIndexOf('rejected');
+  const lastApprovalIndex = history.map((h: any) => String(h?.note || '').toLowerCase()).lastIndexOf('sales admin approved');
+  const wasRejectedBySalesAdmin = !isFinanceRejection &&
+    enrollment.status === 'rejected' &&
+    lastRejectionIndex !== -1 &&
+    String(history[lastRejectionIndex]?.note || '').startsWith('Sales Admin rejected') &&
+    (lastApprovalIndex === -1 || lastApprovalIndex < lastRejectionIndex);
+
+  const wasRejectedByOperations = enrollment.status === 'ops_rejected' ||
+    hasModalRejection ||
+    (wasAlreadyInOperations && !wasRejectedBySalesAdmin && !isFinanceRejection) ||
+    (hasPassedSalesAdmin && !wasRejectedBySalesAdmin && !isFinanceRejection);
+
+  const isAcademicPartner = Boolean(
+    enrollment.studyCenterId ||
+    student?.centerId ||
+    req.user.studyCenterId ||
+    req.user.role === 'center_admin'
+  );
 
   let nextStatus = 'document_review';
   let remarksNote = enrollment.isProvisional 
     ? 'Provisional enrollment completed with full details by Sales' 
     : 'Re-applied by Sales with updated documents and forwarded to Operations';
 
-  if (isFinanceRejection) {
+  if (isAcademicPartner) {
+    nextStatus = isFinanceRejection ? 'finance_review' : 'document_review';
+    remarksNote = isFinanceRejection
+      ? 'Payment receipt re-uploaded by Academic Partner and forwarded directly to Finance for verification'
+      : (enrollment.isProvisional
+          ? 'Academic partner provisional enrollment completed and forwarded directly to Operations for review'
+          : 'Academic partner application forwarded directly to Operations for review');
+  } else if (enrollment.isUpgrade) {
+    if (wasRejectedBySalesAdmin) {
+      nextStatus = 'sales_admin_review';
+      remarksNote = 'Upgrade application re-submitted and forwarded back to Sales Admin for approval';
+    } else {
+      nextStatus = 'document_review';
+      remarksNote = 'Upgrade application re-submitted with updated documents and forwarded to Operations for verification';
+    }
+  } else if (isFinanceRejection) {
     nextStatus = 'finance_review';
     remarksNote = 'Payment receipt re-uploaded by Sales and forwarded directly back to Finance for verification';
+  } else if (wasRejectedByOperations) {
+    // Operations rejected photo/docs in review modal or main rejection, or application was already in Operations:
+    // Route directly back to Operations (document_review) without going to Sales Admin!
+    nextStatus = 'document_review';
+    remarksNote = 'Re-applied by Sales with updated documents/photos and forwarded directly to Operations for review';
   } else if (flowEnabled) {
     if (wasRejectedBySalesAdmin) {
       nextStatus = 'sales_admin_review';
       remarksNote = 'Re-applied by Sales with updated documents and sent back to Sales Admin for approval';
-    } else if (enrollment.isProvisional && !history.some((h: any) => h?.status === 'sales_admin_review')) {
+    } else if (enrollment.isProvisional && !hasPassedSalesAdmin && !history.some((h: any) => h?.status === 'sales_admin_review')) {
       nextStatus = 'sales_admin_review';
       remarksNote = 'Provisional enrollment completed with full details by Sales and sent to Sales Admin for approval';
     }
@@ -516,12 +572,15 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
       studentEmail: student.email,
       studentPhone: student.phone,
       studentAddress: student.address,
-      documents: student.documents ? (student.documents as any) : [],
+      documents: Array.isArray(student.documents)
+        ? (student.documents as any[]).map((d: any) => ({ ...d, status: d?.status === 'rejected' ? 'pending' : (d?.status || 'pending') }))
+        : [],
       photo: student.photo,
       ...(req.body.receiptUrl ? { receiptUrl: String(req.body.receiptUrl).trim() } : {}),
       ...(req.body.initialPaymentAmount ? { initialPaymentAmount: Number(req.body.initialPaymentAmount) } : {}),
       ...(isFinanceRejection ? { financeRemarks: null, receiptVerified: false, departmentRemarks: null } : {}),
-      ...(isPhotoUpdated ? { photoStatus: 'pending' } : {}),
+      ...(nextStatus === 'document_review' ? { departmentRemarks: null } : {}),
+      ...(isPhotoUpdated || enrollment.photoStatus === 'rejected' ? { photoStatus: 'pending' } : {}),
       statusHistory: [...history, historyEntry] as any,
     }
   });
@@ -577,10 +636,12 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
           data: {
             organizationId: enrollment.organizationId,
             userId: op.id,
-            title: 'Student Documents Submitted to Operations',
-            message: `${student.name}'s application with updated details/documents was submitted by ${req.user.name}. Please review.`,
+            title: enrollment.isUpgrade ? '🔄 Upgrade Application Resubmitted' : 'Student Documents Submitted to Operations',
+            message: enrollment.isUpgrade
+              ? `${student.name}'s upgrade application with updated documents was submitted by ${req.user.name}. Please review.`
+              : `${student.name}'s application with updated details/documents was submitted by ${req.user.name}. Please review.`,
             type: 'general',
-            priority: 'medium',
+            priority: enrollment.isUpgrade ? 'high' : 'medium',
             link: 'enrollment_review',
           },
         });

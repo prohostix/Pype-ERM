@@ -64,6 +64,13 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
     : (receipt.overallPaid ?? totalPaid);
   const balanceFeeAmount = Math.max(0, totalFeeAmount - totalRemittedAmount);
 
+  const hasPartnerStudents = Array.isArray(receipt.items) && receipt.items.some((it: any) => it.studentName || it.studentId);
+  const isPartnerInvoice = Boolean(
+    receipt.centerDetails ||
+    hasPartnerStudents ||
+    (!receipt.studentId && (!receipt.studentName || receipt.studentName === 'N/A') && receipt.center && receipt.center !== 'Direct' && receipt.center !== 'HEAD OFFICE')
+  );
+
   const paymentHistoryList = (Array.isArray(receipt.paymentHistory) && receipt.paymentHistory.length > 0)
     ? receipt.paymentHistory
     : (Array.isArray(receipt.payments) && receipt.payments.length > 0)
@@ -116,7 +123,9 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
           )}
           <div>
             <div style={{ fontSize: '22px', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>{actualOrgName}</div>
-            <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 500, marginTop: '2px' }}>Cash Receipt</div>
+            <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 500, marginTop: '2px' }}>
+              {isPartnerInvoice ? 'Academic Partner Bill Receipt' : 'Cash Receipt'}
+            </div>
           </div>
         </div>
         <div style={{ textAlign: 'left', fontSize: '13px', color: '#475569', lineHeight: '1.6', maxWidth: '340px' }}>
@@ -134,79 +143,155 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
         </div>
       </div>
 
-      <div style={{ textAlign: 'center', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px', fontSize: '18px', color: '#2563eb', marginBottom: '18px', textShadow: '0 1px 2px rgba(37,99,235,0.1)' }}>Payment Receipt</div>
-
-      {/* Details section grouped for readability (Column-wise stacked) */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '18px' }}>
-        
-        {/* Receipt Details */}
-        <div style={{ border: '1px solid #bfdbfe', borderRadius: '8px', overflow: 'hidden' }}>
-          <div style={{ background: '#eff6ff', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#1e40af', textTransform: 'uppercase', borderBottom: '1px solid #bfdbfe', letterSpacing: '0.5px' }}>Receipt Details</div>
-          <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '80px' }}>Receipt No:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.receiptNo?.replace('RCP-', '')}</span>
-            </div>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '65px' }}>Bill Date:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{formattedBillDate}</span>
-            </div>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '90px' }}>Admission No:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.admissionNo || receipt.enrollmentNo || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Student Details */}
-        <div style={{ border: '1px solid #e9d5ff', borderRadius: '8px', overflow: 'hidden' }}>
-          <div style={{ background: '#faf5ff', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#6b21a8', textTransform: 'uppercase', borderBottom: '1px solid #e9d5ff', letterSpacing: '0.5px' }}>Student Details</div>
-          <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
-            <div style={{ flex: 2, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '80px' }}>Name:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.studentName !== 'N/A' ? receipt.studentName : 'N/A'}</span>
-            </div>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '90px' }}>Date of Birth:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.studentDob ? new Date(receipt.studentDob).toLocaleDateString('en-GB').replace(/\//g, '-') : 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Academic Details */}
-        <div style={{ border: '1px solid #bbf7d0', borderRadius: '8px', overflow: 'hidden' }}>
-          <div style={{ background: '#f0fdf4', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#166534', textTransform: 'uppercase', borderBottom: '1px solid #bbf7d0', letterSpacing: '0.5px' }}>Academic Details</div>
-          <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '80px' }}>University:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a', textTransform: 'uppercase' }}>{receipt.university || 'N/A'}</span>
-            </div>
-            <div style={{ flex: 1.5, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#64748b', width: '60px' }}>Course:</span>
-              <span style={{ fontWeight: 700, color: '#0f172a', textTransform: 'uppercase' }}>{receipt.program || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
+      <div style={{ textAlign: 'center', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px', fontSize: '18px', color: '#2563eb', marginBottom: '18px', textShadow: '0 1px 2px rgba(37,99,235,0.1)' }}>
+        {isPartnerInvoice ? 'Academic Partner Bill Receipt' : 'Payment Receipt'}
       </div>
+
+      {/* Details section */}
+      {isPartnerInvoice ? (
+        /* Academic Partner Info Cards */
+        <div style={{ display: 'flex', gap: '16px', marginBottom: '18px' }}>
+          {/* Invoice Details */}
+          <div style={{ flex: 1, border: '1px solid #bfdbfe', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ background: '#eff6ff', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#1e40af', textTransform: 'uppercase', borderBottom: '1px solid #bfdbfe', letterSpacing: '0.5px' }}>Receipt / Bill Details</div>
+            <div style={{ display: 'flex', flexDirection: 'column', padding: '10px 12px', fontSize: '13px', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Receipt No:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.receiptNo?.replace('RCP-', '')}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Bill Date:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{formattedBillDate}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Due Date:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.dueDate ? new Date(receipt.dueDate).toLocaleDateString('en-GB').replace(/\//g, '-') : 'On Receipt'}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Status:</span>
+                <span style={{ fontWeight: 700, color: receipt.status === 'paid' ? '#16a34a' : '#2563eb', textTransform: 'uppercase' }}>{receipt.status || 'DRAFT'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Academic Partner Details */}
+          <div style={{ flex: 1.4, border: '1px solid #fed7aa', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ background: '#fff7ed', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#c2410c', textTransform: 'uppercase', borderBottom: '1px solid #fed7aa', letterSpacing: '0.5px' }}>Billed To: Academic Partner</div>
+            <div style={{ display: 'flex', flexDirection: 'column', padding: '10px 12px', fontSize: '13px', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Partner:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.centerDetails?.name || receipt.center || 'Academic Partner'}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Center Code:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.centerDetails?.code || '—'}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Contact:</span>
+                <span style={{ fontWeight: 600, color: '#334155' }}>
+                  {[receipt.centerDetails?.contact, receipt.centerDetails?.email].filter(Boolean).join(' • ') || '—'}
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Address:</span>
+                <span style={{ fontWeight: 500, color: '#334155', flex: 1 }}>
+                  {[receipt.centerDetails?.address, receipt.centerDetails?.city, receipt.centerDetails?.state].filter(Boolean).join(', ') || '—'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Student Details section grouped for readability (Column-wise stacked) */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '18px' }}>
+          {/* Receipt Details */}
+          <div style={{ border: '1px solid #bfdbfe', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ background: '#eff6ff', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#1e40af', textTransform: 'uppercase', borderBottom: '1px solid #bfdbfe', letterSpacing: '0.5px' }}>Receipt Details</div>
+            <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '80px' }}>Receipt No:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.receiptNo?.replace('RCP-', '')}</span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '65px' }}>Bill Date:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{formattedBillDate}</span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Admission No:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.admissionNo || receipt.enrollmentNo || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Student Details */}
+          <div style={{ border: '1px solid #e9d5ff', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ background: '#faf5ff', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#6b21a8', textTransform: 'uppercase', borderBottom: '1px solid #e9d5ff', letterSpacing: '0.5px' }}>Student Details</div>
+            <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
+              <div style={{ flex: 2, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '80px' }}>Name:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.studentName !== 'N/A' ? receipt.studentName : 'N/A'}</span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '90px' }}>Date of Birth:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a' }}>{receipt.studentDob ? new Date(receipt.studentDob).toLocaleDateString('en-GB').replace(/\//g, '-') : 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Academic Details */}
+          <div style={{ border: '1px solid #bbf7d0', borderRadius: '8px', overflow: 'hidden' }}>
+            <div style={{ background: '#f0fdf4', padding: '6px 12px', fontSize: '11px', fontWeight: 700, color: '#166534', textTransform: 'uppercase', borderBottom: '1px solid #bbf7d0', letterSpacing: '0.5px' }}>Academic Details</div>
+            <div style={{ display: 'flex', padding: '8px 12px', fontSize: '13px', gap: '24px' }}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '80px' }}>University:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a', textTransform: 'uppercase' }}>{receipt.university || 'N/A'}</span>
+              </div>
+              <div style={{ flex: 1.5, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#64748b', width: '60px' }}>Course:</span>
+                <span style={{ fontWeight: 700, color: '#0f172a', textTransform: 'uppercase' }}>{receipt.program || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Table of Particulars */}
       <div style={{ borderRadius: '8px', border: '1px solid #2563eb', overflow: 'hidden', marginBottom: '16px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ background: '#2563eb' }}>
-              <th style={{ padding: '8px 14px', textAlign: 'left', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Particulars</th>
-              <th style={{ padding: '8px 14px', textAlign: 'right', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '200px' }}>Amount (₹)</th>
+              <th style={{ padding: '8px 14px', textAlign: 'left', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '36px' }}>#</th>
+              <th style={{ padding: '8px 14px', textAlign: 'left', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                {hasPartnerStudents ? 'Enrolled Student Particulars' : 'Particulars'}
+              </th>
+              {hasPartnerStudents && <th style={{ padding: '8px 14px', textAlign: 'left', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Course / Program</th>}
+              {hasPartnerStudents && <th style={{ padding: '8px 14px', textAlign: 'center', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '120px' }}>Enrolled Date</th>}
+              <th style={{ padding: '8px 14px', textAlign: 'right', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '160px' }}>Amount (₹)</th>
             </tr>
           </thead>
           <tbody>
             {(Array.isArray(receipt.items) ? receipt.items : []).map((item: any, i: number) => (
-              <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                <td style={{ padding: '10px 14px', fontSize: '13px', color: '#0f172a', fontWeight: 600, textTransform: 'uppercase' }}>{item.description || item.name}</td>
+              <tr key={i} style={{ borderBottom: '1px solid #f1f5f9', background: i % 2 === 0 ? '#ffffff' : '#f8fafc' }}>
+                <td style={{ padding: '10px 14px', fontSize: '12px', color: '#64748b' }}>{i + 1}</td>
+                <td style={{ padding: '10px 14px', fontSize: '13px', color: '#0f172a', fontWeight: 600 }}>
+                  <div>{item.studentName || item.description || item.name}</div>
+                  {item.enrollmentNo && <div style={{ fontSize: '11px', color: '#2563eb', fontWeight: 500, marginTop: '2px' }}>#{item.enrollmentNo}</div>}
+                </td>
+                {hasPartnerStudents && <td style={{ padding: '10px 14px', fontSize: '13px', color: '#334155' }}>{item.programName || '—'}</td>}
+                {hasPartnerStudents && <td style={{ padding: '10px 14px', fontSize: '12px', color: '#64748b', textAlign: 'center' }}>{item.date || '—'}</td>}
                 <td style={{ padding: '10px 14px', textAlign: 'right', fontSize: '13px', color: '#0f172a', fontWeight: 700 }}>{(item.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
               </tr>
             ))}
+            {Boolean(receipt.tax && Number(receipt.tax) > 0) && (
+              <tr style={{ background: '#f8fafc', borderTop: '1px solid #e2e8f0' }}>
+                <td colSpan={hasPartnerStudents ? 4 : 2} style={{ padding: '8px 14px', fontSize: '13px', color: '#475569', fontWeight: 600, textAlign: 'right' }}>Tax / GST:</td>
+                <td style={{ padding: '8px 14px', textAlign: 'right', fontSize: '13px', color: '#475569', fontWeight: 700 }}>₹{Number(receipt.tax).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              </tr>
+            )}
             <tr style={{ background: '#eff6ff', borderTop: '2px solid #2563eb' }}>
-              <td style={{ padding: '10px 14px', fontSize: '13px', color: '#1e40af', fontWeight: 800, textAlign: 'right', textTransform: 'uppercase' }}>Total Amount</td>
+              <td colSpan={hasPartnerStudents ? 4 : 2} style={{ padding: '10px 14px', fontSize: '13px', color: '#1e40af', fontWeight: 800, textAlign: 'right', textTransform: 'uppercase' }}>
+                Total Amount {hasPartnerStudents ? `(${receipt.items?.length || 0} Students)` : ''}
+              </td>
               <td style={{ padding: '10px 14px', textAlign: 'right', fontSize: '15px', color: '#1e40af', fontWeight: 900 }}>₹{(receipt.total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
             </tr>
           </tbody>
@@ -249,30 +334,68 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
       )}
 
       {/* Payment & Summary */}
-      <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', marginBottom: '16px' }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: '13px', color: '#475569', lineHeight: '1.8' }}>
-            <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Amount in Words:</span> <span>{numberToWords(receipt.total || 0)}</span></div>
-            <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Payment Mode:</span> <span>{paymentMethod.toUpperCase()}</span></div>
-            <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Paid At:</span> <span>{payAt.toUpperCase()}</span></div>
+      {isPartnerInvoice ? (
+        <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', marginBottom: '16px' }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '13px', color: '#475569', lineHeight: '1.8' }}>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Amount in Words:</span> <span>{numberToWords(receipt.total || 0)}</span></div>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Academic Partner:</span> <span>{receipt.centerDetails?.name || receipt.center || 'Academic Partner'}</span></div>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Payment Mode:</span> <span>{paymentMethod.toUpperCase()}</span></div>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Paid At:</span> <span>{payAt.toUpperCase()}</span></div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <span style={{ fontWeight: 600, color: '#0f172a' }}>Billing Status:</span> 
+                <span style={{ fontWeight: 700, textTransform: 'uppercase', color: receipt.status === 'paid' ? '#16a34a' : '#2563eb' }}>{receipt.status || 'DRAFT'}</span>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div style={{ width: '320px', background: '#fdf8f6', padding: '16px', borderRadius: '8px', border: '1px solid #fed7aa' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px dashed #fdba74' }}>
-            <span style={{ fontSize: '13px', color: '#c2410c', fontWeight: 600 }}>Total Fee</span>
-            <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>{receipt.feeStructureMissing ? 'Fee not set up' : `₹${totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px dashed #fdba74' }}>
-            <span style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>Total Remitted Fee</span>
-            <span style={{ fontSize: '14px', color: '#16a34a', fontWeight: 700 }}>₹{totalRemittedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: 800, textTransform: 'uppercase' }}>Balance Fee</span>
-            <span style={{ fontSize: '17px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>{receipt.feeStructureMissing ? '—' : `₹${balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
+          <div style={{ width: '320px', background: '#f8fafc', padding: '16px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px dashed #cbd5e1' }}>
+              <span style={{ fontSize: '13px', color: '#475569', fontWeight: 600 }}>Subtotal</span>
+              <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 700 }}>₹{((receipt.amount ?? receipt.total) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px dashed #cbd5e1' }}>
+              <span style={{ fontSize: '13px', color: '#475569', fontWeight: 600 }}>Tax / GST</span>
+              <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 700 }}>₹{(Number(receipt.tax) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px dashed #cbd5e1' }}>
+              <span style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>Total Remitted / Paid</span>
+              <span style={{ fontSize: '14px', color: '#16a34a', fontWeight: 700 }}>₹{totalPaid.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: 800, textTransform: 'uppercase' }}>Balance Due</span>
+              <span style={{ fontSize: '17px', color: (receipt.total - totalPaid) <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>
+                ₹{Math.max(0, (receipt.total || 0) - totalPaid).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', marginBottom: '16px' }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '13px', color: '#475569', lineHeight: '1.8' }}>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Amount in Words:</span> <span>{numberToWords(receipt.total || 0)}</span></div>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Payment Mode:</span> <span>{paymentMethod.toUpperCase()}</span></div>
+              <div style={{ display: 'flex', gap: '8px' }}><span style={{ fontWeight: 600, color: '#0f172a' }}>Paid At:</span> <span>{payAt.toUpperCase()}</span></div>
+            </div>
+          </div>
+
+          <div style={{ width: '320px', background: '#fdf8f6', padding: '16px', borderRadius: '8px', border: '1px solid #fed7aa' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px dashed #fdba74' }}>
+              <span style={{ fontSize: '13px', color: '#c2410c', fontWeight: 600 }}>Total Fee</span>
+              <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>{receipt.feeStructureMissing ? 'Fee not set up' : `₹${totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px dashed #fdba74' }}>
+              <span style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>Total Remitted Fee</span>
+              <span style={{ fontSize: '14px', color: '#16a34a', fontWeight: 700 }}>₹{totalRemittedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: 800, textTransform: 'uppercase' }}>Balance Fee</span>
+              <span style={{ fontSize: '17px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>{receipt.feeStructureMissing ? '—' : `₹${balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: '12px', borderTop: '2px dashed #e2e8f0', fontSize: '12px', color: '#475569' }}>
@@ -281,9 +404,8 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
           <div style={{ fontSize: '11px' }}>This is a computer-generated receipt and does not require a physical signature.</div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontWeight: 700, color: '#0f172a', marginBottom: '2px' }}>Received by:</div>
-          <div style={{ fontStyle: 'italic' }}>Accountant / Cashier</div>
-          <div style={{ fontWeight: 600, marginTop: '2px' }}></div>
+          <div style={{ fontWeight: 700, color: '#0f172a', marginBottom: '2px' }}>Received / Authorized by:</div>
+          <div style={{ fontStyle: 'italic' }}>Finance Officer / Accountant</div>
         </div>
       </div>
     </div>
@@ -348,8 +470,11 @@ export function BillReceiptPanel() {
 
   const filtered = invoices.filter(inv => {
     const matchStatus = statusFilter === 'all' || inv.status === statusFilter;
-    const matchSearch = !search || inv.invoiceNo?.toLowerCase().includes(search.toLowerCase()) ||
-      inv.student?.name?.toLowerCase().includes(search.toLowerCase());
+    const matchSearch = !search || 
+      inv.invoiceNo?.toLowerCase().includes(search.toLowerCase()) ||
+      inv.student?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      inv.center?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      inv.center?.code?.toLowerCase().includes(search.toLowerCase());
     return matchStatus && matchSearch;
   });
 
@@ -372,7 +497,7 @@ export function BillReceiptPanel() {
             <div className="flex items-center gap-2">
               <div className="relative">
                 <Search className="absolute left-2.5 top-2 w-4 h-4 text-muted-foreground" />
-                <Input placeholder="Search invoice / student..." className="pl-8 h-8 w-56 text-sm" value={search} onChange={e => setSearch(e.target.value)} />
+                <Input placeholder="Search invoice, student or partner..." className="pl-8 h-8 w-64 text-sm" value={search} onChange={e => setSearch(e.target.value)} />
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="h-8 w-32 text-sm"><SelectValue /></SelectTrigger>
@@ -397,18 +522,37 @@ export function BillReceiptPanel() {
               {filtered.map(inv => (
                 <div key={inv.id} className="flex items-center justify-between p-3.5 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
-                      <FileText className="w-4 h-4 text-blue-600" />
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${inv.center ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' : 'bg-blue-100 text-blue-600 dark:bg-blue-900/20'}`}>
+                      {inv.center ? <Building2 className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
                     </div>
                     <div>
-                      <div className="font-semibold text-sm">{inv.invoiceNo}</div>
-                      <div className="text-xs text-muted-foreground flex items-center gap-1.5">
-                        <User className="w-3 h-3" /> {inv.student?.name || 'N/A'}
-                        {inv.center?.name && <><span>•</span><Building2 className="w-3 h-3" />{inv.center.name}</>}
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-sm">{inv.invoiceNo}</span>
+                        {inv.center && (
+                          <Badge variant="outline" className="text-[10px] bg-amber-50 text-amber-800 border-amber-200 py-0 px-1.5 font-medium">
+                            Academic Partner
+                          </Badge>
+                        )}
                       </div>
-                      {inv.dueDate && (
-                        <div className="text-xs text-muted-foreground">Due: {new Date(inv.dueDate).toLocaleDateString('en-IN')}</div>
-                      )}
+                      <div className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
+                        {inv.center ? (
+                          <>
+                            <span className="font-medium text-slate-700 dark:text-slate-300">{inv.center.name}</span>
+                            {inv.center.code && <span className="text-[10px] text-slate-500 font-mono">({inv.center.code})</span>}
+                            {inv.student?.name && <><span>•</span><User className="w-3 h-3" />{inv.student.name}</>}
+                          </>
+                        ) : (
+                          <>
+                            <User className="w-3 h-3" /> {inv.student?.name || 'N/A'}
+                          </>
+                        )}
+                        {inv.dueDate && (
+                          <>
+                            <span>•</span>
+                            <span>Due: {new Date(inv.dueDate).toLocaleDateString('en-IN')}</span>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -432,7 +576,12 @@ export function BillReceiptPanel() {
         <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <div className="flex items-center justify-between pr-8">
-              <DialogTitle>Payment Receipt</DialogTitle>
+              <DialogTitle>
+                {receipt?.centerDetails || (receipt?.center && receipt?.center !== 'Direct' && receipt?.center !== 'HEAD OFFICE')
+                  ? `Academic Partner Bill Receipt`
+                  : 'Payment Receipt'
+                }
+              </DialogTitle>
               <Button size="sm" onClick={handlePrint} className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white">
                 <Download className="w-3.5 h-3.5" /> Download PDF
               </Button>

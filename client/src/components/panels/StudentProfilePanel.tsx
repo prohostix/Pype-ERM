@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   ArrowLeft,
   GraduationCap,
@@ -10,9 +10,10 @@ import {
   FileText,
   Key,
   Copy,
-  RefreshCw
+  RefreshCw,
+  BookOpen,
+  Eye
 } from 'lucide-react';
-import { toast } from 'sonner';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -27,6 +28,28 @@ import api from '@/lib/api';
 export function StudentProfilePanel({ student: initialStudent, onBack }: { student: any; onBack: () => void }) {
   const [student, setStudent] = useState<any>(initialStudent);
   const [isResetting, setIsResetting] = useState(false);
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  const [loadingEnrollments, setLoadingEnrollments] = useState(false);
+
+  const refreshData = () => {
+    if (student?.id) {
+      setLoadingEnrollments(true);
+      Promise.all([
+        api.get(`/students/${student.id}`),
+        api.get(`/students/${student.id}/enrollments`)
+      ])
+        .then(([sRes, eRes]) => {
+          if (sRes.data?.data) setStudent(sRes.data.data);
+          if (eRes.data?.data) setEnrollments(eRes.data.data);
+        })
+        .catch(console.error)
+        .finally(() => setLoadingEnrollments(false));
+    }
+  };
+
+  useEffect(() => {
+    refreshData();
+  }, [student?.id]);
   
   const handleResetPassword = async () => {
     try {
@@ -69,7 +92,13 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
           </Button>
           <h2 className="text-xl font-bold">Student Profile</h2>
         </div>
-        <Badge variant="secondary" className="px-3 py-1 uppercase">{student.status}</Badge>
+        {student.status === 'completed' || student.isPrevious ? (
+          <Badge className="bg-emerald-600 text-white px-3 py-1 uppercase font-bold tracking-wider">
+            🎓 Completed
+          </Badge>
+        ) : (
+          <Badge variant="secondary" className="px-3 py-1 uppercase">{student.status}</Badge>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -121,6 +150,9 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                 <TabsList className="w-full justify-start h-auto bg-transparent p-0 gap-6 overflow-x-auto rounded-none border-b border-transparent">
                   <TabsTrigger value="personal" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
                     Personal Details
+                  </TabsTrigger>
+                  <TabsTrigger value="enrollments" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-400">
+                    <GraduationCap className="w-4 h-4" /> Enrollments &amp; Upgrades ({enrollments.length})
                   </TabsTrigger>
                   <TabsTrigger value="documents" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
                     Documents
@@ -394,7 +426,161 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
 
                 {/* Student Progress Tab */}
                 <TabsContent value="progress" className="mt-0">
-                  <StudentProgressTab student={student} />
+                  <StudentProgressTab student={student} enrollments={enrollments} onUpdate={refreshData} />
+                </TabsContent>
+
+                {/* All Enrollments & Upgrades Tab */}
+                <TabsContent value="enrollments" className="space-y-4 mt-0">
+                  <div className="flex items-center justify-between pb-2 border-b">
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">Student Program Enrollments</h3>
+                      <p className="text-xs text-muted-foreground">All academic programs, completed courses, and upgrades linked to this student profile.</p>
+                    </div>
+                    {student.isPrevious && (
+                      <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border-amber-300">
+                        Alumni / Completed
+                      </Badge>
+                    )}
+                  </div>
+
+                  {loadingEnrollments ? (
+                    <div className="py-12 flex flex-col items-center justify-center gap-2 text-muted-foreground">
+                      <RefreshCw className="w-6 h-6 animate-spin text-primary" />
+                      <p className="text-xs">Loading student enrollments...</p>
+                    </div>
+                  ) : enrollments.length === 0 ? (
+                    <div className="py-8 text-center text-muted-foreground text-sm border rounded-xl border-dashed">
+                      No enrollment history records found.
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {enrollments.map((enr: any, idx: number) => {
+                        const isUpgrade = enr.isUpgrade || enr.status === 'ops_upgrade_verification';
+                        const isCompletedProgram = enr.status === 'completed' || (enrollments.length === 1 && (student.status === 'completed' || student.isPrevious));
+                        
+                        // Resolve academic semester progress
+                        const acTerms = Array.isArray(enr.academicProgress) && enr.academicProgress.length > 0
+                          ? enr.academicProgress
+                          : (enrollments.length === 1 && Array.isArray(student.academicProgress) && student.academicProgress.length > 0 ? student.academicProgress : []);
+                        const passedTerms = acTerms.filter((t: any) => t.isSaved && (t.resultStatus === 'Passed' || t.resultStatus === 'Pass'));
+
+                        return (
+                          <div key={enr.id} className="p-4 rounded-2xl border bg-card hover:border-primary/40 transition-all shadow-sm space-y-3">
+                            <div className="flex items-start justify-between gap-3 flex-wrap">
+                              <div>
+                                <div className="flex items-center gap-2 flex-wrap mb-1">
+                                  <h4 className="font-bold text-slate-900 dark:text-slate-100 text-base">
+                                    {enr.program?.name || 'Program'}
+                                  </h4>
+                                  {isCompletedProgram ? (
+                                    <Badge className="bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                                      🎓 Completed
+                                    </Badge>
+                                  ) : isUpgrade ? (
+                                    <Badge className="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                                      🎓 Upgrade
+                                    </Badge>
+                                  ) : (
+                                    <Badge variant="outline" className="text-[10px] uppercase font-bold">
+                                      {enr.status?.replace(/_/g, ' ')}
+                                    </Badge>
+                                  )}
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                  {enr.program?.university?.name || 'University Partner'} • Session: {enr.session?.name || 'Standard'} {enr.specialisation ? `• Spec: ${enr.specialisation}` : ''}
+                                </p>
+                              </div>
+                              <div className="text-right text-xs text-muted-foreground">
+                                <span className="block font-mono font-medium">{enr.enrollmentNumber || 'No Enroll No'}</span>
+                                <span>Applied: {enr.createdAt ? format(new Date(enr.createdAt), 'dd MMM yyyy') : 'N/A'}</span>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-muted/30 rounded-xl text-xs">
+                              <div>
+                                <span className="text-muted-foreground uppercase text-[10px] font-semibold block">Center</span>
+                                <span className="font-medium">{enr.studyCenter?.name || 'Main Branch'}</span>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground uppercase text-[10px] font-semibold block">Payment Plan</span>
+                                <span className="font-medium capitalize">{enr.paymentPlan || 'Standard'}</span>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground uppercase text-[10px] font-semibold block">Initial Fee</span>
+                                <span className="font-medium">{enr.initialPaymentAmount ? `₹${enr.initialPaymentAmount}` : 'N/A'}</span>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground uppercase text-[10px] font-semibold block">Review Stage</span>
+                                <span className="font-medium capitalize">{enr.status?.replace(/_/g, ' ')}</span>
+                              </div>
+                            </div>
+
+                            {/* Academic Semester Progress Breakdown */}
+                            {acTerms.length > 0 && (
+                              <div className="mt-3 pt-3 border-t border-border/60 space-y-2.5">
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-2">
+                                    <BookOpen className="w-4 h-4 text-primary" />
+                                    <span className="text-xs font-bold text-foreground uppercase tracking-wide">
+                                      Academic Progress ({acTerms.length} Terms)
+                                    </span>
+                                  </div>
+                                  <Badge variant="outline" className="bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border-emerald-200 text-[11px] font-semibold">
+                                    {passedTerms.length} of {acTerms.length} Passed
+                                  </Badge>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                  {acTerms.map((term: any) => {
+                                    const isPassed = term.resultStatus === 'Passed' || term.resultStatus === 'Pass';
+                                    return (
+                                      <div key={term.term} className="p-2.5 rounded-xl border bg-muted/20 text-xs space-y-1">
+                                        <div className="flex items-center justify-between">
+                                          <span className="font-bold text-foreground">Semester {term.term}</span>
+                                          <Badge variant={isPassed ? 'default' : 'secondary'} className={isPassed ? 'bg-emerald-600 text-white text-[9px]' : 'text-[9px]'}>
+                                            {term.resultStatus || 'Pending'}
+                                          </Badge>
+                                        </div>
+                                        <div className="text-[11px] text-muted-foreground flex justify-between">
+                                          <span>Re-Reg: <strong>{term.reRegistration || 'Pending'}</strong></span>
+                                          <span>Exam: <strong>{term.examRegistration || 'Pending'}</strong></span>
+                                        </div>
+                                        {(term.resultStatusDoc || term.resultProof || term.reRegistrationDoc || term.examRegistrationDoc) && (
+                                          <div className="flex items-center gap-2 pt-1 border-t border-border/30">
+                                            {(term.resultStatusDoc || term.resultProof) && (
+                                              <a href={api.getFileUrl(term.resultStatusDoc || term.resultProof)} target="_blank" rel="noreferrer" className="text-[10px] text-blue-600 hover:underline flex items-center gap-0.5">
+                                                <Eye className="w-3 h-3" /> Marksheet
+                                              </a>
+                                            )}
+                                            {(term.reRegistrationDoc || term.reRegistrationProof) && (
+                                              <a href={api.getFileUrl(term.reRegistrationDoc || term.reRegistrationProof)} target="_blank" rel="noreferrer" className="text-[10px] text-blue-600 hover:underline flex items-center gap-0.5">
+                                                <Eye className="w-3 h-3" /> Re-Reg
+                                              </a>
+                                            )}
+                                            {(term.examRegistrationDoc || term.examRegistrationProof) && (
+                                              <a href={api.getFileUrl(term.examRegistrationDoc || term.examRegistrationProof)} target="_blank" rel="noreferrer" className="text-[10px] text-blue-600 hover:underline flex items-center gap-0.5">
+                                                <Eye className="w-3 h-3" /> Exam
+                                              </a>
+                                            )}
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+
+                            {enr.departmentRemarks && (
+                              <div className="p-2.5 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 text-xs text-red-700 dark:text-red-300">
+                                <strong>Operations Remarks: </strong>{enr.departmentRemarks}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </TabsContent>
 
               </CardContent>

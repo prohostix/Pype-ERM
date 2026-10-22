@@ -27,9 +27,41 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
     ];
   }
 
+  if (req.query.centerId) {
+    const cId = req.query.centerId as string;
+    delete where.branchId;
+    if (!where.AND) where.AND = [];
+    where.AND.push({
+      OR: [
+        { centerId: cId },
+        { enrollments: { some: { studyCenterId: cId } } }
+      ]
+    });
+  }
+
+  if (req.query.startDate || req.query.endDate) {
+    const dateFilter: any = {};
+    if (req.query.startDate) {
+      dateFilter.gte = new Date(req.query.startDate as string);
+    }
+    if (req.query.endDate) {
+      const end = new Date(req.query.endDate as string);
+      end.setHours(23, 59, 59, 999);
+      dateFilter.lte = end;
+    }
+    if (!where.AND) where.AND = [];
+    where.AND.push({
+      OR: [
+        { enrolledAt: dateFilter },
+        { admissionDate: dateFilter },
+        { createdAt: dateFilter }
+      ]
+    });
+  }
+
   // Branch-level isolation for students list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
-  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId && !req.query.centerId) {
     where.branchId = req.user.branchId;
   }
 
@@ -111,7 +143,7 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
 export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
   let whereClause: any = { id: req.params.id };
   // Enforce branch isolation for students list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     whereClause.branchId = req.user.branchId;
   }
@@ -222,11 +254,19 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     return;
   }
 
+  const isUpgrade = Boolean(req.body.isUpgrade);
+  const existingStudentId = req.body.existingStudentId || (isUpgrade ? req.body.studentId : undefined);
+
   // Enforce uniqueness across existing students and active enrollments
   const uniquenessCheck = await checkStudentOrEnrollmentExists({
     email: cleanEmail,
     phone: cleanPhone,
-    organizationId: req.user.organizationId
+    organizationId: req.user.organizationId,
+    existingStudentId: isUpgrade && existingStudentId ? existingStudentId : undefined,
+    excludeStudentId: !isUpgrade && existingStudentId ? existingStudentId : undefined,
+    isUpgrade,
+    programId,
+    sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : null
   });
 
   if (!uniquenessCheck.isUnique) {
@@ -328,61 +368,111 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     // We do NOT overwrite the password here, we just use the existing account.
   }
 
-  const student = await prisma.student.create({
-    data: {
-      name,
-      email: cleanEmail,
-      phone: cleanPhone,
-      address: address || '',
-      enrollmentNo: req.body.enrollmentNo ? req.body.enrollmentNo : null,
-      admissionNo: admissionNo || null,
-      admissionDate: admissionDate ? new Date(admissionDate) : null,
-      dob: dob ? new Date(dob) : null,
-      fatherName: fatherName || null,
-      fatherPhone: fatherPhone || null,
-      motherName: motherName || null,
-      motherPhone: motherPhone || null,
-      religion: religion || null,
-      caste: caste || null,
-      altPhone: altPhone || null,
-      pinCode: pinCode || null,
-      photo: photo || null,
-      documents: documents || [],
-      isPrevious: Boolean(isPrevious),
-      gender: gender || null,
-      category: category || null,
-      maritalStatus: maritalStatus || null,
-      employmentStatus: employmentStatus || null,
-      guardianName: guardianName || null,
-      familyPhone: familyPhone || null,
-      specialisation: specialisation || null,
-      status: req.body.isPipelineApplication ? 'document_review' : (status || 'pending'),
-      programId,
-      sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : null,
-      universityId: universityId || null,
-      centerId: (resolvedCenterId && typeof resolvedCenterId === 'string' && resolvedCenterId.trim() !== '') ? resolvedCenterId : null,
-      branchId: (branchId && branchId.trim() !== '') ? branchId : (req.user.branchId || null),
-      organizationId: req.user.organizationId,
-      credentials: { email, password: studentUser.password ? '(Existing Account)' : defaultPassword },
-      admissionProgress: { 
-        paymentPlan: paymentPlan || 'full',
-        initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
-        initialPaymentDate: req.body.initialPaymentDate || null
-      },
-      // Track who enrolled this student (sales user)
-      enrolledBy: req.user.id
+  let student: any;
+  if (isUpgrade && existingStudentId) {
+    const existing = await prisma.student.findFirst({
+      where: { id: existingStudentId, organizationId: req.user.organizationId },
+      include: { program: true }
+    });
+    if (!existing) {
+      res.status(404).json({ success: false, message: 'Existing student record not found' });
+      return;
     }
-  });
+    // Update editable fields without creating a duplicate student
+    student = await prisma.student.update({
+      where: { id: existing.id },
+      data: {
+        status: 'active',
+        isPrevious: false,
+        programId: programId,
+        sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : existing.sessionId,
+        specialisation: specialisation || existing.specialisation,
+        address: address !== undefined ? address : existing.address,
+        pinCode: pinCode !== undefined ? pinCode : existing.pinCode,
+        altPhone: altPhone !== undefined ? altPhone : existing.altPhone,
+        phone: cleanPhone || existing.phone,
+        fatherName: fatherName || existing.fatherName,
+        fatherPhone: fatherPhone || existing.fatherPhone,
+        motherName: motherName || existing.motherName,
+        motherPhone: motherPhone || existing.motherPhone,
+        guardianName: guardianName || existing.guardianName,
+        familyPhone: familyPhone || existing.familyPhone,
+        photo: photo || existing.photo,
+        documents: documents || existing.documents,
+      }
+    });
+  } else {
+    student = await prisma.student.create({
+      data: {
+        name,
+        email: cleanEmail,
+        phone: cleanPhone,
+        address: address || '',
+        enrollmentNo: req.body.enrollmentNo ? req.body.enrollmentNo : null,
+        admissionNo: admissionNo || null,
+        admissionDate: admissionDate ? new Date(admissionDate) : null,
+        dob: dob ? new Date(dob) : null,
+        fatherName: fatherName || null,
+        fatherPhone: fatherPhone || null,
+        motherName: motherName || null,
+        motherPhone: motherPhone || null,
+        religion: religion || null,
+        caste: caste || null,
+        altPhone: altPhone || null,
+        pinCode: pinCode || null,
+        photo: photo || null,
+        documents: documents || [],
+        isPrevious: Boolean(isPrevious),
+        gender: gender || null,
+        category: category || null,
+        maritalStatus: maritalStatus || null,
+        employmentStatus: employmentStatus || null,
+        guardianName: guardianName || null,
+        familyPhone: familyPhone || null,
+        specialisation: specialisation || null,
+        status: req.body.isPipelineApplication ? 'document_review' : (status || 'pending'),
+        programId,
+        sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : null,
+        universityId: universityId || null,
+        centerId: (resolvedCenterId && typeof resolvedCenterId === 'string' && resolvedCenterId.trim() !== '') ? resolvedCenterId : null,
+        branchId: (branchId && branchId.trim() !== '') ? branchId : (req.user.branchId || null),
+        organizationId: req.user.organizationId,
+        credentials: { email, password: studentUser.password ? '(Existing Account)' : defaultPassword },
+        admissionProgress: { 
+          paymentPlan: paymentPlan || 'full',
+          initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
+          initialPaymentDate: req.body.initialPaymentDate || null
+        },
+        enrolledBy: req.user.id
+      }
+    });
+  }
 
-  if (req.body.isPipelineApplication) {
+  if (req.body.isPipelineApplication || isUpgrade) {
     const now = new Date();
     
     const org = await prisma.organization.findUnique({ where: { id: req.user.organizationId } });
+    const targetStudyCenterId = (resolvedCenterId && typeof resolvedCenterId === 'string' && resolvedCenterId.trim() !== '') 
+      ? resolvedCenterId 
+      : (student.centerId || req.user.studyCenterId || null);
+
+    const isAcademicPartner = Boolean(
+      req.user.role === 'center_admin' ||
+      req.user.studyCenterId ||
+      targetStudyCenterId
+    );
+
     const metadata = org?.metadata as any;
-    const requiresSalesAdmin = metadata?.enrollmentApprovalFlow === 'sales_admin_approval';
+    // Academic Partner enrolled students bypass Sales Admin review completely and go directly to Operations
+    const requiresSalesAdmin = !isAcademicPartner && metadata?.enrollmentApprovalFlow === 'sales_admin_approval';
     
     const baseStatus = req.body.receiptUrl ? 'receipt_submitted' : 'payment_pending';
-    const initialStatus = requiresSalesAdmin ? 'sales_admin_review' : baseStatus;
+    // If Academic Partner: directly goes to Operations (document_review)
+    const initialStatus = isAcademicPartner 
+      ? 'document_review' 
+      : (requiresSalesAdmin 
+          ? 'sales_admin_review' 
+          : (isUpgrade ? 'document_review' : baseStatus));
 
     await prisma.enrollment.create({
       data: {
@@ -394,13 +484,15 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         studentAddress: student.address,
         fatherName: student.fatherName,
         dob: student.dob,
-        programId: student.programId,
-        specialisation: student.specialisation,
-        studyCenterId: student.centerId,
-        sessionId: student.sessionId,
+        programId: programId,
+        specialisation: specialisation || student.specialisation,
+        studyCenterId: targetStudyCenterId,
+        sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : student.sessionId,
         paymentPlan: req.body.paymentPlan || null,
         initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
         status: initialStatus,
+        isUpgrade: isUpgrade,
+        previousProgramId: isUpgrade ? (existingStudentId ? (await prisma.student.findUnique({ where: { id: existingStudentId }, select: { programId: true } }))?.programId : student.programId) : null,
         receiptUrl: req.body.receiptUrl || null,
         salesUserId: req.user.role === 'center_admin' ? null : req.user.id,
         gender: student.gender,
@@ -415,7 +507,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         guardianName: student.guardianName,
         familyPhone: student.familyPhone,
         photo: student.photo,
-        documents: student.documents ? student.documents : undefined,
+        documents: documents || student.documents || undefined,
         statusHistory: [
           {
             status: 'submitted',
@@ -423,15 +515,21 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
             actorName: req.user.name,
             actorRole: req.user.role,
             timestamp: now.toISOString(),
-            note: `Sales rep ${req.user.name} directly enrolled student via wizard`,
+            note: isAcademicPartner
+              ? `Academic partner enrolled student directly`
+              : (isUpgrade 
+                  ? `Sales rep ${req.user.name} submitted Program Upgrade for student.`
+                  : `Sales rep ${req.user.name} directly enrolled student via wizard`),
           },
           {
             status: initialStatus,
             actorId: 'system',
             timestamp: now.toISOString(),
-            note: requiresSalesAdmin 
-              ? 'Awaiting Sales Admin approval' 
-              : (req.body.receiptUrl ? 'Receipt uploaded, awaiting Finance verification' : 'Awaiting payment receipt upload'),
+            note: isAcademicPartner
+              ? 'Forwarded directly to Operations for document verification'
+              : (requiresSalesAdmin 
+                  ? 'Awaiting Sales Admin approval' 
+                  : 'Forwarded to Operations for document verification'),
           },
         ],
       } as any,
@@ -441,7 +539,9 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     try {
       const roleToNotify = requiresSalesAdmin ? 'sales_admin' : 'ops_admin';
       const linkToUse = requiresSalesAdmin ? 'sales_enrollment_review' : 'enrollment_review';
-      const titleToUse = requiresSalesAdmin ? 'New Student Application for Sales Approval' : 'New Student Application for Review';
+      const titleToUse = requiresSalesAdmin 
+        ? (isUpgrade ? '🎓 Student Upgrade for Sales Approval' : 'New Student Application for Sales Approval')
+        : (isUpgrade ? '🎓 Student Upgrade Application for Review' : 'New Student Application for Review');
       
       const admins = await prisma.user.findMany({
         where: { organizationId: req.user.organizationId, role: roleToNotify, status: 'active' },
@@ -453,9 +553,9 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
             organizationId: req.user.organizationId,
             userId: admin.id,
             title: titleToUse,
-            message: `${student.name} has been directly enrolled by ${req.user.name} and is ready for review.`,
+            message: `${student.name} has applied for ${isUpgrade ? 'an upgrade to ' : ''}${programExists.name} and is ready for review.`,
             type: 'general',
-            priority: 'medium',
+            priority: isUpgrade ? 'high' : 'medium',
             link: linkToUse,
           },
         });
@@ -545,6 +645,7 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     if (cleanPhone && cleanPhone !== existingPhone) {
       const phoneCheck = await checkStudentOrEnrollmentExists({
         phone: rawPhone,
+        organizationId: req.user.organizationId,
         excludeStudentId: req.params.id
       });
       if (!phoneCheck.isUnique) {
@@ -627,6 +728,24 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     await prisma.enrollment.updateMany({
       where: { studentId: req.params.id },
       data: { documents: student.documents as any }
+    });
+  }
+
+  // Synchronize enrollment status if marked completed or if specific enrollmentId is passed
+  if (req.body.enrollmentId) {
+    const enrStatus = (dataToUpdate.status === 'completed' || dataToUpdate.isPrevious === true) ? 'completed' : dataToUpdate.status;
+    await prisma.enrollment.updateMany({
+      where: { id: req.body.enrollmentId, studentId: req.params.id },
+      data: { ...(enrStatus ? { status: enrStatus } : {}) }
+    });
+  } else if (dataToUpdate.status === 'completed' || dataToUpdate.isPrevious === true) {
+    // Only update enrollments if not an active upgrade!
+    await prisma.enrollment.updateMany({
+      where: {
+        studentId: req.params.id,
+        isUpgrade: false
+      },
+      data: { status: 'completed' }
     });
   }
 
@@ -1101,6 +1220,11 @@ export const updatePhotoStatus = asyncHandler(async (req: AuthRequest, res: Resp
     data: { admissionProgress },
   });
 
+  await prisma.enrollment.updateMany({
+    where: { studentId: id },
+    data: { photoStatus: status }
+  });
+
   res.status(200).json({ success: true, data: updatedStudent });
 });
 
@@ -1155,7 +1279,8 @@ export const bulkEnrollmentUpdate = asyncHandler(async (req: AuthRequest, res: R
 
 export const updateAdmissionProgress = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { id, stepId } = req.params;
-  const { status } = req.body; // 'completed' or 'pending'
+  const { status, enrollmentId } = req.body; // 'completed' or 'pending'
+  const targetEnrollmentId = (enrollmentId || req.query.enrollmentId) as string | undefined;
   
   let whereClause: any = { id, organizationId: req.user.organizationId };
   if (req.user.role === 'ops_sub_admin') {
@@ -1174,14 +1299,23 @@ export const updateAdmissionProgress = asyncHandler(async (req: AuthRequest, res
     res.status(404).json({ success: false, message: 'Student not found' });
     return;
   }
+
+  // If a specific enrollment was targeted, find it
+  let targetEnrollment: any = null;
+  if (targetEnrollmentId) {
+    targetEnrollment = await prisma.enrollment.findFirst({
+      where: { id: targetEnrollmentId, studentId: id, organizationId: req.user.organizationId }
+    });
+  }
   
   let admissionProgress: Record<string, any> = {};
-  if (student.admissionProgress) {
-    if (typeof student.admissionProgress === 'object') {
-      admissionProgress = student.admissionProgress as Record<string, any>;
-    } else if (typeof student.admissionProgress === 'string') {
+  const sourceProgress = targetEnrollment?.admissionProgress || student.admissionProgress;
+  if (sourceProgress) {
+    if (typeof sourceProgress === 'object') {
+      admissionProgress = sourceProgress as Record<string, any>;
+    } else if (typeof sourceProgress === 'string') {
       try {
-        admissionProgress = JSON.parse(student.admissionProgress);
+        admissionProgress = JSON.parse(sourceProgress);
       } catch (e) {
         console.error('Failed to parse admissionProgress', e);
       }
@@ -1207,7 +1341,7 @@ export const updateAdmissionProgress = asyncHandler(async (req: AuthRequest, res
     proofUrl = `/uploads/${req.file.key || req.file.filename}`;
   }
 
-  // If we are marking as pending, we might want to clear the proofUrl? Or keep it? The prompt doesn't explicitly state to clear it, but let's clear it so they have to upload again if they re-complete it.
+  // If we are marking as pending, clear proofUrl
   if (status === 'pending') {
     proofUrl = null;
   }
@@ -1222,12 +1356,61 @@ export const updateAdmissionProgress = asyncHandler(async (req: AuthRequest, res
     }
   };
 
+  let updatedEnrollment = null;
+  if (targetEnrollment) {
+    updatedEnrollment = await prisma.enrollment.update({
+      where: { id: targetEnrollment.id },
+      data: { admissionProgress: updatedProgress }
+    });
+  }
+
   const updatedStudent = await prisma.student.update({
     where: { id },
     data: { admissionProgress: updatedProgress }
   });
 
-  res.status(200).json({ success: true, data: updatedStudent });
+  res.status(200).json({ success: true, data: updatedStudent, enrollment: updatedEnrollment });
+});
+
+export const updateStudentAcademicProgress = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id } = req.params;
+  const { academicProgress, enrollmentId } = req.body;
+
+  let whereClause: any = { id, organizationId: req.user.organizationId };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    if (assignedIds.length > 0) {
+      whereClause.OR = [{ enrolledBy: { in: assignedIds } }, { referredBy: { in: assignedIds } }];
+    }
+  }
+
+  const student = await prisma.student.findFirst({ where: whereClause });
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+
+  let updatedEnrollment = null;
+  if (enrollmentId) {
+    const enr = await prisma.enrollment.findFirst({
+      where: { id: enrollmentId, studentId: id, organizationId: req.user.organizationId }
+    });
+    if (enr) {
+      updatedEnrollment = await prisma.enrollment.update({
+        where: { id: enr.id },
+        data: { academicProgress: Array.isArray(academicProgress) ? academicProgress : [] }
+      });
+    }
+  } else {
+    await prisma.student.update({
+      where: { id },
+      data: { academicProgress: Array.isArray(academicProgress) ? academicProgress : [] }
+    });
+  }
+
+  const updatedStudent = await prisma.student.findUnique({ where: { id } });
+  res.status(200).json({ success: true, data: updatedStudent, enrollment: updatedEnrollment });
 });
 
 // GET /students/:id/enrollments — full enrollment history for a student
@@ -1375,15 +1558,25 @@ export const bulkRecordPayment = asyncHandler(async (req: AuthRequest, res: Resp
 export const checkStudentUniqueness = asyncHandler(async (req: AuthRequest, res: Response) => {
   const email = req.query.email as string | undefined;
   const phone = req.query.phone as string | undefined;
+  const identifier = (req.query.identifier || req.query.id || req.query.admissionNo || req.query.enrollmentNo) as string | undefined;
   const excludeStudentId = req.query.excludeStudentId as string | undefined;
   const excludeEnrollmentId = req.query.excludeEnrollmentId as string | undefined;
+  const isUpgrade = req.query.isUpgrade === 'true';
+  const existingStudentId = (req.query.existingStudentId || req.query.studentId) as string | undefined;
+  const programId = req.query.programId as string | undefined;
+  const sessionId = req.query.sessionId as string | undefined;
 
   const result = await checkStudentOrEnrollmentExists({
     email,
     phone,
+    identifier,
     organizationId: req.user.organizationId,
     excludeStudentId,
-    excludeEnrollmentId
+    excludeEnrollmentId,
+    existingStudentId,
+    isUpgrade,
+    programId,
+    sessionId
   });
 
   res.status(200).json({ success: true, ...result });

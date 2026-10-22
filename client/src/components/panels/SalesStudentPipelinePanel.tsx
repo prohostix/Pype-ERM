@@ -41,10 +41,16 @@ interface Enrollment {
   session: { name: string };
   departmentReviewer?: { name: string; email: string };
   financeReviewer?: { name: string; email: string };
+  isUpgrade?: boolean;
+  previousProgramId?: string;
+  student?: any;
+  documents?: any[];
+  photo?: string;
 }
 
 interface Summary {
   total: number;
+  ops_upgrade_verification: number;
   sales_admin_review: number;
   sales_verification_pending: number;
   document_review: number;
@@ -55,6 +61,7 @@ interface Summary {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
+  ops_upgrade_verification: { label: 'Awaiting Ops Upgrade Check', color: 'bg-emerald-100 text-emerald-800 border-emerald-300', icon: <Clock className="w-3 h-3" /> },
   sales_admin_review: { label: 'Admin Review', color: 'bg-indigo-100 text-indigo-700 border-indigo-200', icon: <Clock className="w-3 h-3" /> },
   sales_verification_pending: { label: 'Pending Verification', color: 'bg-purple-100 text-purple-700 border-purple-200', icon: <Clock className="w-3 h-3" /> },
   receipt_submitted: { label: 'Receipt Submitted & Ops Pending', color: 'bg-amber-100 text-amber-700 border-amber-200', icon: <Clock className="w-3 h-3" /> },
@@ -142,6 +149,7 @@ export function SalesStudentPipelinePanel() {
 
   const computedSummary = {
     total: baseFiltered.length,
+    ops_upgrade_verification: baseFiltered.filter(e => e.status === 'ops_upgrade_verification').length,
     sales_admin_review: baseFiltered.filter(e => e.status === 'sales_admin_review').length,
     sales_verification_pending: baseFiltered.filter(e => e.status === 'sales_verification_pending').length,
     provisional_finance_pending: baseFiltered.filter(e => e.status === 'provisional_finance_pending').length,
@@ -216,9 +224,10 @@ export function SalesStudentPipelinePanel() {
 
       {/* Summary cards */}
       {computedSummary && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-9 gap-3">
           {[
             { key: 'total', label: 'Total', color: 'text-foreground' },
+            { key: 'ops_upgrade_verification', label: 'Upgrade Check', color: 'text-emerald-600' },
             { key: 'sales_admin_review', label: 'Admin Review', color: 'text-indigo-600' },
             { key: 'sales_verification_pending', label: 'To Verify', color: 'text-purple-600' },
             { key: 'provisional_finance_pending', label: 'Prov. Pending', color: 'text-yellow-600' },
@@ -318,6 +327,11 @@ export function SalesStudentPipelinePanel() {
                         <span className={cn('inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border font-medium', cfg.color)}>
                           {cfg.icon}{cfg.label}
                         </span>
+                        {e.isUpgrade && (
+                          <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold">
+                            🎓 Program Upgrade
+                          </span>
+                        )}
                         {e.enrollmentNumber && (
                           <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">{e.enrollmentNumber}</span>
                         )}
@@ -452,6 +466,11 @@ export function SalesStudentPipelinePanel() {
                       )}
 
                       {/* Current handler */}
+                      {e.status === 'ops_upgrade_verification' && (
+                        <p className="text-xs text-emerald-700 mt-1 font-medium">
+                          🎓 Awaiting Operations to verify previous program completion & upgrade documents
+                        </p>
+                      )}
                       {e.status === 'document_review' && !hasRejected && (
                         <p className="text-xs text-yellow-600 mt-1 font-medium">📋 Waiting for Operations review</p>
                       )}
@@ -468,7 +487,7 @@ export function SalesStudentPipelinePanel() {
                       )}
                       {(e.status === 'ops_rejected' || e.status === 'rejected') && (
                         <p className="text-xs text-red-600 mt-1 font-medium">
-                          ❌ {e.departmentRemarks || e.financeRemarks}
+                          ❌ {e.departmentRemarks || e.financeRemarks || 'Application rejected — review remarks and resubmit'}
                         </p>
                       )}
                     </div>

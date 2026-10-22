@@ -29,6 +29,7 @@ interface StudentWithCommissions {
     university: {
       id: string;
       name: string;
+      isAcademicPartnerOnly?: boolean;
     };
     feeStructures: Array<{
       id: string;
@@ -270,7 +271,14 @@ export function UniversityCommissionsPanel() {
                         <td className="p-3">
                           <div>
                             <p className="font-semibold text-foreground">{student.program?.name || 'N/A'}</p>
-                            <p className="text-[10px] text-muted-foreground">{student.program?.university?.name || 'N/A'}</p>
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                              <p className="text-[10px] text-muted-foreground">{student.program?.university?.name || 'N/A'}</p>
+                              {student.program?.university?.isAcademicPartnerOnly && (
+                                <Badge variant="outline" className="text-[9px] h-3.5 px-1 bg-purple-50 text-purple-700 border-purple-200">
+                                  Academic Partner
+                                </Badge>
+                              )}
+                            </div>
                           </div>
                         </td>
                         <td className="p-3 text-right">₹{totalUniversityFee.toLocaleString('en-IN')}</td>

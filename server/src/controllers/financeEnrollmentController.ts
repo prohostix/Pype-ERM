@@ -18,12 +18,13 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
   }
 
   // Branch-level isolation for finance users
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     const branchCondition = { 
       OR: [
         { student: { branchId: req.user.branchId } },
-        { salesUser: { branchId: req.user.branchId } }
+        { salesUser: { branchId: req.user.branchId } },
+        { studyCenterId: { not: null } }
       ]
     };
     if (where.OR) {
@@ -87,11 +88,12 @@ export const getFinanceEnrollments = asyncHandler(async (req: AuthRequest, res: 
   const where: any = { organizationId: req.user.organizationId, status: 'finance_review' };
   
   // Enforce branch isolation for finance users
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.OR = [
       { student: { branchId: req.user.branchId } },
-      { salesUser: { branchId: req.user.branchId } }
+      { salesUser: { branchId: req.user.branchId } },
+      { studyCenterId: { not: null } }
     ];
   }
 
@@ -120,11 +122,11 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
   }
 
   // Branch-level isolation check
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     const studentBranch = existingEnrollment.student?.branchId;
     const salesBranch = existingEnrollment.salesUser?.branchId;
-    if (studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
+    if (studentBranch && salesBranch && studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
       res.status(403);
       throw new Error('Access denied: Unauthorized branch');
     }
@@ -235,11 +237,11 @@ export const rejectFinanceEnrollment = asyncHandler(async (req: AuthRequest, res
   }
 
   // Branch-level isolation check
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     const studentBranch = existingEnrollment.student?.branchId;
     const salesBranch = existingEnrollment.salesUser?.branchId;
-    if (studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
+    if (studentBranch && salesBranch && studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
       res.status(403);
       throw new Error('Access denied: Unauthorized branch');
     }
@@ -300,11 +302,11 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
   }
 
   // Branch-level isolation check
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     const studentBranch = enrollment.student?.branchId;
     const salesBranch = enrollment.salesUser?.branchId;
-    if (studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
+    if (studentBranch && salesBranch && studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
       res.status(403);
       throw new Error('Access denied: Unauthorized branch');
     }
@@ -448,11 +450,12 @@ export const getProvisionalEnrollments = asyncHandler(async (req: AuthRequest, r
   const where: any = { organizationId: req.user.organizationId, isProvisional: true, status: 'provisional_finance_pending' };
 
   // Branch-level isolation for finance users
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.OR = [
       { student: { branchId: req.user.branchId } },
-      { salesUser: { branchId: req.user.branchId } }
+      { salesUser: { branchId: req.user.branchId } },
+      { studyCenterId: { not: null } }
     ];
   }
 
@@ -478,11 +481,11 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
   }
 
   // Branch-level isolation check
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     const studentBranch = enrollment.student?.branchId;
     const salesBranch = enrollment.salesUser?.branchId;
-    if (studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
+    if (studentBranch && salesBranch && studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
       res.status(403);
       throw new Error('Access denied: Unauthorized branch');
     }

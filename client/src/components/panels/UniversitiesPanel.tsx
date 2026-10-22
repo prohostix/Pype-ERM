@@ -508,10 +508,8 @@ export function UniversitiesPanel() {
                 <div className="flex items-center gap-2">
                   <p className="font-medium text-sm hover:underline">{u.name}</p>
                   {u.isAcademicPartnerOnly ? (
-                    <Badge variant="outline" className="text-[10px] h-5 px-1.5 bg-purple-50 text-purple-700 border-purple-200" title={(u as any).allocatedPartners?.map((p: any) => p.name).join(', ')}>
-                      {((u as any).allocatedPartners && (u as any).allocatedPartners.length > 0) 
-                        ? `Academic Partner (${(u as any).allocatedPartners.map((p: any) => p.name).join(', ')})` 
-                        : 'Academic Partner (Unallocated)'}
+                    <Badge variant="outline" className="text-[10px] h-5 px-1.5 bg-purple-50 text-purple-700 border-purple-200">
+                      Academic Partner
                     </Badge>
                   ) : (u.allowedBranchIds || []).length === 0 ? (
                     <Badge variant="outline" className="text-[10px] h-5 px-1.5 bg-green-50 text-green-700 border-green-200">All Branches</Badge>

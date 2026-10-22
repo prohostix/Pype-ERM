@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Save, Building2, BookOpen, Calculator, Calendar, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Save, Building2, BookOpen, Calculator, Calendar, Plus, Trash2, Handshake } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +20,8 @@ export function FeeStructuresPanel() {
   const [saving, setSaving] = useState(false);
 
   const [selectedUniv, setSelectedUniv] = useState<any>(null);
+  const [selectedPartner, setSelectedPartner] = useState<any>(null);
+  const [allCenters, setAllCenters] = useState<any[]>([]);
   const [selectedSession, setSelectedSession] = useState<any>(null);
   const [selectedProg, setSelectedProg] = useState<any>(null);
   const [selectedSpecialisations, setSelectedSpecialisations] = useState<string[]>([]);
@@ -45,17 +47,19 @@ export function FeeStructuresPanel() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [fRes, pRes, uRes, sRes] = await Promise.all([
+      const [fRes, pRes, uRes, sRes, cRes] = await Promise.all([
         api.get('/finance/fees'),
         api.get('/operations/programs'),
         api.get('/operations/universities?all=true'),
-        api.get('/operations/sessions')
+        api.get('/operations/sessions'),
+        api.get('/operations/centers?status=active').catch(() => ({ data: { data: [] } }))
       ]);
       console.log('FEES RESPONSE:', fRes.data.data);
       setFees(fRes.data.data || []);
       setPrograms(pRes.data.data || []);
       setUniversities(uRes.data.data || []);
       setSessions(sRes.data.data || []);
+      setAllCenters(cRes.data.data || []);
     } catch (err) {
       console.error(err);
       toast.error('Failed to load data');
@@ -105,6 +109,16 @@ export function FeeStructuresPanel() {
 
   const handleSelectUniv = (u: any) => {
     setSelectedUniv(u);
+    setSelectedPartner(null);
+    if (u.isAcademicPartnerOnly) {
+      setStep(1.5);
+    } else {
+      setStep(2);
+    }
+  };
+
+  const handleSelectPartner = (partner: any) => {
+    setSelectedPartner(partner);
     setStep(2);
   };
 
@@ -254,12 +268,31 @@ export function FeeStructuresPanel() {
     }
   };
 
-  const progsForUniv = programs.filter(p => p.universityId === selectedUniv?.id);
-  const sessionsForUniv = sessions.filter(s => 
-    !s.universityId ||
-    s.universityId === selectedUniv?.id || 
-    (s.programId && programs.find(p => p.id === s.programId)?.universityId === selectedUniv?.id)
-  );
+  const progsForUniv = programs.filter(p => {
+    if (p.universityId !== selectedUniv?.id) return false;
+    if (selectedPartner?.programIds && selectedPartner.programIds.length > 0) {
+      return selectedPartner.programIds.includes(p.id);
+    }
+    return true;
+  });
+
+  const sessionsForUniv = sessions.filter(s => {
+    if (selectedPartner) {
+      if (s.studyCenterId && s.studyCenterId === selectedPartner.id) {
+        if (!s.universityId || s.universityId === selectedUniv?.id) return true;
+      }
+      if (!s.studyCenterId) {
+        if (s.universityId === selectedUniv?.id || !s.universityId) return true;
+        if (s.programId && programs.find(p => p.id === s.programId)?.universityId === selectedUniv?.id) return true;
+      }
+      return false;
+    }
+    return (
+      !s.universityId ||
+      s.universityId === selectedUniv?.id || 
+      (s.programId && programs.find(p => p.id === s.programId)?.universityId === selectedUniv?.id)
+    );
+  });
 
   return (
     <div className="space-y-6">
@@ -295,10 +328,8 @@ export function FeeStructuresPanel() {
                         <div className="flex items-center gap-2">
                           <p className="font-semibold">{u.name}</p>
                           {u.isAcademicPartnerOnly && (
-                            <Badge variant="outline" className="text-[9px] h-4 px-1 bg-purple-50 text-purple-700 border-purple-200" title={(u as any).allocatedPartners?.map((p: any) => p.name).join(', ')}>
-                              {((u as any).allocatedPartners && (u as any).allocatedPartners.length > 0) 
-                                ? `Academic Partner (${(u as any).allocatedPartners.map((p: any) => p.name).join(', ')})` 
-                                : 'Academic Partner (Unallocated)'}
+                            <Badge variant="outline" className="text-[10px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-200">
+                              Academic Partner
                             </Badge>
                           )}
                         </div>
@@ -312,14 +343,79 @@ export function FeeStructuresPanel() {
             </Card>
           )}
 
+          {step === 1.5 && (
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <Button variant="ghost" size="icon" onClick={() => { setSelectedUniv(null); setSelectedPartner(null); setStep(1); }}><ArrowLeft className="w-5 h-5" /></Button>
+                  <div>
+                    <CardTitle>1.5 Select Academic Partner</CardTitle>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                      <span>{selectedUniv?.name}</span>
+                      <Badge variant="outline" className="text-[9px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-200">
+                        Academic Partner
+                      </Badge>
+                      <span>- Choose an academic partner to configure fees for.</span>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {((selectedUniv?.allocatedPartners && selectedUniv.allocatedPartners.length > 0)
+                    ? selectedUniv.allocatedPartners
+                    : allCenters
+                  ).map((partner: any) => {
+                    const allocCount = partner.programIds?.length ?? 
+                      programs.filter(p => p.universityId === selectedUniv?.id).length;
+                    return (
+                      <button
+                        key={partner.id}
+                        onClick={() => handleSelectPartner(partner)}
+                        className="flex items-center gap-4 p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left group"
+                      >
+                        <div className="p-3 rounded-full bg-purple-500/10 text-purple-600 group-hover:bg-purple-500/20 transition-colors">
+                          <Handshake className="w-6 h-6" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-sm truncate">{partner.name}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            {partner.code && <p className="text-xs text-muted-foreground">{partner.code}</p>}
+                            <Badge variant="secondary" className="text-[10px]">
+                              {allocCount} {allocCount === 1 ? 'Program' : 'Programs'}
+                            </Badge>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                  {(!selectedUniv?.allocatedPartners || selectedUniv.allocatedPartners.length === 0) && allCenters.length === 0 && (
+                    <p className="text-muted-foreground col-span-3">No academic partners available for this university.</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {step === 2 && (
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <Button variant="ghost" size="icon" onClick={() => setStep(1)}><ArrowLeft className="w-5 h-5" /></Button>
+                  <Button variant="ghost" size="icon" onClick={() => setStep(selectedUniv?.isAcademicPartnerOnly ? 1.5 : 1)}><ArrowLeft className="w-5 h-5" /></Button>
                   <div>
                     <CardTitle>2. Select Session</CardTitle>
-                    <CardDescription>{selectedUniv?.name} - Choose a session to configure fees for.</CardDescription>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1 flex-wrap">
+                      <span>{selectedUniv?.name}</span>
+                      {selectedPartner && (
+                        <span className="font-medium text-foreground">› {selectedPartner.name}</span>
+                      )}
+                      {selectedUniv?.isAcademicPartnerOnly && (
+                        <Badge variant="outline" className="text-[9px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-200">
+                          Academic Partner
+                        </Badge>
+                      )}
+                      <span>- Choose a session to configure fees for.</span>
+                    </div>
                   </div>
                 </div>
               </CardHeader>
@@ -370,7 +466,18 @@ export function FeeStructuresPanel() {
                   <Button variant="ghost" size="icon" onClick={() => setStep(2)}><ArrowLeft className="w-5 h-5" /></Button>
                   <div>
                     <CardTitle>3. Select Program</CardTitle>
-                    <CardDescription>{selectedUniv?.name} ({selectedSession ? selectedSession.name : 'Default'}) - Choose a program.</CardDescription>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1 flex-wrap">
+                      <span>{selectedUniv?.name}</span>
+                      {selectedPartner && (
+                        <span className="font-medium text-foreground">› {selectedPartner.name}</span>
+                      )}
+                      {selectedUniv?.isAcademicPartnerOnly && (
+                        <Badge variant="outline" className="text-[9px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-200">
+                          Academic Partner
+                        </Badge>
+                      )}
+                      <span>({selectedSession ? selectedSession.name : 'Default'}) - Choose a program.</span>
+                    </div>
                   </div>
                 </div>
               </CardHeader>
@@ -433,7 +540,14 @@ export function FeeStructuresPanel() {
                   <Button variant="ghost" size="icon" onClick={() => setStep(3)}><ArrowLeft className="w-5 h-5" /></Button>
                   <div>
                     <CardTitle>3.5 Select Specialisation</CardTitle>
-                    <CardDescription>{selectedProg.name} has multiple specialisations. Choose one to configure its fee structure.</CardDescription>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                      <span>{selectedProg.name} has multiple specialisations. Choose one to configure its fee structure.</span>
+                      {selectedUniv?.isAcademicPartnerOnly && (
+                        <Badge variant="outline" className="text-[9px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-200">
+                          Academic Partner
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                 </div>
               </CardHeader>
@@ -514,7 +628,20 @@ export function FeeStructuresPanel() {
                     }}><ArrowLeft className="w-5 h-5" /></Button>
                     <div>
                       <CardTitle>4. Configure Fee Structure</CardTitle>
-                      <CardDescription className="text-primary font-medium mt-1">{selectedProg?.name} ({selectedProg?.code}) {selectedSpecialisations.length > 0 ? `- ${selectedSpecialisations.join(', ')}` : ''} - {selectedSession ? selectedSession.name : 'Default'}</CardDescription>
+                      <div className="text-primary font-medium mt-1 flex items-center gap-2 text-sm flex-wrap">
+                        <span>{selectedProg?.name} ({selectedProg?.code}) {selectedSpecialisations.length > 0 ? `- ${selectedSpecialisations.join(', ')}` : ''}</span>
+                        {selectedPartner && (
+                          <span className="text-foreground font-semibold bg-muted px-2 py-0.5 rounded text-xs">
+                            Partner: {selectedPartner.name}
+                          </span>
+                        )}
+                        <span>- {selectedSession ? selectedSession.name : 'Default'}</span>
+                        {selectedUniv?.isAcademicPartnerOnly && (
+                          <Badge variant="outline" className="text-[9px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-200">
+                            Academic Partner
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <Button onClick={handleSave} disabled={saving} className="gap-2">
