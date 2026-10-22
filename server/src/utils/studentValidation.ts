@@ -116,7 +116,7 @@ export async function checkStudentOrEnrollmentExists(
     const existingEnrollmentByEmail = await prisma.enrollment.findFirst({
       where: {
         studentEmail: { equals: cleanEmail, mode: 'insensitive' },
-        status: { notIn: ['rejected', 'cancelled'] },
+        status: { notIn: ['rejected', 'ops_rejected', 'department_rejected', 'cancelled'] },
         ...(options.excludeEnrollmentId ? { id: { not: options.excludeEnrollmentId } } : {}),
         ...(options.excludeStudentId ? { NOT: { studentId: options.excludeStudentId } } : {}),
       },
@@ -148,7 +148,7 @@ export async function checkStudentOrEnrollmentExists(
           { studentPhone: cleanPhone },
           ...(cleanPhone.length >= 10 ? [{ studentPhone: { contains: cleanPhone.slice(-10) } }] : [])
         ],
-        status: { notIn: ['rejected', 'cancelled'] },
+        status: { notIn: ['rejected', 'ops_rejected', 'department_rejected', 'cancelled'] },
         ...(options.excludeEnrollmentId ? { id: { not: options.excludeEnrollmentId } } : {}),
         ...(options.excludeStudentId ? { NOT: { studentId: options.excludeStudentId } } : {}),
       },
