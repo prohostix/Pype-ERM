@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, ShieldAlert, AlertCircle } from 'lucide-react';
-import { CaptchaVerification } from '@/components/auth/CaptchaVerification';
+import { RobotVerification } from '@/components/auth/RobotVerification';
 
 const BrandRibbon = () => (
   <svg 
@@ -53,17 +53,6 @@ const BrandRibbon = () => (
   </svg>
 );
 
-// High-clarity alphanumeric characters (excludes ambiguous chars like 0, O, 1, I, l)
-const CAPTCHA_CHARS = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-
-const generateCaptchaCode = (length = 6): string => {
-  let code = '';
-  for (let i = 0; i < length; i++) {
-    code += CAPTCHA_CHARS.charAt(Math.floor(Math.random() * CAPTCHA_CHARS.length));
-  }
-  return code;
-};
-
 export function Login() {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
@@ -73,21 +62,11 @@ export function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Bot Protection States
-  const [captchaCode, setCaptchaCode] = useState('');
-  const [captchaInput, setCaptchaInput] = useState('');
+  const [isRobotVerified, setIsRobotVerified] = useState(false);
+  const [robotError, setRobotError] = useState(false);
   const [honeypot, setHoneypot] = useState('');
-  const [failedAttempts, setFailedAttempts] = useState(0);
   const [lockoutSeconds, setLockoutSeconds] = useState(0);
   const formMountTime = useRef<number>(Date.now());
-
-  // Generate initial captcha code on mount
-  const handleRegenerateCaptcha = useCallback(() => {
-    setCaptchaCode(generateCaptchaCode(6));
-  }, []);
-
-  useEffect(() => {
-    handleRegenerateCaptcha();
-  }, [handleRegenerateCaptcha]);
 
   // Handle Lockout countdown timer
   useEffect(() => {
@@ -105,16 +84,10 @@ export function Login() {
     return () => clearInterval(timer);
   }, [lockoutSeconds]);
 
-  // Is captcha matched in real-time
-  const isCaptchaMatched = Boolean(
-    captchaCode &&
-    captchaInput.trim().length === captchaCode.length &&
-    captchaInput.trim().toUpperCase() === captchaCode.toUpperCase()
-  );
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setRobotError(false);
 
     // 1. Lockout check
     if (lockoutSeconds > 0) {
@@ -131,26 +104,15 @@ export function Login() {
 
     // 3. Human speed check (Automated scripts submit in milliseconds)
     const timeSinceMount = Date.now() - formMountTime.current;
-    if (timeSinceMount < 500) {
+    if (timeSinceMount < 400) {
       setError('Submission too rapid. Please verify you are human and try again.');
       return;
     }
 
-    // 4. Captcha validation
-    if (!captchaInput || captchaInput.trim().toUpperCase() !== captchaCode.toUpperCase()) {
-      const nextFailed = failedAttempts + 1;
-      setFailedAttempts(nextFailed);
-
-      if (nextFailed >= 3) {
-        setLockoutSeconds(30);
-        setFailedAttempts(0);
-        setError('Too many failed verification attempts. Cooldown active for 30s.');
-      } else {
-        setError(`Incorrect verification code. (${3 - nextFailed} attempts remaining)`);
-      }
-
-      setCaptchaInput('');
-      handleRegenerateCaptcha();
+    // 4. Robot verification check
+    if (!isRobotVerified) {
+      setRobotError(true);
+      setError('Please verify that you are not a robot.');
       return;
     }
 
@@ -160,9 +122,8 @@ export function Login() {
     const success = await login(email, password);
     if (!success) {
       setError('Invalid email or password');
-      // Regenerate captcha for next attempt to prevent replay attacks
-      setCaptchaInput('');
-      handleRegenerateCaptcha();
+      // Reset robot verification to require re-verification after failed login attempts
+      setIsRobotVerified(false);
     } else {
       window.history.replaceState({}, '', '/');
     }
@@ -245,14 +206,21 @@ export function Login() {
               </button>
             </div>
 
-            {/* Visual Bot-Prevention CAPTCHA Section */}
-            <CaptchaVerification
-              code={captchaCode}
-              value={captchaInput}
-              onChange={setCaptchaInput}
-              onRefresh={handleRegenerateCaptcha}
-              isMatched={isCaptchaMatched}
+            {/* "I'm not a robot" Bot-Prevention Checkbox Section */}
+            <RobotVerification
+              isVerified={isRobotVerified}
+              onVerify={(verified) => {
+                setIsRobotVerified(verified);
+                if (verified) {
+                  setRobotError(false);
+                  setError('');
+                } else {
+                  setRobotError(true);
+                  setError('Verification failed. Please try again.');
+                }
+              }}
               disabled={lockoutSeconds > 0 || isLoading}
+              hasError={robotError}
             />
 
             {error && (
