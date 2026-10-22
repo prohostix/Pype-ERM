@@ -84,7 +84,7 @@ export function AssetManagementPanel() {
     try {
       const [assetsRes, usersRes] = await Promise.all([
         api.get('/assets'),
-        api.get('/users?role=employee')
+        api.get('/users') // every staff account (the server leaves out students), not only the "employee" role
       ]);
       if (assetsRes.data.success) {
         setAssets(assetsRes.data.data);
@@ -229,7 +229,7 @@ export function AssetManagementPanel() {
                         {employees.map((emp) => (
                           <CommandItem
                             key={emp.id}
-                            value={`${emp.name} ${emp.employeeProfile?.employeeId || ''} ${emp.email}`}
+                            value={`${emp.name} ${emp.employeeProfile?.employeeId || ''} ${emp.email} ${(emp as any).role || ''}`}
                             onSelect={() => {
                               setSelectedEmployeeId(emp.id);
                               setOpenCombobox(false);
@@ -242,6 +242,7 @@ export function AssetManagementPanel() {
                               )}
                             />
                             {emp.name} {emp.employeeProfile?.employeeId ? `(${emp.employeeProfile.employeeId})` : ''}
+                            <span className="ml-2 text-xs text-muted-foreground capitalize">{String((emp as any).role || '').replace(/_/g, ' ')}</span>
                           </CommandItem>
                         ))}
                       </CommandGroup>

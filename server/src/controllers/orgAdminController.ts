@@ -98,8 +98,28 @@ export const getDesignations = asyncHandler(async (req: AuthRequest, res: Respon
     }
   });
 
+  // A branch manager only sees their own position and the positions beneath
+  // it, never the ones above them or in other parts of the organization.
+  let visible = designations;
+  if (req.user.role === 'branch_manager') {
+    const ids = new Set<string>(
+      designations.filter(d => (d.filledBy || []).some((u: any) => u.id === req.user.id)).map(d => d.id)
+    );
+    let grew = true;
+    while (grew) {
+      grew = false;
+      for (const d of designations) {
+        if (d.parentDesignationId && ids.has(d.parentDesignationId) && !ids.has(d.id)) {
+          ids.add(d.id);
+          grew = true;
+        }
+      }
+    }
+    visible = designations.filter(d => ids.has(d.id));
+  }
+
   // Map relations for frontend compatibility
-  const mapped = designations.map(d => ({
+  const mapped = visible.map(d => ({
     ...d,
     filledBy: d.filledBy || [],
     branchId: d.branch ? d.branch.id : null,

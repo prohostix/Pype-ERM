@@ -30,11 +30,11 @@ const router = express.Router();
 
 // HR Settings routes
 router.get('/settings', protect, getHRSettings);
-router.post('/settings', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), createOrUpdateHRSettings);
-router.put('/settings', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), createOrUpdateHRSettings);
+router.post('/settings', protect, authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), createOrUpdateHRSettings);
+router.put('/settings', protect, authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), createOrUpdateHRSettings);
 
 // Biometric sync endpoint (called by biometric device/middleware)
-router.post('/biometric-sync', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), biometricSync);
+router.post('/biometric-sync', protect, authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), biometricSync);
 
 // Employee routes - punch in/out
 router.get('/punch-config', protect, getPunchConfig);

@@ -30,6 +30,18 @@ export const getOverdueSchedules = asyncHandler(async (req: AuthRequest, res: Re
   if (dueBefore) where.dueDate = { ...(where.dueDate || {}), lte: dueBefore };
   if (dueAfter) where.dueDate = { ...(where.dueDate || {}), gte: dueAfter };
 
+  // Branch-level isolation for finance users
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    where.student = {
+      OR: [
+        { branchId: req.user.branchId },
+        { enrolledByUser: { branchId: req.user.branchId } },
+        { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
+      ]
+    };
+  }
+
   const schedules = await prisma.paymentSchedule.findMany({
     where,
     include: {
@@ -270,6 +282,7 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
     let targetSpecialisation = activeSpecialisation;
     let totalFee = 0;
     let feeBreakdown: any = null;
+    let feeStructureMissing = false;
 
     if (targetProgramId) {
       let feeStruct = null;
@@ -322,6 +335,9 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
         };
       }
     }
+
+    // No fee structure for the program and no payment schedule to fall back on.
+    feeStructureMissing = !feeBreakdown && !totalFee && !(overallProgramFee && overallProgramFee !== invoice.total);
 
     if (!totalFee && overallProgramFee) {
       totalFee = overallProgramFee;
@@ -404,6 +420,7 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       organization: invoice.organization,
       balanceDue: Math.max(0, invoice.total - invoice.payments.reduce((sum, p) => sum + p.amount, 0)),
       totalFee,
+      feeStructureMissing,
       feeBreakdown,
       overallProgramFee,
       overallPaid,
@@ -566,8 +583,22 @@ export const bulkCreateOldFees = asyncHandler(async (req: AuthRequest, res: Resp
 });
 
 export const getOldFees = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = { organizationId: req.user.organizationId, isOldFee: true };
+
+  // Branch-level isolation for finance users
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    where.student = {
+      OR: [
+        { branchId: req.user.branchId },
+        { enrolledByUser: { branchId: req.user.branchId } },
+        { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
+      ]
+    };
+  }
+
   const fees = await prisma.paymentSchedule.findMany({
-    where: { organizationId: req.user.organizationId, isOldFee: true },
+    where,
     include: {
       student: { select: { name: true, email: true, enrollmentNo: true, program: { select: { name: true } } } }
     },
@@ -643,8 +674,20 @@ export const updatePaymentLinkStatus = asyncHandler(async (req: AuthRequest, res
 });
 
 export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = { organizationId: req.user.organizationId };
+
+  // Branch-level isolation for finance users
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    where.OR = [
+      { branchId: req.user.branchId },
+      { enrolledByUser: { branchId: req.user.branchId } },
+      { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
+    ];
+  }
+
   const students = await prisma.student.findMany({
-    where: { organizationId: req.user.organizationId },
+    where,
     select: {
       id: true,
       name: true,
@@ -869,11 +912,23 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
 });
 
 export const getDiscounts = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = { 
+    organizationId: req.user.organizationId,
+    discountAmount: { gt: 0 }
+  };
+
+  // Branch-level isolation for finance users
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    where.OR = [
+      { branchId: req.user.branchId },
+      { enrolledByUser: { branchId: req.user.branchId } },
+      { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
+    ];
+  }
+
   const students = await prisma.student.findMany({
-    where: { 
-      organizationId: req.user.organizationId,
-      discountAmount: { gt: 0 }
-    },
+    where,
     select: {
       id: true,
       name: true,
@@ -906,6 +961,15 @@ export const applyDiscount = asyncHandler(async (req: AuthRequest, res: Response
   if (!student) {
     res.status(404).json({ success: false, message: 'Student not found' });
     return;
+  }
+
+  // Branch-level isolation check
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    if (student.branchId && student.branchId !== req.user.branchId) {
+      res.status(403).json({ success: false, message: 'Access denied: Student belongs to another branch' });
+      return;
+    }
   }
 
   const updatedStudent = await prisma.student.update({
@@ -942,6 +1006,14 @@ export const addExtraFee = asyncHandler(async (req: AuthRequest, res: Response) 
 
     if (!student) {
       return res.status(404).json({ success: false, message: 'Student not found' });
+    }
+
+    // Branch-level isolation check
+    const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+    if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+      if (student.branchId && student.branchId !== req.user.branchId) {
+        return res.status(403).json({ success: false, message: 'Access denied: Student belongs to another branch' });
+      }
     }
 
     const extraFee = await prisma.paymentSchedule.create({

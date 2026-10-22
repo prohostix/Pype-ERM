@@ -164,7 +164,9 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
     }
 
     let isWithinGeofence = false;
-    let allowedRadiusMsg = '';
+    let minDistance = Infinity;
+    let closestOfficeName = '';
+    let closestAllowedRadius = 100;
 
     // Check default office location
     const defaultLoc = settings.location as any;
@@ -173,27 +175,37 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
       const radius = defaultLoc.allowedRadius || 100;
       if (distance <= radius) {
         isWithinGeofence = true;
-      } else {
-        allowedRadiusMsg = `Default location: ${distance.toFixed(0)}m away (max ${radius}m allowed).`;
+      }
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestOfficeName = defaultLoc.name || 'Default Office';
+        closestAllowedRadius = radius;
       }
     }
 
     // Check other office locations
     const locationsList = settings.locations as any[];
-    if (!isWithinGeofence && Array.isArray(locationsList)) {
+    if (Array.isArray(locationsList)) {
       for (const loc of locationsList) {
         if (loc.latitude && loc.longitude) {
           const distance = getDistanceInMeters(latitude, longitude, loc.latitude, loc.longitude);
           const radius = loc.allowedRadius || 100;
           if (distance <= radius) {
             isWithinGeofence = true;
-            break;
+          }
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestOfficeName = loc.name || 'Office';
+            closestAllowedRadius = radius;
           }
         }
       }
     }
 
     if (!isWithinGeofence) {
+      const allowedRadiusMsg = minDistance < Infinity
+        ? `Nearest location (${closestOfficeName}): ${minDistance.toFixed(0)}m away (max ${closestAllowedRadius}m allowed).`
+        : '';
       res.status(400).json({
         success: false,
         message: `Check-in denied: You are outside the allowed office geofences. ${allowedRadiusMsg}`
@@ -305,7 +317,9 @@ export const punchOut = asyncHandler(async (req: AuthRequest, res: Response) => 
     }
 
     let isWithinGeofence = false;
-    let allowedRadiusMsg = '';
+    let minDistance = Infinity;
+    let closestOfficeName = '';
+    let closestAllowedRadius = 100;
 
     // Check default office location
     const defaultLoc = settings.location as any;
@@ -314,27 +328,37 @@ export const punchOut = asyncHandler(async (req: AuthRequest, res: Response) => 
       const radius = defaultLoc.allowedRadius || 100;
       if (distance <= radius) {
         isWithinGeofence = true;
-      } else {
-        allowedRadiusMsg = `Default location: ${distance.toFixed(0)}m away (max ${radius}m allowed).`;
+      }
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestOfficeName = defaultLoc.name || 'Default Office';
+        closestAllowedRadius = radius;
       }
     }
 
     // Check other office locations
     const locationsList = settings.locations as any[];
-    if (!isWithinGeofence && Array.isArray(locationsList)) {
+    if (Array.isArray(locationsList)) {
       for (const loc of locationsList) {
         if (loc.latitude && loc.longitude) {
           const distance = getDistanceInMeters(latitude, longitude, loc.latitude, loc.longitude);
           const radius = loc.allowedRadius || 100;
           if (distance <= radius) {
             isWithinGeofence = true;
-            break;
+          }
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestOfficeName = loc.name || 'Office';
+            closestAllowedRadius = radius;
           }
         }
       }
     }
 
     if (!isWithinGeofence) {
+      const allowedRadiusMsg = minDistance < Infinity
+        ? `Nearest location (${closestOfficeName}): ${minDistance.toFixed(0)}m away (max ${closestAllowedRadius}m allowed).`
+        : '';
       res.status(400).json({
         success: false,
         message: 'You are outside the permitted punch-out area.',

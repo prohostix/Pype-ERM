@@ -108,13 +108,26 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
   const existingEnrollment = await prisma.enrollment.findUnique({
     where: { id: req.params.id },
     include: {
-      program: { include: { feeStructures: true } }
+      program: { include: { feeStructures: true } },
+      student: true,
+      salesUser: true
     }
   });
   
   if (!existingEnrollment) {
     res.status(404);
     throw new Error('Enrollment not found');
+  }
+
+  // Branch-level isolation check
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    const studentBranch = existingEnrollment.student?.branchId;
+    const salesBranch = existingEnrollment.salesUser?.branchId;
+    if (studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
+      res.status(403);
+      throw new Error('Access denied: Unauthorized branch');
+    }
   }
 
   // If receipt hasn't been verified yet, but there is an initial payment amount, generate the invoice
@@ -211,6 +224,27 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
 });
 
 export const rejectFinanceEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const existingEnrollment = await prisma.enrollment.findUnique({
+    where: { id: req.params.id },
+    include: { student: true, salesUser: true }
+  });
+
+  if (!existingEnrollment) {
+    res.status(404);
+    throw new Error('Enrollment not found');
+  }
+
+  // Branch-level isolation check
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    const studentBranch = existingEnrollment.student?.branchId;
+    const salesBranch = existingEnrollment.salesUser?.branchId;
+    if (studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
+      res.status(403);
+      throw new Error('Access denied: Unauthorized branch');
+    }
+  }
+
   const enrollment = await prisma.enrollment.update({
     where: { id: req.params.id },
     data: { 
@@ -254,13 +288,26 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
         include: {
           feeStructures: true
         }
-      }
+      },
+      student: true,
+      salesUser: true
     }
   });
 
   if (!enrollment) {
     res.status(404);
     throw new Error('Enrollment not found');
+  }
+
+  // Branch-level isolation check
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    const studentBranch = enrollment.student?.branchId;
+    const salesBranch = enrollment.salesUser?.branchId;
+    if (studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
+      res.status(403);
+      throw new Error('Access denied: Unauthorized branch');
+    }
   }
 
   if (enrollment.receiptVerified) {
@@ -398,8 +445,19 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
 });
 
 export const getProvisionalEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = { organizationId: req.user.organizationId, isProvisional: true, status: 'provisional_finance_pending' };
+
+  // Branch-level isolation for finance users
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    where.OR = [
+      { student: { branchId: req.user.branchId } },
+      { salesUser: { branchId: req.user.branchId } }
+    ];
+  }
+
   const enrollments = await prisma.enrollment.findMany({
-    where: { organizationId: req.user.organizationId, isProvisional: true, status: 'provisional_finance_pending' },
+    where,
     include: { program: true, studyCenter: true, student: true },
     orderBy: { createdAt: 'asc' }
   });
@@ -410,12 +468,24 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
   const enrollmentId = req.params.id;
 
   const enrollment = await prisma.enrollment.findUnique({
-    where: { id: enrollmentId, isProvisional: true, status: 'provisional_finance_pending' }
+    where: { id: enrollmentId, isProvisional: true, status: 'provisional_finance_pending' },
+    include: { student: true, salesUser: true }
   });
 
   if (!enrollment) {
     res.status(404);
     throw new Error('Provisional enrollment not found or already verified');
+  }
+
+  // Branch-level isolation check
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    const studentBranch = enrollment.student?.branchId;
+    const salesBranch = enrollment.salesUser?.branchId;
+    if (studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
+      res.status(403);
+      throw new Error('Access denied: Unauthorized branch');
+    }
   }
 
   // Create an invoice for the provisional amount (assuming passed in body or fixed)

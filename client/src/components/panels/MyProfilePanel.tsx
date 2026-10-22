@@ -289,7 +289,7 @@ export function MyProfilePanel() {
                   <p className="text-sm text-muted-foreground mb-1">Work Location</p>
                   <p className="font-medium flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-muted-foreground" />
-                    {user.organization?.address || 'Head Office'}
+                    {(user as any).employeeProfileDetail?.workLocation || (user as any).branch?.name || user.organization?.address || 'Head Office'}
                   </p>
                 </div>
                 <div>

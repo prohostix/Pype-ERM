@@ -188,7 +188,7 @@ function ProformaReceiptDocument({ receipt, orgName }: { receipt: any; orgName: 
         <div style={{ width: '340px', background: '#fdf8f6', padding: '20px', borderRadius: '8px', border: '1px solid #fed7aa' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px dashed #fdba74' }}>
             <span style={{ fontSize: '13px', color: '#c2410c', fontWeight: 600 }}>Total Fee</span>
-            <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>₹{totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>{receipt.feeStructureMissing ? 'Fee not set up' : `₹${totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px dashed #fdba74' }}>
             <span style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>Total Remitted Fee</span>
@@ -196,7 +196,7 @@ function ProformaReceiptDocument({ receipt, orgName }: { receipt: any; orgName: 
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 800, textTransform: 'uppercase' }}>Balance Fee</span>
-            <span style={{ fontSize: '18px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>₹{balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            <span style={{ fontSize: '18px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>{receipt.feeStructureMissing ? '—' : `₹${balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
           </div>
         </div>
       </div>

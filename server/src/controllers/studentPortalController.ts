@@ -393,7 +393,37 @@ export const getStudentInvoices = asyncHandler(async (req: AuthRequest, res: Res
     orderBy: { createdAt: 'desc' },
     include: { payments: true },
   });
-  res.json({ success: true, data: invoices });
+
+  // The student portal (web and mobile) reads invoiceNumber / paidAmount /
+  // balanceAmount, an upper-case status and payments with paymentDate,
+  // transactionId and paymentMethod. Add those next to the stored fields so
+  // invoices and receipts show correctly (they came out blank before).
+  const data = invoices.map((inv: any) => {
+    const total = Number(inv.total ?? inv.amount ?? 0);
+    const received = (inv.payments || []).reduce((sum: number, p: any) => sum + Number(p.amount || 0), 0);
+    // An invoice marked paid counts as fully paid even if its payment rows are missing.
+    const paidAmount = inv.status === 'paid' ? Math.max(received, total) : received;
+    const balanceAmount = Math.max(total - paidAmount, 0);
+    const status = balanceAmount <= 0 && (paidAmount > 0 || total === 0)
+      ? 'PAID'
+      : paidAmount > 0 ? 'PARTIALLY_PAID' : 'PENDING';
+    return {
+      ...inv,
+      invoiceNumber: inv.invoiceNo,
+      subtotal: inv.amount,
+      amount: total,
+      paidAmount,
+      balanceAmount,
+      status,
+      payments: (inv.payments || []).map((p: any) => ({
+        ...p,
+        paymentDate: p.receivedAt || p.createdAt,
+        transactionId: p.referenceNo || null,
+        paymentMethod: p.method || 'cash',
+      })),
+    };
+  });
+  res.json({ success: true, data });
 });
 
 // POST /student-portal/refer

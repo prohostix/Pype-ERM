@@ -261,7 +261,7 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
         <div style={{ width: '320px', background: '#fdf8f6', padding: '16px', borderRadius: '8px', border: '1px solid #fed7aa' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px dashed #fdba74' }}>
             <span style={{ fontSize: '13px', color: '#c2410c', fontWeight: 600 }}>Total Fee</span>
-            <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>₹{totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>{receipt.feeStructureMissing ? 'Fee not set up' : `₹${totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px dashed #fdba74' }}>
             <span style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>Total Remitted Fee</span>
@@ -269,7 +269,7 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: 800, textTransform: 'uppercase' }}>Balance Fee</span>
-            <span style={{ fontSize: '17px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>₹{balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+            <span style={{ fontSize: '17px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>{receipt.feeStructureMissing ? '—' : `₹${balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
           </div>
         </div>
       </div>

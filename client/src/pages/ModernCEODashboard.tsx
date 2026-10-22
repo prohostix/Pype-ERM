@@ -68,6 +68,112 @@ import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { ActivityLogPanel } from '@/components/panels/ActivityLogPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
+import { BranchHierarchyPanel } from '@/components/panels/BranchHierarchyPanel';
+import { TargetsPanel } from '@/components/panels/TargetsPanel';
+import { SalesInvitePanel } from '@/components/panels/SalesInvitePanel';
+import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
+import { SalesCentersPanel } from '@/components/panels/SalesCentersPanel';
+import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
+import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
+import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
+import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
+import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
+import { ExpensesPanel } from '@/components/panels/ExpensesPanel';
+import { FinanceEnrollmentsPanel } from '@/components/panels/FinanceEnrollmentsPanel';
+import { TasksPanel } from '@/components/panels/TasksPanel';
+import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
+import { AssetManagementPanel } from '@/components/panels/AssetManagementPanel';
+import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
+import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
+import { PayrollPanel } from '@/components/panels/PayrollPanel';
+
+/**
+ * Sidebar for the CEO and the General Manager: the executive items plus the
+ * same Branch Overview / Sales / Operations / Finance / Management / My Portal
+ * groups the Branch Manager has. Delete Approvals and Activity Logs are CEO-only.
+ */
+export function getExecutiveNavItems(role?: string) {
+  const isCeo = role === 'ceo';
+  return [
+    { id: '__exec_section', label: 'Executive', isSection: true },
+    { id: 'dashboard', label: 'Executive Overview' },
+    { id: 'performance', label: 'Performance' },
+    { id: 'kpi-kra', label: 'KPI / KRA Report' },
+    { id: 'escalations', label: 'Escalations' },
+    { id: 'activity_report', label: 'Activity Report' },
+    ...(isCeo
+      ? [
+          { id: 'delete_approvals', label: 'Delete Approvals' },
+          { id: 'activity-logs', label: 'Activity Logs' },
+        ]
+      : []),
+    { id: '__branch_section', label: 'Branch Overview', isSection: true },
+    { id: 'hierarchy', label: 'Organization Hierarchy' },
+    { id: '__sales_section', label: 'Sales', isSection: true },
+    { id: 'leads', label: 'Leads' },
+    { id: 'targets', label: 'Targets' },
+    { id: 'invite_links', label: 'Invite Links' },
+    { id: 'my_team', label: 'My Team' },
+    { id: 'branch_centers_sales', label: 'Academic Partners (Sales)' },
+    { id: 'university_commissions', label: 'Commissions' },
+    { id: '__ops_section', label: 'Operations', isSection: true },
+    { id: 'students', label: 'Students' },
+    { id: 'enrollment_review', label: 'Enrollment Review' },
+    { id: 'universities', label: 'Universities' },
+    { id: 'programs', label: 'Programs' },
+    { id: 'centers', label: 'Academic Partners' },
+    { id: 'sessions', label: 'Admission Sessions' },
+    { id: 'attendance', label: 'Team Attendance' },
+    { id: 'leaves', label: 'Leave Approvals' },
+    { id: '__finance_section', label: 'Finance', isSection: true },
+    { id: 'invoices', label: 'Invoices' },
+    { id: 'payments', label: 'Payments' },
+    { id: 'expenses', label: 'Expenses' },
+    { id: 'finance_enrollments', label: 'Finance Enrollments' },
+    { id: 'collections', label: 'Collections' },
+    { id: '__shared_section', label: 'Management', isSection: true },
+    { id: 'users', label: 'Users' },
+    { id: 'departments', label: 'Departments' },
+    { id: 'tasks', label: 'Tasks' },
+    { id: 'announcements', label: 'Announcements' },
+    { id: 'assets', label: 'Assets' },
+    { id: '__portal_section', label: 'My Portal', isSection: true },
+    { id: 'my_leaves', label: 'My Leaves' },
+    { id: 'my_attendance', label: 'My Attendance' },
+    { id: 'my_payslips', label: 'Pay Slips' },
+    { id: 'holidays', label: 'Holidays' },
+    { id: 'notice-board', label: 'Notice Board' },
+    { id: 'meetings', label: 'Meetings' },
+  ];
+}
+
+/** Panels shared with the Branch Manager dashboard, keyed by sidebar id. */
+function renderSharedPanel(tab: string) {
+  switch (tab) {
+    case 'hierarchy': return <BranchHierarchyPanel />;
+    case 'targets': return <TargetsPanel endpoint="/sales/targets" title="Targets" />;
+    case 'invite_links': return <SalesInvitePanel />;
+    case 'team':
+    case 'my_team': return <TeamPerformancePanel />;
+    case 'branch_centers_sales': return <SalesCentersPanel />;
+    case 'universities': return <UniversitiesPanel />;
+    case 'programs': return <ProgramsPanel />;
+    case 'centers': return <StudyCentersPanel />;
+    case 'sessions': return <AdmissionSessionsPanel />;
+    case 'payments': return <PaymentsPanel />;
+    case 'expenses': return <ExpensesPanel />;
+    case 'finance_enrollments': return <FinanceEnrollmentsPanel />;
+    case 'announcements': return <AnnouncementsPanel />;
+    case 'assets': return <AssetManagementPanel />;
+    case 'my_leaves': return <LeavesPanel isMyPortal />;
+    case 'my_attendance': return <AttendancePanel isMyPortal />;
+    case 'my_payslips': return <PayrollPanel />;
+    case 'holidays': return <HolidaysPanel />;
+    case 'notice-board': return <NoticeBoardPanel />;
+    case 'meetings': return <MeetingsPanel />;
+    default: return null;
+  }
+}
 
 const DEPT_COLORS: Record<string, string> = {
   hr: 'hsl(var(--info))', finance: 'hsl(var(--success))',
@@ -121,6 +227,13 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
       score: d?.efficiency || 0,
       color: DEPT_COLORS[d?.type] || 'hsl(var(--muted-foreground))',
     }));
+
+  // Branch Overview / Sales / Operations / Finance / Management / My Portal items
+  // use the same panels as the Branch Manager dashboard.
+  const sharedPanel = renderSharedPanel(activeTab);
+  if (sharedPanel) {
+    return <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">{sharedPanel}</div>;
+  }
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">

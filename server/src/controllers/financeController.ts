@@ -155,6 +155,15 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
       return;
     }
 
+    // Branch-level isolation check
+    const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+    if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+      if (student.branchId && student.branchId !== req.user.branchId) {
+        res.status(403).json({ success: false, message: 'Access denied: Student belongs to another branch' });
+        return;
+      }
+    }
+
     // Attempt to resolve program fee structure from db
     let invoiceTotal = Number(req.body.amount);
     let feeDescription = 'Program Admission Fees / Custom Invoice Item';
@@ -487,6 +496,25 @@ export const getFeeStructure = asyncHandler(async (req: AuthRequest, res: Respon
   }
   res.json({ success: true, data: fee });
 });
+
+// A fee structure keeps the program total twice: the base fees and the per-year
+// rows. Receipts and the enrollment form read the per-year rows, so if someone
+// edits only one of them the totals drift apart (e.g. base 20,498 vs yearly
+// 19,000). Refuse to save such a structure and say what to fix.
+const feeTotalsMismatch = (data: any): string | null => {
+  const rows: any[] = Array.isArray(data.yearlyFees) ? data.yearlyFees : [];
+  if (rows.length === 0) return null;
+  const yearly = rows.reduce(
+    (sum, r) => sum + (Number(r?.registrationFee) || 0) + (Number(r?.tuitionFee) || 0) + (Number(r?.examFee) || 0),
+    0
+  );
+  const base = (Number(data.registrationFee) || 0) + (Number(data.tuitionFee) || 0) + (Number(data.examFee) || 0);
+  if (yearly > 0 && base > 0 && Math.abs(yearly - base) > 0.5) {
+    const fmt = (n: number) => '₹' + n.toLocaleString('en-IN');
+    return `The yearly fee rows add up to ${fmt(yearly)} but the base fees add up to ${fmt(base)}. Make them match before saving (receipts and enrollment use the yearly rows).`;
+  }
+  return null;
+};
 export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
   const {
     programId,
@@ -531,6 +559,12 @@ export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     additionalFees: additionalFees || [],
     installments: installments || []
   };
+
+  const mismatchCreate = feeTotalsMismatch(data);
+  if (mismatchCreate) {
+    res.status(400).json({ success: false, message: mismatchCreate });
+    return;
+  }
 
   if (effectiveFrom) {
     data.effectiveFrom = new Date(effectiveFrom);
@@ -588,6 +622,12 @@ export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     additionalFees: additionalFees || [],
     installments: installments || []
   };
+
+  const mismatchUpdate = feeTotalsMismatch(data);
+  if (mismatchUpdate) {
+    res.status(400).json({ success: false, message: mismatchUpdate });
+    return;
+  }
 
   if (effectiveFrom) {
     data.effectiveFrom = new Date(effectiveFrom);
@@ -1004,6 +1044,18 @@ export const getCollectionReport = asyncHandler(async (req: AuthRequest, res: Re
   const { startDate, endDate, receivedBy } = req.query;
 
   const where: any = { organizationId };
+
+  // Branch-level isolation for finance users
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    where.invoice = {
+      OR: [
+        { student: { branchId: req.user.branchId } },
+        { student: { enrolledByUser: { branchId: req.user.branchId } } },
+        { studentId: null, centerId: null }
+      ]
+    };
+  }
 
   if (startDate && endDate) {
     where.receivedAt = {

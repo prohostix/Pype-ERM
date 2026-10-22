@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 
 interface TeamMember {
   id: string;
@@ -42,8 +43,9 @@ export function TeamPerformancePanel() {
     try {
       const res = await api.get('/sales/team-performance');
       setTeam(res.data.data || []);
-    } catch {
+    } catch (err: any) {
       setTeam([]);
+      toast.error(err.response?.data?.message || 'Failed to load team performance');
     } finally {
       setLoading(false);
     }
@@ -151,7 +153,7 @@ export function TeamPerformancePanel() {
 
                   {/* Avatar */}
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0">
-                    {member.name[0].toUpperCase()}
+                    {(member.name?.trim()?.[0] || '?').toUpperCase()}
                   </div>
 
                   {/* Name + designation */}

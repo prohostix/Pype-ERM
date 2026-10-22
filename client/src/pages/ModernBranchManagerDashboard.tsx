@@ -124,6 +124,8 @@ export function ModernBranchManagerDashboard({ initialTab, onNavigate }: { initi
       case 'leads': return <LeadsPanel />;
       case 'targets': return <TargetsPanel endpoint="/sales/targets" title="Branch Targets" />;
       case 'invite_links': return <SalesInvitePanel />;
+      // The page URL maps the "My Team" menu item (my_team) to the tab name "team".
+      case 'team':
       case 'my_team': return <TeamPerformancePanel />;
       case 'branch_centers_sales': return <SalesCentersPanel />;
       // Ops
@@ -144,7 +146,7 @@ export function ModernBranchManagerDashboard({ initialTab, onNavigate }: { initi
       case 'tasks': return <TasksPanel />;
       case 'announcements': return <AnnouncementsPanel />;
       // Portal
-      case 'my_leaves': return <LeavesPanel />;
+      case 'my_leaves': return <LeavesPanel isMyPortal />; // her own leaves only
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'my_payslips': return <PayrollPanel />;
       case 'holidays': return <HolidaysPanel />;

@@ -140,9 +140,9 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
 
       {/* Summary row */}
       <div style={{ border: '1px solid #000', padding: '4px 8px', fontSize: '13px', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-        <span>Total Fee : {(receipt.totalFee || receipt.overallProgramFee || receipt.universityFee || 0).toFixed(2)}</span>
+        <span>Total Fee : {receipt.feeStructureMissing ? 'Fee not set up' : (receipt.totalFee || receipt.overallProgramFee || receipt.universityFee || 0).toFixed(2)}</span>
         <span>Total Remitted Fee : {(receipt.overallPaid || totalPaid).toFixed(2)}</span>
-        <span>Balance Fee : {Math.max(0, (receipt.totalFee || receipt.overallProgramFee || receipt.universityFee || 0) - (receipt.overallPaid || totalPaid)).toFixed(2)}</span>
+        <span>Balance Fee : {receipt.feeStructureMissing ? '—' : Math.max(0, (receipt.totalFee || receipt.overallProgramFee || receipt.universityFee || 0) - (receipt.overallPaid || totalPaid)).toFixed(2)}</span>
       </div>
 
       {/* Words and Payment info */}

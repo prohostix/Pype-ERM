@@ -2232,7 +2232,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                         "bg-destructive/10 text-destructive"
                                   )}
                                 >
-                                  {inv.status}
+                                  {String(inv.status).replace(/_/g, ' ')}
                                 </Badge>
                               </div>
                               <p className="text-sm font-medium text-muted-foreground mb-4">
@@ -2241,12 +2241,12 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                               <div className="flex items-center gap-8 text-sm bg-muted/40 px-4 py-2.5 rounded-lg border border-border/50">
                                 <div>
                                   <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold block mb-0.5">Total Amount</span>
-                                  <span className="font-semibold text-foreground">${inv.amount}</span>
+                                  <span className="font-semibold text-foreground">₹{inv.amount}</span>
                                 </div>
                                 {!isFullyPaid && (
                                   <div>
                                     <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold block mb-0.5">Remaining Balance</span>
-                                    <span className="font-bold text-destructive">${inv.balanceAmount}</span>
+                                    <span className="font-bold text-destructive">₹{inv.balanceAmount}</span>
                                   </div>
                                 )}
                               </div>
@@ -2268,7 +2268,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                 variant="premium"
                                 onClick={() => handlePayNowClick(inv)}
                               >
-                                Pay ${inv.balanceAmount}
+                                Pay ₹{inv.balanceAmount}
                               </Button>
                             ) : (
                               <Button

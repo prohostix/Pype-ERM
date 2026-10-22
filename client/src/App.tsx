@@ -14,6 +14,7 @@ import { getHRNavItems } from '@/pages/ModernHRDashboard';
 import { getFinanceNavItems } from '@/pages/ModernFinanceDashboard';
 import { getSalesNavItems } from '@/pages/ModernSalesDashboard';
 import { getBranchManagerNavItems } from '@/pages/ModernBranchManagerDashboard';
+import { getExecutiveNavItems } from '@/pages/ModernCEODashboard';
 import { getCollectionsNavItems } from '@/pages/ModernCollectionsDashboard';
 import api from '@/lib/api';
 import { toast } from 'sonner';
@@ -401,31 +402,7 @@ function App() {
     }
 
     if (user.role === 'ceo' || user.role === 'general_manager') {
-      return [
-        { id: 'dashboard', label: 'Executive Overview' },
-        { id: 'performance', label: 'Performance' },
-        { id: 'kpi-kra', label: 'KPI / KRA Report' },
-        { id: 'users', label: 'Users' },
-        { id: 'departments', label: 'Departments' },
-        { id: 'tasks', label: 'Tasks' },
-        { id: 'escalations', label: 'Escalations' },
-        { id: 'students', label: 'Students' },
-        { id: 'enrollment_review', label: 'Enrollment Review' },
-        { id: 'leaves', label: 'Leave Requests' },
-        { id: 'attendance', label: 'Attendance' },
-        { id: 'invoices', label: 'Invoices' },
-        { id: 'collections', label: 'Collections' },
-        { id: 'leads', label: 'Leads' },
-        { id: 'university_commissions', label: 'Commissions' },
-        { id: 'activity_report', label: 'Activity Report' },
-        ...(user.role === 'ceo'
-          ? [
-              { id: 'delete_approvals', label: 'Delete Approvals' },
-              { id: 'meetings', label: 'Meetings' },
-              { id: 'activity-logs', label: 'Activity Logs' },
-            ]
-          : []),
-      ];
+      return getExecutiveNavItems(user.role);
     }
 
     if (user.role === 'org_admin') {
@@ -611,7 +588,7 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'faculty'];
+    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'branch_manager', 'faculty'];
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student' && user?.role !== 'center_student';

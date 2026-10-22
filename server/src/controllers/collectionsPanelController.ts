@@ -100,9 +100,28 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
   
   const sevenDaysFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  const studentWhere: any = { organizationId };
+  const scheduleWhere: any = { organizationId };
+
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    studentWhere.OR = [
+      { branchId: req.user.branchId },
+      { enrolledByUser: { branchId: req.user.branchId } },
+      { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
+    ];
+    scheduleWhere.student = {
+      OR: [
+        { branchId: req.user.branchId },
+        { enrolledByUser: { branchId: req.user.branchId } },
+        { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
+      ]
+    };
+  }
+
   // 1. Fetch Students status
   const students = await prisma.student.findMany({
-    where: { organizationId },
+    where: studentWhere,
     select: {
       id: true,
       name: true,
@@ -128,7 +147,7 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
 
   // 2. Fetch Payment Schedules
   const schedules = await prisma.paymentSchedule.findMany({
-    where: { organizationId },
+    where: scheduleWhere,
     include: {
       student: {
         select: {
@@ -270,7 +289,7 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
       },
       orgUsers: users,
       currentUserOversight: {
-        isAdmin: ['ceo', 'org_admin', 'superadmin', 'finance_admin', 'finance_sub_admin'].includes(req.user.role),
+        isAdmin: ['ceo', 'general_manager', 'org_admin', 'superadmin', 'finance_admin', 'finance_sub_admin'].includes(req.user.role),
         isOverseer: Boolean(isOverseer)
       }
     }

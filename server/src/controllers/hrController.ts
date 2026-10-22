@@ -13,7 +13,8 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
 
   const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin'];
   const isHR = ['hr_admin', 'hr_sub_admin'].includes(role);
-  const isGlobalAdmin = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'].includes(role);
+  const isGlobalAdmin = ['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(role);
+  const isBranchManager = role === 'branch_manager';
 
   if (isGlobalAdmin) {
     // Global admins see all leaves
@@ -47,7 +48,7 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
   }
 
   if (req.query.status) {
-    if (req.query.status === 'pending' && (isHR || isGlobalAdmin)) {
+    if (req.query.status === 'pending' && (isHR || isGlobalAdmin || isBranchManager)) {
       where.status = { in: ['pending', 'dept_approved'] };
     } else {
       where.status = req.query.status;
@@ -411,6 +412,14 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
   const { action, remarks } = req.body;
   const currentLeave = await prisma.leaveRequest.findUnique({ where: { id: req.params.id } });
   if (!currentLeave) return res.status(404).json({ success: false, message: 'Not found' });
+
+  // A branch manager can only decide leaves of employees in their own branch.
+  if (req.user.role === 'branch_manager') {
+    const emp = await prisma.user.findUnique({ where: { id: currentLeave.employeeId }, select: { branchId: true, organizationId: true } });
+    if (!req.user.branchId || !emp || emp.organizationId !== req.user.organizationId || emp.branchId !== req.user.branchId) {
+      return res.status(403).json({ success: false, message: 'You can only approve leave requests from your own branch.' });
+    }
+  }
 
   let newStatus: any = action === 'approve' ? 'approved' : 'rejected';
   if (currentLeave.status === 'withdraw_pending') {

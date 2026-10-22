@@ -156,8 +156,11 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
 
     const program = await prisma.program.findUnique({ where: { id: rest.programId } });
 
-    // Ensure User account exists to satisfy Student_email_fkey foreign key constraint
-    let studentUser = await prisma.user.findUnique({ where: { email: rest.studentEmail } });
+    // Ensure User account exists to satisfy Student_email_fkey foreign key constraint.
+    // Use the normalized email (trimmed, lower-case) for BOTH the login account and the
+    // student record; an email typed with capitals or spaces used to create the account
+    // under one spelling and the student under another, which broke the link.
+    let studentUser = await prisma.user.findFirst({ where: { email: { equals: cleanEmail, mode: 'insensitive' } } });
     const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
     const hashedPassword = await hashPassword(defaultPassword);
 
@@ -167,7 +170,7 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
         data: {
           userId: generatedUid,
           organizationId: req.user.organizationId,
-          email: rest.studentEmail,
+          email: cleanEmail,
           password: hashedPassword,
           name: rest.studentName,
           role: 'student',
@@ -180,7 +183,7 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
     const newStudent = await prisma.student.create({
       data: {
         name: rest.studentName,
-        email: cleanEmail,
+        email: studentUser.email,
         phone: cleanPhone,
         address: rest.studentAddress || 'Pending',
         organizationId: req.user.organizationId,

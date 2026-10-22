@@ -72,7 +72,7 @@ import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
 // Targets
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { role, id: userId, organizationId, departmentId } = req.user;
-  const canManage = ['superadmin', 'org_admin', 'ceo', 'sales_admin', 'sales_sub_admin', 'finance_admin', 'finance_sub_admin'].includes(role);
+  const canManage = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'finance_admin', 'finance_sub_admin'].includes(role);
   
   const whereClause: any = { organizationId };
   if (!canManage) {
@@ -210,6 +210,15 @@ export const getTeamPerformance = asyncHandler(async (req: AuthRequest, res: Res
       whereClause.OR.push({ departmentId: req.user.departmentId });
     }
   }
+
+  // A branch manager's team is the staff of their own branch.
+  if (req.user.role === 'branch_manager' && req.user.branchId) {
+    whereClause.branchId = req.user.branchId;
+  }
+
+  // Team performance is about staff: never include student accounts (an
+  // organization can have thousands, which made this call take ~20 seconds).
+  whereClause.role = { not: 'student' };
 
   // Exclude resigned from team performance
   whereClause.status = { not: 'resigned' };
