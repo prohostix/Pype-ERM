@@ -41,6 +41,8 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
   const [punching, setPunching] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
   const [webcamOpen, setWebcamOpen] = useState(false);
+  const [camError, setCamError] = useState<string | null>(null);
+  const [camKey, setCamKey] = useState(0);
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
   const [punchType, setPunchType] = useState<'in' | 'out'>('in');
   const [location, setLocation] = useState<{ lat: number; lng: number; address: string } | null>(null);
@@ -194,6 +196,7 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
     if (!location) return;
     
     if (user?.requireSelfiePunchIn && !capturedPhoto) {
+      setCamError(null);
       setWebcamOpen(true);
       return;
     }
@@ -477,15 +480,39 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
             {!capturedPhoto ? (
               <>
                 <div className="w-full aspect-video rounded-lg overflow-hidden bg-black relative">
+                  {camError ? (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4 text-center text-white text-sm">
+                      <p>{camError}</p>
+                      <Button size="sm" variant="secondary" onClick={() => { setCamError(null); setCamKey(k => k + 1); }}>
+                        Try again
+                      </Button>
+                    </div>
+                  ) : (
                   <Webcam
+                    key={camKey}
+                    onUserMediaError={(err: any) => {
+                      const name = err?.name || '';
+                      setCamError(
+                        !window.isSecureContext
+                          ? 'Camera needs a secure (https) connection. Open the site using https://pypeerm.com.'
+                          : name === 'NotAllowedError' || name === 'SecurityError'
+                          ? 'Camera access is blocked for this site. Click the lock icon in the address bar, set Camera to Allow, then press Try again.'
+                          : name === 'NotFoundError' || name === 'OverconstrainedError'
+                          ? 'No camera was found on this device.'
+                          : name === 'NotReadableError'
+                          ? 'The camera is in use by another app. Close it and press Try again.'
+                          : 'Could not start the camera. Check your browser permissions and press Try again.'
+                      );
+                    }}
                     audio={false}
                     ref={webcamRef}
                     screenshotFormat="image/jpeg"
                     videoConstraints={{ facingMode: "user" }}
                     className="w-full h-full object-cover"
                   />
+                  )}
                 </div>
-                <Button className="w-full" onClick={handleCapturePhoto}>
+                <Button className="w-full" onClick={handleCapturePhoto} disabled={!!camError}>
                   Capture Photo
                 </Button>
               </>
