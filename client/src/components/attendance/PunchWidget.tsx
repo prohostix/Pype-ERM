@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { MapPin, Clock, CheckCircle2, LogIn, LogOut, Loader2, AlertCircle } from 'lucide-react';
+import { MapPin, Clock, CheckCircle2, LogIn, LogOut, Loader2, AlertCircle, Camera } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -111,6 +111,7 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
     setPunchType(type);
     setLocating(true);
     setMapOpen(true);
+    setCapturedPhoto(null);
 
     try {
       const pos = await getLocation();
@@ -216,7 +217,13 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
       setCapturedPhoto(null);
       fetchToday();
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Punch failed');
+      const msg = err.response?.data?.message || 'Punch failed';
+      toast.error(msg);
+      // Fallback: if server demands selfie photo, open camera immediately
+      if (msg.toLowerCase().includes('selfie') && !capturedPhoto) {
+        setCamError(null);
+        setWebcamOpen(true);
+      }
     } finally {
       setPunching(false);
     }
@@ -434,14 +441,19 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Clock className="w-3 h-3" />
-                  <span>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-3 h-3" />
                     {punchType === 'in' ? 'Check-in' : 'Check-out'} time:{' '}
                     <span className="font-bold text-foreground">
                       {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
                     </span>
                   </span>
+                  {user?.requireSelfiePunchIn && (
+                    <Badge variant="secondary" className="text-[10px] gap-1 font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                      <Camera className="w-3 h-3" /> Selfie required
+                    </Badge>
+                  )}
                 </div>
 
                 <div className="flex gap-2">
@@ -451,6 +463,8 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
                   <Button className="flex-1" onClick={handlePunch} disabled={punching}>
                     {punching ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</>
+                    ) : user?.requireSelfiePunchIn && !capturedPhoto ? (
+                      <><Camera className="w-4 h-4 mr-2" />Take Selfie to {punchType === 'in' ? 'Punch In' : 'Punch Out'}</>
                     ) : (
                       <><CheckCircle2 className="w-4 h-4 mr-2" />Confirm {punchType === 'in' ? 'Punch In' : 'Punch Out'}</>
                     )}
