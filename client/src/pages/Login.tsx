@@ -132,14 +132,25 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4 sm:p-8 font-sans text-slate-900 overflow-hidden">
+    <div className="min-h-[100dvh] relative flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 font-sans text-slate-900 overflow-x-hidden overflow-y-auto">
       
       <BrandRibbon />
 
-      {/* Top Left Logo Area */}
-      <div className="absolute top-6 left-6 sm:top-8 sm:left-10 flex items-center gap-3.5">
+      {/* Mobile Brand Header (Natural flow above the card on small screens) */}
+      <div className="flex md:hidden items-center justify-center gap-2.5 mb-4 select-none z-10">
         <div className="flex items-center justify-center">
-          <img src="/erm-logo-green.png" alt="Pype ERM" className="h-20 sm:h-24 w-auto drop-shadow-sm" />
+          <img src="/erm-logo-green.png" alt="Pype ERM" className="h-12 w-auto drop-shadow-sm" />
+        </div>
+        <div className="flex items-baseline gap-1 whitespace-nowrap select-none mt-0.5">
+          <span className="text-2xl font-bold tracking-tight text-slate-500">pype</span>
+          <span className="text-xl font-black tracking-wider text-slate-900">ERM</span>
+        </div>
+      </div>
+
+      {/* Desktop Top Left Logo Area (Pinned to top-left on desktop screens) */}
+      <div className="hidden md:flex absolute top-6 left-6 sm:top-8 sm:left-10 items-center gap-3.5 z-20">
+        <div className="flex items-center justify-center">
+          <img src="/erm-logo-green.png" alt="Pype ERM" className="h-16 lg:h-20 w-auto drop-shadow-sm" />
         </div>
         <div className="flex items-baseline gap-1.5 whitespace-nowrap select-none mt-1">
           <span className="text-2xl sm:text-[28px] font-bold tracking-tight text-slate-500">pype</span>
@@ -147,11 +158,11 @@ export function Login() {
         </div>
       </div>
 
-      {/* Main Glassmorphism Card (Wide, 2 columns) */}
-      <div className="w-full max-w-[1000px] min-h-[600px] bg-white/70 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] border border-white/60 overflow-hidden relative z-10 flex flex-col md:flex-row">
+      {/* Main Glassmorphism Card (Wide, 2 columns on desktop, clean single-column on mobile) */}
+      <div className="w-full max-w-[1000px] min-h-0 md:min-h-[600px] bg-white/70 backdrop-blur-3xl rounded-3xl md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] border border-white/60 overflow-hidden relative z-10 flex flex-col md:flex-row my-auto">
         
         {/* Left Column: Form */}
-        <div className="w-full md:w-1/2 p-8 sm:p-12 md:p-14 flex flex-col justify-center relative">
+        <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-14 flex flex-col justify-center relative">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-[30px] sm:text-[32px] font-bold tracking-tight text-slate-900 mb-2">Sign in to your account</h1>
             <p className="text-slate-500 text-[14px] sm:text-[15px]">Welcome back! Login with your credentials</p>
@@ -286,9 +297,9 @@ export function Login() {
             <circle cx="350" cy="450" r="150" fill="#8ae47e" filter="blur(80px)" opacity="0.25" />
           </svg>
           
-          {/* Top Right Logo matching erm-logo-green.png */}
+          {/* Top Right Logo matching prohostix.png */}
           <div className="absolute top-10 right-10 z-20 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-white/40">
-            <img src="/erm-logo-green.png" alt="Pype ERM" className="w-12 h-12 object-contain" />
+            <img src="/prohostix.png" alt="ProHostix" className="w-12 h-12 object-contain" />
           </div>
           
           <div className="relative z-10 flex flex-col items-start text-left w-full pb-4">

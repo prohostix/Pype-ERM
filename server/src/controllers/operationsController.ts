@@ -393,7 +393,19 @@ export const suspendStudyCenter = asyncHandler(async (req: AuthRequest, res: Res
 
 // Admission Sessions
 export const getAdmissionSessions = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const sessions = await prisma.admissionSession.findMany({ where: { organizationId: req.user.organizationId } });
+  const { universityId } = req.query;
+  const where: any = { organizationId: req.user.organizationId };
+  if (universityId) {
+    where.universityId = String(universityId);
+  }
+  const sessions = await prisma.admissionSession.findMany({
+    where,
+    include: {
+      program: { select: { id: true, name: true, code: true } },
+      university: { select: { id: true, name: true, code: true } },
+    },
+    orderBy: { createdAt: 'desc' }
+  });
   res.json({ success: true, count: sessions.length, data: sessions });
 });
 export const getAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {

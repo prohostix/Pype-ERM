@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 import { ProgramFormDialog } from '../forms/ProgramFormDialog';
-import { SessionFormDialog } from '../forms/SessionFormDialog';
+import { UniversitySessionsDialog } from './UniversitySessionsDialog';
 import { UniversityDetailPanel } from './UniversityDetailPanel';
 import { toast } from 'sonner';
 import { uploadFormFile } from '@/lib/uploadFile';
@@ -44,7 +44,7 @@ export function UniversitiesPanel() {
   const [accessMode, setAccessMode] = useState<'all' | 'exclusive' | 'multi' | 'academic_partners'>('all');
 
   const [addProgramUniId, setAddProgramUniId] = useState<string | null>(null);
-  const [addSessionUniId, setAddSessionUniId] = useState<string | null>(null);
+  const [manageSessionsUni, setManageSessionsUni] = useState<University | null>(null);
   const [selectedUniversity, setSelectedUniversity] = useState<University | null>(null);
 
   useEffect(() => {
@@ -532,7 +532,7 @@ export function UniversitiesPanel() {
                   <Button variant="ghost" size="sm" className="text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50" onClick={() => setAddProgramUniId(u.id)} title="Add Program">
                     <BookOpen className="w-3.5 h-3.5 mr-1" /> Program
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50" onClick={() => setAddSessionUniId(u.id)} title="Add Session">
+                  <Button variant="ghost" size="sm" className="text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50" onClick={() => setManageSessionsUni(u)} title="Sessions">
                     <Calendar className="w-3.5 h-3.5 mr-1" /> Session
                   </Button>
                   <div className="h-4 border-l mx-1 border-slate-300"></div>
@@ -593,11 +593,11 @@ export function UniversitiesPanel() {
             onSuccess={() => { }}
             defaultUniversityId={addProgramUniId || undefined}
           />
-          <SessionFormDialog
-            open={!!addSessionUniId}
-            onOpenChange={(open) => { if (!open) setAddSessionUniId(null); }}
-            onSuccess={() => { }}
-            defaultUniversityId={addSessionUniId || undefined}
+          <UniversitySessionsDialog
+            university={manageSessionsUni}
+            open={!!manageSessionsUni}
+            onOpenChange={(open) => { if (!open) setManageSessionsUni(null); }}
+            isOrgAdmin={isOrgAdmin}
           />
         </>
       )}

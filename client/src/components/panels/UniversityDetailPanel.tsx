@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, BookOpen, Calendar } from 'lucide-react';
+import { ArrowLeft, BookOpen, Calendar, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { ProgramDetailPanel } from './ProgramDetailPanel';
+import { UniversitySessionsDialog } from './UniversitySessionsDialog';
 
 interface UniversityDetailPanelProps {
   university: any;
@@ -16,6 +17,7 @@ export function UniversityDetailPanel({ university, onBack }: UniversityDetailPa
   const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedProgramId, setSelectedProgramId] = useState<string | null>(null);
+  const [manageSessionsOpen, setManageSessionsOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -115,21 +117,38 @@ export function UniversityDetailPanel({ university, onBack }: UniversityDetailPa
 
         {/* Sessions List */}
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
               <Calendar className="w-5 h-5 text-emerald-600" />
               Admission Sessions ({sessions.length})
             </CardTitle>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 gap-1 text-emerald-700 border-emerald-200 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400"
+              onClick={() => setManageSessionsOpen(true)}
+            >
+              <Plus className="w-3.5 h-3.5" /> Manage &amp; Create
+            </Button>
           </CardHeader>
           <CardContent>
             {loading ? (
               <div className="text-center py-4 text-muted-foreground">Loading...</div>
             ) : sessions.length === 0 ? (
-              <div className="text-center py-4 text-muted-foreground">No sessions found for this university.</div>
+              <div className="text-center py-8 text-muted-foreground space-y-3">
+                <p>No sessions found for this university.</p>
+                <Button
+                  size="sm"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1"
+                  onClick={() => setManageSessionsOpen(true)}
+                >
+                  <Plus className="w-3.5 h-3.5" /> Create Session
+                </Button>
+              </div>
             ) : (
               <div className="space-y-3">
                 {sessions.map((s: any) => (
-                  <div key={s.id} className="p-3 border rounded-lg hover:bg-slate-50 transition-colors">
+                  <div key={s.id} className="p-3 border rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-semibold text-sm">{s.name}</p>
@@ -146,6 +165,16 @@ export function UniversityDetailPanel({ university, onBack }: UniversityDetailPa
           </CardContent>
         </Card>
       </div>
+
+      <UniversitySessionsDialog
+        university={university}
+        open={manageSessionsOpen}
+        onOpenChange={(open) => {
+          setManageSessionsOpen(open);
+          if (!open) fetchData();
+        }}
+        isOrgAdmin={true}
+      />
     </div>
   );
 }
