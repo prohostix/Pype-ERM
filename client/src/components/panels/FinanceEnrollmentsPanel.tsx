@@ -50,14 +50,14 @@ interface Summary {
 }
 
 const STATUS_META: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  payment_pending:     { label: 'Fee Pending',      color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', icon: <Clock className="w-3 h-3" /> },
-  receipt_submitted:   { label: 'Receipt Uploaded', color: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400',       icon: <FileText className="w-3 h-3" /> },
-  document_review:     { label: 'Doc Review',       color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',         icon: <AlertCircle className="w-3 h-3" /> },
-  finance_review:      { label: 'Finance Review',      color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', icon: <Clock className="w-3 h-3" /> },
-  sales_admin_review:  { label: 'Sales Admin Review',color: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400', icon: <Clock className="w-3 h-3" /> },
-  enrolled:            { label: 'Enrolled',            color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',     icon: <CheckCircle className="w-3 h-3" /> },
-  rejected:            { label: 'Rejected',         color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',             icon: <XCircle className="w-3 h-3" /> },
-  department_rejected: { label: 'Dept Rejected',    color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',             icon: <Ban className="w-3 h-3" /> },
+  payment_pending: { label: 'Fee Pending', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', icon: <Clock className="w-3 h-3" /> },
+  receipt_submitted: { label: 'Receipt Uploaded', color: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400', icon: <FileText className="w-3 h-3" /> },
+  document_review: { label: 'Doc Review', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', icon: <AlertCircle className="w-3 h-3" /> },
+  finance_review: { label: 'Finance Review', color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', icon: <Clock className="w-3 h-3" /> },
+  sales_admin_review: { label: 'Sales Admin Review', color: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400', icon: <Clock className="w-3 h-3" /> },
+  enrolled: { label: 'Enrolled', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', icon: <CheckCircle className="w-3 h-3" /> },
+  rejected: { label: 'Rejected', color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', icon: <XCircle className="w-3 h-3" /> },
+  department_rejected: { label: 'Dept Rejected', color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', icon: <Ban className="w-3 h-3" /> },
 };
 
 const FILTER_TABS = [
@@ -82,6 +82,59 @@ export function FinanceEnrollmentsPanel() {
   const [rejectDialog, setRejectDialog] = useState<{ open: boolean; id: string }>({ open: false, id: '' });
   const [remarks, setRemarks] = useState('');
   const [viewStudent, setViewStudent] = useState<Enrollment | null>(null);
+  const getRelevantFeeStructure = (enrollment: any) => {
+    const list: any[] = enrollment?.program?.feeStructures;
+    if (!Array.isArray(list) || list.length === 0) return null;
+
+    const studentSessionId = enrollment.sessionId || enrollment.student?.sessionId || null;
+    const studentSpecialisation = enrollment.specialisation || enrollment.student?.specialisation || null;
+
+    // 1. Exact match: session + specialisation
+    if (studentSessionId && studentSpecialisation) {
+      const match = list.find(f => {
+        const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+        return sid === studentSessionId && f.specialisation === studentSpecialisation;
+      });
+      if (match) return match;
+    }
+
+    // 2. Session match without specialisation
+    if (studentSessionId) {
+      const match = list.find(f => {
+        const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+        return sid === studentSessionId && !f.specialisation;
+      });
+      if (match) return match;
+    }
+
+    // 3. Fallback to default session (!sessionId) with specialisation match
+    if (studentSpecialisation) {
+      const match = list.find(f => {
+        const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+        return !sid && f.specialisation === studentSpecialisation;
+      });
+      if (match) return match;
+    }
+
+    // 4. Fallback to default session (!sessionId) without specialisation
+    const defaultMatch = list.find(f => {
+      const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+      return !sid && !f.specialisation;
+    });
+    if (defaultMatch) return defaultMatch;
+
+    // 5. Ultimate fallback if no default session structure exists
+    return list[0];
+  };
+
+  const relevantFee = viewStudent ? getRelevantFeeStructure(viewStudent) : null;
+  const feeRows = relevantFee ? [
+    { label: 'Registration Fee', val: relevantFee.registrationFee },
+    { label: 'Tuition Fee', val: relevantFee.tuitionFee },
+    { label: 'Exam Fee', val: relevantFee.examFee },
+    { label: 'University Fee', val: relevantFee.universityFee },
+  ].filter(r => r.val && Number(r.val) > 0) : [];
+  const totalProgramFee = feeRows.reduce((acc, r) => acc + Number(r.val), 0);
 
   const fetchData = async (status = statusFilter, q = search) => {
     setLoading(true);
@@ -230,7 +283,7 @@ export function FinanceEnrollmentsPanel() {
 
       {/* Table */}
       {loading ? (
-        <div className="space-y-3">{[1,2,3,4].map(i => <div key={i} className="h-16 bg-muted rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1, 2, 3, 4].map(i => <div key={i} className="h-16 bg-muted rounded-xl animate-pulse" />)}</div>
       ) : enrollments.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center text-muted-foreground">
@@ -359,8 +412,8 @@ export function FinanceEnrollmentsPanel() {
                 <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Program &amp; University</h4>
                 <div className="grid grid-cols-2 gap-3">
                   <Field label="Program" value={(viewStudent as any).program?.name ? `${(viewStudent as any).program.name} (${(viewStudent as any).program.code})` : getProgramName(viewStudent)} />
-                  <Field 
-                    label="University" 
+                  <Field
+                    label="University"
                     value={
                       (viewStudent as any).program?.university?.name ? (
                         <span className="flex items-center gap-1.5 flex-wrap">
@@ -372,7 +425,7 @@ export function FinanceEnrollmentsPanel() {
                           )}
                         </span>
                       ) : null
-                    } 
+                    }
                   />
                   <Field label="Univ. Code" value={(viewStudent as any).program?.university?.code} />
                   <Field label="Univ. Address" value={(viewStudent as any).program?.university?.address} />
@@ -383,10 +436,10 @@ export function FinanceEnrollmentsPanel() {
               </div>
 
               {/* Fee Details */}
-              {((viewStudent as any).program?.feeStructures?.length > 0 || viewStudent.payment) && (
+              {(feeRows.length > 0 || viewStudent.payment || viewStudent.initialPaymentAmount) && (
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Fee Details</h4>
-                  {(viewStudent as any).program?.feeStructures?.length > 0 && (
+                  {feeRows.length > 0 && relevantFee && (
                     <div className="rounded-lg border overflow-hidden mb-3">
                       <table className="w-full text-xs">
                         <thead className="bg-muted/50">
@@ -396,20 +449,18 @@ export function FinanceEnrollmentsPanel() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                          {(viewStudent as any).program.feeStructures.map((f: any, i: number) => {
-                            const rows = [
-                              { label: 'Registration Fee', val: f.registrationFee },
-                              { label: 'Tuition Fee', val: f.tuitionFee },
-                              { label: 'Exam Fee', val: f.examFee },
-                              { label: 'University Fee', val: f.universityFee },
-                            ].filter(r => r.val && Number(r.val) > 0);
-                            return rows.map((r, j) => (
-                              <tr key={`${i}-${j}`}>
-                                <td className="px-3 py-2">{r.label} <span className="text-muted-foreground capitalize">({f.billingCycle || 'per year'})</span></td>
-                                <td className="px-3 py-2 text-right font-medium text-green-600">₹{Number(r.val).toLocaleString()}</td>
-                              </tr>
-                            ));
-                          })}
+                          {feeRows.map((r, j) => (
+                            <tr key={j}>
+                              <td className="px-3 py-2">{r.label} <span className="text-muted-foreground capitalize">({relevantFee.billingCycle || 'per year'})</span></td>
+                              <td className="px-3 py-2 text-right font-medium text-green-600">₹{Number(r.val).toLocaleString()}</td>
+                            </tr>
+                          ))}
+                          {feeRows.length > 1 && (
+                            <tr className="bg-muted/30 font-semibold border-t">
+                              <td className="px-3 py-2 text-foreground">Total Fee</td>
+                              <td className="px-3 py-2 text-right text-foreground font-bold">₹{totalProgramFee.toLocaleString()}</td>
+                            </tr>
+                          )}
                         </tbody>
                       </table>
                     </div>

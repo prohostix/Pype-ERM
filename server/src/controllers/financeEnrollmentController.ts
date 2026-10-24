@@ -51,6 +51,7 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
               select: {
                 id: true, registrationFee: true, tuitionFee: true,
                 examFee: true, universityFee: true, billingCycle: true, yearlyFees: true,
+                sessionId: true, specialisation: true,
               }
             },
           },
