@@ -18,12 +18,14 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
   }
 
   // Branch-level isolation for finance users
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     const branchCondition = { 
       OR: [
         { student: { branchId: req.user.branchId } },
         { salesUser: { branchId: req.user.branchId } },
+        { salesUser: { department: { salesBranch: { id: req.user.branchId } } } },
+        { salesUser: { department: { opsBranch: { id: req.user.branchId } } } },
         { studyCenterId: { not: null } }
       ]
     };
@@ -89,11 +91,13 @@ export const getFinanceEnrollments = asyncHandler(async (req: AuthRequest, res: 
   const where: any = { organizationId: req.user.organizationId, status: 'finance_review' };
   
   // Enforce branch isolation for finance users
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.OR = [
       { student: { branchId: req.user.branchId } },
       { salesUser: { branchId: req.user.branchId } },
+      { salesUser: { department: { salesBranch: { id: req.user.branchId } } } },
+      { salesUser: { department: { opsBranch: { id: req.user.branchId } } } },
       { studyCenterId: { not: null } }
     ];
   }
@@ -128,7 +132,7 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
   }
 
   // Branch-level isolation check
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     const studentBranch = existingEnrollment.student?.branchId;
     const salesBranch = existingEnrollment.salesUser?.branchId;
@@ -243,7 +247,7 @@ export const rejectFinanceEnrollment = asyncHandler(async (req: AuthRequest, res
   }
 
   // Branch-level isolation check
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     const studentBranch = existingEnrollment.student?.branchId;
     const salesBranch = existingEnrollment.salesUser?.branchId;
@@ -313,7 +317,7 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
   }
 
   // Branch-level isolation check
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     const studentBranch = enrollment.student?.branchId;
     const salesBranch = enrollment.salesUser?.branchId;
@@ -461,11 +465,13 @@ export const getProvisionalEnrollments = asyncHandler(async (req: AuthRequest, r
   const where: any = { organizationId: req.user.organizationId, isProvisional: true, status: 'provisional_finance_pending' };
 
   // Branch-level isolation for finance users
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.OR = [
       { student: { branchId: req.user.branchId } },
       { salesUser: { branchId: req.user.branchId } },
+      { salesUser: { department: { salesBranch: { id: req.user.branchId } } } },
+      { salesUser: { department: { opsBranch: { id: req.user.branchId } } } },
       { studyCenterId: { not: null } }
     ];
   }
@@ -481,9 +487,21 @@ export const getProvisionalEnrollments = asyncHandler(async (req: AuthRequest, r
 export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, res: Response) => {
   const enrollmentId = req.params.id;
 
-  const enrollment = await prisma.enrollment.findUnique({
+    const enrollment = await prisma.enrollment.findUnique({
     where: { id: enrollmentId, isProvisional: true, status: 'provisional_finance_pending' },
-    include: { student: true, salesUser: true }
+    include: {
+      student: true,
+      salesUser: {
+        include: {
+          department: {
+            include: {
+              salesBranch: true,
+              opsBranch: true
+            }
+          }
+        }
+      }
+    }
   });
 
   if (!enrollment) {
@@ -492,11 +510,13 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
   }
 
   // Branch-level isolation check
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     const studentBranch = enrollment.student?.branchId;
-    const salesBranch = enrollment.salesUser?.branchId;
-    if (studentBranch && salesBranch && studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
+    const salesBranch = enrollment.salesUser?.branchId ||
+                        enrollment.salesUser?.department?.salesBranch?.id ||
+                        enrollment.salesUser?.department?.opsBranch?.id;
+    if ((studentBranch || salesBranch) && studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
       res.status(403);
       throw new Error('Access denied: Unauthorized branch');
     }

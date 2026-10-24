@@ -1815,6 +1815,118 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     toast.success('Template downloaded!');
   };
 
+  // Export Students Data in Excel
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExportExcel = async () => {
+    const dataToExport = selectedStudentIds.size > 0
+      ? filteredStudents.filter(s => selectedStudentIds.has(s.id))
+      : filteredStudents;
+
+    if (dataToExport.length === 0) {
+      toast.warning('No student data available to export.');
+      return;
+    }
+
+    setIsExporting(true);
+    const toastId = toast.loading(`Exporting ${dataToExport.length} student(s) to Excel...`);
+
+    try {
+      const XLSX = await import('xlsx');
+
+      const formatDate = (dateStr?: string | null) => {
+        if (!dateStr) return '';
+        try {
+          const d = new Date(dateStr);
+          if (isNaN(d.getTime())) return '';
+          return d.toISOString().split('T')[0];
+        } catch {
+          return '';
+        }
+      };
+
+      const rows = dataToExport.map((s, idx) => {
+        const centerName = typeof s.centerId === 'object' ? s.centerId?.name : (s.center?.name || centers.find((c: any) => c.id === s.centerId)?.name || '');
+        const programName = typeof s.programId === 'object' ? s.programId?.name : (s.program?.name || programs.find((p: any) => p.id === s.programId)?.name || '');
+        const universityName = typeof s.universityId === 'object' ? s.universityId?.name : (s.university?.name || universities.find((u: any) => u.id === s.universityId)?.name || '');
+        const branchName = typeof s.branchId === 'object' ? s.branchId?.name : (s.branch?.name || branches.find((b: any) => b.id === s.branchId)?.name || '');
+        const sessionName = typeof s.sessionId === 'object' ? s.sessionId?.name : (s.session?.name || sessions.find((ses: any) => ses.id === s.sessionId)?.name || '');
+        const salesUserName = typeof s.enrolledBy === 'object' ? s.enrolledBy?.name : (s.enrolledByUser?.name || salesUsers.find((su: any) => su.id === s.enrolledBy)?.name || '');
+
+        return {
+          'Sl No': idx + 1,
+          'Admission No': s.admissionNo || '',
+          'Enrollment No': s.enrollmentNo || '',
+          'Student Name': s.name || '',
+          'Email': s.email || '',
+          'Phone': s.phone || '',
+          'Alt Phone': s.altPhone || '',
+          'Status': s.status ? (s.status.charAt(0).toUpperCase() + s.status.slice(1)) : '',
+          'University': universityName,
+          'Program': programName,
+          'Specialisation': s.specialisation || '',
+          'Academic Session': sessionName,
+          'Branch': branchName,
+          'Study Center': centerName,
+          'Counselor / Enrolled By': salesUserName,
+          'Admission Date': formatDate(s.admissionDate),
+          'Date of Birth': formatDate(s.dob),
+          'Gender': s.gender || '',
+          'Father Name': s.fatherName || '',
+          'Mother Name': s.motherName || '',
+          'Address': s.address && s.address !== 'To be filled' ? s.address : '',
+          'Pin Code': s.pinCode || '',
+          'Created At': formatDate(s.createdAt)
+        };
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+
+      // Set generous column widths
+      worksheet['!cols'] = [
+        { wch: 8 },  // Sl No
+        { wch: 16 }, // Admission No
+        { wch: 18 }, // Enrollment No
+        { wch: 25 }, // Student Name
+        { wch: 28 }, // Email
+        { wch: 15 }, // Phone
+        { wch: 15 }, // Alt Phone
+        { wch: 14 }, // Status
+        { wch: 26 }, // University
+        { wch: 26 }, // Program
+        { wch: 20 }, // Specialisation
+        { wch: 18 }, // Academic Session
+        { wch: 18 }, // Branch
+        { wch: 22 }, // Study Center
+        { wch: 22 }, // Counselor / Enrolled By
+        { wch: 14 }, // Admission Date
+        { wch: 14 }, // Date of Birth
+        { wch: 10 }, // Gender
+        { wch: 20 }, // Father Name
+        { wch: 20 }, // Mother Name
+        { wch: 30 }, // Address
+        { wch: 12 }, // Pin Code
+        { wch: 14 }  // Created At
+      ];
+
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
+
+      const today = new Date().toISOString().split('T')[0];
+      const fileName = selectedStudentIds.size > 0
+        ? `students_selected_${dataToExport.length}_${today}.xlsx`
+        : `students_export_${today}.xlsx`;
+
+      XLSX.writeFile(workbook, fileName);
+      toast.success(`Exported ${dataToExport.length} student(s) to Excel!`, { id: toastId });
+    } catch (err: any) {
+      console.error('Failed to export students to Excel:', err);
+      toast.error('Failed to export student data. Please try again.', { id: toastId });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   // Bulk Import Parser & Submitter
   const handleBulkImport = async () => {
     if (branches.length > 0 && !selectedBranchId) {
@@ -3392,6 +3504,26 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         </div>
 
         <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Export Excel Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExportExcel}
+            disabled={isExporting || filteredStudents.length === 0}
+            className="border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+            title="Download student records in Excel format"
+          >
+            <Download className={cn("w-4 h-4 sm:mr-2", isExporting && "animate-bounce")} />
+            <span className="hidden sm:inline">
+              {selectedStudentIds.size > 0
+                ? `Export Selected (${selectedStudentIds.size})`
+                : `Export Excel (${filteredStudents.length})`}
+            </span>
+            <span className="sm:hidden">
+              {selectedStudentIds.size > 0 ? `(${selectedStudentIds.size})` : 'Export'}
+            </span>
+          </Button>
+
           {canWrite && (
             <>
               {/* Bulk Import Button */}
@@ -3998,6 +4130,16 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   >
                     <DollarSign className="w-4 h-4" />
                     <span className="hidden sm:inline">Add Fee</span>
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 border-0 gap-2 h-8 rounded-full transition-colors"
+                    onClick={handleExportExcel}
+                    disabled={isExporting}
+                    title="Export selected students to Excel"
+                  >
+                    <Download className={cn("w-4 h-4", isExporting && "animate-bounce")} />
+                    <span className="hidden sm:inline">Export Excel</span>
                   </Button>
                   <div className="w-px h-6 bg-slate-700 ml-1" />
                   <button

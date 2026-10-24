@@ -14,7 +14,7 @@ export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) 
   if (req.query.status && req.query.status !== 'all') where.status = req.query.status as string;
 
   // Branch-level isolation for invoices list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     andConditions.push({
       OR: [
@@ -82,6 +82,7 @@ export const getInvoice = asyncHandler(async (req: AuthRequest, res: Response) =
           admissionNo: true,
           enrollmentNo: true,
           address: true,
+          branchId: true,
           program: { select: { name: true } },
           university: { select: { name: true } }
         }
@@ -95,6 +96,17 @@ export const getInvoice = asyncHandler(async (req: AuthRequest, res: Response) =
     res.status(404).json({ success: false, message: 'Invoice not found' });
     return;
   }
+
+  // Branch-level isolation check
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+    const studentBranch = (invoice.student as any)?.branchId;
+    if (studentBranch && studentBranch !== req.user.branchId) {
+      res.status(403).json({ success: false, message: 'Access denied: Invoice belongs to another branch' });
+      return;
+    }
+  }
+
   res.json({ success: true, data: invoice });
 });
 export const createInvoice = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -137,7 +149,7 @@ export const getPayments = asyncHandler(async (req: AuthRequest, res: Response) 
   const where: any = { organizationId: req.user.organizationId };
 
   // Branch-level isolation for payments list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.invoice = {
       OR: [
@@ -196,7 +208,7 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
     }
 
     // Branch-level isolation check
-    const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+    const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
     if (!globalRoles.includes(req.user.role) && req.user.branchId) {
       if (student.branchId && student.branchId !== req.user.branchId) {
         res.status(403).json({ success: false, message: 'Access denied: Student belongs to another branch' });
@@ -396,7 +408,7 @@ export const deletePayment = asyncHandler(async (req: AuthRequest, res: Response
 export const getExpenses = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
   // Branch-level isolation
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.user = { branchId: req.user.branchId };
   }
@@ -454,7 +466,7 @@ import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
   // Branch-level isolation
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.branchId = req.user.branchId;
   }
@@ -1086,7 +1098,7 @@ export const getCollectionReport = asyncHandler(async (req: AuthRequest, res: Re
   const where: any = { organizationId };
 
   // Branch-level isolation for finance users
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.invoice = {
       OR: [

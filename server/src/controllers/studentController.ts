@@ -60,7 +60,7 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
   }
 
   // Branch-level isolation for students list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId && !req.query.centerId) {
     where.branchId = req.user.branchId;
   }
@@ -143,7 +143,7 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
 export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
   let whereClause: any = { id: req.params.id };
   // Enforce branch isolation for students list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     whereClause.branchId = req.user.branchId;
   }

@@ -122,6 +122,16 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
     });
     if (!invoice) { res.status(404).json({ success: false, message: 'Invoice not found' }); return; }
 
+    // Branch-level isolation check
+    const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+    if (!globalRoles.includes(req.user.role) && req.user.branchId) {
+      const studentBranch = invoice.student?.branchId;
+      if (invoice.studentId && studentBranch && studentBranch !== req.user.branchId) {
+        res.status(403).json({ success: false, message: 'Access denied: Invoice belongs to another branch' });
+        return;
+      }
+    }
+
     let overallProgramFee = invoice.total;
     let overallPaid = invoice.payments.reduce((sum, p) => sum + p.amount, 0);
     let universityFee = 0;
@@ -692,7 +702,11 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
     where.OR = [
       { branchId: req.user.branchId },
       { enrolledByUser: { branchId: req.user.branchId } },
-      { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
+      { enrolledByUser: { department: { salesBranch: { id: req.user.branchId } } } },
+      { enrolledByUser: { department: { opsBranch: { id: req.user.branchId } } } },
+      { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } },
+      { enrollments: { some: { salesUser: { department: { salesBranch: { id: req.user.branchId } } } } } },
+      { enrollments: { some: { salesUser: { department: { opsBranch: { id: req.user.branchId } } } } } }
     ];
   }
 
