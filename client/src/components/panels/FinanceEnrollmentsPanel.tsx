@@ -37,6 +37,7 @@ interface Enrollment {
   initialPaymentAmount?: number | null;
   receiptVerifiedAt?: string | null;
   receiptVerifiedBy?: string | null;
+  isProvisional?: boolean;
 }
 
 interface Summary {
@@ -344,7 +345,7 @@ export function FinanceEnrollmentsPanel() {
                         <Button size="sm" variant="outline" className="h-7 text-xs text-primary border-primary/30 hover:bg-primary/10" onClick={() => setViewStudent(e)}>
                           <Eye className="w-3 h-3 mr-1" />View
                         </Button>
-                        {canAct && e.status === 'finance_review' && (
+                        {canAct && e.status === 'finance_review' && !e.isProvisional && (
                           <>
                             <Button size="sm" variant="outline" className="h-7 text-xs text-green-600 border-green-300 hover:bg-green-50 dark:hover:bg-green-900/20" onClick={() => handleApprove(e.id)}>
                               <CheckCircle className="w-3 h-3 mr-1" />Enroll
@@ -583,19 +584,25 @@ export function FinanceEnrollmentsPanel() {
                         <div className="flex-1">
                           <p className="text-sm font-medium mb-1">Receipt Uploaded</p>
                           {!viewStudent.receiptVerified && canAct ? (
-                            <div className="flex flex-wrap items-center gap-2 mt-2">
-                              <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleVerifyReceipt(viewStudent.id)}>
-                                <CheckCircle className="w-3.5 h-3.5 mr-1" />
-                                Verify Receipt & Enroll
-                              </Button>
-                              <Button size="sm" variant="outline" className="text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => {
-                                setRejectDialog({ open: true, id: viewStudent.id });
-                                setRemarks('');
-                              }}>
-                                <XCircle className="w-3.5 h-3.5 mr-1" />
-                                Reject Receipt
-                              </Button>
-                            </div>
+                            viewStudent.isProvisional ? (
+                              <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs mt-2">
+                                <span className="font-semibold">⚠️ Provisional Enrollment:</span> Receipt verification and admission invoice generation must be done through the <strong>Provisional Verifications</strong> tab.
+                              </div>
+                            ) : (
+                              <div className="flex flex-wrap items-center gap-2 mt-2">
+                                <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleVerifyReceipt(viewStudent.id)}>
+                                  <CheckCircle className="w-3.5 h-3.5 mr-1" />
+                                  Verify Receipt & Enroll
+                                </Button>
+                                <Button size="sm" variant="outline" className="text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => {
+                                  setRejectDialog({ open: true, id: viewStudent.id });
+                                  setRemarks('');
+                                }}>
+                                  <XCircle className="w-3.5 h-3.5 mr-1" />
+                                  Reject Receipt
+                                </Button>
+                              </div>
+                            )
                           ) : (
                             <p className="text-xs text-muted-foreground mt-1">{viewStudent.receiptVerified ? 'Receipt has been verified and student enrolled.' : 'Awaiting verification by Finance.'}</p>
                           )}

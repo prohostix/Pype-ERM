@@ -8,24 +8,62 @@ import { sendEmail } from '../utils/emailService.js';
 // Invoices
 export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
+  const andConditions: any[] = [];
+
   if (req.query.studentId) where.studentId = req.query.studentId as string;
+  if (req.query.status && req.query.status !== 'all') where.status = req.query.status as string;
 
   // Branch-level isolation for invoices list
   const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
-    where.OR = [
-      { student: { branchId: req.user.branchId } },
-      { student: { enrolledByUser: { branchId: req.user.branchId } } },
-      { centerId: { not: null } },
-      { studentId: null, centerId: null } // Fallback if some invoices are manually created
-    ];
+    andConditions.push({
+      OR: [
+        { student: { branchId: req.user.branchId } },
+        { student: { enrolledByUser: { branchId: req.user.branchId } } },
+        { centerId: { not: null } },
+        { studentId: null, centerId: null } // Fallback if some invoices are manually created
+      ]
+    });
+  }
+
+  // Filter specifically by admission / enrollment number
+  if (req.query.admissionNo) {
+    const adm = String(req.query.admissionNo).trim();
+    andConditions.push({
+      student: {
+        OR: [
+          { admissionNo: { contains: adm, mode: 'insensitive' } },
+          { enrollmentNo: { contains: adm, mode: 'insensitive' } }
+        ]
+      }
+    });
+  }
+
+  // General search query (invoice number, admission number, enrollment number, student name, center name/code)
+  const searchQuery = (req.query.search || req.query.q) as string | undefined;
+  if (searchQuery && searchQuery.trim()) {
+    const q = searchQuery.trim();
+    andConditions.push({
+      OR: [
+        { invoiceNo: { contains: q, mode: 'insensitive' } },
+        { student: { admissionNo: { contains: q, mode: 'insensitive' } } },
+        { student: { enrollmentNo: { contains: q, mode: 'insensitive' } } },
+        { student: { name: { contains: q, mode: 'insensitive' } } },
+        { center: { name: { contains: q, mode: 'insensitive' } } },
+        { center: { code: { contains: q, mode: 'insensitive' } } }
+      ]
+    });
+  }
+
+  if (andConditions.length > 0) {
+    where.AND = andConditions;
   }
 
   const invoices = await prisma.invoice.findMany({
     where,
     include: {
-      center: { select: { name: true } },
-      student: { select: { name: true } },
+      center: { select: { name: true, code: true } },
+      student: { select: { name: true, admissionNo: true, enrollmentNo: true } },
       payments: { select: { amount: true, receivedAt: true, createdAt: true } }
     },
     orderBy: { createdAt: 'desc' }

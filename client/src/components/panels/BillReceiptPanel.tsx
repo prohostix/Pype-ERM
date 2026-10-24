@@ -469,10 +469,18 @@ export function BillReceiptPanel() {
   };
 
   const filtered = invoices.filter(inv => {
+    const admNo =
+      inv.student?.admissionNo ||
+      inv.student?.enrollmentNo ||
+      inv.admissionNo ||
+      inv.enrollmentNo ||
+      (Array.isArray(inv.items) && (inv.items[0]?.admissionNo || inv.items[0]?.enrollmentNo)) ||
+      '';
     const matchStatus = statusFilter === 'all' || inv.status === statusFilter;
     const matchSearch = !search || 
       inv.invoiceNo?.toLowerCase().includes(search.toLowerCase()) ||
       inv.student?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      admNo.toLowerCase().includes(search.toLowerCase()) ||
       inv.center?.name?.toLowerCase().includes(search.toLowerCase()) ||
       inv.center?.code?.toLowerCase().includes(search.toLowerCase());
     return matchStatus && matchSearch;
@@ -497,7 +505,7 @@ export function BillReceiptPanel() {
             <div className="flex items-center gap-2">
               <div className="relative">
                 <Search className="absolute left-2.5 top-2 w-4 h-4 text-muted-foreground" />
-                <Input placeholder="Search invoice, student or partner..." className="pl-8 h-8 w-64 text-sm" value={search} onChange={e => setSearch(e.target.value)} />
+                <Input placeholder="Search invoice, admission no, student..." className="pl-8 h-8 w-72 text-sm" value={search} onChange={e => setSearch(e.target.value)} />
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="h-8 w-32 text-sm"><SelectValue /></SelectTrigger>
@@ -519,53 +527,77 @@ export function BillReceiptPanel() {
             <div className="text-center py-12 text-muted-foreground">No invoices found</div>
           ) : (
             <div className="space-y-2">
-              {filtered.map(inv => (
-                <div key={inv.id} className="flex items-center justify-between p-3.5 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${inv.center ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' : 'bg-blue-100 text-blue-600 dark:bg-blue-900/20'}`}>
-                      {inv.center ? <Building2 className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
+              {filtered.map(inv => {
+                const admissionNo =
+                  inv.student?.admissionNo ||
+                  inv.student?.enrollmentNo ||
+                  inv.admissionNo ||
+                  inv.enrollmentNo ||
+                  (Array.isArray(inv.items) && (inv.items[0]?.admissionNo || inv.items[0]?.enrollmentNo)) ||
+                  '';
+
+                return (
+                  <div key={inv.id} className="flex items-center justify-between p-3.5 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${inv.center ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' : 'bg-blue-100 text-blue-600 dark:bg-blue-900/20'}`}>
+                        {inv.center ? <Building2 className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold text-sm">{inv.invoiceNo}</span>
+                          {admissionNo && (
+                            <Badge variant="secondary" className="text-[11px] font-mono font-medium px-2 py-0 h-5 bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800">
+                              Adm: {admissionNo}
+                            </Badge>
+                          )}
+                          {inv.center && (
+                            <Badge variant="outline" className="text-[10px] bg-amber-50 text-amber-800 border-amber-200 py-0 px-1.5 font-medium">
+                              Academic Partner
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5 flex-wrap">
+                          {inv.center ? (
+                            <>
+                              <span className="font-medium text-slate-700 dark:text-slate-300">{inv.center.name}</span>
+                              {inv.center.code && <span className="text-[10px] text-slate-500 font-mono">({inv.center.code})</span>}
+                              {inv.student?.name && (
+                                <>
+                                  <span>•</span>
+                                  <User className="w-3 h-3" />
+                                  <span>{inv.student.name}</span>
+                                  {admissionNo && <span className="text-[11px] font-mono text-slate-500 font-normal">({admissionNo})</span>}
+                                </>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <User className="w-3 h-3" />
+                              <span>{inv.student?.name || 'N/A'}</span>
+                              {admissionNo && <span className="text-[11px] font-mono text-slate-500 font-normal">({admissionNo})</span>}
+                            </>
+                          )}
+                          {inv.dueDate && (
+                            <>
+                              <span>•</span>
+                              <span>Due: {new Date(inv.dueDate).toLocaleDateString('en-IN')}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-sm">{inv.invoiceNo}</span>
-                        {inv.center && (
-                          <Badge variant="outline" className="text-[10px] bg-amber-50 text-amber-800 border-amber-200 py-0 px-1.5 font-medium">
-                            Academic Partner
-                          </Badge>
-                        )}
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <div className="font-bold text-sm">₹{(inv.total || inv.amount || 0).toLocaleString('en-IN')}</div>
+                        <Badge className={statusColors[inv.status] || ''}>{inv.status}</Badge>
                       </div>
-                      <div className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                        {inv.center ? (
-                          <>
-                            <span className="font-medium text-slate-700 dark:text-slate-300">{inv.center.name}</span>
-                            {inv.center.code && <span className="text-[10px] text-slate-500 font-mono">({inv.center.code})</span>}
-                            {inv.student?.name && <><span>•</span><User className="w-3 h-3" />{inv.student.name}</>}
-                          </>
-                        ) : (
-                          <>
-                            <User className="w-3 h-3" /> {inv.student?.name || 'N/A'}
-                          </>
-                        )}
-                        {inv.dueDate && (
-                          <>
-                            <span>•</span>
-                            <span>Due: {new Date(inv.dueDate).toLocaleDateString('en-IN')}</span>
-                          </>
-                        )}
-                      </div>
+                      <Button size="sm" variant="outline" className="gap-1.5 h-8" onClick={() => openReceipt(inv)}>
+                        <Printer className="w-3.5 h-3.5" /> Receipt
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="text-right">
-                      <div className="font-bold text-sm">₹{(inv.total || inv.amount || 0).toLocaleString('en-IN')}</div>
-                      <Badge className={statusColors[inv.status] || ''}>{inv.status}</Badge>
-                    </div>
-                    <Button size="sm" variant="outline" className="gap-1.5 h-8" onClick={() => openReceipt(inv)}>
-                      <Printer className="w-3.5 h-3.5" /> Receipt
-                    </Button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </CardContent>

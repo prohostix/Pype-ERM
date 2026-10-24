@@ -122,6 +122,11 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
     throw new Error('Enrollment not found');
   }
 
+  if (existingEnrollment.isProvisional) {
+    res.status(400);
+    throw new Error('This is a provisional enrollment. Please verify it through the Provisional Verifications tab.');
+  }
+
   // Branch-level isolation check
   const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
@@ -300,6 +305,11 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
   if (!enrollment) {
     res.status(404);
     throw new Error('Enrollment not found');
+  }
+
+  if (enrollment.isProvisional) {
+    res.status(400);
+    throw new Error('This is a provisional enrollment. Please verify it through the Provisional Verifications tab.');
   }
 
   // Branch-level isolation check
