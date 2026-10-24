@@ -334,9 +334,21 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
 
   // Calculate amount paid based on billing cycle
   let amountPaid = 0;
-  let feeStructure = enrollment.program?.feeStructures?.find((fs: any) => fs.sessionId === enrollment.sessionId && fs.specialisation === enrollment.specialisation);
-  if (!feeStructure) feeStructure = enrollment.program?.feeStructures?.find((fs: any) => fs.sessionId === enrollment.sessionId && !fs.specialisation);
-  if (!feeStructure) feeStructure = enrollment.program?.feeStructures?.[0];
+  let feeStructure = enrollment.sessionId
+    ? enrollment.program?.feeStructures?.find((fs: any) => fs.sessionId === enrollment.sessionId && fs.specialisation === enrollment.specialisation)
+    : null;
+  if (!feeStructure && enrollment.sessionId) {
+    feeStructure = enrollment.program?.feeStructures?.find((fs: any) => fs.sessionId === enrollment.sessionId && !fs.specialisation);
+  }
+  if (!feeStructure && enrollment.specialisation) {
+    feeStructure = enrollment.program?.feeStructures?.find((fs: any) => !fs.sessionId && fs.specialisation === enrollment.specialisation);
+  }
+  if (!feeStructure) {
+    feeStructure = enrollment.program?.feeStructures?.find((fs: any) => !fs.sessionId && !fs.specialisation);
+  }
+  if (!feeStructure) {
+    feeStructure = enrollment.program?.feeStructures?.[0];
+  }
 
   if (enrollment.initialPaymentAmount !== null && enrollment.initialPaymentAmount !== undefined) {
     amountPaid = enrollment.initialPaymentAmount;

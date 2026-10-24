@@ -279,31 +279,79 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
     // For admission / provisional invoices or unlinked receipts, prioritize the matched enrollment.
     let activeProgram: any = null;
     let activeSpecialisation: any = null;
+    let activeSessionId: string | null = null;
 
     if (invoice.scheduleId) {
       activeProgram = actualStudent?.program || fallbackEnrollment?.program;
       activeSpecialisation = actualStudent?.specialisation || fallbackEnrollment?.specialisation;
+      activeSessionId = actualStudent?.sessionId || fallbackEnrollment?.sessionId || null;
     } else {
       activeProgram = matchedEnrollment?.program || actualStudent?.program || fallbackEnrollment?.program;
       activeSpecialisation = matchedEnrollment?.specialisation || actualStudent?.specialisation || fallbackEnrollment?.specialisation;
+      activeSessionId = matchedEnrollment?.sessionId || actualStudent?.sessionId || fallbackEnrollment?.sessionId || null;
     }
 
     let targetProgramId = activeProgram?.id || invoice.student?.programId || fallbackEnrollment?.programId;
     let targetSpecialisation = activeSpecialisation;
+    let targetSessionId = activeSessionId;
     let totalFee = 0;
     let feeBreakdown: any = null;
     let feeStructureMissing = false;
 
     if (targetProgramId) {
       let feeStruct = null;
-      if (targetSpecialisation) {
+
+      // 1. If session is assigned to student/enrollment, match fee structure for that specific session
+      if (targetSessionId) {
+        if (targetSpecialisation) {
+          feeStruct = await prisma.feeStructure.findFirst({
+            where: {
+              programId: targetProgramId,
+              sessionId: targetSessionId,
+              specialisation: targetSpecialisation,
+              organizationId: invoice.organizationId
+            }
+          });
+        }
+        if (!feeStruct) {
+          feeStruct = await prisma.feeStructure.findFirst({
+            where: {
+              programId: targetProgramId,
+              sessionId: targetSessionId,
+              organizationId: invoice.organizationId
+            }
+          });
+        }
+      }
+
+      // 2. If no session assigned OR no fee structure for that session, fall back to default (sessionId: null)
+      if (!feeStruct && targetSpecialisation) {
         feeStruct = await prisma.feeStructure.findFirst({
-          where: { programId: targetProgramId, specialisation: targetSpecialisation, organizationId: invoice.organizationId }
+          where: {
+            programId: targetProgramId,
+            sessionId: null,
+            specialisation: targetSpecialisation,
+            organizationId: invoice.organizationId
+          }
         });
       }
       if (!feeStruct) {
         feeStruct = await prisma.feeStructure.findFirst({
-          where: { programId: targetProgramId, organizationId: invoice.organizationId }
+          where: {
+            programId: targetProgramId,
+            sessionId: null,
+            organizationId: invoice.organizationId
+          }
+        });
+      }
+
+      // 3. Ultimate fallback: any fee structure for this program
+      if (!feeStruct) {
+        feeStruct = await prisma.feeStructure.findFirst({
+          where: {
+            programId: targetProgramId,
+            organizationId: invoice.organizationId
+          }
         });
       }
       if (feeStruct) {
