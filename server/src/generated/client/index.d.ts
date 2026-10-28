@@ -562,7 +562,9 @@ export const CourseType: {
   SkillCourse: 'SkillCourse',
   OnlineDegree: 'OnlineDegree',
   BVocDegree: 'BVocDegree',
-  CreditTransfer: 'CreditTransfer'
+  CreditTransfer: 'CreditTransfer',
+  Yearly: 'Yearly',
+  OneSitting: 'OneSitting'
 };
 
 export type CourseType = (typeof CourseType)[keyof typeof CourseType]

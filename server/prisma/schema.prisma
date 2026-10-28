@@ -1792,6 +1792,8 @@ enum CourseType {
   OnlineDegree   @map("Online Degree")
   BVocDegree     @map("B.Voc Degree")
   CreditTransfer @map("Credit Transfer")
+  Yearly         @map("Yearly")
+  OneSitting     @map("One Sitting")
 }
 
 enum ComplaintStatus {

@@ -8,13 +8,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
-type CourseType = 'SkillCourse' | 'OnlineDegree' | 'BVocDegree' | 'CreditTransfer';
+type CourseType = 'SkillCourse' | 'OnlineDegree' | 'BVocDegree' | 'CreditTransfer' | 'Yearly' | 'OneSitting';
 
 const COURSE_TYPES: { value: CourseType; label: string; color: string; bg: string }[] = [
   { value: 'SkillCourse',     label: 'Skill Course',     color: '#7c3aed', bg: '#f5f3ff' },
   { value: 'OnlineDegree',    label: 'Online Degree',    color: '#2563eb', bg: '#eff6ff' },
-  { value: 'BVocDegree',     label: 'B.Voc Degree',    color: '#0891b2', bg: '#ecfeff' },
+  { value: 'BVocDegree',      label: 'B.Voc Degree',     color: '#0891b2', bg: '#ecfeff' },
   { value: 'CreditTransfer',  label: 'Credit Transfer',  color: '#16a34a', bg: '#f0fdf4' },
+  { value: 'Yearly',          label: 'Yearly',           color: '#d97706', bg: '#fffbeb' },
+  { value: 'OneSitting',      label: 'One Sitting',      color: '#e11d48', bg: '#fff1f2' },
 ];
 
 const DURATION_OPTIONS = [
@@ -318,7 +320,7 @@ export function ProgramFormDialog({
           {/* Course Type */}
           <div className="space-y-2">
             <Label>Course Type *</Label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {COURSE_TYPES.map(ct => (
                 <button key={ct.value} type="button"
                   onClick={() => setForm(f => ({ ...f, courseType: ct.value }))}

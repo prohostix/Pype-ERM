@@ -42,10 +42,12 @@ const CATEGORIES = [
 ];
 
 const COURSE_COLORS: Record<string, { color: string; bg: string }> = {
-  'SkillCourse':    { color: '#7c3aed', bg: '#f5f3ff' },
-  'OnlineDegree':   { color: '#2563eb', bg: '#eff6ff' },
-  'BVocDegree':    { color: '#0891b2', bg: '#ecfeff' },
+  'SkillCourse': { color: '#7c3aed', bg: '#f5f3ff' },
+  'OnlineDegree': { color: '#2563eb', bg: '#eff6ff' },
+  'BVocDegree': { color: '#0891b2', bg: '#ecfeff' },
   'CreditTransfer': { color: '#16a34a', bg: '#f0fdf4' },
+  'Yearly': { color: '#d97706', bg: '#fffbeb' },
+  'OneSitting': { color: '#e11d48', bg: '#fff1f2' },
 };
 
 function formatBytes(bytes: number) {

@@ -1617,7 +1617,9 @@ exports.CourseType = exports.$Enums.CourseType = {
   SkillCourse: 'SkillCourse',
   OnlineDegree: 'OnlineDegree',
   BVocDegree: 'BVocDegree',
-  CreditTransfer: 'CreditTransfer'
+  CreditTransfer: 'CreditTransfer',
+  Yearly: 'Yearly',
+  OneSitting: 'OneSitting'
 };
 
 exports.ComplaintStatus = exports.$Enums.ComplaintStatus = {
