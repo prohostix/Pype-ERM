@@ -9,6 +9,7 @@ import { DataGrid } from '@/components/ui/data-grid';
 import PublicRegisterPage from '@/pages/PublicRegisterPage';
 import StudentApplicationPage from '@/pages/StudentApplicationPage';
 import { AppDownloadPage } from '@/pages/AppDownloadPage';
+import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
 import { getOpsNavItems } from '@/pages/ModernOpsDashboard';
 import { getHRNavItems } from '@/pages/ModernHRDashboard';
 import { getFinanceNavItems } from '@/pages/ModernFinanceDashboard';
@@ -356,6 +357,11 @@ function App() {
 
   if (window.location.pathname === '/student-apply') {
     return <StudentApplicationPage />;
+  }
+
+  // Public privacy policy (linked from the Google Play listing)
+  if (window.location.pathname === '/privacy-policy' || window.location.pathname === '/privacy') {
+    return <PrivacyPolicyPage />;
   }
 
   // Public APK / Mobile App download page
