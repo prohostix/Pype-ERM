@@ -1935,12 +1935,12 @@ model CommunicationLog {
   recipientCount Int      @default(0)
   content        String?
   status         String   @default("sent") // sent, failed
-  sentBy         String
+  sentBy         String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  sender       User         @relation(fields: [sentBy], references: [id])
+  sender       User?        @relation(fields: [sentBy], references: [id])
 
   @@index([organizationId])
 }

@@ -8,9 +8,11 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { FileText, CheckCircle2, XCircle, Search, ExternalLink, Eye, User, Phone, Mail, Calendar, MapPin, GraduationCap, IndianRupee, Clock, Image } from 'lucide-react';
 import api from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
 import { StudentsPanel } from './StudentsPanel';
 
 export function SalesAdminReviewPanel() {
+  const { user } = useAuth();
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -162,6 +164,15 @@ export function SalesAdminReviewPanel() {
                       <span className="inline-flex items-center bg-slate-100 text-slate-700 px-2 py-1 rounded-md font-medium">
                         Fee Paid: ₹{enrollment.initialPaymentAmount || 0}
                       </span>
+                      {enrollment.salesUser && (
+                        <span className={`inline-flex items-center px-2 py-1 rounded-md font-medium ${
+                          enrollment.salesUserId === user?.id 
+                            ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 border border-purple-200' 
+                            : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
+                        }`}>
+                          Enrolled by: {enrollment.salesUserId === user?.id ? 'You (Sales Admin)' : (enrollment.salesUser.name || enrollment.salesUser.email)}
+                        </span>
+                      )}
                     </div>
                   </div>
                   
@@ -262,6 +273,11 @@ export function SalesAdminReviewPanel() {
                   <DetailRow icon={GraduationCap} label="Specialisation" value={e.specialisation} />
                   <DetailRow icon={GraduationCap} label="Course Type" value={e.program?.courseType} />
                   <DetailRow icon={GraduationCap} label="Previous Qualification" value={e.previousQualification} />
+                  <DetailRow 
+                    icon={User} 
+                    label="Enrolled By" 
+                    value={e.salesUserId === user?.id ? 'You (Sales Admin)' : (e.salesUser?.name ? `${e.salesUser.name} (${e.salesUser.email})` : (e.salesUser?.email || 'Sales Team'))} 
+                  />
                 </div>
               </div>
 

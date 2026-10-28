@@ -229,7 +229,11 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                     <div>
                       <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Admission Date</p>
                       <p className="font-medium mt-1">
-                        {student.admissionDate ? format(new Date(student.admissionDate), 'dd MMM yyyy') : 'N/A'}
+                        {student.admissionDate 
+                          ? format(new Date(student.admissionDate), 'dd MMM yyyy') 
+                          : (student.enrollments?.[0]?.createdAt 
+                              ? format(new Date(student.enrollments[0].createdAt), 'dd MMM yyyy') 
+                              : (student.createdAt ? format(new Date(student.createdAt), 'dd MMM yyyy') : 'N/A'))}
                       </p>
                     </div>
                     <div>

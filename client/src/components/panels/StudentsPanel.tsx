@@ -591,6 +591,18 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     return s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   };
 
+  const getStudentEffectiveDate = (s: any) => {
+    if (s?.admissionDate) return { date: s.admissionDate, isAdm: true };
+    if (Array.isArray(s?.enrollments) && s.enrollments.length > 0) {
+      const sorted = [...s.enrollments].sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+      const latest = sorted[0];
+      if (latest?.enrolledAt || latest?.createdAt) {
+        return { date: latest.enrolledAt || latest.createdAt, isAdm: true };
+      }
+    }
+    return { date: s?.createdAt, isAdm: false };
+  };
+
   const ALL_STUDENT_STATES = [
     { value: 'all', label: 'All Student States' },
     { value: 'active', label: 'Active' },
@@ -2454,7 +2466,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
     // Admission Date Range Filter
     if (filterStartDate || filterEndDate) {
-      const rawDate = s.admissionDate || s.createdAt;
+      const rawDate = getStudentEffectiveDate(s).date;
       if (!rawDate) return false;
       try {
         const d = new Date(rawDate);
@@ -2526,12 +2538,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       const enB = b.enrollmentNo || '';
       return enA.localeCompare(enB);
     } else if (sortBy === 'admissionDate_desc') {
-      const dateA = new Date(a.admissionDate || a.createdAt || 0).getTime();
-      const dateB = new Date(b.admissionDate || b.createdAt || 0).getTime();
+      const dateA = new Date(getStudentEffectiveDate(a).date || 0).getTime();
+      const dateB = new Date(getStudentEffectiveDate(b).date || 0).getTime();
       return dateB - dateA;
     } else if (sortBy === 'admissionDate_asc') {
-      const dateA = new Date(a.admissionDate || a.createdAt || 0).getTime();
-      const dateB = new Date(b.admissionDate || b.createdAt || 0).getTime();
+      const dateA = new Date(getStudentEffectiveDate(a).date || 0).getTime();
+      const dateB = new Date(getStudentEffectiveDate(b).date || 0).getTime();
       return dateA - dateB;
     } else {
       // Default to sorting by name
@@ -4049,16 +4061,26 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                               <Phone className="w-3.5 h-3.5 text-slate-400" /> {student.phone}
                             </a>
                           )}
-                          {(student.admissionDate || student.createdAt) && (
-                            <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-lg border border-slate-200/50 dark:border-slate-700/50" title={student.admissionDate ? 'Admission Date' : 'Registration Date'}>
-                              <CalendarDays className="w-3.5 h-3.5 text-blue-500/70" />
-                              <span>
-                                {student.admissionDate
-                                  ? `Adm: ${new Date(student.admissionDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`
-                                  : `Reg: ${new Date(student.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`}
-                              </span>
-                            </div>
-                          )}
+                          {(() => {
+                            const { date: effectiveDate, isAdm } = getStudentEffectiveDate(student);
+                            if (!effectiveDate) return null;
+                            const hasDifferentRegDate = isAdm && student.createdAt && new Date(effectiveDate).toDateString() !== new Date(student.createdAt).toDateString();
+                            return (
+                              <div
+                                className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-lg border border-slate-200/50 dark:border-slate-700/50"
+                                title={isAdm 
+                                  ? `Admission Date: ${new Date(effectiveDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}${hasDifferentRegDate ? ` (Registered: ${new Date(student.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })})` : ''}`
+                                  : 'Registration Date'}
+                              >
+                                <CalendarDays className="w-3.5 h-3.5 text-blue-500/70" />
+                                <span>
+                                  {isAdm
+                                    ? `Adm: ${new Date(effectiveDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`
+                                    : `Reg: ${new Date(effectiveDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`}
+                                </span>
+                              </div>
+                            );
+                          })()}
                           {salesUserName && (
                             <div className="flex items-center gap-1.5 bg-blue-50/50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-lg border border-blue-100/50 dark:border-blue-900/30">
                               <Users className="w-3.5 h-3.5 text-blue-500/70" />

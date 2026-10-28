@@ -531,6 +531,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
           status: 'active',
           referredBy: enrollment.salesUserId,
           admissionNo: newAdmissionNo,
+          admissionDate: enrollment.createdAt || new Date(),
           ...(generatedPassword !== '(Existing student account)' ? { credentials: { email: enrollment.studentEmail, password: generatedPassword } } : {})
         },
       });
@@ -541,6 +542,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
         data: {
           status: 'active',
           admissionNo: studentRecord.admissionNo || newAdmissionNo,
+          admissionDate: studentRecord.admissionDate || enrollment.createdAt || new Date(),
           branchId: studentRecord.branchId || salesUserBranchId || undefined
         }
       });
@@ -1234,8 +1236,8 @@ export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: R
     status: wantRejected ? 'rejected' : 'sales_admin_review'
   };
 
-  // sales_admin: find subordinates via designation hierarchy (OrgHierarchyPanel)
-  if (req.user.role === 'sales_admin') {
+  // sales_admin / sales_sub_admin: find subordinates via designation hierarchy (OrgHierarchyPanel)
+  if (['sales_admin', 'sales_sub_admin'].includes(req.user.role)) {
     // Step 1: Get the sales_admin's designations
     const currentUser = await prisma.user.findUnique({
       where: { id: req.user.id },
@@ -1269,14 +1271,10 @@ export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: R
 
     // Fallback: also include assignedSalesUsers (legacy/manual assignment)
     const assignedIds = Array.isArray(currentUser?.assignedSalesUsers) ? (currentUser.assignedSalesUsers as string[]) : [];
-    const allSubordinateIds = [...new Set([...subordinateUserIds, ...assignedIds])];
+    // Include subordinates, assigned sales users, AND the sales admin's own ID so they can see and approve their own enrollments
+    const allowedUserIds = [...new Set([...subordinateUserIds, ...assignedIds, req.user.id])];
 
-    if (allSubordinateIds.length > 0) {
-      baseWhere.salesUserId = { in: allSubordinateIds };
-    } else {
-      // No subordinates found — show nothing
-      baseWhere.salesUserId = { in: [] };
-    }
+    baseWhere.salesUserId = { in: allowedUserIds };
   }
   // org_admin / superadmin see all
 
@@ -1285,7 +1283,8 @@ export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: R
     include: {
       program: { include: { university: true } },
       studyCenter: true,
-      student: true
+      student: true,
+      salesUser: { select: { id: true, name: true, email: true } },
     },
     orderBy: { updatedAt: 'desc' }
   });

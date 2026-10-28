@@ -82,9 +82,9 @@ router.put('/student-applications/:id/approve-finance', authorize('finance_admin
 router.put('/student-applications/:id/reject', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'superadmin'), rejectSalesEnrollment);
 
 // Sales Admin Review Flow
-router.get('/sales-admin-reviews', authorize('sales_admin', 'superadmin', 'org_admin'), getSalesAdminReviews);
-router.put('/student-applications/:id/sales-admin-approve', authorize('sales_admin', 'superadmin', 'org_admin'), approveBySalesAdmin);
-router.put('/student-applications/:id/sales-admin-reject', authorize('sales_admin', 'superadmin', 'org_admin'), rejectBySalesAdmin);
+router.get('/sales-admin-reviews', authorize('sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'), getSalesAdminReviews);
+router.put('/student-applications/:id/sales-admin-approve', authorize('sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'), approveBySalesAdmin);
+router.put('/student-applications/:id/sales-admin-reject', authorize('sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'), rejectBySalesAdmin);
 
 // Sales Reports
 router.get('/reports/team', getTeamReport);

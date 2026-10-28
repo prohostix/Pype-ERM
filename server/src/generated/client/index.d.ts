@@ -99570,7 +99570,7 @@ export namespace Prisma {
     recipientCount: number
     content: string | null
     status: string
-    sentBy: string
+    sentBy: string | null
     createdAt: Date
     updatedAt: Date
     _count: CommunicationLogCountAggregateOutputType | null
@@ -99605,7 +99605,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    sender?: boolean | UserDefaultArgs<ExtArgs>
+    sender?: boolean | CommunicationLog$senderArgs<ExtArgs>
   }, ExtArgs["result"]["communicationLog"]>
 
   export type CommunicationLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -99619,7 +99619,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    sender?: boolean | UserDefaultArgs<ExtArgs>
+    sender?: boolean | CommunicationLog$senderArgs<ExtArgs>
   }, ExtArgs["result"]["communicationLog"]>
 
   export type CommunicationLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -99633,7 +99633,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    sender?: boolean | UserDefaultArgs<ExtArgs>
+    sender?: boolean | CommunicationLog$senderArgs<ExtArgs>
   }, ExtArgs["result"]["communicationLog"]>
 
   export type CommunicationLogSelectScalar = {
@@ -99651,22 +99651,22 @@ export namespace Prisma {
   export type CommunicationLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "type" | "recipientCount" | "content" | "status" | "sentBy" | "createdAt" | "updatedAt", ExtArgs["result"]["communicationLog"]>
   export type CommunicationLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    sender?: boolean | UserDefaultArgs<ExtArgs>
+    sender?: boolean | CommunicationLog$senderArgs<ExtArgs>
   }
   export type CommunicationLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    sender?: boolean | UserDefaultArgs<ExtArgs>
+    sender?: boolean | CommunicationLog$senderArgs<ExtArgs>
   }
   export type CommunicationLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    sender?: boolean | UserDefaultArgs<ExtArgs>
+    sender?: boolean | CommunicationLog$senderArgs<ExtArgs>
   }
 
   export type $CommunicationLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "CommunicationLog"
     objects: {
       organization: Prisma.$OrganizationPayload<ExtArgs>
-      sender: Prisma.$UserPayload<ExtArgs>
+      sender: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -99675,7 +99675,7 @@ export namespace Prisma {
       recipientCount: number
       content: string | null
       status: string
-      sentBy: string
+      sentBy: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["communicationLog"]>
@@ -100073,7 +100073,7 @@ export namespace Prisma {
   export interface Prisma__CommunicationLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    sender<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sender<T extends CommunicationLog$senderArgs<ExtArgs> = {}>(args?: Subset<T, CommunicationLog$senderArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -100510,6 +100510,25 @@ export namespace Prisma {
      * Limit how many CommunicationLogs to delete.
      */
     limit?: number
+  }
+
+  /**
+   * CommunicationLog.sender
+   */
+  export type CommunicationLog$senderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -133333,11 +133352,11 @@ export namespace Prisma {
     recipientCount?: IntFilter<"CommunicationLog"> | number
     content?: StringNullableFilter<"CommunicationLog"> | string | null
     status?: StringFilter<"CommunicationLog"> | string
-    sentBy?: StringFilter<"CommunicationLog"> | string
+    sentBy?: StringNullableFilter<"CommunicationLog"> | string | null
     createdAt?: DateTimeFilter<"CommunicationLog"> | Date | string
     updatedAt?: DateTimeFilter<"CommunicationLog"> | Date | string
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    sender?: XOR<UserScalarRelationFilter, UserWhereInput>
+    sender?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type CommunicationLogOrderByWithRelationInput = {
@@ -133347,7 +133366,7 @@ export namespace Prisma {
     recipientCount?: SortOrder
     content?: SortOrderInput | SortOrder
     status?: SortOrder
-    sentBy?: SortOrder
+    sentBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     organization?: OrganizationOrderByWithRelationInput
@@ -133364,11 +133383,11 @@ export namespace Prisma {
     recipientCount?: IntFilter<"CommunicationLog"> | number
     content?: StringNullableFilter<"CommunicationLog"> | string | null
     status?: StringFilter<"CommunicationLog"> | string
-    sentBy?: StringFilter<"CommunicationLog"> | string
+    sentBy?: StringNullableFilter<"CommunicationLog"> | string | null
     createdAt?: DateTimeFilter<"CommunicationLog"> | Date | string
     updatedAt?: DateTimeFilter<"CommunicationLog"> | Date | string
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    sender?: XOR<UserScalarRelationFilter, UserWhereInput>
+    sender?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type CommunicationLogOrderByWithAggregationInput = {
@@ -133378,7 +133397,7 @@ export namespace Prisma {
     recipientCount?: SortOrder
     content?: SortOrderInput | SortOrder
     status?: SortOrder
-    sentBy?: SortOrder
+    sentBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CommunicationLogCountOrderByAggregateInput
@@ -133398,7 +133417,7 @@ export namespace Prisma {
     recipientCount?: IntWithAggregatesFilter<"CommunicationLog"> | number
     content?: StringNullableWithAggregatesFilter<"CommunicationLog"> | string | null
     status?: StringWithAggregatesFilter<"CommunicationLog"> | string
-    sentBy?: StringWithAggregatesFilter<"CommunicationLog"> | string
+    sentBy?: StringNullableWithAggregatesFilter<"CommunicationLog"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CommunicationLog"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CommunicationLog"> | Date | string
   }
@@ -143767,7 +143786,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutCommunicationLogsInput
-    sender: UserCreateNestedOneWithoutCommunicationLogsInput
+    sender?: UserCreateNestedOneWithoutCommunicationLogsInput
   }
 
   export type CommunicationLogUncheckedCreateInput = {
@@ -143777,7 +143796,7 @@ export namespace Prisma {
     recipientCount?: number
     content?: string | null
     status?: string
-    sentBy: string
+    sentBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -143791,7 +143810,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutCommunicationLogsNestedInput
-    sender?: UserUpdateOneRequiredWithoutCommunicationLogsNestedInput
+    sender?: UserUpdateOneWithoutCommunicationLogsNestedInput
   }
 
   export type CommunicationLogUncheckedUpdateInput = {
@@ -143801,7 +143820,7 @@ export namespace Prisma {
     recipientCount?: IntFieldUpdateOperationsInput | number
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    sentBy?: StringFieldUpdateOperationsInput | string
+    sentBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -143813,7 +143832,7 @@ export namespace Prisma {
     recipientCount?: number
     content?: string | null
     status?: string
-    sentBy: string
+    sentBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -143835,7 +143854,7 @@ export namespace Prisma {
     recipientCount?: IntFieldUpdateOperationsInput | number
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    sentBy?: StringFieldUpdateOperationsInput | string
+    sentBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -164960,10 +164979,12 @@ export namespace Prisma {
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutCommunicationLogsInput, OrganizationUpdateWithoutCommunicationLogsInput>, OrganizationUncheckedUpdateWithoutCommunicationLogsInput>
   }
 
-  export type UserUpdateOneRequiredWithoutCommunicationLogsNestedInput = {
+  export type UserUpdateOneWithoutCommunicationLogsNestedInput = {
     create?: XOR<UserCreateWithoutCommunicationLogsInput, UserUncheckedCreateWithoutCommunicationLogsInput>
     connectOrCreate?: UserCreateOrConnectWithoutCommunicationLogsInput
     upsert?: UserUpsertWithoutCommunicationLogsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCommunicationLogsInput, UserUpdateWithoutCommunicationLogsInput>, UserUncheckedUpdateWithoutCommunicationLogsInput>
   }
@@ -171003,7 +171024,7 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    sender: UserCreateNestedOneWithoutCommunicationLogsInput
+    sender?: UserCreateNestedOneWithoutCommunicationLogsInput
   }
 
   export type CommunicationLogUncheckedCreateWithoutOrganizationInput = {
@@ -171012,7 +171033,7 @@ export namespace Prisma {
     recipientCount?: number
     content?: string | null
     status?: string
-    sentBy: string
+    sentBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -173728,7 +173749,7 @@ export namespace Prisma {
     recipientCount?: IntFilter<"CommunicationLog"> | number
     content?: StringNullableFilter<"CommunicationLog"> | string | null
     status?: StringFilter<"CommunicationLog"> | string
-    sentBy?: StringFilter<"CommunicationLog"> | string
+    sentBy?: StringNullableFilter<"CommunicationLog"> | string | null
     createdAt?: DateTimeFilter<"CommunicationLog"> | Date | string
     updatedAt?: DateTimeFilter<"CommunicationLog"> | Date | string
   }
@@ -269640,7 +269661,7 @@ export namespace Prisma {
     recipientCount?: number
     content?: string | null
     status?: string
-    sentBy: string
+    sentBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -273217,7 +273238,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sender?: UserUpdateOneRequiredWithoutCommunicationLogsNestedInput
+    sender?: UserUpdateOneWithoutCommunicationLogsNestedInput
   }
 
   export type CommunicationLogUncheckedUpdateWithoutOrganizationInput = {
@@ -273226,7 +273247,7 @@ export namespace Prisma {
     recipientCount?: IntFieldUpdateOperationsInput | number
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    sentBy?: StringFieldUpdateOperationsInput | string
+    sentBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -273237,7 +273258,7 @@ export namespace Prisma {
     recipientCount?: IntFieldUpdateOperationsInput | number
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    sentBy?: StringFieldUpdateOperationsInput | string
+    sentBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

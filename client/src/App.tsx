@@ -123,6 +123,8 @@ const TABLE_TO_TAB: Record<string, string> = {
   brochures: 'brochures',
   approval_requests: 'approval_requests',
   support_requests: 'support_requests',
+  admission_approval: 'admission_approval',
+  sales_enrollment_review: 'admission_approval',
   sub_departments: 'subdepartments',
   // CEO
   performance: 'performance',
