@@ -4,6 +4,7 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { sendEmail } from '../utils/emailService.js';
+import { enqueueNotification } from '../utils/notificationQueue.js';
 
 // Universities
 export const getUniversities = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -128,6 +129,10 @@ export const activateUniversity = asyncHandler(async (req: AuthRequest, res: Res
 // Programs
 export const getPrograms = asyncHandler(async (req: AuthRequest, res: Response) => {
   let programs: any[] = [];
+  const where: any = { organizationId: req.user.organizationId };
+  if (req.query.universityId) {
+    where.universityId = req.query.universityId as string;
+  }
   if (req.user.role === 'center_admin') {
     if (!req.user.studyCenterId) {
       programs = [];
@@ -136,15 +141,18 @@ export const getPrograms = asyncHandler(async (req: AuthRequest, res: Response) 
         where: { centerId: req.user.studyCenterId, organizationId: req.user.organizationId, isActive: true }
       });
       const allocatedProgramIds = allocations.map(a => a.programId);
+      where.id = { in: allocatedProgramIds };
       programs = await prisma.program.findMany({ 
-        where: { organizationId: req.user.organizationId, id: { in: allocatedProgramIds } }, 
-        include: { university: true, feeStructures: true } 
+        where, 
+        include: { university: true, feeStructures: true },
+        orderBy: { name: 'asc' }
       });
     }
   } else {
     programs = await prisma.program.findMany({ 
-      where: { organizationId: req.user.organizationId }, 
-      include: { university: true, feeStructures: true } 
+      where, 
+      include: { university: true, feeStructures: true },
+      orderBy: { name: 'asc' }
     });
   }
   res.json({ success: true, count: programs.length, data: programs });
@@ -307,17 +315,20 @@ export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
     }
   });
 
-  // Send email asynchronously so it doesn't block the response
-  sendEmail(
-    targetEmail,
-    'Your Study Center Portal Credentials',
-    `Hello ${name} Admin,\n\nYour study center account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${targetEmail}\nPassword: ${generatedPassword}\n\nRegards,\nSchool Administration`,
-    `<p>Hello <strong>${name} Admin</strong>,</p><p>Your study center account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${targetEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`
-  ).catch((mailErr: any) => {
-    console.error('Failed to send center credentials email:', mailErr.message);
-  });
-
+  // Respond immediately so UI is not blocked by SMTP connection
   res.status(201).json({ success: true, data: center });
+
+  // Enqueue credentials email asynchronously
+  enqueueNotification({
+    type: 'CUSTOM_EMAIL',
+    data: {
+      to: targetEmail,
+      subject: 'Your Study Center Portal Credentials',
+      text: `Hello ${name} Admin,\n\nYour study center account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${targetEmail}\nPassword: ${generatedPassword}\n\nRegards,\nSchool Administration`,
+      html: `<p>Hello <strong>${name} Admin</strong>,</p><p>Your study center account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${targetEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`,
+      organizationId: req.user.organizationId
+    }
+  });
 });
 
 export const updateStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {

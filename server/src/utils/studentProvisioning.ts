@@ -1,6 +1,8 @@
 import prisma from '../lib/prisma.js';
 import { hashPassword, generateUserId } from './authUtils.js';
-import { sendEmail } from './emailService.js';
+import { sendEmail, sendBrandedStudentCredentials } from './emailService.js';
+import { sendAdmissionConfirmationWhatsApp } from './whatsappService.js';
+import { enqueueNotification } from './notificationQueue.js';
 
 export async function provisionStudentAfterApproval(enrollmentId: string) {
   try {
@@ -148,17 +150,21 @@ export async function provisionStudentAfterApproval(enrollmentId: string) {
       }
     });
 
-    // 5. Send credentials email to student
-    try {
-      await sendEmail(
-        enrollment.studentEmail,
-        'Your Student Portal Credentials',
-        `Hello ${enrollment.studentName},\n\nYour enrollment has been approved and account created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${enrollment.studentEmail}\nPassword: ${generatedPassword}\nUser ID: ${generatedUid}\n\nRegards,\nSchool Administration`,
-        `<p>Hello <strong>${enrollment.studentName}</strong>,</p><p>Your enrollment has been approved and your account is active.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>User ID:</strong> ${generatedUid}<br/><strong>Email:</strong> ${enrollment.studentEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`
-      );
-    } catch (mailErr: any) {
-      console.error('Failed to send student credentials email:', mailErr.message);
-    }
+    // 5. Enqueue background credentials & admission notifications (0ms delay)
+    enqueueNotification({
+      type: 'STUDENT_CREDENTIALS',
+      data: {
+        to: enrollment.studentEmail,
+        recipientName: enrollment.studentName,
+        email: enrollment.studentEmail,
+        password: generatedPassword,
+        userId: generatedUid || studentRecord.admissionNo || undefined,
+        organizationId: enrollment.organizationId,
+        studentPhone: enrollment.studentPhone,
+        programName: (enrollment as any).program?.name || 'Academic Program',
+        admissionNo: studentRecord.admissionNo || enrollment.id
+      }
+    });
 
     console.log(`Successfully provisioned student/user for enrollment: ${enrollmentId}`);
   } catch (error) {

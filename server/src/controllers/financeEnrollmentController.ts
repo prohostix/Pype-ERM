@@ -3,6 +3,7 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { provisionStudentAfterApproval } from '../utils/studentProvisioning.js';
+import { enqueueNotification } from '../utils/notificationQueue.js';
 
 export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { status, search } = req.query as Record<string, string>;
@@ -142,6 +143,8 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
     }
   }
 
+  let createdInvoice: any = null;
+
   // If receipt hasn't been verified yet, but there is an initial payment amount, generate the invoice
   if (!existingEnrollment.receiptVerified && existingEnrollment.initialPaymentAmount && existingEnrollment.initialPaymentAmount > 0) {
     const amountPaid = existingEnrollment.initialPaymentAmount;
@@ -160,7 +163,7 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
     const random = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
     const invNo = `INV-AUTO-${Date.now().toString().slice(-4)}-${random}`;
     
-    await prisma.invoice.create({
+    createdInvoice = await prisma.invoice.create({
       data: {
         organizationId: existingEnrollment.organizationId,
         studentId: existingEnrollment.studentId || undefined,
@@ -185,7 +188,8 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
             notes: 'Auto-generated during finance approval'
           }
         }
-      }
+      },
+      include: { payments: true }
     });
     
     // Mark receipt as verified since we processed the payment
@@ -206,9 +210,43 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
       }
     }
   });
-  // Provision student/user account post-approval
+
+  // Provision student/user account post-approval (generates credentials)
   await provisionStudentAfterApproval(enrollment.id);
   
+  // Refetch the updated enrollment with provisioned student info
+  const updatedEnrollment = await prisma.enrollment.findUnique({
+    where: { id: enrollment.id },
+    include: { program: true, studyCenter: true, student: true }
+  });
+
+  // If an initial payment invoice was created, link studentId and enqueue FEE_RECEIPT notification with PDF
+  if (createdInvoice) {
+    if (updatedEnrollment?.studentId) {
+      await prisma.invoice.update({
+        where: { id: createdInvoice.id },
+        data: { studentId: updatedEnrollment.studentId }
+      }).catch(err => console.error('[Finance] Error linking studentId to initial invoice:', err?.message));
+    }
+
+    enqueueNotification({
+      type: 'FEE_RECEIPT',
+      data: {
+        to: existingEnrollment.studentEmail,
+        recipientName: existingEnrollment.studentName,
+        amount: existingEnrollment.initialPaymentAmount || 0,
+        receiptNo: createdInvoice.invoiceNo,
+        paymentDate: (existingEnrollment.initialPaymentDate ? new Date(existingEnrollment.initialPaymentDate) : new Date()).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }),
+        paymentMode: 'Online / Bank Transfer',
+        organizationId: existingEnrollment.organizationId,
+        paymentId: createdInvoice.payments?.[0]?.id,
+        admissionNo: updatedEnrollment?.student?.admissionNo || undefined,
+        programName: updatedEnrollment?.program?.name || undefined,
+        studentPhone: existingEnrollment.studentPhone || undefined
+      }
+    });
+  }
+
   // Notify sales user
   try {
     if (enrollment.salesUserId) {
@@ -225,12 +263,6 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
       });
     }
   } catch (_) { /* non-critical */ }
-
-  // Refetch the updated enrollment with provisioned student info
-  const updatedEnrollment = await prisma.enrollment.findUnique({
-    where: { id: enrollment.id },
-    include: { program: true, studyCenter: true }
-  });
 
   res.json({ success: true, data: updatedEnrollment || enrollment });
 });
@@ -387,10 +419,12 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
     }
   });
 
+  let createdInvoice: any = null;
+
   // Generate an invoice and payment entry for the initial payment so it shows in Student Payments Log
   if (amountPaid > 0) {
     const invNo = `INV-${Date.now()}-${Math.floor(Math.random() * 9999)}`;
-    await prisma.invoice.create({
+    createdInvoice = await prisma.invoice.create({
       data: {
         organizationId: enrollment.organizationId,
         studentId: enrollment.studentId || undefined,
@@ -415,7 +449,8 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
             notes: 'Auto-generated during receipt verification'
           }
         }
-      }
+      },
+      include: { payments: true }
     });
   }
 
@@ -445,8 +480,40 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
     }
   });
 
-  // Provision student/user account post-approval
+  // Provision student/user account post-approval (generates credentials)
   await provisionStudentAfterApproval(updatedEnrollment.id);
+
+  const finalEnrollment = await prisma.enrollment.findUnique({
+    where: { id: updatedEnrollment.id },
+    include: { program: true, studyCenter: true, student: true }
+  });
+
+  // If an initial payment invoice was created, link studentId and enqueue FEE_RECEIPT notification with PDF
+  if (createdInvoice) {
+    if (finalEnrollment?.studentId) {
+      await prisma.invoice.update({
+        where: { id: createdInvoice.id },
+        data: { studentId: finalEnrollment.studentId }
+      }).catch(err => console.error('[Finance] Error linking studentId in verifyReceipt:', err?.message));
+    }
+
+    enqueueNotification({
+      type: 'FEE_RECEIPT',
+      data: {
+        to: enrollment.studentEmail,
+        recipientName: enrollment.studentName,
+        amount: amountPaid,
+        receiptNo: createdInvoice.invoiceNo,
+        paymentDate: (enrollment.initialPaymentDate ? new Date(enrollment.initialPaymentDate) : new Date()).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }),
+        paymentMode: 'Online / Bank Transfer',
+        organizationId: enrollment.organizationId,
+        paymentId: createdInvoice.payments?.[0]?.id,
+        admissionNo: finalEnrollment?.student?.admissionNo || undefined,
+        programName: finalEnrollment?.program?.name || undefined,
+        studentPhone: enrollment.studentPhone || undefined
+      }
+    });
+  }
 
   // Notify sales user
   try {
@@ -464,11 +531,6 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
       });
     }
   } catch (_) { /* non-critical */ }
-
-  const finalEnrollment = await prisma.enrollment.findUnique({
-    where: { id: updatedEnrollment.id },
-    include: { program: true, studyCenter: true }
-  });
 
   res.json({ success: true, data: finalEnrollment || updatedEnrollment });
 });

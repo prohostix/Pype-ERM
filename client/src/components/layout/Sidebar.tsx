@@ -321,6 +321,12 @@ const navItems: NavItem[] = [
     roles: ['superadmin', 'org_admin'],
   },
   {
+    id: 'communication_settings',
+    label: 'SMTP & WhatsApp',
+    icon: MessageSquare,
+    roles: ['org_admin', 'superadmin'],
+  },
+  {
     id: 'login_branding',
     label: 'Login Branding',
     icon: Settings,

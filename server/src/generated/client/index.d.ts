@@ -99390,10 +99390,12 @@ export namespace Prisma {
 
   export type CommunicationLogAvgAggregateOutputType = {
     recipientCount: number | null
+    retryCount: number | null
   }
 
   export type CommunicationLogSumAggregateOutputType = {
     recipientCount: number | null
+    retryCount: number | null
   }
 
   export type CommunicationLogMinAggregateOutputType = {
@@ -99401,8 +99403,15 @@ export namespace Prisma {
     organizationId: string | null
     type: string | null
     recipientCount: number | null
+    recipient: string | null
+    recipientName: string | null
+    subject: string | null
+    category: string | null
     content: string | null
     status: string | null
+    errorMessage: string | null
+    retryCount: number | null
+    lastRetryAt: Date | null
     sentBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -99413,8 +99422,15 @@ export namespace Prisma {
     organizationId: string | null
     type: string | null
     recipientCount: number | null
+    recipient: string | null
+    recipientName: string | null
+    subject: string | null
+    category: string | null
     content: string | null
     status: string | null
+    errorMessage: string | null
+    retryCount: number | null
+    lastRetryAt: Date | null
     sentBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -99425,8 +99441,16 @@ export namespace Prisma {
     organizationId: number
     type: number
     recipientCount: number
+    recipient: number
+    recipientName: number
+    subject: number
+    category: number
     content: number
     status: number
+    errorMessage: number
+    retryCount: number
+    lastRetryAt: number
+    metadata: number
     sentBy: number
     createdAt: number
     updatedAt: number
@@ -99436,10 +99460,12 @@ export namespace Prisma {
 
   export type CommunicationLogAvgAggregateInputType = {
     recipientCount?: true
+    retryCount?: true
   }
 
   export type CommunicationLogSumAggregateInputType = {
     recipientCount?: true
+    retryCount?: true
   }
 
   export type CommunicationLogMinAggregateInputType = {
@@ -99447,8 +99473,15 @@ export namespace Prisma {
     organizationId?: true
     type?: true
     recipientCount?: true
+    recipient?: true
+    recipientName?: true
+    subject?: true
+    category?: true
     content?: true
     status?: true
+    errorMessage?: true
+    retryCount?: true
+    lastRetryAt?: true
     sentBy?: true
     createdAt?: true
     updatedAt?: true
@@ -99459,8 +99492,15 @@ export namespace Prisma {
     organizationId?: true
     type?: true
     recipientCount?: true
+    recipient?: true
+    recipientName?: true
+    subject?: true
+    category?: true
     content?: true
     status?: true
+    errorMessage?: true
+    retryCount?: true
+    lastRetryAt?: true
     sentBy?: true
     createdAt?: true
     updatedAt?: true
@@ -99471,8 +99511,16 @@ export namespace Prisma {
     organizationId?: true
     type?: true
     recipientCount?: true
+    recipient?: true
+    recipientName?: true
+    subject?: true
+    category?: true
     content?: true
     status?: true
+    errorMessage?: true
+    retryCount?: true
+    lastRetryAt?: true
+    metadata?: true
     sentBy?: true
     createdAt?: true
     updatedAt?: true
@@ -99570,8 +99618,16 @@ export namespace Prisma {
     organizationId: string
     type: string
     recipientCount: number
+    recipient: string | null
+    recipientName: string | null
+    subject: string | null
+    category: string | null
     content: string | null
     status: string
+    errorMessage: string | null
+    retryCount: number
+    lastRetryAt: Date | null
+    metadata: JsonValue | null
     sentBy: string | null
     createdAt: Date
     updatedAt: Date
@@ -99601,8 +99657,16 @@ export namespace Prisma {
     organizationId?: boolean
     type?: boolean
     recipientCount?: boolean
+    recipient?: boolean
+    recipientName?: boolean
+    subject?: boolean
+    category?: boolean
     content?: boolean
     status?: boolean
+    errorMessage?: boolean
+    retryCount?: boolean
+    lastRetryAt?: boolean
+    metadata?: boolean
     sentBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -99615,8 +99679,16 @@ export namespace Prisma {
     organizationId?: boolean
     type?: boolean
     recipientCount?: boolean
+    recipient?: boolean
+    recipientName?: boolean
+    subject?: boolean
+    category?: boolean
     content?: boolean
     status?: boolean
+    errorMessage?: boolean
+    retryCount?: boolean
+    lastRetryAt?: boolean
+    metadata?: boolean
     sentBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -99629,8 +99701,16 @@ export namespace Prisma {
     organizationId?: boolean
     type?: boolean
     recipientCount?: boolean
+    recipient?: boolean
+    recipientName?: boolean
+    subject?: boolean
+    category?: boolean
     content?: boolean
     status?: boolean
+    errorMessage?: boolean
+    retryCount?: boolean
+    lastRetryAt?: boolean
+    metadata?: boolean
     sentBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -99643,14 +99723,22 @@ export namespace Prisma {
     organizationId?: boolean
     type?: boolean
     recipientCount?: boolean
+    recipient?: boolean
+    recipientName?: boolean
+    subject?: boolean
+    category?: boolean
     content?: boolean
     status?: boolean
+    errorMessage?: boolean
+    retryCount?: boolean
+    lastRetryAt?: boolean
+    metadata?: boolean
     sentBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CommunicationLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "type" | "recipientCount" | "content" | "status" | "sentBy" | "createdAt" | "updatedAt", ExtArgs["result"]["communicationLog"]>
+  export type CommunicationLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "type" | "recipientCount" | "recipient" | "recipientName" | "subject" | "category" | "content" | "status" | "errorMessage" | "retryCount" | "lastRetryAt" | "metadata" | "sentBy" | "createdAt" | "updatedAt", ExtArgs["result"]["communicationLog"]>
   export type CommunicationLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     sender?: boolean | CommunicationLog$senderArgs<ExtArgs>
@@ -99675,8 +99763,16 @@ export namespace Prisma {
       organizationId: string
       type: string
       recipientCount: number
+      recipient: string | null
+      recipientName: string | null
+      subject: string | null
+      category: string | null
       content: string | null
       status: string
+      errorMessage: string | null
+      retryCount: number
+      lastRetryAt: Date | null
+      metadata: Prisma.JsonValue | null
       sentBy: string | null
       createdAt: Date
       updatedAt: Date
@@ -100109,8 +100205,16 @@ export namespace Prisma {
     readonly organizationId: FieldRef<"CommunicationLog", 'String'>
     readonly type: FieldRef<"CommunicationLog", 'String'>
     readonly recipientCount: FieldRef<"CommunicationLog", 'Int'>
+    readonly recipient: FieldRef<"CommunicationLog", 'String'>
+    readonly recipientName: FieldRef<"CommunicationLog", 'String'>
+    readonly subject: FieldRef<"CommunicationLog", 'String'>
+    readonly category: FieldRef<"CommunicationLog", 'String'>
     readonly content: FieldRef<"CommunicationLog", 'String'>
     readonly status: FieldRef<"CommunicationLog", 'String'>
+    readonly errorMessage: FieldRef<"CommunicationLog", 'String'>
+    readonly retryCount: FieldRef<"CommunicationLog", 'Int'>
+    readonly lastRetryAt: FieldRef<"CommunicationLog", 'DateTime'>
+    readonly metadata: FieldRef<"CommunicationLog", 'Json'>
     readonly sentBy: FieldRef<"CommunicationLog", 'String'>
     readonly createdAt: FieldRef<"CommunicationLog", 'DateTime'>
     readonly updatedAt: FieldRef<"CommunicationLog", 'DateTime'>
@@ -124675,8 +124779,16 @@ export namespace Prisma {
     organizationId: 'organizationId',
     type: 'type',
     recipientCount: 'recipientCount',
+    recipient: 'recipient',
+    recipientName: 'recipientName',
+    subject: 'subject',
+    category: 'category',
     content: 'content',
     status: 'status',
+    errorMessage: 'errorMessage',
+    retryCount: 'retryCount',
+    lastRetryAt: 'lastRetryAt',
+    metadata: 'metadata',
     sentBy: 'sentBy',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -133352,8 +133464,16 @@ export namespace Prisma {
     organizationId?: StringFilter<"CommunicationLog"> | string
     type?: StringFilter<"CommunicationLog"> | string
     recipientCount?: IntFilter<"CommunicationLog"> | number
+    recipient?: StringNullableFilter<"CommunicationLog"> | string | null
+    recipientName?: StringNullableFilter<"CommunicationLog"> | string | null
+    subject?: StringNullableFilter<"CommunicationLog"> | string | null
+    category?: StringNullableFilter<"CommunicationLog"> | string | null
     content?: StringNullableFilter<"CommunicationLog"> | string | null
     status?: StringFilter<"CommunicationLog"> | string
+    errorMessage?: StringNullableFilter<"CommunicationLog"> | string | null
+    retryCount?: IntFilter<"CommunicationLog"> | number
+    lastRetryAt?: DateTimeNullableFilter<"CommunicationLog"> | Date | string | null
+    metadata?: JsonNullableFilter<"CommunicationLog">
     sentBy?: StringNullableFilter<"CommunicationLog"> | string | null
     createdAt?: DateTimeFilter<"CommunicationLog"> | Date | string
     updatedAt?: DateTimeFilter<"CommunicationLog"> | Date | string
@@ -133366,8 +133486,16 @@ export namespace Prisma {
     organizationId?: SortOrder
     type?: SortOrder
     recipientCount?: SortOrder
+    recipient?: SortOrderInput | SortOrder
+    recipientName?: SortOrderInput | SortOrder
+    subject?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
     status?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    retryCount?: SortOrder
+    lastRetryAt?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
     sentBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -133383,8 +133511,16 @@ export namespace Prisma {
     organizationId?: StringFilter<"CommunicationLog"> | string
     type?: StringFilter<"CommunicationLog"> | string
     recipientCount?: IntFilter<"CommunicationLog"> | number
+    recipient?: StringNullableFilter<"CommunicationLog"> | string | null
+    recipientName?: StringNullableFilter<"CommunicationLog"> | string | null
+    subject?: StringNullableFilter<"CommunicationLog"> | string | null
+    category?: StringNullableFilter<"CommunicationLog"> | string | null
     content?: StringNullableFilter<"CommunicationLog"> | string | null
     status?: StringFilter<"CommunicationLog"> | string
+    errorMessage?: StringNullableFilter<"CommunicationLog"> | string | null
+    retryCount?: IntFilter<"CommunicationLog"> | number
+    lastRetryAt?: DateTimeNullableFilter<"CommunicationLog"> | Date | string | null
+    metadata?: JsonNullableFilter<"CommunicationLog">
     sentBy?: StringNullableFilter<"CommunicationLog"> | string | null
     createdAt?: DateTimeFilter<"CommunicationLog"> | Date | string
     updatedAt?: DateTimeFilter<"CommunicationLog"> | Date | string
@@ -133397,8 +133533,16 @@ export namespace Prisma {
     organizationId?: SortOrder
     type?: SortOrder
     recipientCount?: SortOrder
+    recipient?: SortOrderInput | SortOrder
+    recipientName?: SortOrderInput | SortOrder
+    subject?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
     status?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    retryCount?: SortOrder
+    lastRetryAt?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
     sentBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -133417,8 +133561,16 @@ export namespace Prisma {
     organizationId?: StringWithAggregatesFilter<"CommunicationLog"> | string
     type?: StringWithAggregatesFilter<"CommunicationLog"> | string
     recipientCount?: IntWithAggregatesFilter<"CommunicationLog"> | number
+    recipient?: StringNullableWithAggregatesFilter<"CommunicationLog"> | string | null
+    recipientName?: StringNullableWithAggregatesFilter<"CommunicationLog"> | string | null
+    subject?: StringNullableWithAggregatesFilter<"CommunicationLog"> | string | null
+    category?: StringNullableWithAggregatesFilter<"CommunicationLog"> | string | null
     content?: StringNullableWithAggregatesFilter<"CommunicationLog"> | string | null
     status?: StringWithAggregatesFilter<"CommunicationLog"> | string
+    errorMessage?: StringNullableWithAggregatesFilter<"CommunicationLog"> | string | null
+    retryCount?: IntWithAggregatesFilter<"CommunicationLog"> | number
+    lastRetryAt?: DateTimeNullableWithAggregatesFilter<"CommunicationLog"> | Date | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"CommunicationLog">
     sentBy?: StringNullableWithAggregatesFilter<"CommunicationLog"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CommunicationLog"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CommunicationLog"> | Date | string
@@ -143783,8 +143935,16 @@ export namespace Prisma {
     id?: string
     type: string
     recipientCount?: number
+    recipient?: string | null
+    recipientName?: string | null
+    subject?: string | null
+    category?: string | null
     content?: string | null
     status?: string
+    errorMessage?: string | null
+    retryCount?: number
+    lastRetryAt?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutCommunicationLogsInput
@@ -143796,8 +143956,16 @@ export namespace Prisma {
     organizationId: string
     type: string
     recipientCount?: number
+    recipient?: string | null
+    recipientName?: string | null
+    subject?: string | null
+    category?: string | null
     content?: string | null
     status?: string
+    errorMessage?: string | null
+    retryCount?: number
+    lastRetryAt?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     sentBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -143807,8 +143975,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     recipientCount?: IntFieldUpdateOperationsInput | number
+    recipient?: NullableStringFieldUpdateOperationsInput | string | null
+    recipientName?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastRetryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutCommunicationLogsNestedInput
@@ -143820,8 +143996,16 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     recipientCount?: IntFieldUpdateOperationsInput | number
+    recipient?: NullableStringFieldUpdateOperationsInput | string | null
+    recipientName?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastRetryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     sentBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -143832,8 +144016,16 @@ export namespace Prisma {
     organizationId: string
     type: string
     recipientCount?: number
+    recipient?: string | null
+    recipientName?: string | null
+    subject?: string | null
+    category?: string | null
     content?: string | null
     status?: string
+    errorMessage?: string | null
+    retryCount?: number
+    lastRetryAt?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     sentBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -143843,8 +144035,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     recipientCount?: IntFieldUpdateOperationsInput | number
+    recipient?: NullableStringFieldUpdateOperationsInput | string | null
+    recipientName?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastRetryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -143854,8 +144054,16 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     recipientCount?: IntFieldUpdateOperationsInput | number
+    recipient?: NullableStringFieldUpdateOperationsInput | string | null
+    recipientName?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastRetryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     sentBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -150890,8 +151098,16 @@ export namespace Prisma {
     organizationId?: SortOrder
     type?: SortOrder
     recipientCount?: SortOrder
+    recipient?: SortOrder
+    recipientName?: SortOrder
+    subject?: SortOrder
+    category?: SortOrder
     content?: SortOrder
     status?: SortOrder
+    errorMessage?: SortOrder
+    retryCount?: SortOrder
+    lastRetryAt?: SortOrder
+    metadata?: SortOrder
     sentBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -150899,6 +151115,7 @@ export namespace Prisma {
 
   export type CommunicationLogAvgOrderByAggregateInput = {
     recipientCount?: SortOrder
+    retryCount?: SortOrder
   }
 
   export type CommunicationLogMaxOrderByAggregateInput = {
@@ -150906,8 +151123,15 @@ export namespace Prisma {
     organizationId?: SortOrder
     type?: SortOrder
     recipientCount?: SortOrder
+    recipient?: SortOrder
+    recipientName?: SortOrder
+    subject?: SortOrder
+    category?: SortOrder
     content?: SortOrder
     status?: SortOrder
+    errorMessage?: SortOrder
+    retryCount?: SortOrder
+    lastRetryAt?: SortOrder
     sentBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -150918,8 +151142,15 @@ export namespace Prisma {
     organizationId?: SortOrder
     type?: SortOrder
     recipientCount?: SortOrder
+    recipient?: SortOrder
+    recipientName?: SortOrder
+    subject?: SortOrder
+    category?: SortOrder
     content?: SortOrder
     status?: SortOrder
+    errorMessage?: SortOrder
+    retryCount?: SortOrder
+    lastRetryAt?: SortOrder
     sentBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -150927,6 +151158,7 @@ export namespace Prisma {
 
   export type CommunicationLogSumOrderByAggregateInput = {
     recipientCount?: SortOrder
+    retryCount?: SortOrder
   }
 
   export type UserFCMTokenCountOrderByAggregateInput = {
@@ -171022,8 +171254,16 @@ export namespace Prisma {
     id?: string
     type: string
     recipientCount?: number
+    recipient?: string | null
+    recipientName?: string | null
+    subject?: string | null
+    category?: string | null
     content?: string | null
     status?: string
+    errorMessage?: string | null
+    retryCount?: number
+    lastRetryAt?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     sender?: UserCreateNestedOneWithoutCommunicationLogsInput
@@ -171033,8 +171273,16 @@ export namespace Prisma {
     id?: string
     type: string
     recipientCount?: number
+    recipient?: string | null
+    recipientName?: string | null
+    subject?: string | null
+    category?: string | null
     content?: string | null
     status?: string
+    errorMessage?: string | null
+    retryCount?: number
+    lastRetryAt?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     sentBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -173749,8 +173997,16 @@ export namespace Prisma {
     organizationId?: StringFilter<"CommunicationLog"> | string
     type?: StringFilter<"CommunicationLog"> | string
     recipientCount?: IntFilter<"CommunicationLog"> | number
+    recipient?: StringNullableFilter<"CommunicationLog"> | string | null
+    recipientName?: StringNullableFilter<"CommunicationLog"> | string | null
+    subject?: StringNullableFilter<"CommunicationLog"> | string | null
+    category?: StringNullableFilter<"CommunicationLog"> | string | null
     content?: StringNullableFilter<"CommunicationLog"> | string | null
     status?: StringFilter<"CommunicationLog"> | string
+    errorMessage?: StringNullableFilter<"CommunicationLog"> | string | null
+    retryCount?: IntFilter<"CommunicationLog"> | number
+    lastRetryAt?: DateTimeNullableFilter<"CommunicationLog"> | Date | string | null
+    metadata?: JsonNullableFilter<"CommunicationLog">
     sentBy?: StringNullableFilter<"CommunicationLog"> | string | null
     createdAt?: DateTimeFilter<"CommunicationLog"> | Date | string
     updatedAt?: DateTimeFilter<"CommunicationLog"> | Date | string
@@ -181734,8 +181990,16 @@ export namespace Prisma {
     id?: string
     type: string
     recipientCount?: number
+    recipient?: string | null
+    recipientName?: string | null
+    subject?: string | null
+    category?: string | null
     content?: string | null
     status?: string
+    errorMessage?: string | null
+    retryCount?: number
+    lastRetryAt?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutCommunicationLogsInput
@@ -181746,8 +182010,16 @@ export namespace Prisma {
     organizationId: string
     type: string
     recipientCount?: number
+    recipient?: string | null
+    recipientName?: string | null
+    subject?: string | null
+    category?: string | null
     content?: string | null
     status?: string
+    errorMessage?: string | null
+    retryCount?: number
+    lastRetryAt?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -269661,8 +269933,16 @@ export namespace Prisma {
     id?: string
     type: string
     recipientCount?: number
+    recipient?: string | null
+    recipientName?: string | null
+    subject?: string | null
+    category?: string | null
     content?: string | null
     status?: string
+    errorMessage?: string | null
+    retryCount?: number
+    lastRetryAt?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     sentBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -273236,8 +273516,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     recipientCount?: IntFieldUpdateOperationsInput | number
+    recipient?: NullableStringFieldUpdateOperationsInput | string | null
+    recipientName?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastRetryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sender?: UserUpdateOneWithoutCommunicationLogsNestedInput
@@ -273247,8 +273535,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     recipientCount?: IntFieldUpdateOperationsInput | number
+    recipient?: NullableStringFieldUpdateOperationsInput | string | null
+    recipientName?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastRetryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     sentBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -273258,8 +273554,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     recipientCount?: IntFieldUpdateOperationsInput | number
+    recipient?: NullableStringFieldUpdateOperationsInput | string | null
+    recipientName?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastRetryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     sentBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -276413,8 +276717,16 @@ export namespace Prisma {
     organizationId: string
     type: string
     recipientCount?: number
+    recipient?: string | null
+    recipientName?: string | null
+    subject?: string | null
+    category?: string | null
     content?: string | null
     status?: string
+    errorMessage?: string | null
+    retryCount?: number
+    lastRetryAt?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -281546,8 +281858,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     recipientCount?: IntFieldUpdateOperationsInput | number
+    recipient?: NullableStringFieldUpdateOperationsInput | string | null
+    recipientName?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastRetryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutCommunicationLogsNestedInput
@@ -281558,8 +281878,16 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     recipientCount?: IntFieldUpdateOperationsInput | number
+    recipient?: NullableStringFieldUpdateOperationsInput | string | null
+    recipientName?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastRetryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -281569,8 +281897,16 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     recipientCount?: IntFieldUpdateOperationsInput | number
+    recipient?: NullableStringFieldUpdateOperationsInput | string | null
+    recipientName?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastRetryAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

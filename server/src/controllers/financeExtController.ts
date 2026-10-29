@@ -3,6 +3,7 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { sendEmail } from '../utils/emailService.js';
+import { enqueueNotification } from '../utils/notificationQueue.js';
 
 // ── Payment Reminders ────────────────────────────────────────────────────────
 
@@ -81,7 +82,10 @@ export const sendPaymentReminder = asyncHandler(async (req: AuthRequest, res: Re
     });
   }
 
-  let sent = 0;
+  // Respond immediately so user interface never freezes
+  res.json({ success: true, message: `Payment reminders enqueued for dispatch to ${targetStudents.length} student(s)` });
+
+  // Background dispatch via notification queue
   for (const student of targetStudents) {
     const emailBody = message
       .replace('{name}', student.name)
@@ -91,16 +95,32 @@ export const sendPaymentReminder = asyncHandler(async (req: AuthRequest, res: Re
 
     const htmlBody = `<p>Dear <strong>${student.name}</strong>,</p>${emailBody.split('\n').map((l: string) => `<p>${l}</p>`).join('')}<p>Regards,<br/>Finance Department</p>`;
 
-    await sendEmail(
-      student.email,
-      subject || 'Payment Reminder',
-      emailBody,
-      htmlBody
-    );
-    sent++;
-  }
+    if (student.email) {
+      enqueueNotification({
+        type: 'CUSTOM_EMAIL',
+        data: {
+          to: student.email,
+          subject: subject || 'Payment Reminder',
+          text: emailBody,
+          html: htmlBody,
+          organizationId: req.user.organizationId
+        }
+      });
+    }
 
-  res.json({ success: true, message: `Reminder sent to ${sent} students` });
+    if (student.phone) {
+      enqueueNotification({
+        type: 'PAYMENT_REMINDER',
+        data: {
+          studentPhone: student.phone,
+          studentName: student.name,
+          amount: student.amount || '',
+          dueDate: student.dueDate ? new Date(student.dueDate).toLocaleDateString('en-IN') : 'Immediately',
+          organizationId: req.user.organizationId
+        }
+      });
+    }
+  }
 });
 
 // ── Receipt Generation ────────────────────────────────────────────────────────

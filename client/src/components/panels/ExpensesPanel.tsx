@@ -41,10 +41,14 @@ export function ExpensesPanel() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const payload = {
+        ...formData,
+        amount: parseFloat(formData.amount) || 0
+      };
       if (editingId) {
-        await api.put(`/finance/expenses/${editingId}`, formData);
+        await api.put(`/finance/expenses/${editingId}`, payload);
       } else {
-        await api.post('/finance/expenses', formData);
+        await api.post('/finance/expenses', payload);
       }
       setDialogOpen(false);
       resetForm();
@@ -170,7 +174,7 @@ export function ExpensesPanel() {
                         <div className="font-medium">₹{expense.amount} - {expense.category}</div>
                         <div className="text-sm text-muted-foreground">{expense.description}</div>
                         <div className="text-xs text-muted-foreground mt-1">
-                          By: {expense.employeeId?.name || expense.employee?.name || 'Unknown'} • {expense.submittedAt ? new Date(expense.submittedAt).toLocaleDateString() : 'N/A'}
+                          By: {expense.user?.name || expense.employeeId?.name || expense.employee?.name || 'Unknown'} • {expense.submittedAt ? new Date(expense.submittedAt).toLocaleDateString() : 'N/A'}
                         </div>
                       </div>
                     </div>

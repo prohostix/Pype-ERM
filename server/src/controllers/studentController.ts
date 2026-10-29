@@ -4,7 +4,8 @@ import prisma from '../lib/prisma.js';
 import { Prisma } from '../generated/client/index.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
-import { sendEmail } from '../utils/emailService.js';
+import { sendEmail, sendBrandedStudentCredentials } from '../utils/emailService.js';
+import { enqueueNotification } from '../utils/notificationQueue.js';
 import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
 
 const SALES_ROLES = ['sales_admin', 'sales_sub_admin', 'sales', 'employee', 'student'];
@@ -411,7 +412,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         address: address || '',
         enrollmentNo: req.body.enrollmentNo ? req.body.enrollmentNo : null,
         admissionNo: admissionNo || null,
-        admissionDate: admissionDate ? new Date(admissionDate) : new Date(),
+        admissionDate: admissionDate ? new Date(admissionDate) : (req.body.initialPaymentDate ? new Date(req.body.initialPaymentDate) : new Date()),
         dob: dob ? new Date(dob) : null,
         fatherName: fatherName || null,
         fatherPhone: fatherPhone || null,
@@ -491,6 +492,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : student.sessionId,
         paymentPlan: req.body.paymentPlan || null,
         initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
+        initialPaymentDate: req.body.initialPaymentDate ? new Date(req.body.initialPaymentDate) : (admissionDate ? new Date(admissionDate) : null),
         status: initialStatus,
         isUpgrade: isUpgrade,
         previousProgramId: isUpgrade ? (existingStudentId ? (await prisma.student.findUnique({ where: { id: existingStudentId }, select: { programId: true } }))?.programId : student.programId) : null,
@@ -564,19 +566,24 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     } catch (_) { /* non-critical */ }
   }
 
-  // Send credentials email — failure must not fail the creation
-  try {
-    await sendEmail(
-      email,
-      'Your Student Portal Credentials',
-      `Hello ${name},\n\nYour account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${email}\nPassword: ${defaultPassword}\n\nRegards,\nSchool Administration`,
-      `<p>Hello <strong>${name}</strong>,</p><p>Your account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${email}<br/><strong>Password:</strong> ${defaultPassword}</p><p>Regards,<br/>School Administration</p>`
-    );
-  } catch (mailErr: any) {
-    console.error('Failed to send student credentials email:', mailErr.message);
-  }
-
+  // Respond immediately to client (0ms delay)
   res.status(201).json({ success: true, data: student });
+
+  // Enqueue credentials email & WhatsApp into background queue
+  enqueueNotification({
+    type: 'STUDENT_CREDENTIALS',
+    data: {
+      to: email,
+      recipientName: name,
+      email,
+      password: defaultPassword,
+      userId: student.admissionNo || undefined,
+      organizationId: req.user.organizationId,
+      studentPhone: phone || undefined,
+      programName: programExists?.name || undefined,
+      admissionNo: student.admissionNo || undefined
+    }
+  });
 });
 
 export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response) => {

@@ -52,3 +52,26 @@ export const getCountries = asyncHandler(async (req: Request, res: Response) => 
     res.status(500).json({ success: false, message: 'Failed to fetch countries' });
   }
 });
+
+/**
+ * Publicly serves the official branded PDF receipt for download / view
+ * Accessible by students and WhatsApp/Email delivery links without login
+ */
+export const getPublicReceiptPdf = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { getReceiptData, generateReceiptPdfBuffer } = await import('../utils/receiptPdfService.js');
+
+  const receiptData = await getReceiptData(id);
+  if (!receiptData) {
+    res.status(404).json({ success: false, message: 'Payment receipt not found' });
+    return;
+  }
+
+  const pdfBuffer = await generateReceiptPdfBuffer(receiptData);
+  const safeFilename = `Receipt-${receiptData.receiptNo.replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`;
+
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `inline; filename="${safeFilename}"`);
+  res.setHeader('Content-Length', pdfBuffer.length);
+  res.end(pdfBuffer);
+});

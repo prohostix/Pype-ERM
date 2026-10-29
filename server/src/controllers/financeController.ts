@@ -3,7 +3,9 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
-import { sendEmail } from '../utils/emailService.js';
+import { sendEmail, sendBrandedFeeReceipt } from '../utils/emailService.js';
+import { sendFeeReceiptWhatsApp } from '../utils/whatsappService.js';
+import { enqueueNotification } from '../utils/notificationQueue.js';
 
 // Invoices
 export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -368,7 +370,36 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
     }
   });
 
+  // Send response immediately to client (0ms wait time)
   res.status(201).json({ success: true, data: populatedPayment });
+
+  // Trigger automated fee receipt notifications asynchronously (Branded Email + Gupshup WhatsApp)
+  try {
+    const student = populatedPayment?.invoice?.student;
+    const invNo = populatedPayment?.invoice?.invoiceNo || `REC-${payment.id.slice(-6).toUpperCase()}`;
+    const orgId = req.user.organizationId;
+
+    if (student && orgId) {
+      enqueueNotification({
+        type: 'FEE_RECEIPT',
+        data: {
+          to: student.email || undefined,
+          recipientName: student.name,
+          amount: populatedPayment.amount,
+          receiptNo: invNo,
+          paymentDate: new Date(populatedPayment.receivedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }),
+          paymentMode: populatedPayment.method || 'Online',
+          organizationId: orgId,
+          paymentId: populatedPayment.id,
+          admissionNo: student.admissionNo || undefined,
+          programName: student.program?.name || undefined,
+          studentPhone: student.phone || undefined
+        }
+      });
+    }
+  } catch (notifErr: any) {
+    console.error('[Finance] Notification error in recordPayment:', notifErr?.message);
+  }
 });
 export const updatePayment = asyncHandler(async (req: AuthRequest, res: Response) => {
   const exists = await prisma.paymentEntry.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
@@ -412,12 +443,31 @@ export const getExpenses = asyncHandler(async (req: AuthRequest, res: Response) 
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.user = { branchId: req.user.branchId };
   }
-  const expenses = await prisma.expenseClaim.findMany({ where });
+  if (req.query.status) {
+    where.status = req.query.status as any;
+  }
+  if (req.query.category) {
+    where.category = req.query.category as string;
+  }
+  const expenses = await prisma.expenseClaim.findMany({
+    where,
+    include: {
+      user: {
+        select: { id: true, name: true, email: true }
+      }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
   res.json({ success: true, count: expenses.length, data: expenses });
 });
 export const getExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
   const expense = await prisma.expenseClaim.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId }
+    where: { id: req.params.id, organizationId: req.user.organizationId },
+    include: {
+      user: {
+        select: { id: true, name: true, email: true }
+      }
+    }
   });
   if (!expense) {
     res.status(404).json({ success: false, message: 'Expense not found' });
@@ -426,7 +476,25 @@ export const getExpense = asyncHandler(async (req: AuthRequest, res: Response) =
   res.json({ success: true, data: expense });
 });
 export const createExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const expense = await prisma.expenseClaim.create({ data: { ...req.body, organizationId: req.user.organizationId, employeeId: req.user.id } });
+  const { amount, category, description, title, receipts, receiptUrl, status, remarks } = req.body;
+
+  if (amount === undefined || amount === null || isNaN(Number(amount))) {
+    res.status(400).json({ success: false, message: 'Valid amount is required' });
+    return;
+  }
+
+  const expense = await prisma.expenseClaim.create({
+    data: {
+      amount: Number(amount),
+      category: category || 'other',
+      description: description || title || '',
+      receipts: receipts || (receiptUrl ? [receiptUrl] : []),
+      status: status || 'pending',
+      ...(remarks ? { remarks } : {}),
+      organizationId: req.user.organizationId,
+      employeeId: req.body.employeeId || req.user.id
+    }
+  });
   res.status(201).json({ success: true, data: expense });
 });
 export const updateExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -435,14 +503,17 @@ export const updateExpense = asyncHandler(async (req: AuthRequest, res: Response
     res.status(404).json({ success: false, message: 'Expense not found' });
     return;
   }
-  const { title, description, amount, category, date, receiptUrl } = req.body;
+  const { title, description, amount, category, receipts, receiptUrl, status, remarks } = req.body;
   const updateData: any = {};
-  if (title !== undefined) updateData.title = title;
   if (description !== undefined) updateData.description = description;
+  else if (title !== undefined) updateData.description = title;
   if (amount !== undefined) updateData.amount = Number(amount);
   if (category !== undefined) updateData.category = category;
-  if (date !== undefined) updateData.date = new Date(date);
-  if (receiptUrl !== undefined) updateData.receiptUrl = receiptUrl;
+  if (receipts !== undefined) updateData.receipts = receipts;
+  else if (receiptUrl !== undefined) updateData.receipts = [receiptUrl];
+  if (status !== undefined) updateData.status = status;
+  if (remarks !== undefined) updateData.remarks = remarks;
+
   const expense = await prisma.expenseClaim.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: expense });
 });
@@ -456,7 +527,22 @@ export const deleteExpense = asyncHandler(async (req: AuthRequest, res: Response
   res.json({ success: true, data: {} });
 });
 export const approveExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const expense = await prisma.expenseClaim.update({ where: { id: req.params.id }, data: { status: 'approved', approvedBy: req.user.id, approvedAt: new Date() } });
+  const exists = await prisma.expenseClaim.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Expense not found' });
+    return;
+  }
+  const { action, remarks } = req.body || {};
+  const status = action === 'reject' ? 'rejected' : 'approved';
+  const expense = await prisma.expenseClaim.update({
+    where: { id: req.params.id },
+    data: {
+      status,
+      approvedBy: req.user.id,
+      approvedAt: new Date(),
+      ...(remarks ? { remarks } : {})
+    }
+  });
   res.json({ success: true, data: expense });
 });
 

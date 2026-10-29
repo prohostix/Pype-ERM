@@ -4,7 +4,9 @@ import { AuthRequest } from '../middleware/auth.js';
 import { prisma } from '../config/postgres.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
-import { sendEmail } from '../utils/emailService.js';
+import { sendEmail, sendBrandedStudentCredentials } from '../utils/emailService.js';
+import { sendAdmissionConfirmationWhatsApp } from '../utils/whatsappService.js';
+import { enqueueNotification } from '../utils/notificationQueue.js';
 import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
 
 // ─── Public: Validate invite token and get form data ─────────────────────────
@@ -429,7 +431,10 @@ export const approveSalesEnrollmentOps = asyncHandler(async (req: AuthRequest, r
 
 export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthRequest, res: Response) => {
   const now = new Date();
-  const enrollment = await prisma.enrollment.findUnique({ where: { id: req.params.id } });
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { id: req.params.id },
+    include: { program: true }
+  });
 
   if (!enrollment || enrollment.organizationId !== req.user.organizationId) {
     res.status(404).json({ success: false, message: 'Enrollment not found' });
@@ -549,17 +554,98 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
     }
     studentRecordId = studentRecord.id;
 
-    // Send credentials email
-    if (generatedPassword && generatedPassword !== '(Existing student account)') {
-      await sendEmail(
-        enrollment.studentEmail,
-        'Your Student Portal Credentials',
-        `Hello ${enrollment.studentName},\n\nYour enrollment has been approved and account created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${enrollment.studentEmail}\nPassword: ${generatedPassword}\n\nRegards,\nSchool Administration`,
-        `<p>Hello <strong>${enrollment.studentName}</strong>,</p><p>Your enrollment has been approved and account created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${enrollment.studentEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`
-      );
+    // Enqueue notifications (Email + WhatsApp) into background queue (0ms wait time)
+    enqueueNotification({
+      type: 'STUDENT_CREDENTIALS',
+      data: {
+        to: enrollment.studentEmail,
+        recipientName: enrollment.studentName,
+        email: enrollment.studentEmail,
+        password: generatedPassword,
+        userId: generatedUid || studentRecord.admissionNo || undefined,
+        organizationId: enrollment.organizationId,
+        studentPhone: enrollment.studentPhone,
+        programName: enrollment.program?.name || 'Academic Program',
+        admissionNo: studentRecord.admissionNo || newAdmissionNo
+      }
+    });
+
+    // 2. Generate invoice & fee receipt if initial payment amount exists
+    if (enrollment.initialPaymentAmount && enrollment.initialPaymentAmount > 0) {
+      const amountPaid = enrollment.initialPaymentAmount;
+      const random = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+      const invNo = `INV-ADM-${Date.now().toString().slice(-4)}-${random}`;
+
+      // Check if an invoice was already created for this student admission
+      let invoiceToUse = await prisma.invoice.findFirst({
+        where: {
+          organizationId: enrollment.organizationId,
+          studentId: studentRecordId || undefined,
+          notes: { contains: 'Initial Admission Payment' }
+        },
+        include: { payments: true }
+      });
+
+      if (!invoiceToUse) {
+        await prisma.enrollmentPayment.create({
+          data: {
+            enrollmentId: enrollment.id,
+            amount: amountPaid,
+            ...(enrollment.studyCenterId ? { studyCenterId: enrollment.studyCenterId } : {}),
+            debitedAt: enrollment.initialPaymentDate ? new Date(enrollment.initialPaymentDate) : new Date()
+          }
+        });
+
+        invoiceToUse = await prisma.invoice.create({
+          data: {
+            organizationId: enrollment.organizationId,
+            studentId: studentRecordId || undefined,
+            centerId: enrollment.studyCenterId || undefined,
+            invoiceNo: invNo,
+            amount: amountPaid,
+            tax: 0,
+            total: amountPaid,
+            status: 'paid',
+            dueDate: enrollment.initialPaymentDate ? new Date(enrollment.initialPaymentDate) : new Date(),
+            paidAt: enrollment.initialPaymentDate ? new Date(enrollment.initialPaymentDate) : new Date(),
+            notes: 'Initial Admission Payment',
+            items: [{ description: 'Admission / Initial Program Fee', amount: amountPaid }],
+            payments: {
+              create: {
+                organizationId: enrollment.organizationId,
+                amount: amountPaid,
+                method: 'online',
+                referenceNo: 'Admission',
+                receivedBy: req.user.id,
+                receivedAt: enrollment.initialPaymentDate ? new Date(enrollment.initialPaymentDate) : new Date(),
+                notes: 'Auto-generated during sales enrollment finance approval'
+              }
+            }
+          },
+          include: { payments: true }
+        });
+      }
+
+      // Enqueue official fee receipt & invoice notification with PDF attachment
+      enqueueNotification({
+        type: 'FEE_RECEIPT',
+        data: {
+          to: enrollment.studentEmail,
+          recipientName: enrollment.studentName,
+          amount: amountPaid,
+          receiptNo: invoiceToUse.invoiceNo,
+          paymentDate: (enrollment.initialPaymentDate ? new Date(enrollment.initialPaymentDate) : new Date()).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }),
+          paymentMode: 'Online / Bank Transfer',
+          organizationId: enrollment.organizationId,
+          paymentId: invoiceToUse.payments?.[0]?.id,
+          admissionNo: studentRecord.admissionNo || newAdmissionNo,
+          programName: enrollment.program?.name || 'Academic Program',
+          studentPhone: enrollment.studentPhone || undefined
+        }
+      });
     }
   } catch (err) {
-    console.error('Error auto-generating student credentials:', err);
+    console.error('Error auto-generating student credentials or invoice receipt:', err);
   }
 
   const history = ((enrollment as any).statusHistory as any[]) || [];

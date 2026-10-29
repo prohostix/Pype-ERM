@@ -593,12 +593,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   const getStudentEffectiveDate = (s: any) => {
     if (s?.admissionDate) return { date: s.admissionDate, isAdm: true };
+    const initPayDate = (s?.admissionProgress as any)?.initialPaymentDate;
+    if (initPayDate) return { date: initPayDate, isAdm: true };
     if (Array.isArray(s?.enrollments) && s.enrollments.length > 0) {
       const sorted = [...s.enrollments].sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
       const latest = sorted[0];
-      if (latest?.enrolledAt || latest?.createdAt) {
-        return { date: latest.enrolledAt || latest.createdAt, isAdm: true };
-      }
+      if (latest?.initialPaymentDate) return { date: latest.initialPaymentDate, isAdm: true };
+      if (latest?.enrolledAt) return { date: latest.enrolledAt, isAdm: true };
+      if (latest?.createdAt) return { date: latest.createdAt, isAdm: false };
     }
     return { date: s?.createdAt, isAdm: false };
   };

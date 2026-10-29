@@ -14,6 +14,15 @@ import {
   initLoginBranding,
   updateLoginBranding,
 } from '../controllers/organizationController.js';
+import {
+  getCommunicationSettings,
+  updateCommunicationSettings,
+  testSmtpSettings,
+  testWhatsAppSettings,
+  getEmailTemplatePreview,
+  getOrgCommunicationLogs,
+  resendOrgCommunicationLog,
+} from '../controllers/communicationSettingsController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { auditLog } from '../middleware/auditLog.js';
 
@@ -34,6 +43,17 @@ router
 // Enrollment link configuration (must be before /:id to avoid route conflict)
 router.get('/enrollment-link-config', authorize('superadmin', 'org_admin', 'sales_admin', 'sales_sub_admin'), getEnrollmentLinkConfig);
 router.put('/enrollment-link-config', authorize('superadmin', 'org_admin'), updateEnrollmentLinkConfig);
+
+// Communication Settings (SMTP & WhatsApp)
+router.get('/communication-settings', authorize('superadmin', 'org_admin'), getCommunicationSettings);
+router.put('/communication-settings', authorize('superadmin', 'org_admin'), updateCommunicationSettings);
+router.post('/communication-settings/test-smtp', authorize('superadmin', 'org_admin'), testSmtpSettings);
+router.post('/communication-settings/test-whatsapp', authorize('superadmin', 'org_admin'), testWhatsAppSettings);
+router.get('/communication-settings/email-template-preview', authorize('superadmin', 'org_admin'), getEmailTemplatePreview);
+
+// Communication Audit Logs & Resend
+router.get('/communication-logs', authorize('superadmin', 'org_admin'), getOrgCommunicationLogs);
+router.post('/communication-logs/:id/resend', authorize('superadmin', 'org_admin'), resendOrgCommunicationLog);
 
 // Login Branding
 router.post('/login-branding/init', authorize('org_admin', 'superadmin'), initLoginBranding);
