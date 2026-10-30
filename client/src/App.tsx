@@ -400,7 +400,7 @@ function App() {
       return [
         { id: 'dashboard', label: 'Dashboard' },
         { id: 'organizations', label: 'Organizations' },
-        { id: 'licenses', label: 'Licenses' },
+        { id: 'licenses', label: 'Pricings and Bills' },
         { id: 'users', label: 'Users' },
         { id: 'departments', label: 'Departments' },
         { id: 'inquiries', label: 'Enquiries' },

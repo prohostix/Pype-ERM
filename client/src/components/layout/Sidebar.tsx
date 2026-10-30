@@ -79,7 +79,7 @@ const navItems: NavItem[] = [
     roles: ['superadmin'],
     children: [
       { id: 'org-list', label: 'All Organizations', icon: Building, roles: ['superadmin'] },
-      { id: 'licenses', label: 'Licenses', icon: Key, roles: ['superadmin'] },
+      { id: 'licenses', label: 'Pricings and Bills', icon: Receipt, roles: ['superadmin'] },
     ],
   },
   {
@@ -352,9 +352,36 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
 
   if (!user) return null;
 
-  const filteredNavItems = navItems.filter(item =>
-    !item.roles || item.roles.includes(user.role)
-  );
+  const orgFeatures: string[] = React.useMemo(() => {
+    if (user.role === 'superadmin') return ['academic_partners', 'academic_centers'];
+    const org = (user as any).organization;
+    if (!org) return ['academic_partners', 'academic_centers'];
+    const customFeatures = org.metadata?.planConfig?.features || org.metadata?.billingConfig?.features;
+    if (Array.isArray(customFeatures)) return customFeatures;
+    const licenseFeatures = org.license?.features;
+    if (Array.isArray(licenseFeatures) && licenseFeatures.length > 0) return licenseFeatures;
+    return ['academic_partners', 'academic_centers'];
+  }, [user]);
+
+  const isFeatureAllowed = (id: string): boolean => {
+    if (id === 'centers' || id === 'study_centers') {
+      return orgFeatures.includes('academic_partners');
+    }
+    if (id === 'academic_centers') {
+      return orgFeatures.includes('academic_centers');
+    }
+    return true;
+  };
+
+  const filteredNavItems = navItems
+    .filter(item => (!item.roles || item.roles.includes(user.role)) && isFeatureAllowed(item.id))
+    .map(item => {
+      if (!item.children) return item;
+      return {
+        ...item,
+        children: item.children.filter(child => (!child.roles || child.roles.includes(user.role)) && isFeatureAllowed(child.id))
+      };
+    });
 
   const handleNavClick = (itemId: string) => {
     onModuleChange(itemId);

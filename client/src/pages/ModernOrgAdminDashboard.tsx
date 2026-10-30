@@ -1,6 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react-hooks/set-state-in-effect */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { Lock } from 'lucide-react';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { UsersPanel } from '@/components/panels/UsersPanel';
 import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
@@ -42,12 +44,24 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import api from '@/lib/api';
 
 export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
+  const { user } = useAuth();
   const [metrics, setMetrics] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
   const handleNavigate = (tab: string) => {
     setActiveTab(tab);
     if (onNavigate) onNavigate(tab);
   };
+
+  const orgFeatures = useMemo(() => {
+    if (user?.role === 'superadmin') return ['academic_partners', 'academic_centers'];
+    const org = (user as any)?.organization;
+    if (!org) return ['academic_partners', 'academic_centers'];
+    const customFeatures = org.metadata?.billingConfig?.features;
+    if (Array.isArray(customFeatures)) return customFeatures;
+    const licenseFeatures = org.license?.features;
+    if (Array.isArray(licenseFeatures) && licenseFeatures.length > 0) return licenseFeatures;
+    return ['academic_partners', 'academic_centers'];
+  }, [user]);
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
@@ -102,7 +116,9 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="universities"><UniversitiesPanel /></TabsContent>
         <TabsContent value="programs"><ProgramsPanel /></TabsContent>
         <TabsContent value="program_allocations"><OpsProgramAllocationPanel /></TabsContent>
-        <TabsContent value="centers"><StudyCentersPanel /></TabsContent>
+        <TabsContent value="centers">
+          {orgFeatures.includes('academic_partners') ? <StudyCentersPanel /> : <FeatureLockedCard title="Academic Partners / Study Centers" description="Franchise study center portal and student allocations are not enabled for your organization's subscription plan. Please contact your Superadmin to enable this module." />}
+        </TabsContent>
         <TabsContent value="invoices"><InvoicesPanel /></TabsContent>
         <TabsContent value="payments"><PaymentsPanel /></TabsContent>
         <TabsContent value="expenses"><ExpensesPanel /></TabsContent>
@@ -131,7 +147,9 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="admission_pipeline"><SalesStudentPipelinePanel /></TabsContent>
 
         {/* Alias tabs for resilience */}
-        <TabsContent value="study_centers"><StudyCentersPanel /></TabsContent>
+        <TabsContent value="study_centers">
+          {orgFeatures.includes('academic_partners') ? <StudyCentersPanel /> : <FeatureLockedCard title="Academic Partners / Study Centers" description="Franchise study center portal and student allocations are not enabled for your organization's subscription plan. Please contact your Superadmin to enable this module." />}
+        </TabsContent>
         <TabsContent value="leave_requests"><LeavesPanel /></TabsContent>
         <TabsContent value="biometric_devices"><BiometricDevicesPanel /></TabsContent>
 
@@ -148,13 +166,29 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
           <ActivityLogPanel />
         </TabsContent>
         <TabsContent value="academic_centers">
-          <AcademicCentersPanel />
+          {orgFeatures.includes('academic_centers') ? <AcademicCentersPanel /> : <FeatureLockedCard title="Academic Centers & Offline Classes" description="Physical center venues, offline classroom batches, and venue scheduling are not enabled for your organization's subscription plan. Please contact your Superadmin to enable this module." />}
         </TabsContent>
         <TabsContent value="faculties">
           <FacultiesPanel />
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+function FeatureLockedCard({ title, description }: { title: string; description: string }) {
+  return (
+    <Card className="border-dashed border-amber-300 dark:border-amber-800 bg-amber-50/30 dark:bg-amber-950/20">
+      <CardContent className="flex flex-col items-center justify-center py-16 text-center space-y-3">
+        <div className="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+          <Lock className="w-6 h-6" />
+        </div>
+        <div className="space-y-1 max-w-md">
+          <h3 className="text-lg font-bold text-foreground">{title} Not Enabled</h3>
+          <p className="text-sm text-muted-foreground">{description}</p>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

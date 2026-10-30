@@ -138,9 +138,9 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
     include: {
       enrolledByUser: true,
       enrollments: { include: { payment: true } },
-      program: true,
+      program: { include: { feeStructures: true } },
       center: true,
-      university: true,
+      university: { include: { feeStructures: true } },
       session: true,
       branch: true,
       paymentSchedules: { orderBy: { dueDate: 'asc' } },
@@ -208,7 +208,7 @@ export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) =
 
   const student = await prisma.student.findFirst({
     where: whereClause,
-    include: { enrollments: { include: { payment: true } }, program: true, center: true, university: true, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } } }
+    include: { enrollments: { include: { payment: true } }, program: { include: { feeStructures: true } }, center: true, university: { include: { feeStructures: true } }, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } } }
   });
   if (!student) {
     res.status(404).json({ success: false, message: 'Student not found' });

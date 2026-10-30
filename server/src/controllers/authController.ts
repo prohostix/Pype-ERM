@@ -261,14 +261,14 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
       subDepartment: { select: { id: true, name: true } },
       branch: { select: { id: true, name: true, city: true } },
       employeeProfileDetail: { select: { joinDate: true, probationEndDate: true, workLocation: true } },
-      organization: true,
+      organization: { include: { license: true } },
     }
   });
 
   if (!user) {
     const faculty = await prisma.faculty.findUnique({
       where: { id: req.user.id },
-      include: { organization: true }
+      include: { organization: { include: { license: true } } }
     });
     if (faculty) {
       user = {

@@ -13,6 +13,10 @@ import {
   getLoginBrandingBySlug,
   initLoginBranding,
   updateLoginBranding,
+  generateOrgBill,
+  getBillHistory,
+  updateBillStatus,
+  getOrgMonthEnrollments,
 } from '../controllers/organizationController.js';
 import {
   getCommunicationSettings,
@@ -59,6 +63,9 @@ router.post('/communication-logs/:id/resend', authorize('superadmin', 'org_admin
 router.post('/login-branding/init', authorize('org_admin', 'superadmin'), initLoginBranding);
 router.put('/login-branding', authorize('org_admin', 'superadmin'), updateLoginBranding);
 
+// Organization Bill History (must be before /:id)
+router.get('/bills/history', authorize('superadmin', 'org_admin'), getBillHistory);
+
 router
   .route('/:id')
   .get(getOrganization)
@@ -66,5 +73,8 @@ router
   .delete(authorize('superadmin'), auditLog('delete', 'Organization'), deleteOrganization);
 
 router.put('/:id/license', authorize('superadmin'), assignLicense);
+router.get('/:id/month-enrollments', authorize('superadmin', 'org_admin'), getOrgMonthEnrollments);
+router.post('/:id/generate-bill', authorize('superadmin'), generateOrgBill);
+router.patch('/:id/bills/:billId/status', authorize('superadmin'), updateBillStatus);
 
 export default router;

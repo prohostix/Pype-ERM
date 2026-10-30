@@ -1924,6 +1924,155 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         return Math.round(totalPaid * 100) / 100;
       };
 
+      const calculateStudentTotalFees = (s: any, paidFees: number): number => {
+        let totalFee = 0;
+        let structureTotal = 0;
+
+        // 1. Check Fee Structure from program (either attached to student.program or in programs list)
+        const prog = (s.program && Array.isArray(s.program.feeStructures) && s.program.feeStructures.length > 0)
+          ? s.program
+          : programs.find((p: any) => p.id === s.programId);
+
+        const feeStructuresList: any[] = prog?.feeStructures || [];
+
+        let feeSt: any = undefined;
+        if (feeStructuresList.length > 0) {
+          // Exact match session + specialisation
+          feeSt = feeStructuresList.find((f: any) =>
+            f.sessionId === s.sessionId && (f.specialisation || null) === (s.specialisation || null)
+          );
+          // Match session only
+          if (!feeSt) {
+            feeSt = feeStructuresList.find((f: any) =>
+              f.sessionId === s.sessionId && !f.specialisation
+            );
+          }
+          // Match specialisation only
+          if (!feeSt) {
+            feeSt = feeStructuresList.find((f: any) =>
+              !f.sessionId && (f.specialisation || null) === (s.specialisation || null)
+            );
+          }
+          // Match default (null session and null specialisation)
+          if (!feeSt) {
+            feeSt = feeStructuresList.find((f: any) => !f.sessionId && !f.specialisation);
+          }
+          // Fallback first fee structure
+          if (!feeSt) {
+            feeSt = feeStructuresList[0];
+          }
+        }
+
+        // Fallback: Check University Fee Structure if program has no fee structure
+        if (!feeSt) {
+          const univ = (s.university && Array.isArray(s.university.feeStructures) && s.university.feeStructures.length > 0)
+            ? s.university
+            : universities.find((u: any) => u.id === s.universityId);
+          const univFeeStructures: any[] = univ?.feeStructures || [];
+          if (univFeeStructures.length > 0) {
+            feeSt = univFeeStructures.find((f: any) =>
+              f.sessionId === s.sessionId && (f.specialisation || null) === (s.specialisation || null)
+            ) || univFeeStructures.find((f: any) =>
+              f.sessionId === s.sessionId && !f.specialisation
+            ) || univFeeStructures[0];
+          }
+        }
+
+        if (feeSt) {
+          if (Array.isArray(feeSt.yearlyFees) && feeSt.yearlyFees.length > 0) {
+            structureTotal = feeSt.yearlyFees.reduce((sum: number, yf: any) => {
+              return sum + (Number(yf.tuitionFee) || 0) + (Number(yf.registrationFee) || 0) + (Number(yf.examFee) || 0);
+            }, 0);
+          } else {
+            structureTotal = (Number(feeSt.tuitionFee) || 0) + (Number(feeSt.registrationFee) || 0) + (Number(feeSt.examFee) || 0);
+          }
+
+          // Add additional fees if defined in feeStructure
+          let additionalFeesList: any[] = [];
+          if (Array.isArray(feeSt.additionalFees)) {
+            additionalFeesList = feeSt.additionalFees;
+          } else if (typeof feeSt.additionalFees === 'string') {
+            try {
+              const parsed = JSON.parse(feeSt.additionalFees);
+              if (Array.isArray(parsed)) additionalFeesList = parsed;
+            } catch {}
+          }
+          const additionalTotal = additionalFeesList.reduce((sum: number, f: any) => sum + (Number(f?.amount) || 0), 0);
+          structureTotal += additionalTotal;
+        }
+
+        // 2. Sum of student's Payment Schedules (if any exist)
+        let scheduledFee = 0;
+        if (Array.isArray(s.paymentSchedules) && s.paymentSchedules.length > 0) {
+          scheduledFee = s.paymentSchedules.reduce((sum: number, ps: any) => sum + (Number(ps.amount) || 0), 0);
+        }
+
+        // 3. Extra fees in paymentSchedules (isExtraFee)
+        let extraFeesTotal = 0;
+        if (Array.isArray(s.paymentSchedules)) {
+          s.paymentSchedules.filter((ps: any) => ps.isExtraFee).forEach((ps: any) => {
+            extraFeesTotal += Number(ps.amount) || 0;
+          });
+        }
+
+        // 4. Initial payment / admission payment check
+        const hasInitialInvoiceOrSchedule =
+          (Array.isArray(s.invoices) && s.invoices.some((inv: any) =>
+            (inv.invoiceNo?.startsWith('INV-AUTO') ||
+             inv.invoiceNo?.startsWith('INV-PROV') ||
+             (inv.notes || '').toLowerCase().includes('initial') ||
+             (inv.notes || '').toLowerCase().includes('admission') ||
+             (inv.notes || '').toLowerCase().includes('provisional')) &&
+            ((inv.payments && inv.payments.length > 0) || (inv.status || '').toLowerCase() === 'paid')
+          )) ||
+          (Array.isArray(s.paymentSchedules) && s.paymentSchedules.some((ps: any) =>
+            ((ps.title || '').toLowerCase().includes('admission') || (ps.title || '').toLowerCase().includes('initial')) &&
+            (ps.status || '').toLowerCase() === 'paid'
+          ));
+
+        let initialAdmissionAmount = 0;
+        if (!hasInitialInvoiceOrSchedule) {
+          if (Array.isArray(s.enrollments) && s.enrollments.length > 0) {
+            for (const enr of s.enrollments) {
+              if (enr.payment && typeof enr.payment.amount === 'number') {
+                initialAdmissionAmount = Math.max(initialAdmissionAmount, Number(enr.payment.amount) || 0);
+              } else if (enr.initialPaymentAmount && Number(enr.initialPaymentAmount) > 0) {
+                initialAdmissionAmount = Math.max(initialAdmissionAmount, Number(enr.initialPaymentAmount) || 0);
+              }
+            }
+          }
+          const admInit = Number((s.admissionProgress as any)?.initialPaymentAmount) || 0;
+          initialAdmissionAmount = Math.max(initialAdmissionAmount, admInit);
+        }
+
+        // 5. Combine and determine totalFee
+        if (structureTotal > 0) {
+          totalFee = structureTotal + extraFeesTotal;
+          if (scheduledFee + initialAdmissionAmount > totalFee) {
+            totalFee = scheduledFee + initialAdmissionAmount;
+          }
+        } else if (scheduledFee > 0) {
+          totalFee = scheduledFee + initialAdmissionAmount;
+        } else if (Array.isArray(s.invoices) && s.invoices.length > 0) {
+          totalFee = s.invoices.reduce((sum: number, inv: any) => sum + (Number(inv.total || inv.amount || 0)), 0);
+        } else if (initialAdmissionAmount > 0) {
+          totalFee = initialAdmissionAmount;
+        }
+
+        // Apply discount if student has discountAmount
+        const discount = Number(s.discountAmount) || 0;
+        if (discount > 0 && totalFee > 0) {
+          totalFee = Math.max(0, totalFee - discount);
+        }
+
+        // Ensure totalFee is at least paidFees
+        if (totalFee < paidFees) {
+          totalFee = paidFees;
+        }
+
+        return Math.round(totalFee * 100) / 100;
+      };
+
       const rows = dataToExport.map((s, idx) => {
         const centerName = typeof s.centerId === 'object' ? s.centerId?.name : (s.center?.name || centers.find((c: any) => c.id === s.centerId)?.name || '');
         const programName = typeof s.programId === 'object' ? s.programId?.name : (s.program?.name || programs.find((p: any) => p.id === s.programId)?.name || '');
@@ -1931,6 +2080,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         const branchName = typeof s.branchId === 'object' ? s.branchId?.name : (s.branch?.name || branches.find((b: any) => b.id === s.branchId)?.name || '');
         const sessionName = typeof s.sessionId === 'object' ? s.sessionId?.name : (s.session?.name || sessions.find((ses: any) => ses.id === s.sessionId)?.name || '');
         const salesUserName = typeof s.enrolledBy === 'object' ? s.enrolledBy?.name : (s.enrolledByUser?.name || salesUsers.find((su: any) => su.id === s.enrolledBy)?.name || '');
+
+        const paidFees = calculateStudentPaidFees(s);
+        const totalFees = calculateStudentTotalFees(s, paidFees);
+        const balanceAmount = Math.max(0, Math.round((totalFees - paidFees) * 100) / 100);
 
         return {
           'Sl No': idx + 1,
@@ -1948,7 +2101,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           'Branch': branchName,
           'Study Center': centerName,
           'Counselor / Enrolled By': salesUserName,
-          'Paid Fees': calculateStudentPaidFees(s),
+          'Total Fees': totalFees,
+          'Paid Fees': paidFees,
+          'Balance Amount': balanceAmount,
           'Admission Date': formatDate(s.admissionDate),
           'Date of Birth': formatDate(s.dob),
           'Gender': s.gender || '',
@@ -1979,7 +2134,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         { wch: 18 }, // Branch
         { wch: 22 }, // Study Center
         { wch: 22 }, // Counselor / Enrolled By
+        { wch: 15 }, // Total Fees
         { wch: 15 }, // Paid Fees
+        { wch: 16 }, // Balance Amount
         { wch: 14 }, // Admission Date
         { wch: 14 }, // Date of Birth
         { wch: 10 }, // Gender
