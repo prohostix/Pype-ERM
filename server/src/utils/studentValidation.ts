@@ -43,8 +43,10 @@ export interface UniquenessResult {
   conflictEntity?: 'student' | 'enrollment' | 'user';
   message?: string;
   isCompleted?: boolean;
+  isDropped?: boolean;
   isInProgress?: boolean;
   canUpgrade?: boolean;
+  canReEnroll?: boolean;
   previousProgram?: {
     id: string;
     name: string;
@@ -114,6 +116,14 @@ export async function checkStudentOrEnrollmentExists(
       (existingStudent.status || '').toLowerCase() === 'completed'
     );
 
+    // Check if the student has dropped out
+    const studentStatusLower = (existingStudent.status || '').toLowerCase();
+    let isDropped = Boolean(
+      studentStatusLower === 'dropped' ||
+      studentStatusLower === 'dropout' ||
+      studentStatusLower === 'inactive'
+    );
+
     // If this specific record is not explicitly completed, check if any duplicate peer record
     // with the same phone or email is marked completed/previous within the same organization
     if (!isCompleted && (existingStudent.phone || existingStudent.email)) {
@@ -149,11 +159,24 @@ export async function checkStudentOrEnrollmentExists(
       }
     }
 
+    // Also check if any past enrollment is marked as dropped
+    if (!isDropped && !isCompleted && existingStudent.id) {
+      const droppedEnrollment = await prisma.enrollment.findFirst({
+        where: {
+          studentId: existingStudent.id,
+          status: { in: ['dropped', 'dropout'] }
+        }
+      });
+      if (droppedEnrollment) {
+        isDropped = true;
+      }
+    }
+
     // Check for any active ongoing enrollments for this student (excluding finalized/inactive ones)
     const activeEnrollments = await prisma.enrollment.findMany({
       where: {
         studentId: existingStudent.id,
-        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'completed', 'graduated', 'alumni'] }
+        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'completed', 'graduated', 'alumni', 'dropped', 'dropout'] }
       },
       include: {
         program: { select: { id: true, name: true, code: true } }
@@ -167,16 +190,17 @@ export async function checkStudentOrEnrollmentExists(
       'sales_verification_pending', 'provisional_finance_pending', 'provisional_finance_verified'
     ];
 
-    // If the student has already completed their program, an 'enrolled' status on their past program
-    // represents their finished degree and does NOT block an upgrade.
-    // Ongoing enrollments that block re-enrollment are unverified pipeline applications or (if not completed) 'enrolled'.
+    // If the student has already completed their program or dropped out, an 'enrolled' status on their past program
+    // represents their past degree/enrollment and does NOT block an upgrade/re-enrollment.
+    // Ongoing enrollments that block re-enrollment are unverified pipeline applications or (if not completed and not dropped) 'enrolled'.
     const activeCurrent = activeEnrollments.find(e => 
-      pipelineStatuses.includes(e.status) || (!isCompleted && e.status === 'enrolled')
+      pipelineStatuses.includes(e.status) || (!isCompleted && !isDropped && e.status === 'enrolled')
     ) || null;
 
     const hasActiveEnrollment = Boolean(activeCurrent);
-    const isInProgress = !isCompleted || hasActiveEnrollment;
-    const canUpgrade = isCompleted && !hasActiveEnrollment;
+    const isInProgress = hasActiveEnrollment || (!isCompleted && !isDropped);
+    const canUpgrade = (isCompleted || isDropped) && !hasActiveEnrollment;
+    const canReEnroll = canUpgrade;
 
     const previousProgram = existingStudent.program ? {
       id: existingStudent.program.id,
@@ -225,7 +249,11 @@ export async function checkStudentOrEnrollmentExists(
 
     let message = 'Student record exists';
     if (canUpgrade) {
-      message = `Student already existed and has completed ${previousProgram?.name || 'previous program'}. You can re-enroll this student in another program.`;
+      if (isDropped) {
+        message = `Student previously dropped out of ${previousProgram?.name || 'their previous program'}. You can re-enroll this student in another program.`;
+      } else {
+        message = `Student already existed and has completed ${previousProgram?.name || 'previous program'}. You can re-enroll this student in another program.`;
+      }
     } else if (isInProgress) {
       const progName = activeEnrollmentInfo?.programName || previousProgram?.name;
       message = progName
@@ -240,10 +268,12 @@ export async function checkStudentOrEnrollmentExists(
           isUnique: false,
           field,
           conflictEntity: 'student',
-          message: `Cannot enroll this student: This student is currently in progress. Only completed students can be upgraded to another program.`,
+          message: `Cannot enroll this student: This student is currently in progress. Only completed or dropped students can be re-enrolled in another program.`,
           isCompleted,
+          isDropped,
           isInProgress,
           canUpgrade,
+          canReEnroll,
           previousProgram,
           activeEnrollment: activeEnrollmentInfo,
           studentData,
@@ -258,7 +288,7 @@ export async function checkStudentOrEnrollmentExists(
             studentId: existingStudent.id,
             programId: options.programId,
             ...(options.sessionId ? { sessionId: options.sessionId } : {}),
-            status: { notIn: ['rejected', 'cancelled', 'ops_rejected'] }
+            status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'dropped', 'dropout'] }
           }
         });
         if (sameProgramEnrollment) {
@@ -268,8 +298,10 @@ export async function checkStudentOrEnrollmentExists(
             conflictEntity: 'enrollment',
             message: `Student already has an active or completed application for this exact program.`,
             isCompleted,
+            isDropped,
             isInProgress,
             canUpgrade,
+            canReEnroll,
             previousProgram,
             activeEnrollment: activeEnrollmentInfo,
             studentData,
@@ -295,12 +327,14 @@ export async function checkStudentOrEnrollmentExists(
         }
       }
 
-      // Permitted upgrade!
+      // Permitted upgrade / re-enrollment!
       return {
         isUnique: true,
         isCompleted,
+        isDropped,
         isInProgress: false,
         canUpgrade: true,
+        canReEnroll: true,
         previousProgram,
         activeEnrollment: activeEnrollmentInfo,
         studentData,
@@ -314,8 +348,10 @@ export async function checkStudentOrEnrollmentExists(
       conflictEntity: 'student',
       message,
       isCompleted,
+      isDropped,
       isInProgress,
       canUpgrade,
+      canReEnroll,
       previousProgram,
       activeEnrollment: activeEnrollmentInfo,
       studentData,
@@ -459,7 +495,7 @@ export async function checkStudentOrEnrollmentExists(
           { enrollmentNumber: { equals: cleanIdentifier, mode: 'insensitive' } },
           { id: cleanIdentifier }
         ],
-        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'completed', 'graduated', 'alumni'] },
+        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'completed', 'graduated', 'alumni', 'dropped', 'dropout'] },
         ...(options.excludeEnrollmentId ? { id: { not: options.excludeEnrollmentId } } : {}),
         ...(options.excludeStudentId ? { NOT: { studentId: options.excludeStudentId } } : {}),
       },
@@ -538,7 +574,7 @@ export async function checkStudentOrEnrollmentExists(
     const enrollmentCandidates = await prisma.enrollment.findMany({
       where: {
         studentEmail: { equals: cleanEmail, mode: 'insensitive' },
-        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'department_rejected', 'completed', 'graduated', 'alumni'] },
+        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'department_rejected', 'completed', 'graduated', 'alumni', 'dropped', 'dropout'] },
         ...(options.excludeEnrollmentId ? { id: { not: options.excludeEnrollmentId } } : {}),
         ...(options.excludeStudentId ? { NOT: { studentId: options.excludeStudentId } } : {}),
       },
@@ -565,7 +601,7 @@ export async function checkStudentOrEnrollmentExists(
           { studentPhone: cleanPhone },
           ...(cleanPhone.length >= 10 ? [{ studentPhone: { contains: cleanPhone.slice(-10) } }] : [])
         ],
-        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'department_rejected', 'completed', 'graduated', 'alumni'] },
+        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'department_rejected', 'completed', 'graduated', 'alumni', 'dropped', 'dropout'] },
         ...(options.excludeEnrollmentId ? { id: { not: options.excludeEnrollmentId } } : {}),
         ...(options.excludeStudentId ? { NOT: { studentId: options.excludeStudentId } } : {}),
       },

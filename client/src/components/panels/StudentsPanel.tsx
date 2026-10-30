@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, Calendar, ExternalLink, MessageSquare, Key, Download, User, Users, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X, RotateCcw, Filter, ChevronDown, Check, UserCheck, XCircle, AlertCircle, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, Calendar, ExternalLink, MessageSquare, Key, Download, User, Users, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X, RotateCcw, Filter, ChevronDown, Check, UserCheck, XCircle, AlertCircle, AlertTriangle, CheckCircle2, UserX } from 'lucide-react';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -480,6 +480,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const [enrollHistoryData, setEnrollHistoryData] = useState<any[]>([]);
   const [enrollHistoryLoading, setEnrollHistoryLoading] = useState(false);
 
+  // Enrollment Dropout Dialog State
+  const [dropoutDialogOpen, setDropoutDialogOpen] = useState(false);
+  const [dropoutStudent, setDropoutStudent] = useState<any>(null);
+  const [dropoutEnrollment, setDropoutEnrollment] = useState<any>(null);
+  const [dropoutReason, setDropoutReason] = useState('Financial Constraints');
+  const [dropoutCustomReason, setDropoutCustomReason] = useState('');
+  const [dropoutRemarks, setDropoutRemarks] = useState('');
+  const [dropoutDate, setDropoutDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [dropoutSyncStudent, setDropoutSyncStudent] = useState(true);
+  const [dropoutSubmitting, setDropoutSubmitting] = useState(false);
+
   // Bulk Selection State
   const [selectedStudentIds, setSelectedStudentIds] = useState<Set<string>>(new Set());
   const [bulkProgramDialogOpen, setBulkProgramDialogOpen] = useState(false);
@@ -813,6 +824,57 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     }
   };
 
+  const handleOpenDropout = (student: any, enrollment: any) => {
+    setDropoutStudent(student);
+    setDropoutEnrollment(enrollment);
+    setDropoutReason('Financial Constraints');
+    setDropoutCustomReason('');
+    setDropoutRemarks('');
+    setDropoutDate(new Date().toISOString().split('T')[0]);
+    setDropoutSyncStudent(true);
+    setDropoutDialogOpen(true);
+  };
+
+  const handleConfirmDropout = async () => {
+    if (!dropoutStudent || !dropoutEnrollment) return;
+    setDropoutSubmitting(true);
+    try {
+      const finalReason = dropoutReason === 'Other' && dropoutCustomReason.trim()
+        ? `Other: ${dropoutCustomReason.trim()}`
+        : dropoutReason;
+
+      await api.markEnrollmentDropout(dropoutStudent.id, dropoutEnrollment.id, {
+        reason: finalReason,
+        remarks: dropoutRemarks.trim(),
+        dropoutDate,
+        updateStudentStatus: dropoutSyncStudent,
+      });
+
+      toast.success('Enrollment marked as dropped successfully');
+      setDropoutDialogOpen(false);
+
+      // Refresh enrollment history dialog data
+      if (enrollHistoryStudent?.id === dropoutStudent.id) {
+        const enrRes = await api.get(`/students/${dropoutStudent.id}/enrollments`);
+        setEnrollHistoryData(enrRes.data.data || []);
+      }
+
+      // Refresh main students list
+      fetchStudents();
+
+      // Refresh profile view if open
+      if (viewingProfileStudent?.id === dropoutStudent.id) {
+        setViewingProfileStudent((prev: any) =>
+          prev ? { ...prev, status: dropoutSyncStudent ? 'dropped' : prev.status } : null
+        );
+      }
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to mark enrollment as dropped');
+    } finally {
+      setDropoutSubmitting(false);
+    }
+  };
+
   const handleOpenCredentials = (student: any) => {
     setCredTarget(student);
     setCredPassword(student.credentials?.password || '');
@@ -880,8 +942,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const [upgradeCheck, setUpgradeCheck] = useState<{
     loading: boolean;
     isCompleted?: boolean;
+    isDropped?: boolean;
     isInProgress?: boolean;
     canUpgrade?: boolean;
+    canReEnroll?: boolean;
     message?: string;
     studentData?: any;
     previousProgram?: any;
@@ -893,8 +957,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     checked: boolean;
     isAvailable?: boolean;
     isCompleted?: boolean;
+    isDropped?: boolean;
     isInProgress?: boolean;
     canUpgrade?: boolean;
+    canReEnroll?: boolean;
     message?: string;
     studentData?: any;
     previousProgram?: any;
@@ -906,8 +972,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     checked: boolean;
     isAvailable?: boolean;
     isCompleted?: boolean;
+    isDropped?: boolean;
     isInProgress?: boolean;
     canUpgrade?: boolean;
+    canReEnroll?: boolean;
     message?: string;
     studentData?: any;
     previousProgram?: any;
@@ -986,7 +1054,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         });
 
         if (res.data) {
-          const { isUnique, isCompleted, isInProgress, canUpgrade, studentData, previousProgram, activeEnrollment, message } = res.data;
+          const { isUnique, isCompleted, isDropped, isInProgress, canUpgrade, canReEnroll, studentData, previousProgram, activeEnrollment, message } = res.data;
           if (!isUnique) {
             if (studentData) {
               const matchInfo = {
@@ -994,8 +1062,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 checked: true,
                 isAvailable: false,
                 isCompleted,
+                isDropped: Boolean(isDropped),
                 isInProgress,
                 canUpgrade,
+                canReEnroll,
                 message,
                 studentData,
                 previousProgram,
@@ -1005,15 +1075,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
               setUpgradeCheck(matchInfo);
 
               // Auto-prefill data from the phone match!
-              applyStudentDataToForm(studentData, Boolean(canUpgrade || isCompleted));
+              applyStudentDataToForm(studentData, Boolean(canUpgrade || isCompleted || isDropped));
             } else {
               setPhoneCheck({
                 loading: false,
                 checked: true,
                 isAvailable: false,
                 isCompleted: false,
+                isDropped: false,
                 isInProgress: false,
                 canUpgrade: false,
+                canReEnroll: false,
                 message: message || 'This phone number is already registered in the system.',
                 studentData: null,
                 previousProgram: null,
@@ -1059,7 +1131,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         });
 
         if (res.data) {
-          const { isUnique, isCompleted, isInProgress, canUpgrade, studentData, previousProgram, activeEnrollment, message } = res.data;
+          const { isUnique, isCompleted, isDropped, isInProgress, canUpgrade, canReEnroll, studentData, previousProgram, activeEnrollment, message } = res.data;
           if (!isUnique) {
             if (studentData) {
               const matchInfo = {
@@ -1067,8 +1139,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 checked: true,
                 isAvailable: false,
                 isCompleted,
+                isDropped: Boolean(isDropped),
                 isInProgress,
                 canUpgrade,
+                canReEnroll,
                 message,
                 studentData,
                 previousProgram,
@@ -1086,7 +1160,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 setConflictBasis('prompt');
               } else {
                 setUpgradeCheck(matchInfo);
-                applyStudentDataToForm(studentData, Boolean(canUpgrade || isCompleted));
+                applyStudentDataToForm(studentData, Boolean(canUpgrade || isCompleted || isDropped));
               }
             } else {
               setEmailCheck({
@@ -1094,8 +1168,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 checked: true,
                 isAvailable: false,
                 isCompleted: false,
+                isDropped: false,
                 isInProgress: false,
                 canUpgrade: false,
+                canReEnroll: false,
                 message: message || 'This email address is already registered in the system.',
                 studentData: null,
                 previousProgram: null,
@@ -1848,12 +1924,24 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     try {
       const XLSX = await import('xlsx');
 
-      const formatDate = (dateStr?: string | null) => {
+      const formatDate = (dateStr?: string | Date | null) => {
         if (!dateStr) return '';
         try {
+          if (typeof dateStr === 'string') {
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return dateStr;
+            if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) return dateStr.replace(/-/g, '/');
+            const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})(?:T00:00:00(?:\.000)?Z?)?$/);
+            if (match) {
+              const [, y, m, day] = match;
+              return `${day}/${m}/${y}`;
+            }
+          }
           const d = new Date(dateStr);
           if (isNaN(d.getTime())) return '';
-          return d.toISOString().split('T')[0];
+          const day = String(d.getDate()).padStart(2, '0');
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const year = d.getFullYear();
+          return `${day}/${month}/${year}`;
         } catch {
           return '';
         }
@@ -2104,7 +2192,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           'Total Fees': totalFees,
           'Paid Fees': paidFees,
           'Balance Amount': balanceAmount,
-          'Admission Date': formatDate(s.admissionDate),
+          'Admission Date': formatDate(s.admissionDate || s.enrollments?.[0]?.createdAt || s.enrolledAt),
           'Date of Birth': formatDate(s.dob),
           'Gender': s.gender || '',
           'Father Name': s.fatherName || '',
@@ -3013,12 +3101,22 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                       <div className="flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
                           <h4 className="font-bold text-emerald-900 dark:text-emerald-200 text-sm">
-                            Existing Completed Student Identified (Eligible for Upgrade)
+                            {upgradeCheck.isDropped ? 'Previous Dropped Student Identified (Eligible for Re-Enrollment)' : 'Existing Completed Student Identified (Eligible for Upgrade)'}
                           </h4>
-                          <Badge className="bg-emerald-600 text-white text-[10px] uppercase font-bold tracking-wider">Completed</Badge>
+                          <Badge className="bg-emerald-600 text-white text-[10px] uppercase font-bold tracking-wider">
+                            {upgradeCheck.isDropped ? 'Re-Enrollment' : 'Completed'}
+                          </Badge>
                         </div>
                         <p className="text-xs text-emerald-800 dark:text-emerald-300 mt-1 leading-relaxed">
-                          <strong>{upgradeCheck.studentData?.name}</strong> has completed <strong>{upgradeCheck.previousProgram?.name || 'their previous program'}</strong> ({upgradeCheck.previousProgram?.universityName || 'University'}). Previous biographical, family, and document data will be prefilled upon continuing.
+                          {upgradeCheck.isDropped ? (
+                            <>
+                              <strong>{upgradeCheck.studentData?.name}</strong> previously dropped out of <strong>{upgradeCheck.previousProgram?.name || 'their previous program'}</strong> ({upgradeCheck.previousProgram?.universityName || 'University'}). Previous biographical, family, and document data will be prefilled upon continuing.
+                            </>
+                          ) : (
+                            <>
+                              <strong>{upgradeCheck.studentData?.name}</strong> has completed <strong>{upgradeCheck.previousProgram?.name || 'their previous program'}</strong> ({upgradeCheck.previousProgram?.universityName || 'University'}). Previous biographical, family, and document data will be prefilled upon continuing.
+                            </>
+                          )}
                         </p>
                       </div>
                     </div>
@@ -4843,10 +4941,45 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           {enr.studyCenter?.name ? ` · ${enr.studyCenter.name}` : ''}
                         </p>
                       </div>
-                      <span className="text-xs text-muted-foreground shrink-0">
-                        {new Date(enr.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                      </span>
+                      <div className="flex flex-col items-end gap-1.5 shrink-0">
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(enr.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </span>
+                        {isOrgAdmin && enr.status !== 'dropped' && enr.status !== 'completed' && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-xs border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:border-rose-900/50 dark:text-rose-400 dark:hover:bg-rose-950/40 font-medium flex items-center gap-1 shadow-sm"
+                            onClick={() => handleOpenDropout(enrollHistoryStudent, enr)}
+                          >
+                            <UserX className="w-3.5 h-3.5" />
+                            Mark Dropout
+                          </Button>
+                        )}
+                      </div>
                     </div>
+
+                    {/* Dropped Alert Banner */}
+                    {enr.status === 'dropped' && (
+                      <div className="flex items-start gap-2.5 p-3 rounded-lg bg-rose-50/80 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-xs text-rose-800 dark:text-rose-300">
+                        <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
+                        <div className="flex-1 space-y-0.5">
+                          <p className="font-semibold text-rose-900 dark:text-rose-200">
+                            Student Marked as Dropped Out
+                          </p>
+                          {(() => {
+                            const dropEntry = history.find((h: any) => h.status === 'dropped');
+                            return (
+                              <p className="text-[11px] text-rose-700 dark:text-rose-300">
+                                {dropEntry?.reason ? <span className="font-medium">Reason: {dropEntry.reason}</span> : null}
+                                {dropEntry?.remarks && dropEntry?.remarks !== dropEntry?.reason ? <span> — {dropEntry.remarks}</span> : null}
+                                {dropEntry?.actorName ? <span> (by {dropEntry.actorName})</span> : null}
+                              </p>
+                            );
+                          })()}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Remarks */}
                     {(enr.departmentRemarks || enr.financeRemarks || enr.universityRemarks) && (
@@ -4910,6 +5043,128 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
               })}
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Enrollment Dropout Confirmation Dialog */}
+      <Dialog open={dropoutDialogOpen} onOpenChange={setDropoutDialogOpen}>
+        <DialogContent className="max-w-md w-full rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-rose-600">
+              <UserX className="w-5 h-5" />
+              Mark Enrollment Dropout
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-2">
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs space-y-1">
+              <p className="font-semibold text-slate-800 dark:text-slate-200">
+                Student: {dropoutStudent?.name}
+              </p>
+              <p className="text-muted-foreground">
+                Program: <span className="font-medium text-foreground">{dropoutEnrollment?.program?.name || 'Selected Program'}</span>
+              </p>
+              {dropoutEnrollment?.enrollmentNumber && (
+                <p className="text-muted-foreground font-mono">
+                  Enrollment No: {dropoutEnrollment.enrollmentNumber}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold">Dropout Reason *</Label>
+              <Select value={dropoutReason} onValueChange={setDropoutReason}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select reason..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Financial Constraints">Financial Constraints</SelectItem>
+                  <SelectItem value="Personal / Family Reasons">Personal / Family Reasons</SelectItem>
+                  <SelectItem value="Health / Medical Issues">Health / Medical Issues</SelectItem>
+                  <SelectItem value="Relocation / Moved City">Relocation / Moved City</SelectItem>
+                  <SelectItem value="Academic Difficulties">Academic Difficulties</SelectItem>
+                  <SelectItem value="Joined Another University / Institute">Joined Another University / Institute</SelectItem>
+                  <SelectItem value="Employment / Job Conflicts">Employment / Job Conflicts</SelectItem>
+                  <SelectItem value="Discontinued Attendance">Discontinued Attendance</SelectItem>
+                  <SelectItem value="Other">Other Reason (Specify)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {dropoutReason === 'Other' && (
+              <div className="space-y-1.5 animate-in fade-in">
+                <Label className="text-xs font-semibold">Specify Reason *</Label>
+                <Input
+                  placeholder="Enter specific dropout reason..."
+                  value={dropoutCustomReason}
+                  onChange={(e) => setDropoutCustomReason(e.target.value)}
+                />
+              </div>
+            )}
+
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold">Effective Dropout Date</Label>
+              <Input
+                type="date"
+                value={dropoutDate}
+                onChange={(e) => setDropoutDate(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold">Remarks / Internal Notes</Label>
+              <Textarea
+                rows={2}
+                placeholder="Optional notes or context regarding the dropout decision..."
+                value={dropoutRemarks}
+                onChange={(e) => setDropoutRemarks(e.target.value)}
+              />
+            </div>
+
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40">
+              <Checkbox
+                id="syncStudentStatus"
+                checked={dropoutSyncStudent}
+                onCheckedChange={(checked) => setDropoutSyncStudent(Boolean(checked))}
+                className="mt-0.5"
+              />
+              <div className="text-xs">
+                <label htmlFor="syncStudentStatus" className="font-semibold text-amber-900 dark:text-amber-300 cursor-pointer">
+                  Also update student overall status to Dropped
+                </label>
+                <p className="text-[11px] text-amber-700 dark:text-amber-400 mt-0.5">
+                  Reflects the student as dropped in the main students list and status analytics.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button
+                variant="outline"
+                onClick={() => setDropoutDialogOpen(false)}
+                disabled={dropoutSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="bg-rose-600 hover:bg-rose-700 text-white font-medium"
+                onClick={handleConfirmDropout}
+                disabled={dropoutSubmitting || (dropoutReason === 'Other' && !dropoutCustomReason.trim())}
+              >
+                {dropoutSubmitting ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-1.5 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <UserX className="w-4 h-4 mr-1.5" />
+                    Confirm Dropout
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 

@@ -71,8 +71,10 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
   const [upgradeCheck, setUpgradeCheck] = useState<{
     loading: boolean;
     isCompleted?: boolean;
+    isDropped?: boolean;
     isInProgress?: boolean;
     canUpgrade?: boolean;
+    canReEnroll?: boolean;
     message?: string;
     studentData?: any;
     previousProgram?: any;
@@ -83,8 +85,10 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
     checked: boolean;
     isAvailable?: boolean;
     isCompleted?: boolean;
+    isDropped?: boolean;
     isInProgress?: boolean;
     canUpgrade?: boolean;
+    canReEnroll?: boolean;
     message?: string;
     studentData?: any;
     previousProgram?: any;
@@ -96,8 +100,10 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
     checked: boolean;
     isAvailable?: boolean;
     isCompleted?: boolean;
+    isDropped?: boolean;
     isInProgress?: boolean;
     canUpgrade?: boolean;
+    canReEnroll?: boolean;
     message?: string;
     studentData?: any;
     previousProgram?: any;
@@ -307,7 +313,7 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
         });
 
         if (res.data) {
-          const { isUnique, isCompleted, isInProgress, canUpgrade, studentData, previousProgram, activeEnrollment, message } = res.data;
+          const { isUnique, isCompleted, isDropped, isInProgress, canUpgrade, canReEnroll, studentData, previousProgram, activeEnrollment, message } = res.data;
           if (!isUnique) {
             if (studentData) {
               const matchInfo = {
@@ -315,8 +321,10 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                 checked: true,
                 isAvailable: false,
                 isCompleted,
+                isDropped: Boolean(isDropped),
                 isInProgress,
                 canUpgrade,
+                canReEnroll,
                 message,
                 studentData,
                 previousProgram,
@@ -324,15 +332,17 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
               };
               setPhoneCheck(matchInfo);
               setUpgradeCheck(matchInfo);
-              applyPrefill(studentData, Boolean(canUpgrade || isCompleted));
+              applyPrefill(studentData, Boolean(canUpgrade || isCompleted || isDropped));
             } else {
               setPhoneCheck({
                 loading: false,
                 checked: true,
                 isAvailable: false,
                 isCompleted: false,
+                isDropped: false,
                 isInProgress: false,
                 canUpgrade: false,
+                canReEnroll: false,
                 message: message || 'This phone number is already registered in the system.',
                 studentData: null,
                 previousProgram: null,
@@ -378,7 +388,7 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
         });
 
         if (res.data) {
-          const { isUnique, isCompleted, isInProgress, canUpgrade, studentData, previousProgram, activeEnrollment, message } = res.data;
+          const { isUnique, isCompleted, isDropped, isInProgress, canUpgrade, canReEnroll, studentData, previousProgram, activeEnrollment, message } = res.data;
           if (!isUnique) {
             if (studentData) {
               const matchInfo = {
@@ -386,8 +396,10 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                 checked: true,
                 isAvailable: false,
                 isCompleted,
+                isDropped: Boolean(isDropped),
                 isInProgress,
                 canUpgrade,
+                canReEnroll,
                 message,
                 studentData,
                 previousProgram,
@@ -403,7 +415,7 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                 setConflictBasis('prompt');
               } else {
                 setUpgradeCheck(matchInfo);
-                applyPrefill(studentData, Boolean(canUpgrade || isCompleted));
+                applyPrefill(studentData, Boolean(canUpgrade || isCompleted || isDropped));
               }
             } else {
               setEmailCheck({
@@ -411,8 +423,10 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                 checked: true,
                 isAvailable: false,
                 isCompleted: false,
+                isDropped: false,
                 isInProgress: false,
                 canUpgrade: false,
+                canReEnroll: false,
                 message: message || 'This email address is already registered in the system.',
                 studentData: null,
                 previousProgram: null,
@@ -640,7 +654,7 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
     if (!selectedProgram) return;
 
     if (upgradeCheck?.isInProgress && !upgradeCheck?.canUpgrade) {
-      toast.error('Cannot enroll: Student is currently in progress. Only completed students can be enrolled in another program.');
+      toast.error('Cannot enroll: Student is currently in progress. Only completed or dropped students can be enrolled in another program.');
       return;
     }
 
@@ -996,13 +1010,24 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                     <div className="flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <h4 className="font-bold text-emerald-900 dark:text-emerald-200 text-sm">
-                          Existing Completed Student Identified
+                          {upgradeCheck.isDropped ? 'Previous Dropped Student Identified' : 'Existing Completed Student Identified'}
                         </h4>
-                        <Badge className="bg-emerald-600 text-white text-[10px] uppercase font-bold tracking-wider">Eligible for Upgrade</Badge>
+                        <Badge className="bg-emerald-600 text-white text-[10px] uppercase font-bold tracking-wider">
+                          {upgradeCheck.isDropped ? 'Eligible for Re-Enrollment' : 'Eligible for Upgrade'}
+                        </Badge>
                       </div>
                       <p className="text-xs text-emerald-800 dark:text-emerald-300 mt-1 leading-relaxed">
-                        <strong>{upgradeCheck.studentData?.name}</strong> has completed <strong>{upgradeCheck.previousProgram?.name || 'their previous program'}</strong> ({upgradeCheck.previousProgram?.universityName || 'University'}).
-                        Their past biographical, family, and document data has been retrieved and prefilled. Click <strong>Next Step</strong> to proceed.
+                        {upgradeCheck.isDropped ? (
+                          <>
+                            <strong>{upgradeCheck.studentData?.name}</strong> previously dropped out of <strong>{upgradeCheck.previousProgram?.name || 'their previous program'}</strong> ({upgradeCheck.previousProgram?.universityName || 'University'}).
+                            Their past biographical, family, and document data has been retrieved and prefilled. Click <strong>Next Step</strong> to re-enroll this student.
+                          </>
+                        ) : (
+                          <>
+                            <strong>{upgradeCheck.studentData?.name}</strong> has completed <strong>{upgradeCheck.previousProgram?.name || 'their previous program'}</strong> ({upgradeCheck.previousProgram?.universityName || 'University'}).
+                            Their past biographical, family, and document data has been retrieved and prefilled. Click <strong>Next Step</strong> to proceed.
+                          </>
+                        )}
                       </p>
                     </div>
                   </div>

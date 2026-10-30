@@ -12,24 +12,81 @@ import {
   Copy,
   RefreshCw,
   BookOpen,
-  Eye
+  Eye,
+  UserX,
+  AlertTriangle
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
+import { toast } from 'sonner';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { format } from 'date-fns';
+import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 
 export function StudentProfilePanel({ student: initialStudent, onBack }: { student: any; onBack: () => void }) {
+  const { user } = useAuth();
+  const isOrgAdmin = ['org_admin', 'superadmin'].includes(user?.role || '');
   const [student, setStudent] = useState<any>(initialStudent);
   const [isResetting, setIsResetting] = useState(false);
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [loadingEnrollments, setLoadingEnrollments] = useState(false);
+
+  // Enrollment Dropout Dialog State
+  const [dropoutDialogOpen, setDropoutDialogOpen] = useState(false);
+  const [dropoutEnrollment, setDropoutEnrollment] = useState<any>(null);
+  const [dropoutReason, setDropoutReason] = useState('Financial Constraints');
+  const [dropoutCustomReason, setDropoutCustomReason] = useState('');
+  const [dropoutRemarks, setDropoutRemarks] = useState('');
+  const [dropoutDate, setDropoutDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [dropoutSyncStudent, setDropoutSyncStudent] = useState(true);
+  const [dropoutSubmitting, setDropoutSubmitting] = useState(false);
+
+  const handleOpenDropout = (enrollment: any) => {
+    setDropoutEnrollment(enrollment);
+    setDropoutReason('Financial Constraints');
+    setDropoutCustomReason('');
+    setDropoutRemarks('');
+    setDropoutDate(new Date().toISOString().split('T')[0]);
+    setDropoutSyncStudent(true);
+    setDropoutDialogOpen(true);
+  };
+
+  const handleConfirmDropout = async () => {
+    if (!student || !dropoutEnrollment) return;
+    setDropoutSubmitting(true);
+    try {
+      const finalReason = dropoutReason === 'Other' && dropoutCustomReason.trim()
+        ? `Other: ${dropoutCustomReason.trim()}`
+        : dropoutReason;
+
+      await api.markEnrollmentDropout(student.id, dropoutEnrollment.id, {
+        reason: finalReason,
+        remarks: dropoutRemarks.trim(),
+        dropoutDate,
+        updateStudentStatus: dropoutSyncStudent,
+      });
+
+      toast.success('Enrollment marked as dropped successfully');
+      setDropoutDialogOpen(false);
+      refreshData();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to mark enrollment as dropped');
+    } finally {
+      setDropoutSubmitting(false);
+    }
+  };
 
   const refreshData = () => {
     if (student?.id) {
@@ -79,8 +136,9 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
     ? api.getFileUrl(student.photo)
     : undefined;
 
-  const universityName = student.university?.name || student.universityId?.name || 'Not Assigned';
-  const programName = student.program?.name || student.programId?.name || 'Not Assigned';
+  const latestEnrollment = enrollments && enrollments.length > 0 ? enrollments[0] : null;
+  const universityName = latestEnrollment?.program?.university?.name || student.university?.name || student.universityId?.name || 'Not Assigned';
+  const programName = latestEnrollment?.program?.name || student.program?.name || student.programId?.name || 'Not Assigned';
   const branchName = student.branch?.name || student.branchId?.name || 'Main Campus';
 
   return (
@@ -476,6 +534,11 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                                   <h4 className="font-bold text-slate-900 dark:text-slate-100 text-base">
                                     {enr.program?.name || 'Program'}
                                   </h4>
+                                  {idx === 0 && !isCompletedProgram && enr.status !== 'dropped' && (
+                                    <Badge className="bg-emerald-600/10 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 text-[10px] font-bold uppercase tracking-wider">
+                                      Latest Enrollment
+                                    </Badge>
+                                  )}
                                   {isCompletedProgram ? (
                                     <Badge className="bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-wider">
                                       🎓 Completed
@@ -483,6 +546,10 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                                   ) : isUpgrade ? (
                                     <Badge className="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider">
                                       🎓 Upgrade
+                                    </Badge>
+                                  ) : enr.status === 'dropped' ? (
+                                    <Badge className="bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400 border border-rose-200 text-[10px] uppercase font-bold">
+                                      ⚠️ Dropped
                                     </Badge>
                                   ) : (
                                     <Badge variant="outline" className="text-[10px] uppercase font-bold">
@@ -494,11 +561,46 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                                   {enr.program?.university?.name || 'University Partner'} • Session: {enr.session?.name || 'Standard'} {enr.specialisation ? `• Spec: ${enr.specialisation}` : ''}
                                 </p>
                               </div>
-                              <div className="text-right text-xs text-muted-foreground">
+                              <div className="text-right text-xs text-muted-foreground flex flex-col items-end gap-1">
                                 <span className="block font-mono font-medium">{enr.enrollmentNumber || 'No Enroll No'}</span>
                                 <span>Applied: {enr.createdAt ? format(new Date(enr.createdAt), 'dd MMM yyyy') : 'N/A'}</span>
+                                {isOrgAdmin && enr.status !== 'dropped' && enr.status !== 'completed' && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="h-6 text-[11px] border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:border-rose-900/50 dark:text-rose-400 dark:hover:bg-rose-950/40 font-medium flex items-center gap-1 shadow-sm mt-0.5"
+                                    onClick={() => handleOpenDropout(enr)}
+                                  >
+                                    <UserX className="w-3 h-3" />
+                                    Mark Dropout
+                                  </Button>
+                                )}
                               </div>
                             </div>
+
+                            {/* Dropped Alert Banner */}
+                            {enr.status === 'dropped' && (
+                              <div className="flex items-start gap-2.5 p-3 rounded-lg bg-rose-50/80 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-xs text-rose-800 dark:text-rose-300">
+                                <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
+                                <div className="flex-1 space-y-0.5">
+                                  <p className="font-semibold text-rose-900 dark:text-rose-200">
+                                    Student Marked as Dropped Out
+                                  </p>
+                                  {(() => {
+                                    const rawH = enr.statusHistory;
+                                    const histArr: any[] = Array.isArray(rawH) ? rawH : [];
+                                    const dropEntry = histArr.find((h: any) => h.status === 'dropped');
+                                    return (
+                                      <p className="text-[11px] text-rose-700 dark:text-rose-300">
+                                        {dropEntry?.reason ? <span className="font-medium">Reason: {dropEntry.reason}</span> : null}
+                                        {dropEntry?.remarks && dropEntry?.remarks !== dropEntry?.reason ? <span> — {dropEntry.remarks}</span> : null}
+                                        {dropEntry?.actorName ? <span> (by {dropEntry.actorName})</span> : null}
+                                      </p>
+                                    );
+                                  })()}
+                                </div>
+                              </div>
+                            )}
 
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-muted/30 rounded-xl text-xs">
                               <div>
@@ -592,6 +694,128 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
           </Card>
         </div>
       </div>
+
+      {/* Enrollment Dropout Confirmation Dialog */}
+      <Dialog open={dropoutDialogOpen} onOpenChange={setDropoutDialogOpen}>
+        <DialogContent className="max-w-md w-full rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-rose-600">
+              <UserX className="w-5 h-5" />
+              Mark Enrollment Dropout
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-2">
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs space-y-1">
+              <p className="font-semibold text-slate-800 dark:text-slate-200">
+                Student: {student?.name}
+              </p>
+              <p className="text-muted-foreground">
+                Program: <span className="font-medium text-foreground">{dropoutEnrollment?.program?.name || 'Selected Program'}</span>
+              </p>
+              {dropoutEnrollment?.enrollmentNumber && (
+                <p className="text-muted-foreground font-mono">
+                  Enrollment No: {dropoutEnrollment.enrollmentNumber}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold">Dropout Reason *</Label>
+              <Select value={dropoutReason} onValueChange={setDropoutReason}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select reason..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Financial Constraints">Financial Constraints</SelectItem>
+                  <SelectItem value="Personal / Family Reasons">Personal / Family Reasons</SelectItem>
+                  <SelectItem value="Health / Medical Issues">Health / Medical Issues</SelectItem>
+                  <SelectItem value="Relocation / Moved City">Relocation / Moved City</SelectItem>
+                  <SelectItem value="Academic Difficulties">Academic Difficulties</SelectItem>
+                  <SelectItem value="Joined Another University / Institute">Joined Another University / Institute</SelectItem>
+                  <SelectItem value="Employment / Job Conflicts">Employment / Job Conflicts</SelectItem>
+                  <SelectItem value="Discontinued Attendance">Discontinued Attendance</SelectItem>
+                  <SelectItem value="Other">Other Reason (Specify)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {dropoutReason === 'Other' && (
+              <div className="space-y-1.5 animate-in fade-in">
+                <Label className="text-xs font-semibold">Specify Reason *</Label>
+                <Input
+                  placeholder="Enter specific dropout reason..."
+                  value={dropoutCustomReason}
+                  onChange={(e) => setDropoutCustomReason(e.target.value)}
+                />
+              </div>
+            )}
+
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold">Effective Dropout Date</Label>
+              <Input
+                type="date"
+                value={dropoutDate}
+                onChange={(e) => setDropoutDate(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold">Remarks / Internal Notes</Label>
+              <Textarea
+                rows={2}
+                placeholder="Optional notes or context regarding the dropout decision..."
+                value={dropoutRemarks}
+                onChange={(e) => setDropoutRemarks(e.target.value)}
+              />
+            </div>
+
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40">
+              <Checkbox
+                id="profileSyncStudentStatus"
+                checked={dropoutSyncStudent}
+                onCheckedChange={(checked) => setDropoutSyncStudent(Boolean(checked))}
+                className="mt-0.5"
+              />
+              <div className="text-xs">
+                <label htmlFor="profileSyncStudentStatus" className="font-semibold text-amber-900 dark:text-amber-300 cursor-pointer">
+                  Also update student overall status to Dropped
+                </label>
+                <p className="text-[11px] text-amber-700 dark:text-amber-400 mt-0.5">
+                  Reflects the student as dropped across the system.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button
+                variant="outline"
+                onClick={() => setDropoutDialogOpen(false)}
+                disabled={dropoutSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="bg-rose-600 hover:bg-rose-700 text-white font-medium"
+                onClick={handleConfirmDropout}
+                disabled={dropoutSubmitting || (dropoutReason === 'Other' && !dropoutCustomReason.trim())}
+              >
+                {dropoutSubmitting ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-1.5 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <UserX className="w-4 h-4 mr-1.5" />
+                    Confirm Dropout
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

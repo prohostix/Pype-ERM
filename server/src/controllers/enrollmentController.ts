@@ -125,7 +125,7 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
     const existingActiveEnrollment = await prisma.enrollment.findFirst({
       where: {
         studentId: currentStudentId,
-        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'department_rejected', 'completed', 'graduated', 'alumni'] }
+        status: { notIn: ['rejected', 'cancelled', 'ops_rejected', 'department_rejected', 'completed', 'graduated', 'alumni', 'dropped', 'dropout'] }
       }
     });
     if (existingActiveEnrollment) {

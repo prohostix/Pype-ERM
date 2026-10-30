@@ -20,6 +20,7 @@ import {
   updateAdmissionProgress,
   updateStudentAcademicProgress,
   getStudentEnrollments,
+  markEnrollmentDropout,
   updateDocumentStatus,
   updatePhotoStatus,
   checkStudentUniqueness,
@@ -54,5 +55,6 @@ router.put('/:id/progress/:stepId', authorize('org_admin', 'superadmin', 'center
 router.put('/:id/academic-progress', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudentAcademicProgress);
 router.put('/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), approveStudent);
 router.get('/:id/enrollments', getStudentEnrollments);
+router.put('/:id/enrollments/:enrollmentId/dropout', authorize('org_admin', 'superadmin'), markEnrollmentDropout);
 
 export default router;

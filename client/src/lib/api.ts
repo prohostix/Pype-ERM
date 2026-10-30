@@ -242,6 +242,11 @@ class ApiService {
     return response.data;
   }
 
+  async markEnrollmentDropout(studentId: string, enrollmentId: string, data: { reason?: string; remarks?: string; dropoutDate?: string; updateStudentStatus?: boolean }) {
+    const response = await this.api.put(`/students/${studentId}/enrollments/${enrollmentId}/dropout`, data);
+    return response.data;
+  }
+
   async updateStudentProgress(id: string, stepId: string, data: FormData, enrollmentId?: string) {
     const token = localStorage.getItem('token');
     const url = enrollmentId

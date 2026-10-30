@@ -765,6 +765,14 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
       },
       data: { status: 'completed' }
     });
+  } else if (dataToUpdate.status === 'dropped') {
+    await prisma.enrollment.updateMany({
+      where: {
+        studentId: req.params.id,
+        status: { notIn: ['completed', 'rejected', 'ops_rejected', 'department_rejected'] }
+      },
+      data: { status: 'dropped' }
+    });
   }
 
   res.status(200).json({ success: true, data: student });
@@ -1447,6 +1455,83 @@ export const getStudentEnrollments = asyncHandler(async (req: AuthRequest, res: 
   });
 
   res.status(200).json({ success: true, data: enrollments });
+});
+
+/**
+ * PUT /students/:id/enrollments/:enrollmentId/dropout
+ * Mark an enrollment (and optionally the student) as dropped / dropout
+ */
+export const markEnrollmentDropout = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id: studentId, enrollmentId } = req.params;
+  const { reason, remarks, dropoutDate, updateStudentStatus = true } = req.body;
+
+  const student = await prisma.student.findFirst({
+    where: { id: studentId, organizationId: req.user.organizationId }
+  });
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+
+  const enrollment = await prisma.enrollment.findFirst({
+    where: { id: enrollmentId, studentId, organizationId: req.user.organizationId },
+    include: {
+      program: { select: { id: true, name: true, code: true } }
+    }
+  });
+  if (!enrollment) {
+    res.status(404).json({ success: false, message: 'Enrollment not found' });
+    return;
+  }
+
+  const rawHist: any = enrollment.statusHistory;
+  const history: any[] = Array.isArray(rawHist) ? [...rawHist] : (rawHist && typeof rawHist === 'object' ? Object.values(rawHist) : []);
+
+  const effectiveDropoutDate = dropoutDate ? new Date(dropoutDate).toISOString() : new Date().toISOString();
+  const dropoutRemarks = [reason, remarks].filter(Boolean).join(' - ') || 'Marked as dropout';
+
+  const newHistoryEntry = {
+    status: 'dropped',
+    changedAt: effectiveDropoutDate,
+    changedBy: req.user.id,
+    actorName: req.user.name,
+    actorRole: req.user.role,
+    reason: reason || 'Dropout',
+    remarks: dropoutRemarks,
+    note: `Marked dropout by ${req.user.name || 'Admin'} (${(req.user.role || '').replace(/_/g, ' ')})`
+  };
+
+  const updatedEnrollment = await prisma.enrollment.update({
+    where: { id: enrollmentId },
+    data: {
+      status: 'dropped',
+      departmentRemarks: remarks ? `Dropout remarks: ${remarks}` : enrollment.departmentRemarks,
+      statusHistory: [...history, newHistoryEntry] as any,
+    },
+    include: {
+      program: { include: { university: { select: { name: true } } } },
+      studyCenter: { select: { name: true, code: true } },
+      session: { select: { name: true } },
+      payment: true,
+    }
+  });
+
+  let updatedStudent = student;
+  if (updateStudentStatus) {
+    updatedStudent = await prisma.student.update({
+      where: { id: studentId },
+      data: { status: 'dropped' }
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'Enrollment marked as dropped successfully',
+    data: {
+      enrollment: updatedEnrollment,
+      student: updatedStudent
+    }
+  });
 });
 
 /**

@@ -38,6 +38,7 @@ const ADMISSION_STEPS_CONFIG = [
 
 export function StudentProgressTab({ student, enrollments: initialEnrollments, onUpdate }: StudentProgressTabProps) {
   const { user } = useAuth();
+  const isOrgAdmin = ['org_admin', 'superadmin'].includes(user?.role || '');
 
   // Multi-enrollment management
   const [loadedEnrollments, setLoadedEnrollments] = useState<any[]>(initialEnrollments || []);
@@ -337,6 +338,31 @@ export function StudentProgressTab({ student, enrollments: initialEnrollments, o
     } catch (err: any) {
       console.error(err);
       toast.error('Failed to mark program as completed');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const markAsDropped = async () => {
+    try {
+      setIsSubmitting(true);
+      if (selectedEnrollment?.id) {
+        await api.markEnrollmentDropout(student.id, selectedEnrollment.id, {
+          reason: 'Discontinued Program',
+          remarks: 'Marked dropped from academic progress tab',
+          updateStudentStatus: true
+        });
+        setLoadedEnrollments(list => list.map(enr => enr.id === selectedEnrollment.id ? { ...enr, status: 'dropped' } : enr));
+      } else {
+        await api.updateStudent(student.id, { 
+          status: 'dropped'
+        });
+      }
+      toast.success('Enrollment marked as dropped');
+      if (onUpdate) onUpdate();
+    } catch (err: any) {
+      console.error(err);
+      toast.error('Failed to mark enrollment as dropped');
     } finally {
       setIsSubmitting(false);
     }
@@ -725,29 +751,58 @@ export function StudentProgressTab({ student, enrollments: initialEnrollments, o
                   <FileText className="w-5 h-5 text-emerald-600" />
                   <span className="font-semibold text-emerald-900 dark:text-emerald-100">Certificate Process & Course Completed</span>
                 </div>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button 
-                      size="sm" 
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                      disabled={isSubmitting || (selectedEnrollment ? selectedEnrollment.status === 'completed' : student.isPrevious) || !academicTerms.every(t => t.isSaved)}
-                    >
-                      {(selectedEnrollment ? selectedEnrollment.status === 'completed' : student.isPrevious) ? 'Completed' : 'Mark as Completed'}
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This will mark the student as completed and move them to the completed students list. Are you sure you want to proceed?
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={markAsCompleted}>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                <div className="flex items-center gap-2">
+                  {isOrgAdmin && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="border-rose-300 text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:border-rose-900/50 dark:text-rose-400 dark:hover:bg-rose-950/40"
+                          disabled={isSubmitting || (selectedEnrollment ? selectedEnrollment.status === 'dropped' : student.status === 'dropped')}
+                        >
+                          {(selectedEnrollment ? selectedEnrollment.status === 'dropped' : student.status === 'dropped') ? 'Dropped' : 'Mark as Dropped'}
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Mark Student as Dropped?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This will mark the current enrollment as dropped/dropout and update student records. Are you sure you want to proceed?
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction className="bg-rose-600 hover:bg-rose-700 text-white" onClick={markAsDropped}>Confirm Dropout</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button 
+                        size="sm" 
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                        disabled={isSubmitting || (selectedEnrollment ? selectedEnrollment.status === 'completed' : student.isPrevious) || !academicTerms.every(t => t.isSaved)}
+                      >
+                        {(selectedEnrollment ? selectedEnrollment.status === 'completed' : student.isPrevious) ? 'Completed' : 'Mark as Completed'}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will mark the student as completed and move them to the completed students list. Are you sure you want to proceed?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={markAsCompleted}>Continue</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </div>
             </CardContent>
           </Card>

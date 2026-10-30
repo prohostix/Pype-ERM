@@ -1,0 +1,197 @@
+{
+  "deletedAt": "2026-10-30T10:30:34.554Z",
+  "organization": "Edufolio",
+  "organizationId": "86c5580d-6b98-4e67-97c3-98f44f5b7242",
+  "reason": "Duplicate ops_rejected enrollment removal for Aparna Suresh (active enrolled record 19076ebd preserved)",
+  "record": {
+    "id": "573ba76b-d065-46ca-b177-7d8ce37d787d",
+    "organizationId": "86c5580d-6b98-4e67-97c3-98f44f5b7242",
+    "studentId": "6c6f0692-59da-48c8-b417-a00bdb930d78",
+    "programId": "f7708d1d-7dcd-42b3-8e1d-4466228313db",
+    "specialisation": null,
+    "studyCenterId": null,
+    "sessionId": null,
+    "enrollmentNumber": null,
+    "studentName": "APARNA SURESH",
+    "studentEmail": "aparnasanal81@gmail.com",
+    "studentPhone": "+919744361545",
+    "studentAddress": "Puthenpurakkal(H) kallamakunnu,P.O Nadavaramba, Irinjalakuda,Thrissur 680661",
+    "status": "ops_rejected",
+    "departmentRemarks": "Already Exist",
+    "financeRemarks": null,
+    "departmentReviewedBy": "537a9c9b-f1a9-4caf-9fd5-76e84919207d",
+    "departmentReviewedAt": "2026-10-29T09:13:08.367Z",
+    "financeReviewedBy": null,
+    "financeReviewedAt": null,
+    "enrolledAt": null,
+    "statusHistory": {
+      "push": {
+        "status": "ops_rejected",
+        "remarks": "Already Exist",
+        "actorName": "Fidha K U",
+        "actorRole": "ops_admin",
+        "changedAt": "2026-10-29T09:13:08.367Z",
+        "changedBy": "537a9c9b-f1a9-4caf-9fd5-76e84919207d"
+      }
+    },
+    "createdAt": "2026-09-16T09:21:20.151Z",
+    "updatedAt": "2026-10-29T09:13:08.370Z",
+    "universityRemarks": null,
+    "universityReviewedAt": null,
+    "universityReviewedBy": null,
+    "salesUserId": "0fd268e5-1768-4d67-a130-da2d52d10fff",
+    "altPhone": null,
+    "dob": "1991-02-12T00:00:00.000Z",
+    "fatherName": "P.V Suresh",
+    "isProvisional": false,
+    "isUpgrade": false,
+    "previousProgramId": null,
+    "provisionalReceiptUrl": null,
+    "pinCode": null,
+    "gender": null,
+    "category": null,
+    "religion": "Hindu",
+    "maritalStatus": null,
+    "employmentStatus": null,
+    "caste": "Ezhava",
+    "motherName": "Sindhu Suresh",
+    "motherPhone": "+916235399386",
+    "fatherPhone": "+919633134986",
+    "guardianName": null,
+    "familyPhone": null,
+    "photo": "/uploads/file-1789549917148-81899000.jpg",
+    "documents": [
+      {
+        "url": "/uploads/file-1793264511457-107003214.jpeg",
+        "type": "SSLC Certificate",
+        "status": "approved",
+        "reviewedAt": "2026-10-29T09:09:24.068Z",
+        "reviewedBy": "Fidha K U"
+      },
+      {
+        "url": "/uploads/file-1793264519638-528254982.jpeg",
+        "type": "Plus Two Certificate",
+        "status": "approved",
+        "reviewedAt": "2026-10-29T09:09:27.183Z",
+        "reviewedBy": "Fidha K U"
+      },
+      {
+        "url": "/uploads/file-1793264525886-438553436.jpeg",
+        "type": "Degree Certificate",
+        "status": "approved",
+        "reviewedAt": "2026-10-29T09:09:24.744Z",
+        "reviewedBy": "Fidha K U"
+      },
+      {
+        "url": "/uploads/file-1793264533025-853678606.pdf",
+        "type": "Other",
+        "label": "",
+        "status": "approved",
+        "reviewedAt": "2026-10-29T09:09:26.352Z",
+        "reviewedBy": "Fidha K U"
+      },
+      {
+        "url": "/uploads/file-1793264585046-95404541.pdf",
+        "type": "Aadhaar Card",
+        "status": "approved",
+        "reviewedAt": "2026-10-29T09:09:25.508Z",
+        "reviewedBy": "Fidha K U"
+      }
+    ],
+    "admissionProgress": {},
+    "academicProgress": [],
+    "photoStatus": "approved",
+    "receiptUrl": "/uploads/file-1789550476176-841880553.jpg",
+    "receiptVerified": false,
+    "receiptVerifiedAt": null,
+    "receiptVerifiedBy": null,
+    "initialPaymentAmount": 500,
+    "initialPaymentDate": null,
+    "paymentPlan": "per_year_sem",
+    "payment": null,
+    "program": {
+      "id": "f7708d1d-7dcd-42b3-8e1d-4466228313db",
+      "universityId": "d228591c-f474-4af7-84dc-4915312441e0",
+      "organizationId": "86c5580d-6b98-4e67-97c3-98f44f5b7242",
+      "subDepartmentId": null,
+      "name": "MBA",
+      "code": "SMUMBA",
+      "courseType": "OnlineDegree",
+      "duration": 24,
+      "hasSemesters": true,
+      "semesters": [
+        {
+          "name": "Semester 1",
+          "number": 1,
+          "durationMonths": 6
+        },
+        {
+          "name": "Semester 2",
+          "number": 2,
+          "durationMonths": 6
+        },
+        {
+          "name": "Semester 3",
+          "number": 3,
+          "durationMonths": 6
+        },
+        {
+          "name": "Semester 4",
+          "number": 4,
+          "durationMonths": 6
+        }
+      ],
+      "status": "active",
+      "specialisations": [
+        "MARKETING",
+        "FINANCE",
+        "HR",
+        "OPERATIONS & SUPPLY CHAIN MANAGEMENT",
+        "SYSTEM",
+        "HEALTHCARE MANAGEMENT"
+      ],
+      "syllabus": ""
+    },
+    "studyCenter": null,
+    "salesUser": {
+      "id": "0fd268e5-1768-4d67-a130-da2d52d10fff",
+      "userId": "PYPEERM0074",
+      "organizationId": "86c5580d-6b98-4e67-97c3-98f44f5b7242",
+      "departmentId": "d8b832c1-d747-4db9-8cdb-39ff56cc65ca",
+      "additionalDepartmentIds": [],
+      "branchId": null,
+      "subDepartmentId": null,
+      "ceoPanelId": null,
+      "studyCenterId": null,
+      "universityId": null,
+      "email": "ayanaedufolio22@gmail.com",
+      "password": "$2a$12$yjGHMfKIymOHzq7FVCLr8O0rbW/wuKjesCLAJFiOMlL91X3fto4WK",
+      "name": "Ayana K Gopinath",
+      "role": "sales_sub_admin",
+      "avatar": null,
+      "phone": "7356005155",
+      "designation": "Academic Counselor",
+      "reportingTo": null,
+      "status": "active",
+      "lastLogin": "2026-10-30T10:24:19.823Z",
+      "biometricId": null,
+      "allowSystemPunchIn": true,
+      "requireSelfiePunchIn": true,
+      "allowAnywherePunchIn": false,
+      "requiresAttendance": true,
+      "createdAt": "2026-06-30T08:40:55.654Z",
+      "updatedAt": "2026-10-30T10:24:19.823Z",
+      "permissions": [],
+      "assignedSalesUsers": [],
+      "assignedOpsUsers": []
+    },
+    "student": {
+      "id": "6c6f0692-59da-48c8-b417-a00bdb930d78",
+      "name": "APARNA SURESH",
+      "email": "aparnasanal81@gmail.com",
+      "admissionNo": "EDU-635160",
+      "enrollmentNo": "EPG2457",
+      "status": "active"
+    }
+  }
+}

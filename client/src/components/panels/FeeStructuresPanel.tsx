@@ -38,7 +38,7 @@ export function FeeStructuresPanel() {
     additionalFees: ''
   });
   const [yearlyFees, setYearlyFees] = useState<any[]>([]);
-  const [installments, setInstallments] = useState<{name: string; amount: number; dueDate: string}[]>([]);
+  const [installments, setInstallments] = useState<{ name: string; amount: number; dueDate: string }[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -185,7 +185,7 @@ export function FeeStructuresPanel() {
   const handleSelectProg = (p: any) => {
     setSelectedProg(p);
     setSelectedSpecialisations([]);
-    
+
     if (p.specialisations && p.specialisations.length > 0) {
       setStep(3.5);
     } else {
@@ -195,20 +195,20 @@ export function FeeStructuresPanel() {
   };
 
   const handleToggleSpecialisation = (spec: string) => {
-    setSelectedSpecialisations(prev => 
+    setSelectedSpecialisations(prev =>
       prev.includes(spec) ? prev.filter(s => s !== spec) : [...prev, spec]
     );
   };
 
   const handleSave = async () => {
     if (!selectedProg) return;
-    
+
     setSaving(true);
     const additionalFees = formData.additionalFees
       ? formData.additionalFees.split(',').map(s => {
-          const [label, amount] = s.trim().split(':');
-          return { label: label?.trim(), amount: Number(amount) };
-        }).filter(f => f.label && !isNaN(f.amount))
+        const [label, amount] = s.trim().split(':');
+        return { label: label?.trim(), amount: Number(amount) };
+      }).filter(f => f.label && !isNaN(f.amount))
       : [];
 
     const formattedYearlyFees = yearlyFees.map(yf => ({
@@ -243,7 +243,7 @@ export function FeeStructuresPanel() {
       const specsToSave = selectedSpecialisations.length > 0 ? selectedSpecialisations : [null];
       for (const spec of specsToSave) {
         const payload = createPayload(spec);
-        
+
         // Check if fee already exists for this specialisation
         const existing = fees.find(f => {
           const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
@@ -257,7 +257,7 @@ export function FeeStructuresPanel() {
           await api.post('/finance/fees', payload);
         }
       }
-      
+
       toast.success(specsToSave.length > 1 ? 'Fee structures saved for all selected specialisations' : 'Fee structure saved');
       await fetchData();
       setStep(selectedProg?.specialisations?.length > 0 ? 3.5 : 3);
@@ -289,7 +289,7 @@ export function FeeStructuresPanel() {
     }
     return (
       !s.universityId ||
-      s.universityId === selectedUniv?.id || 
+      s.universityId === selectedUniv?.id ||
       (s.programId && programs.find(p => p.id === s.programId)?.universityId === selectedUniv?.id)
     );
   });
@@ -366,7 +366,7 @@ export function FeeStructuresPanel() {
                     ? selectedUniv.allocatedPartners
                     : allCenters
                   ).map((partner: any) => {
-                    const allocCount = partner.programIds?.length ?? 
+                    const allocCount = partner.programIds?.length ??
                       programs.filter(p => p.universityId === selectedUniv?.id).length;
                     return (
                       <button
@@ -577,7 +577,7 @@ export function FeeStructuresPanel() {
                             <p className="font-semibold text-sm line-clamp-1">{spec}</p>
                           </div>
                           {selectedSpecialisations.includes(spec) && (
-                             <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-[10px] font-bold">✓</div>
+                            <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-[10px] font-bold">✓</div>
                           )}
                         </div>
                         <div className="mt-auto pt-4 flex justify-between items-center w-full">
@@ -650,7 +650,7 @@ export function FeeStructuresPanel() {
                 </div>
               </CardHeader>
               <CardContent className="p-6">
-                
+
                 {/* One Time Pricing Section */}
                 <div className="mb-10">
                   <div className="flex items-center gap-2 mb-4 border-b pb-2">
@@ -658,33 +658,33 @@ export function FeeStructuresPanel() {
                     <h3 className="text-lg font-semibold">One-Time Payment Plan (Lump Sum)</h3>
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">Set the pricing for students who choose to pay the entire course fee upfront. This is usually discounted.</p>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-4 bg-muted/20 p-5 rounded-xl border border-border">
                     <div className="space-y-2">
                       <Label>Registration Fee</Label>
-                      <Input type="number" value={formData.registrationFee} onChange={e => setFormData({...formData, registrationFee: e.target.value})} />
+                      <Input type="number" value={formData.registrationFee} onChange={e => setFormData({ ...formData, registrationFee: e.target.value })} />
                     </div>
                     <div className="space-y-2">
                       <Label>Tuition Fee</Label>
-                      <Input type="number" value={formData.tuitionFee} onChange={e => setFormData({...formData, tuitionFee: e.target.value})} />
+                      <Input type="number" value={formData.tuitionFee} onChange={e => setFormData({ ...formData, tuitionFee: e.target.value })} />
                     </div>
                     <div className="space-y-2">
                       <Label>Exam Fee</Label>
-                      <Input type="number" value={formData.examFee} onChange={e => setFormData({...formData, examFee: e.target.value})} />
+                      <Input type="number" value={formData.examFee} onChange={e => setFormData({ ...formData, examFee: e.target.value })} />
                     </div>
                     <div className="space-y-2">
                       <Label>University Fee</Label>
-                      <Input type="number" value={formData.universityFee} onChange={e => setFormData({...formData, universityFee: e.target.value})} />
+                      <Input type="number" value={formData.universityFee} onChange={e => setFormData({ ...formData, universityFee: e.target.value })} />
                     </div>
                     <div className="space-y-2">
                       <Label>Center Commission Rate (Flat)</Label>
-                      <Input type="number" value={formData.commissionRate} onChange={e => setFormData({...formData, commissionRate: e.target.value})} />
+                      <Input type="number" value={formData.commissionRate} onChange={e => setFormData({ ...formData, commissionRate: e.target.value })} />
                     </div>
                   </div>
-                  
+
                   <div className="mt-4 space-y-2">
                     <Label>Additional One-Time Fees (Format: Label:Amount, e.g., Library:5000, ID Card:500)</Label>
-                    <Input value={formData.additionalFees} onChange={e => setFormData({...formData, additionalFees: e.target.value})} placeholder="Hostel:20000, Transport:10000" />
+                    <Input value={formData.additionalFees} onChange={e => setFormData({ ...formData, additionalFees: e.target.value })} placeholder="Hostel:20000, Transport:10000" />
                   </div>
                 </div>
 
@@ -698,7 +698,7 @@ export function FeeStructuresPanel() {
 
                   <div className="w-64 mb-6">
                     <Label className="mb-2 block">Installment Cycle</Label>
-                    <Select value={formData.billingCycle} onValueChange={v => setFormData({...formData, billingCycle: v})}>
+                    <Select value={formData.billingCycle} onValueChange={v => setFormData({ ...formData, billingCycle: v })}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -713,10 +713,10 @@ export function FeeStructuresPanel() {
                   </div>
 
                   <div className="mb-6 flex items-center space-x-2 bg-muted/30 p-4 rounded-lg border border-border">
-                    <Checkbox 
-                      id="allowInitialFee" 
+                    <Checkbox
+                      id="allowInitialFee"
                       checked={formData.allowInitialFee}
-                      onCheckedChange={(c) => setFormData({...formData, allowInitialFee: !!c})}
+                      onCheckedChange={(c) => setFormData({ ...formData, allowInitialFee: !!c })}
                     />
                     <div className="space-y-1 leading-none">
                       <label htmlFor="allowInitialFee" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
@@ -752,64 +752,64 @@ export function FeeStructuresPanel() {
                   ) : (
                     <div className="space-y-4">
                       {yearlyFees.map((yf, idx) => (
-                      <div key={idx} className="p-4 border rounded-xl bg-card shadow-sm flex flex-col gap-4">
-                        <div className="font-semibold text-primary">{yf.periodName}</div>
-                        <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
-                          <div className="space-y-1">
-                            <Label className="text-xs">Reg Fee</Label>
-                            <Input type="number" className="h-8" value={yf.registrationFee} onChange={e => {
-                              const next = [...yearlyFees];
-                              next[idx].registrationFee = e.target.value;
-                              setYearlyFees(next);
-                            }} />
-                          </div>
-                          <div className="space-y-1">
-                            <Label className="text-xs">Tuition Fee</Label>
-                            <Input type="number" className="h-8" value={yf.tuitionFee} onChange={e => {
-                              const next = [...yearlyFees];
-                              next[idx].tuitionFee = e.target.value;
-                              setYearlyFees(next);
-                            }} />
-                          </div>
-                          <div className="space-y-1">
-                            <Label className="text-xs">Exam Fee</Label>
-                            <Input type="number" className="h-8" value={yf.examFee} onChange={e => {
-                              const next = [...yearlyFees];
-                              next[idx].examFee = e.target.value;
-                              setYearlyFees(next);
-                            }} />
-                          </div>
-                          <div className="space-y-1">
-                            <Label className="text-xs">Univ Fee</Label>
-                            <Input type="number" className="h-8" value={yf.universityFee} onChange={e => {
-                              const next = [...yearlyFees];
-                              next[idx].universityFee = e.target.value;
-                              setYearlyFees(next);
-                            }} />
-                          </div>
-                          <div className="space-y-1">
-                            <Label className="text-xs">Commission (Flat)</Label>
-                            <Input type="number" className="h-8" value={yf.commissionRate} onChange={e => {
-                              const next = [...yearlyFees];
-                              next[idx].commissionRate = e.target.value;
-                              setYearlyFees(next);
-                            }} />
-                          </div>
-                          <div className="space-y-1">
-                            <Label className="text-xs">Due Date</Label>
-                            <Input type="date" className="h-8" value={yf.dueDate || ''} onChange={e => {
-                              const next = [...yearlyFees];
-                              next[idx].dueDate = e.target.value;
-                              setYearlyFees(next);
-                            }} />
+                        <div key={idx} className="p-4 border rounded-xl bg-card shadow-sm flex flex-col gap-4">
+                          <div className="font-semibold text-primary">{yf.periodName}</div>
+                          <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
+                            <div className="space-y-1">
+                              <Label className="text-xs">Reg Fee</Label>
+                              <Input type="number" className="h-8" value={yf.registrationFee} onChange={e => {
+                                const next = [...yearlyFees];
+                                next[idx].registrationFee = e.target.value;
+                                setYearlyFees(next);
+                              }} />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-xs">Tuition Fee</Label>
+                              <Input type="number" className="h-8" value={yf.tuitionFee} onChange={e => {
+                                const next = [...yearlyFees];
+                                next[idx].tuitionFee = e.target.value;
+                                setYearlyFees(next);
+                              }} />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-xs">Exam Fee</Label>
+                              <Input type="number" className="h-8" value={yf.examFee} onChange={e => {
+                                const next = [...yearlyFees];
+                                next[idx].examFee = e.target.value;
+                                setYearlyFees(next);
+                              }} />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-xs">Univ Fee</Label>
+                              <Input type="number" className="h-8" value={yf.universityFee} onChange={e => {
+                                const next = [...yearlyFees];
+                                next[idx].universityFee = e.target.value;
+                                setYearlyFees(next);
+                              }} />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-xs">Commission (Flat)</Label>
+                              <Input type="number" className="h-8" value={yf.commissionRate} onChange={e => {
+                                const next = [...yearlyFees];
+                                next[idx].commissionRate = e.target.value;
+                                setYearlyFees(next);
+                              }} />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-xs">Due Date</Label>
+                              <Input type="date" className="h-8" value={yf.dueDate || ''} onChange={e => {
+                                const next = [...yearlyFees];
+                                next[idx].dueDate = e.target.value;
+                                setYearlyFees(next);
+                              }} />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                    {yearlyFees.length === 0 && (
-                      <p className="text-sm text-muted-foreground">Select an installment cycle to view periods.</p>
-                    )}
-                  </div>
+                      ))}
+                      {yearlyFees.length === 0 && (
+                        <p className="text-sm text-muted-foreground">Select an installment cycle to view periods.</p>
+                      )}
+                    </div>
                   )}
                 </div>
 

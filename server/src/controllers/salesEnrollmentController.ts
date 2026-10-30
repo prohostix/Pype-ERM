@@ -8,6 +8,8 @@ import { sendEmail, sendBrandedStudentCredentials } from '../utils/emailService.
 import { sendAdmissionConfirmationWhatsApp } from '../utils/whatsappService.js';
 import { enqueueNotification } from '../utils/notificationQueue.js';
 import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
+import { sendPushNotification } from '../services/notification.service.js';
+import { emitToUser } from '../config/socket.js';
 
 // ─── Public: Validate invite token and get form data ─────────────────────────
 
@@ -1169,17 +1171,22 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
         select: { id: true },
       });
       for (const admin of financeAdmins) {
-        await prisma.notification.create({
+        const notifTitle = 'Payment Receipt Re-uploaded';
+        const notifMsg = `${finalEnrollment.studentName}'s payment receipt was re-uploaded by ${req.user.name}. Please verify the payment.`;
+        const notif = await prisma.notification.create({
           data: {
             organizationId: orgId,
             userId: admin.id,
-            title: 'Payment Receipt Re-uploaded',
-            message: `${finalEnrollment.studentName}'s payment receipt was re-uploaded by ${req.user.name}. Please verify the payment.`,
+            title: notifTitle,
+            message: notifMsg,
             type: 'general',
             priority: 'medium',
             link: 'enrollments_finance',
           },
         });
+        try { emitToUser(admin.id, 'notification', notif); } catch (_) {}
+        sendPushNotification(admin.id, notifTitle, notifMsg, { type: 'enrollments_finance', enrollmentId: finalEnrollment.id, link: 'enrollments_finance' })
+          .catch(e => console.error('[Push Notification Error]:', e?.message || e));
       }
     } catch (_) { /* non-critical */ }
   } else if (newStatus === 'document_review') {
@@ -1189,19 +1196,24 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
         select: { id: true },
       });
       for (const admin of adminsToNotify) {
-        await prisma.notification.create({
+        const notifTitle = wasRejectedByOperations ? 'Resubmitted Application for Operations Review' : 'New Student Application for Review';
+        const notifMsg = wasRejectedByOperations
+          ? `${finalEnrollment.studentName}'s application was updated with corrected documents by ${req.user.name}. Please review.`
+          : `${finalEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review.`;
+        const notif = await prisma.notification.create({
           data: {
             organizationId: orgId,
             userId: admin.id,
-            title: wasRejectedByOperations ? 'Resubmitted Application for Operations Review' : 'New Student Application for Review',
-            message: wasRejectedByOperations
-              ? `${finalEnrollment.studentName}'s application was updated with corrected documents by ${req.user.name}. Please review.`
-              : `${finalEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review.`,
+            title: notifTitle,
+            message: notifMsg,
             type: 'general',
             priority: 'medium',
             link: 'enrollment_review',
           },
         });
+        try { emitToUser(admin.id, 'notification', notif); } catch (_) {}
+        sendPushNotification(admin.id, notifTitle, notifMsg, { type: 'enrollment_review', enrollmentId: finalEnrollment.id, link: 'enrollment_review' })
+          .catch(e => console.error('[Push Notification Error]:', e?.message || e));
       }
     } catch (_) { /* non-critical */ }
   } else {
@@ -1212,17 +1224,22 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
         select: { id: true },
       });
       for (const admin of adminsToNotify) {
-        await prisma.notification.create({
+        const notifTitle = wasRejectedBySalesAdmin ? 'Application Re-applied for Sales Approval' : 'New Student Application for Sales Approval';
+        const notifMsg = `${finalEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review.`;
+        const notif = await prisma.notification.create({
           data: {
             organizationId: orgId,
             userId: admin.id,
-            title: wasRejectedBySalesAdmin ? 'Application Re-applied for Sales Approval' : 'New Student Application for Sales Approval',
-            message: `${finalEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review.`,
+            title: notifTitle,
+            message: notifMsg,
             type: 'general',
             priority: 'medium',
             link: 'sales_enrollment_review',
           },
         });
+        try { emitToUser(admin.id, 'notification', notif); } catch (_) {}
+        sendPushNotification(admin.id, notifTitle, notifMsg, { type: 'sales_enrollment_review', enrollmentId: finalEnrollment.id, link: 'sales_enrollment_review' })
+          .catch(e => console.error('[Push Notification Error]:', e?.message || e));
       }
     } catch (_) { /* non-critical */ }
   }
@@ -1386,7 +1403,10 @@ export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: R
 });
 
 export const approveBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const enrollment = await prisma.enrollment.findUnique({ where: { id: req.params.id } });
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { id: req.params.id },
+    include: { program: { select: { name: true } } }
+  });
   if (!enrollment || enrollment.status !== 'sales_admin_review') {
     res.status(404).json({ success: false, message: 'Enrollment not found or not in review status' });
     return;
@@ -1406,12 +1426,108 @@ export const approveBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Re
       }) as any,
     }
   });
+
+  // 1. Notify Operations team (ops_admin and ops_sub_admin) via In-App + FCM Push Notification + Socket
+  try {
+    const opsAdmins = await prisma.user.findMany({
+      where: {
+        organizationId: enrollment.organizationId,
+        role: { in: ['ops_admin', 'ops_sub_admin'] },
+        status: 'active'
+      },
+      select: { id: true, name: true }
+    });
+
+    const programTitle = (enrollment as any).program?.name ? ` for ${(enrollment as any).program.name}` : '';
+    const opsTitle = enrollment.isUpgrade
+      ? '🔄 Upgrade Application Approved by Sales Admin'
+      : '📋 Student Application Approved by Sales Admin';
+    const opsMessage = `${enrollment.studentName}'s application${programTitle} has been approved by Sales Admin (${req.user.name}) and forwarded to Operations for review.`;
+
+    for (const op of opsAdmins) {
+      // Create In-App Notification
+      const notif = await prisma.notification.create({
+        data: {
+          organizationId: enrollment.organizationId,
+          userId: op.id,
+          title: opsTitle,
+          message: opsMessage,
+          type: 'general',
+          priority: enrollment.isUpgrade ? 'high' : 'medium',
+          link: 'enrollment_review',
+        }
+      });
+
+      // Realtime WebSocket notification
+      try {
+        emitToUser(op.id, 'notification', notif);
+      } catch (_) {}
+
+      // FCM Push Notification to device(s)
+      sendPushNotification(
+        op.id,
+        opsTitle,
+        opsMessage,
+        {
+          type: 'enrollment_review',
+          enrollmentId: enrollment.id,
+          action: 'sales_admin_approved',
+          link: 'enrollment_review'
+        }
+      ).catch(err => console.error(`[Push Notification] Error sending to Ops ${op.id}:`, err?.message || err));
+    }
+  } catch (err: any) {
+    console.error('[approveBySalesAdmin] Error notifying operations:', err?.message || err);
+  }
+
+  // 2. Notify the Sales Counselor (creator/owner of the application)
+  if (enrollment.salesUserId) {
+    try {
+      const programTitle = (enrollment as any).program?.name ? ` for ${(enrollment as any).program.name}` : '';
+      const counselorTitle = '✅ Application Approved by Sales Admin';
+      const counselorMessage = `Your student application for ${enrollment.studentName}${programTitle} has been approved by Sales Admin (${req.user.name}) and forwarded to Operations.`;
+
+      const counselorNotif = await prisma.notification.create({
+        data: {
+          organizationId: enrollment.organizationId,
+          userId: enrollment.salesUserId,
+          title: counselorTitle,
+          message: counselorMessage,
+          type: 'general',
+          priority: 'high',
+          link: 'student-applications',
+        }
+      });
+
+      try {
+        emitToUser(enrollment.salesUserId, 'notification', counselorNotif);
+      } catch (_) {}
+
+      sendPushNotification(
+        enrollment.salesUserId,
+        counselorTitle,
+        counselorMessage,
+        {
+          type: 'student_application',
+          enrollmentId: enrollment.id,
+          action: 'sales_admin_approved',
+          link: 'student-applications'
+        }
+      ).catch(err => console.error(`[Push Notification] Error sending to Sales user ${enrollment.salesUserId}:`, err?.message || err));
+    } catch (err: any) {
+      console.error('[approveBySalesAdmin] Error notifying sales user:', err?.message || err);
+    }
+  }
+
   res.json({ success: true, data: updated, message: 'Application approved' });
 });
 
 export const rejectBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { remarks } = req.body;
-  const enrollment = await prisma.enrollment.findUnique({ where: { id: req.params.id } });
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { id: req.params.id },
+    include: { program: { select: { name: true } } }
+  });
   if (!enrollment || enrollment.status !== 'sales_admin_review') {
     res.status(404).json({ success: false, message: 'Enrollment not found or not in review status' });
     return;
@@ -1431,5 +1547,45 @@ export const rejectBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Res
       }) as any,
     }
   });
+
+  // Notify the Sales Counselor
+  if (enrollment.salesUserId) {
+    try {
+      const programTitle = (enrollment as any).program?.name ? ` for ${(enrollment as any).program.name}` : '';
+      const counselorTitle = '❌ Application Rejected by Sales Admin';
+      const counselorMessage = `Application for ${enrollment.studentName}${programTitle} was rejected by Sales Admin (${req.user.name}). Reason: ${remarks || 'No remarks provided.'}`;
+
+      const counselorNotif = await prisma.notification.create({
+        data: {
+          organizationId: enrollment.organizationId,
+          userId: enrollment.salesUserId,
+          title: counselorTitle,
+          message: counselorMessage,
+          type: 'general',
+          priority: 'high',
+          link: 'student-applications',
+        }
+      });
+
+      try {
+        emitToUser(enrollment.salesUserId, 'notification', counselorNotif);
+      } catch (_) {}
+
+      sendPushNotification(
+        enrollment.salesUserId,
+        counselorTitle,
+        counselorMessage,
+        {
+          type: 'student_application',
+          enrollmentId: enrollment.id,
+          action: 'sales_admin_rejected',
+          link: 'student-applications'
+        }
+      ).catch(err => console.error(`[Push Notification] Error sending to Sales user ${enrollment.salesUserId}:`, err?.message || err));
+    } catch (err: any) {
+      console.error('[rejectBySalesAdmin] Error notifying sales user:', err?.message || err);
+    }
+  }
+
   res.json({ success: true, data: updated, message: 'Application rejected' });
 });
