@@ -135,7 +135,17 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
 
   const students = await prisma.student.findMany({
     where,
-    include: { enrolledByUser: true, enrollments: { include: { payment: true } }, program: true, center: true, university: true, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } } },
+    include: {
+      enrolledByUser: true,
+      enrollments: { include: { payment: true } },
+      program: true,
+      center: true,
+      university: true,
+      session: true,
+      branch: true,
+      paymentSchedules: { orderBy: { dueDate: 'asc' } },
+      invoices: { include: { payments: true } }
+    },
     orderBy: { createdAt: 'desc' }
   });
   res.status(200).json({ success: true, count: students.length, data: students });

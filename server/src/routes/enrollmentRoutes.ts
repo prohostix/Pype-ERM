@@ -33,16 +33,16 @@ router.post('/wallet/topup', authorize('center_admin', 'sales_admin', 'sales_sub
 router.get('/wallet/topups', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), getTopUpHistory);
 
 // Study Center enrollment routes
-router.get('/programs', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), getEnrollablePrograms);
-router.post('/enroll', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), createEnrollment);
-router.get('/enrollments', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), getMyEnrollments);
-router.get('/provisional', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'finance_admin', 'finance_sub_admin'), getMyProvisionalEnrollments);
+router.get('/programs', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'org_admin', 'superadmin'), getEnrollablePrograms);
+router.post('/enroll', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'org_admin', 'superadmin'), createEnrollment);
+router.get('/enrollments', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'org_admin', 'superadmin'), getMyEnrollments);
+router.get('/provisional', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getMyProvisionalEnrollments);
 
 // Center onboarding status & payment (authenticated)
 router.get('/my-center-status', authorize('center_admin'), getMyCenterStatus);
 router.post('/submit-payment', authorize('center_admin'), upload.single('proofFile'), submitMyCenterPayment);
-router.post('/:id/receipt', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), upload.single('receipt'), uploadReceipt);
-router.put('/:id/provisional-complete', authorize('center_admin', 'org_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), completeProvisionalEnrollment);
+router.post('/:id/receipt', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'org_admin', 'superadmin'), upload.single('receipt'), uploadReceipt);
+router.put('/:id/provisional-complete', authorize('center_admin', 'org_admin', 'superadmin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), completeProvisionalEnrollment);
 
 // Dept/Sub-dept manager review routes
 // Branch managers, the CEO and the General Manager can view applications under review but cannot approve or reject them.

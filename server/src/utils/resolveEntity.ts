@@ -118,6 +118,46 @@ export async function resolveTargetName(url: string): Promise<string | null> {
       }
     }
 
+    if (endpoint === 'faculty-portal') {
+      const sub = parts[1];
+      if (sub === 'modules') {
+        const moduleId = parts[2] || id;
+        const m = await prisma.classModule.findUnique({
+          where: { id: moduleId },
+          select: { title: true, academicClass: { select: { name: true } } }
+        });
+        return m ? `Module: ${m.title} (${m.academicClass?.name || 'Class'})` : `Module ID: ${moduleId}`;
+      }
+      if (sub === 'submodules') {
+        const subModuleId = parts[2] || id;
+        const sm = await prisma.classSubModule.findUnique({
+          where: { id: subModuleId },
+          select: { title: true, classModule: { select: { title: true } } }
+        });
+        return sm ? `Sub-Module: ${sm.title} (${sm.classModule?.title || 'Module'})` : `Sub-Module ID: ${subModuleId}`;
+      }
+      if (sub === 'lessons') {
+        const lessonId = parts[2] || id;
+        const isAssessment = parts.includes('assessment');
+        const l = await prisma.moduleLesson.findUnique({
+          where: { id: lessonId },
+          select: { title: true, classModule: { select: { title: true } } }
+        });
+        if (isAssessment) {
+          return l ? `Assessment for Lesson: ${l.title}` : `Assessment (Lesson ID: ${lessonId})`;
+        }
+        return l ? `Lesson: ${l.title} (${l.classModule?.title || 'Module'})` : `Lesson ID: ${lessonId}`;
+      }
+      if (sub === 'materials') {
+        const materialId = parts[2] || id;
+        const m = await prisma.classMaterial.findUnique({
+          where: { id: materialId },
+          select: { title: true, fileName: true }
+        });
+        return m ? `Material: ${m.title || m.fileName}` : `Material ID: ${materialId}`;
+      }
+    }
+
 
   } catch (e) {
     console.error('Error resolving target name', e);

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Plus, Edit, Trash2, Folder, FileText, Upload, Loader2, Download, BookOpen, ChevronDown, ChevronUp, User, UserPlus, Clock, Play, Users, CheckSquare, Layers, Video, AlertTriangle, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, Folder, FileText, Upload, Loader2, Download, BookOpen, ChevronDown, ChevronUp, User, UserPlus, Clock, Play, Users, CheckSquare, Layers, Video, AlertTriangle, AlertCircle, CheckCircle2, FileSpreadsheet, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -90,6 +90,8 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   // Assessment Modal
   const [assessmentDialogOpen, setAssessmentDialogOpen] = useState(false);
   const [loadingAssessment, setLoadingAssessment] = useState(false);
+  const [existingAssessment, setExistingAssessment] = useState<any | null>(null);
+  const assessmentFileInputRef = useRef<HTMLInputElement>(null);
   const [assessmentForm, setAssessmentForm] = useState({
     title: 'Lesson Assessment',
     description: '',
@@ -359,20 +361,22 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
 
   const openAssessmentDialog = async (lesson: any) => {
     setActiveLessonId(lesson.id);
-    setAssessmentForm({ title: 'Lesson Assessment', description: '', passingScore: '50', questions: [] });
+    setAssessmentForm({ title: `${lesson.title} - Assessment`, description: '', passingScore: '50', questions: [] });
+    setExistingAssessment(null);
     setAssessmentDialogOpen(true);
     try {
       setLoadingAssessment(true);
       const res = await api.get(`/faculty-portal/lessons/${lesson.id}/assessment`);
       if (res.data?.data) {
+        setExistingAssessment(res.data.data);
         setAssessmentForm({
-          title: res.data.data.title,
+          title: res.data.data.title || `${lesson.title} - Assessment`,
           description: res.data.data.description || '',
-          passingScore: String(res.data.data.passingScore),
-          questions: res.data.data.questions.map((q: any) => ({
+          passingScore: String(res.data.data.passingScore ?? 50),
+          questions: (res.data.data.questions || []).map((q: any) => ({
             questionText: q.questionText,
-            options: q.options,
-            correctIndex: q.correctIndex
+            options: Array.isArray(q.options) ? q.options : ['', '', '', ''],
+            correctIndex: q.correctIndex ?? 0
           }))
         });
       }
@@ -386,15 +390,184 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   const handleAssessmentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeLessonId) return;
+    if (assessmentForm.questions.length === 0) {
+      return toast.error('Please add or bulk upload at least one question before saving.');
+    }
+    for (let i = 0; i < assessmentForm.questions.length; i++) {
+      const q = assessmentForm.questions[i];
+      if (!q.questionText?.trim()) {
+        return toast.error(`Question ${i + 1} is missing question text.`);
+      }
+      const filledOptions = (q.options || []).filter((opt: string) => opt && opt.trim() !== '');
+      if (filledOptions.length < 2) {
+        return toast.error(`Question ${i + 1} must have at least 2 options.`);
+      }
+    }
     try {
       setLoadingAssessment(true);
       await api.post(`/faculty-portal/lessons/${activeLessonId}/assessment`, assessmentForm);
       toast.success('Assessment configured successfully');
       setAssessmentDialogOpen(false);
+      await fetchModules();
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to configure assessment');
     } finally {
       setLoadingAssessment(false);
+    }
+  };
+
+  const handleDeleteAssessment = async () => {
+    if (!activeLessonId) return;
+    if (!confirm('Are you sure you want to delete this assessment? All associated questions and student attempts will be permanently removed.')) return;
+    try {
+      setLoadingAssessment(true);
+      await api.delete(`/faculty-portal/lessons/${activeLessonId}/assessment`);
+      toast.success('Assessment deleted successfully');
+      setAssessmentDialogOpen(false);
+      await fetchModules();
+    } catch (err: any) {
+      if (err?.isDeleteRequest) {
+        setAssessmentDialogOpen(false);
+      } else {
+        toast.error(err.response?.data?.message || 'Failed to delete assessment');
+      }
+    } finally {
+      setLoadingAssessment(false);
+    }
+  };
+
+  const handleDownloadAssessmentTemplate = () => {
+    const csvContent =
+      "Question,Option A,Option B,Option C,Option D,Correct Option (A/B/C/D)\n" +
+      '"What is the primary function of DNA?","Energy storage","Genetic blueprint","Cell structure","Enzyme catalyst","B"\n' +
+      '"Which of the following is an example of an operating system?","Python","Linux","Google Chrome","HTML","B"\n' +
+      '"Which protocol is used for secure web browsing?","HTTP","FTP","HTTPS","SMTP","C"\n';
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'assessment_template.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success('Assessment template downloaded!');
+  };
+
+  const handleBulkUploadAssessment = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const XLSX = await import('xlsx');
+      const reader = new FileReader();
+
+      reader.onload = (ev) => {
+        try {
+          const data = new Uint8Array(ev.target?.result as ArrayBuffer);
+          const wb = XLSX.read(data, { type: 'array' });
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const rows: any[] = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+          if (!rows || rows.length === 0) {
+            toast.error('The uploaded file contains no data.');
+            return;
+          }
+
+          const parsedQuestions: any[] = [];
+          const errors: string[] = [];
+
+          rows.forEach((row, idx) => {
+            const getCol = (names: string[]) => {
+              for (const key of Object.keys(row)) {
+                const cleanKey = key.trim().toLowerCase();
+                if (names.some(n => n.toLowerCase() === cleanKey)) {
+                  return String(row[key] ?? '').trim();
+                }
+              }
+              return '';
+            };
+
+            const question = getCol(['question', 'question text', 'question_text']);
+            const optA = getCol(['option a', 'option_a', 'option1', 'a']);
+            const optB = getCol(['option b', 'option_b', 'option2', 'b']);
+            const optC = getCol(['option c', 'option_c', 'option3', 'c']);
+            const optD = getCol(['option d', 'option_d', 'option4', 'd']);
+            const rawCorrect = getCol([
+              'correct option (a/b/c/d)',
+              'correct option',
+              'correct_option',
+              'correct option(a/b/c/d)',
+              'correct',
+              'answer'
+            ]);
+
+            // Skip empty rows
+            if (!question && !optA && !optB && !optC && !optD) return;
+
+            if (!question) {
+              errors.push(`Row ${idx + 2}: Missing Question text`);
+              return;
+            }
+
+            const options = [optA, optB, optC, optD];
+            const filledOptions = options.filter(Boolean);
+            if (filledOptions.length < 2) {
+              errors.push(`Row ${idx + 2}: At least 2 options are required for "${question.slice(0, 25)}..."`);
+              return;
+            }
+
+            let correctIndex = -1;
+            const cleanCorrect = rawCorrect.toUpperCase();
+            if (cleanCorrect.startsWith('A') || cleanCorrect === '1') correctIndex = 0;
+            else if (cleanCorrect.startsWith('B') || cleanCorrect === '2') correctIndex = 1;
+            else if (cleanCorrect.startsWith('C') || cleanCorrect === '3') correctIndex = 2;
+            else if (cleanCorrect.startsWith('D') || cleanCorrect === '4') correctIndex = 3;
+            else {
+              const match = options.findIndex(opt => opt && opt.toLowerCase() === rawCorrect.toLowerCase());
+              if (match !== -1) correctIndex = match;
+            }
+
+            if (correctIndex === -1 || !options[correctIndex]) {
+              errors.push(`Row ${idx + 2}: Invalid Correct Option "${rawCorrect}" (must be A, B, C, or D matching an option)`);
+              return;
+            }
+
+            parsedQuestions.push({
+              questionText: question,
+              options,
+              correctIndex
+            });
+          });
+
+          if (parsedQuestions.length === 0) {
+            toast.error(errors.length > 0 ? errors[0] : 'No valid questions found in file.');
+            return;
+          }
+
+          setAssessmentForm(prev => ({
+            ...prev,
+            questions: [...prev.questions, ...parsedQuestions]
+          }));
+
+          if (errors.length > 0) {
+            toast.warning(`Imported ${parsedQuestions.length} questions. ${errors.length} invalid row(s) were skipped.`);
+          } else {
+            toast.success(`Successfully imported ${parsedQuestions.length} question${parsedQuestions.length > 1 ? 's' : ''}!`);
+          }
+        } catch (parseErr) {
+          console.error(parseErr);
+          toast.error('Failed to parse file. Please verify it matches the template.');
+        } finally {
+          if (assessmentFileInputRef.current) assessmentFileInputRef.current.value = '';
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    } catch (err) {
+      console.error(err);
+      toast.error('Error reading the uploaded file.');
     }
   };
 
@@ -417,10 +590,28 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
             )}
           </div>
         </div>
-        <div className="flex items-center gap-1 shrink-0">
-          <Button variant="ghost" size="sm" onClick={() => openAssessmentDialog(lesson)} className="h-7 text-xs">
-            <CheckSquare className="w-3 h-3 mr-1" /> Assessment
-          </Button>
+        <div className="flex items-center gap-1.5 shrink-0">
+          {lesson.assessment ? (
+            <Button 
+              variant="default" 
+              size="sm" 
+              onClick={() => openAssessmentDialog(lesson)} 
+              className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-medium shadow-xs border border-emerald-500/30 gap-1.5 transition-all"
+              title="Assessment is configured for this lesson"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-100" />
+              <span>Assessment ({lesson.assessment._count?.questions ?? '✓'})</span>
+            </Button>
+          ) : (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => openAssessmentDialog(lesson)} 
+              className="h-7 text-xs text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:text-indigo-600 hover:border-indigo-300 gap-1"
+            >
+              <CheckSquare className="w-3.5 h-3.5" /> Assessment
+            </Button>
+          )}
           <Button variant="ghost" size="sm" onClick={() => { 
             setActiveLessonId(lesson.id); 
             setMaterialForm({ title: '', description: '' }); 
@@ -953,79 +1144,253 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
 
       {/* Assessment Modal */}
       <Dialog open={assessmentDialogOpen} onOpenChange={setAssessmentDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>Configure Lesson Assessment</DialogTitle></DialogHeader>
-          <form onSubmit={handleAssessmentSubmit} className="space-y-6 pt-4">
+        <DialogContent className="max-w-5xl sm:max-w-5xl w-[95vw] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <div className="flex items-center justify-between pr-6">
+              <div className="flex items-center gap-2">
+                <DialogTitle>Configure Lesson Assessment</DialogTitle>
+                {existingAssessment && (
+                  <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300 text-[11px] font-medium">
+                    <CheckCircle2 className="w-3 h-3 mr-1" /> Configured
+                  </Badge>
+                )}
+              </div>
+              {existingAssessment && (
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handleDeleteAssessment}
+                  className="h-7 text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40"
+                  disabled={loadingAssessment}
+                >
+                  <Trash2 className="w-3.5 h-3.5 mr-1" /> Delete Assessment
+                </Button>
+              )}
+            </div>
+          </DialogHeader>
+
+          <form onSubmit={handleAssessmentSubmit} className="space-y-6 pt-2">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Assessment Title</Label>
-                <Input value={assessmentForm.title} onChange={e => setAssessmentForm({ ...assessmentForm, title: e.target.value })} required />
+                <Input 
+                  value={assessmentForm.title} 
+                  onChange={e => setAssessmentForm({ ...assessmentForm, title: e.target.value })} 
+                  placeholder="e.g. Lesson Quiz"
+                  required 
+                />
               </div>
               <div className="space-y-2">
                 <Label>Passing Score (%)</Label>
-                <Input type="number" min="0" max="100" value={assessmentForm.passingScore} onChange={e => setAssessmentForm({ ...assessmentForm, passingScore: e.target.value })} required />
+                <Input 
+                  type="number" 
+                  min="0" 
+                  max="100" 
+                  value={assessmentForm.passingScore} 
+                  onChange={e => setAssessmentForm({ ...assessmentForm, passingScore: e.target.value })} 
+                  required 
+                />
               </div>
             </div>
+
             <div className="space-y-2">
-              <Label>Description</Label>
-              <Textarea value={assessmentForm.description} onChange={e => setAssessmentForm({ ...assessmentForm, description: e.target.value })} />
+              <Label>Description (Optional)</Label>
+              <Textarea 
+                value={assessmentForm.description} 
+                onChange={e => setAssessmentForm({ ...assessmentForm, description: e.target.value })} 
+                placeholder="Instructions or remarks for students taking this assessment"
+                rows={2}
+              />
             </div>
 
+            {/* Bulk Upload Section */}
+            <div className="rounded-xl border border-indigo-200 dark:border-indigo-800/80 bg-gradient-to-r from-indigo-50/70 to-blue-50/50 dark:from-indigo-950/30 dark:to-slate-900/40 p-4 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <FileSpreadsheet className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                      Bulk Upload Questions
+                      <Badge variant="secondary" className="text-[10px] h-4.5 px-1.5 font-normal">CSV / Excel</Badge>
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Import multiple questions at once using the template format.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleDownloadAssessmentTemplate}
+                    className="h-8 text-xs bg-white dark:bg-slate-900 border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 text-indigo-700 dark:text-indigo-300"
+                  >
+                    <Download className="w-3.5 h-3.5 mr-1 text-indigo-600 dark:text-indigo-400" /> Download Template
+                  </Button>
+
+                  <input 
+                    ref={assessmentFileInputRef} 
+                    type="file" 
+                    accept=".csv, .xlsx, .xls" 
+                    onChange={handleBulkUploadAssessment} 
+                    className="hidden" 
+                  />
+                  <Button 
+                    type="button" 
+                    variant="default" 
+                    size="sm" 
+                    onClick={() => assessmentFileInputRef.current?.click()}
+                    className="h-8 text-xs bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs"
+                  >
+                    <Upload className="w-3.5 h-3.5 mr-1" /> Bulk Upload
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-1.5 text-[11px] text-indigo-800/80 dark:text-indigo-300/80 pt-2 border-t border-indigo-200/50 dark:border-indigo-900/50">
+                <Info className="w-3.5 h-3.5 mt-0.5 shrink-0 text-indigo-600 dark:text-indigo-400" />
+                <span>
+                  Template Columns: <code className="bg-white/80 dark:bg-slate-900 px-1 py-0.5 rounded text-[10px] font-mono">Question</code>, <code className="bg-white/80 dark:bg-slate-900 px-1 py-0.5 rounded text-[10px] font-mono">Option A</code>, <code className="bg-white/80 dark:bg-slate-900 px-1 py-0.5 rounded text-[10px] font-mono">Option B</code>, <code className="bg-white/80 dark:bg-slate-900 px-1 py-0.5 rounded text-[10px] font-mono">Option C</code>, <code className="bg-white/80 dark:bg-slate-900 px-1 py-0.5 rounded text-[10px] font-mono">Option D</code>, <code className="bg-white/80 dark:bg-slate-900 px-1 py-0.5 rounded text-[10px] font-mono">Correct Option (A/B/C/D)</code>
+                </span>
+              </div>
+            </div>
+
+            {/* Questions List */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold">Questions ({assessmentForm.questions.length})</h3>
-                <Button type="button" variant="outline" size="sm" onClick={() => {
-                  setAssessmentForm({
-                    ...assessmentForm,
-                    questions: [...assessmentForm.questions, { questionText: '', options: ['', '', '', ''], correctIndex: 0 }]
-                  });
-                }}>
-                  <Plus className="w-4 h-4 mr-2" /> Add Question
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-sm">Questions ({assessmentForm.questions.length})</h3>
+                  {assessmentForm.questions.length > 0 && (
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-6 text-[11px] text-muted-foreground hover:text-red-500"
+                      onClick={() => {
+                        if (confirm('Clear all questions currently in the list?')) {
+                          setAssessmentForm({ ...assessmentForm, questions: [] });
+                        }
+                      }}
+                    >
+                      Clear All
+                    </Button>
+                  )}
+                </div>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => {
+                    setAssessmentForm({
+                      ...assessmentForm,
+                      questions: [...assessmentForm.questions, { questionText: '', options: ['', '', '', ''], correctIndex: 0 }]
+                    });
+                  }}
+                  className="h-8 text-xs"
+                >
+                  <Plus className="w-3.5 h-3.5 mr-1.5" /> Add Question Manually
                 </Button>
               </div>
 
-              {assessmentForm.questions.map((q, qIndex) => (
-                <Card key={qIndex} className="relative">
-                  <CardContent className="p-4 space-y-4">
-                    <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2 text-red-500" onClick={() => {
-                      const newQs = [...assessmentForm.questions];
-                      newQs.splice(qIndex, 1);
-                      setAssessmentForm({ ...assessmentForm, questions: newQs });
-                    }}>
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                    <div className="space-y-2">
-                      <Label>Question {qIndex + 1}</Label>
-                      <Textarea value={q.questionText} onChange={e => {
-                        const newQs = [...assessmentForm.questions];
-                        newQs[qIndex].questionText = e.target.value;
-                        setAssessmentForm({ ...assessmentForm, questions: newQs });
-                      }} required className="mr-8" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      {q.options.map((opt: string, oIndex: number) => (
-                        <div key={oIndex} className="flex items-center gap-2">
-                          <input type="radio" name={`correct-${qIndex}`} checked={q.correctIndex === oIndex} onChange={() => {
+              {assessmentForm.questions.length === 0 ? (
+                <div className="p-8 text-center border border-dashed rounded-xl bg-slate-50/50 dark:bg-slate-900/30 text-muted-foreground space-y-2">
+                  <FileSpreadsheet className="w-8 h-8 text-muted-foreground/40 mx-auto" />
+                  <p className="text-sm font-medium text-foreground">No questions added yet</p>
+                  <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+                    Click <strong>Bulk Upload</strong> above to upload questions from CSV/Excel, or click <strong>Add Question Manually</strong> to enter questions one by one.
+                  </p>
+                </div>
+              ) : (
+                assessmentForm.questions.map((q, qIndex) => (
+                  <Card key={qIndex} className="relative border-border/80 shadow-xs">
+                    <CardContent className="p-4 space-y-3">
+                      <Button 
+                        type="button" 
+                        variant="ghost" 
+                        size="icon" 
+                        className="absolute top-2 right-2 text-red-500 hover:bg-red-50 h-7 w-7" 
+                        onClick={() => {
+                          const newQs = [...assessmentForm.questions];
+                          newQs.splice(qIndex, 1);
+                          setAssessmentForm({ ...assessmentForm, questions: newQs });
+                        }}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Question {qIndex + 1}</Label>
+                        <Textarea 
+                          value={q.questionText} 
+                          onChange={e => {
                             const newQs = [...assessmentForm.questions];
-                            newQs[qIndex].correctIndex = oIndex;
+                            newQs[qIndex].questionText = e.target.value;
                             setAssessmentForm({ ...assessmentForm, questions: newQs });
-                          }} className="w-4 h-4 text-primary" required />
-                          <Input value={opt} onChange={e => {
-                            const newQs = [...assessmentForm.questions];
-                            newQs[qIndex].options[oIndex] = e.target.value;
-                            setAssessmentForm({ ...assessmentForm, questions: newQs });
-                          }} placeholder={`Option ${oIndex + 1}`} required />
+                          }} 
+                          required 
+                          placeholder="Enter question text..."
+                          className="mr-8 min-h-[60px]" 
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-[11px] font-medium text-muted-foreground">Select the radio button for the correct option:</span>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                          {q.options.map((opt: string, oIndex: number) => {
+                            const letter = ['A', 'B', 'C', 'D'][oIndex] || `${oIndex + 1}`;
+                            const isCorrect = q.correctIndex === oIndex;
+                            return (
+                              <div 
+                                key={oIndex} 
+                                className={`flex items-center gap-2 p-1.5 rounded-lg border transition-colors ${
+                                  isCorrect 
+                                    ? 'bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800' 
+                                    : 'border-border/60 bg-background'
+                                }`}
+                              >
+                                <input 
+                                  type="radio" 
+                                  name={`correct-${qIndex}`} 
+                                  checked={isCorrect} 
+                                  onChange={() => {
+                                    const newQs = [...assessmentForm.questions];
+                                    newQs[qIndex].correctIndex = oIndex;
+                                    setAssessmentForm({ ...assessmentForm, questions: newQs });
+                                  }} 
+                                  className="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer ml-1" 
+                                  required 
+                                />
+                                <span className={`text-xs font-bold w-4 text-center ${isCorrect ? 'text-emerald-700 dark:text-emerald-400' : 'text-muted-foreground'}`}>
+                                  {letter}
+                                </span>
+                                <Input 
+                                  value={opt} 
+                                  onChange={e => {
+                                    const newQs = [...assessmentForm.questions];
+                                    newQs[qIndex].options[oIndex] = e.target.value;
+                                    setAssessmentForm({ ...assessmentForm, questions: newQs });
+                                  }} 
+                                  placeholder={`Option ${letter}`} 
+                                  className="h-8 text-xs flex-1"
+                                  required 
+                                />
+                              </div>
+                            );
+                          })}
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
             </div>
 
-            <Button type="submit" className="w-full" disabled={loadingAssessment}>
+            <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white" disabled={loadingAssessment}>
               {loadingAssessment ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckSquare className="w-4 h-4 mr-2" />}
-              {loadingAssessment ? 'Saving...' : 'Save Assessment'}
+              {loadingAssessment ? 'Saving...' : `Save Assessment (${assessmentForm.questions.length} Question${assessmentForm.questions.length !== 1 ? 's' : ''})`}
             </Button>
           </form>
         </DialogContent>

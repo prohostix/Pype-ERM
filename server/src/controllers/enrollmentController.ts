@@ -271,7 +271,13 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
 
 export const getMyEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { status } = req.query;
-  const where: any = { studyCenterId: req.user.studyCenterId || '' };
+  const where: any = {};
+
+  if (req.user.studyCenterId) {
+    where.studyCenterId = req.user.studyCenterId;
+  } else if (req.user.organizationId) {
+    where.organizationId = req.user.organizationId;
+  }
   
   if (status) {
     where.status = status;

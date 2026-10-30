@@ -55,15 +55,19 @@ export const getEditDeleteRequests = asyncHandler(async (req: AuthRequest, res: 
     include: {
       user: {
         select: { id: true, name: true, email: true, role: true }
+      },
+      faculty: {
+        select: { id: true, name: true, email: true }
       }
     },
     orderBy: { createdAt: 'desc' }
   });
 
   const resolvedRequests = await Promise.all(
-    requests.map(async (r) => {
+    requests.map(async (r: any) => {
       const targetName = await resolveTargetName(r.entityId);
-      return { ...r, targetName };
+      const requester = r.user || (r.faculty ? { ...r.faculty, role: 'faculty' } : null);
+      return { ...r, user: requester, targetName };
     })
   );
 
@@ -73,8 +77,14 @@ export const getEditDeleteRequests = asyncHandler(async (req: AuthRequest, res: 
 export const getEditDeleteRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
   const request = await prisma.editDeleteRequest.findUnique({
     where: { id: req.params.id },
-    include: { user: { select: { id: true, name: true } } }
+    include: {
+      user: { select: { id: true, name: true } },
+      faculty: { select: { id: true, name: true } }
+    }
   });
+  if (request && !request.user && request.faculty) {
+    (request as any).user = { ...request.faculty, role: 'faculty' };
+  }
   res.json({ success: true, data: request });
 });
 
@@ -119,6 +129,76 @@ async function executeApprovedDeletion(entityId: string, organizationId: string,
       return { success: true };
     } else if (entityType === 'program_allocation' || endpoint === 'program_allocation') {
       await prisma.programAllocation.delete({ where: { id } });
+      return { success: true };
+    } else if (
+      entityType === 'class_module' ||
+      (endpoint === 'faculty-portal' && sub === 'modules') ||
+      (endpoint === 'modules')
+    ) {
+      const moduleId = (isUrl && parts[0] === 'faculty-portal' && parts[2]) ? parts[2] : id;
+      await prisma.academicSession.deleteMany({
+        where: { classModuleId: moduleId }
+      });
+      await prisma.classModule.delete({ where: { id: moduleId } });
+      return { success: true };
+    } else if (
+      entityType === 'class_submodule' ||
+      (endpoint === 'faculty-portal' && sub === 'submodules') ||
+      (endpoint === 'submodules')
+    ) {
+      const subModuleId = (isUrl && parts[0] === 'faculty-portal' && parts[2]) ? parts[2] : id;
+      const lessons = await prisma.moduleLesson.findMany({
+        where: { classSubModuleId: subModuleId },
+        select: { id: true }
+      });
+      const lessonIds = lessons.map(l => l.id);
+      if (lessonIds.length > 0) {
+        await prisma.academicSession.deleteMany({
+          where: { moduleLessonId: { in: lessonIds } }
+        });
+      }
+      await prisma.classSubModule.delete({ where: { id: subModuleId } });
+      return { success: true };
+    } else if (
+      entityType === 'lesson_assessment' ||
+      (endpoint === 'faculty-portal' && sub === 'lessons' && parts.includes('assessment')) ||
+      parts.includes('assessment')
+    ) {
+      let targetLessonId = id;
+      if (isUrl) {
+        const assessIdx = parts.indexOf('assessment');
+        if (assessIdx > 0) {
+          targetLessonId = parts[assessIdx - 1];
+        }
+      }
+      await prisma.assessment.deleteMany({
+        where: {
+          OR: [
+            { lessonId: targetLessonId },
+            { id: targetLessonId },
+            { id: id }
+          ]
+        }
+      });
+      return { success: true };
+    } else if (
+      entityType === 'module_lesson' ||
+      (endpoint === 'faculty-portal' && sub === 'lessons') ||
+      (endpoint === 'lessons')
+    ) {
+      const lessonId = (isUrl && parts[0] === 'faculty-portal' && parts[2]) ? parts[2] : id;
+      await prisma.academicSession.deleteMany({
+        where: { moduleLessonId: lessonId }
+      });
+      await prisma.moduleLesson.delete({ where: { id: lessonId } });
+      return { success: true };
+    } else if (
+      entityType === 'class_material' ||
+      (endpoint === 'faculty-portal' && sub === 'materials') ||
+      (endpoint === 'materials')
+    ) {
+      const materialId = (isUrl && parts[0] === 'faculty-portal' && parts[2]) ? parts[2] : id;
+      await prisma.classMaterial.delete({ where: { id: materialId } });
       return { success: true };
     }
 

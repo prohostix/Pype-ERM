@@ -3,7 +3,7 @@ import { protect, authorize } from '../middleware/auth.js';
 import { getMyClasses, getClassBatches, getMyBatches, getMyStudents, getModulesForClass, createModule, updateModule, deleteModule, createSubModule, updateSubModule, deleteSubModule, createLesson, updateLesson, deleteLesson, assignTeacherToLesson, getLessonHistory,
   getBatchSessions,
   uploadMaterial, deleteMaterial, getOrganizationFaculty, getMyAssignedLessons, startSession, getActiveSessions, getSessionStudents, submitSessionAttendance, endSession,
-  punchInSession, punchOutSession, getFacultyAttendancesByClass, approveFacultyPunch, getClassReviews, getVideoAnalytics, getLessonAssessment, upsertLessonAssessment } from '../controllers/facultyPortalController.js';
+  punchInSession, punchOutSession, getFacultyAttendancesByClass, approveFacultyPunch, getClassReviews, getVideoAnalytics, getLessonAssessment, upsertLessonAssessment, deleteLessonAssessment } from '../controllers/facultyPortalController.js';
 import { upload } from '../middleware/upload.js';
 
 const router = express.Router();
@@ -58,7 +58,8 @@ router.route('/lessons/:lessonId/history').get(getLessonHistory);
 
 router.route('/lessons/:lessonId/assessment')
   .get(getLessonAssessment)
-  .post(upsertLessonAssessment);
+  .post(upsertLessonAssessment)
+  .delete(deleteLessonAssessment);
 
 
 // Materials Management

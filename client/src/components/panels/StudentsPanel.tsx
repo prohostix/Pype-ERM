@@ -1859,6 +1859,71 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         }
       };
 
+      const calculateStudentPaidFees = (s: any): number => {
+        let totalPaid = 0;
+        const countedScheduleIds = new Set<string>();
+
+        // 1. Payment Schedules with status 'paid'
+        if (Array.isArray(s.paymentSchedules)) {
+          s.paymentSchedules.forEach((ps: any) => {
+            if ((ps.status || '').toLowerCase() === 'paid') {
+              totalPaid += Number(ps.amount) || 0;
+              if (ps.id) countedScheduleIds.add(ps.id);
+            }
+          });
+        }
+
+        // 2. Invoices with recorded payments
+        if (Array.isArray(s.invoices)) {
+          s.invoices.forEach((inv: any) => {
+            if (inv.scheduleId && countedScheduleIds.has(inv.scheduleId)) {
+              return;
+            }
+            if (Array.isArray(inv.payments) && inv.payments.length > 0) {
+              inv.payments.forEach((p: any) => {
+                totalPaid += Number(p.amount) || 0;
+              });
+            } else if ((inv.status || '').toLowerCase() === 'paid') {
+              totalPaid += Number(inv.total || inv.amount || 0);
+            }
+          });
+        }
+
+        // 3. Enrollment initial payments & admissionProgress payments (if not already invoiced or scheduled)
+        const hasInitialInvoiceOrSchedule =
+          (Array.isArray(s.invoices) && s.invoices.some((inv: any) =>
+            (inv.invoiceNo?.startsWith('INV-AUTO') ||
+             inv.invoiceNo?.startsWith('INV-PROV') ||
+             (inv.notes || '').toLowerCase().includes('initial') ||
+             (inv.notes || '').toLowerCase().includes('admission') ||
+             (inv.notes || '').toLowerCase().includes('provisional')) &&
+            ((inv.payments && inv.payments.length > 0) || (inv.status || '').toLowerCase() === 'paid')
+          )) ||
+          (Array.isArray(s.paymentSchedules) && s.paymentSchedules.some((ps: any) =>
+            ((ps.title || '').toLowerCase().includes('admission') || (ps.title || '').toLowerCase().includes('initial')) &&
+            (ps.status || '').toLowerCase() === 'paid'
+          ));
+
+        if (!hasInitialInvoiceOrSchedule) {
+          let enrollmentInitial = 0;
+          if (Array.isArray(s.enrollments) && s.enrollments.length > 0) {
+            for (const enr of s.enrollments) {
+              if (enr.payment && typeof enr.payment.amount === 'number') {
+                enrollmentInitial = Math.max(enrollmentInitial, Number(enr.payment.amount) || 0);
+              } else if (enr.initialPaymentAmount && Number(enr.initialPaymentAmount) > 0) {
+                enrollmentInitial = Math.max(enrollmentInitial, Number(enr.initialPaymentAmount) || 0);
+              }
+            }
+          }
+          // Also check student.admissionProgress.initialPaymentAmount
+          const admInitAmount = Number((s.admissionProgress as any)?.initialPaymentAmount) || 0;
+          const finalInitial = Math.max(enrollmentInitial, admInitAmount);
+          totalPaid += finalInitial;
+        }
+
+        return Math.round(totalPaid * 100) / 100;
+      };
+
       const rows = dataToExport.map((s, idx) => {
         const centerName = typeof s.centerId === 'object' ? s.centerId?.name : (s.center?.name || centers.find((c: any) => c.id === s.centerId)?.name || '');
         const programName = typeof s.programId === 'object' ? s.programId?.name : (s.program?.name || programs.find((p: any) => p.id === s.programId)?.name || '');
@@ -1883,6 +1948,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           'Branch': branchName,
           'Study Center': centerName,
           'Counselor / Enrolled By': salesUserName,
+          'Paid Fees': calculateStudentPaidFees(s),
           'Admission Date': formatDate(s.admissionDate),
           'Date of Birth': formatDate(s.dob),
           'Gender': s.gender || '',
@@ -1913,6 +1979,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         { wch: 18 }, // Branch
         { wch: 22 }, // Study Center
         { wch: 22 }, // Counselor / Enrolled By
+        { wch: 15 }, // Paid Fees
         { wch: 14 }, // Admission Date
         { wch: 14 }, // Date of Birth
         { wch: 10 }, // Gender

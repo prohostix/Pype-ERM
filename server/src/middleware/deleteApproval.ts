@@ -31,15 +31,22 @@ export const processDeleteRequest = async (req: Request, res: Response, next: Ne
 
     // Otherwise, create request
     let status = 'pending_manager';
-    // If they are a department manager or org_admin/superadmin, skip manager step.
+    // If they are a department manager or org_admin/superadmin or faculty, route to CEO.
     const managerRoles = ['org_admin', 'hr_admin', 'hr_sub_admin', 'operations_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'superadmin'];
-    if (managerRoles.includes(role)) {
+    if (managerRoles.includes(role) || role === 'faculty') {
       status = 'pending_ceo';
     }
 
+    let entityType = 'api_delete';
+    if (req.originalUrl.includes('/faculty-portal/modules/')) entityType = 'class_module';
+    else if (req.originalUrl.includes('/faculty-portal/submodules/')) entityType = 'class_submodule';
+    else if (req.originalUrl.includes('/faculty-portal/lessons/') && req.originalUrl.includes('/assessment')) entityType = 'lesson_assessment';
+    else if (req.originalUrl.includes('/faculty-portal/lessons/')) entityType = 'module_lesson';
+    else if (req.originalUrl.includes('/faculty-portal/materials/')) entityType = 'class_material';
+
     const requestData: any = {
       organization: { connect: { id: authReq.user.organizationId } },
-      entityType: 'api_delete',
+      entityType: entityType,
       entityId: req.originalUrl,
       requestType: 'delete',
       reason: reason,

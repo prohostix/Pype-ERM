@@ -73,8 +73,8 @@ const FILTER_TABS = [
 
 export function FinanceEnrollmentsPanel() {
   const { user } = useAuth();
-  // Only Finance can approve, reject or verify; everyone else (CEO, General Manager, Branch Manager) views.
-  const canAct = ['finance_admin', 'finance_sub_admin'].includes(user?.role || '');
+  // Finance and Org/Super Admins can approve, reject or verify; everyone else (CEO, General Manager, Branch Manager) views.
+  const canAct = ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'].includes(user?.role || '');
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(false);

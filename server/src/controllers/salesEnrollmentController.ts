@@ -304,6 +304,8 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
   const orgId = req.user.organizationId;
   let allowedIds = [req.user.id];
 
+  const isGlobalAdmin = ['org_admin', 'superadmin', 'ceo', 'general_manager'].includes(req.user.role);
+
   if (['sales_admin', 'sales_sub_admin'].includes(req.user.role)) {
     const targetRoles = (req.user.role === 'sales_admin' ? ['sales_sub_admin', 'sales', 'employee'] : ['sales', 'employee']) as any;
     const subordinates = await prisma.user.findMany({
@@ -313,15 +315,20 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
     allowedIds = [...allowedIds, ...subordinates.map(s => s.id)];
   }
 
+  const whereClause: any = {
+    organizationId: orgId,
+    NOT: {
+      status: 'enrolled',
+      studentId: null
+    }
+  };
+
+  if (!isGlobalAdmin) {
+    whereClause.salesUserId = { in: allowedIds };
+  }
+
   const enrollments = await prisma.enrollment.findMany({
-    where: {
-      organizationId: orgId,
-      salesUserId: { in: allowedIds },
-      NOT: {
-        status: 'enrolled',
-        studentId: null
-      }
-    },
+    where: whereClause,
     include: {
       program: { select: { id: true, name: true, code: true, courseType: true, universityId: true, feeStructures: { select: { allowInitialFee: true } } } },
       studyCenter: { select: { id: true, name: true, code: true } },

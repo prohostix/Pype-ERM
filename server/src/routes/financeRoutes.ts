@@ -95,67 +95,67 @@ router.route('/invoices').get(getInvoices).post(createInvoice);
 router.route('/invoices/:id')
   .get(getInvoice)
   .put(updateInvoice)
-  .delete(authorize('finance_admin', 'finance_sub_admin'), deleteInvoice);
-router.put('/invoices/:id/approve', authorize('finance_admin', 'finance_sub_admin'), approveInvoice);
+  .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deleteInvoice);
+router.put('/invoices/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), approveInvoice);
 
 // Payments
-router.route('/payments').get(getPayments).post(authorize('finance_admin', 'finance_sub_admin'), createPayment);
+router.route('/payments').get(getPayments).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), createPayment);
 router.route('/payments/:id')
   .get(getPayment)
-  .put(authorize('finance_admin', 'finance_sub_admin'), updatePayment)
-  .delete(authorize('finance_admin', 'finance_sub_admin'), deletePayment);
+  .put(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updatePayment)
+  .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deletePayment);
 
 // Expenses
 router.route('/expenses').get(getExpenses).post(createExpense);
 router.route('/expenses/:id')
   .get(getExpense)
   .put(updateExpense)
-  .delete(authorize('finance_admin', 'finance_sub_admin'), deleteExpense);
-router.put('/expenses/:id/approve', authorize('finance_admin', 'finance_sub_admin'), approveExpense);
+  .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deleteExpense);
+router.put('/expenses/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), approveExpense);
 
 // Targets
-router.route('/targets').get(getTargets).post(authorize('finance_admin', 'finance_sub_admin'), createTarget);
+router.route('/targets').get(getTargets).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), createTarget);
 router.route('/targets/:id')
   .get(getTarget)
-  .put(authorize('finance_admin', 'finance_sub_admin'), updateTarget)
-  .delete(authorize('finance_admin', 'finance_sub_admin'), deleteTarget);
+  .put(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updateTarget)
+  .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deleteTarget);
 
 // Fee Structures
-router.route('/fees').get(getFeeStructures).post(authorize('finance_admin', 'finance_sub_admin'), createFeeStructure);
+router.route('/fees').get(getFeeStructures).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), createFeeStructure);
 router.route('/fees/:id')
   .get(getFeeStructure)
-  .put(authorize('finance_admin', 'finance_sub_admin'), updateFeeStructure)
-  .delete(authorize('finance_admin', 'finance_sub_admin'), deleteFeeStructure);
+  .put(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updateFeeStructure)
+  .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deleteFeeStructure);
 
 // Discounts
-router.route('/discounts').get(getDiscounts).post(authorize('finance_admin', 'finance_sub_admin'), applyDiscount);
+router.route('/discounts').get(getDiscounts).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), applyDiscount);
 
 // University Auth Fees
-router.route('/auth-fees').get(authorize('finance_admin', 'finance_sub_admin'), getAuthFees).post(authorize('finance_admin', 'finance_sub_admin'), createAuthFee);
-router.put('/auth-fees/:id', authorize('finance_admin', 'finance_sub_admin'), updateAuthFee);
+router.route('/auth-fees').get(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getAuthFees).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), createAuthFee);
+router.put('/auth-fees/:id', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updateAuthFee);
 
 // Study Center Payment Verification & Creation
-router.get('/centers/pending-payment', authorize('finance_admin', 'finance_sub_admin'), getPendingPaymentCenters);
+router.get('/centers/pending-payment', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getPendingPaymentCenters);
 router.post('/centers', authorize('org_admin', 'superadmin'), createStudyCenter);
-router.put('/centers/:id/finance-verify', authorize('finance_admin', 'finance_sub_admin'), financeVerifyCenter);
+router.put('/centers/:id/finance-verify', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), financeVerifyCenter);
 
 
 
 // Wallet Top-Ups
-router.get('/wallet-topups', authorize('finance_admin', 'finance_sub_admin'), getWalletTopUps);
-router.put('/wallet-topups/:id/approve', authorize('finance_admin', 'finance_sub_admin'), approveWalletTopUp);
-router.put('/wallet-topups/:id/reject', authorize('finance_admin', 'finance_sub_admin'), rejectWalletTopUp);
+router.get('/wallet-topups', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getWalletTopUps);
+router.put('/wallet-topups/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), approveWalletTopUp);
+router.put('/wallet-topups/:id/reject', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), rejectWalletTopUp);
 
 // Finance Enrollment Review
-router.get('/enrollments/all', authorize('finance_admin', 'finance_sub_admin', 'branch_manager', 'ceo', 'general_manager', 'org_admin'), getAllEnrollments);
-router.get('/enrollments', authorize('finance_admin', 'finance_sub_admin', 'branch_manager', 'ceo', 'general_manager', 'org_admin'), getFinanceEnrollments);
-router.put('/enrollments/:id/approve', authorize('finance_admin', 'finance_sub_admin'), approveFinanceEnrollment);
-router.put('/enrollments/:id/reject', authorize('finance_admin', 'finance_sub_admin'), rejectFinanceEnrollment);
-router.post('/enrollments/:id/verify-receipt', authorize('finance_admin', 'finance_sub_admin'), verifyReceipt);
+router.get('/enrollments/all', authorize('finance_admin', 'finance_sub_admin', 'branch_manager', 'ceo', 'general_manager', 'org_admin', 'superadmin'), getAllEnrollments);
+router.get('/enrollments', authorize('finance_admin', 'finance_sub_admin', 'branch_manager', 'ceo', 'general_manager', 'org_admin', 'superadmin'), getFinanceEnrollments);
+router.put('/enrollments/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), approveFinanceEnrollment);
+router.put('/enrollments/:id/reject', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), rejectFinanceEnrollment);
+router.post('/enrollments/:id/verify-receipt', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), verifyReceipt);
 
 // Provisional Enrollment Finance Verification
-router.get('/enrollments/provisional', authorize('finance_admin', 'finance_sub_admin'), getProvisionalEnrollments);
-router.post('/enrollments/:id/provisional-verify', authorize('finance_admin', 'finance_sub_admin'), verifyProvisionalReceipt);
+router.get('/enrollments/provisional', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getProvisionalEnrollments);
+router.post('/enrollments/:id/provisional-verify', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), verifyProvisionalReceipt);
 
 // Reports
 router.get('/reports/income-expenditure', authorize('finance_admin', 'finance_sub_admin'), getIncomeExpenditureReport);
@@ -178,7 +178,7 @@ router.put('/payroll-batches/:id/complete-payment', authorize('finance_admin', '
 
 // Payment Reminders
 router.get('/reminders/schedules', getOverdueSchedules);
-router.post('/reminders/send', authorize('finance_admin', 'finance_sub_admin'), sendPaymentReminder);
+router.post('/reminders/send', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), sendPaymentReminder);
 
 // Receipt Generation
 router.get('/receipt/invoice/:invoiceId', generateReceipt);
@@ -186,36 +186,36 @@ router.get('/receipt/payment/:paymentId', generateReceipt);
 
 // Invoice from Schedule
 router.get('/payment-plan/:studentId', getStudentPaymentPlan);
-router.post('/payment-plan/schedule/:scheduleId/invoice', authorize('finance_admin', 'finance_sub_admin'), generateInvoiceFromSchedule);
-router.post('/payment-plan/student/:studentId/generate-all', authorize('finance_admin', 'finance_sub_admin'), generateAllInvoicesForStudent);
+router.post('/payment-plan/schedule/:scheduleId/invoice', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), generateInvoiceFromSchedule);
+router.post('/payment-plan/student/:studentId/generate-all', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), generateAllInvoicesForStudent);
 
 // Bulk Old Fees
 router.get('/old-fees', getOldFees);
-router.post('/old-fees/bulk', authorize('finance_admin', 'finance_sub_admin'), bulkCreateOldFees);
+router.post('/old-fees/bulk', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), bulkCreateOldFees);
 
 // Payment Gateway
 router.get('/payment-links', getPaymentLinks);
-router.post('/payment-links', authorize('finance_admin', 'finance_sub_admin'), generatePaymentLink);
-router.put('/payment-links/:id/status', authorize('finance_admin', 'finance_sub_admin'), updatePaymentLinkStatus);
+router.post('/payment-links', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), generatePaymentLink);
+router.put('/payment-links/:id/status', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updatePaymentLinkStatus);
 
 // Student Payments Log & Extras
-router.get('/student-payments-log', authorize('finance', 'finance_admin', 'finance_sub_admin', 'superadmin'), getStudentPaymentsLog);
-router.post('/student-payments-log/extra-fee', authorize('finance', 'finance_admin', 'finance_sub_admin', 'superadmin'), addExtraFee);
+router.get('/student-payments-log', authorize('finance', 'finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getStudentPaymentsLog);
+router.post('/student-payments-log/extra-fee', authorize('finance', 'finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), addExtraFee);
 
 // Commissions from Universities
 router.route('/commissions')
   .get(getUniversityCommissions)
-  .post(authorize('finance_admin', 'finance_sub_admin'), recordUniversityCommission);
+  .post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), recordUniversityCommission);
 
 
 // Payments to Universities
 router.route('/university-payments')
   .get(getUniversityPayments)
-  .post(authorize('finance_admin', 'finance_sub_admin'), recordUniversityPayment);
+  .post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), recordUniversityPayment);
 
 // Discounts
 router.route('/discounts')
   .get(getDiscounts)
-  .post(authorize('finance_admin', 'finance_sub_admin'), applyDiscount);
+  .post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), applyDiscount);
 
 export default router;

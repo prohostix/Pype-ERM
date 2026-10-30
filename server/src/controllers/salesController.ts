@@ -136,8 +136,14 @@ export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response)
 
 // Invites
 export const listMyInvites = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = {};
+  if (['org_admin', 'superadmin', 'ceo', 'general_manager'].includes(req.user.role)) {
+    where.organizationId = req.user.organizationId;
+  } else {
+    where.referredBy = req.user.id;
+  }
   const invites = await prisma.studyCenterInvite.findMany({
-    where: { referredBy: req.user.id },
+    where,
     orderBy: { createdAt: 'desc' },
   });
   // Resolve session names for display

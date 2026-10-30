@@ -122,7 +122,8 @@ export const getModulesForClass = asyncHandler(async (req: AuthRequest, res: Res
               materials: true, 
               faculty: { select: { id: true, name: true } },
               batchAssignments: { include: { faculty: { select: { id: true, name: true } }, academicBatch: { select: { id: true, name: true } } } },
-              academicSessions: { select: { id: true, academicBatchId: true, status: true } }
+              academicSessions: { select: { id: true, academicBatchId: true, status: true } },
+              assessment: { select: { id: true, title: true, passingScore: true, _count: { select: { questions: true } } } }
             }, 
             orderBy: [ { order: 'asc' }, { createdAt: 'asc' } ] 
           }
@@ -133,7 +134,8 @@ export const getModulesForClass = asyncHandler(async (req: AuthRequest, res: Res
           materials: true, 
           faculty: { select: { id: true, name: true } },
           batchAssignments: { include: { faculty: { select: { id: true, name: true } }, academicBatch: { select: { id: true, name: true } } } },
-          academicSessions: { select: { id: true, academicBatchId: true, status: true } }
+          academicSessions: { select: { id: true, academicBatchId: true, status: true } },
+          assessment: { select: { id: true, title: true, passingScore: true, _count: { select: { questions: true } } } }
         }, 
         orderBy: [ { order: 'asc' }, { createdAt: 'asc' } ] 
       } 
@@ -929,4 +931,16 @@ export const upsertLessonAssessment = asyncHandler(async (req: AuthRequest, res:
   });
 
   res.status(200).json({ success: true, message: 'Assessment configured successfully', data: finalAssessment });
+});
+
+// DELETE /faculty-portal/lessons/:lessonId/assessment
+export const deleteLessonAssessment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { lessonId } = req.params;
+
+  const assessment = await prisma.assessment.findFirst({ where: { lessonId } });
+  if (!assessment) return res.status(404).json({ success: false, message: 'Assessment not found' });
+
+  await prisma.assessment.delete({ where: { id: assessment.id } });
+  res.status(200).json({ success: true, message: 'Assessment deleted successfully' });
 });

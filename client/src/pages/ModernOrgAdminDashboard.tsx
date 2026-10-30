@@ -30,6 +30,12 @@ import { AcademicCentersPanel } from '@/components/panels/AcademicCentersPanel';
 import { FacultiesPanel } from '@/components/panels/FacultiesPanel';
 import { FlowSettingsPanel } from '@/components/panels/FlowSettingsPanel';
 import { CommunicationSettingsPanel } from '@/components/panels/CommunicationSettingsPanel';
+import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
+import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
+import { FinanceEnrollmentsPanel } from '@/components/panels/FinanceEnrollmentsPanel';
+import { SalesInvitePanel } from '@/components/panels/SalesInvitePanel';
+import { ProvisionalEnrollmentPanel } from '@/components/panels/ProvisionalEnrollmentPanel';
+import { SalesStudentPipelinePanel } from '@/components/panels/SalesStudentPipelinePanel';
 
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -106,6 +112,29 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="leads"><LeadsPanel /></TabsContent>
         <TabsContent value="sessions"><AdmissionSessionsPanel /></TabsContent>
         <TabsContent value="admission_review"><DeptEnrollmentReviewPanel /></TabsContent>
+
+        {/* Bill & Receipts */}
+        <TabsContent value="bill_receipts"><BillReceiptPanel /></TabsContent>
+
+        {/* Fee Structures */}
+        <TabsContent value="fee_structures"><FeeStructuresPanel /></TabsContent>
+        <TabsContent value="fees"><FeeStructuresPanel /></TabsContent>
+
+        {/* Enrollments */}
+        <TabsContent value="enrollments"><FinanceEnrollmentsPanel /></TabsContent>
+        <TabsContent value="finance_enrollments"><FinanceEnrollmentsPanel /></TabsContent>
+
+        {/* Pipeline */}
+        <TabsContent value="invite_links"><SalesInvitePanel /></TabsContent>
+        <TabsContent value="provisional_enrollment"><ProvisionalEnrollmentPanel /></TabsContent>
+        <TabsContent value="admission_status_overview"><SalesStudentPipelinePanel /></TabsContent>
+        <TabsContent value="admission_pipeline"><SalesStudentPipelinePanel /></TabsContent>
+
+        {/* Alias tabs for resilience */}
+        <TabsContent value="study_centers"><StudyCentersPanel /></TabsContent>
+        <TabsContent value="leave_requests"><LeavesPanel /></TabsContent>
+        <TabsContent value="biometric_devices"><BiometricDevicesPanel /></TabsContent>
+
         <TabsContent value="settings"><OrganizationSettingsPanel /></TabsContent>
         <TabsContent value="communication_settings"><CommunicationSettingsPanel /></TabsContent>
         <TabsContent value="login_branding"><LoginCustomizationPanel /></TabsContent>

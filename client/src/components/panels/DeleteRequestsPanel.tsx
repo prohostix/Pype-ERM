@@ -45,6 +45,12 @@ export function DeleteRequestsPanel() {
       const parts = url.split('/').filter(Boolean);
       const relevantParts = parts.filter(p => p !== 'api' && p !== 'v1');
       
+      if (relevantParts.includes('assessment')) {
+        const lessonIdx = relevantParts.indexOf('lessons');
+        const lessonId = lessonIdx !== -1 && relevantParts[lessonIdx + 1] ? relevantParts[lessonIdx + 1] : '';
+        return `Lesson Assessment (Lesson ID: ${lessonId.length > 12 ? lessonId.substring(0, 8) + '...' : lessonId})`;
+      }
+
       const id = relevantParts.pop();
       if (!id) return url;
       
@@ -72,7 +78,7 @@ export function DeleteRequestsPanel() {
           <div key={req.id} className="p-4 border rounded-xl flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-semibold">{req.user?.name || 'Unknown User'}</span>
+                <span className="font-semibold">{req.user?.name || req.faculty?.name || 'Unknown User'}</span>
                 <Badge variant="outline">{req.entityType}</Badge>
                 {req.status === 'pending_manager' && <Badge className="bg-warning text-warning-foreground">Pending Manager</Badge>}
                 {req.status === 'pending_ceo' && <Badge className="bg-info text-info-foreground">Pending CEO</Badge>}

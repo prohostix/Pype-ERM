@@ -133,6 +133,9 @@ export function PrismaLayout({
       case 'fees':
       case 'fee_structures':
       case 'admission_review':
+      case 'admission_status_overview':
+      case 'admission_pipeline':
+      case 'provisional_enrollment':
       case 'bill_receipts':
       case 'committed_payments':
       case 'discounts':

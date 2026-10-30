@@ -279,7 +279,7 @@ export function SalesStudentPipelinePanel() {
           ))}
         </select>
 
-        {['sales_admin', 'sales_sub_admin'].includes(user?.role || '') && (
+        {['sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'].includes(user?.role || '') && (
           <select
             className="h-10 px-3 border rounded-md text-sm bg-background w-[200px]"
             value={salesSubFilter}

@@ -61,6 +61,10 @@ const TABLE_TO_TAB: Record<string, string> = {
   flow_settings: 'flow_settings',
   academic_centers: 'academic_centers',
   faculties: 'faculties',
+  bill_receipts: 'bill_receipts',
+  enrollments: 'enrollments',
+  finance_enrollments: 'finance_enrollments',
+  provisional_enrollment: 'provisional_enrollment',
 
   // Shared
   users: 'users',
@@ -416,36 +420,52 @@ function App() {
 
     if (user.role === 'org_admin') {
       return [
+        { id: '__main_section', label: 'Main', isSection: true },
         { id: 'dashboard', label: 'Overview' },
         { id: 'hierarchy', label: 'Hierarchy' },
         { id: 'branches', label: 'Branches' },
         { id: 'users', label: 'Users' },
         { id: 'departments', label: 'Departments' },
+        { id: 'employees', label: 'Employees' },
         { id: 'tasks', label: 'Tasks' },
+        { id: 'meetings', label: 'Meetings' },
+
+        { id: '__pipeline_section', label: 'Pipeline', isSection: true },
+        { id: 'invite_links', label: 'Generate Student Link' },
+        { id: 'provisional_enrollment', label: 'Provisional Enrollment' },
+        { id: 'admission_status_overview', label: 'Admission Pipeline' },
+
+        { id: '__academics_section', label: 'Academics & Operations', isSection: true },
         { id: 'students', label: 'Students' },
+        { id: 'admission_review', label: 'Admission Review' },
         { id: 'universities', label: 'Universities' },
         { id: 'programs', label: 'Programs' },
         { id: 'program_allocations', label: 'Program Allocation' },
+        { id: 'sessions', label: 'Sessions' },
         { id: 'faculties', label: 'Faculties' },
         { id: 'academic_centers', label: 'Academic Centers' },
-
         { id: 'study_centers', label: 'Academic Partners' },
+
+        { id: '__finance_section', label: 'Finance & Billing', isSection: true },
+        { id: 'enrollments', label: 'Enrollments' },
+        { id: 'fee_structures', label: 'Fee Structures' },
         { id: 'invoices', label: 'Invoices' },
+        { id: 'bill_receipts', label: 'Bill & Receipts' },
         { id: 'payments', label: 'Payments' },
         { id: 'expenses', label: 'Expenses' },
-        { id: 'employees', label: 'Employees' },
-        { id: 'leave_requests', label: 'Leave Requests' },
-        { id: 'leads', label: 'Leads' },
-        { id: 'sessions', label: 'Sessions' },
-        { id: 'admission_review', label: 'Admission Overview' },
         { id: 'collections', label: 'Collections' },
+
+        { id: '__sales_hr_section', label: 'Sales & HR', isSection: true },
+        { id: 'leads', label: 'Leads' },
+        { id: 'leave_requests', label: 'Leave Requests' },
         { id: 'biometric_devices', label: 'Biometric Devices' },
+
+        { id: '__settings_section', label: 'Settings & Integrations', isSection: true },
         { id: 'settings', label: 'Organisation Settings' },
         { id: 'communication_settings', label: 'SMTP & WhatsApp' },
         { id: 'login_branding', label: 'Login Branding' },
         { id: 'enrollment_link_config', label: 'Enrollment Link Config' },
         { id: 'flow_settings', label: 'Flow Settings' },
-        { id: 'meetings', label: 'Meetings' },
       ];
     }
 
@@ -598,7 +618,7 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'branch_manager', 'faculty'];
+    const roleDashboardRoles = ['org_admin', 'ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'branch_manager', 'faculty'];
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student' && user?.role !== 'center_student';

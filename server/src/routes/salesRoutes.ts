@@ -51,8 +51,8 @@ router.route('/leads/:id').get(getLead).put(updateLead).delete(deleteLead);
 router.put('/leads/:id/convert', convertLead);
 
 // Target routes
-router.route('/targets').get(getTargets).post(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager'), createTarget);
-router.route('/targets/:id').get(getTarget).put(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager'), updateTarget).delete(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager'), deleteTarget);
+router.route('/targets').get(getTargets).post(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin'), createTarget);
+router.route('/targets/:id').get(getTarget).put(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin'), updateTarget).delete(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin'), deleteTarget);
 
 // Invite routes — available to all sales department employees
 router.route('/invites').get(listMyInvites).post(generateInvite);
@@ -77,9 +77,9 @@ router.get('/student-applications', getSalesEnrollmentPipeline);
 router.post('/direct-enroll', createDirectEnrollment);
 router.put('/student-applications/:id/verify', verifySalesEnrollment);
 router.put('/student-applications/:id/resubmit-receipt', resubmitPaymentReceipt);
-router.put('/student-applications/:id/approve-ops', authorize('ops_admin', 'superadmin'), approveSalesEnrollmentOps);
-router.put('/student-applications/:id/approve-finance', authorize('finance_admin', 'finance_sub_admin', 'superadmin'), approveSalesEnrollmentFinance);
-router.put('/student-applications/:id/reject', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'superadmin'), rejectSalesEnrollment);
+router.put('/student-applications/:id/approve-ops', authorize('ops_admin', 'superadmin', 'org_admin'), approveSalesEnrollmentOps);
+router.put('/student-applications/:id/approve-finance', authorize('finance_admin', 'finance_sub_admin', 'superadmin', 'org_admin'), approveSalesEnrollmentFinance);
+router.put('/student-applications/:id/reject', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'superadmin', 'org_admin'), rejectSalesEnrollment);
 
 // Sales Admin Review Flow
 router.get('/sales-admin-reviews', authorize('sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'), getSalesAdminReviews);
