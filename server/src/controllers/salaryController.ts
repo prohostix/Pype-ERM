@@ -108,6 +108,22 @@ export const upsertLeaveAllocation = asyncHandler(async (req: AuthRequest, res: 
   res.json({ success: true, data: allocation });
 });
 
+export const deleteLeaveAllocation = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const year = Number(req.query.year) || new Date().getFullYear();
+  const month = Number(req.query.month) || (new Date().getMonth() + 1);
+
+  await prisma.leaveAllocation.deleteMany({
+    where: {
+      userId: req.params.userId,
+      organizationId: req.user.organizationId,
+      year,
+      month
+    }
+  });
+
+  res.json({ success: true, message: 'Leave allocation deleted successfully' });
+});
+
 export const bulkInitLeaveAllocations = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { year = new Date().getFullYear(), month = (new Date().getMonth() + 1), casual, sick, earned } = req.body;
   const users = await prisma.user.findMany({ where: { organizationId: req.user.organizationId, status: 'active', NOT: { role: { in: ['student', 'center_admin'] } } } });
@@ -170,7 +186,12 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
 
     let totalBillableLateMinutes = 0;
     for (const att of attendances) {
-      const billable = Math.max(0, att.lateMinutes - gracePeriod);
+      let lateM = att.lateMinutes || 0;
+      // Protect from unadjusted half-day morning offset
+      if (att.status === 'half_day' && lateM >= 180) {
+        lateM = Math.max(0, lateM - 270);
+      }
+      const billable = Math.max(0, lateM - gracePeriod);
       totalBillableLateMinutes += billable;
     }
 

@@ -1928,12 +1928,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         if (!dateStr) return '';
         try {
           if (typeof dateStr === 'string') {
-            if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return dateStr;
-            if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) return dateStr.replace(/-/g, '/');
+            if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) return dateStr;
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return dateStr.replace(/\//g, '-');
             const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})(?:T00:00:00(?:\.000)?Z?)?$/);
             if (match) {
               const [, y, m, day] = match;
-              return `${day}/${m}/${y}`;
+              return `${day}-${m}-${y}`;
             }
           }
           const d = new Date(dateStr);
@@ -1941,7 +1941,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           const day = String(d.getDate()).padStart(2, '0');
           const month = String(d.getMonth() + 1).padStart(2, '0');
           const year = d.getFullYear();
-          return `${day}/${month}/${year}`;
+          return `${day}-${month}-${year}`;
         } catch {
           return '';
         }
@@ -1950,63 +1950,73 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       const calculateStudentPaidFees = (s: any): number => {
         let totalPaid = 0;
         const countedScheduleIds = new Set<string>();
+        let hasInitialPaymentInvoiced = false;
 
-        // 1. Payment Schedules with status 'paid'
-        if (Array.isArray(s.paymentSchedules)) {
-          s.paymentSchedules.forEach((ps: any) => {
-            if ((ps.status || '').toLowerCase() === 'paid') {
-              totalPaid += Number(ps.amount) || 0;
-              if (ps.id) countedScheduleIds.add(ps.id);
-            }
-          });
-        }
-
-        // 2. Invoices with recorded payments
+        // 1. Invoices: Official billing and cash receipt entries
         if (Array.isArray(s.invoices)) {
           s.invoices.forEach((inv: any) => {
-            if (inv.scheduleId && countedScheduleIds.has(inv.scheduleId)) {
-              return;
-            }
-            if (Array.isArray(inv.payments) && inv.payments.length > 0) {
-              inv.payments.forEach((p: any) => {
-                totalPaid += Number(p.amount) || 0;
-              });
-            } else if ((inv.status || '').toLowerCase() === 'paid') {
-              totalPaid += Number(inv.total || inv.amount || 0);
+            const invStatus = (inv.status || '').toLowerCase();
+            if (invStatus === 'cancelled' || invStatus === 'void') return;
+
+            const paymentsSum = (inv.payments || []).reduce((sum: number, p: any) => sum + (Number(p.amount) || 0), 0);
+            const invTotal = Number(inv.total ?? inv.amount ?? 0);
+            const invPaid = invStatus === 'paid' ? Math.max(paymentsSum, invTotal) : paymentsSum;
+
+            if (invPaid > 0) {
+              totalPaid += invPaid;
+              if (inv.scheduleId) {
+                countedScheduleIds.add(inv.scheduleId);
+              }
+
+              const invNo = (inv.invoiceNo || '').toUpperCase();
+              const notes = (inv.notes || '').toLowerCase();
+              if (
+                invNo.startsWith('INV-AUTO') ||
+                invNo.startsWith('INV-PROV') ||
+                notes.includes('initial') ||
+                notes.includes('admission') ||
+                notes.includes('provisional')
+              ) {
+                hasInitialPaymentInvoiced = true;
+              }
             }
           });
         }
 
-        // 3. Enrollment initial payments & admissionProgress payments (if not already invoiced or scheduled)
-        const hasInitialInvoiceOrSchedule =
-          (Array.isArray(s.invoices) && s.invoices.some((inv: any) =>
-            (inv.invoiceNo?.startsWith('INV-AUTO') ||
-             inv.invoiceNo?.startsWith('INV-PROV') ||
-             (inv.notes || '').toLowerCase().includes('initial') ||
-             (inv.notes || '').toLowerCase().includes('admission') ||
-             (inv.notes || '').toLowerCase().includes('provisional')) &&
-            ((inv.payments && inv.payments.length > 0) || (inv.status || '').toLowerCase() === 'paid')
-          )) ||
-          (Array.isArray(s.paymentSchedules) && s.paymentSchedules.some((ps: any) =>
-            ((ps.title || '').toLowerCase().includes('admission') || (ps.title || '').toLowerCase().includes('initial')) &&
-            (ps.status || '').toLowerCase() === 'paid'
-          ));
+        // 2. Payment Schedules (for milestone-based or historical fees with status 'paid' not already covered by invoices)
+        if (Array.isArray(s.paymentSchedules)) {
+          s.paymentSchedules.forEach((ps: any) => {
+            const psStatus = (ps.status || '').toLowerCase();
+            if (psStatus === 'paid' || ps.paidAt) {
+              if (!ps.id || !countedScheduleIds.has(ps.id)) {
+                totalPaid += Number(ps.amount) || 0;
+                if (ps.id) countedScheduleIds.add(ps.id);
 
-        if (!hasInitialInvoiceOrSchedule) {
-          let enrollmentInitial = 0;
-          if (Array.isArray(s.enrollments) && s.enrollments.length > 0) {
-            for (const enr of s.enrollments) {
-              if (enr.payment && typeof enr.payment.amount === 'number') {
-                enrollmentInitial = Math.max(enrollmentInitial, Number(enr.payment.amount) || 0);
-              } else if (enr.initialPaymentAmount && Number(enr.initialPaymentAmount) > 0) {
-                enrollmentInitial = Math.max(enrollmentInitial, Number(enr.initialPaymentAmount) || 0);
+                const title = (ps.title || '').toLowerCase();
+                if (title.includes('admission') || title.includes('initial')) {
+                  hasInitialPaymentInvoiced = true;
+                }
               }
             }
+          });
+        }
+
+        // 3. Verified Enrollment Payments (ONLY if receipt is verified by finance or EnrollmentPayment row exists, and enrollment is not rejected/cancelled)
+        if (!hasInitialPaymentInvoiced && Array.isArray(s.enrollments) && s.enrollments.length > 0) {
+          const validEnrollment = s.enrollments.find((enr: any) => {
+            const enrStatus = (enr.status || '').toLowerCase();
+            if (['rejected', 'ops_rejected', 'cancelled'].includes(enrStatus)) return false;
+            const hasPaymentRecord = enr.payment && Number(enr.payment.amount) > 0;
+            const isVerified = enr.receiptVerified === true && Number(enr.initialPaymentAmount) > 0;
+            return hasPaymentRecord || isVerified;
+          });
+
+          if (validEnrollment) {
+            const enrPaid = Number(validEnrollment.payment?.amount || validEnrollment.initialPaymentAmount || 0);
+            if (enrPaid > 0) {
+              totalPaid += enrPaid;
+            }
           }
-          // Also check student.admissionProgress.initialPaymentAmount
-          const admInitAmount = Number((s.admissionProgress as any)?.initialPaymentAmount) || 0;
-          const finalInitial = Math.max(enrollmentInitial, admInitAmount);
-          totalPaid += finalInitial;
         }
 
         return Math.round(totalPaid * 100) / 100;
@@ -2103,7 +2113,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           });
         }
 
-        // 4. Initial payment / admission payment check
+        // 4. Initial verified admission payment check (if not already invoiced or scheduled)
         const hasInitialInvoiceOrSchedule =
           (Array.isArray(s.invoices) && s.invoices.some((inv: any) =>
             (inv.invoiceNo?.startsWith('INV-AUTO') ||
@@ -2118,33 +2128,30 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
             (ps.status || '').toLowerCase() === 'paid'
           ));
 
-        let initialAdmissionAmount = 0;
-        if (!hasInitialInvoiceOrSchedule) {
-          if (Array.isArray(s.enrollments) && s.enrollments.length > 0) {
-            for (const enr of s.enrollments) {
-              if (enr.payment && typeof enr.payment.amount === 'number') {
-                initialAdmissionAmount = Math.max(initialAdmissionAmount, Number(enr.payment.amount) || 0);
-              } else if (enr.initialPaymentAmount && Number(enr.initialPaymentAmount) > 0) {
-                initialAdmissionAmount = Math.max(initialAdmissionAmount, Number(enr.initialPaymentAmount) || 0);
-              }
-            }
+        let verifiedAdmissionAmount = 0;
+        if (!hasInitialInvoiceOrSchedule && Array.isArray(s.enrollments) && s.enrollments.length > 0) {
+          const validEnrollment = s.enrollments.find((enr: any) => {
+            const enrStatus = (enr.status || '').toLowerCase();
+            if (['rejected', 'ops_rejected', 'cancelled'].includes(enrStatus)) return false;
+            return (enr.receiptVerified === true && Number(enr.initialPaymentAmount) > 0) || (enr.payment && Number(enr.payment.amount) > 0);
+          });
+          if (validEnrollment) {
+            verifiedAdmissionAmount = Number(validEnrollment.payment?.amount || validEnrollment.initialPaymentAmount || 0);
           }
-          const admInit = Number((s.admissionProgress as any)?.initialPaymentAmount) || 0;
-          initialAdmissionAmount = Math.max(initialAdmissionAmount, admInit);
         }
 
         // 5. Combine and determine totalFee
         if (structureTotal > 0) {
           totalFee = structureTotal + extraFeesTotal;
-          if (scheduledFee + initialAdmissionAmount > totalFee) {
-            totalFee = scheduledFee + initialAdmissionAmount;
+          if (scheduledFee + verifiedAdmissionAmount > totalFee) {
+            totalFee = scheduledFee + verifiedAdmissionAmount;
           }
         } else if (scheduledFee > 0) {
-          totalFee = scheduledFee + initialAdmissionAmount;
+          totalFee = scheduledFee + verifiedAdmissionAmount;
         } else if (Array.isArray(s.invoices) && s.invoices.length > 0) {
           totalFee = s.invoices.reduce((sum: number, inv: any) => sum + (Number(inv.total || inv.amount || 0)), 0);
-        } else if (initialAdmissionAmount > 0) {
-          totalFee = initialAdmissionAmount;
+        } else if (verifiedAdmissionAmount > 0) {
+          totalFee = verifiedAdmissionAmount;
         }
 
         // Apply discount if student has discountAmount

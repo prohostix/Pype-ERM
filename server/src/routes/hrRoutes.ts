@@ -68,6 +68,7 @@ import {
   deleteSalaryConfig,
   getLeaveAllocations,
   getLeaveAllocation,
+  deleteLeaveAllocation,
   upsertLeaveAllocation,
   bulkInitLeaveAllocations,
   generateSmartPayroll,
@@ -140,7 +141,8 @@ router.get('/leave-allocations', authorize('hr_admin', 'hr_sub_admin'), getLeave
 router.post('/leave-allocations/bulk-init', authorize('hr_admin', 'hr_sub_admin'), bulkInitLeaveAllocations);
 router.route('/leave-allocations/:userId')
   .get(authorize('hr_admin', 'hr_sub_admin'), getLeaveAllocation)
-  .put(authorize('hr_admin', 'hr_sub_admin'), upsertLeaveAllocation);
+  .put(authorize('hr_admin', 'hr_sub_admin'), upsertLeaveAllocation)
+  .delete(authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), deleteLeaveAllocation);
 
 // Smart Payroll Generation (uses salary configs + late deductions)
 router.post('/payroll/generate-smart', authorize('hr_admin', 'hr_sub_admin'), generateSmartPayroll);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Edit, Save, RefreshCw, Plus, Zap } from 'lucide-react';
+import { Calendar, Edit, Save, RefreshCw, Plus, Zap, Trash2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -101,6 +101,19 @@ export function LeaveAllocationPanel() {
       toast.error(err.response?.data?.message || 'Failed to save');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDelete = async (userId: string, userName: string) => {
+    if (!window.confirm(`Are you sure you want to delete the leave allocation for ${userName} (${month}/${year})?`)) {
+      return;
+    }
+    try {
+      await api.delete(`/hr/leave-allocations/${userId}?year=${year}&month=${month}`);
+      toast.success(`Leave allocation deleted for ${userName}`);
+      fetchAll();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to delete leave allocation');
     }
   };
 
@@ -231,9 +244,20 @@ export function LeaveAllocationPanel() {
                         ))}
                       </div>
                     </div>
-                    <Button size="sm" variant="outline" onClick={() => openEdit(alloc)}>
-                      <Edit className="w-3.5 h-3.5" />
-                    </Button>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <Button size="sm" variant="outline" onClick={() => openEdit(alloc)} title="Edit Allocation">
+                        <Edit className="w-3.5 h-3.5" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 border-red-200 dark:border-red-900/50"
+                        onClick={() => handleDelete(uid, user?.name || 'Employee')}
+                        title="Delete Allocation"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

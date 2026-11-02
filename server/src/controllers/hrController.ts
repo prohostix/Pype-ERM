@@ -60,8 +60,8 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
     include: {
       user: { select: { name: true, email: true, designation: true } },
       department: { select: { name: true } },
-      deptApprover: { select: { name: true } },
-      hrApprover: { select: { name: true, role: true } }
+      deptApprover: { select: { name: true, role: true, designation: true } },
+      hrApprover: { select: { name: true, role: true, designation: true } }
     },
     orderBy: { createdAt: 'desc' }
   });
@@ -486,8 +486,7 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
       if (existing) {
         // Update existing record
         const updateData: any = { status: statusToSet as any };
-        if (leave.isHalfDay && leave.halfDayType === 'first_half') {
-          // Clear lateness penalty since they are excused for the first half
+        if (leave.isHalfDay) {
           updateData.isLate = false;
           updateData.lateMinutes = 0;
         }
@@ -531,8 +530,8 @@ export const getMyLeaves = asyncHandler(async (req: AuthRequest, res: Response) 
     include: {
       user: { select: { name: true, email: true, designation: true } },
       department: { select: { name: true } },
-      deptApprover: { select: { name: true } },
-      hrApprover: { select: { name: true, role: true } }
+      deptApprover: { select: { name: true, role: true, designation: true } },
+      hrApprover: { select: { name: true, role: true, designation: true } }
     },
     orderBy: { createdAt: 'desc' }
   });

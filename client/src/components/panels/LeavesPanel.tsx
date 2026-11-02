@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Trash2, CheckCircle, XCircle, Clock, RefreshCw, ChevronDown, ChevronUp, CalendarPlus, ShieldAlert, FileText, UserCircle2 } from 'lucide-react';
+import { Plus, Trash2, CheckCircle, XCircle, Clock, RefreshCw, RotateCcw, ChevronDown, ChevronUp, CalendarPlus, ShieldAlert, FileText, UserCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -40,8 +40,8 @@ interface LeaveRequest {
   status: 'pending' | 'dept_approved' | 'approved' | 'rejected' | 'withdraw_pending' | 'withdrawn';
   deptAdminRemarks?: string;
   hrRemarks?: string;
-  deptApprover?: { name: string } | null;
-  hrApprover?: { name: string } | null;
+  deptApprover?: { name: string; role?: string; designation?: string } | null;
+  hrApprover?: { name: string; role?: string; designation?: string } | null;
   appliedAt: string;
   createdAt: string;
   isHalfDay?: boolean;
@@ -440,13 +440,13 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                               {leave.deptApprover && (
                                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/30 border border-border/50 px-2 py-1 rounded-md">
                                   <UserCircle2 className="w-3 h-3 opacity-70" />
-                                  <span>Dept: <span className="font-medium text-foreground/80">{leave.deptApprover.name}</span></span>
+                                  <span>Dept: <span className="font-medium text-foreground/80">{leave.deptApprover.name}</span>{leave.deptApprover.designation ? ` (${leave.deptApprover.designation})` : ''}</span>
                                 </div>
                               )}
                               {leave.hrApprover && (
                                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/30 border border-border/50 px-2 py-1 rounded-md">
                                   <UserCircle2 className="w-3 h-3 opacity-70" />
-                                  <span>Final: <span className="font-medium text-foreground/80">{leave.hrApprover.name}</span></span>
+                                  <span>Final: <span className="font-medium text-foreground/80">{leave.hrApprover.name}</span>{leave.hrApprover.designation ? ` (${leave.hrApprover.designation})` : ''}</span>
                                 </div>
                               )}
                             </div>
@@ -468,7 +468,9 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                               {leave.deptAdminRemarks && (
                                 <div className="space-y-1">
                                   <div className="flex items-center gap-2">
-                                    <span className="font-semibold text-foreground/80 text-xs uppercase tracking-wider">Dept Manager</span>
+                                    <span className="font-semibold text-foreground/80 text-xs uppercase tracking-wider">
+                                      {leave.deptApprover?.designation || 'Dept Manager'}
+                                    </span>
                                     {leave.deptApprover && (
                                       <span className="text-xs text-muted-foreground">— {leave.deptApprover.name}</span>
                                     )}
@@ -476,19 +478,63 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                                   <p className="text-muted-foreground text-sm bg-background/50 p-2 rounded-lg border border-border/30">{leave.deptAdminRemarks}</p>
                                 </div>
                               )}
-                              {leave.hrRemarks && (
-                                <div className="space-y-1">
-                                  <div className="flex items-center gap-2">
-                                      <span className="font-semibold text-foreground/80 text-xs uppercase tracking-wider">
-                                        {leave.hrApprover?.role === 'ceo' ? 'CEO' : (leave.hrApprover?.role === 'general_manager' || leave.hrApprover?.role === 'branch_manager') ? 'General Manager' : 'HR Admin'}
-                                      </span>
-                                    {leave.hrApprover && (
-                                      <span className="text-xs text-muted-foreground">— {leave.hrApprover.name}</span>
+                              {leave.hrRemarks && (() => {
+                                const hasWithdrawal = leave.hrRemarks.includes('Withdrawal Reason:');
+                                let withdrawalReason: string | null = null;
+                                let reviewerRemarks: string | null = leave.hrRemarks;
+
+                                if (hasWithdrawal) {
+                                  if (leave.hrRemarks.includes('\n')) {
+                                    const lines = leave.hrRemarks.split('\n');
+                                    const wLine = lines.find(l => l.startsWith('Withdrawal Reason:'));
+                                    if (wLine) {
+                                      withdrawalReason = wLine.replace(/^Withdrawal Reason:\s*/, '').trim();
+                                      reviewerRemarks = lines.filter(l => !l.startsWith('Withdrawal Reason:')).join('\n').trim() || null;
+                                    }
+                                  } else {
+                                    withdrawalReason = leave.hrRemarks.replace(/^Withdrawal Reason:\s*/, '').trim();
+                                    reviewerRemarks = null;
+                                  }
+                                }
+
+                                return (
+                                  <>
+                                    {withdrawalReason && (
+                                      <div className="space-y-1">
+                                        <div className="flex items-center gap-2">
+                                          <span className="font-semibold text-orange-600 dark:text-orange-400 text-xs uppercase tracking-wider">Withdrawal Reason</span>
+                                          {leave.user && (
+                                            <span className="text-xs text-muted-foreground">— {leave.user.name}</span>
+                                          )}
+                                        </div>
+                                        <p className="text-muted-foreground text-sm bg-orange-500/5 p-2 rounded-lg border border-orange-500/20 whitespace-pre-wrap">{withdrawalReason}</p>
+                                      </div>
                                     )}
-                                  </div>
-                                  <p className="text-muted-foreground text-sm bg-background/50 p-2 rounded-lg border border-border/30">{leave.hrRemarks}</p>
-                                </div>
-                              )}
+
+                                    {reviewerRemarks && (
+                                      <div className="space-y-1">
+                                        <div className="flex items-center gap-2">
+                                          <span className="font-semibold text-foreground/80 text-xs uppercase tracking-wider">
+                                            {leave.hrApprover?.designation || (
+                                              leave.hrApprover?.role === 'ceo'
+                                                ? 'CEO'
+                                                : leave.hrApprover?.role === 'branch_manager'
+                                                  ? 'Branch In Charge'
+                                                  : leave.hrApprover?.role === 'general_manager'
+                                                    ? 'General Manager'
+                                                    : 'HR Admin'
+                                            )}
+                                          </span>
+                                          {leave.hrApprover && (
+                                            <span className="text-xs text-muted-foreground">— {leave.hrApprover.name}</span>
+                                          )}
+                                        </div>
+                                        <p className="text-muted-foreground text-sm bg-background/50 p-2 rounded-lg border border-border/30 whitespace-pre-wrap">{reviewerRemarks}</p>
+                                      </div>
+                                    )}
+                                  </>
+                                );
+                              })()}
                             </div>
                           )}
                         </div>
@@ -535,23 +581,63 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                           </div>
 
                           {/* Workflow progress bar */}
-                          <div className="flex items-center gap-2 text-[10px] text-muted-foreground w-full sm:w-auto justify-center sm:justify-end">
-                            <StepDot active={true} done={true} label="Submitted" />
-                            <div className={cn('w-8 sm:w-6 h-[2px] rounded-full', leave.status !== 'pending' ? 'bg-primary' : 'bg-muted')} />
-                            <StepDot
-                              active={leave.status !== 'pending'}
-                              done={['dept_approved', 'approved'].includes(leave.status)}
-                              rejected={leave.status === 'rejected' && !!leave.deptAdminRemarks && !leave.hrRemarks}
-                              label="Dept Manager"
-                            />
-                            <div className={cn('w-8 sm:w-6 h-[2px] rounded-full', leave.status === 'approved' ? 'bg-primary' : 'bg-muted')} />
-                            <StepDot
-                              active={leave.status === 'approved' || (leave.status === 'rejected' && !!leave.hrRemarks)}
-                              done={leave.status === 'approved'}
-                              rejected={leave.status === 'rejected' && !!leave.hrRemarks}
-                              label={leave.hrApprover?.role === 'ceo' ? 'CEO' : (leave.hrApprover?.role === 'general_manager' || leave.hrApprover?.role === 'branch_manager') ? 'Gen. Manager' : 'HR Admin'}
-                            />
-                          </div>
+                          {(() => {
+                            const hasDeptStep = Boolean(leave.deptApprover || leave.deptAdminRemarks || leave.status === 'dept_approved');
+                            const isWithdrawn = leave.status === 'withdrawn';
+                            const isWithdrawPending = leave.status === 'withdraw_pending';
+                            const isFinalApproved = ['approved', 'withdraw_pending', 'withdrawn'].includes(leave.status);
+                            const finalApproverLabel = leave.hrApprover?.designation
+                              ? (leave.hrApprover.designation === 'Branch In Charge' ? 'Branch In-Charge' : leave.hrApprover.designation.length > 15 ? leave.hrApprover.designation.slice(0, 13) + '..' : leave.hrApprover.designation)
+                              : leave.hrApprover?.role === 'ceo'
+                                ? 'CEO'
+                                : leave.hrApprover?.role === 'branch_manager'
+                                  ? 'Branch In-Charge'
+                                  : leave.hrApprover?.role === 'general_manager'
+                                    ? 'Gen. Manager'
+                                    : 'HR Admin';
+
+                            return (
+                              <div className="flex items-center gap-2 text-[10px] text-muted-foreground w-full sm:w-auto justify-center sm:justify-end">
+                                {/* 1. Submitted */}
+                                <StepDot active={true} done={true} label="Submitted" />
+
+                                {/* 2. Dept Manager Step (ONLY if this leave genuinely had a department manager step) */}
+                                {hasDeptStep && (
+                                  <>
+                                    <div className={cn('w-8 sm:w-6 h-[2px] rounded-full', leave.status !== 'pending' ? 'bg-primary' : 'bg-muted')} />
+                                    <StepDot
+                                      active={leave.status !== 'pending'}
+                                      done={['dept_approved', 'approved', 'withdraw_pending', 'withdrawn'].includes(leave.status)}
+                                      rejected={leave.status === 'rejected' && !!leave.deptAdminRemarks && !leave.hrRemarks}
+                                      label={leave.deptApprover?.designation || "Dept Manager"}
+                                    />
+                                  </>
+                                )}
+
+                                {/* 3. Final Approver Step (Branch In-Charge / HR / CEO) */}
+                                <div className={cn('w-8 sm:w-6 h-[2px] rounded-full', (isFinalApproved || (leave.status === 'rejected' && !!leave.hrRemarks)) ? 'bg-primary' : 'bg-muted')} />
+                                <StepDot
+                                  active={isFinalApproved || (leave.status === 'rejected' && !!leave.hrRemarks)}
+                                  done={isFinalApproved}
+                                  rejected={leave.status === 'rejected' && !!leave.hrRemarks}
+                                  label={finalApproverLabel}
+                                />
+
+                                {/* 4. Withdrawn Step (If the leave was cancelled/withdrawn) */}
+                                {(isWithdrawn || isWithdrawPending) && (
+                                  <>
+                                    <div className={cn('w-8 sm:w-6 h-[2px] rounded-full', isWithdrawn ? 'bg-orange-500' : 'bg-muted')} />
+                                    <StepDot
+                                      active={isWithdrawPending}
+                                      done={isWithdrawn}
+                                      withdrawn={isWithdrawn}
+                                      label={isWithdrawn ? "Withdrawn" : "Withdrawal"}
+                                    />
+                                  </>
+                                )}
+                              </div>
+                            );
+                          })()}
 
                         </div>
                       </div>
@@ -733,27 +819,30 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
   );
 }
 
-function StepDot({ active, done, rejected, label }: { active: boolean; done: boolean; rejected?: boolean; label: string }) {
+function StepDot({ active, done, rejected, withdrawn, label }: { active: boolean; done: boolean; rejected?: boolean; withdrawn?: boolean; label: string }) {
   return (
     <div className="flex flex-col items-center gap-1.5">
       <div className={cn(
         'w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300',
+        withdrawn ? 'bg-orange-500 text-white shadow-md shadow-orange-500/30' :
         done ? 'bg-green-500 text-white shadow-md shadow-green-500/30' :
-          rejected ? 'bg-red-500 text-white shadow-md shadow-red-500/30' :
-            active ? 'bg-primary text-white shadow-md shadow-primary/30 ring-4 ring-primary/20' :
-              'bg-muted border border-border text-muted-foreground'
+        rejected ? 'bg-red-500 text-white shadow-md shadow-red-500/30' :
+        active ? 'bg-primary text-white shadow-md shadow-primary/30 ring-4 ring-primary/20' :
+        'bg-muted border border-border text-muted-foreground'
       )}>
-        {done && <CheckCircle className="w-3.5 h-3.5" />}
-        {rejected && <XCircle className="w-3.5 h-3.5" />}
-        {active && !done && !rejected && <div className="w-2 h-2 rounded-full bg-white animate-pulse" />}
-        {!active && !done && !rejected && <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30" />}
+        {withdrawn && <RotateCcw className="w-3.5 h-3.5" />}
+        {done && !withdrawn && <CheckCircle className="w-3.5 h-3.5" />}
+        {rejected && !withdrawn && <XCircle className="w-3.5 h-3.5" />}
+        {active && !done && !rejected && !withdrawn && <div className="w-2 h-2 rounded-full bg-white animate-pulse" />}
+        {!active && !done && !rejected && !withdrawn && <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30" />}
       </div>
       <span className={cn(
         "text-[10px] font-bold whitespace-nowrap transition-colors tracking-wide",
+        withdrawn ? "text-orange-600 dark:text-orange-400" :
         done ? "text-green-600 dark:text-green-500" :
-          rejected ? "text-red-600 dark:text-red-500" :
-            active ? "text-primary" :
-              "text-muted-foreground"
+        rejected ? "text-red-600 dark:text-red-500" :
+        active ? "text-primary" :
+        "text-muted-foreground"
       )}>
         {label}
       </span>

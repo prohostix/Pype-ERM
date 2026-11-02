@@ -146,7 +146,13 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
             aggregated[empId] = { name: empName, email: empEmail, totalLate: 0, present: 0, absent: 0, halfDay: 0, leave: 0 };
           }
           
-          aggregated[empId].totalLate += (rec.lateMinutes || 0);
+          let lateMins = rec.lateMinutes || 0;
+          // Guarantee: half day punch-ins never count late minutes
+          if (rec.status === 'half_day' || (rec.notes && rec.notes.toLowerCase().includes('half day'))) {
+            lateMins = 0;
+          }
+
+          aggregated[empId].totalLate += lateMins;
           if (rec.status === 'present' || rec.status === 'late') aggregated[empId].present++;
           else if (rec.status === 'absent') aggregated[empId].absent++;
           else if (rec.status === 'half_day') aggregated[empId].halfDay++;
@@ -169,6 +175,10 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
         exportData = rawData.map((rec: any) => {
           const empName = rec.employeeId?.name || rec.employee?.name || rec.user?.name || 'Unknown';
           const empEmail = rec.employeeId?.email || rec.employee?.email || rec.user?.email || '';
+          let lateMins = rec.lateMinutes || 0;
+          if (rec.status === 'half_day' || (rec.notes && rec.notes.toLowerCase().includes('half day'))) {
+            lateMins = 0;
+          }
           return {
             'Employee Name': empName,
             'Email': empEmail,
@@ -176,8 +186,8 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
             'Status': rec.status?.replace('_', ' ').toUpperCase() || 'PRESENT',
             'Check-In': rec.checkIn ? new Date(rec.checkIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--',
             'Check-Out': rec.checkOut ? new Date(rec.checkOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--',
-            'Late Check-In': rec.isLate ? 'YES' : 'NO',
-            'Late Minutes': rec.lateMinutes || 0,
+            'Late Check-In': (rec.isLate && lateMins > 0) ? 'YES' : 'NO',
+            'Late Minutes': lateMins,
             'Working Hours': rec.workingHours || 0,
             'Notes': rec.notes || ''
           };

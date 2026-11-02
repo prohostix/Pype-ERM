@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
-import { Plus, Video, Calendar, Clock, FileText, X, MapPin, Users, Link2, CheckCircle, Circle, Send } from 'lucide-react';
+import { Plus, Video, Calendar, Clock, FileText, X, MapPin, Users, Link2, CheckCircle, Circle, Send, Building2, Search, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { api } from '@/lib/api';
@@ -20,7 +22,14 @@ interface Meeting {
   time: string;
   duration: number | null;
   hostId: string;
-  host?: { name: string; email: string; id: string; role: string };
+  host?: {
+    name: string;
+    email: string;
+    id: string;
+    role: string;
+    branchId?: string | null;
+    branch?: { id: string; name: string } | null;
+  };
   attendees: any[];
   status: string;
   type?: string;
@@ -33,8 +42,15 @@ interface Meeting {
 
 export function MeetingsPanel() {
   const { user } = useAuth();
+  const isGlobalRole = ['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(user?.role || '');
+
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [loading, setLoading] = useState(true);
+  const [branches, setBranches] = useState<any[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isMinutesOpen, setIsMinutesOpen] = useState(false);
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
@@ -63,12 +79,28 @@ export function MeetingsPanel() {
   useEffect(() => {
     fetchMeetings();
     fetchUsers();
-  }, []);
+    if (isGlobalRole) {
+      fetchBranches();
+    }
+  }, [selectedBranch]);
+
+  const fetchBranches = async () => {
+    try {
+      const res = await api.get('/org/branches');
+      setBranches(res.data.data || res.data || []);
+    } catch (error) {
+      console.error('Failed to fetch branches', error);
+    }
+  };
 
   const fetchMeetings = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/meetings');
+      const params: any = {};
+      if (selectedBranch && selectedBranch !== 'all') {
+        params.branchId = selectedBranch;
+      }
+      const res = await api.get('/meetings', { params });
       setMeetings(res.data.data || res.data || []);
     } catch (error) {
       toast.error('Failed to fetch meetings');
@@ -83,6 +115,17 @@ export function MeetingsPanel() {
       setAllUsers((res.data.data || res.data || []).filter((u: any) => u.status !== 'resigned'));
     } catch (error) {
       console.error('Failed to fetch users', error);
+    }
+  };
+
+  const handleDeleteMeeting = async (meetingId: string) => {
+    if (!window.confirm('Are you sure you want to delete this meeting?')) return;
+    try {
+      await api.delete(`/meetings/${meetingId}`);
+      toast.success('Meeting deleted successfully');
+      fetchMeetings();
+    } catch (error) {
+      toast.error('Failed to delete meeting');
     }
   };
 
@@ -175,10 +218,31 @@ export function MeetingsPanel() {
     }
   };
 
+  const filteredMeetings = meetings.filter((meeting) => {
+    if (statusFilter !== 'all' && meeting.status !== statusFilter) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const matchTitle = (meeting.title || '').toLowerCase().includes(q);
+      const matchAgenda = (meeting.agenda || '').toLowerCase().includes(q);
+      const matchHost = (meeting.host?.name || '').toLowerCase().includes(q);
+      const matchBranch = (meeting.host?.branch?.name || '').toLowerCase().includes(q);
+      const matchAttendee = Array.isArray(meeting.attendees) && meeting.attendees.some((a: any) => (a.name || '').toLowerCase().includes(q));
+      if (!matchTitle && !matchAgenda && !matchHost && !matchBranch && !matchAttendee) return false;
+    }
+    return true;
+  });
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Meetings</h2>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Meetings</h2>
+          <p className="text-sm text-muted-foreground">
+            {isGlobalRole 
+              ? 'View, monitor, and coordinate meetings across all branches' 
+              : 'Schedule and manage your team meetings and discussions'}
+          </p>
+        </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button className="shadow-lg hover:shadow-xl transition-all rounded-full px-6">
@@ -382,33 +446,120 @@ export function MeetingsPanel() {
         </Dialog>
       </div>
 
+      {/* Filter toolbar */}
+      <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 bg-card p-3 rounded-xl border border-border/60 shadow-sm">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search meetings by title, agenda, host, branch, or attendee..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            className="pl-9 h-9 bg-muted/40"
+          />
+        </div>
+        
+        {isGlobalRole && (
+          <div className="w-full md:w-56">
+            <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+              <SelectTrigger className="h-9">
+                <Building2 className="w-3.5 h-3.5 mr-2 text-muted-foreground" />
+                <SelectValue placeholder="All Branches" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Branches</SelectItem>
+                {branches.map((b) => (
+                  <SelectItem key={b.id} value={b.id}>
+                    {b.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        <div className="w-full md:w-44">
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="h-9">
+              <SelectValue placeholder="All Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="scheduled">Scheduled</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="cancelled">Cancelled</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       <div className="grid gap-4">
         {loading ? (
-          <div className="text-center py-10 text-muted-foreground">Loading meetings...</div>
-        ) : meetings.length === 0 ? (
-          <div className="text-center py-10 text-muted-foreground bg-muted/20 rounded-lg border border-dashed">
-            No meetings scheduled yet.
+          <div className="text-center py-12 text-muted-foreground">Loading meetings...</div>
+        ) : filteredMeetings.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground bg-muted/20 rounded-xl border border-dashed flex flex-col items-center justify-center gap-2">
+            <Calendar className="w-8 h-8 text-muted-foreground/50" />
+            <p className="font-medium">No meetings found</p>
+            <p className="text-xs text-muted-foreground">
+              {searchQuery || statusFilter !== 'all' || selectedBranch !== 'all'
+                ? 'Try adjusting your search or filters'
+                : 'Click "Call Meeting" to schedule your first meeting'}
+            </p>
           </div>
         ) : (
-          meetings.map((meeting) => (
-            <Card key={meeting.id}>
-              <CardHeader className="pb-2">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Video className="w-5 h-5 text-primary" />
-                      {meeting.title || 'Untitled Meeting'}
-                    </CardTitle>
-                    <div className="text-sm text-muted-foreground mt-1 flex items-center gap-4">
-                      <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {format(new Date(meeting.date), 'MMM d, yyyy')}</span>
-                      <span className="flex items-center gap-1"><Clock className="w-4 h-4" /> {meeting.time}</span>
-                      <span className="flex items-center gap-1 capitalize px-2 py-0.5 rounded-md bg-secondary/50 text-xs border border-border">
+          filteredMeetings.map((meeting) => (
+            <Card key={meeting.id} className="transition-all hover:shadow-md">
+              <CardHeader className="pb-3">
+                <div className="flex justify-between items-start gap-4">
+                  <div className="space-y-1.5 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Video className="w-5 h-5 text-primary" />
+                        {meeting.title || 'Untitled Meeting'}
+                      </CardTitle>
+                      {meeting.host?.branch?.name ? (
+                        <Badge variant="outline" className="flex items-center gap-1 text-xs font-normal border-primary/30 bg-primary/5 text-primary">
+                          <Building2 className="w-3 h-3" /> {meeting.host.branch.name}
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="flex items-center gap-1 text-xs font-normal border-border text-muted-foreground">
+                          <Building2 className="w-3 h-3" /> Head Office
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="text-sm text-muted-foreground flex flex-wrap items-center gap-3">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4 text-muted-foreground/70" /> 
+                        {format(new Date(meeting.date), 'MMM d, yyyy')}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-4 h-4 text-muted-foreground/70" /> 
+                        {meeting.time}
+                      </span>
+                      <span className="flex items-center gap-1 capitalize px-2 py-0.5 rounded-md bg-secondary/60 text-xs border border-border">
                         {meeting.type || 'offline'}
                       </span>
                     </div>
                   </div>
-                  <div className={`px-2 py-1 rounded-full text-xs font-medium ${meeting.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
-                    {meeting.status.toUpperCase()}
+                  <div className="flex items-center gap-2">
+                    <span className={cn(
+                      "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider",
+                      meeting.status === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                      meeting.status === 'cancelled' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                      'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                    )}>
+                      {meeting.status}
+                    </span>
+                    {(isGlobalRole || user?.id === meeting.hostId) && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                        onClick={() => handleDeleteMeeting(meeting.id)}
+                        title="Delete meeting"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               </CardHeader>
@@ -430,11 +581,11 @@ export function MeetingsPanel() {
                   <div>
                     <h4 className="font-medium text-foreground mb-1">Attendees</h4>
                     <div className="flex flex-wrap gap-2">
-                      <span className="px-2 py-1 bg-primary/10 text-primary rounded-md text-xs font-medium border border-primary/20">
-                        {meeting.host?.name || 'Unknown'} (Host)
+                      <span className="px-2.5 py-1 bg-primary/10 text-primary rounded-md text-xs font-medium border border-primary/20 flex items-center gap-1">
+                        {meeting.host?.name || 'Unknown'} (Host{meeting.host?.branch?.name ? ` • ${meeting.host.branch.name}` : ''})
                       </span>
                       {meeting.attendees?.map((a: any, i: number) => (
-                        <span key={i} className="px-2 py-1 bg-secondary rounded-md text-xs border">
+                        <span key={i} className="px-2.5 py-1 bg-secondary rounded-md text-xs border border-border">
                           {a.name}
                         </span>
                       ))}
@@ -482,15 +633,45 @@ export function MeetingsPanel() {
                   </div>
 
                   {meeting.minutes ? (
-                    <div className="bg-muted p-4 rounded-md">
-                      <h4 className="font-medium flex items-center gap-2 mb-2">
-                        <FileText className="w-4 h-4" /> Meeting Minutes / Report
-                      </h4>
-                      <p className="text-muted-foreground whitespace-pre-wrap">{meeting.minutes}</p>
+                    <div className="bg-muted/50 p-4 rounded-lg border border-border/50 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-medium flex items-center gap-2 text-sm">
+                          <FileText className="w-4 h-4 text-primary" /> Meeting Minutes / Report
+                        </h4>
+                        {(user?.id === meeting.hostId || isGlobalRole) && (
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-7 text-xs"
+                              onClick={() => {
+                                setSelectedMeeting(meeting);
+                                setMinutesText(meeting.minutes || '');
+                                setIsMinutesOpen(true);
+                              }}
+                            >
+                              Edit Minutes
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="h-7 text-xs"
+                              onClick={() => {
+                                setSelectedMeeting(meeting);
+                                setRescheduleForm({ date: meeting.date.split('T')[0], time: meeting.time, reason: '' });
+                                setIsRescheduleOpen(true);
+                              }}
+                            >
+                              <Clock className="w-3.5 h-3.5 mr-1" /> Reschedule
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-muted-foreground whitespace-pre-wrap text-sm">{meeting.minutes}</p>
                     </div>
                   ) : (
                     <div className="flex gap-2">
-                      {(user?.id === meeting.hostId || user?.role === 'ceo' || user?.role === 'org_admin') && (
+                      {(user?.id === meeting.hostId || isGlobalRole) && (
                         <>
                           <Button 
                             variant="outline" 

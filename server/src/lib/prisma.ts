@@ -3,8 +3,14 @@ import { PrismaClient } from '../generated/client/index.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 import { parse as parseConnectionString } from 'pg-connection-string';
 

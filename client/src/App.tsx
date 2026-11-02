@@ -8,7 +8,6 @@ import { PrismaLayout, type TableItem } from '@/components/layout/PrismaLayout';
 import { DataGrid } from '@/components/ui/data-grid';
 import PublicRegisterPage from '@/pages/PublicRegisterPage';
 import StudentApplicationPage from '@/pages/StudentApplicationPage';
-import { AppDownloadPage } from '@/pages/AppDownloadPage';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
 import { getOpsNavItems } from '@/pages/ModernOpsDashboard';
 import { getHRNavItems } from '@/pages/ModernHRDashboard';
@@ -368,16 +367,6 @@ function App() {
   // Public privacy policy (linked from the Google Play listing)
   if (window.location.pathname === '/privacy-policy' || window.location.pathname === '/privacy') {
     return <PrivacyPolicyPage />;
-  }
-
-  // Public APK / Mobile App download page
-  if (
-    window.location.pathname === '/download' ||
-    window.location.pathname === '/apk' ||
-    window.location.pathname === '/app-download' ||
-    window.location.pathname === '/download/apk'
-  ) {
-    return <AppDownloadPage />;
   }
 
   // Public register page — show when on /register path OR has ?token= param (no-router SPA)

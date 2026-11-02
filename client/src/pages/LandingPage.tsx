@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { 
   ArrowRight, Shield, Users, GraduationCap, DollarSign, Activity, 
-  FileText, CheckCircle, Play, Smartphone, Check, Menu, X,
+  FileText, CheckCircle, Play, Check, Menu, X,
   LayoutDashboard, TrendingUp, Search, Bell, Filter, Building, 
   CreditCard, Sparkles, Clock, PhoneCall, CheckCircle2,
   FolderKanban, MessageSquare, Bot, Target, Calendar,
@@ -143,14 +143,6 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
 
           {/* Right Action Buttons */}
           <div className="flex items-center gap-1.5 sm:gap-3">
-            <a
-              href="/download"
-              className="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50/90 hover:bg-emerald-100/90 border border-emerald-200/80 px-3.5 py-2 rounded-full transition-all shadow-xs"
-            >
-              <Smartphone className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Mobile App</span>
-            </a>
-            
             <Button 
               variant="ghost" 
               className="text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 font-semibold text-xs sm:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full h-8 sm:h-9 transition-colors"
@@ -197,17 +189,6 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
             >
               <span>Platform</span>
               <ArrowRight className="w-4 h-4 text-slate-400" />
-            </a>
-            <a 
-              href="/download" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-emerald-800 bg-emerald-50/80 font-semibold hover:bg-emerald-100 transition-colors flex items-center justify-between border border-emerald-100 text-sm"
-            >
-              <span className="flex items-center gap-2">
-                <Smartphone className="w-4 h-4 text-[#54b947]" />
-                Android Mobile App
-              </span>
-              <span className="text-xs bg-[#54b947] text-white px-2 py-0.5 rounded-full font-bold">APK</span>
             </a>
           </div>
         )}
@@ -1105,18 +1086,50 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
               </p>
 
               {/* Status & App Badges */}
-              <div className="flex flex-wrap items-center gap-2.5 pt-1">
+              <div className="space-y-3 pt-1">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/70 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
                   <span className="w-2 h-2 rounded-full bg-[#54b947] animate-pulse"></span>
                   All Systems Operational
                 </div>
-                <a 
-                  href="/download"
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-slate-300 hover:text-white transition-colors"
-                >
-                  <Smartphone className="w-3.5 h-3.5 text-[#54b947]" />
-                  <span>Android App</span>
-                </a>
+
+                <div className="flex flex-wrap items-center gap-2.5 pt-0.5">
+                  {/* Google Play Store Badge */}
+                  <a
+                    href="https://play.google.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all hover:-translate-y-0.5 shadow-sm group"
+                    aria-label="Get it on Google Play"
+                  >
+                    <svg viewBox="0 0 24 24" className="w-4 h-4 shrink-0" fill="none">
+                      <path d="M3.609 1.814L13.792 12 3.61 22.186a1.532 1.532 0 0 1-.36-.615V2.429a1.53 1.53 0 0 1 .36-.615z" fill="#00D2FF"/>
+                      <path d="M14.799 13.004l2.585 2.585-13.067 7.545a1.516 1.516 0 0 1-.41-.12z" fill="#00E676"/>
+                      <path d="M16.413 11.39l3.185 1.84c1.196.69 1.196 1.817 0 2.507l-3.185 1.84-2.888-2.889z" fill="#FFC400"/>
+                      <path d="M3.418.307l13.067 7.545-2.585 2.585-10.482-10.13a1.528 1.528 0 0 1-.41-.12z" fill="#FF3D00"/>
+                    </svg>
+                    <div className="flex flex-col text-left">
+                      <span className="text-[8px] uppercase tracking-wider text-slate-400 font-semibold leading-tight">GET IT ON</span>
+                      <span className="text-xs font-bold text-white tracking-tight leading-tight">Google Play</span>
+                    </div>
+                  </a>
+
+                  {/* Apple App Store Badge */}
+                  <a
+                    href="https://apps.apple.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all hover:-translate-y-0.5 shadow-sm group"
+                    aria-label="Download on the App Store"
+                  >
+                    <svg viewBox="0 0 24 24" className="w-4 h-4 shrink-0 fill-white">
+                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.65-1.07 1.71-.93 2.73 1.01.08 2.03-.5 2.64-1.23z"/>
+                    </svg>
+                    <div className="flex flex-col text-left">
+                      <span className="text-[8px] uppercase tracking-wider text-slate-400 font-semibold leading-tight">Download on the</span>
+                      <span className="text-xs font-bold text-white tracking-tight leading-tight">App Store</span>
+                    </div>
+                  </a>
+                </div>
               </div>
             </div>
             
@@ -1126,7 +1139,6 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
               <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
                 <li><a href="#features" className="hover:text-[#54b947] transition-colors">Features</a></li>
                 <li><a href="#preview" className="hover:text-[#54b947] transition-colors">Platform</a></li>
-                <li><a href="/download" className="hover:text-[#54b947] transition-colors">Mobile App</a></li>
               </ul>
             </div>
 

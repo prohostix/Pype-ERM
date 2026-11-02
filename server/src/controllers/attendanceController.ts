@@ -67,19 +67,29 @@ async function calculateLateMinutes(
   const endOfDay = new Date(checkInDate);
   endOfDay.setHours(23, 59, 59, 999);
 
-  const firstHalfLeave = await prisma.leaveRequest.findFirst({
+  // 1. Check for any half-day leave for this day (approved, dept_approved, or pending)
+  const halfDayLeave = await prisma.leaveRequest.findFirst({
     where: {
       employeeId,
-      status: 'approved',
+      status: { in: ['approved', 'dept_approved', 'pending'] },
       isHalfDay: true,
-      halfDayType: 'first_half',
       startDate: { lte: endOfDay },
       endDate: { gte: startOfDay }
     }
   });
 
-  if (firstHalfLeave) {
-    targetTotalMins = targetTotalMins + Math.floor((outTargetTotalMins - targetTotalMins) / 2);
+  // 2. Check if attendance record already exists with half_day status
+  const existingAtt = await prisma.attendance.findFirst({
+    where: {
+      employeeId,
+      date: { gte: startOfDay, lte: endOfDay }
+    }
+  });
+  const isExistingHalfDay = existingAtt?.status === 'half_day' || existingAtt?.notes?.toLowerCase().includes('half day');
+
+  // GUARANTEE: If employee has taken a half-day leave or has half_day attendance, NEVER count late minutes
+  if (halfDayLeave || isExistingHalfDay) {
+    return { isLate: false, lateMinutes: 0 };
   }
 
   const diffMins = punchTotalMins - targetTotalMins;
@@ -222,7 +232,24 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
   let lateMinutes = 0;
   let status: 'present' | 'late' = 'present';
 
-  if (settings && settings.officeHours) {
+  // Check if user has an approved/pending half-day leave for today
+  const hasHalfDayLeave = await prisma.leaveRequest.findFirst({
+    where: {
+      employeeId: req.user.id,
+      status: { in: ['approved', 'dept_approved', 'pending'] },
+      isHalfDay: true,
+      startDate: { lte: todayEnd },
+      endDate: { gte: todayStart }
+    }
+  });
+
+  const isHalfDayToday = !!hasHalfDayLeave || existing?.status === 'half_day' || existing?.notes?.toLowerCase().includes('half day');
+
+  if (isHalfDayToday) {
+    status = 'half_day' as any;
+    isLate = false;
+    lateMinutes = 0;
+  } else if (settings && settings.officeHours) {
     const lateCalc = await calculateLateMinutes(now, req.user.id, req.user.organizationId, settings.officeHours);
     isLate = lateCalc.isLate;
     lateMinutes = lateCalc.lateMinutes;
@@ -231,15 +258,19 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
 
   let attendance;
   if (existing) {
+    const finalStatus = isHalfDayToday ? 'half_day' : (existing.status === 'wfh' ? 'wfh' : status);
+    const finalIsLate = isHalfDayToday ? false : isLate;
+    const finalLateMinutes = isHalfDayToday ? 0 : lateMinutes;
+
     attendance = await prisma.attendance.update({
       where: { id: existing.id },
       data: {
         checkIn: now,
         checkInLocation: latitude ? { latitude, longitude, address } : undefined,
         checkInPhoto,
-        status: (existing.status === 'half_day' || existing.status === 'wfh') ? existing.status : status,
-        isLate,
-        lateMinutes
+        status: finalStatus,
+        isLate: finalIsLate,
+        lateMinutes: finalLateMinutes
       }
     });
   } else {
@@ -816,6 +847,10 @@ export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Respo
         if (updateData.status === 'late') updateData.status = 'present';
       }
     }
+  } else if (updateData.status === 'half_day' && updateData.lateMinutes === undefined && (attendance.lateMinutes || 0) >= 180) {
+    // If status is updated to half_day and lateMinutes had unadjusted morning offset, normalize it
+    updateData.lateMinutes = Math.max(0, (attendance.lateMinutes || 0) - 270);
+    updateData.isLate = updateData.lateMinutes > 0;
   }
 
   const updatedAttendance = await prisma.attendance.update({ where: { id: req.params.id }, data: updateData });
@@ -1551,5 +1586,17 @@ export const exportAttendance = asyncHandler(async (req: AuthRequest, res: Respo
     orderBy: [{ date: 'asc' }, { employeeId: 'asc' }]
   });
 
-  res.status(200).json({ success: true, count: attendances.length, data: attendances });
+  // Sanitize any half-day late minutes in exported records (guaranteed 0 late minutes)
+  const sanitizedAttendances = attendances.map((att: any) => {
+    if (att.status === 'half_day' || (att.notes && att.notes.toLowerCase().includes('half day'))) {
+      return {
+        ...att,
+        lateMinutes: 0,
+        isLate: false
+      };
+    }
+    return att;
+  });
+
+  res.status(200).json({ success: true, count: sanitizedAttendances.length, data: sanitizedAttendances });
 });

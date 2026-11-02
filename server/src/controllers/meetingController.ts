@@ -4,50 +4,74 @@ import prisma from '../lib/prisma.js';
 
 export const getMeetings = async (req: AuthRequest, res: Response) => {
   try {
-    const { organizationId, role, id, name } = req.user!;
+    const { organizationId, role, id, name, branchId } = req.user!;
 
     if (!organizationId) {
       return res.status(400).json({ message: 'Organization ID is required' });
     }
 
-    let meetings;
+    const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+    const isGlobal = globalRoles.includes(role);
 
-    if (role === 'ceo' || role === 'org_admin') {
-      meetings = await prisma.meeting.findMany({
-        where: { organizationId },
-        include: {
-          host: {
-            select: { name: true, email: true, id: true, role: true }
+    const filterBranchId = req.query.branchId as string | undefined;
+
+    let whereClause: any = { organizationId };
+
+    if (isGlobal) {
+      // Global leadership (CEO, Org Admin, Superadmin, General Manager) can view all meetings across all branches
+      if (filterBranchId && filterBranchId !== 'all') {
+        whereClause.host = { branchId: filterBranchId };
+      }
+    } else if (role === 'branch_manager' && branchId) {
+      // Branch Managers can view their own meetings, meetings in their branch, or where they are an attendee
+      whereClause.OR = [
+        { hostId: id },
+        { host: { branchId } },
+        {
+          attendees: {
+            array_contains: [{ id }]
           }
         },
-        orderBy: { date: 'desc' }
-      });
+        {
+          attendees: {
+            array_contains: [{ name }]
+          }
+        }
+      ];
     } else {
-      meetings = await prisma.meeting.findMany({
-        where: {
-          organizationId,
-          OR: [
-            { hostId: id },
-            {
-              attendees: {
-                array_contains: [{ id }]
-              }
-            },
-            {
-              attendees: {
-                array_contains: [{ name }]
-              }
-            }
-          ]
-        },
-        include: {
-          host: {
-            select: { name: true, email: true, id: true, role: true }
+      whereClause.OR = [
+        { hostId: id },
+        {
+          attendees: {
+            array_contains: [{ id }]
           }
         },
-        orderBy: { date: 'desc' }
-      });
+        {
+          attendees: {
+            array_contains: [{ name }]
+          }
+        }
+      ];
     }
+
+    const meetings = await prisma.meeting.findMany({
+      where: whereClause,
+      include: {
+        host: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            branchId: true,
+            branch: {
+              select: { id: true, name: true }
+            }
+          }
+        }
+      },
+      orderBy: { date: 'desc' }
+    });
 
     res.json(meetings);
   } catch (error) {
@@ -80,7 +104,16 @@ export const createMeeting = async (req: AuthRequest, res: Response) => {
       },
       include: {
         host: {
-          select: { name: true, email: true, id: true, role: true }
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            branchId: true,
+            branch: {
+              select: { id: true, name: true }
+            }
+          }
         }
       }
     });
@@ -104,7 +137,8 @@ export const updateMeeting = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ message: 'Meeting not found' });
     }
 
-    if (meeting.hostId !== userId && role !== 'ceo' && role !== 'org_admin') {
+    const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+    if (meeting.hostId !== userId && !globalRoles.includes(role)) {
       return res.status(403).json({ message: 'Unauthorized to update this meeting' });
     }
 
@@ -156,7 +190,16 @@ export const updateMeeting = async (req: AuthRequest, res: Response) => {
       },
       include: {
         host: {
-          select: { name: true, email: true, id: true, role: true }
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            branchId: true,
+            branch: {
+              select: { id: true, name: true }
+            }
+          }
         }
       }
     });
@@ -179,7 +222,8 @@ export const deleteMeeting = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ message: 'Meeting not found' });
     }
 
-    if (meeting.hostId !== userId && role !== 'ceo' && role !== 'org_admin') {
+    const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+    if (meeting.hostId !== userId && !globalRoles.includes(role)) {
       return res.status(403).json({ message: 'Unauthorized to delete this meeting' });
     }
 
