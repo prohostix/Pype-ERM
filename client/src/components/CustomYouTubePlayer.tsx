@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, Settings, Check } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, Settings, Check, Tv } from 'lucide-react';
 
 interface CustomYouTubePlayerProps {
   videoUrl: string;
   onPlay?: () => void;
   onEnded?: () => void;
   onHeartbeat?: (duration: number) => void;
+  onToggleTheater?: () => void;
+  isTheater?: boolean;
 }
 
 declare global {
@@ -63,7 +65,14 @@ const extractVideoId = (url: string) => {
   return videoId;
 };
 
-export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoUrl, onPlay, onEnded, onHeartbeat }) => {
+export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ 
+  videoUrl, 
+  onPlay, 
+  onEnded, 
+  onHeartbeat,
+  onToggleTheater,
+  isTheater = false,
+}) => {
   const onPlayRef = useRef(onPlay);
   onPlayRef.current = onPlay;
   const onEndedRef = useRef(onEnded);
@@ -84,13 +93,71 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
   const [isHovered, setIsHovered] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
+  const [isSwitching, setIsSwitching] = useState(false);
   const [selectedQuality, setSelectedQuality] = useState<string>('auto');
   const [currentQuality, setCurrentQuality] = useState<string>('auto');
   const [availableQualities, setAvailableQualities] = useState<string[]>(DEFAULT_QUALITIES);
   const [playbackRate, setPlaybackRate] = useState<number>(1);
   const [showQualityMenu, setShowQualityMenu] = useState(false);
+  const [buffered, setBuffered] = useState(0);
+  const [hoverPosition, setHoverPosition] = useState<number | null>(null);
+  const [hoverTime, setHoverTime] = useState<number | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const selectedQualityRef = useRef(selectedQuality);
+  selectedQualityRef.current = selectedQuality;
+  const hasStartedRef = useRef(hasStarted);
+  hasStartedRef.current = hasStarted;
+  const prevVideoIdRef = useRef(videoId);
+  const playerContainerId = useRef(`yt-player-${Math.random().toString(36).substring(2, 9)}`).current;
+
+  const enforceQuality = (player: any) => {
+    try {
+      if (!player) return;
+      const levels: string[] = typeof player.getAvailableQualityLevels === 'function' ? player.getAvailableQualityLevels() : [];
+      const targetQ = selectedQualityRef.current !== 'auto'
+        ? selectedQualityRef.current
+        : (levels.length > 0 && levels[0] !== 'auto' ? levels[0] : 'hd1080');
+
+      if (typeof player.setPlaybackQuality === 'function') {
+        player.setPlaybackQuality(targetQ);
+      }
+      if (typeof player.setPlaybackQualityRange === 'function') {
+        player.setPlaybackQualityRange(targetQ, targetQ);
+      }
+    } catch {}
+  };
 
   useEffect(() => {
+    // If videoId changed and an active player instance exists, switch seamlessly
+    if (prevVideoIdRef.current !== videoId) {
+      prevVideoIdRef.current = videoId;
+      setIsSwitching(true);
+      setIsPlaying(false);
+      setCurrentTime(0);
+      setDuration(0);
+      setIsEnded(false);
+
+      if (playerRef.current && typeof playerRef.current.loadVideoById === 'function') {
+        try {
+          if (hasStartedRef.current) {
+            playerRef.current.loadVideoById({
+              videoId,
+              startSeconds: 0,
+            });
+          } else {
+            playerRef.current.cueVideoById({
+              videoId,
+              startSeconds: 0,
+            });
+          }
+          return;
+        } catch {
+          // Fallback to full re-initialization if loadVideoById throws
+        }
+      }
+    }
+
     // Load YouTube API script if it doesn't exist
     if (!window.YT) {
       const tag = document.createElement('script');
@@ -106,6 +173,7 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
     return () => {
       if (playerRef.current) {
         playerRef.current.destroy();
+        playerRef.current = null;
       }
     };
   }, [videoId]);
@@ -125,42 +193,62 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
           setCurrentQuality(current);
         }
       }
+      enforceQuality(player);
     } catch {}
   };
 
   const initializePlayer = () => {
     if (playerRef.current) {
       playerRef.current.destroy();
+      playerRef.current = null;
     }
 
-    playerRef.current = new window.YT.Player(`youtube-player-${videoId}`, {
+    playerRef.current = new window.YT.Player(playerContainerId, {
       width: '100%',
       height: '100%',
       videoId,
       playerVars: {
-        autoplay: 0,
+        autoplay: hasStartedRef.current ? 1 : 0,
         controls: 0,
         disablekb: 1,
         modestbranding: 1,
         rel: 0,
         iv_load_policy: 3,
-        fs: 0,
+        fs: 1,
         playsinline: 1,
+        enablejsapi: 1,
+        origin: typeof window !== 'undefined' ? window.location.origin : undefined,
       },
       events: {
         onReady: (event: any) => {
           setDuration(event.target.getDuration());
           updateQualityLevels(event.target);
+          enforceQuality(event.target);
+          if (hasStartedRef.current) {
+            event.target.playVideo();
+          } else {
+            setIsSwitching(false);
+          }
         },
         onStateChange: (event: any) => {
-          setIsPlaying(event.data === window.YT.PlayerState.PLAYING);
+          // YT.PlayerState: -1 (UNSTARTED), 0 (ENDED), 1 (PLAYING), 2 (PAUSED), 3 (BUFFERING), 5 (CUED)
+          if (event.data === window.YT.PlayerState.BUFFERING || event.data === window.YT.PlayerState.PLAYING) {
+            enforceQuality(event.target);
+          }
           if (event.data === window.YT.PlayerState.PLAYING) {
+            setIsSwitching(false);
             setHasStarted(true);
+            setIsPlaying(true);
             setIsEnded(false);
             updateQualityLevels(event.target);
             onPlayRef.current?.();
-          }
-          if (event.data === window.YT.PlayerState.ENDED) {
+          } else if (event.data === window.YT.PlayerState.PAUSED) {
+            setIsPlaying(false);
+          } else if (event.data === window.YT.PlayerState.CUED) {
+            if (!hasStartedRef.current) {
+              setIsSwitching(false);
+            }
+          } else if (event.data === window.YT.PlayerState.ENDED) {
             setIsPlaying(false);
             setIsEnded(true);
             onEndedRef.current?.();
@@ -169,6 +257,11 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
         onPlaybackQualityChange: (event: any) => {
           if (event.data && event.data !== 'unknown') {
             setCurrentQuality(event.data);
+            // If YouTube downshifted below HD while user target is HD/auto, re-assert quality
+            const targetQ = selectedQualityRef.current === 'auto' ? 'hd1080' : selectedQualityRef.current;
+            if ((targetQ === 'hd1080' || targetQ === 'hd720') && (event.data === 'medium' || event.data === 'small' || event.data === 'tiny')) {
+              enforceQuality(playerRef.current);
+            }
           }
         },
       },
@@ -179,7 +272,20 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
     let interval: NodeJS.Timeout;
     if (isPlaying && playerRef.current) {
       interval = setInterval(() => {
-        setCurrentTime(playerRef.current.getCurrentTime());
+        if (playerRef.current) {
+          if (typeof playerRef.current.getCurrentTime === 'function') {
+            setCurrentTime(playerRef.current.getCurrentTime());
+          }
+          if (typeof playerRef.current.getVideoLoadedFraction === 'function') {
+            setBuffered(playerRef.current.getVideoLoadedFraction() * 100);
+          }
+          if (typeof playerRef.current.getPlaybackQuality === 'function') {
+            const q = playerRef.current.getPlaybackQuality();
+            if (q && q !== 'unknown') {
+              setCurrentQuality(q);
+            }
+          }
+        }
       }, 250);
     }
     return () => clearInterval(interval);
@@ -195,8 +301,10 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
     return () => clearInterval(heartbeatInterval);
   }, [isPlaying]);
 
+  const progressPercent = duration > 0 ? Math.min(100, Math.max(0, (currentTime / duration) * 100)) : 0;
+
   const handlePlayPause = () => {
-    if (!playerRef.current) return;
+    if (!playerRef.current || isSwitching) return;
     if (isEnded) {
       setIsEnded(false);
       playerRef.current.seekTo(0, true);
@@ -210,12 +318,36 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
     }
   };
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const time = parseFloat(e.target.value);
-    setCurrentTime(time);
-    if (playerRef.current) {
-      playerRef.current.seekTo(time, true);
+  const handleTrackMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!trackRef.current || duration <= 0) return;
+    const rect = trackRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+    const percent = (x / rect.width) * 100;
+    const targetTime = (percent / 100) * duration;
+    setHoverPosition(percent);
+    setHoverTime(targetTime);
+
+    // If clicking and dragging
+    if (e.buttons === 1 && playerRef.current) {
+      setCurrentTime(targetTime);
+      playerRef.current.seekTo(targetTime, true);
     }
+  };
+
+  const handleTrackMouseLeave = () => {
+    setHoverPosition(null);
+    setHoverTime(null);
+  };
+
+  const handleTrackClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    if (!trackRef.current || duration <= 0 || !playerRef.current) return;
+    const rect = trackRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+    const percent = x / rect.width;
+    const targetTime = percent * duration;
+    setCurrentTime(targetTime);
+    playerRef.current.seekTo(targetTime, true);
   };
 
   const handleVolumeToggle = (e: React.MouseEvent) => {
@@ -282,21 +414,19 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
     setSelectedQuality(quality);
     setShowQualityMenu(false);
     if (playerRef.current) {
-      const curTime = playerRef.current.getCurrentTime ? playerRef.current.getCurrentTime() : 0;
       const targetQ = quality === 'auto' ? 'default' : quality;
-      if (typeof playerRef.current.setPlaybackQuality === 'function') {
-        playerRef.current.setPlaybackQuality(targetQ);
+      try {
+        if (typeof playerRef.current.setPlaybackQuality === 'function') {
+          playerRef.current.setPlaybackQuality(targetQ);
+        }
+        if (typeof playerRef.current.setPlaybackQualityRange === 'function') {
+          playerRef.current.setPlaybackQualityRange(targetQ, targetQ);
+        }
+      } catch (err) {
+        console.warn('Could not set playback quality hint:', err);
       }
-      if (typeof playerRef.current.setPlaybackQualityRange === 'function') {
-        playerRef.current.setPlaybackQualityRange(targetQ, targetQ);
-      }
-      if (typeof playerRef.current.loadVideoById === 'function') {
-        playerRef.current.loadVideoById({
-          videoId,
-          startSeconds: curTime,
-          suggestedQuality: targetQ,
-        });
-      }
+      // Note: We deliberately do NOT call loadVideoById here, because reloading mid-stream
+      // drops player buffer and forces YouTube's ABR to fall back to 360p low-latency bitrate.
     }
   };
 
@@ -315,14 +445,21 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
   }, [showQualityMenu]);
 
   const getDisplayQualityLabel = () => {
+    // Determine active resolution: prefer live streaming quality if available
+    const activeQ = currentQuality && currentQuality !== 'auto' && currentQuality !== 'unknown' 
+      ? currentQuality 
+      : selectedQuality;
+
     let qText = 'Auto';
-    if (selectedQuality === 'hd1080') qText = '1080p';
-    else if (selectedQuality === 'hd720') qText = '720p';
-    else if (selectedQuality === 'large') qText = '480p';
-    else if (selectedQuality === 'medium') qText = '360p';
-    else if (selectedQuality === 'small') qText = '240p';
-    else if (selectedQuality === 'highres') qText = '4K';
-    else if (QUALITY_LABELS[selectedQuality]) qText = QUALITY_LABELS[selectedQuality].split(' ')[0];
+    if (activeQ === 'highres' || activeQ === 'hd2160') qText = '4K';
+    else if (activeQ === 'hd1440') qText = '1440p';
+    else if (activeQ === 'hd1080') qText = '1080p HD';
+    else if (activeQ === 'hd720') qText = '720p HD';
+    else if (activeQ === 'large') qText = '480p';
+    else if (activeQ === 'medium') qText = '360p';
+    else if (activeQ === 'small') qText = '240p';
+    else if (activeQ === 'tiny') qText = '144p';
+    else if (QUALITY_LABELS[activeQ]) qText = QUALITY_LABELS[activeQ].split(' ')[0];
 
     return playbackRate === 1 ? qText : `${qText} • ${playbackRate}x`;
   };
@@ -342,7 +479,7 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* The IFrame Layer with vertical letterbox masking: Hides YouTube header & watermark with 0% video crop */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         <div 
           style={{ 
             position: 'absolute', 
@@ -353,23 +490,30 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
           }}
           className="[&_iframe]:w-full [&_iframe]:h-full [&_iframe]:border-0"
         >
-          <div id={`youtube-player-${videoId}`} className="w-full h-full" />
+          <div id={playerContainerId} className="w-full h-full" />
         </div>
       </div>
 
-      {/* Poster Layer (Only show before start to hide initial YT UI) */}
-      {!hasStarted && (
+      {/* Video Switching & Pre-start Mask Layer: 100% hides YouTube loading splash, thumbnail, and native play button */}
+      {(!hasStarted || isSwitching) && (
         <div 
-          className="absolute inset-0 z-10 bg-gray-900 flex items-center justify-center cursor-pointer"
+          className="absolute inset-0 z-25 bg-zinc-950 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-300"
           onClick={handlePlayPause}
         >
-          <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110">
-            <Play className="w-8 h-8 text-white ml-1" />
-          </div>
+          {isSwitching ? (
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-12 h-12 rounded-full border-2 border-red-500 border-t-transparent animate-spin" />
+              <span className="text-xs font-medium text-zinc-300 tracking-wide">Loading lesson...</span>
+            </div>
+          ) : (
+            <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110">
+              <Play className="w-8 h-8 text-white ml-1 fill-white" />
+            </div>
+          )}
         </div>
       )}
 
-      {/* Interceptor Overlay (Blocks right-click and any link navigation to YouTube) */}
+      {/* Interceptor & Custom Paused Overlay: Completely masks YouTube native animated play/pause icon */}
       <div
         onClick={() => {
           if (showQualityMenu) {
@@ -379,8 +523,18 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
           }
         }}
         onContextMenu={(e) => e.preventDefault()}
-        className="absolute inset-0 cursor-pointer z-20"
-      />
+        className={`absolute inset-0 cursor-pointer z-20 transition-all duration-200 ${
+          hasStarted && !isPlaying && !isEnded && !isSwitching
+            ? 'bg-black/45 backdrop-blur-[1px] flex items-center justify-center'
+            : 'bg-transparent'
+        }`}
+      >
+        {hasStarted && !isPlaying && !isEnded && !isSwitching && (
+          <div className="w-16 h-16 bg-red-600/95 hover:bg-red-600 rounded-full flex items-center justify-center shadow-2xl transition-transform hover:scale-110">
+            <Play className="w-8 h-8 text-white ml-1 fill-white" />
+          </div>
+        )}
+      </div>
 
       {/* End-screen shield (prevents YouTube recommended related videos) */}
       {isEnded && (
@@ -409,51 +563,83 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
 
       {/* Custom Controls */}
       <div 
-        className={`absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-30 transition-opacity duration-300 ${
-          isHovered || !isPlaying || showQualityMenu ? 'opacity-100' : 'opacity-0'
+        className={`absolute bottom-0 left-0 right-0 px-4 pb-3.5 pt-6 bg-gradient-to-t from-black/95 via-black/60 to-transparent z-30 transition-opacity duration-300 ${
+          isHovered || !isPlaying || showQualityMenu ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
-        {/* Timeline */}
-        <div className="flex items-center gap-3 mb-2" onClick={e => e.stopPropagation()}>
-          <span className="text-xs text-white/90 font-medium w-10 text-right">{formatTime(currentTime)}</span>
-          <input
-            type="range"
-            min={0}
-            max={duration || 100}
-            value={currentTime}
-            onChange={handleSeek}
-            className="flex-1 h-1.5 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-red-600 hover:h-2 transition-all"
-          />
-          <span className="text-xs text-white/90 font-medium w-10">{formatTime(duration)}</span>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={(e) => { e.stopPropagation(); handlePlayPause(); }}
-              className="text-white hover:text-red-500 transition-colors p-1"
-            >
-              {isPlaying ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
-            </button>
-            
-            <div className="flex items-center gap-2 group/vol" onClick={e => e.stopPropagation()}>
-              <button 
-                onClick={handleVolumeToggle}
-                className="text-white hover:text-gray-300 transition-colors p-1"
+          {/* Minimal Interactive Progress Track */}
+          <div 
+            ref={trackRef}
+            className="relative py-2.5 cursor-pointer group/track select-none -mx-1 px-1"
+            onClick={handleTrackClick}
+            onMouseMove={handleTrackMouseMove}
+            onMouseLeave={handleTrackMouseLeave}
+          >
+            {/* Hover Time Tooltip Bubble */}
+            {hoverTime !== null && hoverPosition !== null && (
+              <div 
+                className="absolute -top-7 -translate-x-1/2 px-2 py-0.5 rounded-md bg-zinc-950/95 border border-white/20 text-[10px] font-mono font-bold text-white shadow-xl pointer-events-none transition-all duration-75"
+                style={{ left: `${hoverPosition}%` }}
               >
-                {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
-              </button>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={isMuted ? 0 : volume}
-                onChange={handleVolumeChange}
-                className="w-0 opacity-0 group-hover/vol:w-20 group-hover/vol:opacity-100 h-1.5 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-white transition-all duration-300 ease-out"
+                {formatTime(hoverTime)}
+              </div>
+            )}
+
+            {/* Track Rail */}
+            <div className="relative w-full h-[3px] group-hover/track:h-[5px] bg-white/20 rounded-full overflow-hidden transition-all duration-150">
+              {/* Buffered Bar */}
+              <div 
+                className="absolute top-0 bottom-0 left-0 bg-white/25 rounded-full transition-all duration-200"
+                style={{ width: `${buffered}%` }}
+              />
+              {/* Played Bar */}
+              <div 
+                className="absolute top-0 bottom-0 left-0 bg-red-600 rounded-full transition-all duration-75"
+                style={{ width: `${progressPercent}%` }}
               />
             </div>
+
+            {/* Minimal Scrubber Knob (Expands seamlessly on hover) */}
+            <div 
+              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-red-600 rounded-full shadow-lg ring-2 ring-white scale-0 group-hover/track:scale-100 transition-transform duration-150 pointer-events-none"
+              style={{ left: `${progressPercent}%` }}
+            />
           </div>
+
+          {/* Control Buttons Row with Compact Minimal Time */}
+          <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={(e) => { e.stopPropagation(); handlePlayPause(); }}
+                className="text-white hover:text-red-500 transition-colors p-1"
+              >
+                {isPlaying ? <Pause size={22} /> : <Play size={22} className="ml-0.5 fill-white" />}
+              </button>
+              
+              <div className="flex items-center gap-2 group/vol" onClick={e => e.stopPropagation()}>
+                <button 
+                  onClick={handleVolumeToggle}
+                  className="text-white hover:text-gray-300 transition-colors p-1"
+                >
+                  {isMuted || volume === 0 ? <VolumeX size={19} /> : <Volume2 size={19} />}
+                </button>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={isMuted ? 0 : volume}
+                  onChange={handleVolumeChange}
+                  className="w-0 opacity-0 group-hover/vol:w-16 group-hover/vol:opacity-100 h-1 bg-white/30 rounded-lg appearance-none cursor-pointer accent-white transition-all duration-200 ease-out"
+                />
+              </div>
+
+              {/* Minimal Clean Time Counter */}
+              <div className="text-[11px] font-mono font-medium text-white/80 select-none pl-1 flex items-center gap-1.5">
+                <span>{formatTime(currentTime)}</span>
+                <span className="text-white/30">/</span>
+                <span className="text-white/50">{formatTime(duration)}</span>
+              </div>
+            </div>
 
           <div className="flex items-center gap-2">
             {/* Settings & Quality Menu */}
@@ -473,14 +659,23 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
               {/* Settings Dropdown Popover */}
               {showQualityMenu && (
                 <div 
-                  className="absolute bottom-full right-0 mb-2 w-56 bg-zinc-950/95 backdrop-blur-xl border border-white/15 rounded-xl shadow-2xl p-2.5 z-40 animate-in fade-in zoom-in-95 duration-150"
+                  className="absolute bottom-full right-0 mb-2 w-64 bg-zinc-950/95 backdrop-blur-xl border border-white/15 rounded-xl shadow-2xl p-3 z-40 animate-in fade-in zoom-in-95 duration-150"
                 >
+                  {/* Active Stream Quality Status */}
+                  <div className="mb-2.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between">
+                    <span className="text-[11px] text-zinc-400 font-medium">Active Stream:</span>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      {QUALITY_LABELS[currentQuality] || currentQuality || 'Auto (HD)'}
+                    </span>
+                  </div>
+
                   {/* Video Quality Options */}
                   <div className="mb-3">
-                    <div className="px-2 py-1 text-[10px] font-bold tracking-wider uppercase text-zinc-400 border-b border-white/10 mb-1 flex items-center justify-between">
-                      <span>Video Quality</span>
+                    <div className="px-1 py-1 text-[10px] font-bold tracking-wider uppercase text-zinc-400 border-b border-white/10 mb-1 flex items-center justify-between">
+                      <span>Quality Preference</span>
                       <span className="text-[9px] text-zinc-500 font-mono">
-                        {selectedQuality === 'auto' ? 'Auto' : selectedQuality}
+                        {selectedQuality === 'auto' ? 'Adaptive' : selectedQuality}
                       </span>
                     </div>
                     <div className="max-h-40 overflow-y-auto space-y-0.5 custom-scrollbar pr-1">
@@ -505,9 +700,40 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
                     </div>
                   </div>
 
+                  {/* HD Quality Tip & One-Click Fullscreen/Theater */}
+                  <div className="mb-3 p-2 rounded-lg bg-red-950/20 border border-red-500/20 text-[10px] text-zinc-300 space-y-1.5">
+                    <p className="leading-relaxed">
+                      💡 <strong className="text-white">HD Tip:</strong> YouTube adjusts resolution to player size. Enter Fullscreen or Theater Mode for 1080p HD.
+                    </p>
+                    <div className="flex gap-1.5 pt-0.5">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          setShowQualityMenu(false);
+                          toggleFullscreen(e);
+                        }}
+                        className="flex-1 py-1 px-2 rounded bg-white/10 hover:bg-white/20 text-white font-medium text-[10px] text-center transition-colors"
+                      >
+                        {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+                      </button>
+                      {onToggleTheater && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowQualityMenu(false);
+                            onToggleTheater();
+                          }}
+                          className="flex-1 py-1 px-2 rounded bg-red-600/80 hover:bg-red-600 text-white font-medium text-[10px] text-center transition-colors"
+                        >
+                          {isTheater ? 'Exit Theater' : 'Theater Mode'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
                   {/* Playback Speed */}
                   <div>
-                    <div className="px-2 py-1 text-[10px] font-bold tracking-wider uppercase text-zinc-400 border-b border-white/10 mb-1 flex items-center justify-between">
+                    <div className="px-1 py-1 text-[10px] font-bold tracking-wider uppercase text-zinc-400 border-b border-white/10 mb-1 flex items-center justify-between">
                       <span>Playback Speed</span>
                       <span className="text-[9px] text-zinc-400">{playbackRate}x</span>
                     </div>
@@ -532,6 +758,20 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
               )}
             </div>
 
+            {/* Theater Mode Button */}
+            {onToggleTheater && (
+              <button 
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onToggleTheater(); }}
+                className={`p-1.5 rounded-lg transition-colors ${
+                  isTheater ? 'text-red-500 bg-red-500/15' : 'text-white hover:text-gray-300 hover:bg-white/10'
+                }`}
+                title={isTheater ? 'Exit Theater Mode' : 'Theater Mode (Wide HD View)'}
+              >
+                <Tv size={18} />
+              </button>
+            )}
+
             {/* Fullscreen Button */}
             <button 
               type="button"
@@ -544,6 +784,16 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ videoU
           </div>
         </div>
       </div>
+
+      {/* Ambient Minimal Progress Line (Always visible at the bottom edge when controls fade out during playback) */}
+      {hasStarted && isPlaying && !isHovered && !showQualityMenu && (
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/10 pointer-events-none z-30 transition-opacity duration-300">
+          <div 
+            className="h-full bg-red-600 transition-all duration-150"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+      )}
     </div>
   );
 };

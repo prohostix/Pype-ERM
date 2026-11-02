@@ -48,6 +48,8 @@ const STUDENT_NAV_ITEMS: TableItem[] = [
 // Maps sidebar table IDs to the dashboard tab they should open
 const TABLE_TO_TAB: Record<string, string> = {
   // Superadmin
+  usage: 'usage',
+  audit_logs: 'usage',
   organizations: 'organizations',
   licenses: 'licenses',
   inquiries: 'enquiries',
@@ -146,7 +148,6 @@ const TABLE_TO_TAB: Record<string, string> = {
   my_team: 'team',
   // Common
   escalations: 'escalations',
-  audit_logs: 'overview',
   collections: 'collections',
   biometric_devices: 'biometric-devices',
   // Student Portal
@@ -399,14 +400,13 @@ function App() {
     if (user.role === 'superadmin') {
       return [
         { id: 'dashboard', label: 'Dashboard' },
+        { id: 'usage', label: 'Usage & Telemetry' },
         { id: 'organizations', label: 'Organizations' },
         { id: 'licenses', label: 'Pricings and Bills' },
         { id: 'users', label: 'Users' },
         { id: 'departments', label: 'Departments' },
         { id: 'inquiries', label: 'Enquiries' },
-        { id: 'biometric_devices', label: 'Biometric Devices' },
         { id: 'audit_logs', label: 'Audit Logs' },
-        { id: 'meetings', label: 'Meetings' },
       ];
     }
 

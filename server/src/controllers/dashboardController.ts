@@ -14,6 +14,136 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
   if (role === 'superadmin') {
     metrics.totalOrganizations = await prisma.organization.count();
     metrics.activeOrganizations = await prisma.organization.count({ where: { status: 'active' } });
+    metrics.totalBranches = await prisma.branch.count();
+    metrics.totalEnrollments = await prisma.enrollment.count();
+    metrics.totalLicenses = await prisma.license.count();
+
+    // Total Revenue collected across platform
+    const payments = await prisma.paymentEntry.findMany({ select: { amount: true } });
+    metrics.totalRevenue = payments.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
+    metrics.totalInvoices = await prisma.invoice.count();
+    metrics.totalPayments = payments.length;
+
+    // User Roles Breakdown
+    const roleCounts = await prisma.user.groupBy({
+      by: ['role'],
+      _count: { id: true },
+      where: { status: { not: 'resigned' } }
+    });
+    metrics.roleDistribution = roleCounts.map(r => ({ role: r.role, count: r._count.id }));
+
+    // Monthly Enrollment Trend (Last 6 months)
+    const allEnrollments = await prisma.enrollment.findMany({
+      select: { createdAt: true, status: true }
+    });
+    const now = new Date();
+    const monthMap: Record<string, { month: string; enrollments: number; completed: number; dropped: number }> = {};
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+      monthMap[key] = { month: key, enrollments: 0, completed: 0, dropped: 0 };
+    }
+    for (const e of allEnrollments) {
+      const d = new Date(e.createdAt);
+      const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+      if (monthMap[key]) {
+        monthMap[key].enrollments++;
+        if (e.status === 'completed' || e.status === 'enrolled') monthMap[key].completed++;
+        if (e.status === 'dropped') monthMap[key].dropped++;
+      }
+    }
+    metrics.enrollmentTrend = Object.values(monthMap);
+
+    // Monthly Revenue Trend (Last 6 months)
+    const allPaymentEntries = await prisma.paymentEntry.findMany({
+      select: { createdAt: true, amount: true }
+    });
+    const revMap: Record<string, { month: string; amount: number }> = {};
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+      revMap[key] = { month: key, amount: 0 };
+    }
+    for (const p of allPaymentEntries) {
+      const d = new Date(p.createdAt);
+      const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+      if (revMap[key]) {
+        revMap[key].amount += Number(p.amount) || 0;
+      }
+    }
+    metrics.revenueTrend = Object.values(revMap);
+
+    // Top Organizations with Live Stats
+    const orgsList = await prisma.organization.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        status: true,
+        createdAt: true,
+        license: { select: { name: true } },
+        _count: {
+          select: {
+            users: true,
+            students: true,
+            studyCenters: true,
+            branches: true,
+            enrollments: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+    metrics.organizationsList = orgsList.map(o => ({
+      id: o.id,
+      name: o.name,
+      email: o.email,
+      phone: o.phone,
+      status: o.status,
+      createdAt: o.createdAt,
+      licenseName: o.license?.name || 'Standard License',
+      usersCount: o._count.users,
+      studentsCount: o._count.students,
+      studyCentersCount: o._count.studyCenters,
+      branchesCount: o._count.branches,
+      enrollmentsCount: o._count.enrollments
+    }));
+
+    // Real System Audit Logs
+    const recentAudits = await prisma.auditLog.findMany({
+      take: 8,
+      orderBy: { timestamp: 'desc' },
+      include: {
+        user: { select: { name: true, email: true, role: true } },
+        organization: { select: { name: true } }
+      }
+    });
+    metrics.recentAuditLogs = recentAudits.map(a => ({
+      id: a.id,
+      action: a.action,
+      entityType: a.entityType,
+      entityId: a.entityId,
+      timestamp: a.timestamp,
+      ipAddress: a.ipAddress,
+      userName: a.user?.name || a.user?.email || 'System User',
+      userEmail: a.user?.email,
+      userRole: a.user?.role,
+      orgName: a.organization?.name || 'Platform'
+    }));
+
+    // Top Organizations for Comparison Graph
+    metrics.orgComparison = [...metrics.organizationsList]
+      .filter(o => o.id !== 'system')
+      .sort((a, b) => (b.studentsCount + b.usersCount) - (a.studentsCount + a.usersCount))
+      .slice(0, 6)
+      .map(o => ({
+        name: o.name.length > 14 ? o.name.slice(0, 12) + '..' : o.name,
+        fullName: o.name,
+        students: o.studentsCount,
+        staff: o.usersCount,
+        branches: o.branchesCount
+      }));
   }
 
   if (['superadmin', 'ceo', 'general_manager', 'org_admin'].includes(role)) {
@@ -181,7 +311,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     metrics.pendingExpenses = await prisma.expenseClaim.count({ where: { organizationId: orgId, status: 'pending' } });
   }
 
-  if (['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager'].includes(role)) {
+  if (['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin'].includes(role)) {
     metrics.totalLeads = await prisma.lead.count({ where: { organizationId: orgId } });
     metrics.convertedLeads = await prisma.lead.count({ where: { organizationId: orgId, status: 'converted' } });
   }
@@ -196,6 +326,283 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
 
   if (role === 'ceo' || role === 'general_manager') {
     metrics.activeEscalations = await prisma.escalation.count({ where: { organizationId: orgId, status: 'active' } });
+  }
+
+  // Organization-level Deep Analytics (For Org Admin, CEO, GM or Superadmin viewing an Org)
+  if (['org_admin', 'ceo', 'general_manager'].includes(role) || (role === 'superadmin' && req.query.organizationId)) {
+    const targetOrgId = (req.query.organizationId as string) || orgId;
+    if (targetOrgId) {
+      // 1. Organization profile & counts
+      const org = await prisma.organization.findUnique({
+        where: { id: targetOrgId },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          address: true,
+          status: true,
+          createdAt: true,
+          license: { select: { name: true, tag: true } },
+          _count: {
+            select: {
+              branches: true,
+              departments: true,
+              users: true,
+              students: true,
+              studyCenters: true,
+              programs: true,
+              enrollments: true
+            }
+          }
+        }
+      });
+      metrics.organization = org;
+      metrics.totalBranches = org?._count.branches ?? await prisma.branch.count({ where: { organizationId: targetOrgId } });
+      metrics.totalEnrollments = org?._count.enrollments ?? await prisma.enrollment.count({ where: { organizationId: targetOrgId } });
+
+      // Ensure totalStudents is accurate
+      metrics.totalStudents = org?._count.students ?? await prisma.student.count({ where: { organizationId: targetOrgId } });
+
+      // Accurate Workforce count (excluding student accounts)
+      metrics.totalEmployees = await prisma.user.count({
+        where: {
+          organizationId: targetOrgId,
+          role: { notIn: ['ceo', 'org_admin', 'superadmin', 'student'] },
+          status: { not: 'resigned' }
+        }
+      });
+
+      // 2. Real Admissions Breakdown & Status
+      const studentStatuses = await prisma.student.groupBy({
+        by: ['status'],
+        where: { organizationId: targetOrgId },
+        _count: { id: true }
+      });
+      let verifiedStudents = 0;
+      let pendingStudents = 0;
+      for (const s of studentStatuses) {
+        if (['active', 'completed', 'enrolled'].includes(s.status)) {
+          verifiedStudents += s._count.id;
+        } else {
+          pendingStudents += s._count.id;
+        }
+      }
+      metrics.verifiedStudents = verifiedStudents;
+      metrics.pendingStudents = pendingStudents;
+
+      // 3. Organization Monthly Admissions Trend (Last 6 months)
+      const now = new Date();
+      const monthMap: Record<string, { month: string; enrollments: number; completed: number; pending: number }> = {};
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+        monthMap[key] = { month: key, enrollments: 0, completed: 0, pending: 0 };
+      }
+
+      // Query students for intake trajectory
+      const orgStudents = await prisma.student.findMany({
+        where: { organizationId: targetOrgId },
+        select: { createdAt: true, joinDate: true, status: true }
+      });
+
+      if (orgStudents.length > 0) {
+        for (const s of orgStudents) {
+          const d = new Date(s.joinDate || s.createdAt);
+          const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+          if (monthMap[key]) {
+            monthMap[key].enrollments++;
+            if (['active', 'completed', 'enrolled'].includes(s.status)) {
+              monthMap[key].completed++;
+            } else {
+              monthMap[key].pending++;
+            }
+          }
+        }
+      } else {
+        // Fallback to online portal enrollments if students table empty
+        const orgEnrollments = await prisma.enrollment.findMany({
+          where: { organizationId: targetOrgId },
+          select: { createdAt: true, status: true }
+        });
+        for (const e of orgEnrollments) {
+          const d = new Date(e.createdAt);
+          const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+          if (monthMap[key]) {
+            monthMap[key].enrollments++;
+            if (['completed', 'enrolled'].includes(e.status)) {
+              monthMap[key].completed++;
+            } else {
+              monthMap[key].pending++;
+            }
+          }
+        }
+      }
+      metrics.enrollmentTrend = Object.values(monthMap);
+
+      // 4. Organization Monthly Revenue Collections (Last 6 months from PaymentEntry)
+      const orgPaymentEntries = await prisma.paymentEntry.findMany({
+        where: { organizationId: targetOrgId },
+        select: { createdAt: true, amount: true }
+      });
+      const revMap: Record<string, { month: string; amount: number; count: number }> = {};
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+        revMap[key] = { month: key, amount: 0, count: 0 };
+      }
+      let totalCollectedPayments = 0;
+      for (const p of orgPaymentEntries) {
+        const d = new Date(p.createdAt);
+        const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+        const val = Number(p.amount) || 0;
+        totalCollectedPayments += val;
+        if (revMap[key]) {
+          revMap[key].amount += val;
+          revMap[key].count++;
+        }
+      }
+      metrics.revenueTrend = Object.values(revMap);
+      if (totalCollectedPayments > 0 || !metrics.totalRevenue) {
+        metrics.totalRevenue = totalCollectedPayments;
+      }
+      metrics.totalPayments = orgPaymentEntries.length;
+
+      // Invoices & Settlement Efficiency
+      const allInvoices = await prisma.invoice.findMany({
+        where: { organizationId: targetOrgId },
+        select: { total: true, status: true }
+      });
+      metrics.totalInvoices = allInvoices.length;
+      metrics.totalInvoicedAmount = allInvoices.reduce((sum, inv) => sum + (Number(inv.total) || 0), 0);
+      metrics.paidInvoicesCount = allInvoices.filter(i => i.status === 'paid').length;
+      metrics.settlementRate = allInvoices.length > 0 
+        ? Math.round((metrics.paidInvoicesCount / allInvoices.length) * 100)
+        : (metrics.totalPayments > 0 ? 100 : 0);
+
+      // 5. Branch Distribution (Students & Staff by Branch)
+      const branches = await prisma.branch.findMany({
+        where: { organizationId: targetOrgId },
+        select: {
+          id: true,
+          name: true,
+          code: true,
+          city: true,
+          _count: {
+            select: {
+              students: true,
+              users: true
+            }
+          }
+        },
+        orderBy: { students: { _count: 'desc' } },
+        take: 8
+      });
+      metrics.branchDistribution = branches.map(b => ({
+        id: b.id,
+        name: b.name.length > 18 ? b.name.slice(0, 16) + '..' : b.name,
+        fullName: b.name,
+        city: b.city || '',
+        students: b._count.students,
+        staff: b._count.users
+      }));
+
+      // 6. Academic Programs Popularity
+      const programs = await prisma.program.findMany({
+        where: { organizationId: targetOrgId },
+        select: {
+          id: true,
+          name: true,
+          code: true,
+          _count: {
+            select: {
+              students: true,
+              enrollments: true
+            }
+          }
+        },
+        orderBy: { students: { _count: 'desc' } },
+        take: 6
+      });
+      metrics.programDistribution = programs.map(p => ({
+        id: p.id,
+        name: p.code || (p.name.length > 14 ? p.name.slice(0, 12) + '..' : p.name),
+        fullName: p.name,
+        students: p._count.students,
+        enrollments: p._count.enrollments
+      }));
+
+      // 7. User Roles Breakdown within Organization (excluding students)
+      const roleCounts = await prisma.user.groupBy({
+        by: ['role'],
+        _count: { id: true },
+        where: { 
+          organizationId: targetOrgId, 
+          status: { not: 'resigned' },
+          role: { not: 'student' }
+        }
+      });
+      metrics.roleDistribution = roleCounts.map(r => ({ role: r.role, count: r._count.id }));
+
+      // 8. Recent Organization Activity Logs (combining audits, admissions, payments)
+      const recentOrgAudits = await prisma.auditLog.findMany({
+        where: { organizationId: targetOrgId },
+        take: 5,
+        orderBy: { timestamp: 'desc' },
+        include: {
+          user: { select: { name: true, email: true, role: true } }
+        }
+      });
+      const recentStudents = await prisma.student.findMany({
+        where: { organizationId: targetOrgId },
+        take: 4,
+        orderBy: { createdAt: 'desc' },
+        select: { id: true, name: true, createdAt: true }
+      });
+      const recentPayments = await prisma.paymentEntry.findMany({
+        where: { organizationId: targetOrgId },
+        take: 4,
+        orderBy: { createdAt: 'desc' },
+        select: { id: true, amount: true, createdAt: true, receiver: { select: { name: true } } }
+      });
+
+      const combinedActivities: any[] = [
+        ...recentOrgAudits.map(a => ({
+          id: 'audit-' + a.id,
+          action: `${a.action} on ${a.entityType}`,
+          entityType: a.entityType,
+          userName: a.user?.name || a.user?.email || 'Administrator',
+          userRole: a.user?.role || 'Admin',
+          timestamp: a.timestamp
+        })),
+        ...recentStudents.map(s => ({
+          id: 'student-' + s.id,
+          action: 'Admitted into Student Body',
+          entityType: 'Student',
+          userName: s.name,
+          userRole: 'Admission',
+          timestamp: s.createdAt
+        })),
+        ...recentPayments.map(p => ({
+          id: 'payment-' + p.id,
+          action: `Received fee payment of ₹${Number(p.amount).toLocaleString('en-IN')}`,
+          entityType: 'Fee Receipt',
+          userName: p.receiver?.name || 'Accounts Desk',
+          userRole: 'Finance',
+          timestamp: p.createdAt
+        }))
+      ];
+      combinedActivities.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      metrics.recentAuditLogs = combinedActivities.slice(0, 8);
+
+      // 9. Pending Reviews Count (admissions pending review in portal)
+      metrics.pendingReviews = await prisma.enrollment.count({
+        where: {
+          organizationId: targetOrgId,
+          status: { notIn: ['enrolled', 'completed', 'rejected', 'ops_rejected'] }
+        }
+      });
+    }
   }
 
   res.status(200).json({ success: true, data: metrics });
@@ -687,4 +1094,229 @@ export const getBranchHierarchy = asyncHandler(async (req: AuthRequest, res: Res
   }
 
   res.status(200).json({ success: true, data: hierarchyData });
+});
+
+export const getPlatformUsageMetrics = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user.role !== 'superadmin') {
+    res.status(403).json({ success: false, message: 'Superadmin privileges required' });
+    return;
+  }
+
+  const requestedOrgId = req.query.organizationId as string;
+  const isOrgFiltered = requestedOrgId && requestedOrgId !== 'all';
+  const orgWhere = isOrgFiltered ? { organizationId: requestedOrgId } : {};
+
+  // 1. Fetch available organizations for dropdown
+  const organizations = await prisma.organization.findMany({
+    select: {
+      id: true,
+      name: true,
+      customLoginSlug: true,
+      status: true,
+      _count: {
+        select: {
+          students: true,
+          users: true,
+          enrollments: true,
+        }
+      }
+    },
+    orderBy: { name: 'asc' }
+  });
+
+  // 2. Summary KPIs
+  const [
+    totalEnrollments,
+    totalStudents,
+    totalUsers,
+    totalAuditLogs,
+    paymentsAggregate
+  ] = await Promise.all([
+    prisma.enrollment.count({ where: orgWhere }),
+    prisma.student.count({ where: isOrgFiltered ? { organizationId: requestedOrgId } : {} }),
+    prisma.user.count({ where: isOrgFiltered ? { organizationId: requestedOrgId, status: { not: 'resigned' } } : { status: { not: 'resigned' } } }),
+    prisma.auditLog.count({ where: orgWhere }),
+    prisma.paymentEntry.aggregate({
+      where: orgWhere,
+      _sum: { amount: true },
+      _count: { id: true }
+    })
+  ]);
+
+  const totalRevenue = Number(paymentsAggregate._sum.amount || 0);
+
+  // 3. Historical Months (Last 6 months)
+  const now = new Date();
+  const monthsCount = 6;
+  const monthMap: Record<string, {
+    month: string;
+    enrollments: number;
+    completed: number;
+    revenue: number;
+    actions: number;
+  }> = {};
+
+  for (let i = monthsCount - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+    monthMap[key] = {
+      month: key,
+      enrollments: 0,
+      completed: 0,
+      revenue: 0,
+      actions: 0
+    };
+  }
+
+  const startDate = new Date(now.getFullYear(), now.getMonth() - (monthsCount - 1), 1);
+
+  // Fetch enrollments over period
+  const enrollmentsList = await prisma.enrollment.findMany({
+    where: {
+      ...orgWhere,
+      createdAt: { gte: startDate }
+    },
+    select: {
+      createdAt: true,
+      status: true,
+      studyCenterId: true
+    }
+  });
+
+  enrollmentsList.forEach(e => {
+    const d = new Date(e.createdAt);
+    const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+    if (monthMap[key]) {
+      monthMap[key].enrollments++;
+      if (['completed', 'enrolled'].includes(e.status)) {
+        monthMap[key].completed++;
+      }
+    }
+  });
+
+  // Fetch payments over period
+  const paymentsList = await prisma.paymentEntry.findMany({
+    where: {
+      ...orgWhere,
+      createdAt: { gte: startDate }
+    },
+    select: {
+      createdAt: true,
+      amount: true
+    }
+  });
+
+  paymentsList.forEach(p => {
+    const d = new Date(p.createdAt);
+    const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+    if (monthMap[key]) {
+      monthMap[key].revenue += Number(p.amount || 0);
+    }
+  });
+
+  // Fetch audit logs over period for actions timeline
+  const auditsList = await prisma.auditLog.findMany({
+    where: {
+      ...orgWhere,
+      timestamp: { gte: startDate }
+    },
+    select: {
+      timestamp: true,
+      action: true,
+      entityType: true,
+      userId: true
+    }
+  });
+
+  auditsList.forEach(a => {
+    const d = new Date(a.timestamp);
+    const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+    if (monthMap[key]) {
+      monthMap[key].actions++;
+    }
+  });
+
+  const correlationTrend = Object.values(monthMap);
+
+  // 4. User Actions Breakdown
+  const actionCounts: Record<string, number> = {};
+  const entityCounts: Record<string, number> = {};
+
+  auditsList.forEach(a => {
+    const actionKey = (a.action || 'other').toLowerCase();
+    actionCounts[actionKey] = (actionCounts[actionKey] || 0) + 1;
+
+    const entityKey = a.entityType || 'General';
+    entityCounts[entityKey] = (entityCounts[entityKey] || 0) + 1;
+  });
+
+  const actionDistribution = Object.entries(actionCounts).map(([action, count]) => ({
+    name: action.charAt(0).toUpperCase() + action.slice(1),
+    action,
+    count
+  })).sort((a, b) => b.count - a.count);
+
+  const entityDistribution = Object.entries(entityCounts).map(([entity, count]) => ({
+    name: entity,
+    count
+  })).sort((a, b) => b.count - a.count).slice(0, 8);
+
+  // 5. Recent Detailed Audit Logs (last 100)
+  const auditLogs = await prisma.auditLog.findMany({
+    where: orgWhere,
+    take: 100,
+    orderBy: { timestamp: 'desc' },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true
+        }
+      },
+      organization: {
+        select: {
+          id: true,
+          name: true
+        }
+      }
+    }
+  });
+
+  // 6. Top Active Operators
+  const userActionMap: Record<string, { user: any; count: number }> = {};
+  auditLogs.forEach(a => {
+    if (a.user) {
+      if (!userActionMap[a.user.id]) {
+        userActionMap[a.user.id] = { user: a.user, count: 0 };
+      }
+      userActionMap[a.user.id].count++;
+    }
+  });
+
+  const topOperators = Object.values(userActionMap)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+
+  res.status(200).json({
+    success: true,
+    data: {
+      selectedOrgId: isOrgFiltered ? requestedOrgId : 'all',
+      organizations,
+      summary: {
+        totalEnrollments,
+        totalStudents,
+        totalUsers,
+        totalAuditLogs,
+        totalRevenue,
+        paymentsCount: paymentsAggregate._count.id || 0,
+      },
+      correlationTrend,
+      actionDistribution,
+      entityDistribution,
+      topOperators,
+      auditLogs
+    }
+  });
 });

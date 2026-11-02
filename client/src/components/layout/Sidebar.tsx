@@ -312,13 +312,13 @@ const navItems: NavItem[] = [
     id: 'meetings',
     label: 'Meetings',
     icon: Video,
-    // No roles array means visible to all users
+    roles: ['org_admin', 'ceo', 'general_manager', 'branch_manager', 'ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'faculty', 'center_admin'],
   },
   {
     id: 'settings',
     label: 'Organization Settings',
     icon: Settings,
-    roles: ['superadmin', 'org_admin'],
+    roles: ['org_admin'],
   },
   {
     id: 'communication_settings',
