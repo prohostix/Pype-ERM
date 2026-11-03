@@ -8,7 +8,7 @@ import { PrismaLayout, type TableItem } from '@/components/layout/PrismaLayout';
 import { DataGrid } from '@/components/ui/data-grid';
 import PublicRegisterPage from '@/pages/PublicRegisterPage';
 import StudentApplicationPage from '@/pages/StudentApplicationPage';
-import { AppDownloadPage } from '@/pages/AppDownloadPage';
+import { ApkDownloadRedirect, apkPlatformForPath } from '@/pages/ApkDownloadRedirect';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
 import { getOpsNavItems } from '@/pages/ModernOpsDashboard';
 import { getHRNavItems } from '@/pages/ModernHRDashboard';
@@ -370,14 +370,10 @@ function App() {
     return <PrivacyPolicyPage />;
   }
 
-  // Public APK / Mobile App download page
-  if (
-    window.location.pathname === '/download' ||
-    window.location.pathname === '/apk' ||
-    window.location.pathname === '/app-download' ||
-    window.location.pathname === '/download/apk'
-  ) {
-    return <AppDownloadPage />;
+  // Public download links go straight to the APK (no page)
+  const apkPlatform = apkPlatformForPath(window.location.pathname, window.location.search);
+  if (apkPlatform) {
+    return <ApkDownloadRedirect platform={apkPlatform} />;
   }
 
   // Public register page — show when on /register path OR has ?token= param (no-router SPA)

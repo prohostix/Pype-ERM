@@ -3,6 +3,26 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// The server package root (this file lives in src/controllers or dist/controllers).
+const SERVER_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+/**
+ * Folder holding the published APKs. A relative UPLOAD_PATH (the default
+ * "./uploads") used to resolve against the process's working directory, so the
+ * download returned 404 whenever the process was started from outside server/.
+ * Try the working directory first, then the server package root.
+ */
+const resolveReleasesFolder = (): string => {
+  const configured = process.env.UPLOAD_PATH || './uploads';
+  if (path.isAbsolute(configured)) return path.join(configured, 'releases');
+  const candidates = [
+    path.resolve(configured, 'releases'),
+    path.resolve(SERVER_ROOT, configured, 'releases'),
+  ];
+  return candidates.find((c) => fs.existsSync(c)) ?? candidates[0];
+};
 
 interface ReleaseManifest {
   versionName: string;
@@ -65,9 +85,8 @@ export const downloadApk = asyncHandler(async (req: Request, res: Response) => {
     return;
   }
 
-  const uploadPath = process.env.UPLOAD_PATH || './uploads';
-  const releasesFolder = path.join(uploadPath, 'releases');
-  const filePath = path.join(releasesFolder, manifest.apkFileName);
+  const releasesFolder = resolveReleasesFolder();
+  const filePath = path.join(releasesFolder, path.basename(manifest.apkFileName));
 
   if (!fs.existsSync(filePath)) {
     res.status(404).json({ success: false, message: 'APK file not found on server' });
