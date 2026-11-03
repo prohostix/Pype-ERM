@@ -35,7 +35,16 @@ function getDistanceInMeters(lat1: number, lon1: number, lat2: number, lon2: num
   return R * c; // in meters
 }
 
-async function calculateLateMinutes(
+export const DEFAULT_OFFICE_HOURS = {
+  checkInTime: '09:00',
+  checkOutTime: '18:00',
+  graceMinutes: 15,
+  earlyExitGraceMinutes: 5,
+  workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+  dayOverrides: [] as any[]
+};
+
+export async function calculateLateMinutes(
   checkInDate: Date,
   employeeId: string,
   organizationId: string,
@@ -98,6 +107,75 @@ async function calculateLateMinutes(
     return { isLate: true, lateMinutes: diffMins };
   }
   return { isLate: false, lateMinutes: 0 };
+}
+
+export async function calculateEarlyExitMinutes(
+  checkOutDate: Date,
+  employeeId: string,
+  organizationId: string,
+  officeHours: any
+): Promise<{ isEarlyExit: boolean; earlyExitMinutes: number }> {
+  const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const istCheckOut = new Date(checkOutDate.getTime() + (330 * 60000));
+  const currentDayName = weekdays[istCheckOut.getUTCDay()];
+
+  const overrides = officeHours.dayOverrides || [];
+  const dayOverride = overrides.find((o: any) => o.day === currentDayName);
+
+  const checkOutTarget = dayOverride?.checkOutTime || officeHours.checkOutTime || '18:00';
+  const earlyGrace = officeHours.earlyExitGraceMinutes !== undefined 
+    ? officeHours.earlyExitGraceMinutes 
+    : (officeHours.graceMinutes !== undefined ? officeHours.graceMinutes : 5);
+
+  const punchHour = istCheckOut.getUTCHours();
+  const punchMin = istCheckOut.getUTCMinutes();
+  const punchTotalMins = punchHour * 60 + punchMin;
+
+  const [outTargetHour, outTargetMin] = checkOutTarget.split(':').map(Number);
+  const outTargetTotalMins = outTargetHour * 60 + outTargetMin;
+
+  const startOfDay = new Date(checkOutDate);
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date(checkOutDate);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  // 1. Check for approved/pending early_exit leave permission
+  const earlyExitLeave = await prisma.leaveRequest.findFirst({
+    where: {
+      employeeId,
+      status: { in: ['approved', 'dept_approved'] },
+      type: 'early_exit',
+      startDate: { lte: endOfDay },
+      endDate: { gte: startOfDay }
+    }
+  });
+
+  if (earlyExitLeave) {
+    return { isEarlyExit: false, earlyExitMinutes: 0 };
+  }
+
+  // 2. Check for second-half leave (or full day leave) for today
+  const halfDayLeave = await prisma.leaveRequest.findFirst({
+    where: {
+      employeeId,
+      status: { in: ['approved', 'dept_approved'] },
+      isHalfDay: true,
+      startDate: { lte: endOfDay },
+      endDate: { gte: startOfDay }
+    }
+  });
+
+  if (halfDayLeave && halfDayLeave.halfDayType === 'second_half') {
+    return { isEarlyExit: false, earlyExitMinutes: 0 };
+  }
+
+  // Calculate early exit minutes
+  const diffMins = outTargetTotalMins - punchTotalMins;
+
+  if (diffMins > earlyGrace) {
+    return { isEarlyExit: true, earlyExitMinutes: diffMins };
+  }
+  return { isEarlyExit: false, earlyExitMinutes: 0 };
 }
 
 export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -243,14 +321,31 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
     }
   });
 
+  // Check if user has an approved/pending late-coming permission for today
+  const hasLateComingLeave = await prisma.leaveRequest.findFirst({
+    where: {
+      employeeId: req.user.id,
+      status: { in: ['approved', 'dept_approved'] },
+      type: 'late_coming',
+      startDate: { lte: todayEnd },
+      endDate: { gte: todayStart }
+    }
+  });
+
   const isHalfDayToday = !!hasHalfDayLeave || existing?.status === 'half_day' || existing?.notes?.toLowerCase().includes('half day');
+  const isLateComingApproved = !!hasLateComingLeave || existing?.notes?.toLowerCase().includes('late coming approved');
 
   if (isHalfDayToday) {
     status = 'half_day' as any;
     isLate = false;
     lateMinutes = 0;
-  } else if (settings && settings.officeHours) {
-    const lateCalc = await calculateLateMinutes(now, req.user.id, req.user.organizationId, settings.officeHours);
+  } else if (isLateComingApproved) {
+    status = 'present';
+    isLate = false;
+    lateMinutes = 0;
+  } else {
+    const officeHours = (settings && settings.officeHours) ? settings.officeHours : DEFAULT_OFFICE_HOURS;
+    const lateCalc = await calculateLateMinutes(now, req.user.id, req.user.organizationId, officeHours);
     isLate = lateCalc.isLate;
     lateMinutes = lateCalc.lateMinutes;
     if (isLate) status = 'late';
@@ -259,8 +354,8 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
   let attendance;
   if (existing) {
     const finalStatus = isHalfDayToday ? 'half_day' : (existing.status === 'wfh' ? 'wfh' : status);
-    const finalIsLate = isHalfDayToday ? false : isLate;
-    const finalLateMinutes = isHalfDayToday ? 0 : lateMinutes;
+    const finalIsLate = (isHalfDayToday || isLateComingApproved) ? false : isLate;
+    const finalLateMinutes = (isHalfDayToday || isLateComingApproved) ? 0 : lateMinutes;
 
     attendance = await prisma.attendance.update({
       where: { id: existing.id },
@@ -282,9 +377,9 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
         checkIn: now,
         checkInLocation: latitude ? { latitude, longitude, address } : undefined,
         checkInPhoto,
-        status,
-        isLate,
-        lateMinutes
+        status: isHalfDayToday ? 'half_day' : status,
+        isLate: (isHalfDayToday || isLateComingApproved) ? false : isLate,
+        lateMinutes: (isHalfDayToday || isLateComingApproved) ? 0 : lateMinutes
       }
     });
   }
@@ -441,13 +536,23 @@ export const punchOut = asyncHandler(async (req: AuthRequest, res: Response) => 
   const checkInTime = new Date(attendanceRecord.checkIn!).getTime();
   const workingHours = Number(((now.getTime() - checkInTime) / 3600000).toFixed(2));
 
+  // Early Exit Calculation
+  let isEarlyExit = false;
+  let earlyExitMinutes = 0;
+  const officeHours = (settings && settings.officeHours) ? settings.officeHours : DEFAULT_OFFICE_HOURS;
+  const earlyCalc = await calculateEarlyExitMinutes(now, req.user.id, req.user.organizationId, officeHours);
+  isEarlyExit = earlyCalc.isEarlyExit;
+  earlyExitMinutes = earlyCalc.earlyExitMinutes;
+
   const attendance = await prisma.attendance.update({
     where: { id: attendanceRecord.id },
     data: {
       checkOut: now,
       checkOutLocation: latitude ? { latitude, longitude, address } : undefined,
       checkOutPhoto,
-      workingHours
+      workingHours,
+      isEarlyExit,
+      earlyExitMinutes
     }
   });
 
@@ -456,13 +561,15 @@ export const punchOut = asyncHandler(async (req: AuthRequest, res: Response) => 
     req.user.organizationId,
     'general',
     'Employee Punched Out',
-    `${req.user.name} just punched out after ${workingHours} hrs.`,
+    `${req.user.name} just punched out after ${workingHours} hrs${isEarlyExit ? ` (Early Exit by ${earlyExitMinutes} mins)` : ''}.`,
     ['hr_admin', 'hr_sub_admin']
   );
 
   res.json({
     success: true,
-    message: `Punched out successfully! Total duration: ${workingHours} hrs.`,
+    message: isEarlyExit 
+      ? `Punched out successfully! (Early exit by ${earlyExitMinutes} mins)` 
+      : `Punched out successfully! Total duration: ${workingHours} hrs.`,
     data: attendance
   });
 });
@@ -651,13 +758,17 @@ export const getAttendancesData = async (req: AuthRequest, forceStatus?: string)
     
     const leaveMap = new Map(leaves.map(l => [l.employeeId, l]));
 
-    // Annotate present/late attendances with leave info if any (e.g. half days)
+    // Annotate present/late attendances with leave info if any (e.g. half days, permissions)
     finalAttendances.forEach(a => {
       const empLeave = leaveMap.get(a.employeeId);
       if (empLeave) {
-        let leaveNote = empLeave.isHalfDay 
-          ? `Half Day (${empLeave.halfDayType === 'first_half' ? '1st Half' : '2nd Half'}) - ${empLeave.type} Leave` 
-          : `${empLeave.type} Leave`;
+        let leaveNote = empLeave.type === 'late_coming'
+          ? 'Late Coming Permission'
+          : empLeave.type === 'early_exit'
+            ? 'Early Exit Permission'
+            : empLeave.isHalfDay 
+              ? `Half Day (${empLeave.halfDayType === 'first_half' ? '1st Half' : '2nd Half'}) - ${empLeave.type} Leave` 
+              : `${empLeave.type} Leave`;
         a.remarks = a.remarks ? `${a.remarks} | ${leaveNote}` : leaveNote;
         (a as any)._hasLeave = true;
       }
@@ -671,12 +782,18 @@ export const getAttendancesData = async (req: AuthRequest, forceStatus?: string)
       
       const empLeave = leaveMap.get(emp.id);
       if (empLeave) {
-        computedStatus = 'leave';
-        if (empLeave.isHalfDay) {
-          const hdText = empLeave.halfDayType === 'first_half' ? '1st Half' : '2nd Half';
-          notes = `Half Day (${hdText}) - ${empLeave.type} Leave`;
+        if (empLeave.type === 'late_coming') {
+          notes = `Late Coming Permission: ${empLeave.reason}`;
+        } else if (empLeave.type === 'early_exit') {
+          notes = `Early Exit Permission: ${empLeave.reason}`;
         } else {
-          notes = `${empLeave.type} Leave`;
+          computedStatus = 'leave';
+          if (empLeave.isHalfDay) {
+            const hdText = empLeave.halfDayType === 'first_half' ? '1st Half' : '2nd Half';
+            notes = `Half Day (${hdText}) - ${empLeave.type} Leave`;
+          } else {
+            notes = `${empLeave.type} Leave`;
+          }
         }
       }
 
@@ -799,23 +916,103 @@ export const createAttendance = asyncHandler(async (req: AuthRequest, res: Respo
   }
 
   const data = { ...req.body, organizationId: orgId };
+  if (!data.employeeId || !data.date) {
+    res.status(400).json({ success: false, message: 'Employee ID and date are required.' });
+    return;
+  }
+
+  const targetDate = new Date(data.date);
+  const startOfDay = new Date(targetDate);
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date(targetDate);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  // Check if an attendance record already exists for this employee on this day
+  const existing = await prisma.attendance.findFirst({
+    where: {
+      employeeId: data.employeeId,
+      date: {
+        gte: startOfDay,
+        lte: endOfDay
+      }
+    }
+  });
 
   if (data.checkIn) {
     const settings = await prisma.hRSettings.findFirst({ where: { organizationId: orgId } });
-    if (settings && settings.officeHours) {
-      const lateCalc = await calculateLateMinutes(new Date(data.checkIn), data.employeeId, orgId, settings.officeHours);
+    const officeHours = (settings && settings.officeHours) ? settings.officeHours : DEFAULT_OFFICE_HOURS;
+    const lateCalc = await calculateLateMinutes(new Date(data.checkIn), data.employeeId, orgId, officeHours);
+    if (data.isLate === undefined) {
       data.isLate = lateCalc.isLate;
+    }
+    if (data.lateMinutes === undefined) {
       data.lateMinutes = lateCalc.lateMinutes;
-      if (data.isLate) {
-        if (!data.status || data.status === 'present') data.status = 'late';
-      } else {
-        if (data.status === 'late') data.status = 'present';
-      }
+    }
+    if (data.isLate) {
+      if (!data.status || data.status === 'present') data.status = 'late';
+    } else {
+      if (data.status === 'late') data.status = 'present';
     }
   }
 
-  const attendance = await prisma.attendance.create({ data });
-  res.status(201).json({ success: true, data: attendance });
+  if (data.checkOut && data.earlyExitMinutes === undefined) {
+    const settings = await prisma.hRSettings.findFirst({ where: { organizationId: orgId } });
+    const officeHours = (settings && settings.officeHours) ? settings.officeHours : DEFAULT_OFFICE_HOURS;
+    const earlyCalc = await calculateEarlyExitMinutes(new Date(data.checkOut), data.employeeId, orgId, officeHours);
+    if (data.isEarlyExit === undefined) {
+      data.isEarlyExit = earlyCalc.isEarlyExit;
+    }
+    if (data.earlyExitMinutes === undefined) {
+      data.earlyExitMinutes = earlyCalc.earlyExitMinutes;
+    }
+  }
+
+  if (data.checkIn && data.checkOut && !data.workingHours) {
+    const cin = new Date(data.checkIn).getTime();
+    const cout = new Date(data.checkOut).getTime();
+    if (cout > cin) {
+      data.workingHours = Number(((cout - cin) / 3600000).toFixed(2));
+    }
+  }
+
+  let attendance;
+  if (existing) {
+    attendance = await prisma.attendance.update({
+      where: { id: existing.id },
+      data: {
+        ...data,
+        date: existing.date
+      }
+    });
+    res.status(200).json({ success: true, data: attendance, message: 'Existing attendance record updated.' });
+    return;
+  }
+
+  try {
+    attendance = await prisma.attendance.create({ data });
+    res.status(201).json({ success: true, data: attendance });
+  } catch (err: any) {
+    if (err.code === 'P2002') {
+      const fallbackExisting = await prisma.attendance.findFirst({
+        where: {
+          employeeId: data.employeeId,
+          date: new Date(data.date)
+        }
+      });
+      if (fallbackExisting) {
+        attendance = await prisma.attendance.update({
+          where: { id: fallbackExisting.id },
+          data: {
+            ...data,
+            date: fallbackExisting.date
+          }
+        });
+        res.status(200).json({ success: true, data: attendance, message: 'Existing attendance record updated.' });
+        return;
+      }
+    }
+    throw err;
+  }
 });
 export const markAttendance = createAttendance;
 
@@ -825,32 +1022,41 @@ export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Respo
     res.status(404).json({ success: false, message: 'Attendance record not found' });
     return;
   }
-  const { checkIn, checkOut, status, isLate, lateMinutes, workingHours, remarks } = req.body;
+  const { checkIn, checkOut, status, isLate, lateMinutes, isEarlyExit, earlyExitMinutes, workingHours, remarks } = req.body;
   const updateData: any = {};
   if (checkIn !== undefined) updateData.checkIn = checkIn ? new Date(checkIn) : null;
   if (checkOut !== undefined) updateData.checkOut = checkOut ? new Date(checkOut) : null;
   if (status !== undefined) updateData.status = status;
   if (isLate !== undefined) updateData.isLate = isLate;
   if (lateMinutes !== undefined) updateData.lateMinutes = Number(lateMinutes);
+  if (isEarlyExit !== undefined) updateData.isEarlyExit = isEarlyExit;
+  if (earlyExitMinutes !== undefined) updateData.earlyExitMinutes = Number(earlyExitMinutes);
   if (workingHours !== undefined) updateData.workingHours = Number(workingHours);
   if (remarks !== undefined) updateData.remarks = remarks;
 
   if (updateData.checkIn) {
     const settings = await prisma.hRSettings.findFirst({ where: { organizationId: req.user.organizationId } });
-    if (settings && settings.officeHours) {
-      const lateCalc = await calculateLateMinutes(updateData.checkIn, attendance.employeeId, attendance.organizationId, settings.officeHours);
-      updateData.isLate = lateCalc.isLate;
-      updateData.lateMinutes = lateCalc.lateMinutes;
-      if (updateData.isLate) {
-        if (!updateData.status || updateData.status === 'present') updateData.status = 'late';
-      } else {
-        if (updateData.status === 'late') updateData.status = 'present';
-      }
+    const officeHours = (settings && settings.officeHours) ? settings.officeHours : DEFAULT_OFFICE_HOURS;
+    const lateCalc = await calculateLateMinutes(updateData.checkIn, attendance.employeeId, attendance.organizationId, officeHours);
+    updateData.isLate = lateCalc.isLate;
+    updateData.lateMinutes = lateCalc.lateMinutes;
+    if (updateData.isLate) {
+      if (!updateData.status || updateData.status === 'present') updateData.status = 'late';
+    } else {
+      if (updateData.status === 'late') updateData.status = 'present';
     }
   } else if (updateData.status === 'half_day' && updateData.lateMinutes === undefined && (attendance.lateMinutes || 0) >= 180) {
     // If status is updated to half_day and lateMinutes had unadjusted morning offset, normalize it
     updateData.lateMinutes = Math.max(0, (attendance.lateMinutes || 0) - 270);
     updateData.isLate = updateData.lateMinutes > 0;
+  }
+
+  if (updateData.checkOut && earlyExitMinutes === undefined) {
+    const settings = await prisma.hRSettings.findFirst({ where: { organizationId: req.user.organizationId } });
+    const officeHours = (settings && settings.officeHours) ? settings.officeHours : DEFAULT_OFFICE_HOURS;
+    const earlyCalc = await calculateEarlyExitMinutes(updateData.checkOut, attendance.employeeId, attendance.organizationId, officeHours);
+    updateData.isEarlyExit = earlyCalc.isEarlyExit;
+    updateData.earlyExitMinutes = earlyCalc.earlyExitMinutes;
   }
 
   const updatedAttendance = await prisma.attendance.update({ where: { id: req.params.id }, data: updateData });
@@ -1364,8 +1570,19 @@ export const syncOfflinePunches = asyncHandler(async (req: AuthRequest, res: Res
       let lateMinutes = 0;
       let status: 'present' | 'late' = 'present';
 
-      if (type === 'in' && settings && settings.officeHours) {
-        const lateCalc = await calculateLateMinutes(punchTime, req.user.id, req.user.organizationId, settings.officeHours);
+      const hasLateComingLeave = await prisma.leaveRequest.findFirst({
+        where: {
+          employeeId: req.user.id,
+          status: { in: ['approved', 'dept_approved'] },
+          type: 'late_coming',
+          startDate: { lte: punchEnd },
+          endDate: { gte: punchStart }
+        }
+      });
+
+      if (type === 'in' && !hasLateComingLeave) {
+        const officeHours = (settings && settings.officeHours) ? settings.officeHours : DEFAULT_OFFICE_HOURS;
+        const lateCalc = await calculateLateMinutes(punchTime, req.user.id, req.user.organizationId, officeHours);
         isLate = lateCalc.isLate;
         lateMinutes = lateCalc.lateMinutes;
         if (isLate) status = 'late';
@@ -1424,6 +1641,13 @@ export const syncOfflinePunches = asyncHandler(async (req: AuthRequest, res: Res
             workingHours = parseFloat((diffMs / (1000 * 60 * 60)).toFixed(2));
           }
 
+          let isEarlyExit = false;
+          let earlyExitMinutes = 0;
+          const officeHours = (settings && settings.officeHours) ? settings.officeHours : DEFAULT_OFFICE_HOURS;
+          const earlyCalc = await calculateEarlyExitMinutes(punchTime, req.user.id, req.user.organizationId, officeHours);
+          isEarlyExit = earlyCalc.isEarlyExit;
+          earlyExitMinutes = earlyCalc.earlyExitMinutes;
+
           const attendance = await prisma.attendance.update({
             where: { id: existing.id },
             data: {
@@ -1431,6 +1655,8 @@ export const syncOfflinePunches = asyncHandler(async (req: AuthRequest, res: Res
               checkOutLocation: latitude ? { latitude, longitude, address } : undefined,
               checkOutPhoto: photoUrl,
               workingHours,
+              isEarlyExit,
+              earlyExitMinutes,
               notes: existing.notes ? existing.notes + '\nCheck-out updated by offline sync' : 'Check-out updated by offline sync'
             }
           });

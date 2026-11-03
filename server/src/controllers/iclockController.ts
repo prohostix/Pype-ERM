@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma.js';
+import { calculateLateMinutes, calculateEarlyExitMinutes, DEFAULT_OFFICE_HOURS } from './attendanceController.js';
 
 function differenceInMinutes(date1: Date, date2: Date) {
   return Math.abs(Math.floor((date1.getTime() - date2.getTime()) / 1000 / 60));
@@ -114,15 +115,19 @@ export const iclockPushData = async (req: Request, res: Response) => {
 
       if (!attendance) {
         // First punch of the day -> Check In
+        const hrSettings = await prisma.hRSettings.findFirst({ where: { organizationId: user.organizationId } });
+        const officeHours = (hrSettings && hrSettings.officeHours) ? hrSettings.officeHours : DEFAULT_OFFICE_HOURS;
+        const lateCalc = await calculateLateMinutes(punchTime, user.id, user.organizationId, officeHours);
+
         attendance = await prisma.attendance.create({
           data: {
             employeeId: user.id,
             organizationId: user.organizationId,
             date: startOfDay,
             checkIn: punchTime,
-            status: 'present',
-            isLate: false,
-            lateMinutes: 0,
+            status: lateCalc.isLate ? 'late' : 'present',
+            isLate: lateCalc.isLate,
+            lateMinutes: lateCalc.lateMinutes,
             workingHours: 0
           }
         });
@@ -139,11 +144,19 @@ export const iclockPushData = async (req: Request, res: Response) => {
         const diffMinutes = differenceInMinutes(checkOutTime, checkInTime);
         workingHours = parseFloat((diffMinutes / 60).toFixed(2));
 
+        const hrSettings = await prisma.hRSettings.findFirst({ where: { organizationId: user.organizationId } });
+        const officeHours = (hrSettings && hrSettings.officeHours) ? hrSettings.officeHours : DEFAULT_OFFICE_HOURS;
+        const earlyCalc = await calculateEarlyExitMinutes(checkOutTime, user.id, user.organizationId, officeHours);
+        const isEarlyExit = earlyCalc.isEarlyExit;
+        const earlyExitMinutes = earlyCalc.earlyExitMinutes;
+
         await prisma.attendance.update({
           where: { id: attendance.id },
           data: {
             checkOut: checkOutTime,
-            workingHours
+            workingHours,
+            isEarlyExit,
+            earlyExitMinutes
           }
         });
       }

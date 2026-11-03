@@ -44,16 +44,53 @@ const startAutoPunchOutCron = () => {
         }
       });
 
+      const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const orgSettingsCache: Record<string, any> = {};
+
       let updatedCount = 0;
       for (const record of pendingAttendances) {
         if (!record.checkIn) continue;
 
-        const checkOutTime = new Date(record.date);
-        checkOutTime.setHours(23, 59, 59, 999);
+        const orgId = record.organizationId;
+        if (orgId && !orgSettingsCache[orgId]) {
+          const settings = await prisma.hRSettings.findFirst({
+            where: { organizationId: orgId }
+          });
+          orgSettingsCache[orgId] = settings?.officeHours || {
+            checkInTime: '09:00',
+            checkOutTime: '18:00',
+            dayOverrides: []
+          };
+        }
 
-        const checkInTime = new Date(record.checkIn).getTime();
-        const workingHours = Number(((checkOutTime.getTime() - checkInTime) / 3600000).toFixed(2));
+        const officeHours = (orgId && orgSettingsCache[orgId]) ? orgSettingsCache[orgId] : {
+          checkInTime: '09:00',
+          checkOutTime: '18:00',
+          dayOverrides: []
+        };
 
+        const checkInDate = new Date(record.checkIn);
+        const istOffset = 330 * 60000;
+        const istCheckIn = new Date(checkInDate.getTime() + istOffset);
+        const currentDayName = weekdays[istCheckIn.getUTCDay()];
+
+        const overrides = officeHours.dayOverrides || [];
+        const dayOverride = overrides.find((o: any) => o.day === currentDayName);
+        const checkOutTarget = dayOverride?.checkOutTime || officeHours.checkOutTime || '18:00';
+
+        const [outH, outM] = checkOutTarget.split(':').map(Number);
+        const year = istCheckIn.getUTCFullYear();
+        const month = istCheckIn.getUTCMonth();
+        const day = istCheckIn.getUTCDate();
+
+        let checkOutTime = new Date(Date.UTC(year, month, day, outH, outM, 0) - istOffset);
+
+        // If check-in happened after the target punch-out time, set check-out to check-in
+        if (checkOutTime.getTime() < checkInDate.getTime()) {
+          checkOutTime = new Date(checkInDate.getTime());
+        }
+
+        const workingHours = Number(Math.max(0, (checkOutTime.getTime() - checkInDate.getTime()) / 3600000).toFixed(2));
         const existingNotes = record.notes ? record.notes + '\n' : '';
 
         await prisma.attendance.update({
@@ -61,13 +98,15 @@ const startAutoPunchOutCron = () => {
           data: {
             checkOut: checkOutTime,
             workingHours,
-            notes: existingNotes + 'Auto-punched out by system at midnight.'
+            isEarlyExit: false,
+            earlyExitMinutes: 0,
+            notes: existingNotes + `Auto-punched out by system at organization punch-out time (${checkOutTarget}).`
           }
         });
         updatedCount++;
       }
       
-      console.log(`✅ Auto-punched out ${updatedCount} employees`);
+      console.log(`✅ Auto-punched out ${updatedCount} employees at organization punch-out times`);
     } catch (error) {
       console.error('❌ Auto punch-out cron error:', error);
     }

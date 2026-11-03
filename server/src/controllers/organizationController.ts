@@ -4,29 +4,85 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
 /**
- * Helper to fetch and deduplicate students/enrollments for an organization for a specific billing month (YYYY-MM).
+ * Helper to determine the exact billing start & end dates based on the organization's salary billing cycle.
  */
-export async function getOrganizationMonthEnrollments(orgId: string, billingMonth: string) {
+export async function getOrgBillingDateRange(orgId: string, billingMonth: string) {
   const [yearStr, monthStr] = billingMonth.split('-');
   const year = parseInt(yearStr, 10);
   const month = parseInt(monthStr, 10);
 
-  const startOfMonth = new Date(`${yearStr}-${monthStr}-01T00:00:00.000Z`);
-  const nextYear = month === 12 ? year + 1 : year;
-  const nextMonth = month === 12 ? 1 : month + 1;
-  const nextMonthStr = String(nextMonth).padStart(2, '0');
-  const endOfMonth = new Date(new Date(`${nextYear}-${nextMonthStr}-01T00:00:00.000Z`).getTime() - 1);
+  const org = await prisma.organization.findUnique({
+    where: { id: orgId },
+    select: { metadata: true }
+  });
+
+  const metadata = (org?.metadata as any) || {};
+  const salaryCycle = metadata.salaryCycle;
+
+  let startDate: Date;
+  let endDate: Date;
+
+  if (salaryCycle?.type === 'custom_range' && salaryCycle.customStartDate && salaryCycle.customEndDate) {
+    startDate = new Date(salaryCycle.customStartDate);
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date(salaryCycle.customEndDate);
+    endDate.setHours(23, 59, 59, 999);
+  } else if (salaryCycle?.startDay && salaryCycle?.endDay) {
+    const startDay = Number(salaryCycle.startDay);
+    const endDay = Number(salaryCycle.endDay);
+    const cycleMode = salaryCycle.cycleMode || (startDay > endDay ? 'previous_to_current' : 'same_month');
+
+    if (cycleMode === 'previous_to_current' || startDay > endDay) {
+      // e.g. billingMonth 2026-10:
+      // Starts in previous month (month - 2), ends in billing month (month - 1)
+      const prevMonthLastDay = new Date(year, month - 1, 0).getDate();
+      const currMonthLastDay = new Date(year, month, 0).getDate();
+      const safeStartDay = Math.min(startDay, prevMonthLastDay);
+      const safeEndDay = Math.min(endDay, currMonthLastDay);
+
+      startDate = new Date(year, month - 2, safeStartDay, 0, 0, 0, 0);
+      endDate = new Date(year, month - 1, safeEndDay, 23, 59, 59, 999);
+    } else {
+      // Within same month (e.g. 1st to 30th/31st)
+      const currMonthLastDay = new Date(year, month, 0).getDate();
+      const safeStartDay = Math.min(startDay, currMonthLastDay);
+      const safeEndDay = Math.min(endDay, currMonthLastDay);
+
+      startDate = new Date(year, month - 1, safeStartDay, 0, 0, 0, 0);
+      endDate = new Date(year, month - 1, safeEndDay, 23, 59, 59, 999);
+    }
+  } else {
+    // Default 1st of month to end of month
+    startDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
+    const nextYear = month === 12 ? year + 1 : year;
+    const nextMonth = month === 12 ? 1 : month + 1;
+    const nextMonthStr = String(nextMonth).padStart(2, '0');
+    endDate = new Date(new Date(`${nextYear}-${nextMonthStr}-01T00:00:00.000Z`).getTime() - 1);
+  }
+
+  const cycleStartFormatted = startDate.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+  const cycleEndFormatted = endDate.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+  const billingCycleLabel = `${cycleStartFormatted} — ${cycleEndFormatted}`;
+
+  return { startDate, endDate, billingCycleLabel, salaryCycle };
+}
+
+/**
+ * Helper to fetch and deduplicate students/enrollments for an organization strictly within its salary billing cycle.
+ */
+export async function getOrganizationMonthEnrollments(orgId: string, billingMonth: string) {
+  const { startDate, endDate } = await getOrgBillingDateRange(orgId, billingMonth);
 
   const [enrollments, students] = await Promise.all([
     prisma.enrollment.findMany({
       where: {
         organizationId: orgId,
         OR: [
-          { enrolledAt: { gte: startOfMonth, lte: endOfMonth } },
+          { enrolledAt: { gte: startDate, lte: endDate } },
           {
             AND: [
               { enrolledAt: null },
-              { createdAt: { gte: startOfMonth, lte: endOfMonth } }
+              { createdAt: { gte: startDate, lte: endDate } }
             ]
           }
         ]
@@ -41,13 +97,13 @@ export async function getOrganizationMonthEnrollments(orgId: string, billingMont
       where: {
         organizationId: orgId,
         OR: [
-          { enrolledAt: { gte: startOfMonth, lte: endOfMonth } },
-          { admissionDate: { gte: startOfMonth, lte: endOfMonth } },
+          { enrolledAt: { gte: startDate, lte: endDate } },
+          { admissionDate: { gte: startDate, lte: endDate } },
           {
             AND: [
               { enrolledAt: null },
               { admissionDate: null },
-              { createdAt: { gte: startOfMonth, lte: endOfMonth } }
+              { createdAt: { gte: startDate, lte: endDate } }
             ]
           }
         ]
@@ -552,7 +608,8 @@ export const generateOrgBill = asyncHandler(async (req: AuthRequest, res: Respon
     ? Number(planConfig.academicCenterBasePrice ?? billingConfig.academicCenterBasePrice ?? 0)
     : 0;
 
-  // Query strictly for the selected billing month
+  // Query strictly for the selected billing month within organization's salary billing cycle
+  const { startDate, endDate, billingCycleLabel } = await getOrgBillingDateRange(org.id, billingMonth);
   const monthEnrollments = await getOrganizationMonthEnrollments(org.id, billingMonth);
   const partnerEnrollments = monthEnrollments.filter(e => e.isPartnerEnrollment);
   const directEnrollments = monthEnrollments.filter(e => !e.isPartnerEnrollment);
@@ -589,6 +646,9 @@ export const generateOrgBill = asyncHandler(async (req: AuthRequest, res: Respon
     organizationPhone: org.phone,
     billingMonth: billingMonth,
     billingMonthLabel: monthLabel,
+    billingCycleStart: startDate.toISOString(),
+    billingCycleEnd: endDate.toISOString(),
+    billingCycleLabel: billingCycleLabel,
     generatedAt: new Date().toISOString(),
     status: existingStatus,
     studentCount: totalStudentCount,
@@ -638,7 +698,7 @@ export const generateOrgBill = asyncHandler(async (req: AuthRequest, res: Respon
   res.status(200).json({ 
     success: true, 
     data: billRecord, 
-    message: `Bill generated for ${monthLabel} with ${partnerStudentCount} partner enrollment(s) (${directStudentCount} direct admissions excluded)` 
+    message: `Bill generated for ${monthLabel} (${billingCycleLabel}) with ${partnerStudentCount} partner enrollment(s) (${directStudentCount} direct admissions excluded)` 
   });
 });
 
@@ -662,6 +722,7 @@ export const getOrgMonthEnrollments = asyncHandler(async (req: AuthRequest, res:
   const monthDate = new Date(Number(yearStr), Number(monthStr) - 1, 1);
   const monthLabel = monthDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
 
+  const { startDate, endDate, billingCycleLabel } = await getOrgBillingDateRange(id, monthParam);
   const enrollments = await getOrganizationMonthEnrollments(id, monthParam);
   const partnerEnrollments = enrollments.filter(e => e.isPartnerEnrollment);
   const directEnrollments = enrollments.filter(e => !e.isPartnerEnrollment);
@@ -672,6 +733,9 @@ export const getOrgMonthEnrollments = asyncHandler(async (req: AuthRequest, res:
     organizationName: org.name,
     billingMonth: monthParam,
     billingMonthLabel: monthLabel,
+    billingCycleLabel,
+    billingCycleStart: startDate.toISOString(),
+    billingCycleEnd: endDate.toISOString(),
     count: enrollments.length,
     partnerCount: partnerEnrollments.length,
     directCount: directEnrollments.length,

@@ -47,10 +47,10 @@ export function LeaveAllocationPanel() {
   const [search, setSearch] = useState('');
 
   const [form, setForm] = useState({
-    sickLeave: 12, casualLeave: 12, earnedLeave: 15, complementaryLeave: 0, wfh: 0
+    sickLeave: 0, casualLeave: 0, earnedLeave: 0, complementaryLeave: 0, wfh: 0
   });
   const [bulkForm, setBulkForm] = useState({
-    sickLeave: 12, casualLeave: 12, earnedLeave: 15, complementaryLeave: 0, wfh: 0
+    sickLeave: 0, casualLeave: 0, earnedLeave: 0, complementaryLeave: 0, wfh: 0
   });
 
   useEffect(() => { fetchAll(); }, [year, month]);
@@ -76,15 +76,15 @@ export function LeaveAllocationPanel() {
     if (alloc) {
       setEditingUserId(typeof alloc.userId === 'object' ? alloc.userId.id : alloc.userId);
       setForm({
-        sickLeave: alloc.sickLeave,
-        casualLeave: alloc.casualLeave,
-        earnedLeave: alloc.earnedLeave,
-        complementaryLeave: alloc.complementaryLeave,
-        wfh: (alloc as any).wfh || 0,
+        sickLeave: alloc.sickLeave ?? 0,
+        casualLeave: alloc.casualLeave ?? 0,
+        earnedLeave: alloc.earnedLeave ?? 0,
+        complementaryLeave: alloc.complementaryLeave ?? 0,
+        wfh: (alloc as any).wfh ?? 0,
       });
     } else {
       setEditingUserId(userId || '');
-      setForm({ sickLeave: 12, casualLeave: 12, earnedLeave: 15, complementaryLeave: 0, wfh: 0 });
+      setForm({ sickLeave: 0, casualLeave: 0, earnedLeave: 0, complementaryLeave: 0, wfh: 0 });
     }
     setDialogOpen(true);
   };

@@ -250,6 +250,8 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   checkOutPhoto: 'checkOutPhoto',
   isLate: 'isLate',
   lateMinutes: 'lateMinutes',
+  isEarlyExit: 'isEarlyExit',
+  earlyExitMinutes: 'earlyExitMinutes',
   workingHours: 'workingHours',
   notes: 'notes',
   createdAt: 'createdAt',
@@ -501,6 +503,7 @@ exports.Prisma.SalaryConfigScalarFieldEnum = {
   deductions: 'deductions',
   unpaidLeaveRule: 'unpaidLeaveRule',
   lateDeductionPerMinute: 'lateDeductionPerMinute',
+  earlyExitDeductionPerMinute: 'earlyExitDeductionPerMinute',
   wfhDeductionPerDay: 'wfhDeductionPerDay',
   effectiveFrom: 'effectiveFrom',
   approvalStatus: 'approvalStatus',
@@ -1663,7 +1666,9 @@ exports.LeaveType = exports.$Enums.LeaveType = {
   casual: 'casual',
   earned: 'earned',
   unpaid: 'unpaid',
-  wfh: 'wfh'
+  wfh: 'wfh',
+  late_coming: 'late_coming',
+  early_exit: 'early_exit'
 };
 
 exports.LeaveStatus = exports.$Enums.LeaveStatus = {

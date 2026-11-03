@@ -246,7 +246,13 @@ export function PayrollPanel() {
                               <div className="space-y-0.5 opacity-80">
                                 {Object.entries(p.deductions || {}).map(([key, val]) => (
                                   <div key={key} className="flex justify-between">
-                                    <span className="capitalize">{key === 'wfh' ? 'WFH Penalty' : key}:</span>
+                                    <span className="capitalize">
+                                      {key === 'wfh' ? 'WFH Penalty' :
+                                       key === 'lateDeduction' ? 'Late Deduction' :
+                                       key === 'earlyExitDeduction' ? 'Early Exit Deduction' :
+                                       key === 'leaveDeduction' ? 'Leave / LOP' :
+                                       key.replace(/([A-Z])/g, ' $1')}:
+                                    </span>
                                     <span>₹{Number(val).toLocaleString()}</span>
                                   </div>
                                 ))}

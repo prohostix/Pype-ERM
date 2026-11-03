@@ -202,15 +202,20 @@ export const getLeaveRequest = asyncHandler(async (req: AuthRequest, res: Respon
 });
 
 export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { startDate, endDate, departmentId, isHalfDay, halfDayType, type, ...rest } = req.body;
+  const { startDate, endDate, departmentId, isHalfDay, halfDayType, type, reason, permissionTime } = req.body;
   
+  const isPermission = type === 'late_coming' || type === 'early_exit';
   const start = new Date(startDate);
-  const end = new Date(endDate);
-  const requestedDays = isHalfDay ? 0.5 : (end.getTime() - start.getTime()) / 86400000 + 1;
+  const end = isPermission ? new Date(startDate) : new Date(endDate);
+  const requestedDays = isPermission ? 0 : (isHalfDay ? 0.5 : (end.getTime() - start.getTime()) / 86400000 + 1);
   const currentYear = start.getFullYear();
   const currentMonth = start.getMonth() + 1;
 
   let finalType = type;
+  let formattedReason = reason || '';
+  if (isPermission && permissionTime && !formattedReason.includes(`[Time: ${permissionTime}]`)) {
+    formattedReason = `[Time: ${permissionTime}] ${formattedReason}`.trim();
+  }
 
   if (type === 'sick' || type === 'casual' || type === 'wfh') {
     const allocation = await prisma.leaveAllocation.findFirst({
@@ -286,10 +291,10 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
 
   const leave = await prisma.leaveRequest.create({
     data: { 
-      ...rest,
+      reason: formattedReason,
       type: finalType,
-      isHalfDay: isHalfDay || false,
-      halfDayType: halfDayType || null,
+      isHalfDay: isPermission ? false : (isHalfDay || false),
+      halfDayType: isPermission ? null : (halfDayType || null),
       startDate: start,
       endDate: end,
       employeeId: req.user.id, 
@@ -301,13 +306,14 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
   try {
     const me = await prisma.user.findUnique({ where: { id: req.user.id } });
     let notifyUserId = me?.reportingTo;
+    const reqLabel = finalType === 'late_coming' ? 'Late Coming Permission' : finalType === 'early_exit' ? 'Early Exit Permission' : 'Leave';
     
     if (me?.role === 'hr_admin') {
       const executives = await prisma.user.findMany({
         where: { role: { in: ['ceo', 'general_manager', 'branch_manager'] }, organizationId: req.user.organizationId }
       });
       executives.forEach(exec => {
-        sendPushNotification(exec.id, "New Leave Request from HR", `${me?.name || 'HR'} has requested leave. Pending your approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+        sendPushNotification(exec.id, `New ${reqLabel} Request from HR`, `${me?.name || 'HR'} has requested ${reqLabel.toLowerCase()}. Pending your approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
       });
     } else {
       if (!notifyUserId && (departmentId || me?.departmentId)) {
@@ -319,13 +325,13 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
       }
 
       if (notifyUserId) {
-        sendPushNotification(notifyUserId, "New Leave Request", `${me?.name || 'An employee'} has requested leave`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+        sendPushNotification(notifyUserId, `New ${reqLabel} Request`, `${me?.name || 'An employee'} has requested ${reqLabel.toLowerCase()}`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
       } else {
         const hrAdmins = await prisma.user.findMany({
           where: { role: 'hr_admin', organizationId: req.user.organizationId }
         });
         hrAdmins.forEach(hr => {
-          sendPushNotification(hr.id, "New Leave Request", `${me?.name || 'An employee'} has requested leave`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+          sendPushNotification(hr.id, `New ${reqLabel} Request`, `${me?.name || 'An employee'} has requested ${reqLabel.toLowerCase()}`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
         });
       }
     }
@@ -379,25 +385,27 @@ export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Respo
 
   try {
     const employee = await prisma.user.findUnique({ where: { id: leave.employeeId }});
+    const typeLabel = leave.type === 'late_coming' ? 'late coming request' : leave.type === 'early_exit' ? 'early exit request' : 'leave request';
     const statusText = action === 'approve' ? 'approved by your department' : 'rejected by your department';
     if (employee) {
-      sendPushNotification(employee.id, "Leave Request Update", `Your leave request was ${statusText}.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+      sendPushNotification(employee.id, "Request Update", `Your ${typeLabel} was ${statusText}.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
     }
     
     if (action === 'approve' && employee) {
+      const approvalTitle = leave.type === 'late_coming' ? 'Late Coming' : leave.type === 'early_exit' ? 'Early Exit' : 'Leave';
       if (req.user.role === 'hr_admin') {
         const execs = await prisma.user.findMany({
           where: { role: { in: ['ceo', 'general_manager', 'branch_manager'] }, organizationId: employee.organizationId }
         });
         execs.forEach(exec => {
-          sendPushNotification(exec.id, "Pending Final Approval", `HR approved leave for ${employee.name}. Pending your final approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+          sendPushNotification(exec.id, "Pending Final Approval", `HR approved ${approvalTitle.toLowerCase()} for ${employee.name}. Pending your final approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
         });
       } else {
         const hrAdmins = await prisma.user.findMany({
           where: { role: 'hr_admin', organizationId: employee.organizationId }
         });
         hrAdmins.forEach(hr => {
-          sendPushNotification(hr.id, "Pending HR Approval", `Department approved leave for ${employee.name}. Pending final HR approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+          sendPushNotification(hr.id, "Pending HR Approval", `Department approved ${approvalTitle.toLowerCase()} for ${employee.name}. Pending final HR approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
         });
       }
     }
@@ -437,29 +445,40 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
 
   try {
     const employee = await prisma.user.findUnique({ where: { id: leave.employeeId }});
+    const typeLabel = leave.type === 'late_coming' ? 'late coming request' : leave.type === 'early_exit' ? 'early exit request' : 'leave request';
     const statusText = action === 'approve' ? 'fully approved by HR' : 'rejected by HR';
     if (employee) {
-      sendPushNotification(employee.id, "Leave Request Update", `Your leave request was ${statusText}.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+      sendPushNotification(employee.id, "Request Update", `Your ${typeLabel} was ${statusText}.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
     }
   } catch (err) {
     console.error(err);
   }
 
   if (newStatus === 'withdrawn') {
-    // Delete attendance records for this leave
     const startDate = new Date(leave.startDate);
     const endDate = new Date(leave.endDate);
     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
       const dateOnly = new Date(d);
       dateOnly.setHours(0, 0, 0, 0);
-      await prisma.attendance.deleteMany({
-        where: { employeeId: leave.employeeId, date: dateOnly, status: { in: ['leave', 'half_day', 'wfh'] } }
-      });
+      if (leave.type === 'late_coming' || leave.type === 'early_exit') {
+        // For permissions, only delete placeholder if there is no checkIn punch
+        const existing = await prisma.attendance.findFirst({
+          where: { employeeId: leave.employeeId, date: dateOnly }
+        });
+        if (existing && !existing.checkIn && !existing.checkOut) {
+          await prisma.attendance.delete({ where: { id: existing.id } });
+        }
+      } else {
+        await prisma.attendance.deleteMany({
+          where: { employeeId: leave.employeeId, date: dateOnly, status: { in: ['leave', 'half_day', 'wfh'] } }
+        });
+      }
     }
   } else if (action === 'approve' && newStatus === 'approved') {
-    // Generate attendance records for the leave duration
     const startDate = new Date(leave.startDate);
     const endDate = new Date(leave.endDate);
+    const isLateComing = leave.type === 'late_coming';
+    const isEarlyExit = leave.type === 'early_exit';
     const statusToSet = leave.type === 'wfh' ? 'wfh' : (leave.isHalfDay ? 'half_day' : 'leave');
 
     // Loop through each day (inclusive)
@@ -483,28 +502,82 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
         }
       });
 
-      if (existing) {
-        // Update existing record
-        const updateData: any = { status: statusToSet as any };
-        if (leave.isHalfDay) {
-          updateData.isLate = false;
-          updateData.lateMinutes = 0;
+      if (isLateComing) {
+        if (existing) {
+          const updatedNotes = existing.notes 
+            ? (existing.notes.includes('Late Coming Approved') ? existing.notes : `${existing.notes} | Late Coming Approved: ${leave.reason}`)
+            : `Late Coming Approved: ${leave.reason}`;
+          await prisma.attendance.update({
+            where: { id: existing.id },
+            data: {
+              status: existing.status === 'late' ? 'present' : existing.status,
+              isLate: false,
+              lateMinutes: 0,
+              notes: updatedNotes
+            }
+          });
+        } else {
+          await prisma.attendance.create({
+            data: {
+              employeeId: leave.employeeId,
+              organizationId: leave.organizationId,
+              date: dateOnly,
+              status: 'present',
+              isLate: false,
+              lateMinutes: 0,
+              notes: `Late Coming Approved: ${leave.reason}`
+            }
+          });
         }
-        await prisma.attendance.update({
-          where: { id: existing.id },
-          data: updateData
-        });
+      } else if (isEarlyExit) {
+        if (existing) {
+          const updatedNotes = existing.notes 
+            ? (existing.notes.includes('Early Exit Approved') ? existing.notes : `${existing.notes} | Early Exit Approved: ${leave.reason}`)
+            : `Early Exit Approved: ${leave.reason}`;
+          await prisma.attendance.update({
+            where: { id: existing.id },
+            data: {
+              isEarlyExit: false,
+              earlyExitMinutes: 0,
+              notes: updatedNotes
+            }
+          });
+        } else {
+          await prisma.attendance.create({
+            data: {
+              employeeId: leave.employeeId,
+              organizationId: leave.organizationId,
+              date: dateOnly,
+              status: 'present',
+              isEarlyExit: false,
+              earlyExitMinutes: 0,
+              notes: `Early Exit Approved: ${leave.reason}`
+            }
+          });
+        }
       } else {
-        // Create new record
-        await prisma.attendance.create({
-          data: {
-            employeeId: leave.employeeId,
-            organizationId: leave.organizationId,
-            date: dateOnly,
-            status: statusToSet as any,
-            notes: `Leave Approved: ${leave.reason}`
+        // Standard full day / half day / wfh leave
+        if (existing) {
+          const updateData: any = { status: statusToSet as any };
+          if (leave.isHalfDay) {
+            updateData.isLate = false;
+            updateData.lateMinutes = 0;
           }
-        });
+          await prisma.attendance.update({
+            where: { id: existing.id },
+            data: updateData
+          });
+        } else {
+          await prisma.attendance.create({
+            data: {
+              employeeId: leave.employeeId,
+              organizationId: leave.organizationId,
+              date: dateOnly,
+              status: statusToSet as any,
+              notes: `Leave Approved: ${leave.reason}`
+            }
+          });
+        }
       }
     }
   }

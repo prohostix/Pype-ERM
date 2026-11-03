@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Calendar, Users, Download, Camera, X, CheckCircle2, XCircle, CalendarOff, Loader2, FileSpreadsheet } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, Users, Download, Camera, X, CheckCircle2, XCircle, CalendarOff, Loader2, FileSpreadsheet, Clock, LogOut } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -52,6 +52,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
     checkIn: '',
     checkOut: '',
     lateMinutes: '',
+    earlyExitMinutes: '',
     notes: ''
   });
 
@@ -143,26 +144,29 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
           const empEmail = rec.user?.email || rec.employeeId?.email || rec.employee?.email || '';
           
           if (!aggregated[empId]) {
-            aggregated[empId] = { name: empName, email: empEmail, totalLate: 0, present: 0, absent: 0, halfDay: 0, leave: 0 };
+            aggregated[empId] = { name: empName, email: empEmail, totalLate: 0, totalEarlyExit: 0, present: 0, absent: 0, halfDay: 0, leave: 0 };
           }
           
           let lateMins = rec.lateMinutes || 0;
+          let earlyMins = rec.earlyExitMinutes || 0;
           // Guarantee: half day punch-ins never count late minutes
           if (rec.status === 'half_day' || (rec.notes && rec.notes.toLowerCase().includes('half day'))) {
             lateMins = 0;
           }
 
           aggregated[empId].totalLate += lateMins;
+          aggregated[empId].totalEarlyExit += earlyMins;
           if (rec.status === 'present' || rec.status === 'late') aggregated[empId].present++;
           else if (rec.status === 'absent') aggregated[empId].absent++;
           else if (rec.status === 'half_day') aggregated[empId].halfDay++;
           else if (rec.status === 'leave') aggregated[empId].leave++;
         });
 
-        exportData = Object.values(aggregated).map(emp => ({
+        exportData = Object.values(aggregated).map((emp: any) => ({
           'Employee Name': emp.name,
           'Email': emp.email,
           'Total Late Minutes': emp.totalLate,
+          'Total Early Exit Minutes': emp.totalEarlyExit,
           'Days Present': emp.present,
           'Days Absent': emp.absent,
           'Half Days': emp.halfDay,
@@ -170,7 +174,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
         }));
         
         worksheet = XLSX.utils.json_to_sheet(exportData);
-        worksheet['!cols'] = [22, 28, 18, 14, 14, 12, 12].map(w => ({ wch: w }));
+        worksheet['!cols'] = [22, 28, 18, 22, 14, 14, 12, 12].map(w => ({ wch: w }));
       } else {
         exportData = rawData.map((rec: any) => {
           const empName = rec.employeeId?.name || rec.employee?.name || rec.user?.name || 'Unknown';
@@ -188,12 +192,14 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
             'Check-Out': rec.checkOut ? new Date(rec.checkOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--',
             'Late Check-In': (rec.isLate && lateMins > 0) ? 'YES' : 'NO',
             'Late Minutes': lateMins,
+            'Early Exit': (rec.isEarlyExit && (rec.earlyExitMinutes || 0) > 0) ? 'YES' : 'NO',
+            'Early Exit Minutes': rec.earlyExitMinutes || 0,
             'Working Hours': rec.workingHours || 0,
             'Notes': rec.notes || ''
           };
         });
         worksheet = XLSX.utils.json_to_sheet(exportData);
-        worksheet['!cols'] = [22, 28, 14, 14, 12, 12, 16, 14, 14, 26].map(w => ({ wch: w }));
+        worksheet['!cols'] = [22, 28, 14, 14, 12, 12, 16, 14, 14, 18, 14, 26].map(w => ({ wch: w }));
       }
       
       const workbook = XLSX.utils.book_new();
@@ -264,6 +270,11 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
         payload.isLate = payload.lateMinutes > 0;
       }
 
+      if (formData.earlyExitMinutes !== undefined && formData.earlyExitMinutes !== '') {
+        payload.earlyExitMinutes = Number(formData.earlyExitMinutes);
+        payload.isEarlyExit = payload.earlyExitMinutes > 0;
+      }
+
       if (editingId) {
         await api.put(`/hr/attendance/${editingId}`, payload);
       } else {
@@ -278,10 +289,16 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
     }
   };
 
+  const isMockRecordId = (id: any) => {
+    if (!id) return true;
+    const str = id.toString();
+    return str.startsWith('absent-') || str.startsWith('holiday-') || str.startsWith('leave-') || str.startsWith('week_off-');
+  };
+
   const handleEdit = (record: any) => {
     const recId = record.id;
     const empId = record.employeeId?.id || record.employeeId || '';
-    setEditingId(recId && !recId.toString().startsWith('absent-') ? recId : null);
+    setEditingId(recId && !isMockRecordId(recId) ? recId : null);
     setFormData({
       employeeId: empId?.toString() || '',
       date: record.date ? new Date(record.date).toISOString().split('T')[0] : '',
@@ -289,6 +306,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
       checkIn: record.checkIn ? new Date(record.checkIn).toTimeString().slice(0, 5) : '',
       checkOut: record.checkOut ? new Date(record.checkOut).toTimeString().slice(0, 5) : '',
       lateMinutes: record.lateMinutes || '',
+      earlyExitMinutes: record.earlyExitMinutes || '',
       notes: record.notes || ''
     });
     setDialogOpen(true);
@@ -313,6 +331,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
       checkIn: '',
       checkOut: '',
       lateMinutes: '',
+      earlyExitMinutes: '',
       notes: ''
     });
   };
@@ -515,6 +534,10 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                       <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Late Minutes</Label>
                       <Input type="number" min="0" placeholder="0" className="rounded-xl h-10" value={formData.lateMinutes} onChange={(e) => setFormData({...formData, lateMinutes: e.target.value})} />
                     </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Early Exit Minutes</Label>
+                      <Input type="number" min="0" placeholder="0" className="rounded-xl h-10" value={formData.earlyExitMinutes} onChange={(e) => setFormData({...formData, earlyExitMinutes: e.target.value})} />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Notes</Label>
@@ -547,9 +570,14 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
             <div className="flex items-center gap-4">
               <CardTitle className="text-lg">Attendance Records</CardTitle>
               {viewMode === 'list' && (
-                <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20 font-bold shadow-sm rounded-full px-3">
-                  Late: {attendance.filter(r => r.isLate || r.status === 'late').length} {canViewAll && dateFilter ? 'Users' : 'Records'}
-                </Badge>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20 font-bold shadow-sm rounded-full px-3">
+                    Late: {attendance.filter(r => r.isLate || r.status === 'late' || (r.lateMinutes || 0) > 0).length} {canViewAll && dateFilter ? 'Users' : 'Records'}
+                  </Badge>
+                  <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/20 font-bold shadow-sm rounded-full px-3">
+                    Early Exit: {attendance.filter(r => r.isEarlyExit || (r.earlyExitMinutes || 0) > 0).length} {canViewAll && dateFilter ? 'Users' : 'Records'}
+                  </Badge>
+                </div>
               )}
             </div>
             <Button variant="outline" size="sm" onClick={() => setViewMode('calendar')} className="gap-2 rounded-xl border-slate-200/60 shadow-sm h-9 text-xs font-semibold px-4 transition-transform hover:scale-105">
@@ -558,7 +586,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
           </CardHeader>
           
           {canViewAll && dateFilter && (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 p-5 sm:p-6 pb-0 border-b border-border/40 bg-muted/10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-5 sm:p-6 pb-0 border-b border-border/40 bg-muted/10">
               <Card className="relative overflow-hidden border border-primary/20 shadow-sm rounded-2xl bg-gradient-to-br from-primary/10 via-background to-background group hover:shadow-md transition-all">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                   <Users className="w-12 h-12 text-primary" />
@@ -595,15 +623,43 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                 </CardContent>
               </Card>
 
-              <Card className="relative overflow-hidden border border-yellow-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-yellow-500/10 via-background to-background group hover:shadow-md transition-all">
+              <Card className="relative overflow-hidden border border-purple-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-purple-500/10 via-background to-background group hover:shadow-md transition-all">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <CalendarOff className="w-12 h-12 text-yellow-500" />
+                  <CalendarOff className="w-12 h-12 text-purple-500" />
                 </div>
                 <CardContent className="p-5">
                   <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
-                    <CalendarOff className="w-3.5 h-3.5 text-yellow-600" /> On Leave
+                    <CalendarOff className="w-3.5 h-3.5 text-purple-600" /> On Leave
                   </p>
                   <p className="text-3xl font-black text-foreground mt-2">{attendance.filter(r => r.status === 'leave').length}</p>
+                </CardContent>
+              </Card>
+
+              <Card className="relative overflow-hidden border border-yellow-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-yellow-500/10 via-background to-background group hover:shadow-md transition-all">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Clock className="w-12 h-12 text-yellow-500" />
+                </div>
+                <CardContent className="p-5">
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                    <Clock className="w-3.5 h-3.5 text-yellow-600" /> Late Comers
+                  </p>
+                  <p className="text-3xl font-black text-foreground mt-2">
+                    {attendance.filter(r => r.isLate || r.status === 'late' || (r.lateMinutes || 0) > 0).length}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="relative overflow-hidden border border-amber-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-amber-500/10 via-background to-background group hover:shadow-md transition-all">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <LogOut className="w-12 h-12 text-amber-500" />
+                </div>
+                <CardContent className="p-5">
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                    <LogOut className="w-3.5 h-3.5 text-amber-600" /> Early Exits
+                  </p>
+                  <p className="text-3xl font-black text-foreground mt-2">
+                    {attendance.filter(r => r.isEarlyExit || (r.earlyExitMinutes || 0) > 0).length}
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -700,13 +756,25 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                   const empName = record.employeeId?.name || record.employee?.name || record.user?.name || 'Unknown';
                   return (
                     <div key={recId} className="group flex flex-col sm:flex-row sm:items-center justify-between p-5 border border-slate-200/60 dark:border-slate-800/60 rounded-2xl bg-card/40 hover:bg-card/80 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300 gap-4 overflow-hidden relative">
-                      {record.isLate && (
+                      {record.isLate ? (
                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500 rounded-l-2xl" />
-                      )}
+                      ) : record.isEarlyExit ? (
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 rounded-l-2xl" />
+                      ) : null}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-3 mb-3">
+                        <div className="flex items-center gap-2 flex-wrap mb-3">
                           <div className="font-bold text-base text-foreground truncate">{empName}</div>
                           {getStatusBadge(record.status)}
+                          {record.isLate && (record.lateMinutes || 0) > 0 && (
+                            <Badge variant="outline" className="border-yellow-500/40 text-yellow-600 bg-yellow-500/10 text-[10px] font-bold rounded-full">
+                              Late: {record.lateMinutes}m
+                            </Badge>
+                          )}
+                          {record.isEarlyExit && (record.earlyExitMinutes || 0) > 0 && (
+                            <Badge variant="outline" className="border-amber-500/40 text-amber-600 bg-amber-500/10 text-[10px] font-bold rounded-full">
+                              Early Exit: {record.earlyExitMinutes}m
+                            </Badge>
+                          )}
                         </div>
                         
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium">
@@ -749,7 +817,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                           <Button variant="outline" size="sm" className="h-9 rounded-xl shadow-sm border-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 gap-1.5 px-3" onClick={() => handleEdit(record)}>
                             <Edit className="w-3.5 h-3.5 text-muted-foreground" /> Edit
                           </Button>
-                          {recId && !recId.toString().startsWith('absent-') && (
+                          {recId && !isMockRecordId(recId) && (
                             <Button variant="outline" size="sm" className="h-9 rounded-xl shadow-sm border-red-200 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 hover:text-red-700 gap-1.5 px-3" onClick={() => handleDelete(recId)}>
                               <Trash2 className="w-3.5 h-3.5" /> Delete
                             </Button>

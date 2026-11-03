@@ -339,6 +339,8 @@ model Attendance {
   checkOutPhoto    String?
   isLate           Boolean          @default(false)
   lateMinutes      Int              @default(0)
+  isEarlyExit      Boolean          @default(false)
+  earlyExitMinutes Int              @default(0)
   workingHours     Float            @default(0)
   notes            String?
   createdAt        DateTime         @default(now())
@@ -349,6 +351,7 @@ model Attendance {
   @@unique([employeeId, date])
   @@index([organizationId, date])
   @@index([isLate])
+  @@index([isEarlyExit])
 }
 
 model University {
@@ -721,7 +724,8 @@ model SalaryConfig {
   allowances             Json?          @default("{}")
   deductions             Json?          @default("{}")
   unpaidLeaveRule        Json?          @default("{\"type\":\"standard\"}")
-  lateDeductionPerMinute Float?         @default(0)
+  lateDeductionPerMinute      Float?         @default(0)
+  earlyExitDeductionPerMinute Float?         @default(0)
   wfhDeductionPerDay     Float?         @default(0)
   effectiveFrom          DateTime?
   approvalStatus         ApprovalStatus @default(pending_approval)
@@ -1830,6 +1834,8 @@ enum LeaveType {
   earned
   unpaid
   wfh
+  late_coming
+  early_exit
 }
 
 enum LeaveStatus {

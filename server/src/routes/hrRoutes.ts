@@ -66,6 +66,8 @@ import {
   getSalaryConfig,
   upsertSalaryConfig,
   deleteSalaryConfig,
+  getSalaryCycle,
+  updateSalaryCycle,
   getLeaveAllocations,
   getLeaveAllocation,
   deleteLeaveAllocation,
@@ -135,6 +137,11 @@ router.route('/salary-configs/:userId')
   .get(authorize('hr_admin', 'hr_sub_admin'), getSalaryConfig)
   .put(authorize('hr_admin', 'hr_sub_admin'), upsertSalaryConfig)
   .delete(authorize('hr_admin', 'hr_sub_admin'), deleteSalaryConfig);
+
+// Salary Cycle / Period (Organization-wide Date From to Date To)
+router.route('/salary-cycle')
+  .get(authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), getSalaryCycle)
+  .put(authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), updateSalaryCycle);
 
 // Leave Allocations
 router.get('/leave-allocations', authorize('hr_admin', 'hr_sub_admin'), getLeaveAllocations);

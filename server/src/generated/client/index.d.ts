@@ -615,7 +615,9 @@ export const LeaveType: {
   casual: 'casual',
   earned: 'earned',
   unpaid: 'unpaid',
-  wfh: 'wfh'
+  wfh: 'wfh',
+  late_coming: 'late_coming',
+  early_exit: 'early_exit'
 };
 
 export type LeaveType = (typeof LeaveType)[keyof typeof LeaveType]
@@ -24152,11 +24154,13 @@ export namespace Prisma {
 
   export type AttendanceAvgAggregateOutputType = {
     lateMinutes: number | null
+    earlyExitMinutes: number | null
     workingHours: number | null
   }
 
   export type AttendanceSumAggregateOutputType = {
     lateMinutes: number | null
+    earlyExitMinutes: number | null
     workingHours: number | null
   }
 
@@ -24172,6 +24176,8 @@ export namespace Prisma {
     checkOutPhoto: string | null
     isLate: boolean | null
     lateMinutes: number | null
+    isEarlyExit: boolean | null
+    earlyExitMinutes: number | null
     workingHours: number | null
     notes: string | null
     createdAt: Date | null
@@ -24190,6 +24196,8 @@ export namespace Prisma {
     checkOutPhoto: string | null
     isLate: boolean | null
     lateMinutes: number | null
+    isEarlyExit: boolean | null
+    earlyExitMinutes: number | null
     workingHours: number | null
     notes: string | null
     createdAt: Date | null
@@ -24210,6 +24218,8 @@ export namespace Prisma {
     checkOutPhoto: number
     isLate: number
     lateMinutes: number
+    isEarlyExit: number
+    earlyExitMinutes: number
     workingHours: number
     notes: number
     createdAt: number
@@ -24220,11 +24230,13 @@ export namespace Prisma {
 
   export type AttendanceAvgAggregateInputType = {
     lateMinutes?: true
+    earlyExitMinutes?: true
     workingHours?: true
   }
 
   export type AttendanceSumAggregateInputType = {
     lateMinutes?: true
+    earlyExitMinutes?: true
     workingHours?: true
   }
 
@@ -24240,6 +24252,8 @@ export namespace Prisma {
     checkOutPhoto?: true
     isLate?: true
     lateMinutes?: true
+    isEarlyExit?: true
+    earlyExitMinutes?: true
     workingHours?: true
     notes?: true
     createdAt?: true
@@ -24258,6 +24272,8 @@ export namespace Prisma {
     checkOutPhoto?: true
     isLate?: true
     lateMinutes?: true
+    isEarlyExit?: true
+    earlyExitMinutes?: true
     workingHours?: true
     notes?: true
     createdAt?: true
@@ -24278,6 +24294,8 @@ export namespace Prisma {
     checkOutPhoto?: true
     isLate?: true
     lateMinutes?: true
+    isEarlyExit?: true
+    earlyExitMinutes?: true
     workingHours?: true
     notes?: true
     createdAt?: true
@@ -24385,6 +24403,8 @@ export namespace Prisma {
     checkOutPhoto: string | null
     isLate: boolean
     lateMinutes: number
+    isEarlyExit: boolean
+    earlyExitMinutes: number
     workingHours: number
     notes: string | null
     createdAt: Date
@@ -24424,6 +24444,8 @@ export namespace Prisma {
     checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
+    isEarlyExit?: boolean
+    earlyExitMinutes?: boolean
     workingHours?: boolean
     notes?: boolean
     createdAt?: boolean
@@ -24446,6 +24468,8 @@ export namespace Prisma {
     checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
+    isEarlyExit?: boolean
+    earlyExitMinutes?: boolean
     workingHours?: boolean
     notes?: boolean
     createdAt?: boolean
@@ -24468,6 +24492,8 @@ export namespace Prisma {
     checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
+    isEarlyExit?: boolean
+    earlyExitMinutes?: boolean
     workingHours?: boolean
     notes?: boolean
     createdAt?: boolean
@@ -24490,13 +24516,15 @@ export namespace Prisma {
     checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
+    isEarlyExit?: boolean
+    earlyExitMinutes?: boolean
     workingHours?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "organizationId" | "date" | "status" | "checkIn" | "checkOut" | "checkInLocation" | "checkOutLocation" | "checkInPhoto" | "checkOutPhoto" | "isLate" | "lateMinutes" | "workingHours" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
+  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "organizationId" | "date" | "status" | "checkIn" | "checkOut" | "checkInLocation" | "checkOutLocation" | "checkInPhoto" | "checkOutPhoto" | "isLate" | "lateMinutes" | "isEarlyExit" | "earlyExitMinutes" | "workingHours" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
   export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -24530,6 +24558,8 @@ export namespace Prisma {
       checkOutPhoto: string | null
       isLate: boolean
       lateMinutes: number
+      isEarlyExit: boolean
+      earlyExitMinutes: number
       workingHours: number
       notes: string | null
       createdAt: Date
@@ -24972,6 +25002,8 @@ export namespace Prisma {
     readonly checkOutPhoto: FieldRef<"Attendance", 'String'>
     readonly isLate: FieldRef<"Attendance", 'Boolean'>
     readonly lateMinutes: FieldRef<"Attendance", 'Int'>
+    readonly isEarlyExit: FieldRef<"Attendance", 'Boolean'>
+    readonly earlyExitMinutes: FieldRef<"Attendance", 'Int'>
     readonly workingHours: FieldRef<"Attendance", 'Float'>
     readonly notes: FieldRef<"Attendance", 'String'>
     readonly createdAt: FieldRef<"Attendance", 'DateTime'>
@@ -41955,12 +41987,14 @@ export namespace Prisma {
   export type SalaryConfigAvgAggregateOutputType = {
     basicSalary: number | null
     lateDeductionPerMinute: number | null
+    earlyExitDeductionPerMinute: number | null
     wfhDeductionPerDay: number | null
   }
 
   export type SalaryConfigSumAggregateOutputType = {
     basicSalary: number | null
     lateDeductionPerMinute: number | null
+    earlyExitDeductionPerMinute: number | null
     wfhDeductionPerDay: number | null
   }
 
@@ -41970,6 +42004,7 @@ export namespace Prisma {
     userId: string | null
     basicSalary: number | null
     lateDeductionPerMinute: number | null
+    earlyExitDeductionPerMinute: number | null
     wfhDeductionPerDay: number | null
     effectiveFrom: Date | null
     approvalStatus: $Enums.ApprovalStatus | null
@@ -41987,6 +42022,7 @@ export namespace Prisma {
     userId: string | null
     basicSalary: number | null
     lateDeductionPerMinute: number | null
+    earlyExitDeductionPerMinute: number | null
     wfhDeductionPerDay: number | null
     effectiveFrom: Date | null
     approvalStatus: $Enums.ApprovalStatus | null
@@ -42007,6 +42043,7 @@ export namespace Prisma {
     deductions: number
     unpaidLeaveRule: number
     lateDeductionPerMinute: number
+    earlyExitDeductionPerMinute: number
     wfhDeductionPerDay: number
     effectiveFrom: number
     approvalStatus: number
@@ -42023,12 +42060,14 @@ export namespace Prisma {
   export type SalaryConfigAvgAggregateInputType = {
     basicSalary?: true
     lateDeductionPerMinute?: true
+    earlyExitDeductionPerMinute?: true
     wfhDeductionPerDay?: true
   }
 
   export type SalaryConfigSumAggregateInputType = {
     basicSalary?: true
     lateDeductionPerMinute?: true
+    earlyExitDeductionPerMinute?: true
     wfhDeductionPerDay?: true
   }
 
@@ -42038,6 +42077,7 @@ export namespace Prisma {
     userId?: true
     basicSalary?: true
     lateDeductionPerMinute?: true
+    earlyExitDeductionPerMinute?: true
     wfhDeductionPerDay?: true
     effectiveFrom?: true
     approvalStatus?: true
@@ -42055,6 +42095,7 @@ export namespace Prisma {
     userId?: true
     basicSalary?: true
     lateDeductionPerMinute?: true
+    earlyExitDeductionPerMinute?: true
     wfhDeductionPerDay?: true
     effectiveFrom?: true
     approvalStatus?: true
@@ -42075,6 +42116,7 @@ export namespace Prisma {
     deductions?: true
     unpaidLeaveRule?: true
     lateDeductionPerMinute?: true
+    earlyExitDeductionPerMinute?: true
     wfhDeductionPerDay?: true
     effectiveFrom?: true
     approvalStatus?: true
@@ -42182,6 +42224,7 @@ export namespace Prisma {
     deductions: JsonValue | null
     unpaidLeaveRule: JsonValue | null
     lateDeductionPerMinute: number | null
+    earlyExitDeductionPerMinute: number | null
     wfhDeductionPerDay: number | null
     effectiveFrom: Date | null
     approvalStatus: $Enums.ApprovalStatus
@@ -42221,6 +42264,7 @@ export namespace Prisma {
     deductions?: boolean
     unpaidLeaveRule?: boolean
     lateDeductionPerMinute?: boolean
+    earlyExitDeductionPerMinute?: boolean
     wfhDeductionPerDay?: boolean
     effectiveFrom?: boolean
     approvalStatus?: boolean
@@ -42245,6 +42289,7 @@ export namespace Prisma {
     deductions?: boolean
     unpaidLeaveRule?: boolean
     lateDeductionPerMinute?: boolean
+    earlyExitDeductionPerMinute?: boolean
     wfhDeductionPerDay?: boolean
     effectiveFrom?: boolean
     approvalStatus?: boolean
@@ -42269,6 +42314,7 @@ export namespace Prisma {
     deductions?: boolean
     unpaidLeaveRule?: boolean
     lateDeductionPerMinute?: boolean
+    earlyExitDeductionPerMinute?: boolean
     wfhDeductionPerDay?: boolean
     effectiveFrom?: boolean
     approvalStatus?: boolean
@@ -42293,6 +42339,7 @@ export namespace Prisma {
     deductions?: boolean
     unpaidLeaveRule?: boolean
     lateDeductionPerMinute?: boolean
+    earlyExitDeductionPerMinute?: boolean
     wfhDeductionPerDay?: boolean
     effectiveFrom?: boolean
     approvalStatus?: boolean
@@ -42304,7 +42351,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SalaryConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "userId" | "basicSalary" | "allowances" | "deductions" | "unpaidLeaveRule" | "lateDeductionPerMinute" | "wfhDeductionPerDay" | "effectiveFrom" | "approvalStatus" | "approvedBy" | "approvedAt" | "rejectedRemarks" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["salaryConfig"]>
+  export type SalaryConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "userId" | "basicSalary" | "allowances" | "deductions" | "unpaidLeaveRule" | "lateDeductionPerMinute" | "earlyExitDeductionPerMinute" | "wfhDeductionPerDay" | "effectiveFrom" | "approvalStatus" | "approvedBy" | "approvedAt" | "rejectedRemarks" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["salaryConfig"]>
   export type SalaryConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approver?: boolean | SalaryConfig$approverArgs<ExtArgs>
     creator?: boolean | SalaryConfig$creatorArgs<ExtArgs>
@@ -42341,6 +42388,7 @@ export namespace Prisma {
       deductions: Prisma.JsonValue | null
       unpaidLeaveRule: Prisma.JsonValue | null
       lateDeductionPerMinute: number | null
+      earlyExitDeductionPerMinute: number | null
       wfhDeductionPerDay: number | null
       effectiveFrom: Date | null
       approvalStatus: $Enums.ApprovalStatus
@@ -42785,6 +42833,7 @@ export namespace Prisma {
     readonly deductions: FieldRef<"SalaryConfig", 'Json'>
     readonly unpaidLeaveRule: FieldRef<"SalaryConfig", 'Json'>
     readonly lateDeductionPerMinute: FieldRef<"SalaryConfig", 'Float'>
+    readonly earlyExitDeductionPerMinute: FieldRef<"SalaryConfig", 'Float'>
     readonly wfhDeductionPerDay: FieldRef<"SalaryConfig", 'Float'>
     readonly effectiveFrom: FieldRef<"SalaryConfig", 'DateTime'>
     readonly approvalStatus: FieldRef<"SalaryConfig", 'ApprovalStatus'>
@@ -123589,6 +123638,8 @@ export namespace Prisma {
     checkOutPhoto: 'checkOutPhoto',
     isLate: 'isLate',
     lateMinutes: 'lateMinutes',
+    isEarlyExit: 'isEarlyExit',
+    earlyExitMinutes: 'earlyExitMinutes',
     workingHours: 'workingHours',
     notes: 'notes',
     createdAt: 'createdAt',
@@ -123879,6 +123930,7 @@ export namespace Prisma {
     deductions: 'deductions',
     unpaidLeaveRule: 'unpaidLeaveRule',
     lateDeductionPerMinute: 'lateDeductionPerMinute',
+    earlyExitDeductionPerMinute: 'earlyExitDeductionPerMinute',
     wfhDeductionPerDay: 'wfhDeductionPerDay',
     effectiveFrom: 'effectiveFrom',
     approvalStatus: 'approvalStatus',
@@ -126811,6 +126863,8 @@ export namespace Prisma {
     checkOutPhoto?: StringNullableFilter<"Attendance"> | string | null
     isLate?: BoolFilter<"Attendance"> | boolean
     lateMinutes?: IntFilter<"Attendance"> | number
+    isEarlyExit?: BoolFilter<"Attendance"> | boolean
+    earlyExitMinutes?: IntFilter<"Attendance"> | number
     workingHours?: FloatFilter<"Attendance"> | number
     notes?: StringNullableFilter<"Attendance"> | string | null
     createdAt?: DateTimeFilter<"Attendance"> | Date | string
@@ -126833,6 +126887,8 @@ export namespace Prisma {
     checkOutPhoto?: SortOrderInput | SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
+    isEarlyExit?: SortOrder
+    earlyExitMinutes?: SortOrder
     workingHours?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -126859,6 +126915,8 @@ export namespace Prisma {
     checkOutPhoto?: StringNullableFilter<"Attendance"> | string | null
     isLate?: BoolFilter<"Attendance"> | boolean
     lateMinutes?: IntFilter<"Attendance"> | number
+    isEarlyExit?: BoolFilter<"Attendance"> | boolean
+    earlyExitMinutes?: IntFilter<"Attendance"> | number
     workingHours?: FloatFilter<"Attendance"> | number
     notes?: StringNullableFilter<"Attendance"> | string | null
     createdAt?: DateTimeFilter<"Attendance"> | Date | string
@@ -126881,6 +126939,8 @@ export namespace Prisma {
     checkOutPhoto?: SortOrderInput | SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
+    isEarlyExit?: SortOrder
+    earlyExitMinutes?: SortOrder
     workingHours?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -126909,6 +126969,8 @@ export namespace Prisma {
     checkOutPhoto?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
     isLate?: BoolWithAggregatesFilter<"Attendance"> | boolean
     lateMinutes?: IntWithAggregatesFilter<"Attendance"> | number
+    isEarlyExit?: BoolWithAggregatesFilter<"Attendance"> | boolean
+    earlyExitMinutes?: IntWithAggregatesFilter<"Attendance"> | number
     workingHours?: FloatWithAggregatesFilter<"Attendance"> | number
     notes?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
@@ -128520,6 +128582,7 @@ export namespace Prisma {
     deductions?: JsonNullableFilter<"SalaryConfig">
     unpaidLeaveRule?: JsonNullableFilter<"SalaryConfig">
     lateDeductionPerMinute?: FloatNullableFilter<"SalaryConfig"> | number | null
+    earlyExitDeductionPerMinute?: FloatNullableFilter<"SalaryConfig"> | number | null
     wfhDeductionPerDay?: FloatNullableFilter<"SalaryConfig"> | number | null
     effectiveFrom?: DateTimeNullableFilter<"SalaryConfig"> | Date | string | null
     approvalStatus?: EnumApprovalStatusFilter<"SalaryConfig"> | $Enums.ApprovalStatus
@@ -128544,6 +128607,7 @@ export namespace Prisma {
     deductions?: SortOrderInput | SortOrder
     unpaidLeaveRule?: SortOrderInput | SortOrder
     lateDeductionPerMinute?: SortOrderInput | SortOrder
+    earlyExitDeductionPerMinute?: SortOrderInput | SortOrder
     wfhDeductionPerDay?: SortOrderInput | SortOrder
     effectiveFrom?: SortOrderInput | SortOrder
     approvalStatus?: SortOrder
@@ -128571,6 +128635,7 @@ export namespace Prisma {
     deductions?: JsonNullableFilter<"SalaryConfig">
     unpaidLeaveRule?: JsonNullableFilter<"SalaryConfig">
     lateDeductionPerMinute?: FloatNullableFilter<"SalaryConfig"> | number | null
+    earlyExitDeductionPerMinute?: FloatNullableFilter<"SalaryConfig"> | number | null
     wfhDeductionPerDay?: FloatNullableFilter<"SalaryConfig"> | number | null
     effectiveFrom?: DateTimeNullableFilter<"SalaryConfig"> | Date | string | null
     approvalStatus?: EnumApprovalStatusFilter<"SalaryConfig"> | $Enums.ApprovalStatus
@@ -128595,6 +128660,7 @@ export namespace Prisma {
     deductions?: SortOrderInput | SortOrder
     unpaidLeaveRule?: SortOrderInput | SortOrder
     lateDeductionPerMinute?: SortOrderInput | SortOrder
+    earlyExitDeductionPerMinute?: SortOrderInput | SortOrder
     wfhDeductionPerDay?: SortOrderInput | SortOrder
     effectiveFrom?: SortOrderInput | SortOrder
     approvalStatus?: SortOrder
@@ -128623,6 +128689,7 @@ export namespace Prisma {
     deductions?: JsonNullableWithAggregatesFilter<"SalaryConfig">
     unpaidLeaveRule?: JsonNullableWithAggregatesFilter<"SalaryConfig">
     lateDeductionPerMinute?: FloatNullableWithAggregatesFilter<"SalaryConfig"> | number | null
+    earlyExitDeductionPerMinute?: FloatNullableWithAggregatesFilter<"SalaryConfig"> | number | null
     wfhDeductionPerDay?: FloatNullableWithAggregatesFilter<"SalaryConfig"> | number | null
     effectiveFrom?: DateTimeNullableWithAggregatesFilter<"SalaryConfig"> | Date | string | null
     approvalStatus?: EnumApprovalStatusWithAggregatesFilter<"SalaryConfig"> | $Enums.ApprovalStatus
@@ -136692,6 +136759,8 @@ export namespace Prisma {
     checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
+    isEarlyExit?: boolean
+    earlyExitMinutes?: number
     workingHours?: number
     notes?: string | null
     createdAt?: Date | string
@@ -136714,6 +136783,8 @@ export namespace Prisma {
     checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
+    isEarlyExit?: boolean
+    earlyExitMinutes?: number
     workingHours?: number
     notes?: string | null
     createdAt?: Date | string
@@ -136732,6 +136803,8 @@ export namespace Prisma {
     checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
+    isEarlyExit?: BoolFieldUpdateOperationsInput | boolean
+    earlyExitMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -136754,6 +136827,8 @@ export namespace Prisma {
     checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
+    isEarlyExit?: BoolFieldUpdateOperationsInput | boolean
+    earlyExitMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -136774,6 +136849,8 @@ export namespace Prisma {
     checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
+    isEarlyExit?: boolean
+    earlyExitMinutes?: number
     workingHours?: number
     notes?: string | null
     createdAt?: Date | string
@@ -136792,6 +136869,8 @@ export namespace Prisma {
     checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
+    isEarlyExit?: BoolFieldUpdateOperationsInput | boolean
+    earlyExitMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -136812,6 +136891,8 @@ export namespace Prisma {
     checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
+    isEarlyExit?: BoolFieldUpdateOperationsInput | boolean
+    earlyExitMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -138635,6 +138716,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -138657,6 +138739,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -138675,6 +138758,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -138697,6 +138781,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -138717,6 +138802,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -138735,6 +138821,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -138753,6 +138840,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -147418,6 +147506,8 @@ export namespace Prisma {
     checkOutPhoto?: SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
+    isEarlyExit?: SortOrder
+    earlyExitMinutes?: SortOrder
     workingHours?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -147426,6 +147516,7 @@ export namespace Prisma {
 
   export type AttendanceAvgOrderByAggregateInput = {
     lateMinutes?: SortOrder
+    earlyExitMinutes?: SortOrder
     workingHours?: SortOrder
   }
 
@@ -147441,6 +147532,8 @@ export namespace Prisma {
     checkOutPhoto?: SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
+    isEarlyExit?: SortOrder
+    earlyExitMinutes?: SortOrder
     workingHours?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -147459,6 +147552,8 @@ export namespace Prisma {
     checkOutPhoto?: SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
+    isEarlyExit?: SortOrder
+    earlyExitMinutes?: SortOrder
     workingHours?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -147467,6 +147562,7 @@ export namespace Prisma {
 
   export type AttendanceSumOrderByAggregateInput = {
     lateMinutes?: SortOrder
+    earlyExitMinutes?: SortOrder
     workingHours?: SortOrder
   }
 
@@ -148385,6 +148481,7 @@ export namespace Prisma {
     deductions?: SortOrder
     unpaidLeaveRule?: SortOrder
     lateDeductionPerMinute?: SortOrder
+    earlyExitDeductionPerMinute?: SortOrder
     wfhDeductionPerDay?: SortOrder
     effectiveFrom?: SortOrder
     approvalStatus?: SortOrder
@@ -148399,6 +148496,7 @@ export namespace Prisma {
   export type SalaryConfigAvgOrderByAggregateInput = {
     basicSalary?: SortOrder
     lateDeductionPerMinute?: SortOrder
+    earlyExitDeductionPerMinute?: SortOrder
     wfhDeductionPerDay?: SortOrder
   }
 
@@ -148408,6 +148506,7 @@ export namespace Prisma {
     userId?: SortOrder
     basicSalary?: SortOrder
     lateDeductionPerMinute?: SortOrder
+    earlyExitDeductionPerMinute?: SortOrder
     wfhDeductionPerDay?: SortOrder
     effectiveFrom?: SortOrder
     approvalStatus?: SortOrder
@@ -148425,6 +148524,7 @@ export namespace Prisma {
     userId?: SortOrder
     basicSalary?: SortOrder
     lateDeductionPerMinute?: SortOrder
+    earlyExitDeductionPerMinute?: SortOrder
     wfhDeductionPerDay?: SortOrder
     effectiveFrom?: SortOrder
     approvalStatus?: SortOrder
@@ -148439,6 +148539,7 @@ export namespace Prisma {
   export type SalaryConfigSumOrderByAggregateInput = {
     basicSalary?: SortOrder
     lateDeductionPerMinute?: SortOrder
+    earlyExitDeductionPerMinute?: SortOrder
     wfhDeductionPerDay?: SortOrder
   }
 
@@ -168426,6 +168527,8 @@ export namespace Prisma {
     checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
+    isEarlyExit?: boolean
+    earlyExitMinutes?: number
     workingHours?: number
     notes?: string | null
     createdAt?: Date | string
@@ -168446,6 +168549,8 @@ export namespace Prisma {
     checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
+    isEarlyExit?: boolean
+    earlyExitMinutes?: number
     workingHours?: number
     notes?: string | null
     createdAt?: Date | string
@@ -170197,6 +170302,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -170217,6 +170323,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -171866,6 +171973,8 @@ export namespace Prisma {
     checkOutPhoto?: StringNullableFilter<"Attendance"> | string | null
     isLate?: BoolFilter<"Attendance"> | boolean
     lateMinutes?: IntFilter<"Attendance"> | number
+    isEarlyExit?: BoolFilter<"Attendance"> | boolean
+    earlyExitMinutes?: IntFilter<"Attendance"> | number
     workingHours?: FloatFilter<"Attendance"> | number
     notes?: StringNullableFilter<"Attendance"> | string | null
     createdAt?: DateTimeFilter<"Attendance"> | Date | string
@@ -173330,6 +173439,7 @@ export namespace Prisma {
     deductions?: JsonNullableFilter<"SalaryConfig">
     unpaidLeaveRule?: JsonNullableFilter<"SalaryConfig">
     lateDeductionPerMinute?: FloatNullableFilter<"SalaryConfig"> | number | null
+    earlyExitDeductionPerMinute?: FloatNullableFilter<"SalaryConfig"> | number | null
     wfhDeductionPerDay?: FloatNullableFilter<"SalaryConfig"> | number | null
     effectiveFrom?: DateTimeNullableFilter<"SalaryConfig"> | Date | string | null
     approvalStatus?: EnumApprovalStatusFilter<"SalaryConfig"> | $Enums.ApprovalStatus
@@ -176898,6 +177008,8 @@ export namespace Prisma {
     checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
+    isEarlyExit?: boolean
+    earlyExitMinutes?: number
     workingHours?: number
     notes?: string | null
     createdAt?: Date | string
@@ -176918,6 +177030,8 @@ export namespace Prisma {
     checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
+    isEarlyExit?: boolean
+    earlyExitMinutes?: number
     workingHours?: number
     notes?: string | null
     createdAt?: Date | string
@@ -179690,6 +179804,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -179711,6 +179826,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -179738,6 +179854,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -179759,6 +179876,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -179786,6 +179904,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -179806,6 +179925,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -183265,6 +183385,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -183285,6 +183406,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -269000,6 +269122,8 @@ export namespace Prisma {
     checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
+    isEarlyExit?: boolean
+    earlyExitMinutes?: number
     workingHours?: number
     notes?: string | null
     createdAt?: Date | string
@@ -269626,6 +269750,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -270372,6 +270497,8 @@ export namespace Prisma {
     checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
+    isEarlyExit?: BoolFieldUpdateOperationsInput | boolean
+    earlyExitMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -270392,6 +270519,8 @@ export namespace Prisma {
     checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
+    isEarlyExit?: BoolFieldUpdateOperationsInput | boolean
+    earlyExitMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -270411,6 +270540,8 @@ export namespace Prisma {
     checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
+    isEarlyExit?: BoolFieldUpdateOperationsInput | boolean
+    earlyExitMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -272328,6 +272459,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -272348,6 +272480,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -272367,6 +272500,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -275273,6 +275407,8 @@ export namespace Prisma {
     checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
+    isEarlyExit?: boolean
+    earlyExitMinutes?: number
     workingHours?: number
     notes?: string | null
     createdAt?: Date | string
@@ -276311,6 +276447,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -276330,6 +276467,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    earlyExitDeductionPerMinute?: number | null
     wfhDeductionPerDay?: number | null
     effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
@@ -277024,6 +277162,8 @@ export namespace Prisma {
     checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
+    isEarlyExit?: BoolFieldUpdateOperationsInput | boolean
+    earlyExitMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -277044,6 +277184,8 @@ export namespace Prisma {
     checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
+    isEarlyExit?: BoolFieldUpdateOperationsInput | boolean
+    earlyExitMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -277063,6 +277205,8 @@ export namespace Prisma {
     checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
+    isEarlyExit?: BoolFieldUpdateOperationsInput | boolean
+    earlyExitMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -280187,6 +280331,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -280208,6 +280353,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -280227,6 +280373,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -280244,6 +280391,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -280265,6 +280413,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
@@ -280284,6 +280433,7 @@ export namespace Prisma {
     deductions?: NullableJsonNullValueInput | InputJsonValue
     unpaidLeaveRule?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    earlyExitDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
     wfhDeductionPerDay?: NullableFloatFieldUpdateOperationsInput | number | null
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus

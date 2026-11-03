@@ -353,9 +353,13 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
               <div className="p-3 rounded-xl bg-muted/50 text-center">
                 <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">Check Out</p>
                 <p className="text-lg font-bold">{formatTime(today?.checkOut)}</p>
-                {workingDuration() && (
+                {today?.isEarlyExit && (today.earlyExitMinutes || 0) > 0 ? (
+                  <Badge className="text-[9px] bg-amber-500/10 text-amber-600 border-amber-500/20 mt-1">
+                    {today.earlyExitMinutes}m early exit
+                  </Badge>
+                ) : workingDuration() ? (
                   <p className="text-[10px] text-muted-foreground mt-1">{workingDuration()}</p>
-                )}
+                ) : null}
               </div>
             </div>
 

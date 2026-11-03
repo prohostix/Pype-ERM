@@ -61,6 +61,9 @@ export interface GeneratedBillItem {
   organizationAddress?: string;
   billingMonth: string; // e.g. "2026-10"
   billingMonthLabel: string; // e.g. "October 2026"
+  billingCycleLabel?: string;
+  billingCycleStart?: string;
+  billingCycleEnd?: string;
   generatedAt: string;
   status: 'paid' | 'unpaid';
   studentCount: number;
@@ -202,6 +205,7 @@ export function LicensesPanel() {
     orgAddress: string;
     invoiceNo: string;
     billingMonthLabel: string;
+    billingCycleLabel?: string;
     generatedAt: string;
     partnerEnabled: boolean;
     partnerBase: number;
@@ -486,6 +490,7 @@ export function LicensesPanel() {
       orgAddress: org.address,
       invoiceNo: `PREVIEW-${selectedMonth.replace('-', '')}-${org.id.slice(0, 4).toUpperCase()}`,
       billingMonthLabel: selectedMonthLabel,
+      billingCycleLabel: (res?.data?.billingCycleLabel) || '',
       generatedAt: new Date().toLocaleDateString(),
       partnerEnabled: details.hasAcademicPartners,
       partnerBase: details.academicPartnerBasePrice,
@@ -535,6 +540,7 @@ export function LicensesPanel() {
       orgAddress: bill.organizationAddress || orgFallback?.address || '',
       invoiceNo: bill.billNo,
       billingMonthLabel: bill.billingMonthLabel,
+      billingCycleLabel: bill.billingCycleLabel,
       generatedAt: new Date(bill.generatedAt).toLocaleDateString(),
       partnerEnabled: bill.academicPartner.enabled,
       partnerBase: bill.academicPartner.basePrice,
@@ -1128,6 +1134,11 @@ export function LicensesPanel() {
                           <Badge variant="outline" className="font-medium text-xs bg-muted/60">
                             {bill.billingMonthLabel}
                           </Badge>
+                          {bill.billingCycleLabel && (
+                            <div className="text-[10px] text-muted-foreground mt-0.5 whitespace-nowrap">
+                              {bill.billingCycleLabel}
+                            </div>
+                          )}
                         </TableCell>
 
                         {/* Academic Partner */}
@@ -1516,6 +1527,9 @@ export function LicensesPanel() {
                 <div className="text-right text-xs">
                   <p className="font-mono font-bold text-sm text-foreground">{statementData.invoiceNo}</p>
                   <p className="text-muted-foreground">Billing Month: <strong className="text-foreground">{statementData.billingMonthLabel}</strong></p>
+                  {statementData.billingCycleLabel && (
+                    <p className="text-muted-foreground">Billing Period: <strong className="text-foreground">{statementData.billingCycleLabel}</strong></p>
+                  )}
                   <p className="text-muted-foreground">Date: {statementData.generatedAt}</p>
                 </div>
               </div>

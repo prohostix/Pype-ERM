@@ -68,7 +68,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
   // Create dialog
   const [createOpen, setCreateOpen] = useState(false);
-  const [form, setForm] = useState({ type: 'sick', startDate: '', endDate: '', reason: '', isHalfDay: false, halfDayType: 'first_half' });
+  const [form, setForm] = useState({ type: 'sick', startDate: '', endDate: '', permissionTime: '', reason: '', isHalfDay: false, halfDayType: 'first_half' });
   const [submitting, setSubmitting] = useState(false);
 
   // Action dialog (approve/reject with remarks)
@@ -118,13 +118,26 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await api.post('/hr/leaves', form);
-      toast.success('Leave request submitted. Your department manager will review it.');
+      const isPermission = form.type === 'late_coming' || form.type === 'early_exit';
+      const reasonWithTime = isPermission && form.permissionTime
+        ? `[Time: ${form.permissionTime}] ${form.reason}`
+        : form.reason;
+
+      const { permissionTime, ...restForm } = form;
+      const payload = {
+        ...restForm,
+        endDate: isPermission ? form.startDate : form.endDate,
+        isHalfDay: isPermission ? false : form.isHalfDay,
+        reason: reasonWithTime,
+      };
+
+      await api.post('/hr/leaves', payload);
+      toast.success(isPermission ? 'Permission request submitted. Your manager will review it.' : 'Leave request submitted. Your department manager will review it.');
       setCreateOpen(false);
-      setForm({ type: 'sick', startDate: '', endDate: '', reason: '', isHalfDay: false, halfDayType: 'first_half' });
+      setForm({ type: 'sick', startDate: '', endDate: '', permissionTime: '', reason: '', isHalfDay: false, halfDayType: 'first_half' });
       fetchLeaves();
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to submit leave request');
+      toast.error(err.response?.data?.message || 'Failed to submit request');
     } finally {
       setSubmitting(false);
     }
@@ -393,9 +406,23 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                             <Badge className={cn('text-[11px] font-bold uppercase border px-2.5 py-0.5 rounded-full', cfg.color)}>
                               {cfg.label}
                             </Badge>
-                            <Badge variant="outline" className="text-[11px] capitalize rounded-full bg-background/50 backdrop-blur-sm">
-                              {leave.type === 'wfh' ? 'WFH' : `${leave.type} Leave`}
-                            </Badge>
+                            {leave.type === 'wfh' ? (
+                              <Badge variant="outline" className="text-[11px] capitalize rounded-full bg-purple-500/10 text-purple-600 border-purple-500/20">
+                                WFH
+                              </Badge>
+                            ) : leave.type === 'late_coming' ? (
+                              <Badge variant="outline" className="text-[11px] font-semibold rounded-full bg-amber-500/10 text-amber-600 border-amber-500/30">
+                                Late Coming Permission
+                              </Badge>
+                            ) : leave.type === 'early_exit' ? (
+                              <Badge variant="outline" className="text-[11px] font-semibold rounded-full bg-indigo-500/10 text-indigo-600 border-indigo-500/30">
+                                Early Exit Permission
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="text-[11px] capitalize rounded-full bg-background/50 backdrop-blur-sm">
+                                {leave.type} Leave
+                              </Badge>
+                            )}
                             {leave.department && (
                               <Badge variant="outline" className="text-[11px] rounded-full bg-background/50 backdrop-blur-sm">{leave.department.name}</Badge>
                             )}
@@ -425,9 +452,15 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                           <div className="bg-muted/30 rounded-xl p-3 mt-3 border border-border/40">
                             <div className="flex items-center gap-2 text-xs font-medium text-foreground/80 mb-1.5">
                               <Clock className="w-3.5 h-3.5 text-muted-foreground" />
-                              <span>{new Date(leave.startDate).toLocaleDateString('en-US', { dateStyle: 'medium' })}</span>
-                              <span className="text-muted-foreground">→</span>
-                              <span>{new Date(leave.endDate).toLocaleDateString('en-US', { dateStyle: 'medium' })}</span>
+                              {new Date(leave.startDate).toDateString() === new Date(leave.endDate).toDateString() ? (
+                                <span>{new Date(leave.startDate).toLocaleDateString('en-US', { dateStyle: 'medium' })}</span>
+                              ) : (
+                                <>
+                                  <span>{new Date(leave.startDate).toLocaleDateString('en-US', { dateStyle: 'medium' })}</span>
+                                  <span className="text-muted-foreground">→</span>
+                                  <span>{new Date(leave.endDate).toLocaleDateString('en-US', { dateStyle: 'medium' })}</span>
+                                </>
+                              )}
                             </div>
                             <p className="text-sm text-muted-foreground leading-relaxed">
                               "{leave.reason}"
@@ -650,7 +683,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
         </TabsContent>
       </Tabs>
 
-      {/* Create Leave Dialog */}
+      {/* Create Leave / Permission Dialog */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
           <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3">
@@ -658,15 +691,29 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
               <CalendarPlus className="w-5 h-5" />
             </div>
             <div>
-              <DialogTitle className="text-xl">Submit Leave Request</DialogTitle>
-              <p className="text-sm text-muted-foreground mt-0.5">Fill out the details below to request time off.</p>
+              <DialogTitle className="text-xl">
+                {(form.type === 'late_coming' || form.type === 'early_exit') ? 'Request Permission' : 'Submit Leave Request'}
+              </DialogTitle>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                {(form.type === 'late_coming' || form.type === 'early_exit')
+                  ? 'Fill out the details below to request attendance permission.'
+                  : 'Fill out the details below to request time off.'}
+              </p>
             </div>
           </div>
 
           <form onSubmit={handleCreate} className="p-6 space-y-5">
             <div className="space-y-2">
-              <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Leave Type</Label>
-              <Select value={form.type} onValueChange={v => setForm(f => ({ ...f, type: v }))}>
+              <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Request Type</Label>
+              <Select 
+                value={form.type} 
+                onValueChange={v => setForm(f => ({ 
+                  ...f, 
+                  type: v, 
+                  isHalfDay: (v === 'late_coming' || v === 'early_exit') ? false : f.isHalfDay,
+                  endDate: (v === 'late_coming' || v === 'early_exit') ? f.startDate : f.endDate
+                }))}
+              >
                 <SelectTrigger className="rounded-xl h-11"><SelectValue /></SelectTrigger>
                 <SelectContent className="rounded-xl">
                   <SelectItem value="sick" disabled={balances?.sick?.available <= 0}>Sick Leave {balances?.sick?.available <= 0 ? '(Empty)' : ''}</SelectItem>
@@ -674,49 +721,81 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                   <SelectItem value="earned" disabled={balances?.earned?.available <= 0}>Earned Leave {balances?.earned?.available <= 0 ? '(Empty)' : ''}</SelectItem>
                   <SelectItem value="wfh">Work From Home {balances?.wfh?.available <= 0 ? '(Penalty applies)' : ''}</SelectItem>
                   <SelectItem value="unpaid">Unpaid Leave</SelectItem>
+                  <SelectItem value="late_coming">Late Coming (Permission)</SelectItem>
+                  <SelectItem value="early_exit">Early Exit (Permission)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Start Date</Label>
-                <Input type="date" className="rounded-xl h-11" value={form.startDate} onChange={e => setForm(f => ({ ...f, startDate: e.target.value, endDate: f.isHalfDay ? e.target.value : f.endDate }))} required />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">End Date</Label>
-                <Input type="date" className="rounded-xl h-11" value={form.endDate} onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))} required disabled={form.isHalfDay} />
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-muted/30 p-4 rounded-2xl border border-border/40">
-              <div className="flex items-center space-x-3">
-                <Switch
-                  id="isHalfDay"
-                  checked={form.isHalfDay}
-                  onCheckedChange={(checked) => {
-                    setForm(f => ({
-                      ...f,
-                      isHalfDay: checked,
-                      endDate: checked ? f.startDate : f.endDate
-                    }));
-                  }}
-                />
-                <Label htmlFor="isHalfDay" className="cursor-pointer font-semibold">Half Day Leave?</Label>
-              </div>
-
-              {form.isHalfDay && (
+            {(form.type === 'late_coming' || form.type === 'early_exit') ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-2">
-                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Which Half?</Label>
-                  <Select value={form.halfDayType} onValueChange={v => setForm(f => ({ ...f, halfDayType: v }))}>
-                    <SelectTrigger className="rounded-xl h-10"><SelectValue /></SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                      <SelectItem value="first_half">First Half</SelectItem>
-                      <SelectItem value="second_half">Second Half</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Date</Label>
+                  <Input 
+                    type="date" 
+                    className="rounded-xl h-11" 
+                    value={form.startDate} 
+                    onChange={e => setForm(f => ({ ...f, startDate: e.target.value, endDate: e.target.value }))} 
+                    required 
+                  />
                 </div>
-              )}
-            </div>
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    {form.type === 'late_coming' ? 'Expected In-Time' : 'Expected Exit-Time'}
+                  </Label>
+                  <Input 
+                    type="time" 
+                    className="rounded-xl h-11" 
+                    value={form.permissionTime} 
+                    onChange={e => setForm(f => ({ ...f, permissionTime: e.target.value }))} 
+                    required 
+                  />
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Start Date</Label>
+                    <Input type="date" className="rounded-xl h-11" value={form.startDate} onChange={e => setForm(f => ({ ...f, startDate: e.target.value, endDate: f.isHalfDay ? e.target.value : f.endDate }))} required />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">End Date</Label>
+                    <Input type="date" className="rounded-xl h-11" value={form.endDate} onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))} required disabled={form.isHalfDay} />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-muted/30 p-4 rounded-2xl border border-border/40">
+                  <div className="flex items-center space-x-3">
+                    <Switch
+                      id="isHalfDay"
+                      checked={form.isHalfDay}
+                      onCheckedChange={(checked) => {
+                        setForm(f => ({
+                          ...f,
+                          isHalfDay: checked,
+                          endDate: checked ? f.startDate : f.endDate
+                        }));
+                      }}
+                    />
+                    <Label htmlFor="isHalfDay" className="cursor-pointer font-semibold">Half Day Leave?</Label>
+                  </div>
+
+                  {form.isHalfDay && (
+                    <div className="space-y-2">
+                      <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Which Half?</Label>
+                      <Select value={form.halfDayType} onValueChange={v => setForm(f => ({ ...f, halfDayType: v }))}>
+                        <SelectTrigger className="rounded-xl h-10"><SelectValue /></SelectTrigger>
+                        <SelectContent className="rounded-xl">
+                          <SelectItem value="first_half">First Half</SelectItem>
+                          <SelectItem value="second_half">Second Half</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
 
             <div className="space-y-2">
               <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Reason</Label>
@@ -724,14 +803,16 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                 className="rounded-xl resize-none"
                 value={form.reason}
                 onChange={e => setForm(f => ({ ...f, reason: e.target.value }))}
-                placeholder="Explain the reason for your leave in detail..."
+                placeholder={(form.type === 'late_coming' || form.type === 'early_exit') ? "Explain reason for late coming / early departure in detail..." : "Explain the reason for your leave in detail..."}
                 rows={3}
                 required
               />
             </div>
             <div className="pt-2 flex justify-end gap-2">
               <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setCreateOpen(false)}>Cancel</Button>
-              <Button type="submit" className="rounded-xl px-6" disabled={submitting}>{submitting ? 'Submitting...' : 'Submit Request'}</Button>
+              <Button type="submit" className="rounded-xl px-6" disabled={submitting}>
+                {submitting ? 'Submitting...' : (form.type === 'late_coming' || form.type === 'early_exit') ? 'Submit Permission' : 'Submit Request'}
+              </Button>
             </div>
           </form>
         </DialogContent>
@@ -762,8 +843,18 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                   {actionLeave.user?.name || 'Employee'}
                 </p>
                 <div className="flex items-center gap-2 flex-wrap text-xs font-medium">
-                  <Badge variant="outline" className="capitalize bg-background rounded-full px-2">{actionLeave.type} leave</Badge>
-                  <span className="text-muted-foreground">{new Date(actionLeave.startDate).toLocaleDateString()} → {new Date(actionLeave.endDate).toLocaleDateString()}</span>
+                  <Badge variant="outline" className="capitalize bg-background rounded-full px-2">
+                    {actionLeave.type === 'late_coming'
+                      ? 'Late Coming Permission'
+                      : actionLeave.type === 'early_exit'
+                        ? 'Early Exit Permission'
+                        : `${actionLeave.type} leave`}
+                  </Badge>
+                  <span className="text-muted-foreground">
+                    {new Date(actionLeave.startDate).toDateString() === new Date(actionLeave.endDate).toDateString()
+                      ? new Date(actionLeave.startDate).toLocaleDateString()
+                      : `${new Date(actionLeave.startDate).toLocaleDateString()} → ${new Date(actionLeave.endDate).toLocaleDateString()}`}
+                  </span>
                 </div>
                 <p className="text-muted-foreground text-sm italic mt-2">"{actionLeave.reason}"</p>
               </div>

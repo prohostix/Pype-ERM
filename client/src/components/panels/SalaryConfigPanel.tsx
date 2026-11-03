@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, Edit, Save, RefreshCw, Plus, Trash2, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { DollarSign, Edit, Save, RefreshCw, Plus, Trash2, Clock, CheckCircle, AlertCircle, Calendar } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,15 +8,28 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 import api from '@/lib/api';
+
+interface SalaryCycle {
+  type: 'monthly_day' | 'custom_range';
+  startDay: number;
+  endDay: number;
+  cycleMode: 'previous_to_current' | 'same_month';
+  customStartDate?: string;
+  customEndDate?: string;
+}
 
 interface SalaryConfig {
   id?: string;
   userId: any;
+  user?: User;
   basicSalary: number;
   allowances: { hra: number; transport: number; medical: number; other: number };
   deductions: { pf: number; tax: number; insurance: number; other: number };
   lateDeductionPerMinute: number;
+  earlyExitDeductionPerMinute?: number;
   effectiveFrom?: string;
   approvalStatus?: 'pending_approval' | 'approved' | 'rejected';
   rejectedRemarks?: string;
@@ -38,6 +51,7 @@ const EMPTY_CONFIG = {
   allowances: { hra: 0, transport: 0, medical: 0, other: 0 },
   deductions: { pf: 0, tax: 0, insurance: 0, other: 0 },
   lateDeductionPerMinute: 0,
+  earlyExitDeductionPerMinute: 0,
   unpaidLeaveRule: { type: 'standard' },
   wfhDeductionPerDay: 0,
   effectiveFrom: new Date().toISOString().split('T')[0],
@@ -53,6 +67,16 @@ export function SalaryConfigPanel() {
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
 
+  const [salaryCycle, setSalaryCycle] = useState<SalaryCycle>({
+    type: 'monthly_day',
+    startDay: 26,
+    endDay: 25,
+    cycleMode: 'previous_to_current',
+    customStartDate: '',
+    customEndDate: '',
+  });
+  const [cycleSaving, setCycleSaving] = useState(false);
+
   useEffect(() => {
     fetchAll();
   }, []);
@@ -60,17 +84,76 @@ export function SalaryConfigPanel() {
   const fetchAll = async () => {
     setLoading(true);
     try {
-      const [cfgRes, usersRes] = await Promise.all([
+      const [cfgRes, usersRes, cycleRes] = await Promise.all([
         api.get('/hr/salary-configs'),
         api.get('/users'),
+        api.get('/hr/salary-cycle').catch(() => ({ data: { data: null } }))
       ]);
       setConfigs(cfgRes.data.data || []);
       const allUsers: User[] = (usersRes.data.data || []).filter((u: any) => u.status !== 'resigned');
       setUsers(allUsers.filter(u => !['ceo', 'org_admin', 'superadmin'].includes(u.role)));
+      if (cycleRes?.data?.data) {
+        setSalaryCycle(cycleRes.data.data);
+      }
     } catch {
       toast.error('Failed to load salary data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSaveCycle = async () => {
+    setCycleSaving(true);
+    try {
+      await api.put('/hr/salary-cycle', salaryCycle);
+      toast.success('Salary calculation date range updated successfully');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update salary cycle');
+    } finally {
+      setCycleSaving(false);
+    }
+  };
+
+  const getCyclePreview = () => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+
+    if (salaryCycle.type === 'custom_range') {
+      if (salaryCycle.customStartDate && salaryCycle.customEndDate) {
+        try {
+          const [sy, sm, sd] = salaryCycle.customStartDate.split('-').map(Number);
+          const [ey, em, ed] = salaryCycle.customEndDate.split('-').map(Number);
+          const sDate = new Date(sy, sm - 1, sd);
+          const eDate = new Date(ey, em - 1, ed);
+          return `${format(sDate, 'dd MMM yyyy')} — ${format(eDate, 'dd MMM yyyy')}`;
+        } catch {
+          return `${salaryCycle.customStartDate} to ${salaryCycle.customEndDate}`;
+        }
+      }
+      return 'Dates not set';
+    }
+
+    const startDay = Number(salaryCycle.startDay) || 1;
+    const endDay = Number(salaryCycle.endDay) || 30;
+
+    if (salaryCycle.cycleMode === 'previous_to_current' || startDay > endDay) {
+      const prevMonthLastDay = new Date(currentYear, currentMonth, 0).getDate();
+      const currMonthLastDay = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const safeStartDay = Math.min(startDay, prevMonthLastDay);
+      const safeEndDay = Math.min(endDay, currMonthLastDay);
+
+      const prevMonthDate = new Date(currentYear, currentMonth - 1, safeStartDay);
+      const currMonthDate = new Date(currentYear, currentMonth, safeEndDay);
+      return `${format(prevMonthDate, 'dd MMM yyyy')} — ${format(currMonthDate, 'dd MMM yyyy')}`;
+    } else {
+      const currMonthLastDay = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const safeStartDay = Math.min(startDay, currMonthLastDay);
+      const safeEndDay = Math.min(endDay, currMonthLastDay);
+
+      const startDate = new Date(currentYear, currentMonth, safeStartDay);
+      const endDate = new Date(currentYear, currentMonth, safeEndDay);
+      return `${format(startDate, 'dd MMM yyyy')} — ${format(endDate, 'dd MMM yyyy')}`;
     }
   };
 
@@ -82,6 +165,7 @@ export function SalaryConfigPanel() {
         allowances: { ...config.allowances },
         deductions: { ...config.deductions },
         lateDeductionPerMinute: config.lateDeductionPerMinute || 0,
+        earlyExitDeductionPerMinute: config.earlyExitDeductionPerMinute || 0,
         unpaidLeaveRule: config.unpaidLeaveRule || { type: 'standard' },
         wfhDeductionPerDay: config.wfhDeductionPerDay || 0,
         effectiveFrom: config.effectiveFrom ? config.effectiveFrom.split('T')[0] : new Date().toISOString().split('T')[0],
@@ -151,6 +235,216 @@ export function SalaryConfigPanel() {
         </div>
       </div>
 
+      {/* Salary Cycle / Calculation Date Range */}
+      <Card className="border border-border/80 shadow-sm bg-card rounded-xl overflow-hidden">
+        <div className="p-5 border-b border-border/50 bg-muted/20">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                <Calendar className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold leading-tight">Salary Calculation Period (Date From – To)</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Set the organization-wide pay cycle dates used to calculate attendance, late deductions, and payroll.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+              <Button 
+                size="sm" 
+                onClick={handleSaveCycle} 
+                disabled={cycleSaving}
+                className="shadow-sm"
+              >
+                <Save className="w-4 h-4 mr-1.5" />
+                {cycleSaving ? 'Saving...' : 'Save Salary Dates'}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <CardContent className="p-5 space-y-4">
+          {/* Cycle Type Selector & Presets */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-border/40">
+            <div className="flex items-center gap-2">
+              <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mr-1">Format:</Label>
+              <div className="inline-flex rounded-lg bg-muted p-1 border border-border/50">
+                <button
+                  type="button"
+                  onClick={() => setSalaryCycle(prev => ({ ...prev, type: 'monthly_day' }))}
+                  className={cn(
+                    "px-3 py-1 text-xs font-medium rounded-md transition-all",
+                    salaryCycle.type === 'monthly_day'
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  Monthly Day Cycle
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSalaryCycle(prev => ({ ...prev, type: 'custom_range' }))}
+                  className={cn(
+                    "px-3 py-1 text-xs font-medium rounded-md transition-all",
+                    salaryCycle.type === 'custom_range'
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  Custom Date Range
+                </button>
+              </div>
+            </div>
+
+            {salaryCycle.type === 'monthly_day' && (
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-xs text-muted-foreground mr-1">Quick Presets:</span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs px-2.5 py-0"
+                  onClick={() => setSalaryCycle(prev => ({ ...prev, startDay: 26, endDay: 25, cycleMode: 'previous_to_current' }))}
+                >
+                  26th — 25th (Standard)
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs px-2.5 py-0"
+                  onClick={() => setSalaryCycle(prev => ({ ...prev, startDay: 1, endDay: 30, cycleMode: 'same_month' }))}
+                >
+                  1st — End of Month
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs px-2.5 py-0"
+                  onClick={() => setSalaryCycle(prev => ({ ...prev, startDay: 21, endDay: 20, cycleMode: 'previous_to_current' }))}
+                >
+                  21st — 20th
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Form Controls */}
+          {salaryCycle.type === 'monthly_day' ? (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  Salary Date From <span className="text-muted-foreground font-normal">(Start Day)</span>
+                </Label>
+                <div className="relative">
+                  <Input 
+                    type="number" 
+                    min={1} 
+                    max={31} 
+                    value={salaryCycle.startDay || ''}
+                    onChange={e => {
+                      const val = e.target.value === '' ? 1 : Math.min(31, Math.max(1, Number(e.target.value)));
+                      setSalaryCycle(prev => ({ ...prev, startDay: val }));
+                    }}
+                    className="h-9 pr-12 font-medium"
+                    placeholder="26"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
+                    th/st
+                  </span>
+                </div>
+                <p className="text-[11px] text-muted-foreground">Day of month (1 to 31)</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  Salary Date To <span className="text-muted-foreground font-normal">(End Day)</span>
+                </Label>
+                <div className="relative">
+                  <Input 
+                    type="number" 
+                    min={1} 
+                    max={31} 
+                    value={salaryCycle.endDay || ''}
+                    onChange={e => {
+                      const val = e.target.value === '' ? 25 : Math.min(31, Math.max(1, Number(e.target.value)));
+                      setSalaryCycle(prev => ({ ...prev, endDay: val }));
+                    }}
+                    className="h-9 pr-12 font-medium"
+                    placeholder="25"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
+                    th/st
+                  </span>
+                </div>
+                <p className="text-[11px] text-muted-foreground">Day of month (1 to 31)</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">Cycle Month Rule</Label>
+                <Select 
+                  value={salaryCycle.cycleMode} 
+                  onValueChange={(val: any) => setSalaryCycle(prev => ({ ...prev, cycleMode: val }))}
+                >
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="Select rule" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="previous_to_current">
+                      Prev Month to Current Month (e.g. 26th – 25th)
+                    </SelectItem>
+                    <SelectItem value="same_month">
+                      Within Same Month (e.g. 1st – 30th/31st)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-[11px] text-muted-foreground">Determines calendar month boundary</p>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">Salary Date From (Start Date)</Label>
+                <Input 
+                  type="date" 
+                  value={salaryCycle.customStartDate || ''}
+                  onChange={e => setSalaryCycle(prev => ({ ...prev, customStartDate: e.target.value }))}
+                  className="h-9"
+                />
+                <p className="text-[11px] text-muted-foreground">First day of attendance & salary calculation</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">Salary Date To (End Date)</Label>
+                <Input 
+                  type="date" 
+                  value={salaryCycle.customEndDate || ''}
+                  onChange={e => setSalaryCycle(prev => ({ ...prev, customEndDate: e.target.value }))}
+                  className="h-9"
+                />
+                <p className="text-[11px] text-muted-foreground">Final day included in this salary cycle</p>
+              </div>
+            </div>
+          )}
+
+          {/* Active Preview Banner */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-lg bg-primary/5 border border-primary/15 text-xs text-primary">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 flex-shrink-0" />
+              <span>
+                <strong>Active Period for Current Month:</strong> {getCyclePreview()}
+              </span>
+            </div>
+            <span className="text-[11px] text-muted-foreground">
+              Attendance, late deductions, and leave deductions will strictly apply to these dates.
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+
       <Input placeholder="Search employee..." value={search} onChange={e => setSearch(e.target.value)} className="max-w-xs" />
 
       {loading ? (
@@ -216,6 +510,10 @@ export function SalaryConfigPanel() {
                         <div>
                           <p className="text-xs text-muted-foreground">Late/min</p>
                           <p className="font-semibold text-orange-600">₹{config.lateDeductionPerMinute || 0}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">Early/min</p>
+                          <p className="font-semibold text-amber-600">₹{config.earlyExitDeductionPerMinute ?? config.lateDeductionPerMinute ?? 0}</p>
                         </div>
                       </div>
                     </div>
@@ -293,19 +591,27 @@ export function SalaryConfigPanel() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1">
-                <Label>Late Deduction per Minute (₹)</Label>
+                <Label>Late Deduction (₹/min)</Label>
                 <Input type="number" min="0" step="0.01" value={form.lateDeductionPerMinute}
                   onChange={e => setForm((f: any) => ({ ...f, lateDeductionPerMinute: Number(e.target.value) }))} />
-                <p className="text-xs text-muted-foreground">Amount deducted per late minute</p>
+                <p className="text-xs text-muted-foreground">Amount per late minute</p>
               </div>
 
               <div className="space-y-1">
-                <Label>WFH Deduction (% of daily salary)</Label>
+                <Label>Early Exit Deduction (₹/min)</Label>
+                <Input type="number" min="0" step="0.01" value={form.earlyExitDeductionPerMinute ?? ''}
+                  placeholder={form.lateDeductionPerMinute ? `Default: ₹${form.lateDeductionPerMinute}` : '0'}
+                  onChange={e => setForm((f: any) => ({ ...f, earlyExitDeductionPerMinute: Number(e.target.value) }))} />
+                <p className="text-xs text-muted-foreground">Amount per early exit minute</p>
+              </div>
+
+              <div className="space-y-1">
+                <Label>WFH Deduction (%/day)</Label>
                 <Input type="number" min="0" max="100" value={form.wfhDeductionPerDay}
                   onChange={e => setForm((f: any) => ({ ...f, wfhDeductionPerDay: Number(e.target.value) }))} />
-                <p className="text-xs text-muted-foreground">% of daily salary deducted for each WFH day</p>
+                <p className="text-xs text-muted-foreground">% of daily salary per WFH day</p>
               </div>
             </div>
 

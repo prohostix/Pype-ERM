@@ -154,8 +154,47 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
   const maxLateThresholdPerMonth = Number(latePolicy.maxLateThresholdPerMonth) || 0;
 
   const [yearStr, monthStr] = month.split('-');
-  const startDate = new Date(Number(yearStr), Number(monthStr) - 1, 1);
-  const endDate = new Date(Number(yearStr), Number(monthStr), 1);
+  
+  // Organization salary cycle settings
+  const org = await prisma.organization.findUnique({
+    where: { id: organizationId },
+    select: { metadata: true }
+  });
+  const metadata = (org?.metadata as any) || {};
+  const salaryCycle = metadata.salaryCycle;
+
+  let startDate: Date;
+  let endDate: Date;
+
+  if (req.body.startDate && req.body.endDate) {
+    startDate = new Date(req.body.startDate);
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date(req.body.endDate);
+    endDate.setHours(23, 59, 59, 999);
+  } else if (salaryCycle?.type === 'custom_range' && salaryCycle.customStartDate && salaryCycle.customEndDate) {
+    startDate = new Date(salaryCycle.customStartDate);
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date(salaryCycle.customEndDate);
+    endDate.setHours(23, 59, 59, 999);
+  } else if (salaryCycle?.startDay && salaryCycle?.endDay) {
+    const targetYear = Number(yearStr);
+    const targetMonth = Number(monthStr); // 1-12
+    const startDay = Number(salaryCycle.startDay);
+    const endDay = Number(salaryCycle.endDay);
+
+    if (salaryCycle.cycleMode === 'previous_to_current' || startDay > endDay) {
+      // e.g. 26th of previous month to 25th of current month
+      startDate = new Date(targetYear, targetMonth - 2, startDay, 0, 0, 0, 0);
+      endDate = new Date(targetYear, targetMonth - 1, endDay, 23, 59, 59, 999);
+    } else {
+      // e.g. 1st to 30th/31st of current month
+      startDate = new Date(targetYear, targetMonth - 1, startDay, 0, 0, 0, 0);
+      endDate = new Date(targetYear, targetMonth - 1, endDay, 23, 59, 59, 999);
+    }
+  } else {
+    startDate = new Date(Number(yearStr), Number(monthStr) - 1, 1, 0, 0, 0, 0);
+    endDate = new Date(Number(yearStr), Number(monthStr), 0, 23, 59, 59, 999);
+  }
   
   const configs = await prisma.salaryConfig.findMany({
     where: { organizationId, approvalStatus: 'approved' }
@@ -179,12 +218,19 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
     const attendances = await prisma.attendance.findMany({
       where: {
         employeeId: config.userId,
-        date: { gte: startDate, lt: endDate },
-        isLate: true
+        date: { gte: startDate, lte: endDate },
+        OR: [
+          { isLate: true },
+          { isEarlyExit: true },
+          { lateMinutes: { gt: 0 } },
+          { earlyExitMinutes: { gt: 0 } }
+        ]
       }
     });
 
     let totalBillableLateMinutes = 0;
+    let totalBillableEarlyExitMinutes = 0;
+
     for (const att of attendances) {
       let lateM = att.lateMinutes || 0;
       // Protect from unadjusted half-day morning offset
@@ -193,10 +239,20 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
       }
       const billable = Math.max(0, lateM - gracePeriod);
       totalBillableLateMinutes += billable;
+
+      // Early exit minutes
+      if (att.isEarlyExit || (att.earlyExitMinutes || 0) > 0) {
+        totalBillableEarlyExitMinutes += (att.earlyExitMinutes || 0);
+      }
     }
 
     const chargeableLateMinutes = Math.max(0, totalBillableLateMinutes - maxLateThresholdPerMonth);
     const lateDeductionAmount = chargeableLateMinutes * (config.lateDeductionPerMinute || 0);
+
+    const earlyExitRate = (config.earlyExitDeductionPerMinute !== null && config.earlyExitDeductionPerMinute !== undefined && config.earlyExitDeductionPerMinute > 0)
+      ? config.earlyExitDeductionPerMinute
+      : (config.lateDeductionPerMinute || 0);
+    const earlyExitDeductionAmount = totalBillableEarlyExitMinutes * earlyExitRate;
 
     const allowances = config.allowances as Record<string, number> || {};
     const deductions = config.deductions as Record<string, number> || {};
@@ -210,7 +266,7 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
         employeeId: config.userId,
         type: 'unpaid',
         status: { in: ['approved', 'dept_approved'] },
-        startDate: { gte: startDate, lt: endDate }
+        startDate: { gte: startDate, lte: endDate }
       }
     });
 
@@ -222,7 +278,7 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
         employeeId: config.userId,
         type: 'wfh',
         status: { in: ['approved', 'dept_approved'] },
-        startDate: { gte: startDate, lt: endDate }
+        startDate: { gte: startDate, lte: endDate }
       }
     });
 
@@ -258,8 +314,14 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
 
     const standardDeductions = Object.values(deductions).reduce((acc: number, val: any) => acc + (Number(val) || 0), 0);
     
-    const finalDeductions = { ...deductions, lateDeduction: lateDeductionAmount, leaveDeduction: leaveDeductionAmount, wfhDeduction: wfhDeductionAmount };
-    const totalDeductions = standardDeductions + lateDeductionAmount + leaveDeductionAmount + wfhDeductionAmount;
+    const finalDeductions = { 
+      ...deductions, 
+      lateDeduction: lateDeductionAmount, 
+      earlyExitDeduction: earlyExitDeductionAmount,
+      leaveDeduction: leaveDeductionAmount, 
+      wfhDeduction: wfhDeductionAmount 
+    };
+    const totalDeductions = standardDeductions + lateDeductionAmount + earlyExitDeductionAmount + leaveDeductionAmount + wfhDeductionAmount;
     
     const netSalary = grossSalary - totalDeductions;
 
@@ -292,4 +354,56 @@ export const approveSalaryConfig = asyncHandler(async (req: AuthRequest, res: Re
     data: { approvalStatus: 'approved', approvedBy: req.user.id, approvedAt: new Date() }
   });
   res.json({ success: true, data: config });
+});
+
+export const getSalaryCycle = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const organizationId = req.user.organizationId;
+  const org = await prisma.organization.findUnique({
+    where: { id: organizationId },
+    select: { metadata: true }
+  });
+
+  const metadata = (org?.metadata as any) || {};
+  const salaryCycle = metadata.salaryCycle || {
+    type: 'monthly_day',
+    startDay: 26,
+    endDay: 25,
+    cycleMode: 'previous_to_current',
+    customStartDate: '',
+    customEndDate: ''
+  };
+
+  res.json({ success: true, data: salaryCycle });
+});
+
+export const updateSalaryCycle = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const organizationId = req.user.organizationId;
+  const { type, startDay, endDay, cycleMode, customStartDate, customEndDate } = req.body;
+
+  const org = await prisma.organization.findUnique({
+    where: { id: organizationId },
+    select: { metadata: true }
+  });
+
+  const metadata = (org?.metadata as any) || {};
+  const updatedCycle = {
+    type: type || 'monthly_day',
+    startDay: Number(startDay) || 26,
+    endDay: Number(endDay) || 25,
+    cycleMode: cycleMode || (Number(startDay) > Number(endDay) ? 'previous_to_current' : 'same_month'),
+    customStartDate: customStartDate || '',
+    customEndDate: customEndDate || ''
+  };
+
+  await prisma.organization.update({
+    where: { id: organizationId },
+    data: {
+      metadata: {
+        ...metadata,
+        salaryCycle: updatedCycle
+      }
+    }
+  });
+
+  res.json({ success: true, message: 'Salary cycle updated successfully', data: updatedCycle });
 });
