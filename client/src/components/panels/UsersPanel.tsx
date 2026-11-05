@@ -980,13 +980,15 @@ export function UsersPanel() {
                       <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
                       <SelectItem value="ops_admin">Operations Admin</SelectItem>
                       <SelectItem value="ops_sub_admin">Operations Sub-Admin</SelectItem>
-                      <SelectItem value="faculty">Faculty / Instructor</SelectItem>
                       <SelectItem value="sales_admin">Sales Admin</SelectItem>
                       <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
                       <SelectItem value="sales">Sales Executive</SelectItem>
                       <SelectItem value="employee">Employee</SelectItem>
                     </SelectContent>
                   </Select>
+                  <p className="text-[10px] text-muted-foreground">
+                    Faculty accounts are created in the Faculties panel.
+                  </p>
                 </div>
 
                 <div className="space-y-1.5">

@@ -43,7 +43,9 @@ interface KRA {
 interface SalaryConfig {
   basicSalary?: number;
   allowances?: { hra?: number; da?: number; ta?: number; medical?: number; other?: number };
+  deductions?: { pf?: number; esi?: number; tds?: number; other?: number };
   lateDeductionPerMinute?: number;
+  earlyExitDeductionPerMinute?: number;
   wfhDeductionPerDay?: number;
   unpaidLeaveRule?: { type: string; dailyRate?: number; firstXDays?: number; firstXRate?: number; subsequentRate?: number };
 }
@@ -107,8 +109,11 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
   const [salaryForm, setSalaryForm] = useState<any>({});
   const [salaryConfigForm, setSalaryConfigForm] = useState<SalaryConfig>({});
   const [documentsForm, setDocumentsForm] = useState<any>({});
-  const [kpis, setKpis] = useState<KPI[]>([]);
-  const [kras, setKras] = useState<KRA[]>([]);
+  const [kpis, setKpisRaw] = useState<KPI[]>([]);
+  const [kras, setKrasRaw] = useState<KRA[]>([]);
+  const [kpiKraDirty, setKpiKraDirty] = useState(false);
+  const setKpis = (v: KPI[]) => { setKpisRaw(v); setKpiKraDirty(true); };
+  const setKras = (v: KRA[]) => { setKrasRaw(v); setKpiKraDirty(true); };
   const [payrolls, setPayrolls] = useState<any[]>([]);
   const [reviewForm, setReviewForm] = useState<any>({});
 
@@ -170,11 +175,13 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
         allowances: (sc as any).allowances || { hra: 0, da: 0, ta: 0, medical: 0, other: 0 },
         deductions: (sc as any).deductions || { pf: 0, esi: 0, tds: 0, other: 0 },
         lateDeductionPerMinute: (sc as any).lateDeductionPerMinute || 0,
+        earlyExitDeductionPerMinute: (sc as any).earlyExitDeductionPerMinute || 0,
         wfhDeductionPerDay: (sc as any).wfhDeductionPerDay || 0,
         unpaidLeaveRule: (sc as any).unpaidLeaveRule || { type: 'standard' },
       });
-      setKpis(p.kpis || []);
-      setKras(p.kras || []);
+      setKpisRaw(p.kpis || []);
+      setKrasRaw(p.kras || []);
+      setKpiKraDirty(false);
       setReviewForm({
         lastReviewDate: p.lastReviewDate ? p.lastReviewDate.split('T')[0] : '',
         nextReviewDate: p.nextReviewDate ? p.nextReviewDate.split('T')[0] : '',
@@ -211,9 +218,9 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
     setSaving(true);
     try {
       await api.put(`/hr/employee-profiles/${userId}`, {
-        dateOfBirth: personalForm.dateOfBirth || undefined,
-        gender: personalForm.gender || undefined,
-        bloodGroup: personalForm.bloodGroup || undefined,
+        dateOfBirth: personalForm.dateOfBirth || null,
+        gender: personalForm.gender || null,
+        bloodGroup: personalForm.bloodGroup || null,
         address: personalForm.address,
         city: personalForm.city,
         state: personalForm.state,
@@ -232,12 +239,12 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
   const saveEmployment = async () => {
     setSaving(true);
     try {
-      await Promise.all([
+      const [profileRes, userRes] = await Promise.allSettled([
         api.put(`/hr/employee-profiles/${userId}`, {
           employeeCode: employmentForm.employeeCode,
-          joinDate: employmentForm.joinDate || undefined,
-          confirmationDate: employmentForm.confirmationDate || undefined,
-          probationEndDate: employmentForm.probationEndDate || undefined,
+          joinDate: employmentForm.joinDate || null,
+          confirmationDate: employmentForm.confirmationDate || null,
+          probationEndDate: employmentForm.probationEndDate || null,
           employmentType: employmentForm.employmentType,
           workLocation: employmentForm.workLocation,
         }),
@@ -246,21 +253,31 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
           phone: employmentForm.phone,
         }),
       ]);
-      toast.success('Employment info saved');
+      const errMsg = (r: PromiseRejectedResult) => r.reason?.response?.data?.message || 'request failed';
+      if (profileRes.status === 'fulfilled' && userRes.status === 'fulfilled') {
+        toast.success('Employment info saved');
+      } else {
+        if (profileRes.status === 'rejected') toast.error(`Employment details not saved: ${errMsg(profileRes)}`);
+        if (userRes.status === 'rejected') toast.error(`Designation/phone not saved: ${errMsg(userRes)}`);
+        if (profileRes.status === 'fulfilled' || userRes.status === 'fulfilled') toast.info('The other part of the form was saved.');
+      }
       fetchProfile();
-    } catch { toast.error('Save failed'); } finally { setSaving(false); }
+    } finally { setSaving(false); }
   };
 
   const saveSalary = async () => {
     setSaving(true);
     try {
+      // Salary itself is configured in the Salary Configuration panel; only bank/tax details are saved here.
       await api.patch(`/hr/employee-profiles/${userId}/salary`, {
-        ...salaryForm,
-        salaryConfig: salaryConfigForm,
+        bankName: salaryForm.bankName,
+        bankAccountNo: salaryForm.bankAccountNo,
+        ifscCode: salaryForm.ifscCode,
+        panNumber: salaryForm.panNumber,
       });
-      toast.success('Salary details saved');
+      toast.success('Bank details saved');
       fetchProfile();
-    } catch { toast.error('Save failed'); } finally { setSaving(false); }
+    } catch (e: any) { toast.error(e?.response?.data?.message || 'Save failed'); } finally { setSaving(false); }
   };
 
   const saveKPIs = async () => {
@@ -268,6 +285,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
     try {
       await api.patch(`/hr/employee-profiles/${userId}/kpis`, { kpis });
       toast.success('KPIs saved');
+      setKpiKraDirty(false);
     } catch { toast.error('Save failed'); } finally { setSaving(false); }
   };
 
@@ -276,13 +294,19 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
     try {
       await api.patch(`/hr/employee-profiles/${userId}/kras`, { kras });
       toast.success('KRAs saved');
+      setKpiKraDirty(false);
     } catch { toast.error('Save failed'); } finally { setSaving(false); }
   };
 
   const saveReview = async () => {
     setSaving(true);
     try {
-      await api.put(`/hr/employee-profiles/${userId}`, reviewForm);
+      await api.put(`/hr/employee-profiles/${userId}`, {
+        ...reviewForm,
+        overallRating: reviewForm.overallRating || null,
+        lastReviewDate: reviewForm.lastReviewDate || null,
+        nextReviewDate: reviewForm.nextReviewDate || null,
+      });
       toast.success('Review saved');
       fetchProfile();
     } catch { toast.error('Save failed'); } finally { setSaving(false); }
@@ -346,7 +370,11 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
   const profile = data?.profile;
 
   return (
-    <Sheet open={open} onOpenChange={v => !v && onClose()}>
+    <Sheet open={open} onOpenChange={v => {
+      if (v) return;
+      if (kpiKraDirty && !window.confirm('You have unsaved KPI/KRA changes. Close without saving?')) return;
+      onClose();
+    }}>
       <SheetContent side="right" className="w-full sm:max-w-3xl overflow-y-auto p-0">
         {/* Profile Header */}
         <div className="bg-gradient-to-r from-primary/10 to-primary/5 px-6 py-5 border-b">
@@ -586,87 +614,79 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
 
               {/* ── SALARY ── */}
               <TabsContent value="salary" className="space-y-4 mt-0">
-                <SectionTitle icon={DollarSign} title="Salary & Bank Details" />
+                <div className="flex items-start gap-2 p-3 rounded-lg border border-blue-200 bg-blue-50 text-blue-800 text-xs">
+                  <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                  <span>Note: Salary is configured in the <b>Salary Configuration</b> panel (HR &rarr; Salary Config). This tab only shows the configured salary.</span>
+                </div>
+
+                <SectionTitle icon={TrendingUp} title="Configured Salary" />
+                {!data?.salaryConfig ? (
+                  <div className="p-4 rounded-xl bg-muted/40 text-sm text-muted-foreground text-center">
+                    No salary configured for this employee yet. Configure it in the Salary Configuration panel.
+                  </div>
+                ) : (() => {
+                  const sc: any = data.salaryConfig;
+                  const allowances = sc.allowances || {};
+                  const deductions = sc.deductions || {};
+                  const sum = (o: Record<string, any>) => Object.values(o).reduce((t: number, v: any) => t + (Number(v) || 0), 0);
+                  const gross = (Number(sc.basicSalary) || 0) + sum(allowances);
+                  const net = gross - sum(deductions);
+                  const inr = (n: any) => `₹${(Number(n) || 0).toLocaleString()}`;
+                  const rule = sc.unpaidLeaveRule || { type: 'standard' };
+                  const statusClass = sc.approvalStatus === 'approved' ? 'bg-green-100 text-green-700'
+                    : sc.approvalStatus === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700';
+                  const Row = ({ label, value }: { label: string; value: any }) => (
+                    <div className="flex justify-between text-sm py-1.5 border-b border-border/40 last:border-0">
+                      <span className="text-muted-foreground">{label}</span><span className="font-medium">{value}</span>
+                    </div>
+                  );
+                  return (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground">Approval status:</span>
+                        <Badge className={cn('capitalize', statusClass)}>{String(sc.approvalStatus || 'pending_approval').replace('_', ' ')}</Badge>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Card><CardContent className="pt-4">
+                          <Row label="Basic (monthly)" value={inr(sc.basicSalary)} />
+                          <Row label="HRA" value={inr(allowances.hra)} />
+                          <Row label="DA" value={inr(allowances.da)} />
+                          <Row label="TA" value={inr(allowances.ta)} />
+                          <Row label="Medical" value={inr(allowances.medical)} />
+                          <Row label="Other allowance" value={inr(allowances.other)} />
+                        </CardContent></Card>
+                        <Card><CardContent className="pt-4">
+                          <Row label="PF" value={inr(deductions.pf)} />
+                          <Row label="ESI" value={inr(deductions.esi)} />
+                          <Row label="TDS" value={inr(deductions.tds)} />
+                          <Row label="Late deduction / min" value={inr(sc.lateDeductionPerMinute)} />
+                          <Row label="Early exit deduction / min" value={inr(sc.earlyExitDeductionPerMinute)} />
+                          <Row label="WFH deduction / day" value={`${sc.wfhDeductionPerDay || 0}%`} />
+                        </CardContent></Card>
+                      </div>
+                      <div className="p-3 rounded-lg border bg-muted/30 text-sm">
+                        <span className="text-muted-foreground">Unpaid leave rule: </span>
+                        <span className="font-medium capitalize">{rule.type}</span>
+                        {rule.type === 'fixed' && <span> — {inr(rule.dailyRate)} per day</span>}
+                        {rule.type === 'progressive' && <span> — first {rule.firstXDays || 0} days at {inr(rule.firstXRate)}, then {inr(rule.subsequentRate)}</span>}
+                      </div>
+                      <div className="flex gap-4 p-3 rounded-xl bg-muted/50 text-sm">
+                        <div><span className="text-muted-foreground">Gross: </span><span className="font-bold">{inr(gross)}</span></div>
+                        <div><span className="text-muted-foreground">Net: </span><span className="font-bold text-green-600">{inr(net)}</span></div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                <SectionTitle icon={DollarSign} title="Bank & Tax Details" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div><Label>CTC (Annual ₹)</Label><Input type="number" value={salaryForm.ctc} onChange={e => setSalaryForm({ ...salaryForm, ctc: e.target.value })} /></div>
-                  <div><Label>Basic Salary (Monthly ₹)</Label><Input type="number" value={salaryForm.basicSalary} onChange={e => setSalaryForm({ ...salaryForm, basicSalary: e.target.value })} /></div>
                   <div><Label>Bank Name</Label><Input value={salaryForm.bankName} onChange={e => setSalaryForm({ ...salaryForm, bankName: e.target.value })} /></div>
                   <div><Label>Account Number</Label><Input value={salaryForm.bankAccountNo} onChange={e => setSalaryForm({ ...salaryForm, bankAccountNo: e.target.value })} /></div>
                   <div><Label>IFSC Code</Label><Input value={salaryForm.ifscCode} onChange={e => setSalaryForm({ ...salaryForm, ifscCode: e.target.value })} /></div>
                   <div><Label>PAN Number</Label><Input value={salaryForm.panNumber} onChange={e => setSalaryForm({ ...salaryForm, panNumber: e.target.value })} /></div>
                 </div>
 
-                <SectionTitle icon={TrendingUp} title="Salary Structure (Payroll Config)" />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div><Label>Basic (₹/mo)</Label><Input type="number" value={salaryConfigForm.basicSalary || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, basicSalary: Number(e.target.value) })} /></div>
-                  <div><Label>HRA (₹)</Label><Input type="number" value={salaryConfigForm.allowances?.hra || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, allowances: { ...salaryConfigForm.allowances, hra: Number(e.target.value) } })} /></div>
-                  <div><Label>DA (₹)</Label><Input type="number" value={salaryConfigForm.allowances?.da || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, allowances: { ...salaryConfigForm.allowances, da: Number(e.target.value) } })} /></div>
-                  <div><Label>TA (₹)</Label><Input type="number" value={salaryConfigForm.allowances?.ta || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, allowances: { ...salaryConfigForm.allowances, ta: Number(e.target.value) } })} /></div>
-                  <div><Label>Medical (₹)</Label><Input type="number" value={salaryConfigForm.allowances?.medical || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, allowances: { ...salaryConfigForm.allowances, medical: Number(e.target.value) } })} /></div>
-                  <div><Label>Other Allowance (₹)</Label><Input type="number" value={salaryConfigForm.allowances?.other || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, allowances: { ...salaryConfigForm.allowances, other: Number(e.target.value) } })} /></div>
-                  <div><Label>PF Deduction (₹)</Label><Input type="number" value={salaryConfigForm.deductions?.pf || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, deductions: { ...salaryConfigForm.deductions, pf: Number(e.target.value) } })} /></div>
-                  <div><Label>ESI (₹)</Label><Input type="number" value={salaryConfigForm.deductions?.esi || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, deductions: { ...salaryConfigForm.deductions, esi: Number(e.target.value) } })} /></div>
-                  <div><Label>TDS (₹)</Label><Input type="number" value={salaryConfigForm.deductions?.tds || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, deductions: { ...salaryConfigForm.deductions, tds: Number(e.target.value) } })} /></div>
-                  <div><Label>Late Deduction (₹/min)</Label><Input type="number" step="0.01" value={salaryConfigForm.lateDeductionPerMinute || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, lateDeductionPerMinute: Number(e.target.value) })} /></div>
-                  <div><Label>WFH Deduction (% of daily salary)</Label><Input type="number" step="0.01" value={salaryConfigForm.wfhDeductionPerDay || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, wfhDeductionPerDay: Number(e.target.value) })} /></div>
-                </div>
-
-                <div className="space-y-3 p-4 bg-muted/30 rounded-lg border border-border mt-4">
-                  <Label className="font-semibold text-base">Unpaid Leave Deduction Rule</Label>
-                  <Select 
-                    value={salaryConfigForm.unpaidLeaveRule?.type || 'standard'} 
-                    onValueChange={(val) => setSalaryConfigForm({ ...salaryConfigForm, unpaidLeaveRule: { ...salaryConfigForm.unpaidLeaveRule, type: val } })}
-                  >
-                    <SelectTrigger><SelectValue placeholder="Select rule type..." /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="standard">Standard: (Gross / 30) per day</SelectItem>
-                      <SelectItem value="fixed">Fixed: Custom amount per day</SelectItem>
-                      <SelectItem value="progressive">Progressive: First X days vs subsequent</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  {salaryConfigForm.unpaidLeaveRule?.type === 'fixed' && (
-                    <div className="mt-2">
-                      <Label>Daily Deduction Amount (₹)</Label>
-                      <Input type="number" min="0" value={salaryConfigForm.unpaidLeaveRule?.dailyRate || ''}
-                        onChange={e => setSalaryConfigForm({ ...salaryConfigForm, unpaidLeaveRule: { ...salaryConfigForm.unpaidLeaveRule, dailyRate: Number(e.target.value) } })} />
-                    </div>
-                  )}
-
-                  {salaryConfigForm.unpaidLeaveRule?.type === 'progressive' && (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
-                      <div>
-                        <Label>First X Days</Label>
-                        <Input type="number" min="0" value={salaryConfigForm.unpaidLeaveRule?.firstXDays || ''}
-                          onChange={e => setSalaryConfigForm({ ...salaryConfigForm, unpaidLeaveRule: { ...salaryConfigForm.unpaidLeaveRule, firstXDays: Number(e.target.value) } })} />
-                      </div>
-                      <div>
-                        <Label>First X Rate (₹)</Label>
-                        <Input type="number" min="0" value={salaryConfigForm.unpaidLeaveRule?.firstXRate || ''}
-                          onChange={e => setSalaryConfigForm({ ...salaryConfigForm, unpaidLeaveRule: { ...salaryConfigForm.unpaidLeaveRule, firstXRate: Number(e.target.value) } })} />
-                      </div>
-                      <div>
-                        <Label>Subsequent Rate (₹)</Label>
-                        <Input type="number" min="0" value={salaryConfigForm.unpaidLeaveRule?.subsequentRate || ''}
-                          onChange={e => setSalaryConfigForm({ ...salaryConfigForm, unpaidLeaveRule: { ...salaryConfigForm.unpaidLeaveRule, subsequentRate: Number(e.target.value) } })} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Gross / Net preview */}
-                {(salaryConfigForm.basicSalary || 0) > 0 && (() => {
-                  const gross = (salaryConfigForm.basicSalary || 0) + Object.values(salaryConfigForm.allowances || {}).reduce((s, v) => s + (v || 0), 0);
-                  const net = gross - Object.values(salaryConfigForm.deductions || {}).reduce((s, v) => s + (v || 0), 0);
-                  return (
-                    <div className="flex gap-4 p-3 rounded-xl bg-muted/50 text-sm">
-                      <div><span className="text-muted-foreground">Gross: </span><span className="font-bold">₹{gross.toLocaleString()}</span></div>
-                      <div><span className="text-muted-foreground">Net: </span><span className="font-bold text-green-600">₹{net.toLocaleString()}</span></div>
-                    </div>
-                  );
-                })()}
-
-                <Button onClick={saveSalary} disabled={saving} className="w-full"><Save className="w-4 h-4 mr-2" />Save Salary Details</Button>
+                <Button onClick={saveSalary} disabled={saving} className="w-full"><Save className="w-4 h-4 mr-2" />Save Bank Details</Button>
               </TabsContent>
 
                 {/* ── PAYROLL HISTORY ── */}
