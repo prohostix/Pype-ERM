@@ -300,18 +300,22 @@ export function LicensesPanel() {
     const orgHistory = org.metadata?.billHistory || [];
     const generatedBillForSelectedMonth = orgHistory.find(b => b.billingMonth === selectedMonth);
 
-    // Partner students strictly billed under Academic Partner
-    const partnerStudentCount = generatedBillForSelectedMonth 
-      ? (generatedBillForSelectedMonth.partnerStudentCount ?? (generatedBillForSelectedMonth.academicPartner?.studentCount ?? generatedBillForSelectedMonth.studentCount))
-      : (org.monthPartnerEnrollmentCount !== undefined ? org.monthPartnerEnrollmentCount : 0);
+    // Always show actual month's enrollment counts (current month by default, or the selected month)
+    const partnerStudentCount = org.monthPartnerEnrollmentCount !== undefined 
+      ? org.monthPartnerEnrollmentCount 
+      : (generatedBillForSelectedMonth 
+          ? (generatedBillForSelectedMonth.partnerStudentCount ?? (generatedBillForSelectedMonth.academicPartner?.studentCount ?? generatedBillForSelectedMonth.studentCount))
+          : 0);
 
-    const directStudentCount = generatedBillForSelectedMonth
-      ? (generatedBillForSelectedMonth.directStudentCount ?? (generatedBillForSelectedMonth.directEnrollment?.studentCount ?? 0))
-      : (org.monthDirectEnrollmentCount !== undefined ? org.monthDirectEnrollmentCount : 0);
+    const directStudentCount = org.monthDirectEnrollmentCount !== undefined
+      ? org.monthDirectEnrollmentCount
+      : (generatedBillForSelectedMonth
+          ? (generatedBillForSelectedMonth.directStudentCount ?? (generatedBillForSelectedMonth.directEnrollment?.studentCount ?? 0))
+          : 0);
 
-    const totalStudentCount = generatedBillForSelectedMonth
-      ? (generatedBillForSelectedMonth.totalStudentCount ?? (partnerStudentCount + directStudentCount))
-      : (org.monthTotalEnrollmentCount !== undefined ? org.monthTotalEnrollmentCount : (partnerStudentCount + directStudentCount));
+    const totalStudentCount = org.monthTotalEnrollmentCount !== undefined
+      ? org.monthTotalEnrollmentCount
+      : (partnerStudentCount + directStudentCount);
 
     // Calculations
     const partnerEnrollmentTotal = partnerStudentCount * academicPartnerPerEnrollmentFee;
@@ -928,6 +932,11 @@ export function LicensesPanel() {
                           <div className="text-[11px] text-muted-foreground mt-0.5">
                             Total: <strong>{details.totalStudentCount} students</strong>
                           </div>
+                          {existingBill && org.monthTotalEnrollmentCount !== undefined && org.monthTotalEnrollmentCount !== details.totalStudentCount && (
+                            <div className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold mt-0.5">
+                              Live: {org.monthTotalEnrollmentCount} (new enrollments)
+                            </div>
+                          )}
                           <Button 
                             variant="link" 
                             size="sm"
@@ -967,6 +976,11 @@ export function LicensesPanel() {
                               >
                                 {existingBill.status}
                               </Badge>
+                              {existingBill.totalStudentCount !== details.totalStudentCount && (
+                                <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium whitespace-nowrap">
+                                  Billed: {existingBill.totalStudentCount} (click Regenerate)
+                                </span>
+                              )}
                             </div>
                           ) : (
                             <Badge variant="secondary" className="text-[11px] text-muted-foreground font-normal">
@@ -1266,17 +1280,31 @@ export function LicensesPanel() {
             return (
               <form onSubmit={handleSaveOrgPlan} className="space-y-4 pt-1">
                 {/* Organization Snapshot Bar */}
-                <div className="p-3 rounded-xl border bg-muted/40 flex items-center justify-between text-xs">
-                  <div>
-                    <span className="text-muted-foreground">{selectedMonthLabel} Enrollments:</span>
-                    <span className="font-bold text-foreground ml-1.5 text-sm">
-                      {partnerCount} partner + {directCount} direct ({partnerCount + directCount} total)
-                    </span>
+                <div className="p-3 rounded-xl border bg-muted/40 space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-muted-foreground">{selectedMonthLabel} Live Enrollments:</span>
+                      <span className="font-bold text-foreground ml-1.5 text-sm">
+                        {partnerCount} partner + {directCount} direct ({partnerCount + directCount} total)
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Campus Centers:</span>
+                      <span className="font-semibold text-foreground ml-1.5">{selectedOrg._count?.academicCenters || 0}</span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="text-muted-foreground">Campus Centers:</span>
-                    <span className="font-semibold text-foreground ml-1.5">{selectedOrg._count?.academicCenters || 0}</span>
-                  </div>
+                  {(() => {
+                    const orgHistory = selectedOrg.metadata?.billHistory || [];
+                    const generatedBill = orgHistory.find((b: any) => b.billingMonth === selectedMonth);
+                    if (generatedBill && (generatedBill.totalStudentCount ?? 0) !== (partnerCount + directCount)) {
+                      return (
+                        <div className="text-[11px] text-amber-700 dark:text-amber-300 bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-500/20">
+                          ⚠️ An earlier generated bill exists for this month with <strong>{generatedBill.totalStudentCount} students (₹{(generatedBill.totalAmount || 0).toLocaleString('en-IN')})</strong>. Click <strong>"Regenerate Bill"</strong> on the main table to update the bill with all {partnerCount + directCount} current enrollments.
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
                 </div>
 
                 {/* Plan Identifier */}

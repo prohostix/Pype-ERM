@@ -102,39 +102,39 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
       {/* Global Background Ribbon SVG from Login page */}
       <GlobalBrandBackground />
 
-      {/* Header / Navbar (Sticky Floating Pill) */}
-      <header className="sticky top-3 sm:top-4 z-50 w-full px-3 sm:px-8 pointer-events-none transition-all">
-        <div className="max-w-7xl mx-auto bg-white/90 backdrop-blur-2xl border border-slate-200/80 shadow-[0_10px_35px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)] rounded-2xl sm:rounded-full px-3.5 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between transition-all pointer-events-auto">
+      {/* Header / Navbar (Standard Sticky Navbar at Top) */}
+      <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-xl border-b border-slate-200/80 shadow-xs transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
           {/* Left Area: Logo & Brand + Nav Links */}
-          <div className="flex items-center gap-3 sm:gap-7 shrink-0">
+          <div className="flex items-center gap-4 sm:gap-8 shrink-0">
             {/* Logo & Brand */}
             <div 
-              className="flex items-center gap-2 sm:gap-3 cursor-pointer group shrink-0" 
+              className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group shrink-0" 
               onClick={() => {
                 setMobileMenuOpen(false);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
             >
               <div className="relative flex items-center justify-center group-hover:scale-105 transition-transform">
-                <img src="/erm-logo-green.png" alt="PYPE ERM Logo" className="w-10 h-10 sm:w-14 sm:h-14 object-contain drop-shadow-sm" />
+                <img src="/erm-logo-green.png" alt="PYPE ERM Logo" className="w-9 h-9 sm:w-11 sm:h-11 object-contain drop-shadow-sm" />
               </div>
               <div className="flex items-baseline gap-1 sm:gap-1.5 whitespace-nowrap select-none">
-                <span className="text-xl sm:text-[26px] font-bold tracking-tight text-slate-500">pype</span>
-                <span className="text-[16px] sm:text-[20px] font-black tracking-wider text-slate-900">ERM</span>
+                <span className="text-xl sm:text-[24px] font-bold tracking-tight text-slate-500">pype</span>
+                <span className="text-[16px] sm:text-[19px] font-black tracking-wider text-slate-900">ERM</span>
               </div>
             </div>
             
             {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-1 bg-slate-100/70 border border-slate-200/60 p-1 rounded-full text-sm font-medium text-slate-600 shadow-xs ml-4 sm:ml-8">
+            <nav className="hidden md:flex items-center gap-1 sm:gap-2">
               <a 
                 href="#features" 
-                className="h-8 px-4 rounded-full flex items-center justify-center hover:text-slate-900 hover:bg-white hover:shadow-xs transition-all font-semibold leading-none"
+                className="px-3.5 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 rounded-lg transition-colors"
               >
                 Features
               </a>
               <a 
                 href="#preview" 
-                className="h-8 px-4 rounded-full flex items-center justify-center hover:text-slate-900 hover:bg-white hover:shadow-xs transition-all font-semibold leading-none"
+                className="px-3.5 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 rounded-lg transition-colors"
               >
                 Platform
               </a>
@@ -142,28 +142,29 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
           </div>
 
           {/* Right Action Buttons */}
-          <div className="flex items-center gap-1.5 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Button 
               variant="ghost" 
-              className="text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 font-semibold text-xs sm:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full h-8 sm:h-9 transition-colors"
+              className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-semibold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg h-9 transition-colors"
               onClick={onGoToLogin}
             >
               Log in
             </Button>
             
             <Button 
-              className="bg-[#54b947] hover:bg-[#439c36] text-white font-bold text-xs sm:text-sm px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full h-8 sm:h-9 shadow-[0_4px_14px_rgba(84,185,71,0.35)] hover:shadow-[0_6px_20px_rgba(84,185,71,0.45)] hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all flex items-center gap-1 sm:gap-1.5"
+              variant="outline"
+              className="bg-transparent hover:bg-[#54b947]/10 text-[#54b947] hover:text-[#439c36] border border-[#54b947] hover:border-[#439c36] font-bold text-xs sm:text-sm px-3.5 sm:px-5 py-2 rounded-full h-9 shadow-none hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all flex items-center gap-1.5"
               onClick={() => setOpenModal(true)}
             >
               <span>Get Started</span>
-              <ArrowRight className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </Button>
 
             {/* Mobile Hamburger Menu Toggle */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-1.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors ml-0.5 focus:outline-none"
+              className="md:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -173,11 +174,11 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-2 max-w-7xl mx-auto bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-2xl p-3 shadow-xl pointer-events-auto flex flex-col gap-1 transition-all">
+          <div className="md:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-2xl px-4 py-3 shadow-lg flex flex-col gap-1 transition-all">
             <a 
               href="#features" 
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-slate-700 font-semibold hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center justify-between text-sm"
+              className="px-3 py-2.5 rounded-lg text-slate-700 font-semibold hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center justify-between text-sm"
             >
               <span>Features</span>
               <ArrowRight className="w-4 h-4 text-slate-400" />
@@ -185,7 +186,7 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
             <a 
               href="#preview" 
               onClick={() => setMobileMenuOpen(false)}
-              className="px-4 py-2.5 rounded-xl text-slate-700 font-semibold hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center justify-between text-sm"
+              className="px-3 py-2.5 rounded-lg text-slate-700 font-semibold hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center justify-between text-sm"
             >
               <span>Platform</span>
               <ArrowRight className="w-4 h-4 text-slate-400" />
@@ -214,14 +215,14 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
         
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-12 sm:mb-16 w-full sm:w-auto px-4 sm:px-0">
           <Button 
-            className="bg-[#54b947] hover:bg-[#439c36] text-white text-base sm:text-lg font-bold px-6 py-6 sm:px-10 sm:py-7 rounded-xl sm:rounded-2xl shadow-xl shadow-[#54b947]/25 hover:shadow-[#54b947]/40 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
+            className="bg-[#54b947] hover:bg-[#439c36] text-white text-base sm:text-lg font-bold px-6 py-6 sm:px-10 sm:py-7 rounded-full shadow-xl shadow-[#54b947]/25 hover:shadow-[#54b947]/40 hover:-translate-y-0.5 transition-all w-full sm:w-auto"
             onClick={() => setOpenModal(true)}
           >
             Get Started <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
           <Button 
             variant="outline" 
-            className="border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 text-base sm:text-lg font-bold px-6 py-6 sm:px-10 sm:py-7 rounded-xl sm:rounded-2xl shadow-sm transition-all w-full sm:w-auto"
+            className="border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 text-base sm:text-lg font-bold px-6 py-6 sm:px-10 sm:py-7 rounded-full shadow-sm transition-all w-full sm:w-auto"
             onClick={onGoToLogin}
           >
             <Play className="w-5 h-5 mr-2 fill-current" /> Watch Demo
@@ -1051,7 +1052,7 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-900 mb-4 sm:mb-8">Ready to get started?</h2>
         <p className="text-base sm:text-xl text-slate-500 font-medium mb-8 sm:mb-10 max-w-2xl mx-auto">Join hundreds of institutions that use PYPE ERM to manage their entire operation.</p>
         <Button 
-          className="bg-[#54b947] hover:bg-[#439c36] text-white text-base sm:text-xl font-bold px-8 py-5 sm:px-12 sm:py-8 rounded-xl sm:rounded-2xl shadow-xl shadow-[#54b947]/30 hover:shadow-[#54b947]/40 transition-all hover:-translate-y-1 w-full sm:w-auto"
+          className="bg-[#54b947] hover:bg-[#439c36] text-white text-base sm:text-xl font-bold px-8 py-5 sm:px-12 sm:py-8 rounded-full shadow-xl shadow-[#54b947]/30 hover:shadow-[#54b947]/40 transition-all hover:-translate-y-1 w-full sm:w-auto"
           onClick={() => setOpenModal(true)}
         >
           Sign up for free

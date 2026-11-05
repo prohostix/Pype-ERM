@@ -615,7 +615,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
                           {/* Workflow progress bar */}
                           {(() => {
-                            const hasDeptStep = Boolean(leave.deptApprover || leave.deptAdminRemarks || leave.status === 'dept_approved');
+                            const hasDeptStep = Boolean(leave.departmentId || leave.department || leave.deptApprover || leave.deptAdminRemarks || leave.status === 'dept_approved');
                             const isWithdrawn = leave.status === 'withdrawn';
                             const isWithdrawPending = leave.status === 'withdraw_pending';
                             const isFinalApproved = ['approved', 'withdraw_pending', 'withdrawn'].includes(leave.status);
@@ -634,23 +634,28 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                                 {/* 1. Submitted */}
                                 <StepDot active={true} done={true} label="Submitted" />
 
-                                {/* 2. Dept Manager Step (ONLY if this leave genuinely had a department manager step) */}
+                                {/* 2. Dept Manager Step */}
                                 {hasDeptStep && (
                                   <>
-                                    <div className={cn('w-8 sm:w-6 h-[2px] rounded-full', leave.status !== 'pending' ? 'bg-primary' : 'bg-muted')} />
+                                    <div className={cn('w-8 sm:w-6 h-[2px] rounded-full', 'bg-primary')} />
                                     <StepDot
-                                      active={leave.status !== 'pending'}
+                                      active={leave.status === 'pending'}
                                       done={['dept_approved', 'approved', 'withdraw_pending', 'withdrawn'].includes(leave.status)}
                                       rejected={leave.status === 'rejected' && !!leave.deptAdminRemarks && !leave.hrRemarks}
-                                      label={leave.deptApprover?.designation || "Dept Manager"}
+                                      label={leave.deptApprover?.designation || (leave.department?.name ? `${leave.department.name} Manager` : "Dept Manager")}
                                     />
                                   </>
                                 )}
 
                                 {/* 3. Final Approver Step (Branch In-Charge / HR / CEO) */}
-                                <div className={cn('w-8 sm:w-6 h-[2px] rounded-full', (isFinalApproved || (leave.status === 'rejected' && !!leave.hrRemarks)) ? 'bg-primary' : 'bg-muted')} />
+                                <div className={cn(
+                                  'w-8 sm:w-6 h-[2px] rounded-full',
+                                  hasDeptStep
+                                    ? (['dept_approved', 'approved', 'withdraw_pending', 'withdrawn'].includes(leave.status) ? 'bg-primary' : 'bg-muted')
+                                    : (isFinalApproved || (leave.status === 'rejected' && !!leave.hrRemarks) ? 'bg-primary' : 'bg-muted')
+                                )} />
                                 <StepDot
-                                  active={isFinalApproved || (leave.status === 'rejected' && !!leave.hrRemarks)}
+                                  active={hasDeptStep ? leave.status === 'dept_approved' : (leave.status === 'pending')}
                                   done={isFinalApproved}
                                   rejected={leave.status === 'rejected' && !!leave.hrRemarks}
                                   label={finalApproverLabel}
@@ -705,11 +710,11 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
           <form onSubmit={handleCreate} className="p-6 space-y-5">
             <div className="space-y-2">
               <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Request Type</Label>
-              <Select 
-                value={form.type} 
-                onValueChange={v => setForm(f => ({ 
-                  ...f, 
-                  type: v, 
+              <Select
+                value={form.type}
+                onValueChange={v => setForm(f => ({
+                  ...f,
+                  type: v,
                   isHalfDay: (v === 'late_coming' || v === 'early_exit') ? false : f.isHalfDay,
                   endDate: (v === 'late_coming' || v === 'early_exit') ? f.startDate : f.endDate
                 }))}
@@ -731,24 +736,24 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-2">
                   <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Date</Label>
-                  <Input 
-                    type="date" 
-                    className="rounded-xl h-11" 
-                    value={form.startDate} 
-                    onChange={e => setForm(f => ({ ...f, startDate: e.target.value, endDate: e.target.value }))} 
-                    required 
+                  <Input
+                    type="date"
+                    className="rounded-xl h-11"
+                    value={form.startDate}
+                    onChange={e => setForm(f => ({ ...f, startDate: e.target.value, endDate: e.target.value }))}
+                    required
                   />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                     {form.type === 'late_coming' ? 'Expected In-Time' : 'Expected Exit-Time'}
                   </Label>
-                  <Input 
-                    type="time" 
-                    className="rounded-xl h-11" 
-                    value={form.permissionTime} 
-                    onChange={e => setForm(f => ({ ...f, permissionTime: e.target.value }))} 
-                    required 
+                  <Input
+                    type="time"
+                    className="rounded-xl h-11"
+                    value={form.permissionTime}
+                    onChange={e => setForm(f => ({ ...f, permissionTime: e.target.value }))}
+                    required
                   />
                 </div>
               </div>
@@ -916,10 +921,10 @@ function StepDot({ active, done, rejected, withdrawn, label }: { active: boolean
       <div className={cn(
         'w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300',
         withdrawn ? 'bg-orange-500 text-white shadow-md shadow-orange-500/30' :
-        done ? 'bg-green-500 text-white shadow-md shadow-green-500/30' :
-        rejected ? 'bg-red-500 text-white shadow-md shadow-red-500/30' :
-        active ? 'bg-primary text-white shadow-md shadow-primary/30 ring-4 ring-primary/20' :
-        'bg-muted border border-border text-muted-foreground'
+          done ? 'bg-green-500 text-white shadow-md shadow-green-500/30' :
+            rejected ? 'bg-red-500 text-white shadow-md shadow-red-500/30' :
+              active ? 'bg-primary text-white shadow-md shadow-primary/30 ring-4 ring-primary/20' :
+                'bg-muted border border-border text-muted-foreground'
       )}>
         {withdrawn && <RotateCcw className="w-3.5 h-3.5" />}
         {done && !withdrawn && <CheckCircle className="w-3.5 h-3.5" />}
@@ -930,10 +935,10 @@ function StepDot({ active, done, rejected, withdrawn, label }: { active: boolean
       <span className={cn(
         "text-[10px] font-bold whitespace-nowrap transition-colors tracking-wide",
         withdrawn ? "text-orange-600 dark:text-orange-400" :
-        done ? "text-green-600 dark:text-green-500" :
-        rejected ? "text-red-600 dark:text-red-500" :
-        active ? "text-primary" :
-        "text-muted-foreground"
+          done ? "text-green-600 dark:text-green-500" :
+            rejected ? "text-red-600 dark:text-red-500" :
+              active ? "text-primary" :
+                "text-muted-foreground"
       )}>
         {label}
       </span>

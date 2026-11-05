@@ -4,67 +4,22 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
 /**
- * Helper to determine the exact billing start & end dates based on the organization's salary billing cycle.
+ * Helper to determine the exact billing start & end dates (1st to last day of the month).
  */
 export async function getOrgBillingDateRange(orgId: string, billingMonth: string) {
   const [yearStr, monthStr] = billingMonth.split('-');
   const year = parseInt(yearStr, 10);
   const month = parseInt(monthStr, 10);
 
-  const org = await prisma.organization.findUnique({
-    where: { id: orgId },
-    select: { metadata: true }
-  });
-
-  const metadata = (org?.metadata as any) || {};
-  const salaryCycle = metadata.salaryCycle;
-
-  let startDate: Date;
-  let endDate: Date;
-
-  if (salaryCycle?.type === 'custom_range' && salaryCycle.customStartDate && salaryCycle.customEndDate) {
-    startDate = new Date(salaryCycle.customStartDate);
-    startDate.setHours(0, 0, 0, 0);
-    endDate = new Date(salaryCycle.customEndDate);
-    endDate.setHours(23, 59, 59, 999);
-  } else if (salaryCycle?.startDay && salaryCycle?.endDay) {
-    const startDay = Number(salaryCycle.startDay);
-    const endDay = Number(salaryCycle.endDay);
-    const cycleMode = salaryCycle.cycleMode || (startDay > endDay ? 'previous_to_current' : 'same_month');
-
-    if (cycleMode === 'previous_to_current' || startDay > endDay) {
-      // e.g. billingMonth 2026-10:
-      // Starts in previous month (month - 2), ends in billing month (month - 1)
-      const prevMonthLastDay = new Date(year, month - 1, 0).getDate();
-      const currMonthLastDay = new Date(year, month, 0).getDate();
-      const safeStartDay = Math.min(startDay, prevMonthLastDay);
-      const safeEndDay = Math.min(endDay, currMonthLastDay);
-
-      startDate = new Date(year, month - 2, safeStartDay, 0, 0, 0, 0);
-      endDate = new Date(year, month - 1, safeEndDay, 23, 59, 59, 999);
-    } else {
-      // Within same month (e.g. 1st to 30th/31st)
-      const currMonthLastDay = new Date(year, month, 0).getDate();
-      const safeStartDay = Math.min(startDay, currMonthLastDay);
-      const safeEndDay = Math.min(endDay, currMonthLastDay);
-
-      startDate = new Date(year, month - 1, safeStartDay, 0, 0, 0, 0);
-      endDate = new Date(year, month - 1, safeEndDay, 23, 59, 59, 999);
-    }
-  } else {
-    // Default 1st of month to end of month
-    startDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
-    const nextYear = month === 12 ? year + 1 : year;
-    const nextMonth = month === 12 ? 1 : month + 1;
-    const nextMonthStr = String(nextMonth).padStart(2, '0');
-    endDate = new Date(new Date(`${nextYear}-${nextMonthStr}-01T00:00:00.000Z`).getTime() - 1);
-  }
+  // Exact calendar month: 1st of the month (00:00:00.000) to the last day of the month (23:59:59.999)
+  const startDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
+  const endDate = new Date(year, month, 0, 23, 59, 59, 999);
 
   const cycleStartFormatted = startDate.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
   const cycleEndFormatted = endDate.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
   const billingCycleLabel = `${cycleStartFormatted} — ${cycleEndFormatted}`;
 
-  return { startDate, endDate, billingCycleLabel, salaryCycle };
+  return { startDate, endDate, billingCycleLabel, salaryCycle: null };
 }
 
 /**
@@ -187,7 +142,11 @@ export const getOrganizations = asyncHandler(async (req: AuthRequest, res: Respo
         select: {
           students: true,
           enrollments: true,
-          users: true,
+          users: {
+            where: {
+              role: { not: 'student' }
+            }
+          },
           academicCenters: true,
           studyCenters: true,
         }
@@ -196,7 +155,17 @@ export const getOrganizations = asyncHandler(async (req: AuthRequest, res: Respo
     orderBy: { createdAt: 'desc' }
   });
 
-  let resultData = organizations as any[];
+  let resultData = organizations.map((org: any) => {
+    const studentCount = Math.max(org._count?.students || 0, org._count?.enrollments || 0);
+    return {
+      ...org,
+      _count: {
+        ...org._count,
+        students: studentCount,
+        enrollments: studentCount,
+      }
+    };
+  });
 
   if (monthParam) {
     resultData = await Promise.all(
@@ -406,7 +375,11 @@ export const assignLicense = asyncHandler(async (req: AuthRequest, res: Response
         select: {
           students: true,
           enrollments: true,
-          users: true,
+          users: {
+            where: {
+              role: { not: 'student' }
+            }
+          },
           academicCenters: true,
           studyCenters: true,
         }
@@ -414,7 +387,17 @@ export const assignLicense = asyncHandler(async (req: AuthRequest, res: Response
     }
   });
 
-  res.status(200).json({ success: true, data: updatedOrg });
+  const studentCount = Math.max(updatedOrg._count?.students || 0, updatedOrg._count?.enrollments || 0);
+  const formattedOrg = {
+    ...updatedOrg,
+    _count: {
+      ...updatedOrg._count,
+      students: studentCount,
+      enrollments: studentCount,
+    }
+  };
+
+  res.status(200).json({ success: true, data: formattedOrg });
 });
 
 export const getOrgInquiries = asyncHandler(async (req: AuthRequest, res: Response) => {

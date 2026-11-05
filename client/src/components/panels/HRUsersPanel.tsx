@@ -597,10 +597,11 @@ export function HRUsersPanel() {
                       <SelectContent>
                         {designations.map(d => {
                           const filled = d.filledBy?.length || 0;
+                          const isCurrent = editingUser?.designation === d.title;
                           const vacant = d.maxHeadcount - filled;
-                          const label = `${d.title}${d.departmentId ? ` — ${d.departmentId.name}` : ''}${vacant <= 0 ? ' (Full)' : ` (${vacant} open)`}`;
+                          const label = `${d.title}${d.departmentId ? ` — ${d.departmentId.name}` : ''}${vacant <= 0 && !isCurrent ? ' (Full)' : isCurrent ? ' (Current)' : ` (${vacant} open)`}`;
                           return (
-                            <SelectItem key={d.id} value={d.title} disabled={vacant <= 0}>
+                            <SelectItem key={d.id} value={d.title} disabled={vacant <= 0 && !isCurrent}>
                               <span className="block max-w-[340px] truncate">{label}</span>
                             </SelectItem>
                           );

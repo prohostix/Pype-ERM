@@ -27,8 +27,8 @@ import {
   Sparkles, 
   Globe, 
   FileSpreadsheet,
-  Layers,
   ArrowUpDown,
+  Upload,
   X,
   Eye,
   SlidersHorizontal,
@@ -36,6 +36,7 @@ import {
   TrendingUp,
   AlertCircle
 } from 'lucide-react';
+import { uploadFormFile } from '@/lib/uploadFile';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -226,6 +227,7 @@ export function OrganizationsPanel() {
   const [deletingOrg, setDeletingOrg] = useState<Organization | null>(null);
   const [selectedOrgForView, setSelectedOrgForView] = useState<Organization | null>(null);
   const [formSubmitting, setFormSubmitting] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -233,6 +235,7 @@ export function OrganizationsPanel() {
     email: '',
     phone: '',
     address: '',
+    logo: '',
     customLoginSlug: '',
     status: 'active' as 'active' | 'inactive' | 'suspended',
     licenseId: '',
@@ -256,8 +259,19 @@ export function OrganizationsPanel() {
     try {
       setRefreshing(true);
       const response = await api.get('/organizations');
-      const data = response.data.data || [];
-      setOrganizations(data);
+      const rawData = response.data.data || [];
+      const normalizedData = rawData.map((org: any) => {
+        const studentCount = Math.max(org._count?.students || 0, org._count?.enrollments || 0);
+        return {
+          ...org,
+          _count: {
+            ...org._count,
+            students: studentCount,
+            enrollments: studentCount,
+          }
+        };
+      });
+      setOrganizations(normalizedData);
     } catch (error: any) {
       console.error('Fetch organizations error:', error);
       toast.error('Failed to fetch organizations');
@@ -289,10 +303,10 @@ export function OrganizationsPanel() {
     const inactive = organizations.filter(o => o.status === 'inactive').length;
     const suspended = organizations.filter(o => o.status === 'suspended').length;
     const licensed = organizations.filter(o => Boolean(o.license || o.licenseId)).length;
-    const totalStudents = organizations.reduce((acc, o) => acc + (o._count?.students || 0), 0);
+    const totalStudents = organizations.reduce((acc, o) => acc + (o._count?.students ?? o._count?.enrollments ?? 0), 0);
     const totalUsers = organizations.reduce((acc, o) => acc + (o._count?.users || 0), 0);
     const totalCenters = organizations.reduce((acc, o) => acc + (o._count?.studyCenters || 0) + (o._count?.academicCenters || 0), 0);
-    const totalEnrollments = organizations.reduce((acc, o) => acc + (o._count?.enrollments || 0), 0);
+    const totalEnrollments = totalStudents;
 
     return {
       total,
@@ -358,6 +372,35 @@ export function OrganizationsPanel() {
       });
   }, [organizations, searchQuery, statusFilter, licenseFilter, sortBy]);
 
+  // Logo Upload Handler
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file (PNG, JPG, SVG, WebP)');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Logo file size must be less than 5MB');
+      return;
+    }
+
+    try {
+      setUploadingLogo(true);
+      const toastId = toast.loading('Uploading organization logo...');
+      const uploadedUrl = await uploadFormFile(file);
+      setFormData(prev => ({ ...prev, logo: uploadedUrl }));
+      toast.success('Logo uploaded successfully!', { id: toastId });
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to upload logo');
+    } finally {
+      setUploadingLogo(false);
+      e.target.value = '';
+    }
+  };
+
   // Dialog Handlers
   const handleCreate = () => {
     setEditingOrg(null);
@@ -366,6 +409,7 @@ export function OrganizationsPanel() {
       email: '',
       phone: '',
       address: '',
+      logo: '',
       customLoginSlug: '',
       status: 'active',
       licenseId: '',
@@ -382,6 +426,7 @@ export function OrganizationsPanel() {
       email: org.email || '',
       phone: org.phone || '',
       address: org.address || '',
+      logo: org.logo || '',
       customLoginSlug: org.customLoginSlug || '',
       status: org.status || 'active',
       licenseId: typeof org.licenseId === 'string' ? org.licenseId : org.license?.id || '',
@@ -426,6 +471,7 @@ export function OrganizationsPanel() {
         email: formData.email.trim(),
         phone: formData.phone.trim(),
         address: formData.address.trim(),
+        logo: formData.logo || null,
         customLoginSlug: formData.customLoginSlug.trim() || null,
         status: formData.status,
       };
@@ -490,10 +536,9 @@ export function OrganizationsPanel() {
       'License Plan',
       'License Expiry (DD/MM/YYYY)',
       'Total Students',
-      'Staff / Users',
+      'Staff / Workforce',
       'Academic Centers',
       'Study Centers',
-      'Enrollments',
       'Onboarded Date (DD/MM/YYYY)'
     ];
 
@@ -507,11 +552,10 @@ export function OrganizationsPanel() {
       `"${(org.address || '').replace(/"/g, '""')}"`,
       `"${(org.license?.name || (typeof org.licenseId === 'object' && org.licenseId?.name) || 'Unassigned').replace(/"/g, '""')}"`,
       `"${formatDate(org.licenseExpiry)}"`,
-      org._count?.students || 0,
+      org._count?.students || org._count?.enrollments || 0,
       org._count?.users || 0,
       org._count?.academicCenters || 0,
       org._count?.studyCenters || 0,
-      org._count?.enrollments || 0,
       `"${formatDate(org.createdAt)}"`
     ]);
 
@@ -643,9 +687,10 @@ export function OrganizationsPanel() {
                 <span className="text-2xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400">
                   {metrics.totalStudents.toLocaleString()}
                 </span>
+                <span className="text-xs text-muted-foreground">students</span>
               </div>
               <p className="text-[11px] text-muted-foreground">
-                {metrics.totalEnrollments.toLocaleString()} total admissions
+                Active institutional students
               </p>
             </div>
             <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center shrink-0">
@@ -903,15 +948,22 @@ export function OrganizationsPanel() {
                       <div className="flex items-center gap-3.5 min-w-0">
                         {org.logo ? (
                           <img
-                            src={org.logo}
+                            src={api.getFileUrl(org.logo)}
                             alt={org.name}
-                            className="w-12 h-12 rounded-2xl object-cover border shadow-xs shrink-0"
+                            className="w-12 h-12 rounded-2xl object-contain bg-background border p-1 shadow-xs shrink-0"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                              const fallback = (e.target as HTMLElement).nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
                           />
-                        ) : (
-                          <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center font-bold text-base shadow-sm shrink-0 tracking-tight ring-2 ring-background`}>
-                            {initials}
-                          </div>
-                        )}
+                        ) : null}
+                        <div 
+                          style={{ display: org.logo ? 'none' : 'flex' }}
+                          className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center font-bold text-base shadow-sm shrink-0 tracking-tight ring-2 ring-background`}
+                        >
+                          {initials}
+                        </div>
 
                         <div className="min-w-0 space-y-0.5">
                           <CardTitle 
@@ -1022,16 +1074,16 @@ export function OrganizationsPanel() {
 
                   {/* Metrics Footprint Grid */}
                   <div className="px-5 py-1">
-                    <div className="grid grid-cols-4 gap-2 p-2.5 rounded-2xl bg-muted/40 border border-border/50">
+                    <div className="grid grid-cols-3 gap-2 p-2.5 rounded-2xl bg-muted/40 border border-border/50">
                       {/* Students */}
                       <div className="text-center space-y-0.5">
                         <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
                           Students
                         </span>
                         <div className="flex items-center justify-center gap-1">
-                          <GraduationCap className="w-3 h-3 text-indigo-500 shrink-0" />
+                          <GraduationCap className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
                           <span className="text-xs font-bold text-foreground">
-                            {org._count?.students || 0}
+                            {org._count?.students || org._count?.enrollments || 0}
                           </span>
                         </div>
                       </div>
@@ -1042,7 +1094,7 @@ export function OrganizationsPanel() {
                           Staff
                         </span>
                         <div className="flex items-center justify-center gap-1">
-                          <Users className="w-3 h-3 text-blue-500 shrink-0" />
+                          <Users className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                           <span className="text-xs font-bold text-foreground">
                             {org._count?.users || 0}
                           </span>
@@ -1055,22 +1107,9 @@ export function OrganizationsPanel() {
                           Centers
                         </span>
                         <div className="flex items-center justify-center gap-1">
-                          <School className="w-3 h-3 text-amber-500 shrink-0" />
+                          <School className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                           <span className="text-xs font-bold text-foreground">
                             {(org._count?.studyCenters || 0) + (org._count?.academicCenters || 0)}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Enrollments */}
-                      <div className="text-center space-y-0.5 border-l border-border/50">
-                        <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
-                          Admissions
-                        </span>
-                        <div className="flex items-center justify-center gap-1">
-                          <Layers className="w-3 h-3 text-emerald-500 shrink-0" />
-                          <span className="text-xs font-bold text-foreground">
-                            {org._count?.enrollments || 0}
                           </span>
                         </div>
                       </div>
@@ -1210,7 +1249,22 @@ export function OrganizationsPanel() {
                     {/* Organization Identity */}
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center font-bold text-xs shadow-xs shrink-0`}>
+                        {org.logo ? (
+                          <img
+                            src={api.getFileUrl(org.logo)}
+                            alt={org.name}
+                            className="w-9 h-9 rounded-xl object-contain bg-background border p-0.5 shadow-xs shrink-0"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                              const fallback = (e.target as HTMLElement).nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div 
+                          style={{ display: org.logo ? 'none' : 'flex' }}
+                          className={`w-9 h-9 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center font-bold text-xs shadow-xs shrink-0`}
+                        >
                           {initials}
                         </div>
                         <div className="min-w-0">
@@ -1258,7 +1312,7 @@ export function OrganizationsPanel() {
 
                     {/* Counts */}
                     <TableCell className="text-center font-semibold text-xs">
-                      {org._count?.students || 0}
+                      {org._count?.students || org._count?.enrollments || 0}
                     </TableCell>
                     <TableCell className="text-center font-semibold text-xs">
                       {org._count?.users || 0}
@@ -1328,7 +1382,22 @@ export function OrganizationsPanel() {
               {/* Sheet Header Banner */}
               <div className="p-6 pb-4 bg-muted/30 border-b space-y-4">
                 <div className="flex items-center gap-3.5">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${getGradientForOrg(selectedOrgForView.name)} flex items-center justify-center font-bold text-lg shadow-md shrink-0`}>
+                  {selectedOrgForView.logo ? (
+                    <img
+                      src={api.getFileUrl(selectedOrgForView.logo)}
+                      alt={selectedOrgForView.name}
+                      className="w-14 h-14 rounded-2xl object-contain bg-background border p-1 shadow-md shrink-0"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                        const fallback = (e.target as HTMLElement).nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    style={{ display: selectedOrgForView.logo ? 'none' : 'flex' }}
+                    className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${getGradientForOrg(selectedOrgForView.name)} flex items-center justify-center font-bold text-lg shadow-md shrink-0`}
+                  >
                     {getInitials(selectedOrgForView.name)}
                   </div>
                   <div className="min-w-0 space-y-1">
@@ -1390,12 +1459,12 @@ export function OrganizationsPanel() {
                   <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                     Institutional Footprint
                   </h4>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-3 gap-3">
                     <div className="p-3 rounded-2xl bg-indigo-500/5 border border-indigo-500/20 text-center space-y-0.5">
                       <span className="text-2xl font-black text-indigo-600 dark:text-indigo-400">
-                        {selectedOrgForView._count?.students || 0}
+                        {selectedOrgForView._count?.students || selectedOrgForView._count?.enrollments || 0}
                       </span>
-                      <p className="text-xs font-medium text-muted-foreground">Enrolled Students</p>
+                      <p className="text-xs font-medium text-muted-foreground">Students</p>
                     </div>
                     <div className="p-3 rounded-2xl bg-violet-500/5 border border-violet-500/20 text-center space-y-0.5">
                       <span className="text-2xl font-black text-violet-600 dark:text-violet-400">
@@ -1407,13 +1476,7 @@ export function OrganizationsPanel() {
                       <span className="text-2xl font-black text-amber-600 dark:text-amber-400">
                         {(selectedOrgForView._count?.studyCenters || 0) + (selectedOrgForView._count?.academicCenters || 0)}
                       </span>
-                      <p className="text-xs font-medium text-muted-foreground">Study & Academic Sites</p>
-                    </div>
-                    <div className="p-3 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 text-center space-y-0.5">
-                      <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
-                        {selectedOrgForView._count?.enrollments || 0}
-                      </span>
-                      <p className="text-xs font-medium text-muted-foreground">Course Admissions</p>
+                      <p className="text-xs font-medium text-muted-foreground">Centers & Sites</p>
                     </div>
                   </div>
                 </div>
@@ -1531,6 +1594,73 @@ export function OrganizationsPanel() {
           <form onSubmit={handleSubmit} className="space-y-4 pt-2">
             {/* Section 1: Institutional Identity */}
             <div className="space-y-3">
+              {/* Organization Logo Upload */}
+              <div className="flex items-center gap-3.5 p-3 rounded-2xl bg-muted/40 border border-border/60">
+                <div className="relative group shrink-0">
+                  {formData.logo ? (
+                    <img
+                      src={api.getFileUrl(formData.logo)}
+                      alt="Organization Logo"
+                      className="w-14 h-14 rounded-2xl object-contain bg-background border p-1 shadow-xs"
+                    />
+                  ) : (
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary flex items-center justify-center font-bold text-lg border border-primary/20">
+                      {formData.name ? getInitials(formData.name) : <Building2 className="w-6 h-6" />}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-1 flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-semibold text-foreground">
+                      Organization Logo
+                    </Label>
+                    {formData.logo && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, logo: '' }))}
+                        className="text-[11px] text-destructive hover:underline"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">
+                    Upload institutional emblem (PNG, JPG, SVG, WebP)
+                  </p>
+                  <div className="pt-0.5">
+                    <input
+                      id="org-logo-upload-input"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleLogoUpload}
+                      disabled={uploadingLogo}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => document.getElementById('org-logo-upload-input')?.click()}
+                      disabled={uploadingLogo}
+                      className="h-7 text-xs rounded-lg gap-1.5"
+                    >
+                      {uploadingLogo ? (
+                        <>
+                          <RefreshCw className="w-3 h-3 animate-spin" />
+                          <span>Uploading...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-3 h-3" />
+                          <span>{formData.logo ? 'Change Logo' : 'Upload Logo'}</span>
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
               <div className="space-y-1.5">
                 <Label htmlFor="name" className="text-xs font-semibold">
                   Organization Legal Name <span className="text-destructive">*</span>

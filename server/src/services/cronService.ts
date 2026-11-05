@@ -29,51 +29,157 @@ const startInviteExpiryCron = () => {
   });
 };
 
-const startAutoPunchOutCron = () => {
-  // Run at 12:01 AM every day
-  cron.schedule('1 0 * * *', async () => {
-    console.log('🔄 Running auto punch-out for unclosed attendances...');
-    try {
-      const todayStart = new Date();
-      todayStart.setHours(0, 0, 0, 0);
+export const runAutoPunchOut = async () => {
+  console.log('🔄 Running auto punch-out for unclosed attendances...');
+  try {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
 
-      const pendingAttendances = await prisma.attendance.findMany({
-        where: {
-          checkOut: null,
-          date: { lt: todayStart }
-        }
-      });
+    const pendingAttendances = await prisma.attendance.findMany({
+      where: {
+        checkOut: null,
+        date: { lt: todayStart }
+      }
+    });
 
-      const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const orgSettingsCache: Record<string, any> = {};
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const orgSettingsCache: Record<string, any> = {};
 
-      let updatedCount = 0;
-      for (const record of pendingAttendances) {
-        if (!record.checkIn) continue;
+    let updatedCount = 0;
+    let halfDayCount = 0;
 
-        const orgId = record.organizationId;
-        if (orgId && !orgSettingsCache[orgId]) {
-          const settings = await prisma.hRSettings.findFirst({
-            where: { organizationId: orgId }
-          });
-          orgSettingsCache[orgId] = settings?.officeHours || {
-            checkInTime: '09:00',
-            checkOutTime: '18:00',
-            dayOverrides: []
-          };
-        }
+    for (const record of pendingAttendances) {
+      if (!record.checkIn) continue;
 
-        const officeHours = (orgId && orgSettingsCache[orgId]) ? orgSettingsCache[orgId] : {
+      const orgId = record.organizationId;
+      if (orgId && !orgSettingsCache[orgId]) {
+        const settings = await prisma.hRSettings.findFirst({
+          where: { organizationId: orgId }
+        });
+        orgSettingsCache[orgId] = settings?.officeHours || {
           checkInTime: '09:00',
           checkOutTime: '18:00',
-          dayOverrides: []
+          dayOverrides: [],
+          autoPunchOutAsHalfDay: false
         };
+      }
 
-        const checkInDate = new Date(record.checkIn);
-        const istOffset = 330 * 60000;
-        const istCheckIn = new Date(checkInDate.getTime() + istOffset);
-        const currentDayName = weekdays[istCheckIn.getUTCDay()];
+      const officeHours = (orgId && orgSettingsCache[orgId]) ? orgSettingsCache[orgId] : {
+        checkInTime: '09:00',
+        checkOutTime: '18:00',
+        dayOverrides: [],
+        autoPunchOutAsHalfDay: false
+      };
 
+      const checkInDate = new Date(record.checkIn);
+      const istOffset = 330 * 60000;
+      const istCheckIn = new Date(checkInDate.getTime() + istOffset);
+      const currentDayName = weekdays[istCheckIn.getUTCDay()];
+      const existingNotes = record.notes ? record.notes + '\n' : '';
+
+      const isHalfDayRule = officeHours.autoPunchOutAsHalfDay === true;
+
+      if (isHalfDayRule) {
+        // Rule: Mark as half day, assign 4.0 working hours, and deduct 0.5 from leave allocation
+        const checkOutTime = new Date(checkInDate.getTime() + (4 * 3600000));
+        const workingHours = 4.0;
+
+        await prisma.attendance.update({
+          where: { id: record.id },
+          data: {
+            status: 'half_day',
+            checkOut: checkOutTime,
+            workingHours,
+            isEarlyExit: false,
+            earlyExitMinutes: 0,
+            notes: existingNotes + 'Auto-punched out as Half Day by system (No punch-out detected). Deducted 0.5 leave from allocation.'
+          }
+        });
+
+        // Leave deduction & approved LeaveRequest creation
+        const allocYear = istCheckIn.getUTCFullYear();
+        const allocMonth = istCheckIn.getUTCMonth() + 1;
+
+        const recordDateStart = new Date(record.date);
+        recordDateStart.setHours(0, 0, 0, 0);
+        const recordDateEnd = new Date(record.date);
+        recordDateEnd.setHours(23, 59, 59, 999);
+
+        // Check if auto-deducted leave record already exists for this attendance date to prevent duplicate deductions
+        const existingAutoLeave = await prisma.leaveRequest.findFirst({
+          where: {
+            employeeId: record.employeeId,
+            startDate: { gte: recordDateStart, lte: recordDateEnd },
+            reason: { contains: 'Auto Punch-Out' }
+          }
+        });
+
+        if (!existingAutoLeave) {
+          const alloc = await prisma.leaveAllocation.findUnique({
+            where: {
+              userId_year_month: {
+                userId: record.employeeId,
+                year: allocYear,
+                month: allocMonth
+              }
+            }
+          });
+
+          let leaveType: 'casual' | 'sick' | 'earned' | 'unpaid' = 'unpaid';
+
+          if (alloc) {
+            if (alloc.casualLeave >= 0.5) {
+              leaveType = 'casual';
+              await prisma.leaveAllocation.update({
+                where: { id: alloc.id },
+                data: { casualLeave: Number((alloc.casualLeave - 0.5).toFixed(2)) }
+              });
+            } else if (alloc.sickLeave >= 0.5) {
+              leaveType = 'sick';
+              await prisma.leaveAllocation.update({
+                where: { id: alloc.id },
+                data: { sickLeave: Number((alloc.sickLeave - 0.5).toFixed(2)) }
+              });
+            } else if (alloc.earnedLeave >= 0.5) {
+              leaveType = 'earned';
+              await prisma.leaveAllocation.update({
+                where: { id: alloc.id },
+                data: { earnedLeave: Number((alloc.earnedLeave - 0.5).toFixed(2)) }
+              });
+            } else {
+              leaveType = 'unpaid';
+            }
+          } else {
+            leaveType = 'unpaid';
+          }
+
+          const emp = await prisma.user.findUnique({
+            where: { id: record.employeeId },
+            select: { departmentId: true }
+          });
+
+          await prisma.leaveRequest.create({
+            data: {
+              employeeId: record.employeeId,
+              organizationId: record.organizationId,
+              departmentId: emp?.departmentId || null,
+              type: leaveType,
+              status: 'approved',
+              isHalfDay: true,
+              halfDayType: 'second_half',
+              startDate: record.date,
+              endDate: record.date,
+              reason: `Auto Punch-Out: Half-day ${leaveType} leave applied due to missing punch-out`,
+              hrRemarks: 'System auto-approved half-day leave (Auto punch-out policy)',
+              appliedAt: new Date()
+            }
+          });
+        }
+
+        halfDayCount++;
+        updatedCount++;
+      } else {
+        // Existing behavior: punch out at organization / day override checkout time
         const overrides = officeHours.dayOverrides || [];
         const dayOverride = overrides.find((o: any) => o.day === currentDayName);
         const checkOutTarget = dayOverride?.checkOutTime || officeHours.checkOutTime || '18:00';
@@ -91,7 +197,6 @@ const startAutoPunchOutCron = () => {
         }
 
         const workingHours = Number(Math.max(0, (checkOutTime.getTime() - checkInDate.getTime()) / 3600000).toFixed(2));
-        const existingNotes = record.notes ? record.notes + '\n' : '';
 
         await prisma.attendance.update({
           where: { id: record.id },
@@ -105,11 +210,26 @@ const startAutoPunchOutCron = () => {
         });
         updatedCount++;
       }
-      
-      console.log(`✅ Auto-punched out ${updatedCount} employees at organization punch-out times`);
-    } catch (error) {
-      console.error('❌ Auto punch-out cron error:', error);
     }
+    
+    console.log(`✅ Auto-punched out ${updatedCount} employees (${halfDayCount} marked as half-day with 0.5 leave deduction)`);
+    return { updatedCount, halfDayCount };
+  } catch (error) {
+    console.error('❌ Auto punch-out cron error:', error);
+    throw error;
+  }
+};
+
+const startAutoPunchOutCron = () => {
+  // Run at 12:01 AM every day (Asia/Kolkata)
+  cron.schedule('1 0 * * *', async () => {
+    try {
+      await runAutoPunchOut();
+    } catch (error) {
+      console.error('❌ Auto punch-out cron execution failed:', error);
+    }
+  }, {
+    timezone: 'Asia/Kolkata'
   });
 };
 

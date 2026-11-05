@@ -1648,9 +1648,60 @@ export const syncOfflinePunches = asyncHandler(async (req: AuthRequest, res: Res
           isEarlyExit = earlyCalc.isEarlyExit;
           earlyExitMinutes = earlyCalc.earlyExitMinutes;
 
+          // If previous checkout was an auto punch-out as Half Day, restore attendance status and refund the deducted leave
+          let updatedStatus = existing.status;
+          if (existing.status === 'half_day' && existing.notes?.includes('Auto-punched out as Half Day')) {
+            updatedStatus = existing.isLate ? 'late' : 'present';
+
+            try {
+              const punchStart = new Date(punchTime);
+              punchStart.setHours(0, 0, 0, 0);
+              const punchEnd = new Date(punchTime);
+              punchEnd.setHours(23, 59, 59, 999);
+
+              const autoLeave = await prisma.leaveRequest.findFirst({
+                where: {
+                  employeeId: req.user.id,
+                  startDate: { gte: punchStart, lte: punchEnd },
+                  reason: { contains: 'Auto Punch-Out' }
+                }
+              });
+
+              if (autoLeave) {
+                const year = punchTime.getFullYear();
+                const month = punchTime.getMonth() + 1;
+                const alloc = await prisma.leaveAllocation.findUnique({
+                  where: { userId_year_month: { userId: req.user.id, year, month } }
+                });
+                if (alloc) {
+                  if (autoLeave.type === 'casual') {
+                    await prisma.leaveAllocation.update({
+                      where: { id: alloc.id },
+                      data: { casualLeave: Number((alloc.casualLeave + 0.5).toFixed(2)) }
+                    });
+                  } else if (autoLeave.type === 'sick') {
+                    await prisma.leaveAllocation.update({
+                      where: { id: alloc.id },
+                      data: { sickLeave: Number((alloc.sickLeave + 0.5).toFixed(2)) }
+                    });
+                  } else if (autoLeave.type === 'earned') {
+                    await prisma.leaveAllocation.update({
+                      where: { id: alloc.id },
+                      data: { earnedLeave: Number((alloc.earnedLeave + 0.5).toFixed(2)) }
+                    });
+                  }
+                }
+                await prisma.leaveRequest.delete({ where: { id: autoLeave.id } });
+              }
+            } catch (leaveRefundErr) {
+              console.error('Failed to refund auto-deducted leave on offline sync:', leaveRefundErr);
+            }
+          }
+
           const attendance = await prisma.attendance.update({
             where: { id: existing.id },
             data: {
+              status: updatedStatus,
               checkOut: punchTime,
               checkOutLocation: latitude ? { latitude, longitude, address } : undefined,
               checkOutPhoto: photoUrl,

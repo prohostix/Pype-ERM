@@ -28,6 +28,7 @@ const DEFAULT_SETTINGS = {
     workingDays: ['Monday','Tuesday','Wednesday','Thursday','Friday'],
     breakStartTime: '13:00', breakEndTime: '14:00', breakDurationMinutes: 60,
     dayOverrides: [] as any[],
+    autoPunchOutAsHalfDay: false,
   },
   latePolicy: { maxLateMinutesPerMonth: 60, warningThreshold: 45, deductionPerExtraMinute: 0 },
   location: { officeLatitude: 28.6139, officeLongitude: 77.2090, allowedRadius: 100, requireLocationForCheckIn: true },
@@ -418,6 +419,25 @@ export function HRSettingsPanel() {
                   <Label>Warning Threshold (min)</Label>
                   <Input type="number" min="0" value={settings.latePolicy.warningThreshold}
                     onChange={e => setSettings((p: any) => ({ ...p, latePolicy: { ...p.latePolicy, warningThreshold: Number(e.target.value) } }))} />
+                </div>
+              </div>
+
+              {/* Auto Punch-Out Half Day Rule */}
+              <div className="pt-3 border-t">
+                <div className="flex items-center justify-between gap-4 p-3.5 rounded-lg border bg-muted/20">
+                  <div className="space-y-0.5 pr-2">
+                    <Label className="text-sm font-semibold cursor-pointer" htmlFor="autoPunchOutHalfDay">
+                      Mark Missing Punch-Out as Half Day
+                    </Label>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      When enabled, employees who forget to punch out will be automatically marked as Half Day, and a 0.5-day pre-approved leave will be deducted from their leave allocation. When disabled, checkout is marked at the regular shift punch-out time.
+                    </p>
+                  </div>
+                  <Switch
+                    id="autoPunchOutHalfDay"
+                    checked={Boolean(settings.officeHours.autoPunchOutAsHalfDay)}
+                    onCheckedChange={(checked) => setHours({ autoPunchOutAsHalfDay: checked })}
+                  />
                 </div>
               </div>
             </CardContent>
