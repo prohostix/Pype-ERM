@@ -2,6 +2,9 @@ import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Login } from '@/pages/Login';
 import { LandingPage } from '@/pages/LandingPage';
+import { FeaturesPage } from '@/pages/marketing/FeaturesPage';
+import { WhyChooseUsPage } from '@/pages/marketing/WhyChooseUsPage';
+import { PartnerWithUsPage } from '@/pages/marketing/PartnerWithUsPage';
 import { CustomOrgLogin } from '@/pages/CustomOrgLogin';
 import { Dashboard } from '@/pages/Dashboard';
 import { PrismaLayout, type TableItem } from '@/components/layout/PrismaLayout';
@@ -364,6 +367,11 @@ function App() {
   if (window.location.pathname === '/student-apply') {
     return <StudentApplicationPage />;
   }
+
+  // Public marketing pages
+  if (window.location.pathname === '/features') return <FeaturesPage />;
+  if (window.location.pathname === '/why-choose-us') return <WhyChooseUsPage />;
+  if (window.location.pathname === '/partner-with-us') return <PartnerWithUsPage />;
 
   // Public privacy policy (linked from the Google Play listing)
   if (window.location.pathname === '/privacy-policy' || window.location.pathname === '/privacy') {

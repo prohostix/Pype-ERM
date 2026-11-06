@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Eye, EyeOff, ShieldAlert, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, ShieldAlert, AlertCircle, ArrowLeft } from 'lucide-react';
 import { RobotVerification } from '@/components/auth/RobotVerification';
 
 const BrandRibbon = () => (
@@ -136,8 +136,16 @@ export function Login() {
       
       <BrandRibbon />
 
+      {/* Back to home navigation */}
+      <a
+        href="/"
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-10 z-20 inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white/80 backdrop-blur-md border border-white/60 shadow-sm text-sm font-semibold text-slate-700 hover:text-[#256c1d] hover:bg-white transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" /> Back to Home
+      </a>
+
       {/* Mobile Brand Header (Natural flow above the card on small screens) */}
-      <div className="flex md:hidden items-center justify-center gap-2.5 mb-4 select-none z-10">
+      <a href="/" aria-label="PYPE ERM home" className="flex md:hidden items-center justify-center gap-2.5 mb-4 mt-10 select-none z-10">
         <div className="flex items-center justify-center">
           <img src="/erm-logo-green.png" alt="Pype ERM" className="h-12 w-auto drop-shadow-sm" />
         </div>
@@ -145,10 +153,10 @@ export function Login() {
           <span className="text-2xl font-bold tracking-tight text-slate-500">pype</span>
           <span className="text-xl font-black tracking-wider text-slate-900">ERM</span>
         </div>
-      </div>
+      </a>
 
       {/* Desktop Top Left Logo Area (Pinned to top-left on desktop screens) */}
-      <div className="hidden md:flex absolute top-6 left-6 sm:top-8 sm:left-10 items-center gap-3.5 z-20">
+      <a href="/" aria-label="PYPE ERM home" className="hidden md:flex absolute top-6 left-6 sm:top-8 sm:left-10 items-center gap-3.5 z-20">
         <div className="flex items-center justify-center">
           <img src="/erm-logo-green.png" alt="Pype ERM" className="h-16 lg:h-20 w-auto drop-shadow-sm" />
         </div>
@@ -156,7 +164,7 @@ export function Login() {
           <span className="text-2xl sm:text-[28px] font-bold tracking-tight text-slate-500">pype</span>
           <span className="text-[18px] sm:text-[21px] font-black tracking-wider text-slate-900">ERM</span>
         </div>
-      </div>
+      </a>
 
       {/* Main Glassmorphism Card (Wide, 2 columns on desktop, clean single-column on mobile) */}
       <div className="w-full max-w-[1000px] min-h-0 md:min-h-[600px] bg-white/70 backdrop-blur-3xl rounded-3xl md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] border border-white/60 overflow-hidden relative z-10 flex flex-col md:flex-row my-auto">

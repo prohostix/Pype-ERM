@@ -31,15 +31,31 @@ export const getPublicPrograms = asyncHandler(async (req: Request, res: Response
 });
 
 export const createOrgInquiry = asyncHandler(async (req: Request, res: Response) => {
-  const { orgName, adminName, email, phone, message } = req.body;
+  const clean = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
+  const orgName = clean(req.body?.orgName, 150);
+  const adminName = clean(req.body?.adminName, 100);
+  const email = clean(req.body?.email, 150).toLowerCase();
+  const phone = clean(req.body?.phone, 20);
+  const message = clean(req.body?.message, 1000) || undefined;
+
   if (!orgName || !adminName || !email || !phone) {
     res.status(400).json({ success: false, message: 'All standard fields are required.' });
     return;
   }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
+    return;
+  }
+  if (!/^\+?[0-9\s\-()]{7,20}$/.test(phone)) {
+    res.status(400).json({ success: false, message: 'Please enter a valid phone number.' });
+    return;
+  }
+
   const inquiry = await prisma.orgInquiry.create({
     data: { orgName, adminName, email, phone, message }
   });
-  res.status(201).json({ success: true, data: inquiry });
+  // Don't echo the stored record back to an unauthenticated caller.
+  res.status(201).json({ success: true, data: { id: inquiry.id } });
 });
 
 export const getCountries = asyncHandler(async (req: Request, res: Response) => {
