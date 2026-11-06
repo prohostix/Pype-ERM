@@ -1,7 +1,16 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
+import { asyncHandler, asyncHandlerWithoutDeleteApproval } from '../utils/asyncHandler.js';
+import {
+  computeVideoProgress,
+  evaluateFeeLock,
+  getDailyLimit,
+  getResumePosition,
+  getStartOfIstDay,
+  getWatchedPercent,
+  isVideoLogWatched
+} from '../utils/videoAccess.js';
 
 // Helper: get the Student record linked to the logged-in user (via email or direct ID)
 async function getLinkedStudent(userId: string) {
@@ -95,182 +104,24 @@ export const getStudentNotifications = asyncHandler(async (req: AuthRequest, res
   res.json({ success: true, data: { notifications, announcements } });
 });
 
-// Helper: evaluate fee-paid percentage based video locking for a student
-function evaluateFeeLock(
-  config: any,
-  invoices: any[],
-  schedules: any[],
-  feeStructures: any[] = [],
-  student?: any
-) {
-  if (!config?.feeLocking?.enabled) {
-    return { isFeeLocked: false, message: '', totalFee: 0, paidFee: 0, paidPercentage: 100, minPaidPercentage: 0 };
-  }
+// Only lessons in online centers count toward the daily quota.
+const ONLINE_LESSON_FILTER = {
+  classModule: { academicClass: { academicCenter: { type: 'online' } } }
+};
 
-  const minPaidPercentage = Number(config.feeLocking?.minPaidPercentage ?? 50);
-  const gracePeriodDays = Number(config.feeLocking?.gracePeriodDays ?? 0);
-  const lockMessage = config.feeLocking?.lockMessage;
-
-  // Check enrollment grace period if configured
-  if (gracePeriodDays > 0 && student) {
-    const studentJoinDate = student.enrolledAt || student.joinDate || student.createdAt;
-    if (studentJoinDate) {
-      const now = Date.now();
-      const joinTime = new Date(studentJoinDate).getTime();
-      const daysSinceJoin = (now - joinTime) / (24 * 60 * 60 * 1000);
-      if (daysSinceJoin < gracePeriodDays) {
-        return { isFeeLocked: false, message: '', totalFee: 0, paidFee: 0, paidPercentage: 100, minPaidPercentage };
-      }
-    }
-  }
-
-  // Calculate Total Fee and Paid Fee from the Fee System
-  // 1. Payment Schedules (student's scheduled installments)
-  let scheduleTotal = 0;
-  let schedulePaid = 0;
-  if (schedules && schedules.length > 0) {
-    for (const sch of schedules) {
-      const amt = Number(sch.amount || 0);
-      scheduleTotal += amt;
-      if (sch.status?.toUpperCase() === 'PAID' || sch.paidAt) {
-        schedulePaid += amt;
-      } else if (sch.paidAmount) {
-        schedulePaid += Number(sch.paidAmount);
-      }
-    }
-  }
-
-  // 2. Invoices & Payments (direct billed records)
-  let invoiceTotal = 0;
-  let invoicePaid = 0;
-  if (invoices && invoices.length > 0) {
-    for (const inv of invoices) {
-      const invTotal = Number(inv.total ?? inv.amount ?? 0);
-      invoiceTotal += invTotal;
-      const received = (inv.payments || []).reduce((sum: number, p: any) => sum + Number(p.amount || 0), 0);
-      const paid = inv.status?.toLowerCase() === 'paid' ? Math.max(received, invTotal) : received;
-      invoicePaid += paid;
-    }
-  }
-
-  // 3. Fee Structure (canonical program fee structure)
-  let structureTotal = 0;
-  if (feeStructures && feeStructures.length > 0) {
-    const fs = feeStructures[0];
-    const base = (fs.tuitionFee || 0) + (fs.registrationFee || 0) + (fs.examFee || 0);
-    structureTotal = base + (base * (fs.gstPercentage || 0)) / 100;
-  }
-
-  // Determine effective totalFee and paidFee
-  let totalFee = 0;
-  let paidFee = 0;
-
-  if (scheduleTotal > 0) {
-    totalFee = scheduleTotal;
-    paidFee = Math.max(schedulePaid, invoicePaid);
-  } else if (invoiceTotal > 0) {
-    totalFee = invoiceTotal;
-    paidFee = invoicePaid;
-  } else if (structureTotal > 0) {
-    totalFee = structureTotal;
-    paidFee = Math.max(schedulePaid, invoicePaid);
-  } else {
-    // If no fee records exist for this student, do not arbitrarily lock
-    return {
-      isFeeLocked: false,
-      message: '',
-      totalFee: 0,
-      paidFee: 0,
-      paidPercentage: 100,
-      minPaidPercentage
-    };
-  }
-
-  // Calculate percentage (0 - 100%)
-  const paidPercentage = totalFee > 0 ? Math.min(100, Math.round((paidFee / totalFee) * 100)) : 100;
-
-  if (paidPercentage < minPaidPercentage) {
-    const defaultMsg = `Video lectures are locked because you have paid ${paidPercentage}% of your total course fee (₹${paidFee.toLocaleString('en-IN')} of ₹${totalFee.toLocaleString('en-IN')}). A minimum payment of ${minPaidPercentage}% is required to unlock.`;
-    
-    let finalMsg = defaultMsg;
-    if (lockMessage && lockMessage.trim()) {
-      finalMsg = lockMessage
-        .replace(/{paidPercent}/g, paidPercentage.toString())
-        .replace(/{requiredPercent}/g, minPaidPercentage.toString())
-        .replace(/{paidFee}/g, paidFee.toLocaleString('en-IN'))
-        .replace(/{totalFee}/g, totalFee.toLocaleString('en-IN'));
-    }
-
-    return {
-      isFeeLocked: true,
-      message: finalMsg,
-      totalFee,
-      paidFee,
-      paidPercentage,
-      minPaidPercentage
-    };
-  }
-
-  return {
-    isFeeLocked: false,
-    message: '',
-    totalFee,
-    paidFee,
-    paidPercentage,
-    minPaidPercentage
-  };
-}
-
-// Helper: compute effective daily viewing limit (program config, program override or center default)
-function getEffectiveDailyLimit(config: any, programId?: string): number | null {
-  if (!config?.dailyClassLimitEnabled) return null;
-
-  // If program-specific config, dailyClassLimit applies directly
-  if (typeof config.dailyClassLimit === 'number' && config.dailyClassLimit > 0) {
-    return config.dailyClassLimit;
-  }
-
-  // Fallback for legacy center config with programLimits array
-  if (programId && Array.isArray(config.programLimits)) {
-    const programOverride = config.programLimits.find((p: any) => p.programId === programId && p.enabled);
-    if (programOverride && typeof programOverride.dailyClassLimit === 'number' && programOverride.dailyClassLimit > 0) {
-      return programOverride.dailyClassLimit;
-    }
-  }
-
-  return null;
-}
-
-// Helper: check access permissions for a specific lesson before recording watch duration
-async function checkLessonAccessForStudent(student: any, moduleLessonId: string) {
-  const lesson = await prisma.moduleLesson.findUnique({
-    where: { id: moduleLessonId },
-    include: {
-      classModule: {
-        include: { academicClass: true }
-      },
-      classSubModule: {
-        include: {
-          classModule: {
-            include: { academicClass: true }
-          }
-        }
-      }
+function getTodayOnlineVideoLogs(studentId: string) {
+  return prisma.studentVideoLog.findMany({
+    where: {
+      studentId,
+      lastWatchedAt: { gte: getStartOfIstDay() },
+      watchDuration: { gt: 0 },
+      moduleLesson: ONLINE_LESSON_FILTER
     }
   });
+}
 
-  if (!lesson) {
-    return { allowed: false, status: 404, message: 'Lesson not found' };
-  }
-
-  const academicClass = lesson.classSubModule?.classModule?.academicClass || lesson.classModule?.academicClass;
-  const centerId = academicClass?.academicCenterId || student.centerId;
-
-  const [org, invoices, schedules, feeStructures] = await Promise.all([
-    prisma.organization.findUnique({
-      where: { id: student.organizationId },
-      select: { metadata: true }
-    }),
+function getStudentFeeRecords(student: any) {
+  return Promise.all([
     prisma.invoice.findMany({
       where: { studentId: student.id },
       include: { payments: true }
@@ -282,60 +133,63 @@ async function checkLessonAccessForStudent(student: any, moduleLessonId: string)
       where: {
         organizationId: student.organizationId,
         ...(student.programId ? { programId: student.programId } : {})
-      }
+      },
+      orderBy: { createdAt: 'desc' }
     })
   ]);
+}
 
-  const orgMetadata = (org?.metadata as any) || {};
-  const programConfigs = orgMetadata.programAccessConfigs || {};
-  const centerConfigs = orgMetadata.academicCenterConfigs || {};
+function getDailyLimitMessage(limit: number, watchedCount: number) {
+  return `Daily viewing limit of ${limit} classes reached for today (${watchedCount}/${limit} watched). New classes unlock tomorrow at 12:00 AM.`;
+}
 
-  // Prioritize program-specific configuration over center-level
-  const activeConfig = (student.programId ? programConfigs[student.programId] : null)
-    || (centerId ? centerConfigs[centerId] : null)
-    || (student.centerId ? centerConfigs[student.centerId] : null);
+// Helper: check access to a lesson before recording a view or watch time.
+// Fee and quota rules apply only to online-center lessons of the student's program.
+async function checkLessonAccessForStudent(student: any, moduleLessonId: string) {
+  const lesson = await prisma.moduleLesson.findUnique({
+    where: { id: moduleLessonId },
+    include: {
+      classModule: {
+        include: { academicClass: { include: { academicCenter: true } } }
+      }
+    }
+  });
 
-  // 1. Fee Lock check (percentage based)
+  if (!lesson || lesson.organizationId !== student.organizationId) {
+    return { allowed: false, status: 404, message: 'Lesson not found' };
+  }
+
+  if (lesson.classModule.academicClass.academicCenter.type !== 'online' || !lesson.videoUrl) {
+    return { allowed: true };
+  }
+
+  const org = await prisma.organization.findUnique({
+    where: { id: student.organizationId },
+    select: { metadata: true }
+  });
+  const activeConfig = (org?.metadata as any)?.programAccessConfigs?.[student.programId];
+
+  const [invoices, schedules, feeStructures] = await getStudentFeeRecords(student);
   const feeStatus = evaluateFeeLock(activeConfig, invoices, schedules, feeStructures, student);
   if (feeStatus.isFeeLocked) {
     return {
       allowed: false,
       status: 403,
       reason: 'fee_overdue',
-      message: feeStatus.message,
-      feeDetails: {
-        totalFee: feeStatus.totalFee,
-        paidFee: feeStatus.paidFee,
-        paidPercentage: feeStatus.paidPercentage,
-        minPaidPercentage: feeStatus.minPaidPercentage
-      }
+      message: feeStatus.message
     };
   }
 
-  // 2. Daily limit check
-  const effectiveDailyLimit = getEffectiveDailyLimit(activeConfig, student.programId);
-  if (effectiveDailyLimit !== null) {
-    const now = new Date();
-    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-
-    const todayLogs = await prisma.studentVideoLog.findMany({
-      where: {
-        studentId: student.id,
-        lastWatchedAt: { gte: startOfToday },
-        watchDuration: { gt: 0 }
-      }
-    });
-
-    const watchedTodayIds = new Set(todayLogs.map(l => l.moduleLessonId));
-    if (!watchedTodayIds.has(moduleLessonId)) {
-      if (watchedTodayIds.size >= effectiveDailyLimit) {
-        return {
-          allowed: false,
-          status: 403,
-          reason: 'daily_limit',
-          message: `Daily limit of ${effectiveDailyLimit} classes reached for today. New classes unlock tomorrow at 12:00 AM.`
-        };
-      }
+  const dailyLimit = getDailyLimit(activeConfig);
+  if (dailyLimit !== null) {
+    const watchedTodayIds = new Set((await getTodayOnlineVideoLogs(student.id)).map(l => l.moduleLessonId));
+    if (!watchedTodayIds.has(moduleLessonId) && watchedTodayIds.size >= dailyLimit) {
+      return {
+        allowed: false,
+        status: 403,
+        reason: 'daily_limit',
+        message: getDailyLimitMessage(dailyLimit, watchedTodayIds.size)
+      };
     }
   }
 
@@ -403,12 +257,20 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
     }
   });
 
-  // 2. Fetch online classes via implicit program matching
+  // Batches in online centers are handled with the online classes below, so that
+  // allocated students get the same video progress and access rules.
+  const isOnlineBatch = (batch: any) => batch.academicClass?.academicCenter?.type === 'online';
+  const onlineBatchClassIds = batches.filter(isOnlineBatch).map(b => b.academicClassId);
+
+  // 2. Fetch online classes via program matching or batch allocation
   const onlineClasses = await prisma.academicClass.findMany({
     where: {
       organizationId: student.organizationId,
-      programIds: { has: student.programId || '' },
-      academicCenter: { type: 'online' }
+      academicCenter: { type: 'online' },
+      OR: [
+        { programIds: { has: student.programId || '' } },
+        { id: { in: onlineBatchClassIds } }
+      ]
     },
     orderBy: { createdAt: 'asc' },
     include: {
@@ -454,11 +316,8 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
     }
   });
 
-  // 3. Fetch Organization Metadata (for center accessConfigs), Video Logs, Invoices, Payment Schedules, and Fee Structures
-  const now = new Date();
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-
-  const [org, allVideoLogs, todayVideoLogs, studentInvoices, studentSchedules, studentFeeStructures] = await Promise.all([
+  // 3. Fetch program access rules, video logs and fee records
+  const [org, allVideoLogs, todayVideoLogs, [studentInvoices, studentSchedules, studentFeeStructures]] = await Promise.all([
     prisma.organization.findUnique({
       where: { id: student.organizationId },
       select: { metadata: true }
@@ -466,68 +325,25 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
     prisma.studentVideoLog.findMany({
       where: { studentId: student.id }
     }),
-    prisma.studentVideoLog.findMany({
-      where: {
-        studentId: student.id,
-        lastWatchedAt: { gte: startOfToday },
-        watchDuration: { gt: 0 }
-      }
-    }),
-    prisma.invoice.findMany({
-      where: { studentId: student.id },
-      include: { payments: true }
-    }),
-    prisma.paymentSchedule.findMany({
-      where: { studentId: student.id }
-    }),
-    prisma.feeStructure.findMany({
-      where: {
-        organizationId: student.organizationId,
-        ...(student.programId ? { programId: student.programId } : {})
-      }
-    })
+    getTodayOnlineVideoLogs(student.id),
+    getStudentFeeRecords(student)
   ]);
 
-  const orgMetadata = (org?.metadata as any) || {};
-  const programConfigs = orgMetadata.programAccessConfigs || {};
-  const centerConfigs = orgMetadata.academicCenterConfigs || {};
+  const programAccessConfig = (org?.metadata as any)?.programAccessConfigs?.[student.programId];
   const watchedLessonsToday = new Set(todayVideoLogs.map(l => l.moduleLessonId));
   const watchedCountToday = watchedLessonsToday.size;
-  const studentProgramConfig = student.programId ? programConfigs[student.programId] : null;
+  const feeStatus = evaluateFeeLock(programAccessConfig, studentInvoices, studentSchedules, studentFeeStructures, student);
+  const dailyLimit = getDailyLimit(programAccessConfig);
+  const isDailyLimitReached = dailyLimit !== null && watchedCountToday >= dailyLimit;
 
   // Format Offline Classes
-  const offlineResultData = batches.filter(b => b.academicClass).map(batch => {
+  const offlineResultData = batches.filter(b => b.academicClass && !isOnlineBatch(b)).map(batch => {
     const classData = batch.academicClass;
-    const activeConfig = studentProgramConfig
-      || (classData.academicCenterId ? centerConfigs[classData.academicCenterId] : null)
-      || (student.centerId ? centerConfigs[student.centerId] : null)
-      || null;
-
-    const feeStatus = evaluateFeeLock(activeConfig, studentInvoices, studentSchedules, studentFeeStructures, student);
-    const effectiveDailyLimit = getEffectiveDailyLimit(activeConfig, student.programId);
-    const isDailyLimitReached = effectiveDailyLimit !== null && watchedCountToday >= effectiveDailyLimit;
 
     const formatOfflineLesson = (lesson: any) => {
       const session = lesson.academicSessions.find((s: any) => s.status === 'COMPLETED' && s.academicBatchId === batch.id);
       const isCompleted = !!session;
       const myAttendance = session?.attendances?.[0] || null;
-      const watchedToday = watchedLessonsToday.has(lesson.id);
-
-      let isFeeLocked = false;
-      let isDailyLimitLocked = false;
-      let lockReason: string | null = null;
-      let lockMessage: string | null = null;
-
-      if (lesson.videoUrl && feeStatus.isFeeLocked) {
-        isFeeLocked = true;
-        lockReason = 'fee_overdue';
-        lockMessage = feeStatus.message;
-      } else if (lesson.videoUrl && isDailyLimitReached && !watchedToday && !isCompleted) {
-        isDailyLimitLocked = true;
-        lockReason = 'daily_limit';
-        lockMessage = `Daily viewing limit of ${effectiveDailyLimit} classes reached for today (${watchedCountToday}/${effectiveDailyLimit} watched). New classes unlock tomorrow at 12:00 AM.`;
-      }
-
       return {
         id: lesson.id,
         title: lesson.title,
@@ -539,16 +355,8 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
         canRate: isCompleted && myAttendance,
         materials: isCompleted ? lesson.materials : [],
         videoUrl: lesson.videoUrl || null,
-        isFeeLocked,
-        isDailyLimitLocked,
-        lockReason,
-        lockMessage,
-        dailyLimit: effectiveDailyLimit,
-        watchedTodayCount: watchedCountToday,
-        totalFee: feeStatus.totalFee,
-        paidFee: feeStatus.paidFee,
-        paidPercentage: feeStatus.paidPercentage,
-        minPaidPercentage: feeStatus.minPaidPercentage
+        hasVideo: !!lesson.videoUrl,
+        resumePosition: getResumePosition(allVideoLogs.find(l => l.moduleLessonId === lesson.id))
       };
     };
 
@@ -571,32 +379,15 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
       modules: formattedModules,
       type: 'offline',
       centerId: classData.academicCenterId,
-      centerName: classData.academicCenter?.name,
-      dailyLimit: effectiveDailyLimit,
-      watchedTodayCount: watchedCountToday,
-      isFeeLocked: feeStatus.isFeeLocked,
-      feeLockMessage: feeStatus.message,
-      totalFee: feeStatus.totalFee,
-      paidFee: feeStatus.paidFee,
-      paidPercentage: feeStatus.paidPercentage,
-      minPaidPercentage: feeStatus.minPaidPercentage
+      centerName: classData.academicCenter?.name
     };
   });
 
   // Format Online Classes
   const onlineResultData = onlineClasses.map(classData => {
-    const activeConfig = studentProgramConfig
-      || (classData.academicCenterId ? centerConfigs[classData.academicCenterId] : null)
-      || (student.centerId ? centerConfigs[student.centerId] : null)
-      || null;
-
-    const feeStatus = evaluateFeeLock(activeConfig, studentInvoices, studentSchedules, studentFeeStructures, student);
-    const effectiveDailyLimit = getEffectiveDailyLimit(activeConfig, student.programId);
-    const isDailyLimitReached = effectiveDailyLimit !== null && watchedCountToday >= effectiveDailyLimit;
-
     const formatOnlineLesson = (lesson: any) => {
       const log = allVideoLogs.find(l => l.moduleLessonId === lesson.id);
-      const isVideoWatched = !lesson.videoUrl || !!(log && log.watchDuration > 0);
+      const isVideoWatched = !lesson.videoUrl || isVideoLogWatched(log);
       const hasAssessment = !!lesson.assessment;
       const attempts = lesson.assessment?.studentAttempts || [];
       const assessmentPassed = hasAssessment ? attempts.some((att: any) => att.passed) : true;
@@ -613,10 +404,10 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
         isFeeLocked = true;
         lockReason = 'fee_overdue';
         lockMessage = feeStatus.message;
-      } else if (lesson.videoUrl && isDailyLimitReached && !watchedToday && !isVideoWatched) {
+      } else if (lesson.videoUrl && dailyLimit !== null && isDailyLimitReached && !watchedToday) {
         isDailyLimitLocked = true;
         lockReason = 'daily_limit';
-        lockMessage = `Daily viewing limit of ${effectiveDailyLimit} classes reached for today (${watchedCountToday}/${effectiveDailyLimit} watched). New classes unlock tomorrow at 12:00 AM.`;
+        lockMessage = getDailyLimitMessage(dailyLimit, watchedCountToday);
       }
 
       return {
@@ -635,12 +426,17 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
         myReview: null,
         canRate: false,
         materials: lesson.materials || [],
-        videoUrl: lesson.videoUrl || null,
+        // A locked lesson must not reveal its video link.
+        videoUrl: isFeeLocked || isDailyLimitLocked ? null : lesson.videoUrl || null,
+        hasVideo: !!lesson.videoUrl,
+        watchedToday,
+        watchedPercent: getWatchedPercent(log),
+        resumePosition: getResumePosition(log),
         isFeeLocked,
         isDailyLimitLocked,
         lockReason,
         lockMessage,
-        dailyLimit: effectiveDailyLimit,
+        dailyLimit,
         watchedTodayCount: watchedCountToday,
         totalFee: feeStatus.totalFee,
         paidFee: feeStatus.paidFee,
@@ -669,7 +465,7 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
       type: 'online',
       centerId: classData.academicCenterId,
       centerName: classData.academicCenter?.name,
-      dailyLimit: effectiveDailyLimit,
+      dailyLimit,
       watchedTodayCount: watchedCountToday,
       isFeeLocked: feeStatus.isFeeLocked,
       feeLockMessage: feeStatus.message,
@@ -690,6 +486,38 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
   });
 
   res.json({ success: true, data: Array.from(allResultsMap.values()) });
+});
+
+// GET /student-portal/trial-videos - Free videos of the student's online classes.
+// These skip the fee lock and daily quota, and are not counted as lesson progress.
+export const getStudentTrialVideos = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) {
+    return res.json({ success: true, data: [] });
+  }
+
+  const videos = await prisma.classTrialVideo.findMany({
+    where: {
+      organizationId: student.organizationId,
+      academicClass: {
+        academicCenter: { type: 'online' },
+        OR: [
+          { programIds: { has: student.programId || '' } },
+          ...(student.academicBatchId ? [{ batches: { some: { id: student.academicBatchId } } }] : [])
+        ]
+      }
+    },
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      videoUrl: true,
+      academicClass: { select: { name: true } }
+    }
+  });
+
+  res.json({ success: true, data: videos });
 });
 
 // POST /student-portal/classes/:classId/attendance
@@ -865,7 +693,7 @@ export const videoHeartbeat = asyncHandler(async (req: AuthRequest, res: Respons
   const student = await getLinkedStudent(req.user.id);
   if (!student) return res.status(404).json({ success: false, message: 'Student not found' });
   
-  const { moduleLessonId, watchDuration = 10 } = req.body;
+  const { moduleLessonId, watchDuration = 10, position, duration, completed } = req.body;
   if (!moduleLessonId) return res.status(400).json({ success: false, message: 'moduleLessonId is required' });
 
   // Access validation (fee lock & daily limit)
@@ -877,32 +705,44 @@ export const videoHeartbeat = asyncHandler(async (req: AuthRequest, res: Respons
       reason: accessCheck.reason
     });
   }
+
+  const playedSeconds = Math.min(60, Math.max(0, Number(watchDuration) || 0));
   
   const existingLog = await prisma.studentVideoLog.findUnique({
     where: { studentId_moduleLessonId: { studentId: student.id, moduleLessonId } }
   });
 
-  if (existingLog) {
-    const log = await prisma.studentVideoLog.update({
-      where: { id: existingLog.id },
-      data: {
-        watchDuration: { increment: watchDuration },
-        lastWatchedAt: new Date()
-      }
-    });
-    res.status(200).json({ success: true, data: log });
-  } else {
-    const log = await prisma.studentVideoLog.create({
-      data: {
-        studentId: student.id,
-        moduleLessonId,
-        organizationId: req.user.organizationId,
-        watchDuration,
-        viewCount: 1
-      }
-    });
-    res.status(200).json({ success: true, data: log });
-  }
+  const progress = computeVideoProgress(existingLog, {
+    position,
+    duration,
+    playedSeconds,
+    markCompleted: completed === true
+  });
+
+  const log = existingLog
+    ? await prisma.studentVideoLog.update({
+        where: { id: existingLog.id },
+        data: {
+          ...progress,
+          watchDuration: { increment: playedSeconds },
+          lastWatchedAt: new Date()
+        }
+      })
+    : await prisma.studentVideoLog.create({
+        data: {
+          ...progress,
+          studentId: student.id,
+          moduleLessonId,
+          organizationId: req.user.organizationId,
+          watchDuration: playedSeconds,
+          viewCount: 1
+        }
+      });
+
+  res.status(200).json({
+    success: true,
+    data: { ...log, watchedPercent: getWatchedPercent(log), resumePosition: getResumePosition(log) }
+  });
 });
 
 export const recordVideoView = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -1020,4 +860,170 @@ export const submitLessonAssessment = asyncHandler(async (req: AuthRequest, res:
     data: attempt,
     message: passed ? 'Congratulations! You passed the assessment.' : 'You did not pass. Try again.'
   });
+});
+
+// --- Lesson doubts and notes ---
+
+const MAX_POST_LENGTH = 2000;
+
+// The lesson, if it belongs to a class this student takes.
+function findStudentLesson(student: any, lessonId: string) {
+  return prisma.moduleLesson.findFirst({
+    where: {
+      id: lessonId,
+      organizationId: student.organizationId,
+      classModule: {
+        academicClass: {
+          OR: [
+            { academicCenter: { type: 'online' }, programIds: { has: student.programId || '' } },
+            ...(student.academicBatchId ? [{ batches: { some: { id: student.academicBatchId } } }] : [])
+          ]
+        }
+      }
+    },
+    select: { id: true }
+  });
+}
+
+const DOUBT_INCLUDE = {
+  student: { select: { id: true, name: true } },
+  replies: {
+    orderBy: { createdAt: 'asc' as const },
+    include: {
+      student: { select: { id: true, name: true } },
+      faculty: { select: { id: true, name: true } }
+    }
+  }
+};
+
+export const getLessonDoubts = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student record not found' });
+  if (!await findStudentLesson(student, req.params.lessonId)) {
+    return res.status(404).json({ success: false, message: 'Lesson not found' });
+  }
+
+  const doubts = await prisma.lessonDoubt.findMany({
+    where: { moduleLessonId: req.params.lessonId },
+    orderBy: { createdAt: 'desc' },
+    include: DOUBT_INCLUDE
+  });
+  res.json({
+    success: true,
+    data: doubts.map(d => ({ ...d, isMine: d.studentId === student.id }))
+  });
+});
+
+export const createLessonDoubt = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student record not found' });
+  if (!await findStudentLesson(student, req.params.lessonId)) {
+    return res.status(404).json({ success: false, message: 'Lesson not found' });
+  }
+
+  const question = String(req.body.question || '').trim();
+  if (!question || question.length > MAX_POST_LENGTH) {
+    return res.status(400).json({ success: false, message: `Enter a question of up to ${MAX_POST_LENGTH} characters` });
+  }
+
+  const doubt = await prisma.lessonDoubt.create({
+    data: {
+      question,
+      moduleLessonId: req.params.lessonId,
+      studentId: student.id,
+      organizationId: student.organizationId
+    },
+    include: DOUBT_INCLUDE
+  });
+  res.status(201).json({ success: true, data: { ...doubt, isMine: true } });
+});
+
+export const replyToLessonDoubt = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student record not found' });
+
+  const doubt = await prisma.lessonDoubt.findUnique({ where: { id: req.params.doubtId } });
+  if (!doubt || !await findStudentLesson(student, doubt.moduleLessonId)) {
+    return res.status(404).json({ success: false, message: 'Doubt not found' });
+  }
+
+  const message = String(req.body.message || '').trim();
+  if (!message || message.length > MAX_POST_LENGTH) {
+    return res.status(400).json({ success: false, message: `Enter a reply of up to ${MAX_POST_LENGTH} characters` });
+  }
+
+  const reply = await prisma.lessonDoubtReply.create({
+    data: { message, doubtId: doubt.id, studentId: student.id, organizationId: doubt.organizationId },
+    include: { student: { select: { id: true, name: true } }, faculty: { select: { id: true, name: true } } }
+  });
+  res.status(201).json({ success: true, data: reply });
+});
+
+function parseVideoSeconds(value: unknown): number | null {
+  if (value === null || value === undefined || value === '') return null;
+  const seconds = Math.round(Number(value));
+  return Number.isFinite(seconds) && seconds >= 0 ? seconds : null;
+}
+
+export const getLessonNotes = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student record not found' });
+
+  const notes = await prisma.lessonNote.findMany({
+    where: { moduleLessonId: req.params.lessonId, studentId: student.id },
+    orderBy: [{ videoSeconds: { sort: 'asc', nulls: 'last' } }, { createdAt: 'desc' }]
+  });
+  res.json({ success: true, data: notes });
+});
+
+export const createLessonNote = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student record not found' });
+  if (!await findStudentLesson(student, req.params.lessonId)) {
+    return res.status(404).json({ success: false, message: 'Lesson not found' });
+  }
+
+  const content = String(req.body.content || '').trim();
+  const videoSeconds = parseVideoSeconds(req.body.videoSeconds);
+  if ((!content && videoSeconds === null) || content.length > MAX_POST_LENGTH) {
+    return res.status(400).json({ success: false, message: `Enter a note of up to ${MAX_POST_LENGTH} characters` });
+  }
+
+  const note = await prisma.lessonNote.create({
+    data: {
+      content,
+      videoSeconds,
+      moduleLessonId: req.params.lessonId,
+      studentId: student.id,
+      organizationId: student.organizationId
+    }
+  });
+  res.status(201).json({ success: true, data: note });
+});
+
+export const updateLessonNote = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student record not found' });
+
+  const note = await prisma.lessonNote.findFirst({ where: { id: req.params.noteId, studentId: student.id } });
+  if (!note) return res.status(404).json({ success: false, message: 'Note not found' });
+
+  const content = String(req.body.content || '').trim();
+  if ((!content && note.videoSeconds === null) || content.length > MAX_POST_LENGTH) {
+    return res.status(400).json({ success: false, message: `Enter a note of up to ${MAX_POST_LENGTH} characters` });
+  }
+
+  const updated = await prisma.lessonNote.update({ where: { id: note.id }, data: { content } });
+  res.json({ success: true, data: updated });
+});
+
+export const deleteLessonNote = asyncHandlerWithoutDeleteApproval(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student record not found' });
+
+  const note = await prisma.lessonNote.findFirst({ where: { id: req.params.noteId, studentId: student.id } });
+  if (!note) return res.status(404).json({ success: false, message: 'Note not found' });
+
+  await prisma.lessonNote.delete({ where: { id: note.id } });
+  res.json({ success: true, message: 'Note deleted' });
 });

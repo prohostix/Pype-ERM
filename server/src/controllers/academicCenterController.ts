@@ -56,6 +56,26 @@ export const DEFAULT_ACCESS_CONFIG: AcademicCenterAccessConfig = {
   }
 };
 
+const clampInt = (value: unknown, min: number, max: number, fallback: number) => {
+  const parsed = Math.round(Number(value));
+  return Number.isFinite(parsed) ? Math.min(max, Math.max(min, parsed)) : fallback;
+};
+
+function sanitizeProgramAccessConfig(config: any): ProgramAccessConfig {
+  const defaults = DEFAULT_PROGRAM_ACCESS_CONFIG;
+  const fee = config?.feeLocking;
+  return {
+    dailyClassLimitEnabled: config?.dailyClassLimitEnabled === true,
+    dailyClassLimit: clampInt(config?.dailyClassLimit, 1, 50, defaults.dailyClassLimit),
+    feeLocking: {
+      enabled: fee?.enabled === true,
+      minPaidPercentage: clampInt(fee?.minPaidPercentage, 1, 100, defaults.feeLocking.minPaidPercentage),
+      gracePeriodDays: clampInt(fee?.gracePeriodDays, 0, 90, defaults.feeLocking.gracePeriodDays),
+      lockMessage: typeof fee?.lockMessage === 'string' ? fee.lockMessage.slice(0, 1000) : defaults.feeLocking.lockMessage
+    }
+  };
+}
+
 export const getAcademicCenters = asyncHandler(async (req: Request, res: Response) => {
   const user = (req as any).user;
   const organizationId = user.organizationId;
@@ -351,21 +371,34 @@ export const updateProgramAccessConfigs = asyncHandler(async (req: Request, res:
     return res.status(400).json({ success: false, message: 'Organization ID is required' });
   }
 
+  const incoming: Record<string, unknown> = configs && typeof configs === 'object'
+    ? configs
+    : programId && config ? { [programId]: config } : {};
+
+  if (Object.keys(incoming).length === 0) {
+    return res.status(400).json({ success: false, message: 'Program access rules are required' });
+  }
+
+  // These rules only apply to programs offered by an online center.
+  const onlineCenters = await prisma.academicCenter.findMany({
+    where: { organizationId, type: 'online' },
+    select: { programIds: true }
+  });
+  const onlineProgramIds = new Set(onlineCenters.flatMap((center) => center.programIds));
+  if (Object.keys(incoming).some((id) => !onlineProgramIds.has(id))) {
+    return res.status(400).json({ success: false, message: 'Access rules can only be set for programs offered by an online center' });
+  }
+
   const org = await prisma.organization.findUnique({
     where: { id: organizationId },
     select: { metadata: true }
   });
 
   const orgMetadata = (org?.metadata as any) || {};
-  let programAccessConfigs = { ...(orgMetadata.programAccessConfigs || {}) };
+  const programAccessConfigs = { ...(orgMetadata.programAccessConfigs || {}) };
 
-  if (configs && typeof configs === 'object') {
-    programAccessConfigs = {
-      ...programAccessConfigs,
-      ...configs
-    };
-  } else if (programId && config) {
-    programAccessConfigs[programId] = config;
+  for (const [id, programConfig] of Object.entries(incoming)) {
+    programAccessConfigs[id] = sanitizeProgramAccessConfig(programConfig);
   }
 
   await prisma.organization.update({

@@ -91,6 +91,10 @@ model Organization {
   communicationLogs          CommunicationLog[]
   faculties                  Faculty[]
   classModules               ClassModule[]
+  classTrialVideos           ClassTrialVideo[]
+  lessonDoubts               LessonDoubt[]
+  lessonDoubtReplies         LessonDoubtReply[]
+  lessonNotes                LessonNote[]
   classSubModules            ClassSubModule[]
   classMaterials             ClassMaterial[]
   moduleLessons              ModuleLesson[]
@@ -536,6 +540,9 @@ model Student {
   universityPayments    UniversityPayment[]
   examRegistrations     ExamRegistration[]
   assessmentAttempts    StudentAssessmentAttempt[]
+  lessonDoubts          LessonDoubt[]
+  lessonDoubtReplies    LessonDoubtReply[]
+  lessonNotes           LessonNote[]
 
   @@index([organizationId, status])
   @@index([centerId])
@@ -2006,6 +2013,7 @@ model Faculty {
   previousFacultyHistories LessonFacultyHistory[]  @relation("PreviousFaculty")
   newFacultyHistories      LessonFacultyHistory[]  @relation("NewFaculty")
   changedFacultyHistories  LessonFacultyHistory[]  @relation("ChangedBy")
+  lessonDoubtReplies       LessonDoubtReply[]
   batchLessonAssignments   BatchLessonAssignment[]
   studentBatchTransfers    StudentBatchTransfer[]
   editDeleteRequests       EditDeleteRequest[]     @relation("FacultyEditDeleteRequester")
@@ -2044,8 +2052,27 @@ model AcademicClass {
   updatedAt             DateTime               @updatedAt
   batches               AcademicBatch[]
   modules               ClassModule[]
+  trialVideos           ClassTrialVideo[]
 
   @@index([academicCenterId])
+  @@index([organizationId])
+}
+
+// Free videos for an online class, separate from its modules and open to all its students.
+model ClassTrialVideo {
+  id              String        @id @default(uuid())
+  academicClassId String
+  academicClass   AcademicClass @relation(fields: [academicClassId], references: [id], onDelete: Cascade)
+  title           String
+  description     String?
+  videoUrl        String
+  order           Int           @default(0)
+  organizationId  String
+  organization    Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([academicClassId])
   @@index([organizationId])
 }
 
@@ -2106,6 +2133,8 @@ model ModuleLesson {
   batchAssignments BatchLessonAssignment[]
   videoUrl         String?
   videoLogs        StudentVideoLog[]
+  doubts           LessonDoubt[]
+  notes            LessonNote[]
   assessment       Assessment?
 
   @@index([classModuleId])
@@ -2160,12 +2189,70 @@ model StudentVideoLog {
   watchDuration  Int          @default(0) // in seconds
   viewCount      Int          @default(1)
   lastWatchedAt  DateTime     @default(now())
+  lastPosition   Int          @default(0) // seconds, where to resume
+  maxPosition    Int          @default(0) // seconds, furthest point reached without skipping
+  videoDuration  Int          @default(0) // seconds, 0 on logs from before this was tracked
+  isCompleted    Boolean      @default(false)
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, moduleLessonId])
   @@index([studentId])
   @@index([moduleLessonId])
+  @@index([organizationId])
+}
+
+model LessonDoubt {
+  id             String             @id @default(uuid())
+  moduleLessonId String
+  moduleLesson   ModuleLesson       @relation(fields: [moduleLessonId], references: [id], onDelete: Cascade)
+  studentId      String
+  student        Student            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  question       String
+  status         String             @default("open") // open or answered
+  organizationId String
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  replies        LessonDoubtReply[]
+
+  @@index([moduleLessonId])
+  @@index([studentId])
+  @@index([organizationId, status])
+}
+
+model LessonDoubtReply {
+  id             String       @id @default(uuid())
+  doubtId        String
+  doubt          LessonDoubt  @relation(fields: [doubtId], references: [id], onDelete: Cascade)
+  message        String
+  studentId      String?
+  student        Student?     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  facultyId      String?
+  faculty        Faculty?     @relation(fields: [facultyId], references: [id], onDelete: SetNull)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@index([doubtId])
+  @@index([organizationId])
+}
+
+// A private student note. With videoSeconds set, it is a bookmark at that moment.
+model LessonNote {
+  id             String       @id @default(uuid())
+  moduleLessonId String
+  moduleLesson   ModuleLesson @relation(fields: [moduleLessonId], references: [id], onDelete: Cascade)
+  studentId      String
+  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  content        String
+  videoSeconds   Int?
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([studentId, moduleLessonId])
   @@index([organizationId])
 }
 

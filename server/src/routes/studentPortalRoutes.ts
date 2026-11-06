@@ -4,6 +4,14 @@ import {
   getStudentNotifications,
   getStudentMaterials,
   getStudentClasses,
+  getStudentTrialVideos,
+  getLessonDoubts,
+  createLessonDoubt,
+  replyToLessonDoubt,
+  getLessonNotes,
+  createLessonNote,
+  updateLessonNote,
+  deleteLessonNote,
   registerClassAttendance,
   getStudentFees,
   getStudentInvoices,
@@ -25,6 +33,14 @@ router.get('/profile', getStudentProfile);
 router.get('/notifications', getStudentNotifications);
 router.get('/materials', getStudentMaterials);
 router.get('/classes', getStudentClasses);
+router.get('/trial-videos', getStudentTrialVideos);
+router.get('/lessons/:lessonId/doubts', getLessonDoubts);
+router.post('/lessons/:lessonId/doubts', createLessonDoubt);
+router.post('/doubts/:doubtId/replies', replyToLessonDoubt);
+router.get('/lessons/:lessonId/notes', getLessonNotes);
+router.post('/lessons/:lessonId/notes', createLessonNote);
+router.put('/notes/:noteId', updateLessonNote);
+router.delete('/notes/:noteId', deleteLessonNote);
 router.post('/classes/:classId/attendance', registerClassAttendance);
 router.post('/sessions/:sessionId/rate', rateSession);
 router.post('/video-heartbeat', videoHeartbeat);

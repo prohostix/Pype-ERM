@@ -1,8 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, Settings, Check, Tv } from 'lucide-react';
 
+export interface YouTubePlayerControl {
+  getCurrentTime: () => number;
+  getDuration: () => number;
+  seekTo: (seconds: number) => void;
+}
+
 interface CustomYouTubePlayerProps {
   videoUrl: string;
+  startAt?: number;
+  controlRef?: React.MutableRefObject<YouTubePlayerControl | null>;
   onPlay?: () => void;
   onEnded?: () => void;
   onHeartbeat?: (duration: number) => void;
@@ -31,6 +39,9 @@ const QUALITY_LABELS: Record<string, string> = {
 };
 
 const DEFAULT_QUALITIES = ['auto', 'hd1080', 'hd720', 'large', 'medium', 'small'];
+
+// Stop this close to the end so YouTube never reaches its suggested-videos screen.
+const END_GUARD_SECONDS = 1;
 
 const QUALITIES = [
   { id: 'auto', label: 'Auto (HD)' },
@@ -67,6 +78,8 @@ const extractVideoId = (url: string) => {
 
 export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({ 
   videoUrl, 
+  startAt = 0,
+  controlRef,
   onPlay, 
   onEnded, 
   onHeartbeat,
@@ -79,6 +92,9 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
   onEndedRef.current = onEnded;
   const onHeartbeatRef = useRef(onHeartbeat);
   onHeartbeatRef.current = onHeartbeat;
+
+  const startAtRef = useRef(startAt);
+  startAtRef.current = startAt;
 
   const videoId = extractVideoId(videoUrl);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -110,6 +126,18 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
   hasStartedRef.current = hasStarted;
   const prevVideoIdRef = useRef(videoId);
   const playerContainerId = useRef(`yt-player-${Math.random().toString(36).substring(2, 9)}`).current;
+  const endHandledRef = useRef(false);
+
+  const finishVideo = () => {
+    if (endHandledRef.current) return;
+    endHandledRef.current = true;
+    setIsPlaying(false);
+    setIsEnded(true);
+    try {
+      playerRef.current?.pauseVideo();
+    } catch {}
+    onEndedRef.current?.();
+  };
 
   const enforceQuality = (player: any) => {
     try {
@@ -137,18 +165,19 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
       setCurrentTime(0);
       setDuration(0);
       setIsEnded(false);
+      endHandledRef.current = false;
 
       if (playerRef.current && typeof playerRef.current.loadVideoById === 'function') {
         try {
           if (hasStartedRef.current) {
             playerRef.current.loadVideoById({
               videoId,
-              startSeconds: 0,
+              startSeconds: startAtRef.current,
             });
           } else {
             playerRef.current.cueVideoById({
               videoId,
-              startSeconds: 0,
+              startSeconds: startAtRef.current,
             });
           }
           return;
@@ -209,6 +238,7 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
       videoId,
       playerVars: {
         autoplay: hasStartedRef.current ? 1 : 0,
+        start: Math.floor(startAtRef.current),
         controls: 0,
         disablekb: 1,
         modestbranding: 1,
@@ -240,6 +270,7 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
             setHasStarted(true);
             setIsPlaying(true);
             setIsEnded(false);
+            endHandledRef.current = false;
             updateQualityLevels(event.target);
             onPlayRef.current?.();
           } else if (event.data === window.YT.PlayerState.PAUSED) {
@@ -249,9 +280,7 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
               setIsSwitching(false);
             }
           } else if (event.data === window.YT.PlayerState.ENDED) {
-            setIsPlaying(false);
-            setIsEnded(true);
-            onEndedRef.current?.();
+            finishVideo();
           }
         },
         onPlaybackQualityChange: (event: any) => {
@@ -274,7 +303,13 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
       interval = setInterval(() => {
         if (playerRef.current) {
           if (typeof playerRef.current.getCurrentTime === 'function') {
-            setCurrentTime(playerRef.current.getCurrentTime());
+            const time = playerRef.current.getCurrentTime();
+            setCurrentTime(time);
+            const total = typeof playerRef.current.getDuration === 'function' ? playerRef.current.getDuration() : 0;
+            if (total > END_GUARD_SECONDS && time >= total - END_GUARD_SECONDS) {
+              finishVideo();
+              return;
+            }
           }
           if (typeof playerRef.current.getVideoLoadedFraction === 'function') {
             setBuffered(playerRef.current.getVideoLoadedFraction() * 100);
@@ -300,6 +335,21 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
     }
     return () => clearInterval(heartbeatInterval);
   }, [isPlaying]);
+
+  useEffect(() => {
+    if (!controlRef) return;
+    controlRef.current = {
+      getCurrentTime: () => playerRef.current?.getCurrentTime?.() ?? 0,
+      getDuration: () => playerRef.current?.getDuration?.() ?? 0,
+      seekTo: (seconds: number) => {
+        playerRef.current?.seekTo?.(seconds, true);
+        playerRef.current?.playVideo?.();
+      }
+    };
+    return () => {
+      controlRef.current = null;
+    };
+  }, [controlRef]);
 
   const progressPercent = duration > 0 ? Math.min(100, Math.max(0, (currentTime / duration) * 100)) : 0;
 
@@ -348,6 +398,8 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
     const targetTime = percent * duration;
     setCurrentTime(targetTime);
     playerRef.current.seekTo(targetTime, true);
+    // Playback stops at the end screen, so seeking back has to resume it.
+    if (isEnded) playerRef.current.playVideo();
   };
 
   const handleVolumeToggle = (e: React.MouseEvent) => {
@@ -538,12 +590,12 @@ export const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
 
       {/* End-screen shield (prevents YouTube recommended related videos) */}
       {isEnded && (
-        <div className="absolute inset-0 z-30 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-300">
+        <div className="absolute inset-0 z-30 bg-black flex flex-col items-center justify-center p-6 text-center">
           <div className="w-16 h-16 rounded-full bg-red-600/20 border border-red-500/30 flex items-center justify-center mb-4 text-red-500">
             <Check size={32} />
           </div>
-          <h3 className="text-xl font-bold text-white mb-2">Lesson Completed</h3>
-          <p className="text-sm text-zinc-400 max-w-sm mb-6">You have completed this video lecture.</p>
+          <h3 className="text-xl font-bold text-white mb-2">Video Finished</h3>
+          <p className="text-sm text-zinc-400 max-w-sm mb-6">You have reached the end of this video.</p>
           <button
             type="button"
             onClick={() => {

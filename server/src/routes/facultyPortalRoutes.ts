@@ -4,6 +4,7 @@ import { getMyClasses, getClassBatches, getMyBatches, getMyStudents, getModulesF
   getBatchSessions,
   uploadMaterial, deleteMaterial, getOrganizationFaculty, getMyAssignedLessons, startSession, getActiveSessions, getSessionStudents, submitSessionAttendance, endSession,
   punchInSession, punchOutSession, getFacultyAttendancesByClass, approveFacultyPunch, getClassReviews, getVideoAnalytics, getLessonAssessment, upsertLessonAssessment, deleteLessonAssessment } from '../controllers/facultyPortalController.js';
+import { getTrialVideos, createTrialVideo, updateTrialVideo, deleteTrialVideo, getClassDoubts, answerDoubt, deleteDoubt, getClassProgress } from '../controllers/facultyPortalController.js';
 import { upload } from '../middleware/upload.js';
 
 const router = express.Router();
@@ -16,6 +17,21 @@ router.route('/batches/:batchId/students').get(getMyStudents);
 router.route('/batches/:batchId/sessions').get(getBatchSessions);
 router.route('/organization/faculty').get(getOrganizationFaculty);
 router.route('/my-assignments').get(getMyAssignedLessons);
+
+// Doubts & Progress
+router.route('/classes/:classId/doubts').get(getClassDoubts);
+router.route('/doubts/:doubtId/replies').post(answerDoubt);
+router.route('/doubts/:doubtId').delete(deleteDoubt);
+router.route('/classes/:classId/progress').get(getClassProgress);
+
+// Trial Videos Management
+router.route('/classes/:classId/trial-videos')
+  .get(getTrialVideos)
+  .post(createTrialVideo);
+
+router.route('/trial-videos/:videoId')
+  .put(updateTrialVideo)
+  .delete(deleteTrialVideo);
 
 // Modules Management
 router.route('/classes/:classId/modules')

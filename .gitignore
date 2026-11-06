@@ -48,3 +48,6 @@ Thumbs.db
 *.sw?
 server/uploads/
 */dist
+
+# Local data backups (contain personal data)
+server/backups/

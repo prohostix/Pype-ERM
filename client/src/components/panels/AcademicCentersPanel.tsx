@@ -248,9 +248,16 @@ export function AcademicCentersPanel() {
   const handleSaveProgramRules = async () => {
     setSavingProgramRules(true);
     try {
-      await api.put('/academic-centers/program-access-configs', {
-        configs: programConfigs
-      });
+      const onlineConfigs = Object.fromEntries(
+        onlinePrograms
+          .filter(p => programConfigs[p.id])
+          .map(p => [p.id, programConfigs[p.id]])
+      );
+      if (Object.keys(onlineConfigs).length > 0) {
+        await api.put('/academic-centers/program-access-configs', {
+          configs: onlineConfigs
+        });
+      }
       toast.success('Program video access and fee locking rules saved successfully');
       setProgramRulesModalOpen(false);
     } catch (err: any) {
@@ -260,26 +267,41 @@ export function AcademicCentersPanel() {
     }
   };
 
-  // Copy current program's rules to all other programs
+  // Copy current program's rules to the other online programs
   const handleApplyToAllPrograms = (sourceProgId: string) => {
     const source = programConfigs[sourceProgId] || DEFAULT_PROGRAM_CONFIG;
-    const newConfigs: Record<string, ProgramAccessConfig> = {};
-    programs.forEach(p => {
-      newConfigs[p.id] = JSON.parse(JSON.stringify(source));
+    setProgramConfigs(prev => {
+      const next = { ...prev };
+      onlinePrograms.forEach(p => {
+        next[p.id] = JSON.parse(JSON.stringify(source));
+      });
+      return next;
     });
-    setProgramConfigs(newConfigs);
-    toast.success(`Copied configuration across all ${programs.length} programs`);
+    toast.success(`Copied configuration across all ${onlinePrograms.length} online programs`);
   };
 
+  // Close without saving: drop unsaved edits by reloading the saved rules
+  const handleProgramRulesOpenChange = (open: boolean) => {
+    setProgramRulesModalOpen(open);
+    if (!open) fetchProgramConfigs();
+  };
+
+  // Video and fee rules apply only to programs offered by an online center
+  const onlineProgramIds = new Set(
+    centers.filter(c => c.type === 'online').flatMap(c => c.programIds || [])
+  );
+  const onlinePrograms = programs.filter(p => onlineProgramIds.has(p.id));
+  const onlineUniversities = universities.filter(u => onlinePrograms.some(p => p.universityId === u.id));
+
   // Computed summary metrics for common area
-  const programsWithDailyLimit = programs.filter(p => programConfigs[p.id]?.dailyClassLimitEnabled).length;
-  const programsWithFeeLock = programs.filter(p => programConfigs[p.id]?.feeLocking?.enabled).length;
-  const configuredProgramsCount = programs.filter(p => 
+  const programsWithDailyLimit = onlinePrograms.filter(p => programConfigs[p.id]?.dailyClassLimitEnabled).length;
+  const programsWithFeeLock = onlinePrograms.filter(p => programConfigs[p.id]?.feeLocking?.enabled).length;
+  const configuredProgramsCount = onlinePrograms.filter(p => 
     programConfigs[p.id]?.dailyClassLimitEnabled || programConfigs[p.id]?.feeLocking?.enabled
   ).length;
 
   // Filtered programs for modal
-  const filteredPrograms = programs.filter(p => {
+  const filteredPrograms = onlinePrograms.filter(p => {
     const matchesQuery = !searchProgramQuery || 
       p.name?.toLowerCase().includes(searchProgramQuery.toLowerCase()) ||
       p.code?.toLowerCase().includes(searchProgramQuery.toLowerCase());
@@ -287,7 +309,7 @@ export function AcademicCentersPanel() {
     return matchesQuery && matchesUniv;
   });
 
-  const activeSelectedProgram = programs.find(p => p.id === selectedProgramId) || filteredPrograms[0] || null;
+  const activeSelectedProgram = onlinePrograms.find(p => p.id === selectedProgramId) || filteredPrograms[0] || null;
   const activeSelectedConfig = activeSelectedProgram ? getProgramConfig(activeSelectedProgram.id) : DEFAULT_PROGRAM_CONFIG;
 
   if (activeCenter) {
@@ -301,7 +323,7 @@ export function AcademicCentersPanel() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Academic Centers & Programs</h2>
           <p className="text-muted-foreground text-sm">
-            Manage physical & online centers, program offerings, and program-wise video access policies
+            Manage physical & online centers, program offerings, and video access rules for online programs
           </p>
         </div>
 
@@ -319,7 +341,7 @@ export function AcademicCentersPanel() {
               className="border-indigo-200 text-indigo-700 bg-indigo-50/60 hover:bg-indigo-100 hover:text-indigo-800 dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-300 dark:hover:bg-indigo-900/50 shadow-xs gap-2 font-medium transition-all"
             >
               <ShieldAlert className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-              Program Video & Fee Rules
+              Online Program Video & Fee Rules
               {configuredProgramsCount > 0 && (
                 <Badge className="bg-indigo-600 hover:bg-indigo-600 text-[10px] h-4.5 px-1.5 py-0 font-bold">
                   {configuredProgramsCount} Active
@@ -535,8 +557,8 @@ export function AcademicCentersPanel() {
               <GraduationCap className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-xs text-muted-foreground block leading-tight">Total Programs</span>
-              <span className="font-bold text-foreground">{programs.length} Offerings</span>
+              <span className="text-xs text-muted-foreground block leading-tight">Online Programs</span>
+              <span className="font-bold text-foreground">{onlinePrograms.length} Offerings</span>
             </div>
           </div>
 
@@ -681,7 +703,7 @@ export function AcademicCentersPanel() {
       </div>
 
       {/* COMMON AREA: PROGRAM-WISE VIDEO ACCESS & FEE RULES MODAL */}
-      <Dialog open={programRulesModalOpen} onOpenChange={setProgramRulesModalOpen}>
+      <Dialog open={programRulesModalOpen} onOpenChange={handleProgramRulesOpenChange}>
         <DialogContent className="w-[96vw] max-w-6xl lg:max-w-7xl max-h-[92vh] flex flex-col overflow-hidden p-0 border-none shadow-2xl rounded-2xl">
           {/* Modal Header */}
           <DialogHeader className="bg-gradient-to-r from-indigo-600/10 via-blue-600/5 to-purple-600/10 p-6 border-b shrink-0">
@@ -692,10 +714,10 @@ export function AcademicCentersPanel() {
                 </div>
                 <div>
                   <DialogTitle className="text-xl font-bold flex items-center gap-2">
-                    Program Video Access & Fee Rules
+                    Online Program Video Access & Fee Rules
                   </DialogTitle>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Configure daily viewing limits and fee-paid video gating <span className="font-semibold text-foreground">individually per academic program</span>.
+                    Configure daily viewing limits and fee-paid video gating <span className="font-semibold text-foreground">individually for each program offered by an online center</span>. Offline centers are not affected.
                   </p>
                 </div>
               </div>
@@ -707,10 +729,10 @@ export function AcademicCentersPanel() {
                   size="sm" 
                   onClick={() => handleApplyToAllPrograms(activeSelectedProgram.id)}
                   className="text-xs border-indigo-200 text-indigo-700 hover:bg-indigo-50 gap-1.5 self-start sm:self-auto shrink-0"
-                  title="Copy current program's rules across all programs"
+                  title="Copy current program's rules across all online programs"
                 >
                   <Copy className="w-3.5 h-3.5" />
-                  Apply Preset to All Programs
+                  Apply Preset to All Online Programs
                 </Button>
               )}
             </div>
@@ -737,8 +759,8 @@ export function AcademicCentersPanel() {
                     <SelectValue placeholder="All Universities" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Universities ({universities.length})</SelectItem>
-                    {universities.map(u => (
+                    <SelectItem value="all">All Universities ({onlineUniversities.length})</SelectItem>
+                    {onlineUniversities.map(u => (
                       <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
                     ))}
                   </SelectContent>
@@ -750,7 +772,11 @@ export function AcademicCentersPanel() {
                 {filteredPrograms.length === 0 ? (
                   <div className="p-8 text-center text-xs text-muted-foreground space-y-2">
                     <GraduationCap className="w-8 h-8 opacity-40 mx-auto" />
-                    <p>No programs match your search or filter</p>
+                    <p>
+                      {onlinePrograms.length === 0
+                        ? 'No online programs yet. Assign programs to an online center to configure their rules.'
+                        : 'No programs match your search or filter'}
+                    </p>
                   </div>
                 ) : (
                   filteredPrograms.map((prog) => {
@@ -834,7 +860,7 @@ export function AcademicCentersPanel() {
                           <h4 className="text-sm font-semibold">Daily Class Viewing Limit</h4>
                         </div>
                         <p className="text-xs text-muted-foreground leading-relaxed">
-                          Restrict how many video lessons students enrolled in <span className="font-semibold text-foreground">{activeSelectedProgram.name}</span> can view per calendar day.
+                          Restrict how many different video lessons students enrolled in <span className="font-semibold text-foreground">{activeSelectedProgram.name}</span> can view per calendar day.
                         </p>
                       </div>
                       <Switch 
@@ -862,7 +888,7 @@ export function AcademicCentersPanel() {
                           />
                         </div>
                         <div className="text-xs text-muted-foreground bg-background/60 p-3 rounded-lg border border-border/40">
-                          <span className="font-semibold text-foreground">Rule:</span> A student in this program can watch up to <span className="font-bold text-indigo-600 dark:text-indigo-400">{activeSelectedConfig.dailyClassLimit}</span> lessons/day. Unlocks reset at 12:00 AM.
+                          <span className="font-semibold text-foreground">Rule:</span> A student in this program can watch up to <span className="font-bold text-indigo-600 dark:text-indigo-400">{activeSelectedConfig.dailyClassLimit}</span> different lessons/day, including lessons they rewatch. Unlocks reset at 12:00 AM IST.
                         </div>
                       </div>
                     )}
@@ -1067,7 +1093,11 @@ export function AcademicCentersPanel() {
               ) : (
                 <div className="flex flex-col items-center justify-center p-12 text-center text-muted-foreground space-y-3">
                   <GraduationCap className="w-12 h-12 opacity-30" />
-                  <p className="text-sm font-medium">Select a program on the left to configure its access rules</p>
+                  <p className="text-sm font-medium">
+                    {onlinePrograms.length === 0
+                      ? 'These rules apply to programs offered by an online center'
+                      : 'Select a program on the left to configure its access rules'}
+                  </p>
                 </div>
               )}
             </div>
@@ -1076,13 +1106,13 @@ export function AcademicCentersPanel() {
           {/* Modal Footer */}
           <div className="p-4 bg-muted/20 border-t border-border/50 flex items-center justify-between gap-3 shrink-0">
             <span className="text-xs text-muted-foreground hidden sm:block">
-              {configuredProgramsCount} of {programs.length} programs configured with custom rules
+              {configuredProgramsCount} of {onlinePrograms.length} online programs configured with custom rules
             </span>
             <div className="flex items-center gap-3 ml-auto">
               <Button 
                 type="button" 
                 variant="ghost" 
-                onClick={() => setProgramRulesModalOpen(false)}
+                onClick={() => handleProgramRulesOpenChange(false)}
                 disabled={savingProgramRules}
               >
                 Cancel

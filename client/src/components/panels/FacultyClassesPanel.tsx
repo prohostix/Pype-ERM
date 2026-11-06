@@ -10,7 +10,9 @@ import {
   Clock,
   CheckCircle2,
   Star,
-  BarChart2
+  BarChart2,
+  MessageCircle,
+  TrendingUp
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -19,6 +21,8 @@ import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { FacultyClassContentPanel } from './FacultyClassContentPanel';
+import { FacultyClassDoubtsPanel } from './FacultyClassDoubtsPanel';
+import { FacultyClassProgressPanel } from './FacultyClassProgressPanel';
 import { FacultyBatchDashboardPanel } from './FacultyBatchDashboardPanel';
 import { AcademicBatchesPanel } from './AcademicBatchesPanel';
 import { FacultyAttendanceApproval } from './FacultyAttendanceApproval';
@@ -183,6 +187,14 @@ export function FacultyClassesPanel() {
 
   if (view === 'onlineAnalytics' && selectedClass) {
     return <OnlineClassAnalyticsPanel academicClass={selectedClass} onBack={() => setView('classes')} />;
+  }
+
+  if (view === 'doubts' && selectedClass) {
+    return <FacultyClassDoubtsPanel academicClass={selectedClass} onBack={() => setView('classes')} />;
+  }
+
+  if (view === 'progress' && selectedClass) {
+    return <FacultyClassProgressPanel academicClass={selectedClass} onBack={() => setView('classes')} />;
   }
 
   if (view === 'reviews' && selectedClass) {
@@ -386,6 +398,26 @@ export function FacultyClassesPanel() {
                       <Star className="w-4 h-4 mr-2" /> 
                       <span className="font-semibold text-xs tracking-wide">Reviews</span>
                     </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-9 px-4 rounded-full text-indigo-700 bg-indigo-50 border-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 shadow-sm transition-all duration-300"
+                      onClick={(e) => { e.stopPropagation(); setView('doubts'); setSelectedClass(c); }}
+                    >
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      <span className="font-semibold text-xs tracking-wide">Doubts</span>
+                    </Button>
+                    {c.academicCenter?.type === 'online' && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-9 px-4 rounded-full text-emerald-700 bg-emerald-50 border-emerald-200 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 shadow-sm transition-all duration-300"
+                        onClick={(e) => { e.stopPropagation(); setView('progress'); setSelectedClass(c); }}
+                      >
+                        <TrendingUp className="w-4 h-4 mr-2" />
+                        <span className="font-semibold text-xs tracking-wide">Progress</span>
+                      </Button>
+                    )}
                     {c.academicCenter?.type === 'online' && (
                       <Button 
                         variant="outline" 

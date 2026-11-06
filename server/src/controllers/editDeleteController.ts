@@ -107,6 +107,15 @@ async function executeApprovedDeletion(entityId: string, organizationId: string,
 
     if (!id) return { success: false, error: 'Cannot parse entity ID' };
 
+    if (endpoint === 'faculty-portal' && sub === 'trial-videos') {
+      await prisma.classTrialVideo.deleteMany({ where: { id, organizationId } });
+      return { success: true };
+    }
+    if (endpoint === 'faculty-portal' && sub === 'doubts') {
+      await prisma.lessonDoubt.deleteMany({ where: { id, organizationId } });
+      return { success: true };
+    }
+
     // Support new entityTypes directly
     if (entityType === 'academic-batch' || endpoint === 'academic-batches') {
       // Unlink students

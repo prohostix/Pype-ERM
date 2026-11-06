@@ -1336,6 +1336,18 @@ exports.Prisma.AcademicClassScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ClassTrialVideoScalarFieldEnum = {
+  id: 'id',
+  academicClassId: 'academicClassId',
+  title: 'title',
+  description: 'description',
+  videoUrl: 'videoUrl',
+  order: 'order',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ClassModuleScalarFieldEnum = {
   id: 'id',
   academicClassId: 'academicClassId',
@@ -1410,7 +1422,43 @@ exports.Prisma.StudentVideoLogScalarFieldEnum = {
   watchDuration: 'watchDuration',
   viewCount: 'viewCount',
   lastWatchedAt: 'lastWatchedAt',
+  lastPosition: 'lastPosition',
+  maxPosition: 'maxPosition',
+  videoDuration: 'videoDuration',
+  isCompleted: 'isCompleted',
   organizationId: 'organizationId'
+};
+
+exports.Prisma.LessonDoubtScalarFieldEnum = {
+  id: 'id',
+  moduleLessonId: 'moduleLessonId',
+  studentId: 'studentId',
+  question: 'question',
+  status: 'status',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LessonDoubtReplyScalarFieldEnum = {
+  id: 'id',
+  doubtId: 'doubtId',
+  message: 'message',
+  studentId: 'studentId',
+  facultyId: 'facultyId',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.LessonNoteScalarFieldEnum = {
+  id: 'id',
+  moduleLessonId: 'moduleLessonId',
+  studentId: 'studentId',
+  content: 'content',
+  videoSeconds: 'videoSeconds',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.LessonFacultyHistoryScalarFieldEnum = {
@@ -1819,6 +1867,7 @@ exports.Prisma.ModelName = {
   Faculty: 'Faculty',
   AcademicCenter: 'AcademicCenter',
   AcademicClass: 'AcademicClass',
+  ClassTrialVideo: 'ClassTrialVideo',
   ClassModule: 'ClassModule',
   ClassSubModule: 'ClassSubModule',
   ModuleLesson: 'ModuleLesson',
@@ -1826,6 +1875,9 @@ exports.Prisma.ModelName = {
   AssessmentQuestion: 'AssessmentQuestion',
   StudentAssessmentAttempt: 'StudentAssessmentAttempt',
   StudentVideoLog: 'StudentVideoLog',
+  LessonDoubt: 'LessonDoubt',
+  LessonDoubtReply: 'LessonDoubtReply',
+  LessonNote: 'LessonNote',
   LessonFacultyHistory: 'LessonFacultyHistory',
   ClassMaterial: 'ClassMaterial',
   AcademicBatch: 'AcademicBatch',

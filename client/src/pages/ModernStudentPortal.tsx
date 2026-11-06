@@ -50,7 +50,9 @@ import {
   PanelRightClose,
   PanelRightOpen,
   DollarSign,
-  Info
+  Info,
+  MessageCircle,
+  StickyNote
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -58,6 +60,8 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { LessonDoubtsTab } from '@/components/lms/LessonDoubtsTab';
+import { LessonNotesTab } from '@/components/lms/LessonNotesTab';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
@@ -66,7 +70,7 @@ import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ReactPlayer from 'react-player';
 import { Slider } from '@/components/ui/slider';
-import { CustomYouTubePlayer } from '@/components/CustomYouTubePlayer';
+import { CustomYouTubePlayer, type YouTubePlayerControl } from '@/components/CustomYouTubePlayer';
 
 interface StudentPortalProps {
   onNavigate?: (tab: string) => void;
@@ -148,6 +152,9 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [materials, setMaterials] = useState<any[]>([]);
   const [classes, setClasses] = useState<any[]>([]);
+  const [trialVideos, setTrialVideos] = useState<any[]>([]);
+  const [activeTrialVideoId, setActiveTrialVideoId] = useState<string | null>(null);
+  const lessonPlayerControl = useRef<YouTubePlayerControl | null>(null);
   const [classFilter, setClassFilter] = useState<'all' | 'upcoming' | 'live' | 'online' | 'offline'>('all');
   const [schedules, setSchedules] = useState<any[]>([]);
   const [feeStructures, setFeeStructures] = useState<any[]>([]);
@@ -178,7 +185,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
   };
 
   // LMS Classroom Experience State
-  const [lmsActiveTab, setLmsActiveTab] = useState<'overview' | 'quiz' | 'resources' | 'feedback'>('overview');
+  const [lmsActiveTab, setLmsActiveTab] = useState<'overview' | 'quiz' | 'resources' | 'feedback' | 'doubts' | 'notes'>('overview');
   const [curriculumSearch, setCurriculumSearch] = useState('');
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
@@ -212,12 +219,18 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
   const completedCourseLessons = allCurriculumLessons.filter(i => i.lesson.isCompleted).length;
   const overallCourseProgress = totalCourseLessons > 0 ? Math.round((completedCourseLessons / totalCourseLessons) * 100) : 0;
 
+  const activeTrialVideo = trialVideos.find(v => v.id === activeTrialVideoId) || null;
+  const filteredTrialVideos = trialVideos.filter(v =>
+    !curriculumSearch.trim() || v.title?.toLowerCase().includes(curriculumSearch.trim().toLowerCase())
+  );
+
   const handleSelectLesson = (item: { cls: any; mod: any; subMod: any | null; lesson: any }) => {
     const isSequentialLocked = item.lesson.isLocked && !item.lesson.isFeeLocked && !item.lesson.isDailyLimitLocked;
     if (isSequentialLocked) {
       toast.error('Complete preceding lessons to unlock this lesson.');
       return;
     }
+    setActiveTrialVideoId(null);
     setSelectedCurriculumLesson({ cls: item.cls, mod: item.mod, subMod: item.subMod, lesson: item.lesson });
   };
 
@@ -386,27 +399,59 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
         .catch(() => setLessonAssessment(null))
         .finally(() => setLoadingAssessment(false));
     }
-  }, [selectedCurriculumLesson]);
+  }, [selectedCurriculumLesson?.lesson.id]);
+
+  // The server blocked this video (fee lock or daily quota): swap the player for the lock screen.
+  const handleVideoAccessDenied = (err: any) => {
+    const reason = err?.response?.data?.reason;
+    if (reason !== 'fee_overdue' && reason !== 'daily_limit') return false;
+    toast.error(err.response.data.message || 'This video is locked.');
+    fetchStudentData({ silent: true });
+    return true;
+  };
 
   const handleVideoHeartbeat = async (lessonId: string, duration: number = 10) => {
     try {
-      await api.post('/student-portal/video-heartbeat', { moduleLessonId: lessonId, watchDuration: duration });
-      // If current lesson wasn't marked watched, refresh data to update progress
-      if (selectedCurriculumLesson && selectedCurriculumLesson.lesson.id === lessonId && !selectedCurriculumLesson.lesson.isVideoWatched) {
-        fetchStudentData();
+      const res = await api.post('/student-portal/video-heartbeat', {
+        moduleLessonId: lessonId,
+        watchDuration: duration,
+        position: lessonPlayerControl.current?.getCurrentTime(),
+        duration: lessonPlayerControl.current?.getDuration()
+      });
+      const log = res.data.data;
+      const current = selectedCurriculumLesson;
+      if (current?.lesson.id !== lessonId) return;
+
+      current.lesson.resumePosition = log.resumePosition;
+      current.lesson.watchedPercent = log.watchedPercent;
+      if (current.cls.type !== 'online') return;
+
+      // Refresh progress and today's quota when this lesson first counts or completes
+      if ((log.isCompleted && !current.lesson.isVideoWatched) || !current.lesson.watchedToday) {
+        fetchStudentData({ silent: true });
+      } else {
+        setSelectedCurriculumLesson(prev => (prev ? { ...prev } : prev));
       }
     } catch (err) {
-      console.error('Failed to send heartbeat:', err);
+      if (!handleVideoAccessDenied(err)) console.error('Failed to send heartbeat:', err);
+    }
+  };
+
+  const handleVideoView = async (lessonId: string) => {
+    try {
+      await api.post('/student-portal/video-view', { moduleLessonId: lessonId });
+    } catch (err) {
+      if (!handleVideoAccessDenied(err)) console.error('Failed to record video view:', err);
     }
   };
 
   const handleMarkVideoCompleted = async (lessonId: string) => {
     try {
-      await api.post('/student-portal/video-heartbeat', { moduleLessonId: lessonId, watchDuration: 60 });
+      await api.post('/student-portal/video-heartbeat', { moduleLessonId: lessonId, watchDuration: 60, completed: true });
       toast.success('Video marked as watched!');
-      await fetchStudentData();
+      await fetchStudentData({ silent: true });
     } catch (err: any) {
-      toast.error('Failed to mark video as completed');
+      if (!handleVideoAccessDenied(err)) toast.error('Failed to mark video as completed');
     }
   };
 
@@ -438,8 +483,9 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
     }
   };
 
-  const fetchStudentData = async () => {
-    setLoading(true);
+  const fetchStudentData = async ({ silent = false }: { silent?: boolean } = {}) => {
+    // A silent refresh keeps the page, and any playing video, on screen.
+    if (!silent) setLoading(true);
     try {
       // 1. Fetch Profile to verify if user is linked to a student
       const profileRes = await api.get('/student-portal/profile').catch(() => null);
@@ -452,12 +498,13 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
       }
 
       // 2. Fetch student portal data in parallel
-      const [notifRes, matRes, feeRes, invRes, classesRes] = await Promise.all([
+      const [notifRes, matRes, feeRes, invRes, classesRes, trialRes] = await Promise.all([
         api.get('/student-portal/notifications').catch(() => ({ data: { data: { notifications: [], announcements: [] } } })),
         api.get('/student-portal/materials').catch(() => ({ data: { data: [] } })),
         api.get('/student-portal/fees').catch(() => ({ data: { data: { schedules: [], feeStructures: [] } } })),
         api.get('/student-portal/invoices').catch(() => ({ data: { data: [] } })),
         api.get('/student-portal/classes').catch(() => ({ data: { data: [] } })),
+        api.get('/student-portal/trial-videos').catch(() => ({ data: { data: [] } })),
       ]);
 
       setNotifications(notifRes.data.data?.notifications || []);
@@ -466,6 +513,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
       setSchedules(feeRes.data.data?.schedules || []);
       setFeeStructures(feeRes.data.data?.feeStructures || []);
       setInvoices(invRes.data.data || []);
+      setTrialVideos(trialRes.data.data || []);
 
       let fetchedClasses = classesRes.data.data || [];
 
@@ -579,6 +627,19 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
               if (firstSub) {
                 return { cls: c, mod: m, subMod: s, lesson: firstSub };
               }
+            }
+          }
+        }
+
+        // Everything open is fee or quota locked: show the lock screen, not an empty page.
+        const isAccessLocked = (l: any) => l.isFeeLocked || l.isDailyLimitLocked;
+        for (const c of fetchedClasses) {
+          for (const m of c.modules || []) {
+            const lockedDirect = (m.lessons || []).find(isAccessLocked);
+            if (lockedDirect) return { cls: c, mod: m, subMod: null, lesson: lockedDirect };
+            for (const s of m.subModules || []) {
+              const lockedSub = (s.lessons || []).find(isAccessLocked);
+              if (lockedSub) return { cls: c, mod: m, subMod: s, lesson: lockedSub };
             }
           }
         }
@@ -1673,7 +1734,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
               </div>
             </div>
 
-            {(!classes || classes.length === 0) ? (
+            {(!classes || classes.length === 0) && trialVideos.length === 0 ? (
               <div className="text-center py-20 text-muted-foreground border border-dashed rounded-2xl bg-card/30 space-y-3">
                 <BookOpen className="w-12 h-12 mx-auto opacity-20" />
                 <div className="space-y-1">
@@ -1691,7 +1752,32 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                   "space-y-4 sm:space-y-5 transition-all duration-300 w-full",
                   isTheaterMode || !isSidebarVisible ? "lg:col-span-12" : "lg:col-span-8"
                 )}>
-                  {selectedCurriculumLesson ? (
+                  {activeTrialVideo ? (
+                    <Card className="border border-border/50 shadow-2xs overflow-hidden bg-card/60 backdrop-blur-sm rounded-2xl">
+                      <div className="relative w-full aspect-video bg-black">
+                        <div className="absolute inset-0 w-full h-full">
+                          <CustomYouTubePlayer
+                            key={activeTrialVideo.id}
+                            videoUrl={activeTrialVideo.videoUrl}
+                            isTheater={isTheaterMode}
+                            onToggleTheater={() => setIsTheaterMode(prev => !prev)}
+                          />
+                        </div>
+                      </div>
+                      <div className="p-4 sm:p-5 space-y-1.5">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                          <PlayCircle className="w-3 h-3" /> Free Trial Video
+                        </span>
+                        <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-tight">{activeTrialVideo.title}</h2>
+                        {activeTrialVideo.academicClass?.name && (
+                          <p className="text-xs text-muted-foreground">{activeTrialVideo.academicClass.name}</p>
+                        )}
+                        {activeTrialVideo.description && (
+                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{activeTrialVideo.description}</p>
+                        )}
+                      </div>
+                    </Card>
+                  ) : selectedCurriculumLesson ? (
                     <div className="space-y-4 sm:space-y-5 animate-in slide-in-from-right-2 duration-200">
                       
                       {/* Video Player & Stage Card */}
@@ -1761,16 +1847,18 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                             <div className="absolute inset-0 w-full h-full">
                               <CustomYouTubePlayer 
                                 videoUrl={selectedCurriculumLesson.lesson.videoUrl} 
+                                startAt={selectedCurriculumLesson.lesson.resumePosition || 0}
+                                controlRef={lessonPlayerControl}
                                 isTheater={isTheaterMode}
                                 onToggleTheater={() => setIsTheaterMode(prev => !prev)}
                                 onPlay={() => {
-                                  api.post('/student-portal/video-view', { moduleLessonId: selectedCurriculumLesson.lesson.id }).catch(console.error);
+                                  handleVideoView(selectedCurriculumLesson.lesson.id);
                                 }}
                                 onHeartbeat={(duration) => {
                                   handleVideoHeartbeat(selectedCurriculumLesson.lesson.id, duration);
                                 }}
                                 onEnded={() => {
-                                  handleMarkVideoCompleted(selectedCurriculumLesson.lesson.id);
+                                  handleVideoHeartbeat(selectedCurriculumLesson.lesson.id, 10);
                                 }}
                               />
                             </div>
@@ -1866,6 +1954,11 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
 
                             {/* Minimal Condition Badges */}
                             <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                              {selectedCurriculumLesson.lesson.hasVideo && typeof selectedCurriculumLesson.lesson.dailyLimit === 'number' && (
+                                <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-muted/40 text-muted-foreground border border-border/40">
+                                  <Clock className="w-3 h-3" /> Today: {selectedCurriculumLesson.lesson.watchedTodayCount ?? 0}/{selectedCurriculumLesson.lesson.dailyLimit} classes
+                                </span>
+                              )}
                               {selectedCurriculumLesson.lesson.isFeeLocked && (
                                 <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
                                   <ShieldAlert className="w-3 h-3" /> Fee Locked ({selectedCurriculumLesson.lesson.paidPercentage ?? 0}% / {selectedCurriculumLesson.lesson.minPaidPercentage ?? 50}%)
@@ -1884,7 +1977,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                     : "bg-muted/40 text-muted-foreground border-border/40"
                                 )}>
                                   {selectedCurriculumLesson.lesson.isVideoWatched ? <CheckCircle className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
-                                  {selectedCurriculumLesson.lesson.isVideoWatched ? "Video Watched" : "Video Required"}
+                                  {selectedCurriculumLesson.lesson.isVideoWatched ? "Video Watched" : `Watched ${selectedCurriculumLesson.lesson.watchedPercent ?? 0}%`}
                                 </span>
                               )}
                               {selectedCurriculumLesson.lesson.hasAssessment && (
@@ -1905,7 +1998,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
 
                           {/* Segmented LMS Tabs */}
                           <Tabs value={lmsActiveTab} onValueChange={(val: any) => setLmsActiveTab(val)} className="w-full pt-1">
-                            <TabsList className="grid w-full grid-cols-4 bg-muted/30 p-1 rounded-xl h-9.5 border border-border/40">
+                            <TabsList className="grid w-full grid-cols-6 bg-muted/30 p-1 rounded-xl h-9.5 border border-border/40">
                               <TabsTrigger value="overview" className="text-xs font-medium rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-2xs flex items-center justify-center gap-1.5 px-1 sm:px-3 cursor-pointer">
                                 <Info className="w-3.5 h-3.5 text-primary" />
                                 <span className="hidden xs:inline sm:inline">Overview</span>
@@ -1928,7 +2021,23 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                 <Star className="w-3.5 h-3.5 text-amber-500" />
                                 <span className="hidden xs:inline sm:inline">Feedback</span>
                               </TabsTrigger>
+                              <TabsTrigger value="doubts" aria-label="Doubts" className="text-xs font-medium rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-2xs gap-1.5">
+                                <MessageCircle className="w-3.5 h-3.5 text-indigo-500" />
+                                <span className="hidden xs:inline sm:inline">Doubts</span>
+                              </TabsTrigger>
+                              <TabsTrigger value="notes" aria-label="Notes" className="text-xs font-medium rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-2xs gap-1.5">
+                                <StickyNote className="w-3.5 h-3.5 text-emerald-500" />
+                                <span className="hidden xs:inline sm:inline">Notes</span>
+                              </TabsTrigger>
                             </TabsList>
+
+                            <TabsContent value="doubts" className="mt-4">
+                              <LessonDoubtsTab lessonId={selectedCurriculumLesson.lesson.id} />
+                            </TabsContent>
+
+                            <TabsContent value="notes" className="mt-4">
+                              <LessonNotesTab lessonId={selectedCurriculumLesson.lesson.id} playerControl={lessonPlayerControl} />
+                            </TabsContent>
 
                             {/* TAB 1: OVERVIEW & NOTES */}
                             <TabsContent value="overview" className="mt-4 space-y-4">
@@ -2314,8 +2423,34 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                       {/* Scrollable Playlist Body */}
                       <CardContent className="p-0 overflow-y-auto flex-grow custom-scrollbar bg-transparent">
                         <div className="p-1.5 space-y-2">
+                          {/* Free trial videos: outside the fee lock and daily quota */}
+                          {filteredTrialVideos.length > 0 && (
+                            <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/5 p-1.5 space-y-0.5">
+                              <div className="flex items-center gap-1.5 px-1.5 py-1">
+                                <PlayCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                                <h4 className="font-bold text-xs text-foreground">Trial Videos</h4>
+                                <span className="text-[9px] px-1 border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold rounded">Free</span>
+                              </div>
+                              {filteredTrialVideos.map(video => (
+                                <button
+                                  key={video.id}
+                                  type="button"
+                                  onClick={() => setActiveTrialVideoId(video.id)}
+                                  className={cn(
+                                    "text-left px-2.5 py-1.5 text-xs transition-all flex items-start gap-1.5 w-full rounded-lg cursor-pointer",
+                                    activeTrialVideoId === video.id
+                                      ? "bg-primary/10 text-primary border border-primary/25 font-bold"
+                                      : "text-foreground/80 hover:bg-muted/40"
+                                  )}
+                                >
+                                  <Video className="w-3 h-3 mt-0.5 shrink-0" />
+                                  <span className="line-clamp-2 leading-snug">{video.title}</span>
+                                </button>
+                              ))}
+                            </div>
+                          )}
                           {filteredCurriculumClasses.length === 0 ? (
-                            <div className="p-6 text-center text-xs text-muted-foreground space-y-1.5">
+                            filteredTrialVideos.length > 0 ? null : <div className="p-6 text-center text-xs text-muted-foreground space-y-1.5">
                               <Search className="w-5 h-5 opacity-40 mx-auto" />
                               <p>No lessons match "{curriculumSearch}"</p>
                             </div>
@@ -2383,7 +2518,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                         )}>
                                           {mod.lessons && mod.lessons.length > 0 ? (
                                             mod.lessons.map((lesson: any) => {
-                                              const isSelected = selectedCurriculumLesson?.lesson.id === lesson.id;
+                                              const isSelected = !activeTrialVideoId && selectedCurriculumLesson?.lesson.id === lesson.id;
                                               const isFeeLocked = lesson.isFeeLocked;
                                               const isDailyLimitLocked = lesson.isDailyLimitLocked;
                                               const isSequentialLocked = lesson.isLocked && !isFeeLocked && !isDailyLimitLocked;
@@ -2434,7 +2569,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                                   </div>
 
                                                   <div className={cn("flex items-center gap-2 text-[9px] font-medium uppercase tracking-wider", isSelected ? "text-primary/70" : "text-muted-foreground/50")}>
-                                                    {lesson.videoUrl && <span className="flex items-center gap-0.5"><Video className="w-2.5 h-2.5" /> Video</span>}
+                                                    {lesson.hasVideo && <span className="flex items-center gap-0.5"><Video className="w-2.5 h-2.5" /> Video</span>}
                                                     {lesson.hasAssessment && (
                                                       <span className={cn("flex items-center gap-0.5", lesson.assessmentPassed ? "text-emerald-600 font-semibold" : "text-violet-600")}>
                                                         <CheckSquare className="w-2.5 h-2.5" /> {lesson.assessmentPassed ? "Passed" : "Quiz"}
@@ -2458,7 +2593,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                                   </div>
                                                   <div className="space-y-0.5 pl-1.5 border-l border-border/20">
                                                     {sub.lessons?.map((lesson: any) => {
-                                                      const isSelected = selectedCurriculumLesson?.lesson.id === lesson.id;
+                                                      const isSelected = !activeTrialVideoId && selectedCurriculumLesson?.lesson.id === lesson.id;
                                                       const isFeeLocked = lesson.isFeeLocked;
                                                       const isDailyLimitLocked = lesson.isDailyLimitLocked;
                                                       const isSequentialLocked = lesson.isLocked && !isFeeLocked && !isDailyLimitLocked;

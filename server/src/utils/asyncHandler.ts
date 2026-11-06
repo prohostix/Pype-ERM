@@ -18,6 +18,14 @@ export const asyncHandler = (fn: AsyncFunction) => {
   };
 };
 
+// For a user's own private content, such as a student's note, where the
+// organization's delete approval flow doesn't apply.
+export const asyncHandlerWithoutDeleteApproval = (fn: AsyncFunction) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
+};
+
 // Extract the string ID from an organizationId that may be a populated object or plain ObjectId
 export function resolveOrgId(orgId: any): string {
   if (!orgId) return '';

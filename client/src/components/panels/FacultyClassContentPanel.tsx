@@ -33,6 +33,12 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   const [subModuleForm, setSubModuleForm] = useState({ title: '', description: '', order: '' });
 
   // Lesson Modal
+  // Trial video states
+  const [trialVideos, setTrialVideos] = useState<any[]>([]);
+  const [trialVideoDialogOpen, setTrialVideoDialogOpen] = useState(false);
+  const [editingTrialVideoId, setEditingTrialVideoId] = useState<string | null>(null);
+  const [trialVideoForm, setTrialVideoForm] = useState({ title: '', description: '', videoUrl: '', order: '' });
+
   const [lessonDialogOpen, setLessonDialogOpen] = useState(false);
   const [activeModuleId, setActiveModuleId] = useState<string | null>(null);
   const [activeSubModuleId, setActiveSubModuleId] = useState<string | null>(null);
@@ -157,6 +163,63 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
 
   const toggleSubModule = (id: string) => {
     setExpandedSubModules(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const isOnlineClass = academicClass?.academicCenter?.type === 'online';
+
+  // --- TRIAL VIDEO ACTIONS ---
+  const fetchTrialVideos = async () => {
+    try {
+      const res = await api.get(`/faculty-portal/classes/${academicClass.id}/trial-videos`);
+      setTrialVideos(res.data.data || []);
+    } catch (err) {
+      toast.error('Failed to fetch trial videos');
+    }
+  };
+
+  useEffect(() => {
+    if (isOnlineClass) fetchTrialVideos();
+  }, [academicClass?.id]);
+
+  const openTrialVideoDialog = (video?: any) => {
+    setEditingTrialVideoId(video?.id || null);
+    setTrialVideoForm({
+      title: video?.title || '',
+      description: video?.description || '',
+      videoUrl: video?.videoUrl || '',
+      order: video ? String(video.order) : ''
+    });
+    setTrialVideoDialogOpen(true);
+  };
+
+  const handleTrialVideoSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (editingTrialVideoId) {
+        await api.put(`/faculty-portal/trial-videos/${editingTrialVideoId}`, trialVideoForm);
+        toast.success('Trial video updated');
+      } else {
+        await api.post(`/faculty-portal/classes/${academicClass.id}/trial-videos`, trialVideoForm);
+        toast.success('Trial video added');
+      }
+      setTrialVideoDialogOpen(false);
+      fetchTrialVideos();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to save trial video');
+    }
+  };
+
+  const handleDeleteTrialVideo = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this trial video?')) return;
+    try {
+      await api.delete(`/faculty-portal/trial-videos/${id}`);
+      fetchTrialVideos();
+      toast.success('Trial video deleted');
+    } catch (err: any) {
+      if (!err.isDeleteRequest && err.message !== 'Delete request cancelled.') {
+        toast.error(err.response?.data?.message || 'Failed to delete trial video');
+      }
+    }
   };
 
   // --- MODULE ACTIONS ---
@@ -686,6 +749,46 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
         </Button>
       </div>
 
+      {isOnlineClass && (
+        <Card>
+          <CardContent className="p-4 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h3 className="font-semibold flex items-center gap-2">
+                  <Video className="w-4 h-4 text-emerald-600" /> Trial Videos
+                </h3>
+                <p className="text-xs text-muted-foreground">Free videos for this class's students, separate from the modules. No fee lock or daily quota applies.</p>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => openTrialVideoDialog()} className="shrink-0">
+                <Plus className="w-4 h-4 mr-1.5" /> Add Trial Video
+              </Button>
+            </div>
+            {trialVideos.length === 0 ? (
+              <p className="text-xs text-muted-foreground rounded-lg border border-dashed p-3">No trial videos added yet.</p>
+            ) : (
+              <div className="rounded-lg border divide-y">
+                {trialVideos.map(video => (
+                  <div key={video.id} className="flex items-center justify-between gap-3 p-2.5">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium line-clamp-1">{video.title}</p>
+                      {video.description && <p className="text-xs text-muted-foreground line-clamp-1">{video.description}</p>}
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Button variant="ghost" size="icon" onClick={() => openTrialVideoDialog(video)} className="h-7 w-7" aria-label={`Edit ${video.title}`}>
+                        <Edit className="w-3 h-3" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => handleDeleteTrialVideo(video.id)} className="h-7 w-7 text-red-500 hover:text-red-600 hover:bg-red-50" aria-label={`Delete ${video.title}`}>
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       <div className="space-y-4">
         {loading ? (
           <div className="p-12 text-center text-muted-foreground">Loading modules...</div>
@@ -905,6 +1008,31 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
       </div>
 
       {/* Module Modal */}
+      <Dialog open={trialVideoDialogOpen} onOpenChange={setTrialVideoDialogOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>{editingTrialVideoId ? 'Edit Trial Video' : 'Add Trial Video'}</DialogTitle></DialogHeader>
+          <form onSubmit={handleTrialVideoSubmit} className="space-y-4 pt-4">
+            <div className="space-y-2">
+              <Label>Title</Label>
+              <Input value={trialVideoForm.title} onChange={e => setTrialVideoForm({ ...trialVideoForm, title: e.target.value })} required />
+            </div>
+            <div className="space-y-2">
+              <Label>Description (Optional)</Label>
+              <Textarea value={trialVideoForm.description} onChange={e => setTrialVideoForm({ ...trialVideoForm, description: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label>YouTube Video URL</Label>
+              <Input placeholder="e.g. https://youtu.be/..." value={trialVideoForm.videoUrl} onChange={e => setTrialVideoForm({ ...trialVideoForm, videoUrl: e.target.value })} required />
+            </div>
+            <div className="space-y-2">
+              <Label>Order</Label>
+              <Input type="number" value={trialVideoForm.order} onChange={e => setTrialVideoForm({ ...trialVideoForm, order: e.target.value })} />
+            </div>
+            <Button type="submit" className="w-full">{editingTrialVideoId ? 'Save Changes' : 'Add Trial Video'}</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={moduleDialogOpen} onOpenChange={setModuleDialogOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>{editingModuleId ? 'Edit Module' : 'Create Module'}</DialogTitle></DialogHeader>

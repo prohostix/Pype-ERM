@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { buildClassProgress } from '../utils/classProgress.js';
 import { AuthRequest } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
 import { emitToUser } from '../config/socket.js';
@@ -142,6 +143,82 @@ export const getModulesForClass = asyncHandler(async (req: AuthRequest, res: Res
     }
   });
   res.status(200).json({ success: true, data: modules });
+});
+
+export const getTrialVideos = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { classId } = req.params;
+  const ac = await prisma.academicClass.findFirst({ where: { id: classId, inchargeId: req.user.id } });
+  if (!ac) return res.status(404).json({ success: false, message: 'Class not found or unauthorized' });
+
+  const videos = await prisma.classTrialVideo.findMany({
+    where: { academicClassId: classId },
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
+  });
+  res.status(200).json({ success: true, data: videos });
+});
+
+export const createTrialVideo = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { classId } = req.params;
+  const { title, description, videoUrl, order } = req.body;
+  if (!title?.trim() || !videoUrl?.trim()) {
+    return res.status(400).json({ success: false, message: 'Title and video URL are required' });
+  }
+
+  const ac = await prisma.academicClass.findFirst({
+    where: { id: classId, inchargeId: req.user.id },
+    include: { academicCenter: { select: { type: true } } }
+  });
+  if (!ac) return res.status(404).json({ success: false, message: 'Class not found or unauthorized' });
+  if (ac.academicCenter.type !== 'online') {
+    return res.status(400).json({ success: false, message: 'Trial videos are only available for online classes' });
+  }
+
+  const video = await prisma.classTrialVideo.create({
+    data: {
+      title: title.trim(),
+      description: description || null,
+      videoUrl: videoUrl.trim(),
+      order: parseInt(String(order)) || 0,
+      academicClassId: classId,
+      organizationId: ac.organizationId
+    }
+  });
+  res.status(201).json({ success: true, data: video });
+});
+
+export const updateTrialVideo = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { videoId } = req.params;
+  const { title, description, videoUrl, order } = req.body;
+  if (!title?.trim() || !videoUrl?.trim()) {
+    return res.status(400).json({ success: false, message: 'Title and video URL are required' });
+  }
+
+  const video = await prisma.classTrialVideo.findUnique({ where: { id: videoId }, include: { academicClass: true } });
+  if (!video || video.academicClass.inchargeId !== req.user.id) return res.status(404).json({ success: false, message: 'Trial video not found or unauthorized' });
+
+  const updated = await prisma.classTrialVideo.update({
+    where: { id: videoId },
+    data: {
+      title: title.trim(),
+      description: description || null,
+      videoUrl: videoUrl.trim(),
+      order: parseInt(String(order)) || 0
+    }
+  });
+  res.status(200).json({ success: true, data: updated });
+});
+
+export const deleteTrialVideo = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { videoId } = req.params;
+  const video = await prisma.classTrialVideo.findUnique({ where: { id: videoId }, include: { academicClass: true } });
+  if (!video || video.academicClass.inchargeId !== req.user.id) return res.status(404).json({ success: false, message: 'Trial video not found or unauthorized' });
+
+  await prisma.classTrialVideo.delete({ where: { id: videoId } });
+  res.status(200).json({ success: true, message: 'Trial video deleted' });
 });
 
 export const createModule = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -943,4 +1020,119 @@ export const deleteLessonAssessment = asyncHandler(async (req: AuthRequest, res:
 
   await prisma.assessment.delete({ where: { id: assessment.id } });
   res.status(200).json({ success: true, message: 'Assessment deleted successfully' });
+});
+
+// --- Class doubts ---
+
+export const getClassDoubts = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { classId } = req.params;
+  const ac = await prisma.academicClass.findFirst({ where: { id: classId, inchargeId: req.user.id } });
+  if (!ac) return res.status(404).json({ success: false, message: 'Class not found or unauthorized' });
+
+  const doubts = await prisma.lessonDoubt.findMany({
+    where: { moduleLesson: { classModule: { academicClassId: classId } } },
+    orderBy: { createdAt: 'desc' },
+    include: {
+      student: { select: { id: true, name: true, enrollmentNo: true } },
+      moduleLesson: { select: { id: true, title: true } },
+      replies: {
+        orderBy: { createdAt: 'asc' },
+        include: {
+          student: { select: { id: true, name: true } },
+          faculty: { select: { id: true, name: true } }
+        }
+      }
+    }
+  });
+  res.status(200).json({ success: true, data: doubts });
+});
+
+async function findInchargeDoubt(doubtId: string, facultyId: string) {
+  return prisma.lessonDoubt.findFirst({
+    where: {
+      id: doubtId,
+      moduleLesson: { classModule: { academicClass: { inchargeId: facultyId } } }
+    }
+  });
+}
+
+export const answerDoubt = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const doubt = await findInchargeDoubt(req.params.doubtId, req.user.id);
+  if (!doubt) return res.status(404).json({ success: false, message: 'Doubt not found or unauthorized' });
+
+  const message = String(req.body.message || '').trim();
+  if (!message || message.length > 2000) {
+    return res.status(400).json({ success: false, message: 'Enter a reply of up to 2000 characters' });
+  }
+
+  const [reply] = await prisma.$transaction([
+    prisma.lessonDoubtReply.create({
+      data: { message, doubtId: doubt.id, facultyId: req.user.id, organizationId: doubt.organizationId },
+      include: { faculty: { select: { id: true, name: true } } }
+    }),
+    prisma.lessonDoubt.update({ where: { id: doubt.id }, data: { status: 'answered' } })
+  ]);
+  res.status(201).json({ success: true, data: reply });
+});
+
+export const deleteDoubt = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const doubt = await findInchargeDoubt(req.params.doubtId, req.user.id);
+  if (!doubt) return res.status(404).json({ success: false, message: 'Doubt not found or unauthorized' });
+
+  await prisma.lessonDoubt.delete({ where: { id: doubt.id } });
+  res.status(200).json({ success: true, message: 'Doubt deleted' });
+});
+
+// --- Class progress report ---
+
+export const getClassProgress = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { classId } = req.params;
+
+  const academicClass = await prisma.academicClass.findFirst({
+    where: { id: classId, inchargeId: req.user.id },
+    include: {
+      modules: {
+        include: {
+          lessons: {
+            select: { id: true, videoUrl: true, assessment: { select: { id: true, passingScore: true } } }
+          }
+        }
+      }
+    }
+  });
+  if (!academicClass) return res.status(404).json({ success: false, message: 'Class not found or unauthorized' });
+
+  const students = await prisma.student.findMany({
+    where: {
+      organizationId: academicClass.organizationId,
+      status: { not: 'rejected' },
+      OR: [
+        { programId: { in: academicClass.programIds } },
+        { academicBatch: { academicClassId: classId } }
+      ]
+    },
+    select: { id: true, name: true, email: true, enrollmentNo: true },
+    orderBy: { name: 'asc' }
+  });
+
+  const lessons = academicClass.modules.flatMap(m => m.lessons);
+  const studentIds = students.map(s => s.id);
+  const [logs, attempts] = await Promise.all([
+    prisma.studentVideoLog.findMany({
+      where: { studentId: { in: studentIds }, moduleLessonId: { in: lessons.map(l => l.id) } }
+    }),
+    prisma.studentAssessmentAttempt.findMany({
+      where: {
+        studentId: { in: studentIds },
+        assessmentId: { in: lessons.flatMap(l => (l.assessment ? [l.assessment.id] : [])) }
+      },
+      select: { studentId: true, assessmentId: true, score: true, passed: true, createdAt: true }
+    })
+  ]);
+
+  res.status(200).json({ success: true, data: buildClassProgress(students, lessons, logs, attempts) });
 });

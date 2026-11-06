@@ -106,6 +106,11 @@ class ApiService {
     });
   }
 
+  // For a user's own private content, such as a note. The server route must also skip approval.
+  deleteWithoutApproval<T = any>(url: string, config?: any): Promise<import('axios').AxiosResponse<T>> {
+    return this.api.delete(url, config);
+  }
+
   put(url: string, data?: any, config?: any) {
     return this.api.put(url, data, config);
   }
