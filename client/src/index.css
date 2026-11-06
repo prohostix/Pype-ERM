@@ -204,3 +204,55 @@
 body[data-scroll-locked] {
   padding-right: 0 !important;
 }
+
+/* ── Public pages: homepage headline and scroll reveal ── */
+.gradient-text {
+  background-image: linear-gradient(90deg, #14532d, #256c1d, #2f8a24, #0f766e, #14532d);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-bottom: 0.08em;
+  animation: gradient-flow 12s linear infinite;
+}
+@keyframes gradient-flow {
+  to { background-position: 200% center; }
+}
+
+.reveal-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.reveal-ready [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.55s ease-out var(--reveal-delay, 0ms),
+    transform 0.55s ease-out var(--reveal-delay, 0ms);
+}
+
+.hero-word {
+  display: inline-block;
+  white-space: pre;
+  animation: hero-word-in 0.7s ease-out both;
+}
+@keyframes hero-word-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-text,
+  .hero-word { animation: none; }
+  .reveal-ready [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

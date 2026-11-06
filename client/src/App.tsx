@@ -13,6 +13,7 @@ import PublicRegisterPage from '@/pages/PublicRegisterPage';
 import StudentApplicationPage from '@/pages/StudentApplicationPage';
 import { ApkDownloadRedirect, apkPlatformForPath } from '@/pages/ApkDownloadRedirect';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
+import { PublicFooter } from '@/pages/marketing/PublicFooter';
 import { getOpsNavItems } from '@/pages/ModernOpsDashboard';
 import { getHRNavItems } from '@/pages/ModernHRDashboard';
 import { getFinanceNavItems } from '@/pages/ModernFinanceDashboard';
@@ -1048,7 +1049,7 @@ function App() {
       return <CustomOrgLogin />;
     }
     if (window.location.pathname === '/login') {
-      return <Login />;
+      return <><Login /><PublicFooter /></>;
     }
     return <LandingPage onGoToLogin={() => window.location.pathname = '/login'} />;
   }

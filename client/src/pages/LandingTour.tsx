@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import {
-  GraduationCap, Users, FileText, CheckCircle2, TrendingUp, DollarSign, CreditCard, Building,
-  Clock, Check, Loader2, ArrowRight, Search, Send, Receipt,
+  GraduationCap, Users, FileText, CheckCircle2, TrendingUp, IndianRupee, CreditCard, Building,
+  Clock, Check, Loader2, ArrowRight, Send, Receipt,
 } from 'lucide-react';
 
 const SCENE_MS = 7000;
@@ -10,7 +10,7 @@ const CHAR_MS = 38;
 
 /** Focus effect: the element being worked on stays sharp, everything else softly blurs. */
 const focusCls = (on: boolean) =>
-  `transition-[opacity,filter] duration-300 ease-out will-change-[opacity,filter] ${on ? 'opacity-100 blur-0' : 'opacity-45 blur-[2px]'}`;
+  `transition-opacity duration-300 ease-out ${on ? 'opacity-100' : 'opacity-60'}`;
 
 const STUDENT = {
   name: 'Aarav Sharma',
@@ -46,9 +46,9 @@ const SCENES = [
     id: 'finance', step: 'Finance', title: 'Finance collects the fee and issues the receipt',
     portal: 'Finance & Accounts', user: { name: 'Priya Sundaram', role: 'Finance Officer', initials: 'PS' },
     nav: [
-      { label: 'Fee Schedules & Bills', icon: DollarSign },
-      { label: 'UPI Auto-Reconcile', icon: CreditCard },
-      { label: 'GST Tax Invoices', icon: FileText },
+      { label: 'Fee Schedules & Bills', icon: IndianRupee },
+      { label: 'Payments', icon: CreditCard },
+      { label: 'Receipts', icon: FileText },
       { label: 'Defaulters & Dues', icon: Clock },
     ],
   },
@@ -95,7 +95,7 @@ function SalesScene({ t }: { t: number }) {
   return (
     <div className="space-y-4">
       <div className={focusCls(false)}>
-        <h3 className="text-lg sm:text-xl font-black text-slate-900">New Provisional Enrollment</h3>
+        <h3 className="text-lg sm:text-xl font-bold text-slate-900">New Provisional Enrollment</h3>
         <p className="text-xs text-slate-500 font-medium">Fill in the student's details and submit for verification.</p>
       </div>
       <div className="grid sm:grid-cols-2 gap-3">
@@ -110,7 +110,7 @@ function SalesScene({ t }: { t: number }) {
         <div className={focusCls(phase === 'button')}>
           <button
             type="button" tabIndex={-1}
-            className={`h-10 px-6 rounded-xl text-sm font-bold text-white flex items-center gap-2 transition-all duration-300 ${submitted ? 'bg-emerald-700' : 'bg-[#54b947]'} ${pressed ? 'scale-95 ring-4 ring-[#54b947]/30' : phase === 'button' ? 'shadow-lg shadow-[#54b947]/40' : ''}`}
+            className={`h-10 px-6 rounded-xl text-sm font-bold text-white flex items-center gap-2 transition-all duration-300 ${submitted ? 'bg-emerald-700' : 'bg-[#54b947]'} ${pressed ? 'scale-95 ring-4 ring-[#54b947]/30' : phase === 'button' ? '' : ''}`}
           >
             {submitted ? <><Check className="w-4 h-4" /> Submitted</> : <>Submit Enrollment</>}
           </button>
@@ -138,7 +138,7 @@ function OperationsScene({ t }: { t: number }) {
   return (
     <div className="space-y-4">
       <div className={focusCls(!arrived)}>
-        <h3 className="text-lg sm:text-xl font-black text-slate-900">Admissions Verification Queue</h3>
+        <h3 className="text-lg sm:text-xl font-bold text-slate-900">Admissions Verification Queue</h3>
         <p className="text-xs text-slate-500 font-medium">New enrollments from Sales appear here for document and eligibility checks.</p>
       </div>
       {arrived && (
@@ -187,12 +187,12 @@ function FinanceScene({ t }: { t: number }) {
     { label: 'Verified enrollment received from Operations', icon: Users },
     { label: 'Payment link sent to student', icon: Send },
     { label: `Paid via UPI: ${STUDENT.fee}`, icon: CreditCard },
-    { label: 'GST receipt generated', icon: Receipt },
+    { label: 'Receipt generated', icon: Receipt },
   ];
   return (
     <div className="space-y-4">
       <div className={focusCls(false)}>
-        <h3 className="text-lg sm:text-xl font-black text-slate-900">Seat Fee Collection</h3>
+        <h3 className="text-lg sm:text-xl font-bold text-slate-900">Seat Fee Collection</h3>
         <p className="text-xs text-slate-500 font-medium">Verified students move here to pay the seat fee.</p>
       </div>
       <div className="rounded-2xl border border-slate-200 p-4 space-y-3">
@@ -218,7 +218,7 @@ function FinanceScene({ t }: { t: number }) {
         </ul>
       </div>
       {confirmed && (
-        <div className="rounded-2xl bg-emerald-600 text-white px-4 py-3 text-sm font-bold flex items-center gap-2 animate-in fade-in zoom-in-95 duration-500 shadow-lg shadow-emerald-600/30">
+        <div className="rounded-2xl bg-emerald-600 text-white px-4 py-3 text-sm font-bold flex items-center gap-2 animate-in fade-in zoom-in-95 duration-500">
           <CheckCircle2 className="w-5 h-5" /> Admission confirmed for {STUDENT.name}
         </div>
       )}
@@ -239,7 +239,7 @@ function sidebarState(id: string, t: number): { active: number; badges: Record<n
     if (t < 4900) return { active: 1, badges: { 0: '1', 1: '4' } };
     return { active: 1, badges: { 1: '✓' } };
   }
-  // finance: 0 Fee Schedules -> 1 UPI Auto-Reconcile -> 2 GST Tax Invoices
+  // finance: 0 Fee Schedules -> 1 Payments -> 2 Receipts
   if (t < 1200) return { active: 0, badges: { 0: '1' } };
   if (t < 2500) return { active: 0, badges: { 0: 'Link sent' } };
   if (t < 3700) return { active: 1, badges: { 1: '₹' } };
@@ -287,32 +287,21 @@ export function LandingTour() {
         <div className="flex items-center gap-1.5 sm:gap-2" aria-hidden="true">
           {SCENES.map((s, i) => (
             <div key={s.id} className="flex items-center gap-1.5 sm:gap-2">
-              <span className={`px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold border transition-all duration-300 ${i === sceneIdx ? 'bg-[#54b947] text-white border-[#54b947] shadow-md shadow-[#54b947]/30 scale-105' : i < sceneIdx ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-white text-slate-500 border-slate-200'}`}>
+              <span className={`px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold border transition-all duration-300 ${i === sceneIdx ? 'bg-[#54b947] text-white border-[#54b947]' : i < sceneIdx ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-white text-slate-500 border-slate-200'}`}>
                 {i < sceneIdx && <Check className="inline w-3 h-3 mr-1" />}{s.step}
               </span>
               {i < SCENES.length - 1 && <ArrowRight className="w-3.5 h-3.5 text-slate-300" />}
             </div>
           ))}
         </div>
-        <div key={sceneIdx} className="px-4 py-1.5 rounded-full bg-white border border-emerald-100 shadow-sm text-xs sm:text-sm font-bold text-slate-700 animate-in fade-in slide-in-from-bottom-1 duration-500">
+        <div key={sceneIdx} className="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs sm:text-sm font-bold text-slate-700 animate-in fade-in slide-in-from-bottom-1 duration-500">
           <span className="text-[#54b947] mr-2">Step {sceneIdx + 1} of {SCENES.length}</span>{scene.title}
         </div>
       </div>
 
       {/* Window */}
-      <div className="relative w-full rounded-2xl sm:rounded-3xl border border-slate-200 bg-white shadow-xl sm:shadow-2xl shadow-slate-200/90 overflow-hidden text-left">
-        <div className="flex items-center justify-between px-4 py-3 bg-slate-100/80 border-b border-slate-200/80 text-xs text-slate-500">
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-[#ff5f56]" /><span className="w-3 h-3 rounded-full bg-[#ffbd2e]" /><span className="w-3 h-3 rounded-full bg-[#27c93f]" />
-            <div className="hidden sm:flex items-center gap-1.5 ml-3 px-3 py-1 bg-white border border-slate-200 rounded-md text-[11px] font-mono">
-              <span className="text-[#54b947]">https://</span><span>pype-erm.app/dashboard/{scene.id}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-2 bg-white border border-slate-200 px-3 py-1 rounded-md text-xs text-slate-400 w-44"><Search className="w-3.5 h-3.5" /><span>Search records...</span></div>
-            <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#54b947] animate-pulse" /><span className="text-[11px] font-bold text-slate-700">Live Mode</span></div>
-          </div>
-        </div>
+      <div className="relative w-full rounded-3xl border border-slate-200 bg-white overflow-hidden text-left">
+        <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 text-xs text-slate-500">Example workflow, using sample data</div>
 
         <div className="flex min-h-[440px]">
           <div key={`nav-${scene.id}`} className="w-56 bg-slate-50/90 border-r border-slate-200 p-3 hidden md:flex flex-col justify-between text-xs animate-in fade-in duration-300">
@@ -322,7 +311,7 @@ export function LandingTour() {
                 const on = i === side.active;
                 const badge = side.badges[i];
                 return (
-                  <div key={label} className={`flex items-center gap-2.5 px-3 py-2 rounded-xl font-semibold transition-all duration-500 ${on ? 'bg-[#54b947] text-white font-bold shadow-md shadow-[#54b947]/30 scale-[1.02]' : 'text-slate-500 opacity-70'}`}>
+                  <div key={label} className={`flex items-center gap-2.5 px-3 py-2 rounded-xl font-semibold transition-all duration-500 ${on ? 'bg-[#54b947] text-white font-bold' : 'text-slate-500 opacity-70'}`}>
                     <Icon className="w-4 h-4 shrink-0" /><span className="truncate">{label}</span>
                     {badge && (
                       <span key={badge} className={`ml-auto shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-bold animate-in zoom-in-50 duration-300 ${on ? 'bg-white text-[#256c1d]' : 'bg-[#54b947] text-white'}`}>{badge}</span>

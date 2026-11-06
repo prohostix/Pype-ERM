@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Eye, EyeOff, ShieldAlert, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, ShieldAlert, AlertCircle, ArrowLeft, IndianRupee, MapPin, CheckCheck } from 'lucide-react';
 import { RobotVerification } from '@/components/auth/RobotVerification';
 
 const BrandRibbon = () => (
@@ -23,35 +23,45 @@ const BrandRibbon = () => (
         <stop offset="100%" stopColor="#1a4f15" stopOpacity="0.9" />
       </linearGradient>
       
-      {/* Drop shadow for ribbon */}
-      <filter id="ribbonShadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="20" stdDeviation="30" floodOpacity="0.16" floodColor="#1a4f15"/>
-      </filter>
+      {/* Soft white fade, matching the landing page hero */}
+      <linearGradient id="ribbonFade" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.7" />
+        <stop offset="50%" stopColor="#ffffff" stopOpacity="0.4" />
+        <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+      </linearGradient>
     </defs>
-    
-    <rect width="100%" height="100%" fill="#f8fbf7" />
 
-    {/* The ribbon stroke 1 */}
-    <path 
-      d="M -100 800 C 300 900, 500 100, 1000 300 C 1300 400, 1200 900, 1600 700" 
-      fill="none" 
-      stroke="url(#ribbonGrad)" 
-      strokeWidth="140" 
-      strokeLinecap="round" 
-      filter="url(#ribbonShadow)"
-    />
-    
-    {/* The ribbon stroke 2 crossing */}
-    <path 
-      d="M 1200 -200 C 1100 200, 1400 600, 900 800 C 400 1000, 200 300, -200 200" 
-      fill="none" 
-      stroke="url(#ribbonGrad2)" 
-      strokeWidth="110" 
-      strokeLinecap="round" 
-      filter="url(#ribbonShadow)"
-    />
+    <rect width="100%" height="100%" fill="#ffffff" />
+
+    <g opacity="0.28">
+      {/* The ribbon stroke 1 */}
+      <path
+        d="M -100 800 C 300 900, 500 100, 1000 300 C 1300 400, 1200 900, 1600 700"
+        fill="none"
+        stroke="url(#ribbonGrad)"
+        strokeWidth="140"
+        strokeLinecap="round"
+      />
+
+      {/* The ribbon stroke 2 crossing */}
+      <path
+        d="M 1200 -200 C 1100 200, 1400 600, 900 800 C 400 1000, 200 300, -200 200"
+        fill="none"
+        stroke="url(#ribbonGrad2)"
+        strokeWidth="110"
+        strokeLinecap="round"
+      />
+    </g>
+
+    <rect width="100%" height="100%" fill="url(#ribbonFade)" />
   </svg>
 );
+
+const LOGIN_POINTS = [
+  { icon: IndianRupee, text: 'Fee schedules, payment links and reminders' },
+  { icon: MapPin, text: 'Selfie and location attendance on the mobile app' },
+  { icon: CheckCheck, text: 'Tasks, leave and enrollment approvals' },
+];
 
 export function Login() {
   const { login } = useAuth();
@@ -259,7 +269,7 @@ export function Login() {
             <div className="pt-1.5">
               <Button
                 type="submit"
-                className="w-full h-12 bg-slate-900 hover:bg-[#439c36] text-white rounded-2xl text-[15px] font-semibold shadow-lg hover:shadow-[#54b947]/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-12 bg-slate-900 hover:bg-[#439c36] text-white rounded-full text-[15px] font-semibold shadow-lg hover:shadow-[#54b947]/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isLoading || lockoutSeconds > 0}
               >
                 {isLoading ? (
@@ -297,23 +307,31 @@ export function Login() {
               </filter>
             </defs>
             <rect width="100%" height="100%" fill="url(#waveBase)" />
-            
+
             <path d="M0,0 L220,0 C280,250 150,350 0,550 Z" fill="url(#waveTop)" filter="url(#blurShadow)" />
             <path d="M400,600 L100,600 C250,450 400,300 400,100 Z" fill="url(#waveBottom)" filter="url(#blurShadow)" />
-            
+
             <circle cx="50" cy="150" r="120" fill="#54b947" filter="blur(80px)" opacity="0.35" />
             <circle cx="350" cy="450" r="150" fill="#8ae47e" filter="blur(80px)" opacity="0.25" />
           </svg>
-          
+          {/* Keeps the text readable where the bright ribbon passes behind it */}
+          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-3/5 z-0 bg-gradient-to-t from-[#05150c]/90 via-[#05150c]/70 to-transparent" />
+
           {/* Top Right Logo matching prohostix.png */}
           <div className="absolute top-10 right-10 z-20 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-white/40">
             <img src="/prohostix.png" alt="ProHostix" className="w-12 h-12 object-contain" />
           </div>
           
-          <div className="relative z-10 flex flex-col items-start text-left w-full pb-4">
-            <h2 className="text-[34px] font-bold tracking-tight leading-tight">
-              Next-generation<br />academic management.
-            </h2>
+          <div className="relative z-10 w-full pb-2">
+            <h2 className="text-[30px] lg:text-[34px] font-bold tracking-tight leading-[1.15] mb-3 [text-wrap:balance]">Your whole institution. One sign-in.</h2>
+            <p className="text-[15px] leading-relaxed text-white/80 mb-7">Admissions, finance, HR and academics, connected in one place.</p>
+            <ul className="space-y-3 border-t border-white/15 pt-6">
+              {LOGIN_POINTS.map(({ icon: Icon, text }) => (
+                <li key={text} className="flex items-start gap-3 text-sm text-white/90">
+                  <Icon className="w-4 h-4 mt-0.5 shrink-0 text-[#8ae47e]" /> {text}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
