@@ -4,6 +4,7 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { provisionStudentAfterApproval } from '../utils/studentProvisioning.js';
 import { enqueueNotification } from '../utils/notificationQueue.js';
+import { appendHistory } from '../utils/statusHistory.js';
 
 export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { status, search } = req.query as Record<string, string>;
@@ -552,17 +553,17 @@ export const getProvisionalEnrollments = asyncHandler(async (req: AuthRequest, r
 
   const enrollments = await prisma.enrollment.findMany({
     where,
-    include: { program: true, studyCenter: true, student: true },
+    include: { program: true, studyCenter: true, student: true, salesUser: { select: { id: true, name: true } } },
     orderBy: { createdAt: 'asc' }
   });
   res.json({ success: true, count: enrollments.length, data: enrollments });
 });
 
-export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const enrollmentId = req.params.id;
-
-    const enrollment = await prisma.enrollment.findUnique({
-    where: { id: enrollmentId, isProvisional: true, status: 'provisional_finance_pending' },
+// Loads a pending provisional enrollment and applies the branch check shared by
+// verify and reject. Sends the error response and returns null when not allowed.
+const loadPendingProvisional = async (req: AuthRequest, res: Response) => {
+  const enrollment = await prisma.enrollment.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId, isProvisional: true, status: 'provisional_finance_pending' },
     include: {
       student: true,
       salesUser: {
@@ -579,8 +580,8 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
   });
 
   if (!enrollment) {
-    res.status(404);
-    throw new Error('Provisional enrollment not found or already verified');
+    res.status(404).json({ success: false, message: 'Provisional enrollment not found or already reviewed' });
+    return null;
   }
 
   // Branch-level isolation check
@@ -591,17 +592,54 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
                         enrollment.salesUser?.department?.salesBranch?.id ||
                         enrollment.salesUser?.department?.opsBranch?.id;
     if ((studentBranch || salesBranch) && studentBranch !== req.user.branchId && salesBranch !== req.user.branchId) {
-      res.status(403);
-      throw new Error('Access denied: Unauthorized branch');
+      res.status(403).json({ success: false, message: 'Access denied: Unauthorized branch' });
+      return null;
     }
   }
+  return enrollment;
+};
 
-  // Create an invoice for the provisional amount (assuming passed in body or fixed)
-  const amountPaid = req.body.amount || 0;
+export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const amountPaid = Number(req.body.amount);
+  if (!Number.isFinite(amountPaid) || amountPaid <= 0) {
+    res.status(400).json({ success: false, message: 'Verified amount must be greater than 0' });
+    return;
+  }
 
-  if (amountPaid > 0) {
+  const enrollment = await loadPendingProvisional(req, res);
+  if (!enrollment) return;
+
+  const historyEntry = {
+    status: 'provisional_finance_verified',
+    changedAt: new Date().toISOString(),
+    changedBy: req.user.id,
+    actorName: req.user.name,
+    actorRole: req.user.role,
+    remarks: 'Provisional receipt verified by Finance',
+    amount: amountPaid
+  };
+
+  // Status change, invoice and payment succeed or fail together. The status
+  // update is conditional, so a second click or a concurrent reject cannot
+  // produce a duplicate invoice.
+  const updatedEnrollment = await prisma.$transaction(async (tx) => {
+    const moved = await tx.enrollment.updateMany({
+      where: { id: enrollment.id, status: 'provisional_finance_pending', isProvisional: true },
+      data: {
+        status: 'provisional_finance_verified',
+        receiptVerified: true,
+        receiptVerifiedAt: new Date(),
+        receiptVerifiedBy: req.user.id,
+        financeReviewedBy: req.user.id,
+        financeReviewedAt: new Date(),
+        financeRemarks: null,
+        statusHistory: appendHistory(enrollment.statusHistory, historyEntry)
+      }
+    });
+    if (moved.count === 0) return null;
+
     const invNo = `INV-PROV-${Date.now()}-${Math.floor(Math.random() * 9999)}`;
-    await prisma.invoice.create({
+    await tx.invoice.create({
       data: {
         organizationId: enrollment.organizationId,
         studentId: enrollment.studentId || undefined,
@@ -619,7 +657,7 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
           create: {
             organizationId: enrollment.organizationId,
             amount: amountPaid,
-            method: 'online', 
+            method: 'online',
             referenceNo: 'Provisional Admission',
             receivedBy: req.user.id,
             receivedAt: new Date(),
@@ -628,8 +666,8 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
         }
       }
     });
-    
-    await prisma.enrollmentPayment.create({
+
+    await tx.enrollmentPayment.create({
       data: {
         enrollmentId: enrollment.id,
         amount: amountPaid,
@@ -637,29 +675,14 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
         debitedAt: new Date()
       }
     });
-  }
 
-  const historyEntry = {
-    status: 'provisional_finance_verified',
-    changedAt: new Date().toISOString(),
-    changedBy: req.user.id,
-    actorName: req.user.name,
-    actorRole: req.user.role,
-    remarks: 'Provisional receipt verified by Finance'
-  };
-
-  const updatedEnrollment = await prisma.enrollment.update({
-    where: { id: enrollment.id },
-    data: {
-      status: 'provisional_finance_verified',
-      receiptVerified: true,
-      receiptVerifiedAt: new Date(),
-      receiptVerifiedBy: req.user.id,
-      statusHistory: {
-        push: historyEntry
-      }
-    }
+    return tx.enrollment.findUnique({ where: { id: enrollment.id } });
   });
+
+  if (!updatedEnrollment) {
+    res.status(409).json({ success: false, message: 'This provisional enrollment was already reviewed' });
+    return;
+  }
 
   // Notify sales user
   try {
@@ -670,6 +693,64 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
           userId: enrollment.salesUserId,
           title: 'Provisional Receipt Verified',
           message: `${enrollment.studentName}'s provisional fee receipt was verified by Finance. Please complete the student application.`,
+          type: 'general',
+          priority: 'high',
+          link: 'student-applications',
+        },
+      });
+    }
+  } catch (_) { /* non-critical */ }
+
+  res.json({ success: true, data: updatedEnrollment });
+});
+
+export const rejectProvisionalReceipt = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const remarks = typeof req.body.remarks === 'string' ? req.body.remarks.trim() : '';
+  if (!remarks) {
+    res.status(400).json({ success: false, message: 'A rejection reason is required' });
+    return;
+  }
+
+  const enrollment = await loadPendingProvisional(req, res);
+  if (!enrollment) return;
+
+  const historyEntry = {
+    status: 'provisional_finance_rejected',
+    changedAt: new Date().toISOString(),
+    changedBy: req.user.id,
+    actorName: req.user.name,
+    actorRole: req.user.role,
+    remarks,
+    // Keep the rejected receipt and amount so earlier attempts stay visible.
+    receiptUrl: enrollment.receiptUrl,
+    initialPaymentAmount: enrollment.initialPaymentAmount
+  };
+
+  const moved = await prisma.enrollment.updateMany({
+    where: { id: enrollment.id, status: 'provisional_finance_pending', isProvisional: true },
+    data: {
+      status: 'provisional_finance_rejected',
+      receiptVerified: false,
+      financeRemarks: remarks,
+      financeReviewedBy: req.user.id,
+      financeReviewedAt: new Date(),
+      statusHistory: appendHistory(enrollment.statusHistory, historyEntry)
+    }
+  });
+  if (moved.count === 0) {
+    res.status(409).json({ success: false, message: 'This provisional enrollment was already reviewed' });
+    return;
+  }
+  const updatedEnrollment = await prisma.enrollment.findUnique({ where: { id: enrollment.id } });
+
+  try {
+    if (enrollment.salesUserId) {
+      await prisma.notification.create({
+        data: {
+          organizationId: enrollment.organizationId,
+          userId: enrollment.salesUserId,
+          title: 'Provisional Receipt Rejected',
+          message: `${enrollment.studentName}'s provisional fee receipt was rejected by Finance. Reason: ${remarks}. Please re-upload the receipt.`,
           type: 'general',
           priority: 'high',
           link: 'student-applications',

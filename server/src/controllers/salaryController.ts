@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { getPayrollBranchId } from '../utils/payrollScope.js';
 
 export const getSalaryConfigs = asyncHandler(async (req: AuthRequest, res: Response) => {
   const configs = await prisma.salaryConfig.findMany({
@@ -196,10 +197,15 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
     endDate = new Date(Number(yearStr), Number(monthStr), 0, 23, 59, 59, 999);
   }
   
+  const branchId = getPayrollBranchId(req);
   const configs = await prisma.salaryConfig.findMany({
-    where: { organizationId, approvalStatus: 'approved' }
+    where: {
+      organizationId,
+      approvalStatus: 'approved',
+      user: { status: { not: 'resigned' }, ...(branchId ? { branchId } : {}) }
+    }
   });
-  
+
   const existingPayrolls = await prisma.payroll.findMany({
     where: { organizationId, month },
     select: { employeeId: true }

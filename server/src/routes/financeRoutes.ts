@@ -71,6 +71,7 @@ import {
   verifyReceipt,
   getProvisionalEnrollments,
   verifyProvisionalReceipt,
+  rejectProvisionalReceipt,
 } from '../controllers/financeEnrollmentController.js';
 import {
   getFinanceSalaryConfigs,
@@ -156,6 +157,7 @@ router.post('/enrollments/:id/verify-receipt', authorize('finance_admin', 'finan
 // Provisional Enrollment Finance Verification
 router.get('/enrollments/provisional', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getProvisionalEnrollments);
 router.post('/enrollments/:id/provisional-verify', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), verifyProvisionalReceipt);
+router.post('/enrollments/:id/provisional-reject', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), rejectProvisionalReceipt);
 
 // Reports
 router.get('/reports/income-expenditure', authorize('finance_admin', 'finance_sub_admin'), getIncomeExpenditureReport);

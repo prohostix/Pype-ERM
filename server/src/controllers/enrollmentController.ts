@@ -362,6 +362,18 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     throw new Error('Enrollment not found');
   }
 
+  // A provisional enrollment can only be completed after Finance verifies its
+  // receipt. Older provisional records in other statuses are left as they were.
+  if (enrollment.isProvisional && ['provisional_finance_pending', 'provisional_finance_rejected'].includes(enrollment.status)) {
+    res.status(409).json({
+      success: false,
+      message: enrollment.status === 'provisional_finance_rejected'
+        ? 'Finance rejected the payment receipt. Please re-upload the receipt before completing the application.'
+        : 'Finance has not verified the payment receipt yet. Please wait for verification before completing the application.'
+    });
+    return;
+  }
+
   // Find or create student user account for credentials
   const targetEmail = (email || enrollment.studentEmail || '').trim();
   let studentUser = targetEmail ? await prisma.user.findUnique({ where: { email: targetEmail } }) : null;

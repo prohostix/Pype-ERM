@@ -10,6 +10,7 @@ import { enqueueNotification } from '../utils/notificationQueue.js';
 import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
 import { sendPushNotification } from '../services/notification.service.js';
 import { emitToUser } from '../config/socket.js';
+import { historyList, appendHistory } from '../utils/statusHistory.js';
 
 // ─── Public: Validate invite token and get form data ─────────────────────────
 
@@ -351,6 +352,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
     sales_verification_pending: enrollments.filter((e: any) => e.status === 'sales_verification_pending').length,
     provisional_finance_pending: enrollments.filter((e: any) => e.status === 'provisional_finance_pending').length,
     provisional_finance_verified: enrollments.filter((e: any) => e.status === 'provisional_finance_verified').length,
+    provisional_finance_rejected: enrollments.filter((e: any) => e.status === 'provisional_finance_rejected').length,
     document_review: enrollments.filter((e: any) => e.status === 'document_review').length,
     finance_review: enrollments.filter((e: any) => e.status === 'finance_review').length,
     enrolled: enrollments.filter((e: any) => e.status === 'enrolled').length,
@@ -919,11 +921,7 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
 });
 
 
-// Prisma's list-only `push`, which stored {"push": {...}} instead of a list, so
-// accept either shape when reading and always write a real array.
-const historyList = (raw: any): any[] =>
-  Array.isArray(raw) ? raw : (raw && typeof raw === 'object' ? Object.values(raw) : []);
-const appendHistory = (raw: any, entry: any): any[] => [...historyList(raw), entry];
+// historyList / appendHistory live in utils/statusHistory.ts
 
 const isSalesAdminRejected = (e: any): boolean => {
   if (e?.status !== 'rejected' || e?.financeRemarks) return false;
@@ -1281,13 +1279,83 @@ export const resubmitPaymentReceipt = asyncHandler(async (req: AuthRequest, res:
     res.status(403).json({ success: false, message: 'You are not authorized to re-upload this payment receipt.' });
     return;
   }
-  if (enrollment.status !== 'rejected' || !(enrollment as any).financeRemarks) {
+  // Provisional enrollments rejected in the Provisional Verifications tab go
+  // back to that queue (the normal Finance queue refuses provisional ones).
+  const isProvisionalResubmit = enrollment.isProvisional && enrollment.status === 'provisional_finance_rejected';
+
+  if (!isProvisionalResubmit && (enrollment.status !== 'rejected' || !(enrollment as any).financeRemarks)) {
     res.status(409).json({ success: false, message: 'The payment receipt can only be re-uploaded after Finance has rejected the application.' });
     return;
   }
 
   const now = new Date();
-  const history = Array.isArray(enrollment.statusHistory) ? [...(enrollment.statusHistory as any[])] : [];
+
+  if (isProvisionalResubmit) {
+    // Sales may also correct the amount they claimed, since a wrong amount is a common rejection reason.
+    let correctedAmount: number | undefined;
+    if (req.body.initialPaymentAmount !== undefined && req.body.initialPaymentAmount !== '' && req.body.initialPaymentAmount !== null) {
+      const amt = Number(req.body.initialPaymentAmount);
+      if (!Number.isFinite(amt) || amt <= 0) {
+        res.status(400).json({ success: false, message: 'Payment amount must be greater than 0.' });
+        return;
+      }
+      correctedAmount = amt;
+    }
+
+    const history = appendHistory(enrollment.statusHistory, {
+      status: 'provisional_finance_pending',
+      changedAt: now.toISOString(),
+      changedBy: req.user.id,
+      actorName: req.user.name,
+      actorRole: req.user.role,
+      remarks: 'Provisional payment receipt re-uploaded by Sales and sent back to Finance for verification.',
+      receiptUrl: receiptUrl.trim(),
+      ...(correctedAmount !== undefined ? { initialPaymentAmount: correctedAmount } : {}),
+    });
+
+    // Only move it if it is still rejected (guards against a double submit).
+    const moved = await prisma.enrollment.updateMany({
+      where: { id, status: 'provisional_finance_rejected', isProvisional: true },
+      data: {
+        receiptUrl: receiptUrl.trim(),
+        status: 'provisional_finance_pending',
+        financeRemarks: null,
+        receiptVerified: false,
+        ...(correctedAmount !== undefined ? { initialPaymentAmount: correctedAmount } : {}),
+        statusHistory: history,
+      } as any,
+    });
+    if (moved.count === 0) {
+      res.status(409).json({ success: false, message: 'This receipt was already re-submitted.' });
+      return;
+    }
+    const updated = await prisma.enrollment.findUnique({ where: { id } });
+
+    try {
+      const financeAdmins = await prisma.user.findMany({
+        where: { organizationId: req.user.organizationId, role: { in: ['finance_admin', 'finance_sub_admin'] }, status: 'active' },
+        select: { id: true },
+      });
+      for (const admin of financeAdmins) {
+        await prisma.notification.create({
+          data: {
+            organizationId: req.user.organizationId,
+            userId: admin.id,
+            title: 'Provisional Receipt Re-uploaded',
+            message: `${enrollment.studentName}'s provisional payment receipt was re-uploaded by ${req.user.name}. Please verify it.`,
+            type: 'general',
+            priority: 'medium',
+            link: 'provisional_verifications',
+          },
+        });
+      }
+    } catch (_) { /* non-critical */ }
+
+    res.json({ success: true, message: 'Payment receipt re-uploaded and sent to Finance.', data: updated });
+    return;
+  }
+
+  const history = [...historyList(enrollment.statusHistory)];
   history.push({
     status: 'finance_review',
     actorId: req.user.id,

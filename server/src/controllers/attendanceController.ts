@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { getScopedBranchId, isUserInScope } from '../utils/branchScope.js';
 import { broadcastNotification } from './notificationController.js';
 import fs from 'fs';
 import path from 'path';
@@ -605,7 +606,12 @@ export const getMonthlyLateSummary = asyncHandler(async (req: AuthRequest, res: 
   const endDate = new Date(year, month, 0, 23, 59, 59);
 
   const lateRecords = await prisma.attendance.findMany({
-    where: { organizationId: orgId, status: 'late', date: { gte: startDate, lte: endDate } },
+    where: {
+      organizationId: orgId,
+      status: 'late',
+      date: { gte: startDate, lte: endDate },
+      ...(getScopedBranchId(req) ? { user: { branchId: getScopedBranchId(req)! } } : {})
+    },
     include: { user: { select: { id: true, name: true, email: true } } },
     orderBy: { date: 'asc' }
   });
@@ -630,7 +636,9 @@ export const getAttendancesData = async (req: AuthRequest, forceStatus?: string)
   const userFilters: any = { role: { not: 'student' }, requiresAttendance: true };
 
   if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin', 'general_manager'].includes(req.user.role)) {
-    // See all users
+    // See all users — limited to their branch when HR is assigned one (or a global admin picks one)
+    const scopedBranchId = getScopedBranchId(req);
+    if (scopedBranchId) userFilters.branchId = scopedBranchId;
   } else if (req.user.role === 'branch_manager' && req.user.branchId) {
     userFilters.branchId = req.user.branchId;
   } else if (req.user.role === 'center_admin') {
@@ -892,7 +900,7 @@ export const getAttendanceStats = asyncHandler(async (req: AuthRequest, res: Res
 
 export const getAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
   const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id }, include: { user: true } });
-  if (!attendance || attendance.organizationId !== req.user.organizationId) {
+  if (!attendance || attendance.organizationId !== req.user.organizationId || !(await isUserInScope(req, attendance.employeeId))) {
     res.status(404).json({ success: false, message: 'Attendance record not found' });
     return;
   }
@@ -901,7 +909,7 @@ export const getAttendance = asyncHandler(async (req: AuthRequest, res: Response
 
 export const getAttendanceById = asyncHandler(async (req: AuthRequest, res: Response) => {
   const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id }, include: { user: true } });
-  if (!attendance) {
+  if (!attendance || attendance.organizationId !== req.user.organizationId || !(await isUserInScope(req, attendance.employeeId))) {
     res.status(404).json({ success: false, message: 'Attendance record not found' });
     return;
   }
@@ -918,6 +926,11 @@ export const createAttendance = asyncHandler(async (req: AuthRequest, res: Respo
   const data = { ...req.body, organizationId: orgId };
   if (!data.employeeId || !data.date) {
     res.status(400).json({ success: false, message: 'Employee ID and date are required.' });
+    return;
+  }
+  delete data.branchId;
+  if (req.user.organizationId && !(await isUserInScope(req, data.employeeId))) {
+    res.status(403).json({ success: false, message: 'You can only mark attendance for employees in your branch.' });
     return;
   }
 
@@ -1018,7 +1031,7 @@ export const markAttendance = createAttendance;
 
 export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
   const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id } });
-  if (!attendance || attendance.organizationId !== req.user.organizationId) {
+  if (!attendance || attendance.organizationId !== req.user.organizationId || !(await isUserInScope(req, attendance.employeeId))) {
     res.status(404).json({ success: false, message: 'Attendance record not found' });
     return;
   }
@@ -1065,7 +1078,7 @@ export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Respo
 
 export const deleteAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
   const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id } });
-  if (!attendance) {
+  if (!attendance || attendance.organizationId !== req.user.organizationId || !(await isUserInScope(req, attendance.employeeId))) {
     res.status(404).json({ success: false, message: 'Attendance record not found' });
     return;
   }
@@ -1124,7 +1137,11 @@ export const getActivityReport = asyncHandler(async (req: AuthRequest, res: Resp
   };
 
   if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin', 'general_manager'].includes(req.user.role)) {
-    // See all users
+    // See all users — limited to their branch when HR is assigned one (or a global admin picks one)
+    const scopedBranchId = getScopedBranchId(req);
+    if (scopedBranchId) userFilters.branchId = scopedBranchId;
+  } else if (req.user.role === 'branch_manager' && req.user.branchId) {
+    userFilters.branchId = req.user.branchId;
   } else if (req.user.role === 'center_admin') {
     userFilters.OR = [];
     if (req.user.branchId) userFilters.OR.push({ branchId: req.user.branchId });
@@ -1373,7 +1390,7 @@ export const getAttendanceByUserId = asyncHandler(async (req: AuthRequest, res: 
   const isSelf = req.user.id === userId;
   const isPrivileged = ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager', 'center_admin'].includes(req.user.role);
   
-  if (!isSelf && !isPrivileged) {
+  if (!isSelf && (!isPrivileged || !(await isUserInScope(req, userId)))) {
     res.status(403).json({ success: false, message: "Not authorized to view this user's attendance" });
     return;
   }
@@ -1416,7 +1433,7 @@ export const getMonthlyAttendanceSummary = asyncHandler(async (req: AuthRequest,
   const isSelf = req.user.id === userId;
   const isPrivileged = ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager', 'center_admin'].includes(req.user.role);
   
-  if (!isSelf && !isPrivileged) {
+  if (!isSelf && (!isPrivileged || !(await isUserInScope(req, userId)))) {
     res.status(403).json({ success: false, message: "Not authorized to view this user's attendance" });
     return;
   }
@@ -1769,7 +1786,7 @@ export const importAttendance = asyncHandler(async (req: AuthRequest, res: Respo
           }
 
           const user = await prisma.user.findFirst({
-            where: { email, organizationId: orgId }
+            where: { email, organizationId: orgId, ...(getScopedBranchId(req) ? { branchId: getScopedBranchId(req)! } : {}) }
           });
 
           if (!user) {
@@ -1838,6 +1855,9 @@ export const exportAttendance = asyncHandler(async (req: AuthRequest, res: Respo
   if (employeeId && employeeId !== 'all') {
     where.employeeId = employeeId;
   }
+
+  const scopedBranchId = getScopedBranchId(req);
+  if (scopedBranchId) where.user = { branchId: scopedBranchId };
   
   if (startDate || endDate) {
     where.date = {};

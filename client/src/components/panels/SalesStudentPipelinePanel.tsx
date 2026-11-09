@@ -10,6 +10,7 @@ import api from '@/lib/api';
 import { StudentsPanel } from './StudentsPanel';
 import { useAuth } from '@/hooks/useAuth';
 import { uploadFormFile } from '@/lib/uploadFile';
+import { toast } from 'sonner';
 
 interface StatusHistoryEntry {
   status: string;
@@ -43,6 +44,8 @@ interface Enrollment {
   financeReviewer?: { name: string; email: string };
   isUpgrade?: boolean;
   previousProgramId?: string;
+  isProvisional?: boolean;
+  initialPaymentAmount?: number;
   student?: any;
   documents?: any[];
   photo?: string;
@@ -67,6 +70,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.
   receipt_submitted: { label: 'Receipt Submitted & Ops Pending', color: 'bg-amber-100 text-amber-700 border-amber-200', icon: <Clock className="w-3 h-3" /> },
   provisional_finance_pending: { label: 'Prov. Fin. Pending', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: <Clock className="w-3 h-3" /> },
   provisional_finance_verified: { label: 'Prov. Fin. Verified', color: 'bg-green-100 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
+  provisional_finance_rejected: { label: 'Prov. Receipt Rejected', color: 'bg-red-100 text-red-700 border-red-200', icon: <XCircle className="w-3 h-3" /> },
   document_review: { label: 'Ops Review', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: <Clock className="w-3 h-3" /> },
   finance_review: { label: 'Finance Review', color: 'bg-blue-100 text-blue-700 border-blue-200', icon: <Clock className="w-3 h-3" /> },
   enrolled: { label: 'Enrolled', color: 'bg-green-100 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
@@ -107,12 +111,12 @@ export function SalesStudentPipelinePanel() {
   // Receipt-only re-upload after a Finance rejection (nothing else is editable)
   const [receiptTarget, setReceiptTarget] = useState<Enrollment | null>(null);
   const [newReceiptUrl, setNewReceiptUrl] = useState('');
+  const [newReceiptAmount, setNewReceiptAmount] = useState('');
   const [uploadingReceipt, setUploadingReceipt] = useState(false);
   const [submittingReceipt, setSubmittingReceipt] = useState(false);
 
   const canReuploadReceipt = (e: Enrollment) =>
-    e.status === 'rejected' &&
-    !!e.financeRemarks &&
+    (e.status === 'provisional_finance_rejected' || (e.status === 'rejected' && !!e.financeRemarks)) &&
     !!user?.id &&
     (e.salesUserId === user.id || ['sales_admin', 'superadmin', 'org_admin', 'branch_manager'].includes(user?.role || ''));
 
@@ -154,6 +158,7 @@ export function SalesStudentPipelinePanel() {
     sales_verification_pending: baseFiltered.filter(e => e.status === 'sales_verification_pending').length,
     provisional_finance_pending: baseFiltered.filter(e => e.status === 'provisional_finance_pending').length,
     provisional_finance_verified: baseFiltered.filter(e => e.status === 'provisional_finance_verified').length,
+    provisional_finance_rejected: baseFiltered.filter(e => e.status === 'provisional_finance_rejected').length,
     document_review: baseFiltered.filter(e => e.status === 'document_review').length,
     finance_review: baseFiltered.filter(e => e.status === 'finance_review').length,
     enrolled: baseFiltered.filter(e => e.status === 'enrolled').length,
@@ -232,6 +237,7 @@ export function SalesStudentPipelinePanel() {
             { key: 'sales_verification_pending', label: 'To Verify', color: 'text-purple-600' },
             { key: 'provisional_finance_pending', label: 'Prov. Pending', color: 'text-yellow-600' },
             { key: 'provisional_finance_verified', label: 'Prov. Verified', color: 'text-green-600' },
+            { key: 'provisional_finance_rejected', label: 'Prov. Rejected', color: 'text-red-600' },
             { key: 'document_review', label: 'Ops Review', color: 'text-yellow-600' },
             { key: 'finance_review', label: 'Finance', color: 'text-blue-600' },
             { key: 'enrolled', label: 'Enrolled', color: 'text-green-600' },
@@ -415,6 +421,7 @@ export function SalesStudentPipelinePanel() {
                             onClick={(evt) => {
                               evt.stopPropagation();
                               setNewReceiptUrl('');
+                              setNewReceiptAmount(e.initialPaymentAmount != null ? String(e.initialPaymentAmount) : '');
                               setReceiptTarget(e);
                             }}
                           >
@@ -488,6 +495,14 @@ export function SalesStudentPipelinePanel() {
                       {(e.status === 'ops_rejected' || e.status === 'rejected') && (
                         <p className="text-xs text-red-600 mt-1 font-medium">
                           ❌ {e.departmentRemarks || e.financeRemarks || 'Application rejected — review remarks and resubmit'}
+                        </p>
+                      )}
+                      {e.status === 'provisional_finance_pending' && (
+                        <p className="text-xs text-yellow-600 mt-1 font-medium">💰 Waiting for Finance to verify the provisional payment receipt</p>
+                      )}
+                      {e.status === 'provisional_finance_rejected' && (
+                        <p className="text-xs text-red-600 mt-1 font-medium">
+                          ❌ Finance rejected the provisional receipt: {e.financeRemarks || 're-upload the payment receipt'}
                         </p>
                       )}
                     </div>
@@ -565,8 +580,21 @@ export function SalesStudentPipelinePanel() {
                 <p>{receiptTarget.financeRemarks}</p>
               </div>
               <p className="text-xs text-muted-foreground">
-                Only the payment receipt can be changed. All other details are locked.
+                {receiptTarget.status === 'provisional_finance_rejected'
+                  ? 'Upload a new receipt and correct the paid amount if needed. All other details are locked.'
+                  : 'Only the payment receipt can be changed. All other details are locked.'}
               </p>
+              {receiptTarget.status === 'provisional_finance_rejected' && (
+                <div className="space-y-1.5">
+                  <Label>Amount Paid (₹)</Label>
+                  <Input
+                    type="number"
+                    min="1"
+                    value={newReceiptAmount}
+                    onChange={(ev) => setNewReceiptAmount(ev.target.value)}
+                  />
+                </div>
+              )}
               <div className="space-y-1.5">
                 <Label>New Payment Receipt / Screenshot</Label>
                 <Input
@@ -597,12 +625,19 @@ export function SalesStudentPipelinePanel() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setReceiptTarget(null)}>Cancel</Button>
             <Button
-              disabled={!newReceiptUrl || uploadingReceipt || submittingReceipt}
+              disabled={
+                !newReceiptUrl || uploadingReceipt || submittingReceipt ||
+                (receiptTarget?.status === 'provisional_finance_rejected' && !(Number(newReceiptAmount) > 0))
+              }
               onClick={async () => {
                 if (!receiptTarget) return;
                 setSubmittingReceipt(true);
                 try {
-                  await api.put(`/sales/student-applications/${receiptTarget.id}/resubmit-receipt`, { receiptUrl: newReceiptUrl });
+                  const isProv = receiptTarget.status === 'provisional_finance_rejected';
+                  await api.put(`/sales/student-applications/${receiptTarget.id}/resubmit-receipt`, {
+                    receiptUrl: newReceiptUrl,
+                    ...(isProv ? { initialPaymentAmount: Number(newReceiptAmount) } : {}),
+                  });
                   toast.success('Receipt re-uploaded and sent to Finance');
                   setReceiptTarget(null);
                   fetchPipeline();

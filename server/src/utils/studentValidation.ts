@@ -187,7 +187,8 @@ export async function checkStudentOrEnrollmentExists(
     const pipelineStatuses = [
       'payment_pending', 'submitted', 'receipt_submitted', 'document_review',
       'finance_review', 'sales_admin_review', 'ops_upgrade_verification',
-      'sales_verification_pending', 'provisional_finance_pending', 'provisional_finance_verified'
+      'sales_verification_pending', 'provisional_finance_pending', 'provisional_finance_verified',
+      'provisional_finance_rejected'
     ];
 
     // If the student has already completed their program or dropped out, an 'enrolled' status on their past program
