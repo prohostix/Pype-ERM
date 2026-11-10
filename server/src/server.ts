@@ -69,6 +69,7 @@ import facultyPortalRoutes from './routes/facultyPortalRoutes.js';
 import academicCenterRoutes from './routes/academicCenterRoutes.js';
 import academicClassRoutes from './routes/academicClassRoutes.js';
 import academicBatchRoutes from './routes/academicBatchRoutes.js';
+import aiReportRoutes from './modules/ai-reports/routes.js';
 
 const app: Application = express();
 
@@ -213,6 +214,7 @@ app.use(`/api/${API_VERSION}/documents`, documentRoutes);
 app.use(`/api/${API_VERSION}/meetings`, meetingRoutes);
 app.use(`/api/${API_VERSION}/exams`, examRoutes);
 app.use(`/api/${API_VERSION}/communications`, communicationRoutes);
+app.use(`/api/${API_VERSION}/ai-reports`, aiReportRoutes);
 app.use(`/api/${API_VERSION}/fcm-token`, fcmTokenRoutes);
 app.use(`/api/${API_VERSION}/app-releases`, appReleaseRoutes);
 app.use(`/api/${API_VERSION}/faculties`, facultyRoutes);

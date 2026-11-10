@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ReactElement } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 import { ModernCEODashboard } from './ModernCEODashboard';
@@ -15,6 +15,7 @@ import { ModernStaffPortal } from './ModernStaffPortal';
 import { ModernBranchManagerDashboard } from './ModernBranchManagerDashboard';
 import { ModernStudentPortal } from './ModernStudentPortal';
 import { ModernFacultyPortal } from './ModernFacultyPortal';
+import { AIReportBuilder } from '@/components/ai-reports/AIReportBuilder';
 
 
 interface DashboardProps {
@@ -96,11 +97,17 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
     fetchDeptAndSubDept();
   }, [useDepartmentDashboard, user]);
 
+  // "AI Reports" tab — Org Admin, CEO and General Manager only (the server enforces this too).
+  // The panel name only picks which datasets are offered.
+  const aiAllowed = ['org_admin', 'ceo', 'general_manager'].includes(user?.role || '');
+  const ai = (panel: string, dashboard: ReactElement) =>
+    (initialTab === 'ai_reports' && aiAllowed ? <AIReportBuilder panel={panel} /> : dashboard);
+
   const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student';
 
   // Branch managers always get the branch dashboard — skip all other routing
   if (isBranchManager) {
-    return <ModernBranchManagerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('branch', <ModernBranchManagerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   // While fetching department type, don't render anything yet to avoid flash
@@ -120,33 +127,33 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
     if (departmentType) {
       // Regular employees (not sub-dept managers) always get the employee dashboard, except collections and sales
       if (!isSubDeptManager && departmentType !== 'collections' && departmentType !== 'sales') {
-        return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+        return ai('employee', <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
       }
       // Sub-dept managers and department employees get the department dashboard
       switch (departmentType) {
         case 'hr':
-          return <ModernHRDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+          return ai('hr', <ModernHRDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
         case 'finance':
-          return <ModernFinanceDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+          return ai('finance', <ModernFinanceDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
         case 'operations':
-          return <ModernOpsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+          return ai('ops', <ModernOpsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
         case 'sales':
-          return <ModernSalesDashboard initialTab={initialTab} isSubDeptManager={isSubDeptManager} onNavigate={onNavigateToTable} />;
+          return ai('sales', <ModernSalesDashboard initialTab={initialTab} isSubDeptManager={isSubDeptManager} onNavigate={onNavigateToTable} />);
         case 'collections':
-          return <ModernCollectionsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+          return ai('collections', <ModernCollectionsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
         case 'ceo':
         case 'general_manager':
-          return <ModernCEODashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+          return ai('ceo', <ModernCEODashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
         case 'branch_manager':
-          return <ModernBranchManagerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+          return ai('branch', <ModernBranchManagerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
         default:
-          return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+          return ai('employee', <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
       }
     }
 
     // No department type found — sub-dept manager with unknown parent dept type
     // Show employee dashboard (it has a My Sub-Dept tab for sub-dept managers)
-    return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('employee', <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (user?.role === 'superadmin') {
@@ -154,53 +161,53 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
   }
 
   if (user?.role === 'ceo' || user?.role === 'general_manager') {
-    return <ModernCEODashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('ceo', <ModernCEODashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (user?.role === 'branch_manager') {
-    return <ModernBranchManagerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('branch', <ModernBranchManagerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (user?.role === 'org_admin') {
-    return <ModernOrgAdminDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('org_admin', <ModernOrgAdminDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (user?.role === 'faculty') {
-    return <ModernFacultyPortal initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('faculty', <ModernFacultyPortal initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (['finance_admin', 'finance_sub_admin', 'finance'].includes(user?.role || '')) {
-    return <ModernFinanceDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('finance', <ModernFinanceDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (['ops_admin', 'ops_sub_admin'].includes(user?.role || '')) {
-    return <ModernOpsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('ops', <ModernOpsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (user?.role === 'hr_admin' || user?.role === 'hr_sub_admin') {
-    return <ModernHRDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('hr', <ModernHRDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (['sales_admin', 'sales_sub_admin', 'sales'].includes(user?.role || '')) {
-    return <ModernSalesDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('sales', <ModernSalesDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (['collections_admin', 'collections'].includes(user?.role || '')) {
-    return <ModernCollectionsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('collections', <ModernCollectionsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (user?.role === 'student') {
-    return <ModernStudentPortal initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('student', <ModernStudentPortal initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (user?.role === 'center_admin') {
-    return <ModernStudyCenterDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('center', <ModernStudyCenterDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   if (user?.role === 'employee') {
-    return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+    return ai('employee', <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
   }
 
   // Fallback for other staff/admin roles
-  return <ModernStaffPortal />;
+  return ai('staff', <ModernStaffPortal />);
 }

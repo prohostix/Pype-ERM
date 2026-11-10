@@ -97,6 +97,7 @@ export function getExecutiveNavItems(role?: string) {
   return [
     { id: '__exec_section', label: 'Executive', isSection: true },
     { id: 'dashboard', label: 'Executive Overview' },
+    { id: 'ai_reports', label: '✨ AI Reports' },
     { id: 'performance', label: 'Performance' },
     { id: 'kpi-kra', label: 'KPI / KRA Report' },
     { id: 'escalations', label: 'Escalations' },

@@ -112,6 +112,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
 
     // Real System Audit Logs
     const recentAudits = await prisma.auditLog.findMany({
+      where: { NOT: { action: { startsWith: 'AI_' } } }, // AI report questions would crowd out real activity
       take: 8,
       orderBy: { timestamp: 'desc' },
       include: {
@@ -546,7 +547,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
 
       // 8. Recent Organization Activity Logs (combining audits, admissions, payments)
       const recentOrgAudits = await prisma.auditLog.findMany({
-        where: { organizationId: targetOrgId },
+        where: { organizationId: targetOrgId, NOT: { action: { startsWith: 'AI_' } } }, // hide AI report questions
         take: 5,
         orderBy: { timestamp: 'desc' },
         include: {

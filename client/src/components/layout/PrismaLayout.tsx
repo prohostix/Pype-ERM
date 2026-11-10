@@ -26,7 +26,8 @@ import {
   Video,
   BookOpen,
   Target,
-  Activity
+  Activity,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -120,6 +121,7 @@ export function PrismaLayout({
     switch (tableId) {
       case 'dashboard':
       case 'overview': return <LayoutDashboard className={iconClass} />;
+      case 'ai_reports': return <Sparkles className={iconClass} />;
       case 'usage': return <Activity className={iconClass} />;
       case 'audit_logs': return <ShieldCheck className={iconClass} />;
       case 'classes':

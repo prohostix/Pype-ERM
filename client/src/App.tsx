@@ -26,6 +26,9 @@ import { toast } from 'sonner';
 
 type ViewMode = 'dashboard' | 'table';
 
+/** Roles that can use AI Reports (the server enforces the same list) */
+const AI_REPORT_ROLES = ['org_admin', 'ceo', 'general_manager'];
+
 const EMPLOYEE_NAV_ITEMS: TableItem[] = [
   { id: 'dashboard', label: 'Dashboard' },
   { id: 'tasks', label: 'My Tasks' },
@@ -51,6 +54,8 @@ const STUDENT_NAV_ITEMS: TableItem[] = [
 
 // Maps sidebar table IDs to the dashboard tab they should open
 const TABLE_TO_TAB: Record<string, string> = {
+  // AI Reports (Org Admin, CEO, General Manager)
+  ai_reports: 'ai_reports',
   // Superadmin
   usage: 'usage',
   audit_logs: 'usage',
@@ -330,7 +335,7 @@ function App() {
   // Route to public pages if needed — NOTE: useMemo/useEffect must be declared before these returns
   const hasInviteToken = urlParams.has('token');
 
-  const tables = useMemo(() => getAvailableTables(), [user?.role, (user as any)?.subDepartmentId, (user as any)?.isBranchManager, deptType, isCollectionsOverseer]);
+  const tables = useMemo(() => withAIReports(getAvailableTables()), [user?.role, (user as any)?.subDepartmentId, (user as any)?.isBranchManager, deptType, isCollectionsOverseer]);
 
   // Validate activeTable against allowed tables for the user
   useEffect(() => {
@@ -392,6 +397,15 @@ function App() {
   }
 
   // Define available tables based on user role
+  /** AI Reports menu item: only Org Admin, CEO and General Manager (placed after the first menu item) */
+  function withAIReports(items: TableItem[]): TableItem[] {
+    if (!user || !AI_REPORT_ROLES.includes(user.role)) return items.filter((t) => t.id !== 'ai_reports');
+    if (items.some((t) => t.id === 'ai_reports')) return items;
+    const first = items.findIndex((t) => !t.isSection);
+    const at = first === -1 ? items.length : first + 1;
+    return [...items.slice(0, at), { id: 'ai_reports', label: '✨ AI Reports' }, ...items.slice(at)];
+  }
+
   function getAvailableTables(): TableItem[] {
     if (!user) return [];
     
