@@ -245,6 +245,50 @@ export const deleteOrganization = asyncHandler(async (req: AuthRequest, res: Res
   res.status(200).json({ success: true, data: {} });
 });
 
+// Features Superadmin can switch on/off for one organization without opening the full plan dialog.
+const TOGGLEABLE_FEATURES = ['study_abroad_partners'];
+// What the org menus assume when nothing has been configured for an organization.
+const DEFAULT_ORG_FEATURES = ['academic_partners', 'academic_centers'];
+
+export const setOrganizationFeature = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { feature, enabled } = req.body;
+  if (!TOGGLEABLE_FEATURES.includes(feature)) {
+    res.status(400).json({ success: false, message: `feature must be one of: ${TOGGLEABLE_FEATURES.join(', ')}` });
+    return;
+  }
+  if (typeof enabled !== 'boolean') {
+    res.status(400).json({ success: false, message: 'enabled must be true or false' });
+    return;
+  }
+
+  const org = await prisma.organization.findUnique({ where: { id: req.params.id }, include: { license: true } });
+  if (!org) {
+    res.status(404).json({ success: false, message: 'Organization not found' });
+    return;
+  }
+
+  const meta: any = { ...((org.metadata as any) || {}) };
+  // The feature list in force today (same precedence the menus use), so toggling one feature
+  // never changes the others — including the default Academic features of an unconfigured org.
+  const current: string[] =
+    Array.isArray(meta.planConfig?.features) ? meta.planConfig.features
+    : Array.isArray(meta.billingConfig?.features) ? meta.billingConfig.features
+    : (Array.isArray(org.license?.features) && org.license!.features.length > 0 ? org.license!.features : DEFAULT_ORG_FEATURES);
+  const next = enabled ? Array.from(new Set([...current, feature])) : current.filter(f => f !== feature);
+
+  // Keep planConfig and billingConfig in step, as the plan dialog does. If neither exists yet,
+  // planConfig carries just the feature list (prices fall back to billingConfig/license as before).
+  if (meta.planConfig || !meta.billingConfig) meta.planConfig = { ...(meta.planConfig || {}), features: next };
+  if (meta.billingConfig) meta.billingConfig = { ...meta.billingConfig, features: next };
+
+  const updated = await prisma.organization.update({
+    where: { id: org.id },
+    data: { metadata: meta },
+    select: { id: true, metadata: true },
+  });
+  res.status(200).json({ success: true, data: { id: updated.id, metadata: updated.metadata, feature, enabled } });
+});
+
 export const assignLicense = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { 
     planName, 

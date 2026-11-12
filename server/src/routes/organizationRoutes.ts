@@ -6,6 +6,7 @@ import {
   updateOrganization,
   deleteOrganization,
   assignLicense,
+  setOrganizationFeature,
   getOrgInquiries,
   updateOrgInquiryStatus,
   getEnrollmentLinkConfig,
@@ -73,6 +74,7 @@ router
   .delete(authorize('superadmin'), auditLog('delete', 'Organization'), deleteOrganization);
 
 router.put('/:id/license', authorize('superadmin'), assignLicense);
+router.put('/:id/features', authorize('superadmin'), setOrganizationFeature);
 router.get('/:id/month-enrollments', authorize('superadmin', 'org_admin'), getOrgMonthEnrollments);
 router.post('/:id/generate-bill', authorize('superadmin'), generateOrgBill);
 router.patch('/:id/bills/:billId/status', authorize('superadmin'), updateBillStatus);

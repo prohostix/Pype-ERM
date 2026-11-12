@@ -32,6 +32,7 @@ import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPan
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { FinanceCenterVerificationPanel } from '@/components/panels/FinanceCenterVerificationPanel';
 import { WalletTopUpsPanel } from '@/components/panels/WalletTopUpsPanel';
+import { StudyAbroadPartnersPage } from '@/components/panels/StudyAbroadPartnersPage';
 import { FinanceEnrollmentsPanel } from '@/components/panels/FinanceEnrollmentsPanel';
 import { ProvisionalFinancePanel } from '@/components/panels/ProvisionalFinancePanel';
 import { IncomeExpenditurePanel } from '@/components/panels/IncomeExpenditurePanel';
@@ -82,6 +83,7 @@ export function ModernFinanceDashboard({ initialTab, onNavigate }: { initialTab?
       case 'bill_receipts': return <BillReceiptPanel />;
       case 'payment_gateway': return <PaymentGatewayPanel />;
       case 'wallet_topup': return <WalletTopUpsPanel />;
+      case 'study_abroad_partners': return <StudyAbroadPartnersPage />;
       case 'student_collections': return <CollectionsPanel />;
       case 'fee_structures': return <FeeStructuresPanel />;
       case 'discounts': return <DiscountsPanel />;
@@ -139,6 +141,7 @@ export function getFinanceNavItems() {
     { id: 'bill_receipts', label: 'Bill Receipts' },
     { id: 'payment_gateway', label: 'Payment Gateway' },
     { id: 'wallet_topup', label: 'Wallet Top-up' },
+    { id: 'study_abroad_partners', label: 'Study Abroad Partners' },
     
     { id: '__billing_section', label: '📄 Billing', isSection: true },
     { id: 'invoices', label: 'Invoices' },

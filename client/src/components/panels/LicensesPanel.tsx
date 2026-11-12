@@ -19,7 +19,8 @@ import {
   UserCheck,
   Download,
   History,
-  Loader2
+  Loader2,
+  Globe2
 } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { Card, CardContent } from '@/components/ui/card';
@@ -194,6 +195,7 @@ export function LicensesPanel() {
     directPerEnrollmentFee: '0',
     academic_centers: true,
     academicCenterBasePrice: '0',
+    study_abroad_partners: false,
   });
 
   // Statement / Invoice Dialog State
@@ -274,6 +276,8 @@ export function LicensesPanel() {
 
     const hasAcademicPartners = features.includes('academic_partners');
     const hasAcademicCenters = features.includes('academic_centers');
+    // Opt-in: only enabled when Superadmin switches it on (never part of the default feature set).
+    const hasStudyAbroad = features.includes('study_abroad_partners');
 
     // Academic Partner: Base value + Per enrollment value
     const academicPartnerBasePrice = planConfig.academicPartnerBasePrice !== undefined
@@ -332,6 +336,7 @@ export function LicensesPanel() {
       academicCenterBasePrice,
       hasAcademicPartners,
       hasAcademicCenters,
+      hasStudyAbroad,
       studentCount: totalStudentCount,
       partnerStudentCount,
       directStudentCount,
@@ -357,6 +362,7 @@ export function LicensesPanel() {
       directPerEnrollmentFee: details.directPerEnrollmentFee.toString(),
       academic_centers: details.hasAcademicCenters,
       academicCenterBasePrice: details.academicCenterBasePrice.toString(),
+      study_abroad_partners: details.hasStudyAbroad,
     });
     setConfigDialogOpen(true);
   };
@@ -369,6 +375,7 @@ export function LicensesPanel() {
     const features: string[] = [];
     if (planForm.academic_partners) features.push('academic_partners');
     if (planForm.academic_centers) features.push('academic_centers');
+    if (planForm.study_abroad_partners) features.push('study_abroad_partners');
 
     const payload = {
       planName: planForm.planName.trim() || `${selectedOrg.name} Plan`,
@@ -840,6 +847,7 @@ export function LicensesPanel() {
                     <TableHead className="font-semibold text-xs text-center">Academic Partner</TableHead>
                     <TableHead className="font-semibold text-xs text-center">Direct Admissions</TableHead>
                     <TableHead className="font-semibold text-xs text-center">Academic Center</TableHead>
+                    <TableHead className="font-semibold text-xs text-center">Study Abroad</TableHead>
                     <TableHead className="font-semibold text-xs text-right">Enrollments ({selectedMonthLabel})</TableHead>
                     <TableHead className="font-semibold text-xs text-right">{selectedMonthLabel} Bill</TableHead>
                     <TableHead className="font-semibold text-xs text-center">Cycle Status</TableHead>
@@ -915,6 +923,19 @@ export function LicensesPanel() {
                                 Base: ₹{details.academicCenterBasePrice.toLocaleString('en-IN')}
                               </span>
                             </div>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] text-slate-400 bg-slate-100 border border-slate-200 dark:bg-slate-800 dark:text-slate-500">
+                              <X className="w-3 h-3" /> Disabled
+                            </span>
+                          )}
+                        </TableCell>
+
+                        {/* Study Abroad Partner access */}
+                        <TableCell className="text-center">
+                          {details.hasStudyAbroad ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-sky-50 text-sky-700 border border-sky-200 dark:bg-sky-950/40 dark:text-sky-300">
+                              <Check className="w-3 h-3 text-sky-600" /> Enabled
+                            </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] text-slate-400 bg-slate-100 border border-slate-200 dark:bg-slate-800 dark:text-slate-500">
                               <X className="w-3 h-3" /> Disabled
@@ -1382,6 +1403,27 @@ export function LicensesPanel() {
                       </div>
                     </div>
                   )}
+                </div>
+
+                {/* Study Abroad Partner: access switch (no pricing) */}
+                <div className="rounded-xl border border-sky-200/90 bg-sky-50/30 dark:bg-sky-950/20 dark:border-sky-900/60 p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                        <Globe2 className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-foreground">Study Abroad Partner</h4>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          Lets this organization's admins create study abroad partners, receive their student applications and manage their wallets. Turn off to block all access; existing data is kept.
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={planForm.study_abroad_partners}
+                      onCheckedChange={checked => setPlanForm({ ...planForm, study_abroad_partners: checked })}
+                    />
+                  </div>
                 </div>
 
                 {/* FEATURE 2: Direct Student Admissions Pricing */}

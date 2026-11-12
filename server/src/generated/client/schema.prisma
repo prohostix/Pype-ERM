@@ -64,6 +64,9 @@ model Organization {
   paymentSchedules           PaymentSchedule[]
   payrolls                   Payroll[]
   payrollBatches             PayrollBatch[]
+  studyAbroadPartners        StudyAbroadPartner[]
+  countries                  Country[]
+  studyAbroadEnrollments     StudyAbroadEnrollment[]
   polls                      Poll[]
   programs                   Program[]
   programAllocations         ProgramAllocation[]
@@ -157,17 +160,17 @@ model Department {
 
 model User {
   studentBatchTransfers         StudentBatchTransfer[]
-  id                            String                 @id @default(uuid())
-  userId                        String?                @unique
+  id                            String                  @id @default(uuid())
+  userId                        String?                 @unique
   organizationId                String?
   departmentId                  String?
-  additionalDepartmentIds       Json?                  @default("[]")
+  additionalDepartmentIds       Json?                   @default("[]")
   branchId                      String?
   subDepartmentId               String?
   ceoPanelId                    String?
   studyCenterId                 String?
   universityId                  String?
-  email                         String                 @unique
+  email                         String                  @unique
   password                      String
   name                          String
   role                          UserRole
@@ -175,106 +178,109 @@ model User {
   phone                         String?
   designation                   String?
   reportingTo                   String?
-  status                        UserStatus             @default(active)
+  status                        UserStatus              @default(active)
   lastLogin                     DateTime?
-  biometricId                   String?                @unique
-  allowSystemPunchIn            Boolean                @default(true)
-  requireSelfiePunchIn          Boolean                @default(false)
-  allowAnywherePunchIn          Boolean                @default(false)
-  requiresAttendance            Boolean                @default(true)
-  createdAt                     DateTime               @default(now())
-  updatedAt                     DateTime               @updatedAt
-  permissions                   Json?                  @default("[]")
-  approvedSessions              AdmissionSession[]     @relation("SessionApprovedBy")
-  createdSessions               AdmissionSession[]     @relation("SessionCreatedBy")
+  biometricId                   String?                 @unique
+  allowSystemPunchIn            Boolean                 @default(true)
+  requireSelfiePunchIn          Boolean                 @default(false)
+  allowAnywherePunchIn          Boolean                 @default(false)
+  requiresAttendance            Boolean                 @default(true)
+  createdAt                     DateTime                @default(now())
+  updatedAt                     DateTime                @updatedAt
+  permissions                   Json?                   @default("[]")
+  approvedSessions              AdmissionSession[]      @relation("SessionApprovedBy")
+  createdSessions               AdmissionSession[]      @relation("SessionCreatedBy")
   postedAnnouncements           Announcement[]
-  assets                        Asset[]                @relation("UserAssets")
+  assets                        Asset[]                 @relation("UserAssets")
   attendances                   Attendance[]
   auditLogs                     AuditLog[]
-  managedBranch                 Branch?                @relation("BranchManager")
+  managedBranch                 Branch?                 @relation("BranchManager")
   ceoPanel                      CeoPanel?
   collectionOverseers           CollectionOverseer[]
   complaints                    Complaint[]
-  credentialResponder           CredentialRequest[]    @relation("CredentialResponder")
-  credentialRequester           CredentialRequest[]    @relation("CredentialRequester")
-  managedDepartments            Department[]           @relation("DepartmentManager")
-  documentLogs                  DocumentLog[]          @relation("DocumentLoggedBy")
-  editDeleteResponder           EditDeleteRequest[]    @relation("EditDeleteResponder")
-  editDeleteRequester           EditDeleteRequest[]    @relation("EditDeleteRequester")
+  credentialResponder           CredentialRequest[]     @relation("CredentialResponder")
+  credentialRequester           CredentialRequest[]     @relation("CredentialRequester")
+  managedDepartments            Department[]            @relation("DepartmentManager")
+  documentLogs                  DocumentLog[]           @relation("DocumentLoggedBy")
+  editDeleteResponder           EditDeleteRequest[]     @relation("EditDeleteResponder")
+  editDeleteRequester           EditDeleteRequest[]     @relation("EditDeleteRequester")
   employeeProfile               Employee?
   employeeProfileDetail         EmployeeProfile?
-  deptReviewedEnrollments       Enrollment[]           @relation("DeptReviewedBy")
-  financeReviewedEnrollments    Enrollment[]           @relation("FinanceReviewedBy")
-  verifiedReceipts              Enrollment[]           @relation("ReceiptVerifiedBy")
-  salesLedEnrollments           Enrollment[]           @relation("SalesUserEnrollments")
-  universityReviewedEnrollments Enrollment[]           @relation("UniversityReviewedBy")
-  deptAdminEscalations          Escalation[]           @relation("EscalationDeptAdmin")
-  employeeEscalations           Escalation[]           @relation("EscalationEmployee")
-  handledEscalations            Escalation[]           @relation("EscalationHandledBy")
-  resolvedEscalations           Escalation[]           @relation("EscalatedResolvedBy")
-  approvedExpenseClaims         ExpenseClaim[]         @relation("ExpenseApprovedBy")
-  expenseClaims                 ExpenseClaim[]         @relation("EmployeeExpenses")
-  createdFees                   FeeStructure[]         @relation("FeeCreatedBy")
-  createdGstSettings            GSTSetting[]           @relation("GstSettingCreatedBy")
-  approvedIncentives            IncentiveStructure[]   @relation("IncentiveApprovedBy")
-  createdIncentives             IncentiveStructure[]   @relation("IncentiveCreatedBy")
-  enteredMarks                  InternalMark[]         @relation("MarkEnteredBy")
-  referredLeads                 Lead[]                 @relation("LeadReferredBy")
-  createdLeaveAllocations       LeaveAllocation[]      @relation("LeaveAllocationCreatedBy")
+  deptReviewedEnrollments       Enrollment[]            @relation("DeptReviewedBy")
+  financeReviewedEnrollments    Enrollment[]            @relation("FinanceReviewedBy")
+  verifiedReceipts              Enrollment[]            @relation("ReceiptVerifiedBy")
+  salesLedEnrollments           Enrollment[]            @relation("SalesUserEnrollments")
+  universityReviewedEnrollments Enrollment[]            @relation("UniversityReviewedBy")
+  deptAdminEscalations          Escalation[]            @relation("EscalationDeptAdmin")
+  employeeEscalations           Escalation[]            @relation("EscalationEmployee")
+  handledEscalations            Escalation[]            @relation("EscalationHandledBy")
+  resolvedEscalations           Escalation[]            @relation("EscalatedResolvedBy")
+  approvedExpenseClaims         ExpenseClaim[]          @relation("ExpenseApprovedBy")
+  expenseClaims                 ExpenseClaim[]          @relation("EmployeeExpenses")
+  createdFees                   FeeStructure[]          @relation("FeeCreatedBy")
+  createdGstSettings            GSTSetting[]            @relation("GstSettingCreatedBy")
+  approvedIncentives            IncentiveStructure[]    @relation("IncentiveApprovedBy")
+  createdIncentives             IncentiveStructure[]    @relation("IncentiveCreatedBy")
+  enteredMarks                  InternalMark[]          @relation("MarkEnteredBy")
+  referredLeads                 Lead[]                  @relation("LeadReferredBy")
+  createdLeaveAllocations       LeaveAllocation[]       @relation("LeaveAllocationCreatedBy")
   leaveAllocations              LeaveAllocation[]
-  deptApprovedLeaves            LeaveRequest[]         @relation("DeptApprovedBy")
-  leaveRequests                 LeaveRequest[]         @relation("EmployeeLeaves")
-  hrApprovedLeaves              LeaveRequest[]         @relation("HrApprovedBy")
-  hostedMeetings                Meeting[]              @relation("MeetingHost")
+  deptApprovedLeaves            LeaveRequest[]          @relation("DeptApprovedBy")
+  leaveRequests                 LeaveRequest[]          @relation("EmployeeLeaves")
+  hrApprovedLeaves              LeaveRequest[]          @relation("HrApprovedBy")
+  hostedMeetings                Meeting[]               @relation("MeetingHost")
   notifications                 Notification[]
-  receivedPayments              PaymentEntry[]         @relation("PaymentReceivedBy")
-  createdPaymentLinks           PaymentLink[]          @relation("PaymentLinkCreatedBy")
-  confirmedPayrolls             Payroll[]              @relation("PayrollConfirmedBy")
-  payrolls                      Payroll[]              @relation("EmployeePayroll")
-  financeApprovedPayrolls       Payroll[]              @relation("PayrollFinanceApprovedBy")
-  processedPayrolls             Payroll[]              @relation("PayrollProcessedBy")
-  transferredPayrolls           Payroll[]              @relation("PayrollTransferredBy")
-  batchApproved                 PayrollBatch[]         @relation("BatchApprovedBy")
-  batchRejected                 PayrollBatch[]         @relation("BatchRejectedBy")
-  batchTransferred              PayrollBatch[]         @relation("BatchTransferredBy")
-  createdPolls                  Poll[]                 @relation("PollCreatedBy")
-  programAllocations            ProgramAllocation[]    @relation("AllocatedBy")
-  uploadedMaterials             ProgramMaterial[]      @relation("MaterialUploadedBy")
+  receivedPayments              PaymentEntry[]          @relation("PaymentReceivedBy")
+  createdPaymentLinks           PaymentLink[]           @relation("PaymentLinkCreatedBy")
+  confirmedPayrolls             Payroll[]               @relation("PayrollConfirmedBy")
+  payrolls                      Payroll[]               @relation("EmployeePayroll")
+  financeApprovedPayrolls       Payroll[]               @relation("PayrollFinanceApprovedBy")
+  processedPayrolls             Payroll[]               @relation("PayrollProcessedBy")
+  transferredPayrolls           Payroll[]               @relation("PayrollTransferredBy")
+  batchApproved                 PayrollBatch[]          @relation("BatchApprovedBy")
+  batchRejected                 PayrollBatch[]          @relation("BatchRejectedBy")
+  batchTransferred              PayrollBatch[]          @relation("BatchTransferredBy")
+  createdPolls                  Poll[]                  @relation("PollCreatedBy")
+  programAllocations            ProgramAllocation[]     @relation("AllocatedBy")
+  uploadedMaterials             ProgramMaterial[]       @relation("MaterialUploadedBy")
   referralLink                  ReferralLink?
-  salaryApproved                SalaryConfig[]         @relation("SalaryApprovedBy")
-  salaryCreated                 SalaryConfig[]         @relation("SalaryCreatedBy")
-  salaryConfig                  SalaryConfig?          @relation("UserSalaryConfig")
-  approvedRequests              SessionRequest[]       @relation("RequestApprovedBy")
+  salaryApproved                SalaryConfig[]          @relation("SalaryApprovedBy")
+  salaryCreated                 SalaryConfig[]          @relation("SalaryCreatedBy")
+  salaryConfig                  SalaryConfig?           @relation("UserSalaryConfig")
+  approvedRequests              SessionRequest[]        @relation("RequestApprovedBy")
   sessionRequests               SessionRequest[]
   studentProfile                Student?
-  enrolledStudents              Student[]              @relation("StudentEnrolledBy")
-  referredStudents              Student[]              @relation("StudentReferredBy")
-  financeApprovedCenters        StudyCenter[]          @relation("FinanceApprovedBy")
-  referredStudyCenters          StudyCenter[]          @relation("ReferredBy")
-  verifiedStudyCenters          StudyCenter[]          @relation("VerifiedBy")
-  studyCenterInvites            StudyCenterInvite[]    @relation("InviteReferredBy")
-  managedSubDepartments         SubDepartment[]        @relation("SubDeptManager")
-  targets                       Target[]               @relation("TargetEmployee")
-  assignedTasks                 Task[]                 @relation("AssignedTasks")
-  createdTasks                  Task[]                 @relation("CreatedTasks")
-  escalatedTasks                Task[]                 @relation("EscalatedTasks")
-  configuredAuthFees            UniversityAuthFee[]    @relation("AuthFeeConfiguredBy")
-  branch                        Branch?                @relation(fields: [branchId], references: [id])
-  department                    Department?            @relation("UserToDepartment", fields: [departmentId], references: [id])
-  organization                  Organization?          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  manager                       User?                  @relation("ReportingChain", fields: [reportingTo], references: [id])
-  subordinates                  User[]                 @relation("ReportingChain")
-  studyCenter                   StudyCenter?           @relation("CenterAdmin", fields: [studyCenterId], references: [id])
-  subDepartment                 SubDepartment?         @relation(fields: [subDepartmentId], references: [id])
-  university                    University?            @relation("UniversityAdmin", fields: [universityId], references: [id])
-  verifiedWalletTopUps          WalletTopUp[]          @relation("TopUpVerifiedBy")
-  assistantManagedDepartments   Department[]           @relation("AssistantManagers")
-  designations                  Designation[]          @relation("DesignationFilledBy")
+  enrolledStudents              Student[]               @relation("StudentEnrolledBy")
+  referredStudents              Student[]               @relation("StudentReferredBy")
+  financeApprovedCenters        StudyCenter[]           @relation("FinanceApprovedBy")
+  referredStudyCenters          StudyCenter[]           @relation("ReferredBy")
+  verifiedStudyCenters          StudyCenter[]           @relation("VerifiedBy")
+  studyCenterInvites            StudyCenterInvite[]     @relation("InviteReferredBy")
+  managedSubDepartments         SubDepartment[]         @relation("SubDeptManager")
+  targets                       Target[]                @relation("TargetEmployee")
+  assignedTasks                 Task[]                  @relation("AssignedTasks")
+  createdTasks                  Task[]                  @relation("CreatedTasks")
+  escalatedTasks                Task[]                  @relation("EscalatedTasks")
+  configuredAuthFees            UniversityAuthFee[]     @relation("AuthFeeConfiguredBy")
+  branch                        Branch?                 @relation(fields: [branchId], references: [id])
+  department                    Department?             @relation("UserToDepartment", fields: [departmentId], references: [id])
+  organization                  Organization?           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  manager                       User?                   @relation("ReportingChain", fields: [reportingTo], references: [id])
+  subordinates                  User[]                  @relation("ReportingChain")
+  studyCenter                   StudyCenter?            @relation("CenterAdmin", fields: [studyCenterId], references: [id])
+  studyAbroadPartnerAdminOf     StudyAbroadPartner?     @relation("StudyAbroadPartnerAdmin")
+  studyAbroadPartnersReferred   StudyAbroadPartner[]    @relation("StudyAbroadPartnerReferredBy")
+  studyAbroadEnrollmentsCreated StudyAbroadEnrollment[] @relation("StudyAbroadEnrollmentCreatedBy")
+  subDepartment                 SubDepartment?          @relation(fields: [subDepartmentId], references: [id])
+  university                    University?             @relation("UniversityAdmin", fields: [universityId], references: [id])
+  verifiedWalletTopUps          WalletTopUp[]           @relation("TopUpVerifiedBy")
+  assistantManagedDepartments   Department[]            @relation("AssistantManagers")
+  designations                  Designation[]           @relation("DesignationFilledBy")
   communicationLogs             CommunicationLog[]
-  assignedSalesUsers            Json?                  @default("[]")
-  assignedOpsUsers              Json?                  @default("[]")
+  assignedSalesUsers            Json?                   @default("[]")
+  assignedOpsUsers              Json?                   @default("[]")
   fcmTokens                     UserFCMToken[]
-  opsSubAdminAllocations        ProgramAllocation[]    @relation("OpsSubAdminAllocated")
+  opsSubAdminAllocations        ProgramAllocation[]     @relation("OpsSubAdminAllocated")
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -1755,6 +1761,7 @@ enum UserRole {
   sales_admin
   sales_sub_admin
   center_admin
+  study_abroad_admin
   university_admin
   finance
   sales
@@ -2436,5 +2443,87 @@ model StudentAcademicAttendance {
   @@unique([sessionId, studentId])
   @@index([studentId])
   @@index([sessionId])
+  @@index([organizationId])
+}
+
+// ─── Study Abroad Partner ────────────────────────────────────────────────────
+// Separate counterpart of StudyCenter ("Academic Partner") for overseas-education
+// partners: own student application flow. Staff-created partners
+// are active immediately, like Academic Partners.
+
+model StudyAbroadPartner {
+  id                   String                  @id @default(uuid())
+  organizationId       String
+  name                 String
+  code                 String
+  address              String?
+  contact              String?
+  email                String?
+  city                 String?
+  state                String?
+  country              String?
+  status               String                  @default("active")
+  destinationCountries String[]                @default([])
+  referredBy           String?
+  statusHistory        Json                    @default("[]")
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
+  organization         Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  referrer             User?                   @relation("StudyAbroadPartnerReferredBy", fields: [referredBy], references: [id])
+  adminUserId          String?                 @unique
+  adminUser            User?                   @relation("StudyAbroadPartnerAdmin", fields: [adminUserId], references: [id])
+  enrollments          StudyAbroadEnrollment[]
+
+  @@unique([organizationId, code])
+  @@index([organizationId, status])
+}
+
+model StudyAbroadEnrollment {
+  id                 String             @id @default(uuid())
+  organizationId     String
+  partnerId          String
+  createdBy          String
+  studentName        String
+  studentEmail       String
+  studentPhone       String
+  studentAddress     String?
+  dateOfBirth        DateTime?
+  passportNumber     String?
+  destinationCountry String
+  universityName     String
+  courseName         String
+  intake             String
+  intakeYear         Int?
+  documents          Json               @default("[]")
+  status             String             @default("document_review")
+  opsRemarks         String?
+  financeRemarks     String?
+  opsReviewedBy      String?
+  opsReviewedAt      DateTime?
+  financeReviewedBy  String?
+  financeReviewedAt  DateTime?
+  serviceFee         Float?
+  debitedAt          DateTime?
+  statusHistory      Json               @default("[]")
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  organization       Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  partner            StudyAbroadPartner @relation(fields: [partnerId], references: [id])
+  creator            User               @relation("StudyAbroadEnrollmentCreatedBy", fields: [createdBy], references: [id])
+
+  @@index([organizationId, status])
+  @@index([partnerId, status])
+}
+
+// Countries an organization offers when setting up universities (University.country stores the name).
+// Scoped to the organization: each one keeps its own list.
+model Country {
+  id             String       @id @default(uuid())
+  organizationId String
+  name           String
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, name])
   @@index([organizationId])
 }

@@ -50,6 +50,8 @@ import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
 import { OpsProgramAllocationPanel } from '@/components/panels/OpsProgramAllocationPanel';
 import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
+import { StudyAbroadPartnersPage } from '@/components/panels/StudyAbroadPartnersPage';
+import { hasStudyAbroadAccess } from '@/lib/orgFeatures';
 import { InvoicesPanel } from '@/components/panels/InvoicesPanel';
 import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
 import { ExpensesPanel } from '@/components/panels/ExpensesPanel';
@@ -817,6 +819,9 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="program_allocations"><OpsProgramAllocationPanel /></TabsContent>
         <TabsContent value="centers">
           {orgFeatures.includes('academic_partners') ? <StudyCentersPanel /> : <FeatureLockedCard title="Academic Partners / Study Centers" description="Franchise study center portal and student allocations are not enabled for your organization's subscription plan. Please contact your Superadmin to enable this module." />}
+        </TabsContent>
+        <TabsContent value="study_abroad_partners">
+          {hasStudyAbroadAccess(user) ? <StudyAbroadPartnersPage /> : <FeatureLockedCard title="Study Abroad Partners" description="Study Abroad Partners is not enabled for your organization. Please contact your Superadmin to enable this module." />}
         </TabsContent>
         <TabsContent value="invoices"><InvoicesPanel /></TabsContent>
         <TabsContent value="payments"><PaymentsPanel /></TabsContent>

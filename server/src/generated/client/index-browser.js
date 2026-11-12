@@ -1555,6 +1555,64 @@ exports.Prisma.StudentAcademicAttendanceScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.StudyAbroadPartnerScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  name: 'name',
+  code: 'code',
+  address: 'address',
+  contact: 'contact',
+  email: 'email',
+  city: 'city',
+  state: 'state',
+  country: 'country',
+  status: 'status',
+  destinationCountries: 'destinationCountries',
+  referredBy: 'referredBy',
+  statusHistory: 'statusHistory',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  adminUserId: 'adminUserId'
+};
+
+exports.Prisma.StudyAbroadEnrollmentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  partnerId: 'partnerId',
+  createdBy: 'createdBy',
+  studentName: 'studentName',
+  studentEmail: 'studentEmail',
+  studentPhone: 'studentPhone',
+  studentAddress: 'studentAddress',
+  dateOfBirth: 'dateOfBirth',
+  passportNumber: 'passportNumber',
+  destinationCountry: 'destinationCountry',
+  universityName: 'universityName',
+  courseName: 'courseName',
+  intake: 'intake',
+  intakeYear: 'intakeYear',
+  documents: 'documents',
+  status: 'status',
+  opsRemarks: 'opsRemarks',
+  financeRemarks: 'financeRemarks',
+  opsReviewedBy: 'opsReviewedBy',
+  opsReviewedAt: 'opsReviewedAt',
+  financeReviewedBy: 'financeReviewedBy',
+  financeReviewedAt: 'financeReviewedAt',
+  serviceFee: 'serviceFee',
+  debitedAt: 'debitedAt',
+  statusHistory: 'statusHistory',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CountryScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  name: 'name',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1624,6 +1682,7 @@ exports.UserRole = exports.$Enums.UserRole = {
   sales_admin: 'sales_admin',
   sales_sub_admin: 'sales_sub_admin',
   center_admin: 'center_admin',
+  study_abroad_admin: 'study_abroad_admin',
   university_admin: 'university_admin',
   finance: 'finance',
   sales: 'sales',
@@ -1884,7 +1943,10 @@ exports.Prisma.ModelName = {
   StudentBatchTransfer: 'StudentBatchTransfer',
   BatchLessonAssignment: 'BatchLessonAssignment',
   AcademicSession: 'AcademicSession',
-  StudentAcademicAttendance: 'StudentAcademicAttendance'
+  StudentAcademicAttendance: 'StudentAcademicAttendance',
+  StudyAbroadPartner: 'StudyAbroadPartner',
+  StudyAbroadEnrollment: 'StudyAbroadEnrollment',
+  Country: 'Country'
 };
 
 /**

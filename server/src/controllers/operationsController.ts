@@ -86,11 +86,76 @@ export const getUniversity = asyncHandler(async (req: AuthRequest, res: Response
   }
   res.json({ success: true, data: university });
 });
+// ── Countries (scoped to the organization) ─────────────────────────────────
+const cleanCountryName = (v: unknown): string | null => {
+  if (typeof v !== 'string') return null;
+  const t = v.trim().replace(/\s+/g, ' ');
+  return t ? t.slice(0, 100) : null;
+};
+
+/**
+ * Resolve a country name to the organization's own spelling, adding it to the organization's
+ * list when it is new. "uk" and "UK" are the same country, so the first spelling wins.
+ */
+const resolveCountry = async (organizationId: string, raw: unknown): Promise<string | null> => {
+  const name = cleanCountryName(raw);
+  if (!name) return null;
+  const existing = await prisma.country.findFirst({
+    where: { organizationId, name: { equals: name, mode: 'insensitive' } },
+  });
+  if (existing) return existing.name;
+  try {
+    return (await prisma.country.create({ data: { organizationId, name } })).name;
+  } catch (e: any) {
+    // Lost a race with another request creating the same country: use theirs.
+    if (e?.code === 'P2002') {
+      const again = await prisma.country.findFirst({ where: { organizationId, name: { equals: name, mode: 'insensitive' } } });
+      if (again) return again.name;
+    }
+    throw e;
+  }
+};
+
+/** The organization's countries: the saved list plus any already typed into universities, once each. */
+export const getCountries = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const organizationId = req.user.organizationId;
+  const [saved, used] = await Promise.all([
+    prisma.country.findMany({ where: { organizationId }, select: { id: true, name: true } }),
+    prisma.university.groupBy({ by: ['country'], where: { organizationId, country: { not: null } }, _count: { _all: true } }),
+  ]);
+  const byKey = new Map<string, { id: string | null; name: string; universities: number }>();
+  for (const c of saved) byKey.set(c.name.toLowerCase(), { id: c.id, name: c.name, universities: 0 });
+  for (const u of used) {
+    const name = cleanCountryName(u.country);
+    if (!name) continue;
+    const key = name.toLowerCase();
+    const entry = byKey.get(key) || { id: null, name, universities: 0 };
+    entry.universities += u._count._all;
+    byKey.set(key, entry);
+  }
+  const data = Array.from(byKey.values()).sort((a, b) => a.name.localeCompare(b.name));
+  res.json({ success: true, count: data.length, data });
+});
+
+/** Add a country to the organization's list. Adding one that already exists just returns it. */
+export const createCountry = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const name = cleanCountryName(req.body?.name);
+  if (!name) {
+    res.status(400).json({ success: false, message: 'Country name is required' });
+    return;
+  }
+  const organizationId = req.user.organizationId;
+  const before = await prisma.country.findFirst({ where: { organizationId, name: { equals: name, mode: 'insensitive' } } });
+  const canonical = await resolveCountry(organizationId, name);
+  res.status(before ? 200 : 201).json({ success: true, data: { name: canonical, existed: !!before } });
+});
+
 export const createUniversity = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { allowedBranchIds, ...rest } = req.body;
+  const { allowedBranchIds, country, ...rest } = req.body;
   const university = await prisma.university.create({
     data: {
       ...rest,
+      country: await resolveCountry(req.user.organizationId, country),
       organizationId: req.user.organizationId,
       allowedBranches: allowedBranchIds && allowedBranchIds.length > 0
         ? { connect: allowedBranchIds.map((id: string) => ({ id })) }
@@ -101,11 +166,22 @@ export const createUniversity = asyncHandler(async (req: AuthRequest, res: Respo
 });
 export const updateUniversity = asyncHandler(async (req: AuthRequest, res: Response) => {
   try {
-    const { allowedBranchIds, id, organizationId, createdAt, updatedAt, ...rest } = req.body;
+    const { allowedBranchIds, id, organizationId, createdAt, updatedAt, country, ...rest } = req.body;
+    // Country is optional: left alone when not sent, cleared when sent empty, otherwise matched to the
+    // organization's list (the university's own organization, not the caller's).
+    // A university can only be edited from its own organization (Superadmin excepted).
+    const owner = await prisma.university.findFirst({
+      where: { id: req.params.id, ...(req.user.role === 'superadmin' ? {} : { organizationId: req.user.organizationId }) },
+      select: { organizationId: true },
+    });
+    if (!owner) { res.status(404).json({ success: false, message: 'University not found' }); return; }
+    let countryUpdate: { country: string | null } | {} = {};
+    if (country !== undefined) countryUpdate = { country: await resolveCountry(owner.organizationId, country) };
     const university = await prisma.university.update({
       where: { id: req.params.id },
       data: {
         ...rest,
+        ...countryUpdate,
         allowedBranches: allowedBranchIds
           ? { set: allowedBranchIds.map((bid: string) => ({ id: bid })) }
           : undefined

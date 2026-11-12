@@ -107,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       sales_sub_admin: ['sales', 'leads', 'deals', 'referrals', 'targets', 'dashboard', 'all'],
       sales: ['sales', 'leads', 'deals', 'referrals', 'targets', 'dashboard', 'all'],
       center_admin: ['center', 'students', 'invoices', 'marks'],
+      study_abroad_admin: ['study_abroad'],
       academic_counselor: ['dashboard', 'academic_centers', 'all'],
       center_student: ['dashboard', 'all'],
       center_teacher: ['dashboard', 'all'],

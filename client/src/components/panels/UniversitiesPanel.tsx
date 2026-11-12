@@ -18,7 +18,7 @@ import { uploadFormFile } from '@/lib/uploadFile';
 interface Branch { id: string; name: string; code: string; }
 interface University {
   id: string; name: string; code: string; address?: string;
-  contact?: string; status: string; logo?: string;
+  contact?: string; status: string; logo?: string; country?: string | null;
   allowedBranchIds: Branch[];
   enrollmentFormConfig?: any;
   isAcademicPartnerOnly?: boolean;
@@ -34,13 +34,48 @@ export function UniversitiesPanel() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    name: '', code: '', address: '', contact: '', status: 'active', logo: '',
+    name: '', code: '', address: '', contact: '', country: '', status: 'active', logo: '',
     enrollmentFormConfig: {
       requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'] as string[],
       requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] as string[]
     }
   });
   const [selectedBranchIds, setSelectedBranchIds] = useState<string[]>([]);
+
+  // Optional country: pick one of the organization's countries or add a new one.
+  const [countries, setCountries] = useState<{ name: string; universities: number }[]>([]);
+  const [addingCountry, setAddingCountry] = useState(false);
+  const [newCountry, setNewCountry] = useState('');
+  const [savingCountry, setSavingCountry] = useState(false);
+
+  const fetchCountries = async () => {
+    try {
+      const res = await api.get('/operations/countries');
+      setCountries(res.data.data || []);
+    } catch (err) {
+      console.error('Failed to fetch countries:', err);
+    }
+  };
+
+  const addCountry = async () => {
+    const name = newCountry.trim();
+    if (!name) return;
+    setSavingCountry(true);
+    try {
+      const res = await api.post('/operations/countries', { name });
+      const saved: string = res.data.data.name;
+      setCountries(prev => prev.some(c => c.name.toLowerCase() === saved.toLowerCase())
+        ? prev : [...prev, { name: saved, universities: 0 }].sort((a, b) => a.name.localeCompare(b.name)));
+      setFormData(prev => ({ ...prev, country: saved }));
+      setAddingCountry(false);
+      setNewCountry('');
+      toast.success(res.data.data.existed ? `${saved} already exists — selected` : `${saved} added`);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to add country');
+    } finally {
+      setSavingCountry(false);
+    }
+  };
   const [accessMode, setAccessMode] = useState<'all' | 'exclusive' | 'multi' | 'academic_partners'>('all');
 
   const [addProgramUniId, setAddProgramUniId] = useState<string | null>(null);
@@ -49,6 +84,7 @@ export function UniversitiesPanel() {
 
   useEffect(() => {
     fetchUniversities();
+    fetchCountries();
     if (isOrgAdmin) fetchBranches();
   }, []);
 
@@ -78,6 +114,8 @@ export function UniversitiesPanel() {
     try {
       const payload = {
         ...formData,
+        // A country typed but not yet "Add"ed is still saved (the server adds it to the list).
+        country: addingCountry && newCountry.trim() ? newCountry.trim() : formData.country,
         allowedBranchIds: selectedBranchIds,
         isAcademicPartnerOnly: accessMode === 'academic_partners',
       };
@@ -89,6 +127,7 @@ export function UniversitiesPanel() {
       setDialogOpen(false);
       resetForm();
       fetchUniversities();
+      fetchCountries();
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to save university');
     }
@@ -104,6 +143,7 @@ export function UniversitiesPanel() {
       code: u.code,
       address: u.address || '',
       contact: u.contact || '',
+      country: u.country || '',
       status: u.status,
       logo: u.logo || '',
       enrollmentFormConfig: {
@@ -132,8 +172,10 @@ export function UniversitiesPanel() {
 
   const resetForm = () => {
     setEditingId(null);
+    setAddingCountry(false);
+    setNewCountry('');
     setFormData({
-      name: '', code: '', address: '', contact: '', status: 'active', logo: '',
+      name: '', code: '', address: '', contact: '', country: '', status: 'active', logo: '',
       enrollmentFormConfig: {
         requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'],
         requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate']
@@ -213,6 +255,39 @@ export function UniversitiesPanel() {
               <div>
                 <Label>Address</Label>
                 <Input value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} />
+              </div>
+              <div>
+                <Label>Country <span className="text-muted-foreground font-normal">(optional)</span></Label>
+                {addingCountry ? (
+                  <div className="flex gap-2">
+                    <Input
+                      autoFocus
+                      value={newCountry}
+                      onChange={(e) => setNewCountry(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addCountry(); } }}
+                      placeholder="New country name"
+                      maxLength={100}
+                    />
+                    <Button type="button" onClick={addCountry} disabled={!newCountry.trim() || savingCountry}>Add</Button>
+                    <Button type="button" variant="outline" onClick={() => { setAddingCountry(false); setNewCountry(''); }}>Cancel</Button>
+                  </div>
+                ) : (
+                  <Select
+                    value={formData.country || '__none__'}
+                    onValueChange={(v) => {
+                      if (v === '__new__') { setAddingCountry(true); setNewCountry(''); }
+                      else setFormData({ ...formData, country: v === '__none__' ? '' : v });
+                    }}
+                  >
+                    <SelectTrigger><SelectValue placeholder="Select a country" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__none__">No country</SelectItem>
+                      {countries.map(c => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
+                      <SelectItem value="__new__">+ Add new country…</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+                <p className="text-[11px] text-muted-foreground mt-1">Countries are kept per organization — pick one you've already added or add a new one.</p>
               </div>
               <div>
                 <Label>Contact</Label>
@@ -520,7 +595,7 @@ export function UniversitiesPanel() {
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {u.code}{u.contact ? ` • ${u.contact}` : ''}{u.address ? ` • ${u.address}` : ''}
+                  {u.code}{u.country ? ` • ${u.country}` : ''}{u.contact ? ` • ${u.contact}` : ''}{u.address ? ` • ${u.address}` : ''}
                 </p>
               </div>
             </div>

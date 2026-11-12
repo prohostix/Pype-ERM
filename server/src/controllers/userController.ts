@@ -59,11 +59,11 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
 
   if (!req.query.role) {
     if (['hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
-      where.role = { notIn: ['student', 'center_admin'] };
+      where.role = { notIn: ['student', 'center_admin', 'study_abroad_admin'] };
     } else {
       where.role = { not: 'student' };
     }
-  } else if (req.query.role === 'center_admin' && ['hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
+  } else if (['center_admin', 'study_abroad_admin'].includes(req.query.role as string) && ['hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
     // Prevent HR from explicitly fetching center admins
     where.role = 'none'; // invalid role to return empty
   }
@@ -162,8 +162,14 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
     allowSystemPunchIn, requireSelfiePunchIn, allowAnywherePunchIn, requiresAttendance
   } = req.body;
 
+  // Partner admins keep their role; their account is managed from Study Abroad Partners.
+  if (userExists.role === 'study_abroad_admin' && role !== undefined && role !== 'study_abroad_admin') {
+    res.status(403).json({ success: false, message: 'This is a Study Abroad Partner login. Manage it from Study Abroad Partners.' });
+    return;
+  }
+
   // Role restriction on update
-  if (role) {
+  if (role && !(userExists.role === 'study_abroad_admin' && role === 'study_abroad_admin')) {
     const callerRole = req.user.role as string;
     const allowed = CREATABLE_ROLES[callerRole] || [];
     if (!allowed.includes(role)) {
@@ -226,6 +232,12 @@ export const deleteUser = asyncHandler(async (req: AuthRequest, res: Response) =
   const user = await prisma.user.findFirst({ where });
   if (!user) {
     res.status(404).json({ success: false, message: 'User not found' });
+    return;
+  }
+
+  // A study abroad partner's login belongs to its partner record; removing it here would leave the partner without access.
+  if (user.role === 'study_abroad_admin') {
+    res.status(400).json({ success: false, message: 'This is a Study Abroad Partner login. Manage it from Study Abroad Partners.' });
     return;
   }
 

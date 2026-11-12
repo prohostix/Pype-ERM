@@ -10,6 +10,7 @@ import { ModernCollectionsDashboard } from './ModernCollectionsDashboard';
 import { ModernSuperadminDashboard } from './ModernSuperadminDashboard';
 import { ModernOrgAdminDashboard } from './ModernOrgAdminDashboard';
 import { ModernStudyCenterDashboard } from './ModernStudyCenterDashboard';
+import { ModernStudyAbroadPartnerDashboard } from './ModernStudyAbroadPartnerDashboard';
 import { ModernEmployeeDashboard } from './ModernEmployeeDashboard';
 import { ModernStaffPortal } from './ModernStaffPortal';
 import { ModernBranchManagerDashboard } from './ModernBranchManagerDashboard';
@@ -202,6 +203,10 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
 
   if (user?.role === 'center_admin') {
     return ai('center', <ModernStudyCenterDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
+  }
+
+  if (user?.role === 'study_abroad_admin') {
+    return <ModernStudyAbroadPartnerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'employee') {

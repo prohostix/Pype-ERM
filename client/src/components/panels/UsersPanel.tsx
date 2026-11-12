@@ -95,6 +95,7 @@ export const ROLE_CONFIG: Record<string, { label: string; category: string; badg
   academic_counselor: { label: 'Academic Counselor', category: 'Sales & Growth', badgeClass: 'bg-amber-600 text-white' },
   collections_admin: { label: 'Collections Admin', category: 'Finance', badgeClass: 'bg-violet-600 text-white' },
   center_admin: { label: 'Academic Partner Admin', category: 'Academic Partners', badgeClass: 'bg-amber-500 text-white' },
+  study_abroad_admin: { label: 'Study Abroad Partner Admin', category: 'Study Abroad Partners', badgeClass: 'bg-sky-600 text-white' },
   employee: { label: 'Employee', category: 'Workforce', badgeClass: 'bg-slate-600 text-white' },
 };
 
@@ -122,6 +123,12 @@ const getGradientForName = (str?: string): string => {
     hash = (str || '').charCodeAt(i) + ((hash << 5) - hash);
   }
   return AVATAR_GRADIENTS[Math.abs(hash) % AVATAR_GRADIENTS.length];
+};
+
+// Partner logins belong to their partner record, so they're edited from the partner pages.
+const MANAGED_ELSEWHERE: Record<string, string> = {
+  center_admin: 'Manage via Academic Partners',
+  study_abroad_admin: 'Manage via Study Abroad Partners',
 };
 
 export function UsersPanel() {
@@ -285,6 +292,7 @@ export function UsersPanel() {
       'Human Resources': { categoryName: 'Human Resources', users: [] },
       'Sales & Admissions': { categoryName: 'Sales & Admissions', users: [] },
       'Academic Partner Admins': { categoryName: 'Academic Partner Admins', users: [] },
+      'Study Abroad Partners': { categoryName: 'Study Abroad Partner Admins', users: [] },
       'Workforce & Staff': { categoryName: 'Workforce & Staff', users: [] },
     };
 
@@ -519,9 +527,9 @@ export function UsersPanel() {
             variant="outline"
             size="sm"
             onClick={() => handleEdit(user)}
-            disabled={user.role === 'center_admin'}
+            disabled={user.role in MANAGED_ELSEWHERE}
             className="flex-1 h-8 rounded-xl text-xs font-semibold hover:bg-muted"
-            title={user.role === 'center_admin' ? "Manage via Academic Partners" : "Edit User"}
+            title={MANAGED_ELSEWHERE[user.role] || "Edit User"}
           >
             <Edit className="w-3.5 h-3.5 mr-1.5" />
             Edit
@@ -530,9 +538,9 @@ export function UsersPanel() {
             variant="outline"
             size="sm"
             onClick={() => handleDelete(user)}
-            disabled={user.role === 'center_admin'}
+            disabled={user.role in MANAGED_ELSEWHERE}
             className="h-8 px-3 rounded-xl text-xs text-destructive hover:bg-destructive/10 hover:border-destructive/30"
-            title={user.role === 'center_admin' ? "Manage via Academic Partners" : "Delete User"}
+            title={MANAGED_ELSEWHERE[user.role] || "Delete User"}
           >
             <Trash2 className="w-3.5 h-3.5" />
           </Button>

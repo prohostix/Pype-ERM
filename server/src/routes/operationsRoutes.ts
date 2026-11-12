@@ -3,6 +3,8 @@ import {
   getUniversities,
   getUniversity,
   createUniversity,
+  getCountries,
+  createCountry,
   updateUniversity,
   deleteUniversity,
   activateUniversity,
@@ -54,6 +56,9 @@ import { upload } from '../middleware/upload.js';
 const router = express.Router();
 
 router.use(protect);
+
+// Countries — each organization keeps its own list; anyone who can see universities can read it
+router.route('/countries').get(getCountries).post(authorize('org_admin', 'superadmin'), createCountry);
 
 // Universities — write access restricted to org_admin / superadmin only
 router.route('/universities').get(getUniversities).post(authorize('org_admin', 'superadmin'), createUniversity);

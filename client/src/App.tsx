@@ -22,6 +22,7 @@ import { getBranchManagerNavItems } from '@/pages/ModernBranchManagerDashboard';
 import { getExecutiveNavItems } from '@/pages/ModernCEODashboard';
 import { getCollectionsNavItems } from '@/pages/ModernCollectionsDashboard';
 import api from '@/lib/api';
+import { hasStudyAbroadAccess } from '@/lib/orgFeatures';
 import { toast } from 'sonner';
 
 type ViewMode = 'dashboard' | 'table';
@@ -193,6 +194,7 @@ function App() {
       case 'student':
       case 'center_student': return 'overview';
       case 'academic_counselor': return 'dashboard';
+      case 'study_abroad_admin': return 'dashboard';
       case 'center_teacher':
       case 'teacher': return 'dashboard';
       default: return 'tasks';
@@ -335,7 +337,16 @@ function App() {
   // Route to public pages if needed — NOTE: useMemo/useEffect must be declared before these returns
   const hasInviteToken = urlParams.has('token');
 
-  const tables = useMemo(() => withAIReports(getAvailableTables()), [user?.role, (user as any)?.subDepartmentId, (user as any)?.isBranchManager, deptType, isCollectionsOverseer]);
+  const tables = useMemo(() => {
+    const items = withAIReports(getAvailableTables());
+    if (hasStudyAbroadAccess(user)) return items;
+    // Feature not granted to this organization: drop the menu entry (and its now-empty section header).
+    return items.filter((t: any) => {
+      if (t.id === 'study_abroad_partners') return false;
+      if (t.isSection && t.id === '__study_abroad') return false;
+      return true;
+    });
+  }, [user?.role, (user as any)?.organization, (user as any)?.subDepartmentId, (user as any)?.isBranchManager, deptType, isCollectionsOverseer]);
 
   // Validate activeTable against allowed tables for the user
   useEffect(() => {
@@ -465,6 +476,8 @@ function App() {
         { id: 'academic_centers', label: 'Academic Centers' },
         { id: 'study_centers', label: 'Academic Partners' },
 
+        { id: 'study_abroad_partners', label: 'Study Abroad Partners' },
+
         { id: '__finance_section', label: 'Finance & Billing', isSection: true },
         { id: 'enrollments', label: 'Enrollments' },
         { id: 'fee_structures', label: 'Fee Structures' },
@@ -527,6 +540,14 @@ function App() {
         { id: 'enroll_student', label: 'Enroll Student' },
         { id: 'center_enrollments', label: 'My Enrollments' },
         { id: 'center_programs', label: 'Programs & Materials' },
+      ];
+    }
+
+    if (user.role === 'study_abroad_admin') {
+      return [
+        { id: 'dashboard', label: 'Dashboard' },
+        { id: 'apply', label: 'New Application' },
+        { id: 'applications', label: 'My Applications' },
       ];
     }
 
@@ -637,7 +658,7 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['org_admin', 'ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'branch_manager', 'faculty'];
+    const roleDashboardRoles = ['org_admin', 'ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'branch_manager', 'faculty', 'study_abroad_admin'];
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student' && user?.role !== 'center_student';

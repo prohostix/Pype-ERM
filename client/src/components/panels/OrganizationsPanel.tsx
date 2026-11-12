@@ -34,7 +34,8 @@ import {
   SlidersHorizontal,
   ChevronRight,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  Globe2
 } from 'lucide-react';
 import { uploadFormFile } from '@/lib/uploadFile';
 import { Button } from '@/components/ui/button';
@@ -82,8 +83,21 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { featuresOfOrg } from '@/lib/orgFeatures';
+
+// Optional modules Superadmin can switch on per organization (Organizations → ⋮ → Manage Features).
+// To offer another one, add it here AND to TOGGLEABLE_FEATURES in the server's organizationController.
+const ORG_FEATURE_CATALOG: { key: string; label: string; description: string; icon: any }[] = [
+  {
+    key: 'study_abroad_partners',
+    label: 'Study Abroad Partner',
+    description: 'Lets the organization onboard overseas-education partners, receive their student applications, and manage partner wallets and top-ups.',
+    icon: Globe2,
+  },
+];
 
 // Interface definitions
 export interface OrganizationLicense {
@@ -439,6 +453,27 @@ export function OrganizationsPanel() {
     if (e) e.stopPropagation();
     setDeletingOrg(org);
     setIsDeleteDialogOpen(true);
+  };
+
+  // Manage Features side sheet: Superadmin on/off switches for optional modules of one organization.
+  const [featuresOrgId, setFeaturesOrgId] = useState<string | null>(null);
+  const featuresOrg = organizations.find(o => o.id === featuresOrgId) || null;
+  const [togglingFeature, setTogglingFeature] = useState<string | null>(null);
+
+  const handleToggleFeature = async (org: Organization, feature: { key: string; label: string }, enabled: boolean) => {
+    if (!enabled && !window.confirm(`Turn OFF ${feature.label} for ${org.name}?\n\nIts admins lose access immediately. Existing data is kept and returns if you turn it back on.`)) return;
+    setTogglingFeature(feature.key);
+    try {
+      const res = await api.put(`/organizations/${org.id}/features`, { feature: feature.key, enabled });
+      const metadata = res.data?.data?.metadata;
+      setOrganizations(prev => prev.map(item => item.id === org.id ? { ...item, metadata } : item));
+      setSelectedOrgForView(prev => (prev && prev.id === org.id ? { ...prev, metadata } : prev));
+      toast.success(`${feature.label} ${enabled ? 'enabled' : 'disabled'} for ${org.name}`);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update the feature');
+    } finally {
+      setTogglingFeature(null);
+    }
   };
 
   const handleQuickStatusChange = async (org: Organization, newStatus: 'active' | 'inactive' | 'suspended', e?: React.MouseEvent) => {
@@ -1028,6 +1063,10 @@ export function OrganizationsPanel() {
                               <Edit className="w-3.5 h-3.5 mr-2 text-indigo-500" />
                               Edit Configuration
                             </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setFeaturesOrgId(org.id)} className="cursor-pointer text-xs">
+                              <SlidersHorizontal className="w-3.5 h-3.5 mr-2 text-sky-600" />
+                              Manage Features
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={(e) => handleCopy(org.id, 'Organization ID', e)} className="cursor-pointer text-xs">
                               <Copy className="w-3.5 h-3.5 mr-2 text-slate-500" />
                               Copy Tenant ID
@@ -1349,6 +1388,15 @@ export function OrganizationsPanel() {
                         <Button
                           variant="ghost"
                           size="icon"
+                          onClick={() => setFeaturesOrgId(org.id)}
+                          className="h-8 w-8 rounded-lg hover:text-primary"
+                          title="Manage Features"
+                        >
+                          <SlidersHorizontal className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           onClick={(e) => handleEdit(org, e)}
                           className="h-8 w-8 rounded-lg hover:text-primary"
                           title="Edit"
@@ -1373,6 +1421,55 @@ export function OrganizationsPanel() {
           </Table>
         </Card>
       )}
+
+      {/* Slide-out Sheet: Manage Features */}
+      <Sheet open={Boolean(featuresOrg)} onOpenChange={(open) => !open && setFeaturesOrgId(null)}>
+        <SheetContent className="sm:max-w-md overflow-y-auto">
+          {featuresOrg && (
+            <>
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-2"><SlidersHorizontal className="w-5 h-5 text-sky-600" />Manage Features</SheetTitle>
+                <SheetDescription>
+                  Optional modules for <strong>{featuresOrg.name}</strong>. Changes apply immediately.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="px-4 pb-6 space-y-3">
+                {ORG_FEATURE_CATALOG.map(feature => {
+                  const enabled = featuresOfOrg(featuresOrg).includes(feature.key);
+                  const Icon = feature.icon;
+                  return (
+                    <div key={feature.key} className="rounded-xl border border-border/60 p-4 flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-lg bg-sky-600 text-white flex items-center justify-center shrink-0">
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-sm font-semibold text-foreground">{feature.label}</h4>
+                            <Badge variant="outline" className={enabled ? 'text-[10px] border-emerald-500/40 text-emerald-700 dark:text-emerald-400' : 'text-[10px] text-muted-foreground'}>
+                              {enabled ? 'Enabled' : 'Disabled'}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">{feature.description}</p>
+                        </div>
+                      </div>
+                      <Switch
+                        checked={enabled}
+                        disabled={togglingFeature === feature.key}
+                        onCheckedChange={(checked) => handleToggleFeature(featuresOrg, feature, checked)}
+                        aria-label={`${feature.label} for ${featuresOrg.name}`}
+                      />
+                    </div>
+                  );
+                })}
+                <p className="text-[11px] text-muted-foreground pt-1">
+                  Pricing and the core Academic features are configured under Pricings and Bills.
+                </p>
+              </div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
 
       {/* Slide-out Sheet: Organization Deep Profile View */}
       <Sheet open={Boolean(selectedOrgForView)} onOpenChange={(open) => !open && setSelectedOrgForView(null)}>

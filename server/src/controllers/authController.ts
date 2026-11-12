@@ -43,7 +43,7 @@ export const register = asyncHandler(async (req: AuthRequest, res: Response) => 
   const hashedPassword = await hashPassword(password);
 
   // Prevent privilege escalation — nobody can register themselves as superadmin
-  const assignedRole = (role === 'superadmin' || role === 'org_admin' || role === 'center_admin') ? 'student' : (role || 'student');
+  const assignedRole = (role === 'superadmin' || role === 'org_admin' || role === 'center_admin' || role === 'study_abroad_admin') ? 'student' : (role || 'student');
 
   // Create user
   const user = await prisma.user.create({
