@@ -66,7 +66,6 @@ model Organization {
   payrollBatches             PayrollBatch[]
   studyAbroadPartners        StudyAbroadPartner[]
   countries                  Country[]
-  studyAbroadEnrollments     StudyAbroadEnrollment[]
   polls                      Poll[]
   programs                   Program[]
   programAllocations         ProgramAllocation[]
@@ -270,7 +269,6 @@ model User {
   studyCenter                   StudyCenter?           @relation("CenterAdmin", fields: [studyCenterId], references: [id])
   studyAbroadPartnerAdminOf     StudyAbroadPartner?    @relation("StudyAbroadPartnerAdmin")
   studyAbroadPartnersReferred   StudyAbroadPartner[]   @relation("StudyAbroadPartnerReferredBy")
-  studyAbroadEnrollmentsCreated StudyAbroadEnrollment[] @relation("StudyAbroadEnrollmentCreatedBy")
   subDepartment                 SubDepartment?         @relation(fields: [subDepartmentId], references: [id])
   university                    University?            @relation("UniversityAdmin", fields: [universityId], references: [id])
   verifiedWalletTopUps          WalletTopUp[]          @relation("TopUpVerifiedBy")
@@ -522,6 +520,7 @@ model Student {
   familyPhone           String?
   universityId          String?
   enrolledBy            String?
+  source                String?
   academicProgress      Json?                       @default("[]")
   admissionProgress     Json?                       @default("{}")
   discountAmount        Float                       @default(0)
@@ -1010,6 +1009,9 @@ model Enrollment {
   initialPaymentAmount Float?
   initialPaymentDate   DateTime?
   paymentPlan          String?
+  source               String?
+  studyAbroadPartnerId String?
+  serviceFee           Float?
   departmentReviewer   User?              @relation("DeptReviewedBy", fields: [departmentReviewedBy], references: [id])
   financeReviewer      User?              @relation("FinanceReviewedBy", fields: [financeReviewedBy], references: [id])
   organization         Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -1025,6 +1027,7 @@ model Enrollment {
   @@unique([studentId, programId, sessionId])
   @@index([organizationId, status])
   @@index([studyCenterId])
+  @@index([studyAbroadPartnerId])
 }
 
 model ExpenseClaim {
@@ -2474,47 +2477,9 @@ model StudyAbroadPartner {
   referrer             User?                   @relation("StudyAbroadPartnerReferredBy", fields: [referredBy], references: [id])
   adminUserId          String?                 @unique
   adminUser            User?                   @relation("StudyAbroadPartnerAdmin", fields: [adminUserId], references: [id])
-  enrollments          StudyAbroadEnrollment[]
 
   @@unique([organizationId, code])
   @@index([organizationId, status])
-}
-
-model StudyAbroadEnrollment {
-  id                String             @id @default(uuid())
-  organizationId    String
-  partnerId         String
-  createdBy         String
-  studentName       String
-  studentEmail      String
-  studentPhone      String
-  studentAddress    String?
-  dateOfBirth       DateTime?
-  passportNumber    String?
-  destinationCountry String
-  universityName    String
-  courseName        String
-  intake            String
-  intakeYear        Int?
-  documents         Json               @default("[]")
-  status            String             @default("document_review")
-  opsRemarks        String?
-  financeRemarks    String?
-  opsReviewedBy     String?
-  opsReviewedAt     DateTime?
-  financeReviewedBy String?
-  financeReviewedAt DateTime?
-  serviceFee        Float?
-  debitedAt         DateTime?
-  statusHistory     Json               @default("[]")
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  organization      Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  partner           StudyAbroadPartner @relation(fields: [partnerId], references: [id])
-  creator           User               @relation("StudyAbroadEnrollmentCreatedBy", fields: [createdBy], references: [id])
-
-  @@index([organizationId, status])
-  @@index([partnerId, status])
 }
 
 // Countries an organization offers when setting up universities (University.country stores the name).

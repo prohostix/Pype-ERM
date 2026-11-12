@@ -25,7 +25,6 @@ import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { EnrollStudentPanel } from '@/components/panels/EnrollStudentPanel';
 import { ProvisionalEnrollmentPanel } from '@/components/panels/ProvisionalEnrollmentPanel';
-import { StudyAbroadPartnersPage } from '@/components/panels/StudyAbroadPartnersPage';
 import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
 import { LeadsPanel } from '@/components/panels/LeadsPanel';
 import { CEOKPIReportPanel } from '@/components/panels/CEOKPIReportPanel';
@@ -115,7 +114,6 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       // Enrollment
       case 'team_student_registration': return <EnrollStudentPanel />;
       case 'provisional_enrollment': return <ProvisionalEnrollmentPanel />;
-      case 'study_abroad_partners': return <StudyAbroadPartnersPage />;
       case 'team_enrolled_students':
       case 'enrolled_students':
       case 'student_status': return <StudentsPanel />;
@@ -231,7 +229,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
       { id: '__enrollment', label: 'Enrollment', isSection: true },
       { id: 'invite_links', label: 'Generate Student Link' },
       { id: 'provisional_enrollment', label: 'Provisional Enrollment' },
-      { id: 'study_abroad_partners', label: 'Study Abroad Partners' },
       { id: 'admission_pipeline', label: 'Admission Pipeline' },
       { id: 'student_status', label: 'Student Status' },
       { id: 'payment_status', label: 'Payment Status' },

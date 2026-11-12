@@ -15,7 +15,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     metrics.totalOrganizations = await prisma.organization.count();
     metrics.activeOrganizations = await prisma.organization.count({ where: { status: 'active' } });
     metrics.totalBranches = await prisma.branch.count();
-    metrics.totalEnrollments = await prisma.enrollment.count();
+    metrics.totalEnrollments = await prisma.enrollment.count({ where: { source: null } }); // Study Abroad applications are not part of the enrollment totals
     metrics.totalLicenses = await prisma.license.count();
 
     // Total Revenue collected across platform
@@ -360,7 +360,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
       });
       metrics.organization = org;
       metrics.totalBranches = org?._count.branches ?? await prisma.branch.count({ where: { organizationId: targetOrgId } });
-      metrics.totalEnrollments = org?._count.enrollments ?? await prisma.enrollment.count({ where: { organizationId: targetOrgId } });
+      metrics.totalEnrollments = await prisma.enrollment.count({ where: { organizationId: targetOrgId, source: null } });
 
       // Ensure totalStudents is accurate
       metrics.totalStudents = org?._count.students ?? await prisma.student.count({ where: { organizationId: targetOrgId } });
@@ -1133,7 +1133,7 @@ export const getPlatformUsageMetrics = asyncHandler(async (req: AuthRequest, res
     totalAuditLogs,
     paymentsAggregate
   ] = await Promise.all([
-    prisma.enrollment.count({ where: orgWhere }),
+    prisma.enrollment.count({ where: { ...orgWhere, source: null } }),
     prisma.student.count({ where: isOrgFiltered ? { organizationId: requestedOrgId } : {} }),
     prisma.user.count({ where: isOrgFiltered ? { organizationId: requestedOrgId, status: { not: 'resigned' } } : { status: { not: 'resigned' } } }),
     prisma.auditLog.count({ where: orgWhere }),

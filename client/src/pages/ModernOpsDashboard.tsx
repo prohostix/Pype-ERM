@@ -18,7 +18,6 @@ import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
 import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
-import { StudyAbroadPartnersPage } from '@/components/panels/StudyAbroadPartnersPage';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { OpsProgramAllocationPanel } from '@/components/panels/OpsProgramAllocationPanel';
@@ -91,7 +90,6 @@ export function ModernOpsDashboard({ initialTab, onNavigate }: { initialTab?: st
       case 'program_allocations': return <OpsProgramAllocationPanel />;
 
       case 'centers': return <StudyCentersPanel />;
-      case 'study_abroad_partners': return <StudyAbroadPartnersPage />;
 
       case 'document_received': return <DocumentReceivedPanel />;
       case 'document_dispatch': return <DocumentDispatchPanel />;
@@ -156,9 +154,6 @@ export function getOpsNavItems(role?: string) {
 
     { id: '__study_centers', label: 'Academic Partners', isSection: true },
     { id: 'centers', label: 'Academic Partners' },
-
-    { id: '__study_abroad', label: 'Study Abroad Partners', isSection: true },
-    { id: 'study_abroad_partners', label: 'Study Abroad Partners' },
 
     { id: '__document_management', label: 'Document Management', isSection: true },
     { id: 'document_received', label: 'Document Received' },

@@ -546,8 +546,10 @@ function App() {
     if (user.role === 'study_abroad_admin') {
       return [
         { id: 'dashboard', label: 'Dashboard' },
+        { id: 'catalog', label: 'Search Programs' },
         { id: 'apply', label: 'New Application' },
         { id: 'applications', label: 'My Applications' },
+        { id: 'enrolled', label: 'Enrolled Students' },
       ];
     }
 

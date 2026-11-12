@@ -464,11 +464,6 @@ export type StudentAcademicAttendance = $Result.DefaultSelection<Prisma.$Student
  */
 export type StudyAbroadPartner = $Result.DefaultSelection<Prisma.$StudyAbroadPartnerPayload>
 /**
- * Model StudyAbroadEnrollment
- * 
- */
-export type StudyAbroadEnrollment = $Result.DefaultSelection<Prisma.$StudyAbroadEnrollmentPayload>
-/**
  * Model Country
  * 
  */
@@ -1895,16 +1890,6 @@ export class PrismaClient<
   get studyAbroadPartner(): Prisma.StudyAbroadPartnerDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.studyAbroadEnrollment`: Exposes CRUD operations for the **StudyAbroadEnrollment** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more StudyAbroadEnrollments
-    * const studyAbroadEnrollments = await prisma.studyAbroadEnrollment.findMany()
-    * ```
-    */
-  get studyAbroadEnrollment(): Prisma.StudyAbroadEnrollmentDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.country`: Exposes CRUD operations for the **Country** model.
     * Example usage:
     * ```ts
@@ -2437,7 +2422,6 @@ export namespace Prisma {
     AcademicSession: 'AcademicSession',
     StudentAcademicAttendance: 'StudentAcademicAttendance',
     StudyAbroadPartner: 'StudyAbroadPartner',
-    StudyAbroadEnrollment: 'StudyAbroadEnrollment',
     Country: 'Country'
   };
 
@@ -2454,7 +2438,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadEnrollment" | "country"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "country"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -9118,80 +9102,6 @@ export namespace Prisma {
           }
         }
       }
-      StudyAbroadEnrollment: {
-        payload: Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>
-        fields: Prisma.StudyAbroadEnrollmentFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.StudyAbroadEnrollmentFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.StudyAbroadEnrollmentFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload>
-          }
-          findFirst: {
-            args: Prisma.StudyAbroadEnrollmentFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.StudyAbroadEnrollmentFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload>
-          }
-          findMany: {
-            args: Prisma.StudyAbroadEnrollmentFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload>[]
-          }
-          create: {
-            args: Prisma.StudyAbroadEnrollmentCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload>
-          }
-          createMany: {
-            args: Prisma.StudyAbroadEnrollmentCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.StudyAbroadEnrollmentCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload>[]
-          }
-          delete: {
-            args: Prisma.StudyAbroadEnrollmentDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload>
-          }
-          update: {
-            args: Prisma.StudyAbroadEnrollmentUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload>
-          }
-          deleteMany: {
-            args: Prisma.StudyAbroadEnrollmentDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.StudyAbroadEnrollmentUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.StudyAbroadEnrollmentUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload>[]
-          }
-          upsert: {
-            args: Prisma.StudyAbroadEnrollmentUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$StudyAbroadEnrollmentPayload>
-          }
-          aggregate: {
-            args: Prisma.StudyAbroadEnrollmentAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateStudyAbroadEnrollment>
-          }
-          groupBy: {
-            args: Prisma.StudyAbroadEnrollmentGroupByArgs<ExtArgs>
-            result: $Utils.Optional<StudyAbroadEnrollmentGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.StudyAbroadEnrollmentCountArgs<ExtArgs>
-            result: $Utils.Optional<StudyAbroadEnrollmentCountAggregateOutputType> | number
-          }
-        }
-      }
       Country: {
         payload: Prisma.$CountryPayload<ExtArgs>
         fields: Prisma.CountryFieldRefs
@@ -9464,7 +9374,6 @@ export namespace Prisma {
     academicSession?: AcademicSessionOmit
     studentAcademicAttendance?: StudentAcademicAttendanceOmit
     studyAbroadPartner?: StudyAbroadPartnerOmit
-    studyAbroadEnrollment?: StudyAbroadEnrollmentOmit
     country?: CountryOmit
   }
 
@@ -9587,7 +9496,6 @@ export namespace Prisma {
     payrollBatches: number
     studyAbroadPartners: number
     countries: number
-    studyAbroadEnrollments: number
     polls: number
     programs: number
     programAllocations: number
@@ -9669,7 +9577,6 @@ export namespace Prisma {
     payrollBatches?: boolean | OrganizationCountOutputTypeCountPayrollBatchesArgs
     studyAbroadPartners?: boolean | OrganizationCountOutputTypeCountStudyAbroadPartnersArgs
     countries?: boolean | OrganizationCountOutputTypeCountCountriesArgs
-    studyAbroadEnrollments?: boolean | OrganizationCountOutputTypeCountStudyAbroadEnrollmentsArgs
     polls?: boolean | OrganizationCountOutputTypeCountPollsArgs
     programs?: boolean | OrganizationCountOutputTypeCountProgramsArgs
     programAllocations?: boolean | OrganizationCountOutputTypeCountProgramAllocationsArgs
@@ -10005,13 +9912,6 @@ export namespace Prisma {
    */
   export type OrganizationCountOutputTypeCountCountriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CountryWhereInput
-  }
-
-  /**
-   * OrganizationCountOutputType without action
-   */
-  export type OrganizationCountOutputTypeCountStudyAbroadEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: StudyAbroadEnrollmentWhereInput
   }
 
   /**
@@ -10492,7 +10392,6 @@ export namespace Prisma {
     configuredAuthFees: number
     subordinates: number
     studyAbroadPartnersReferred: number
-    studyAbroadEnrollmentsCreated: number
     verifiedWalletTopUps: number
     assistantManagedDepartments: number
     designations: number
@@ -10572,7 +10471,6 @@ export namespace Prisma {
     configuredAuthFees?: boolean | UserCountOutputTypeCountConfiguredAuthFeesArgs
     subordinates?: boolean | UserCountOutputTypeCountSubordinatesArgs
     studyAbroadPartnersReferred?: boolean | UserCountOutputTypeCountStudyAbroadPartnersReferredArgs
-    studyAbroadEnrollmentsCreated?: boolean | UserCountOutputTypeCountStudyAbroadEnrollmentsCreatedArgs
     verifiedWalletTopUps?: boolean | UserCountOutputTypeCountVerifiedWalletTopUpsArgs
     assistantManagedDepartments?: boolean | UserCountOutputTypeCountAssistantManagedDepartmentsArgs
     designations?: boolean | UserCountOutputTypeCountDesignationsArgs
@@ -11080,13 +10978,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountStudyAbroadPartnersReferredArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudyAbroadPartnerWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountStudyAbroadEnrollmentsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: StudyAbroadEnrollmentWhereInput
   }
 
   /**
@@ -12638,37 +12529,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type StudyAbroadPartnerCountOutputType
-   */
-
-  export type StudyAbroadPartnerCountOutputType = {
-    enrollments: number
-  }
-
-  export type StudyAbroadPartnerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    enrollments?: boolean | StudyAbroadPartnerCountOutputTypeCountEnrollmentsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * StudyAbroadPartnerCountOutputType without action
-   */
-  export type StudyAbroadPartnerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadPartnerCountOutputType
-     */
-    select?: StudyAbroadPartnerCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * StudyAbroadPartnerCountOutputType without action
-   */
-  export type StudyAbroadPartnerCountOutputTypeCountEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: StudyAbroadEnrollmentWhereInput
-  }
-
-
-  /**
    * Models
    */
 
@@ -12943,7 +12803,6 @@ export namespace Prisma {
     payrollBatches?: boolean | Organization$payrollBatchesArgs<ExtArgs>
     studyAbroadPartners?: boolean | Organization$studyAbroadPartnersArgs<ExtArgs>
     countries?: boolean | Organization$countriesArgs<ExtArgs>
-    studyAbroadEnrollments?: boolean | Organization$studyAbroadEnrollmentsArgs<ExtArgs>
     polls?: boolean | Organization$pollsArgs<ExtArgs>
     programs?: boolean | Organization$programsArgs<ExtArgs>
     programAllocations?: boolean | Organization$programAllocationsArgs<ExtArgs>
@@ -13082,7 +12941,6 @@ export namespace Prisma {
     payrollBatches?: boolean | Organization$payrollBatchesArgs<ExtArgs>
     studyAbroadPartners?: boolean | Organization$studyAbroadPartnersArgs<ExtArgs>
     countries?: boolean | Organization$countriesArgs<ExtArgs>
-    studyAbroadEnrollments?: boolean | Organization$studyAbroadEnrollmentsArgs<ExtArgs>
     polls?: boolean | Organization$pollsArgs<ExtArgs>
     programs?: boolean | Organization$programsArgs<ExtArgs>
     programAllocations?: boolean | Organization$programAllocationsArgs<ExtArgs>
@@ -13175,7 +13033,6 @@ export namespace Prisma {
       payrollBatches: Prisma.$PayrollBatchPayload<ExtArgs>[]
       studyAbroadPartners: Prisma.$StudyAbroadPartnerPayload<ExtArgs>[]
       countries: Prisma.$CountryPayload<ExtArgs>[]
-      studyAbroadEnrollments: Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>[]
       polls: Prisma.$PollPayload<ExtArgs>[]
       programs: Prisma.$ProgramPayload<ExtArgs>[]
       programAllocations: Prisma.$ProgramAllocationPayload<ExtArgs>[]
@@ -13666,7 +13523,6 @@ export namespace Prisma {
     payrollBatches<T extends Organization$payrollBatchesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$payrollBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PayrollBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     studyAbroadPartners<T extends Organization$studyAbroadPartnersArgs<ExtArgs> = {}>(args?: Subset<T, Organization$studyAbroadPartnersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyAbroadPartnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     countries<T extends Organization$countriesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$countriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CountryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    studyAbroadEnrollments<T extends Organization$studyAbroadEnrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$studyAbroadEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     polls<T extends Organization$pollsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$pollsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     programs<T extends Organization$programsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$programsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     programAllocations<T extends Organization$programAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$programAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -15167,30 +15023,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CountryScalarFieldEnum | CountryScalarFieldEnum[]
-  }
-
-  /**
-   * Organization.studyAbroadEnrollments
-   */
-  export type Organization$studyAbroadEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    where?: StudyAbroadEnrollmentWhereInput
-    orderBy?: StudyAbroadEnrollmentOrderByWithRelationInput | StudyAbroadEnrollmentOrderByWithRelationInput[]
-    cursor?: StudyAbroadEnrollmentWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: StudyAbroadEnrollmentScalarFieldEnum | StudyAbroadEnrollmentScalarFieldEnum[]
   }
 
   /**
@@ -19284,7 +19116,6 @@ export namespace Prisma {
     studyCenter?: boolean | User$studyCenterArgs<ExtArgs>
     studyAbroadPartnerAdminOf?: boolean | User$studyAbroadPartnerAdminOfArgs<ExtArgs>
     studyAbroadPartnersReferred?: boolean | User$studyAbroadPartnersReferredArgs<ExtArgs>
-    studyAbroadEnrollmentsCreated?: boolean | User$studyAbroadEnrollmentsCreatedArgs<ExtArgs>
     subDepartment?: boolean | User$subDepartmentArgs<ExtArgs>
     university?: boolean | User$universityArgs<ExtArgs>
     verifiedWalletTopUps?: boolean | User$verifiedWalletTopUpsArgs<ExtArgs>
@@ -19494,7 +19325,6 @@ export namespace Prisma {
     studyCenter?: boolean | User$studyCenterArgs<ExtArgs>
     studyAbroadPartnerAdminOf?: boolean | User$studyAbroadPartnerAdminOfArgs<ExtArgs>
     studyAbroadPartnersReferred?: boolean | User$studyAbroadPartnersReferredArgs<ExtArgs>
-    studyAbroadEnrollmentsCreated?: boolean | User$studyAbroadEnrollmentsCreatedArgs<ExtArgs>
     subDepartment?: boolean | User$subDepartmentArgs<ExtArgs>
     university?: boolean | User$universityArgs<ExtArgs>
     verifiedWalletTopUps?: boolean | User$verifiedWalletTopUpsArgs<ExtArgs>
@@ -19610,7 +19440,6 @@ export namespace Prisma {
       studyCenter: Prisma.$StudyCenterPayload<ExtArgs> | null
       studyAbroadPartnerAdminOf: Prisma.$StudyAbroadPartnerPayload<ExtArgs> | null
       studyAbroadPartnersReferred: Prisma.$StudyAbroadPartnerPayload<ExtArgs>[]
-      studyAbroadEnrollmentsCreated: Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>[]
       subDepartment: Prisma.$SubDepartmentPayload<ExtArgs> | null
       university: Prisma.$UniversityPayload<ExtArgs> | null
       verifiedWalletTopUps: Prisma.$WalletTopUpPayload<ExtArgs>[]
@@ -20128,7 +19957,6 @@ export namespace Prisma {
     studyCenter<T extends User$studyCenterArgs<ExtArgs> = {}>(args?: Subset<T, User$studyCenterArgs<ExtArgs>>): Prisma__StudyCenterClient<$Result.GetResult<Prisma.$StudyCenterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     studyAbroadPartnerAdminOf<T extends User$studyAbroadPartnerAdminOfArgs<ExtArgs> = {}>(args?: Subset<T, User$studyAbroadPartnerAdminOfArgs<ExtArgs>>): Prisma__StudyAbroadPartnerClient<$Result.GetResult<Prisma.$StudyAbroadPartnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     studyAbroadPartnersReferred<T extends User$studyAbroadPartnersReferredArgs<ExtArgs> = {}>(args?: Subset<T, User$studyAbroadPartnersReferredArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyAbroadPartnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    studyAbroadEnrollmentsCreated<T extends User$studyAbroadEnrollmentsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$studyAbroadEnrollmentsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     subDepartment<T extends User$subDepartmentArgs<ExtArgs> = {}>(args?: Subset<T, User$subDepartmentArgs<ExtArgs>>): Prisma__SubDepartmentClient<$Result.GetResult<Prisma.$SubDepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     university<T extends User$universityArgs<ExtArgs> = {}>(args?: Subset<T, User$universityArgs<ExtArgs>>): Prisma__UniversityClient<$Result.GetResult<Prisma.$UniversityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     verifiedWalletTopUps<T extends User$verifiedWalletTopUpsArgs<ExtArgs> = {}>(args?: Subset<T, User$verifiedWalletTopUpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTopUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -22521,30 +22349,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudyAbroadPartnerScalarFieldEnum | StudyAbroadPartnerScalarFieldEnum[]
-  }
-
-  /**
-   * User.studyAbroadEnrollmentsCreated
-   */
-  export type User$studyAbroadEnrollmentsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    where?: StudyAbroadEnrollmentWhereInput
-    orderBy?: StudyAbroadEnrollmentOrderByWithRelationInput | StudyAbroadEnrollmentOrderByWithRelationInput[]
-    cursor?: StudyAbroadEnrollmentWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: StudyAbroadEnrollmentScalarFieldEnum | StudyAbroadEnrollmentScalarFieldEnum[]
   }
 
   /**
@@ -31332,6 +31136,7 @@ export namespace Prisma {
     familyPhone: string | null
     universityId: string | null
     enrolledBy: string | null
+    source: string | null
     discountAmount: number | null
     discountReason: string | null
   }
@@ -31377,6 +31182,7 @@ export namespace Prisma {
     familyPhone: string | null
     universityId: string | null
     enrolledBy: string | null
+    source: string | null
     discountAmount: number | null
     discountReason: string | null
   }
@@ -31425,6 +31231,7 @@ export namespace Prisma {
     familyPhone: number
     universityId: number
     enrolledBy: number
+    source: number
     academicProgress: number
     admissionProgress: number
     discountAmount: number
@@ -31482,6 +31289,7 @@ export namespace Prisma {
     familyPhone?: true
     universityId?: true
     enrolledBy?: true
+    source?: true
     discountAmount?: true
     discountReason?: true
   }
@@ -31527,6 +31335,7 @@ export namespace Prisma {
     familyPhone?: true
     universityId?: true
     enrolledBy?: true
+    source?: true
     discountAmount?: true
     discountReason?: true
   }
@@ -31575,6 +31384,7 @@ export namespace Prisma {
     familyPhone?: true
     universityId?: true
     enrolledBy?: true
+    source?: true
     academicProgress?: true
     admissionProgress?: true
     discountAmount?: true
@@ -31712,6 +31522,7 @@ export namespace Prisma {
     familyPhone: string | null
     universityId: string | null
     enrolledBy: string | null
+    source: string | null
     academicProgress: JsonValue | null
     admissionProgress: JsonValue | null
     discountAmount: number
@@ -31781,6 +31592,7 @@ export namespace Prisma {
     familyPhone?: boolean
     universityId?: boolean
     enrolledBy?: boolean
+    source?: boolean
     academicProgress?: boolean
     admissionProgress?: boolean
     discountAmount?: boolean
@@ -31858,6 +31670,7 @@ export namespace Prisma {
     familyPhone?: boolean
     universityId?: boolean
     enrolledBy?: boolean
+    source?: boolean
     academicProgress?: boolean
     admissionProgress?: boolean
     discountAmount?: boolean
@@ -31918,6 +31731,7 @@ export namespace Prisma {
     familyPhone?: boolean
     universityId?: boolean
     enrolledBy?: boolean
+    source?: boolean
     academicProgress?: boolean
     admissionProgress?: boolean
     discountAmount?: boolean
@@ -31978,13 +31792,14 @@ export namespace Prisma {
     familyPhone?: boolean
     universityId?: boolean
     enrolledBy?: boolean
+    source?: boolean
     academicProgress?: boolean
     admissionProgress?: boolean
     discountAmount?: boolean
     discountReason?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "name" | "email" | "phone" | "address" | "programId" | "specialisation" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "academicBatchId" | "createdAt" | "updatedAt" | "referredBy" | "isPrevious" | "credentials" | "altPhone" | "dob" | "fatherName" | "pinCode" | "documents" | "admissionDate" | "admissionNo" | "branchId" | "caste" | "fatherPhone" | "motherName" | "motherPhone" | "photo" | "religion" | "gender" | "category" | "maritalStatus" | "employmentStatus" | "guardianName" | "familyPhone" | "universityId" | "enrolledBy" | "academicProgress" | "admissionProgress" | "discountAmount" | "discountReason", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "name" | "email" | "phone" | "address" | "programId" | "specialisation" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "academicBatchId" | "createdAt" | "updatedAt" | "referredBy" | "isPrevious" | "credentials" | "altPhone" | "dob" | "fatherName" | "pinCode" | "documents" | "admissionDate" | "admissionNo" | "branchId" | "caste" | "fatherPhone" | "motherName" | "motherPhone" | "photo" | "religion" | "gender" | "category" | "maritalStatus" | "employmentStatus" | "guardianName" | "familyPhone" | "universityId" | "enrolledBy" | "source" | "academicProgress" | "admissionProgress" | "discountAmount" | "discountReason", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     studentBatchTransfers?: boolean | Student$studentBatchTransfersArgs<ExtArgs>
     academicBatch?: boolean | Student$academicBatchArgs<ExtArgs>
@@ -32113,6 +31928,7 @@ export namespace Prisma {
       familyPhone: string | null
       universityId: string | null
       enrolledBy: string | null
+      source: string | null
       academicProgress: Prisma.JsonValue | null
       admissionProgress: Prisma.JsonValue | null
       discountAmount: number
@@ -32609,6 +32425,7 @@ export namespace Prisma {
     readonly familyPhone: FieldRef<"Student", 'String'>
     readonly universityId: FieldRef<"Student", 'String'>
     readonly enrolledBy: FieldRef<"Student", 'String'>
+    readonly source: FieldRef<"Student", 'String'>
     readonly academicProgress: FieldRef<"Student", 'Json'>
     readonly admissionProgress: FieldRef<"Student", 'Json'>
     readonly discountAmount: FieldRef<"Student", 'Float'>
@@ -54059,10 +53876,12 @@ export namespace Prisma {
 
   export type EnrollmentAvgAggregateOutputType = {
     initialPaymentAmount: number | null
+    serviceFee: number | null
   }
 
   export type EnrollmentSumAggregateOutputType = {
     initialPaymentAmount: number | null
+    serviceFee: number | null
   }
 
   export type EnrollmentMinAggregateOutputType = {
@@ -54120,6 +53939,9 @@ export namespace Prisma {
     initialPaymentAmount: number | null
     initialPaymentDate: Date | null
     paymentPlan: string | null
+    source: string | null
+    studyAbroadPartnerId: string | null
+    serviceFee: number | null
   }
 
   export type EnrollmentMaxAggregateOutputType = {
@@ -54177,6 +53999,9 @@ export namespace Prisma {
     initialPaymentAmount: number | null
     initialPaymentDate: Date | null
     paymentPlan: string | null
+    source: string | null
+    studyAbroadPartnerId: string | null
+    serviceFee: number | null
   }
 
   export type EnrollmentCountAggregateOutputType = {
@@ -54238,16 +54063,21 @@ export namespace Prisma {
     initialPaymentAmount: number
     initialPaymentDate: number
     paymentPlan: number
+    source: number
+    studyAbroadPartnerId: number
+    serviceFee: number
     _all: number
   }
 
 
   export type EnrollmentAvgAggregateInputType = {
     initialPaymentAmount?: true
+    serviceFee?: true
   }
 
   export type EnrollmentSumAggregateInputType = {
     initialPaymentAmount?: true
+    serviceFee?: true
   }
 
   export type EnrollmentMinAggregateInputType = {
@@ -54305,6 +54135,9 @@ export namespace Prisma {
     initialPaymentAmount?: true
     initialPaymentDate?: true
     paymentPlan?: true
+    source?: true
+    studyAbroadPartnerId?: true
+    serviceFee?: true
   }
 
   export type EnrollmentMaxAggregateInputType = {
@@ -54362,6 +54195,9 @@ export namespace Prisma {
     initialPaymentAmount?: true
     initialPaymentDate?: true
     paymentPlan?: true
+    source?: true
+    studyAbroadPartnerId?: true
+    serviceFee?: true
   }
 
   export type EnrollmentCountAggregateInputType = {
@@ -54423,6 +54259,9 @@ export namespace Prisma {
     initialPaymentAmount?: true
     initialPaymentDate?: true
     paymentPlan?: true
+    source?: true
+    studyAbroadPartnerId?: true
+    serviceFee?: true
     _all?: true
   }
 
@@ -54571,6 +54410,9 @@ export namespace Prisma {
     initialPaymentAmount: number | null
     initialPaymentDate: Date | null
     paymentPlan: string | null
+    source: string | null
+    studyAbroadPartnerId: string | null
+    serviceFee: number | null
     _count: EnrollmentCountAggregateOutputType | null
     _avg: EnrollmentAvgAggregateOutputType | null
     _sum: EnrollmentSumAggregateOutputType | null
@@ -54651,6 +54493,9 @@ export namespace Prisma {
     initialPaymentAmount?: boolean
     initialPaymentDate?: boolean
     paymentPlan?: boolean
+    source?: boolean
+    studyAbroadPartnerId?: boolean
+    serviceFee?: boolean
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -54723,6 +54568,9 @@ export namespace Prisma {
     initialPaymentAmount?: boolean
     initialPaymentDate?: boolean
     paymentPlan?: boolean
+    source?: boolean
+    studyAbroadPartnerId?: boolean
+    serviceFee?: boolean
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -54794,6 +54642,9 @@ export namespace Prisma {
     initialPaymentAmount?: boolean
     initialPaymentDate?: boolean
     paymentPlan?: boolean
+    source?: boolean
+    studyAbroadPartnerId?: boolean
+    serviceFee?: boolean
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -54865,9 +54716,12 @@ export namespace Prisma {
     initialPaymentAmount?: boolean
     initialPaymentDate?: boolean
     paymentPlan?: boolean
+    source?: boolean
+    studyAbroadPartnerId?: boolean
+    serviceFee?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "specialisation" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "isProvisional" | "isUpgrade" | "previousProgramId" | "provisionalReceiptUrl" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "admissionProgress" | "academicProgress" | "photoStatus" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "specialisation" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "isProvisional" | "isUpgrade" | "previousProgramId" | "provisionalReceiptUrl" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "admissionProgress" | "academicProgress" | "photoStatus" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan" | "source" | "studyAbroadPartnerId" | "serviceFee", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -54980,6 +54834,9 @@ export namespace Prisma {
       initialPaymentAmount: number | null
       initialPaymentDate: Date | null
       paymentPlan: string | null
+      source: string | null
+      studyAbroadPartnerId: string | null
+      serviceFee: number | null
     }, ExtArgs["result"]["enrollment"]>
     composites: {}
   }
@@ -55472,6 +55329,9 @@ export namespace Prisma {
     readonly initialPaymentAmount: FieldRef<"Enrollment", 'Float'>
     readonly initialPaymentDate: FieldRef<"Enrollment", 'DateTime'>
     readonly paymentPlan: FieldRef<"Enrollment", 'String'>
+    readonly source: FieldRef<"Enrollment", 'String'>
+    readonly studyAbroadPartnerId: FieldRef<"Enrollment", 'String'>
+    readonly serviceFee: FieldRef<"Enrollment", 'Float'>
   }
     
 
@@ -129718,8 +129578,6 @@ export namespace Prisma {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     referrer?: boolean | StudyAbroadPartner$referrerArgs<ExtArgs>
     adminUser?: boolean | StudyAbroadPartner$adminUserArgs<ExtArgs>
-    enrollments?: boolean | StudyAbroadPartner$enrollmentsArgs<ExtArgs>
-    _count?: boolean | StudyAbroadPartnerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studyAbroadPartner"]>
 
   export type StudyAbroadPartnerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -129793,8 +129651,6 @@ export namespace Prisma {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     referrer?: boolean | StudyAbroadPartner$referrerArgs<ExtArgs>
     adminUser?: boolean | StudyAbroadPartner$adminUserArgs<ExtArgs>
-    enrollments?: boolean | StudyAbroadPartner$enrollmentsArgs<ExtArgs>
-    _count?: boolean | StudyAbroadPartnerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudyAbroadPartnerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -129813,7 +129669,6 @@ export namespace Prisma {
       organization: Prisma.$OrganizationPayload<ExtArgs>
       referrer: Prisma.$UserPayload<ExtArgs> | null
       adminUser: Prisma.$UserPayload<ExtArgs> | null
-      enrollments: Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -130230,7 +130085,6 @@ export namespace Prisma {
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     referrer<T extends StudyAbroadPartner$referrerArgs<ExtArgs> = {}>(args?: Subset<T, StudyAbroadPartner$referrerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     adminUser<T extends StudyAbroadPartner$adminUserArgs<ExtArgs> = {}>(args?: Subset<T, StudyAbroadPartner$adminUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    enrollments<T extends StudyAbroadPartner$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, StudyAbroadPartner$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -130716,30 +130570,6 @@ export namespace Prisma {
   }
 
   /**
-   * StudyAbroadPartner.enrollments
-   */
-  export type StudyAbroadPartner$enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    where?: StudyAbroadEnrollmentWhereInput
-    orderBy?: StudyAbroadEnrollmentOrderByWithRelationInput | StudyAbroadEnrollmentOrderByWithRelationInput[]
-    cursor?: StudyAbroadEnrollmentWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: StudyAbroadEnrollmentScalarFieldEnum | StudyAbroadEnrollmentScalarFieldEnum[]
-  }
-
-  /**
    * StudyAbroadPartner without action
    */
   export type StudyAbroadPartnerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -130755,1414 +130585,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: StudyAbroadPartnerInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model StudyAbroadEnrollment
-   */
-
-  export type AggregateStudyAbroadEnrollment = {
-    _count: StudyAbroadEnrollmentCountAggregateOutputType | null
-    _avg: StudyAbroadEnrollmentAvgAggregateOutputType | null
-    _sum: StudyAbroadEnrollmentSumAggregateOutputType | null
-    _min: StudyAbroadEnrollmentMinAggregateOutputType | null
-    _max: StudyAbroadEnrollmentMaxAggregateOutputType | null
-  }
-
-  export type StudyAbroadEnrollmentAvgAggregateOutputType = {
-    intakeYear: number | null
-    serviceFee: number | null
-  }
-
-  export type StudyAbroadEnrollmentSumAggregateOutputType = {
-    intakeYear: number | null
-    serviceFee: number | null
-  }
-
-  export type StudyAbroadEnrollmentMinAggregateOutputType = {
-    id: string | null
-    organizationId: string | null
-    partnerId: string | null
-    createdBy: string | null
-    studentName: string | null
-    studentEmail: string | null
-    studentPhone: string | null
-    studentAddress: string | null
-    dateOfBirth: Date | null
-    passportNumber: string | null
-    destinationCountry: string | null
-    universityName: string | null
-    courseName: string | null
-    intake: string | null
-    intakeYear: number | null
-    status: string | null
-    opsRemarks: string | null
-    financeRemarks: string | null
-    opsReviewedBy: string | null
-    opsReviewedAt: Date | null
-    financeReviewedBy: string | null
-    financeReviewedAt: Date | null
-    serviceFee: number | null
-    debitedAt: Date | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type StudyAbroadEnrollmentMaxAggregateOutputType = {
-    id: string | null
-    organizationId: string | null
-    partnerId: string | null
-    createdBy: string | null
-    studentName: string | null
-    studentEmail: string | null
-    studentPhone: string | null
-    studentAddress: string | null
-    dateOfBirth: Date | null
-    passportNumber: string | null
-    destinationCountry: string | null
-    universityName: string | null
-    courseName: string | null
-    intake: string | null
-    intakeYear: number | null
-    status: string | null
-    opsRemarks: string | null
-    financeRemarks: string | null
-    opsReviewedBy: string | null
-    opsReviewedAt: Date | null
-    financeReviewedBy: string | null
-    financeReviewedAt: Date | null
-    serviceFee: number | null
-    debitedAt: Date | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type StudyAbroadEnrollmentCountAggregateOutputType = {
-    id: number
-    organizationId: number
-    partnerId: number
-    createdBy: number
-    studentName: number
-    studentEmail: number
-    studentPhone: number
-    studentAddress: number
-    dateOfBirth: number
-    passportNumber: number
-    destinationCountry: number
-    universityName: number
-    courseName: number
-    intake: number
-    intakeYear: number
-    documents: number
-    status: number
-    opsRemarks: number
-    financeRemarks: number
-    opsReviewedBy: number
-    opsReviewedAt: number
-    financeReviewedBy: number
-    financeReviewedAt: number
-    serviceFee: number
-    debitedAt: number
-    statusHistory: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type StudyAbroadEnrollmentAvgAggregateInputType = {
-    intakeYear?: true
-    serviceFee?: true
-  }
-
-  export type StudyAbroadEnrollmentSumAggregateInputType = {
-    intakeYear?: true
-    serviceFee?: true
-  }
-
-  export type StudyAbroadEnrollmentMinAggregateInputType = {
-    id?: true
-    organizationId?: true
-    partnerId?: true
-    createdBy?: true
-    studentName?: true
-    studentEmail?: true
-    studentPhone?: true
-    studentAddress?: true
-    dateOfBirth?: true
-    passportNumber?: true
-    destinationCountry?: true
-    universityName?: true
-    courseName?: true
-    intake?: true
-    intakeYear?: true
-    status?: true
-    opsRemarks?: true
-    financeRemarks?: true
-    opsReviewedBy?: true
-    opsReviewedAt?: true
-    financeReviewedBy?: true
-    financeReviewedAt?: true
-    serviceFee?: true
-    debitedAt?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type StudyAbroadEnrollmentMaxAggregateInputType = {
-    id?: true
-    organizationId?: true
-    partnerId?: true
-    createdBy?: true
-    studentName?: true
-    studentEmail?: true
-    studentPhone?: true
-    studentAddress?: true
-    dateOfBirth?: true
-    passportNumber?: true
-    destinationCountry?: true
-    universityName?: true
-    courseName?: true
-    intake?: true
-    intakeYear?: true
-    status?: true
-    opsRemarks?: true
-    financeRemarks?: true
-    opsReviewedBy?: true
-    opsReviewedAt?: true
-    financeReviewedBy?: true
-    financeReviewedAt?: true
-    serviceFee?: true
-    debitedAt?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type StudyAbroadEnrollmentCountAggregateInputType = {
-    id?: true
-    organizationId?: true
-    partnerId?: true
-    createdBy?: true
-    studentName?: true
-    studentEmail?: true
-    studentPhone?: true
-    studentAddress?: true
-    dateOfBirth?: true
-    passportNumber?: true
-    destinationCountry?: true
-    universityName?: true
-    courseName?: true
-    intake?: true
-    intakeYear?: true
-    documents?: true
-    status?: true
-    opsRemarks?: true
-    financeRemarks?: true
-    opsReviewedBy?: true
-    opsReviewedAt?: true
-    financeReviewedBy?: true
-    financeReviewedAt?: true
-    serviceFee?: true
-    debitedAt?: true
-    statusHistory?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type StudyAbroadEnrollmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which StudyAbroadEnrollment to aggregate.
-     */
-    where?: StudyAbroadEnrollmentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of StudyAbroadEnrollments to fetch.
-     */
-    orderBy?: StudyAbroadEnrollmentOrderByWithRelationInput | StudyAbroadEnrollmentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: StudyAbroadEnrollmentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` StudyAbroadEnrollments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` StudyAbroadEnrollments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned StudyAbroadEnrollments
-    **/
-    _count?: true | StudyAbroadEnrollmentCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: StudyAbroadEnrollmentAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: StudyAbroadEnrollmentSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: StudyAbroadEnrollmentMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: StudyAbroadEnrollmentMaxAggregateInputType
-  }
-
-  export type GetStudyAbroadEnrollmentAggregateType<T extends StudyAbroadEnrollmentAggregateArgs> = {
-        [P in keyof T & keyof AggregateStudyAbroadEnrollment]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateStudyAbroadEnrollment[P]>
-      : GetScalarType<T[P], AggregateStudyAbroadEnrollment[P]>
-  }
-
-
-
-
-  export type StudyAbroadEnrollmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: StudyAbroadEnrollmentWhereInput
-    orderBy?: StudyAbroadEnrollmentOrderByWithAggregationInput | StudyAbroadEnrollmentOrderByWithAggregationInput[]
-    by: StudyAbroadEnrollmentScalarFieldEnum[] | StudyAbroadEnrollmentScalarFieldEnum
-    having?: StudyAbroadEnrollmentScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: StudyAbroadEnrollmentCountAggregateInputType | true
-    _avg?: StudyAbroadEnrollmentAvgAggregateInputType
-    _sum?: StudyAbroadEnrollmentSumAggregateInputType
-    _min?: StudyAbroadEnrollmentMinAggregateInputType
-    _max?: StudyAbroadEnrollmentMaxAggregateInputType
-  }
-
-  export type StudyAbroadEnrollmentGroupByOutputType = {
-    id: string
-    organizationId: string
-    partnerId: string
-    createdBy: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress: string | null
-    dateOfBirth: Date | null
-    passportNumber: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear: number | null
-    documents: JsonValue
-    status: string
-    opsRemarks: string | null
-    financeRemarks: string | null
-    opsReviewedBy: string | null
-    opsReviewedAt: Date | null
-    financeReviewedBy: string | null
-    financeReviewedAt: Date | null
-    serviceFee: number | null
-    debitedAt: Date | null
-    statusHistory: JsonValue
-    createdAt: Date
-    updatedAt: Date
-    _count: StudyAbroadEnrollmentCountAggregateOutputType | null
-    _avg: StudyAbroadEnrollmentAvgAggregateOutputType | null
-    _sum: StudyAbroadEnrollmentSumAggregateOutputType | null
-    _min: StudyAbroadEnrollmentMinAggregateOutputType | null
-    _max: StudyAbroadEnrollmentMaxAggregateOutputType | null
-  }
-
-  type GetStudyAbroadEnrollmentGroupByPayload<T extends StudyAbroadEnrollmentGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<StudyAbroadEnrollmentGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof StudyAbroadEnrollmentGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], StudyAbroadEnrollmentGroupByOutputType[P]>
-            : GetScalarType<T[P], StudyAbroadEnrollmentGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type StudyAbroadEnrollmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    organizationId?: boolean
-    partnerId?: boolean
-    createdBy?: boolean
-    studentName?: boolean
-    studentEmail?: boolean
-    studentPhone?: boolean
-    studentAddress?: boolean
-    dateOfBirth?: boolean
-    passportNumber?: boolean
-    destinationCountry?: boolean
-    universityName?: boolean
-    courseName?: boolean
-    intake?: boolean
-    intakeYear?: boolean
-    documents?: boolean
-    status?: boolean
-    opsRemarks?: boolean
-    financeRemarks?: boolean
-    opsReviewedBy?: boolean
-    opsReviewedAt?: boolean
-    financeReviewedBy?: boolean
-    financeReviewedAt?: boolean
-    serviceFee?: boolean
-    debitedAt?: boolean
-    statusHistory?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    partner?: boolean | StudyAbroadPartnerDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["studyAbroadEnrollment"]>
-
-  export type StudyAbroadEnrollmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    organizationId?: boolean
-    partnerId?: boolean
-    createdBy?: boolean
-    studentName?: boolean
-    studentEmail?: boolean
-    studentPhone?: boolean
-    studentAddress?: boolean
-    dateOfBirth?: boolean
-    passportNumber?: boolean
-    destinationCountry?: boolean
-    universityName?: boolean
-    courseName?: boolean
-    intake?: boolean
-    intakeYear?: boolean
-    documents?: boolean
-    status?: boolean
-    opsRemarks?: boolean
-    financeRemarks?: boolean
-    opsReviewedBy?: boolean
-    opsReviewedAt?: boolean
-    financeReviewedBy?: boolean
-    financeReviewedAt?: boolean
-    serviceFee?: boolean
-    debitedAt?: boolean
-    statusHistory?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    partner?: boolean | StudyAbroadPartnerDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["studyAbroadEnrollment"]>
-
-  export type StudyAbroadEnrollmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    organizationId?: boolean
-    partnerId?: boolean
-    createdBy?: boolean
-    studentName?: boolean
-    studentEmail?: boolean
-    studentPhone?: boolean
-    studentAddress?: boolean
-    dateOfBirth?: boolean
-    passportNumber?: boolean
-    destinationCountry?: boolean
-    universityName?: boolean
-    courseName?: boolean
-    intake?: boolean
-    intakeYear?: boolean
-    documents?: boolean
-    status?: boolean
-    opsRemarks?: boolean
-    financeRemarks?: boolean
-    opsReviewedBy?: boolean
-    opsReviewedAt?: boolean
-    financeReviewedBy?: boolean
-    financeReviewedAt?: boolean
-    serviceFee?: boolean
-    debitedAt?: boolean
-    statusHistory?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    partner?: boolean | StudyAbroadPartnerDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["studyAbroadEnrollment"]>
-
-  export type StudyAbroadEnrollmentSelectScalar = {
-    id?: boolean
-    organizationId?: boolean
-    partnerId?: boolean
-    createdBy?: boolean
-    studentName?: boolean
-    studentEmail?: boolean
-    studentPhone?: boolean
-    studentAddress?: boolean
-    dateOfBirth?: boolean
-    passportNumber?: boolean
-    destinationCountry?: boolean
-    universityName?: boolean
-    courseName?: boolean
-    intake?: boolean
-    intakeYear?: boolean
-    documents?: boolean
-    status?: boolean
-    opsRemarks?: boolean
-    financeRemarks?: boolean
-    opsReviewedBy?: boolean
-    opsReviewedAt?: boolean
-    financeReviewedBy?: boolean
-    financeReviewedAt?: boolean
-    serviceFee?: boolean
-    debitedAt?: boolean
-    statusHistory?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type StudyAbroadEnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "partnerId" | "createdBy" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "dateOfBirth" | "passportNumber" | "destinationCountry" | "universityName" | "courseName" | "intake" | "intakeYear" | "documents" | "status" | "opsRemarks" | "financeRemarks" | "opsReviewedBy" | "opsReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "serviceFee" | "debitedAt" | "statusHistory" | "createdAt" | "updatedAt", ExtArgs["result"]["studyAbroadEnrollment"]>
-  export type StudyAbroadEnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    partner?: boolean | StudyAbroadPartnerDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type StudyAbroadEnrollmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    partner?: boolean | StudyAbroadPartnerDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type StudyAbroadEnrollmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    partner?: boolean | StudyAbroadPartnerDefaultArgs<ExtArgs>
-    creator?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $StudyAbroadEnrollmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "StudyAbroadEnrollment"
-    objects: {
-      organization: Prisma.$OrganizationPayload<ExtArgs>
-      partner: Prisma.$StudyAbroadPartnerPayload<ExtArgs>
-      creator: Prisma.$UserPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      organizationId: string
-      partnerId: string
-      createdBy: string
-      studentName: string
-      studentEmail: string
-      studentPhone: string
-      studentAddress: string | null
-      dateOfBirth: Date | null
-      passportNumber: string | null
-      destinationCountry: string
-      universityName: string
-      courseName: string
-      intake: string
-      intakeYear: number | null
-      documents: Prisma.JsonValue
-      status: string
-      opsRemarks: string | null
-      financeRemarks: string | null
-      opsReviewedBy: string | null
-      opsReviewedAt: Date | null
-      financeReviewedBy: string | null
-      financeReviewedAt: Date | null
-      serviceFee: number | null
-      debitedAt: Date | null
-      statusHistory: Prisma.JsonValue
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["studyAbroadEnrollment"]>
-    composites: {}
-  }
-
-  type StudyAbroadEnrollmentGetPayload<S extends boolean | null | undefined | StudyAbroadEnrollmentDefaultArgs> = $Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload, S>
-
-  type StudyAbroadEnrollmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<StudyAbroadEnrollmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: StudyAbroadEnrollmentCountAggregateInputType | true
-    }
-
-  export interface StudyAbroadEnrollmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudyAbroadEnrollment'], meta: { name: 'StudyAbroadEnrollment' } }
-    /**
-     * Find zero or one StudyAbroadEnrollment that matches the filter.
-     * @param {StudyAbroadEnrollmentFindUniqueArgs} args - Arguments to find a StudyAbroadEnrollment
-     * @example
-     * // Get one StudyAbroadEnrollment
-     * const studyAbroadEnrollment = await prisma.studyAbroadEnrollment.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends StudyAbroadEnrollmentFindUniqueArgs>(args: SelectSubset<T, StudyAbroadEnrollmentFindUniqueArgs<ExtArgs>>): Prisma__StudyAbroadEnrollmentClient<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one StudyAbroadEnrollment that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {StudyAbroadEnrollmentFindUniqueOrThrowArgs} args - Arguments to find a StudyAbroadEnrollment
-     * @example
-     * // Get one StudyAbroadEnrollment
-     * const studyAbroadEnrollment = await prisma.studyAbroadEnrollment.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends StudyAbroadEnrollmentFindUniqueOrThrowArgs>(args: SelectSubset<T, StudyAbroadEnrollmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudyAbroadEnrollmentClient<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first StudyAbroadEnrollment that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StudyAbroadEnrollmentFindFirstArgs} args - Arguments to find a StudyAbroadEnrollment
-     * @example
-     * // Get one StudyAbroadEnrollment
-     * const studyAbroadEnrollment = await prisma.studyAbroadEnrollment.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends StudyAbroadEnrollmentFindFirstArgs>(args?: SelectSubset<T, StudyAbroadEnrollmentFindFirstArgs<ExtArgs>>): Prisma__StudyAbroadEnrollmentClient<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first StudyAbroadEnrollment that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StudyAbroadEnrollmentFindFirstOrThrowArgs} args - Arguments to find a StudyAbroadEnrollment
-     * @example
-     * // Get one StudyAbroadEnrollment
-     * const studyAbroadEnrollment = await prisma.studyAbroadEnrollment.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends StudyAbroadEnrollmentFindFirstOrThrowArgs>(args?: SelectSubset<T, StudyAbroadEnrollmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudyAbroadEnrollmentClient<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more StudyAbroadEnrollments that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StudyAbroadEnrollmentFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all StudyAbroadEnrollments
-     * const studyAbroadEnrollments = await prisma.studyAbroadEnrollment.findMany()
-     * 
-     * // Get first 10 StudyAbroadEnrollments
-     * const studyAbroadEnrollments = await prisma.studyAbroadEnrollment.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const studyAbroadEnrollmentWithIdOnly = await prisma.studyAbroadEnrollment.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends StudyAbroadEnrollmentFindManyArgs>(args?: SelectSubset<T, StudyAbroadEnrollmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a StudyAbroadEnrollment.
-     * @param {StudyAbroadEnrollmentCreateArgs} args - Arguments to create a StudyAbroadEnrollment.
-     * @example
-     * // Create one StudyAbroadEnrollment
-     * const StudyAbroadEnrollment = await prisma.studyAbroadEnrollment.create({
-     *   data: {
-     *     // ... data to create a StudyAbroadEnrollment
-     *   }
-     * })
-     * 
-     */
-    create<T extends StudyAbroadEnrollmentCreateArgs>(args: SelectSubset<T, StudyAbroadEnrollmentCreateArgs<ExtArgs>>): Prisma__StudyAbroadEnrollmentClient<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many StudyAbroadEnrollments.
-     * @param {StudyAbroadEnrollmentCreateManyArgs} args - Arguments to create many StudyAbroadEnrollments.
-     * @example
-     * // Create many StudyAbroadEnrollments
-     * const studyAbroadEnrollment = await prisma.studyAbroadEnrollment.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends StudyAbroadEnrollmentCreateManyArgs>(args?: SelectSubset<T, StudyAbroadEnrollmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many StudyAbroadEnrollments and returns the data saved in the database.
-     * @param {StudyAbroadEnrollmentCreateManyAndReturnArgs} args - Arguments to create many StudyAbroadEnrollments.
-     * @example
-     * // Create many StudyAbroadEnrollments
-     * const studyAbroadEnrollment = await prisma.studyAbroadEnrollment.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many StudyAbroadEnrollments and only return the `id`
-     * const studyAbroadEnrollmentWithIdOnly = await prisma.studyAbroadEnrollment.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends StudyAbroadEnrollmentCreateManyAndReturnArgs>(args?: SelectSubset<T, StudyAbroadEnrollmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a StudyAbroadEnrollment.
-     * @param {StudyAbroadEnrollmentDeleteArgs} args - Arguments to delete one StudyAbroadEnrollment.
-     * @example
-     * // Delete one StudyAbroadEnrollment
-     * const StudyAbroadEnrollment = await prisma.studyAbroadEnrollment.delete({
-     *   where: {
-     *     // ... filter to delete one StudyAbroadEnrollment
-     *   }
-     * })
-     * 
-     */
-    delete<T extends StudyAbroadEnrollmentDeleteArgs>(args: SelectSubset<T, StudyAbroadEnrollmentDeleteArgs<ExtArgs>>): Prisma__StudyAbroadEnrollmentClient<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one StudyAbroadEnrollment.
-     * @param {StudyAbroadEnrollmentUpdateArgs} args - Arguments to update one StudyAbroadEnrollment.
-     * @example
-     * // Update one StudyAbroadEnrollment
-     * const studyAbroadEnrollment = await prisma.studyAbroadEnrollment.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends StudyAbroadEnrollmentUpdateArgs>(args: SelectSubset<T, StudyAbroadEnrollmentUpdateArgs<ExtArgs>>): Prisma__StudyAbroadEnrollmentClient<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more StudyAbroadEnrollments.
-     * @param {StudyAbroadEnrollmentDeleteManyArgs} args - Arguments to filter StudyAbroadEnrollments to delete.
-     * @example
-     * // Delete a few StudyAbroadEnrollments
-     * const { count } = await prisma.studyAbroadEnrollment.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends StudyAbroadEnrollmentDeleteManyArgs>(args?: SelectSubset<T, StudyAbroadEnrollmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more StudyAbroadEnrollments.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StudyAbroadEnrollmentUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many StudyAbroadEnrollments
-     * const studyAbroadEnrollment = await prisma.studyAbroadEnrollment.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends StudyAbroadEnrollmentUpdateManyArgs>(args: SelectSubset<T, StudyAbroadEnrollmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more StudyAbroadEnrollments and returns the data updated in the database.
-     * @param {StudyAbroadEnrollmentUpdateManyAndReturnArgs} args - Arguments to update many StudyAbroadEnrollments.
-     * @example
-     * // Update many StudyAbroadEnrollments
-     * const studyAbroadEnrollment = await prisma.studyAbroadEnrollment.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more StudyAbroadEnrollments and only return the `id`
-     * const studyAbroadEnrollmentWithIdOnly = await prisma.studyAbroadEnrollment.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends StudyAbroadEnrollmentUpdateManyAndReturnArgs>(args: SelectSubset<T, StudyAbroadEnrollmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one StudyAbroadEnrollment.
-     * @param {StudyAbroadEnrollmentUpsertArgs} args - Arguments to update or create a StudyAbroadEnrollment.
-     * @example
-     * // Update or create a StudyAbroadEnrollment
-     * const studyAbroadEnrollment = await prisma.studyAbroadEnrollment.upsert({
-     *   create: {
-     *     // ... data to create a StudyAbroadEnrollment
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the StudyAbroadEnrollment we want to update
-     *   }
-     * })
-     */
-    upsert<T extends StudyAbroadEnrollmentUpsertArgs>(args: SelectSubset<T, StudyAbroadEnrollmentUpsertArgs<ExtArgs>>): Prisma__StudyAbroadEnrollmentClient<$Result.GetResult<Prisma.$StudyAbroadEnrollmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of StudyAbroadEnrollments.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StudyAbroadEnrollmentCountArgs} args - Arguments to filter StudyAbroadEnrollments to count.
-     * @example
-     * // Count the number of StudyAbroadEnrollments
-     * const count = await prisma.studyAbroadEnrollment.count({
-     *   where: {
-     *     // ... the filter for the StudyAbroadEnrollments we want to count
-     *   }
-     * })
-    **/
-    count<T extends StudyAbroadEnrollmentCountArgs>(
-      args?: Subset<T, StudyAbroadEnrollmentCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], StudyAbroadEnrollmentCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a StudyAbroadEnrollment.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StudyAbroadEnrollmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends StudyAbroadEnrollmentAggregateArgs>(args: Subset<T, StudyAbroadEnrollmentAggregateArgs>): Prisma.PrismaPromise<GetStudyAbroadEnrollmentAggregateType<T>>
-
-    /**
-     * Group by StudyAbroadEnrollment.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StudyAbroadEnrollmentGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends StudyAbroadEnrollmentGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: StudyAbroadEnrollmentGroupByArgs['orderBy'] }
-        : { orderBy?: StudyAbroadEnrollmentGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, StudyAbroadEnrollmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudyAbroadEnrollmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the StudyAbroadEnrollment model
-   */
-  readonly fields: StudyAbroadEnrollmentFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for StudyAbroadEnrollment.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__StudyAbroadEnrollmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    partner<T extends StudyAbroadPartnerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudyAbroadPartnerDefaultArgs<ExtArgs>>): Prisma__StudyAbroadPartnerClient<$Result.GetResult<Prisma.$StudyAbroadPartnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    creator<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the StudyAbroadEnrollment model
-   */
-  interface StudyAbroadEnrollmentFieldRefs {
-    readonly id: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly organizationId: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly partnerId: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly createdBy: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly studentName: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly studentEmail: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly studentPhone: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly studentAddress: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly dateOfBirth: FieldRef<"StudyAbroadEnrollment", 'DateTime'>
-    readonly passportNumber: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly destinationCountry: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly universityName: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly courseName: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly intake: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly intakeYear: FieldRef<"StudyAbroadEnrollment", 'Int'>
-    readonly documents: FieldRef<"StudyAbroadEnrollment", 'Json'>
-    readonly status: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly opsRemarks: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly financeRemarks: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly opsReviewedBy: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly opsReviewedAt: FieldRef<"StudyAbroadEnrollment", 'DateTime'>
-    readonly financeReviewedBy: FieldRef<"StudyAbroadEnrollment", 'String'>
-    readonly financeReviewedAt: FieldRef<"StudyAbroadEnrollment", 'DateTime'>
-    readonly serviceFee: FieldRef<"StudyAbroadEnrollment", 'Float'>
-    readonly debitedAt: FieldRef<"StudyAbroadEnrollment", 'DateTime'>
-    readonly statusHistory: FieldRef<"StudyAbroadEnrollment", 'Json'>
-    readonly createdAt: FieldRef<"StudyAbroadEnrollment", 'DateTime'>
-    readonly updatedAt: FieldRef<"StudyAbroadEnrollment", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * StudyAbroadEnrollment findUnique
-   */
-  export type StudyAbroadEnrollmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    /**
-     * Filter, which StudyAbroadEnrollment to fetch.
-     */
-    where: StudyAbroadEnrollmentWhereUniqueInput
-  }
-
-  /**
-   * StudyAbroadEnrollment findUniqueOrThrow
-   */
-  export type StudyAbroadEnrollmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    /**
-     * Filter, which StudyAbroadEnrollment to fetch.
-     */
-    where: StudyAbroadEnrollmentWhereUniqueInput
-  }
-
-  /**
-   * StudyAbroadEnrollment findFirst
-   */
-  export type StudyAbroadEnrollmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    /**
-     * Filter, which StudyAbroadEnrollment to fetch.
-     */
-    where?: StudyAbroadEnrollmentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of StudyAbroadEnrollments to fetch.
-     */
-    orderBy?: StudyAbroadEnrollmentOrderByWithRelationInput | StudyAbroadEnrollmentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for StudyAbroadEnrollments.
-     */
-    cursor?: StudyAbroadEnrollmentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` StudyAbroadEnrollments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` StudyAbroadEnrollments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of StudyAbroadEnrollments.
-     */
-    distinct?: StudyAbroadEnrollmentScalarFieldEnum | StudyAbroadEnrollmentScalarFieldEnum[]
-  }
-
-  /**
-   * StudyAbroadEnrollment findFirstOrThrow
-   */
-  export type StudyAbroadEnrollmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    /**
-     * Filter, which StudyAbroadEnrollment to fetch.
-     */
-    where?: StudyAbroadEnrollmentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of StudyAbroadEnrollments to fetch.
-     */
-    orderBy?: StudyAbroadEnrollmentOrderByWithRelationInput | StudyAbroadEnrollmentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for StudyAbroadEnrollments.
-     */
-    cursor?: StudyAbroadEnrollmentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` StudyAbroadEnrollments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` StudyAbroadEnrollments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of StudyAbroadEnrollments.
-     */
-    distinct?: StudyAbroadEnrollmentScalarFieldEnum | StudyAbroadEnrollmentScalarFieldEnum[]
-  }
-
-  /**
-   * StudyAbroadEnrollment findMany
-   */
-  export type StudyAbroadEnrollmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    /**
-     * Filter, which StudyAbroadEnrollments to fetch.
-     */
-    where?: StudyAbroadEnrollmentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of StudyAbroadEnrollments to fetch.
-     */
-    orderBy?: StudyAbroadEnrollmentOrderByWithRelationInput | StudyAbroadEnrollmentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing StudyAbroadEnrollments.
-     */
-    cursor?: StudyAbroadEnrollmentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` StudyAbroadEnrollments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` StudyAbroadEnrollments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of StudyAbroadEnrollments.
-     */
-    distinct?: StudyAbroadEnrollmentScalarFieldEnum | StudyAbroadEnrollmentScalarFieldEnum[]
-  }
-
-  /**
-   * StudyAbroadEnrollment create
-   */
-  export type StudyAbroadEnrollmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    /**
-     * The data needed to create a StudyAbroadEnrollment.
-     */
-    data: XOR<StudyAbroadEnrollmentCreateInput, StudyAbroadEnrollmentUncheckedCreateInput>
-  }
-
-  /**
-   * StudyAbroadEnrollment createMany
-   */
-  export type StudyAbroadEnrollmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many StudyAbroadEnrollments.
-     */
-    data: StudyAbroadEnrollmentCreateManyInput | StudyAbroadEnrollmentCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * StudyAbroadEnrollment createManyAndReturn
-   */
-  export type StudyAbroadEnrollmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * The data used to create many StudyAbroadEnrollments.
-     */
-    data: StudyAbroadEnrollmentCreateManyInput | StudyAbroadEnrollmentCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * StudyAbroadEnrollment update
-   */
-  export type StudyAbroadEnrollmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    /**
-     * The data needed to update a StudyAbroadEnrollment.
-     */
-    data: XOR<StudyAbroadEnrollmentUpdateInput, StudyAbroadEnrollmentUncheckedUpdateInput>
-    /**
-     * Choose, which StudyAbroadEnrollment to update.
-     */
-    where: StudyAbroadEnrollmentWhereUniqueInput
-  }
-
-  /**
-   * StudyAbroadEnrollment updateMany
-   */
-  export type StudyAbroadEnrollmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update StudyAbroadEnrollments.
-     */
-    data: XOR<StudyAbroadEnrollmentUpdateManyMutationInput, StudyAbroadEnrollmentUncheckedUpdateManyInput>
-    /**
-     * Filter which StudyAbroadEnrollments to update
-     */
-    where?: StudyAbroadEnrollmentWhereInput
-    /**
-     * Limit how many StudyAbroadEnrollments to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * StudyAbroadEnrollment updateManyAndReturn
-   */
-  export type StudyAbroadEnrollmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * The data used to update StudyAbroadEnrollments.
-     */
-    data: XOR<StudyAbroadEnrollmentUpdateManyMutationInput, StudyAbroadEnrollmentUncheckedUpdateManyInput>
-    /**
-     * Filter which StudyAbroadEnrollments to update
-     */
-    where?: StudyAbroadEnrollmentWhereInput
-    /**
-     * Limit how many StudyAbroadEnrollments to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * StudyAbroadEnrollment upsert
-   */
-  export type StudyAbroadEnrollmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    /**
-     * The filter to search for the StudyAbroadEnrollment to update in case it exists.
-     */
-    where: StudyAbroadEnrollmentWhereUniqueInput
-    /**
-     * In case the StudyAbroadEnrollment found by the `where` argument doesn't exist, create a new StudyAbroadEnrollment with this data.
-     */
-    create: XOR<StudyAbroadEnrollmentCreateInput, StudyAbroadEnrollmentUncheckedCreateInput>
-    /**
-     * In case the StudyAbroadEnrollment was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<StudyAbroadEnrollmentUpdateInput, StudyAbroadEnrollmentUncheckedUpdateInput>
-  }
-
-  /**
-   * StudyAbroadEnrollment delete
-   */
-  export type StudyAbroadEnrollmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
-    /**
-     * Filter which StudyAbroadEnrollment to delete.
-     */
-    where: StudyAbroadEnrollmentWhereUniqueInput
-  }
-
-  /**
-   * StudyAbroadEnrollment deleteMany
-   */
-  export type StudyAbroadEnrollmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which StudyAbroadEnrollments to delete
-     */
-    where?: StudyAbroadEnrollmentWhereInput
-    /**
-     * Limit how many StudyAbroadEnrollments to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * StudyAbroadEnrollment without action
-   */
-  export type StudyAbroadEnrollmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudyAbroadEnrollment
-     */
-    select?: StudyAbroadEnrollmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudyAbroadEnrollment
-     */
-    omit?: StudyAbroadEnrollmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudyAbroadEnrollmentInclude<ExtArgs> | null
   }
 
 
@@ -133502,6 +131924,7 @@ export namespace Prisma {
     familyPhone: 'familyPhone',
     universityId: 'universityId',
     enrolledBy: 'enrolledBy',
+    source: 'source',
     academicProgress: 'academicProgress',
     admissionProgress: 'admissionProgress',
     discountAmount: 'discountAmount',
@@ -133893,7 +132316,10 @@ export namespace Prisma {
     receiptVerifiedBy: 'receiptVerifiedBy',
     initialPaymentAmount: 'initialPaymentAmount',
     initialPaymentDate: 'initialPaymentDate',
-    paymentPlan: 'paymentPlan'
+    paymentPlan: 'paymentPlan',
+    source: 'source',
+    studyAbroadPartnerId: 'studyAbroadPartnerId',
+    serviceFee: 'serviceFee'
   };
 
   export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
@@ -134955,40 +133381,6 @@ export namespace Prisma {
   export type StudyAbroadPartnerScalarFieldEnum = (typeof StudyAbroadPartnerScalarFieldEnum)[keyof typeof StudyAbroadPartnerScalarFieldEnum]
 
 
-  export const StudyAbroadEnrollmentScalarFieldEnum: {
-    id: 'id',
-    organizationId: 'organizationId',
-    partnerId: 'partnerId',
-    createdBy: 'createdBy',
-    studentName: 'studentName',
-    studentEmail: 'studentEmail',
-    studentPhone: 'studentPhone',
-    studentAddress: 'studentAddress',
-    dateOfBirth: 'dateOfBirth',
-    passportNumber: 'passportNumber',
-    destinationCountry: 'destinationCountry',
-    universityName: 'universityName',
-    courseName: 'courseName',
-    intake: 'intake',
-    intakeYear: 'intakeYear',
-    documents: 'documents',
-    status: 'status',
-    opsRemarks: 'opsRemarks',
-    financeRemarks: 'financeRemarks',
-    opsReviewedBy: 'opsReviewedBy',
-    opsReviewedAt: 'opsReviewedAt',
-    financeReviewedBy: 'financeReviewedBy',
-    financeReviewedAt: 'financeReviewedAt',
-    serviceFee: 'serviceFee',
-    debitedAt: 'debitedAt',
-    statusHistory: 'statusHistory',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type StudyAbroadEnrollmentScalarFieldEnum = (typeof StudyAbroadEnrollmentScalarFieldEnum)[keyof typeof StudyAbroadEnrollmentScalarFieldEnum]
-
-
   export const CountryScalarFieldEnum: {
     id: 'id',
     organizationId: 'organizationId',
@@ -135557,7 +133949,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchListRelationFilter
     studyAbroadPartners?: StudyAbroadPartnerListRelationFilter
     countries?: CountryListRelationFilter
-    studyAbroadEnrollments?: StudyAbroadEnrollmentListRelationFilter
     polls?: PollListRelationFilter
     programs?: ProgramListRelationFilter
     programAllocations?: ProgramAllocationListRelationFilter
@@ -135655,7 +134046,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchOrderByRelationAggregateInput
     studyAbroadPartners?: StudyAbroadPartnerOrderByRelationAggregateInput
     countries?: CountryOrderByRelationAggregateInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentOrderByRelationAggregateInput
     polls?: PollOrderByRelationAggregateInput
     programs?: ProgramOrderByRelationAggregateInput
     programAllocations?: ProgramAllocationOrderByRelationAggregateInput
@@ -135756,7 +134146,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchListRelationFilter
     studyAbroadPartners?: StudyAbroadPartnerListRelationFilter
     countries?: CountryListRelationFilter
-    studyAbroadEnrollments?: StudyAbroadEnrollmentListRelationFilter
     polls?: PollListRelationFilter
     programs?: ProgramListRelationFilter
     programAllocations?: ProgramAllocationListRelationFilter
@@ -136182,7 +134571,6 @@ export namespace Prisma {
     studyCenter?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
     studyAbroadPartnerAdminOf?: XOR<StudyAbroadPartnerNullableScalarRelationFilter, StudyAbroadPartnerWhereInput> | null
     studyAbroadPartnersReferred?: StudyAbroadPartnerListRelationFilter
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentListRelationFilter
     subDepartment?: XOR<SubDepartmentNullableScalarRelationFilter, SubDepartmentWhereInput> | null
     university?: XOR<UniversityNullableScalarRelationFilter, UniversityWhereInput> | null
     verifiedWalletTopUps?: WalletTopUpListRelationFilter
@@ -136307,7 +134695,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterOrderByWithRelationInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerOrderByWithRelationInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerOrderByRelationAggregateInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentOrderByRelationAggregateInput
     subDepartment?: SubDepartmentOrderByWithRelationInput
     university?: UniversityOrderByWithRelationInput
     verifiedWalletTopUps?: WalletTopUpOrderByRelationAggregateInput
@@ -136435,7 +134822,6 @@ export namespace Prisma {
     studyCenter?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
     studyAbroadPartnerAdminOf?: XOR<StudyAbroadPartnerNullableScalarRelationFilter, StudyAbroadPartnerWhereInput> | null
     studyAbroadPartnersReferred?: StudyAbroadPartnerListRelationFilter
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentListRelationFilter
     subDepartment?: XOR<SubDepartmentNullableScalarRelationFilter, SubDepartmentWhereInput> | null
     university?: XOR<UniversityNullableScalarRelationFilter, UniversityWhereInput> | null
     verifiedWalletTopUps?: WalletTopUpListRelationFilter
@@ -137387,6 +135773,7 @@ export namespace Prisma {
     familyPhone?: StringNullableFilter<"Student"> | string | null
     universityId?: StringNullableFilter<"Student"> | string | null
     enrolledBy?: StringNullableFilter<"Student"> | string | null
+    source?: StringNullableFilter<"Student"> | string | null
     academicProgress?: JsonNullableFilter<"Student">
     admissionProgress?: JsonNullableFilter<"Student">
     discountAmount?: FloatFilter<"Student"> | number
@@ -137463,6 +135850,7 @@ export namespace Prisma {
     familyPhone?: SortOrderInput | SortOrder
     universityId?: SortOrderInput | SortOrder
     enrolledBy?: SortOrderInput | SortOrder
+    source?: SortOrderInput | SortOrder
     academicProgress?: SortOrderInput | SortOrder
     admissionProgress?: SortOrderInput | SortOrder
     discountAmount?: SortOrder
@@ -137542,6 +135930,7 @@ export namespace Prisma {
     familyPhone?: StringNullableFilter<"Student"> | string | null
     universityId?: StringNullableFilter<"Student"> | string | null
     enrolledBy?: StringNullableFilter<"Student"> | string | null
+    source?: StringNullableFilter<"Student"> | string | null
     academicProgress?: JsonNullableFilter<"Student">
     admissionProgress?: JsonNullableFilter<"Student">
     discountAmount?: FloatFilter<"Student"> | number
@@ -137618,6 +136007,7 @@ export namespace Prisma {
     familyPhone?: SortOrderInput | SortOrder
     universityId?: SortOrderInput | SortOrder
     enrolledBy?: SortOrderInput | SortOrder
+    source?: SortOrderInput | SortOrder
     academicProgress?: SortOrderInput | SortOrder
     admissionProgress?: SortOrderInput | SortOrder
     discountAmount?: SortOrder
@@ -137676,6 +136066,7 @@ export namespace Prisma {
     familyPhone?: StringNullableWithAggregatesFilter<"Student"> | string | null
     universityId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     enrolledBy?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    source?: StringNullableWithAggregatesFilter<"Student"> | string | null
     academicProgress?: JsonNullableWithAggregatesFilter<"Student">
     admissionProgress?: JsonNullableWithAggregatesFilter<"Student">
     discountAmount?: FloatWithAggregatesFilter<"Student"> | number
@@ -139548,6 +137939,9 @@ export namespace Prisma {
     initialPaymentAmount?: FloatNullableFilter<"Enrollment"> | number | null
     initialPaymentDate?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     paymentPlan?: StringNullableFilter<"Enrollment"> | string | null
+    source?: StringNullableFilter<"Enrollment"> | string | null
+    studyAbroadPartnerId?: StringNullableFilter<"Enrollment"> | string | null
+    serviceFee?: FloatNullableFilter<"Enrollment"> | number | null
     departmentReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     financeReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -139620,6 +138014,9 @@ export namespace Prisma {
     initialPaymentAmount?: SortOrderInput | SortOrder
     initialPaymentDate?: SortOrderInput | SortOrder
     paymentPlan?: SortOrderInput | SortOrder
+    source?: SortOrderInput | SortOrder
+    studyAbroadPartnerId?: SortOrderInput | SortOrder
+    serviceFee?: SortOrderInput | SortOrder
     departmentReviewer?: UserOrderByWithRelationInput
     financeReviewer?: UserOrderByWithRelationInput
     organization?: OrganizationOrderByWithRelationInput
@@ -139696,6 +138093,9 @@ export namespace Prisma {
     initialPaymentAmount?: FloatNullableFilter<"Enrollment"> | number | null
     initialPaymentDate?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     paymentPlan?: StringNullableFilter<"Enrollment"> | string | null
+    source?: StringNullableFilter<"Enrollment"> | string | null
+    studyAbroadPartnerId?: StringNullableFilter<"Enrollment"> | string | null
+    serviceFee?: FloatNullableFilter<"Enrollment"> | number | null
     departmentReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     financeReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -139768,6 +138168,9 @@ export namespace Prisma {
     initialPaymentAmount?: SortOrderInput | SortOrder
     initialPaymentDate?: SortOrderInput | SortOrder
     paymentPlan?: SortOrderInput | SortOrder
+    source?: SortOrderInput | SortOrder
+    studyAbroadPartnerId?: SortOrderInput | SortOrder
+    serviceFee?: SortOrderInput | SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
     _avg?: EnrollmentAvgOrderByAggregateInput
     _max?: EnrollmentMaxOrderByAggregateInput
@@ -139837,6 +138240,9 @@ export namespace Prisma {
     initialPaymentAmount?: FloatNullableWithAggregatesFilter<"Enrollment"> | number | null
     initialPaymentDate?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
     paymentPlan?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    source?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    studyAbroadPartnerId?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    serviceFee?: FloatNullableWithAggregatesFilter<"Enrollment"> | number | null
   }
 
   export type ExpenseClaimWhereInput = {
@@ -145550,7 +143956,6 @@ export namespace Prisma {
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     referrer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     adminUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    enrollments?: StudyAbroadEnrollmentListRelationFilter
   }
 
   export type StudyAbroadPartnerOrderByWithRelationInput = {
@@ -145574,7 +143979,6 @@ export namespace Prisma {
     organization?: OrganizationOrderByWithRelationInput
     referrer?: UserOrderByWithRelationInput
     adminUser?: UserOrderByWithRelationInput
-    enrollments?: StudyAbroadEnrollmentOrderByRelationAggregateInput
   }
 
   export type StudyAbroadPartnerWhereUniqueInput = Prisma.AtLeast<{
@@ -145602,7 +144006,6 @@ export namespace Prisma {
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     referrer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     adminUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    enrollments?: StudyAbroadEnrollmentListRelationFilter
   }, "id" | "adminUserId" | "organizationId_code">
 
   export type StudyAbroadPartnerOrderByWithAggregationInput = {
@@ -145649,184 +144052,6 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"StudyAbroadPartner"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"StudyAbroadPartner"> | Date | string
     adminUserId?: StringNullableWithAggregatesFilter<"StudyAbroadPartner"> | string | null
-  }
-
-  export type StudyAbroadEnrollmentWhereInput = {
-    AND?: StudyAbroadEnrollmentWhereInput | StudyAbroadEnrollmentWhereInput[]
-    OR?: StudyAbroadEnrollmentWhereInput[]
-    NOT?: StudyAbroadEnrollmentWhereInput | StudyAbroadEnrollmentWhereInput[]
-    id?: StringFilter<"StudyAbroadEnrollment"> | string
-    organizationId?: StringFilter<"StudyAbroadEnrollment"> | string
-    partnerId?: StringFilter<"StudyAbroadEnrollment"> | string
-    createdBy?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentName?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentEmail?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentPhone?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentAddress?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    dateOfBirth?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    passportNumber?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    destinationCountry?: StringFilter<"StudyAbroadEnrollment"> | string
-    universityName?: StringFilter<"StudyAbroadEnrollment"> | string
-    courseName?: StringFilter<"StudyAbroadEnrollment"> | string
-    intake?: StringFilter<"StudyAbroadEnrollment"> | string
-    intakeYear?: IntNullableFilter<"StudyAbroadEnrollment"> | number | null
-    documents?: JsonFilter<"StudyAbroadEnrollment">
-    status?: StringFilter<"StudyAbroadEnrollment"> | string
-    opsRemarks?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    financeRemarks?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    opsReviewedBy?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    opsReviewedAt?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    financeReviewedBy?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    financeReviewedAt?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    serviceFee?: FloatNullableFilter<"StudyAbroadEnrollment"> | number | null
-    debitedAt?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    statusHistory?: JsonFilter<"StudyAbroadEnrollment">
-    createdAt?: DateTimeFilter<"StudyAbroadEnrollment"> | Date | string
-    updatedAt?: DateTimeFilter<"StudyAbroadEnrollment"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    partner?: XOR<StudyAbroadPartnerScalarRelationFilter, StudyAbroadPartnerWhereInput>
-    creator?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }
-
-  export type StudyAbroadEnrollmentOrderByWithRelationInput = {
-    id?: SortOrder
-    organizationId?: SortOrder
-    partnerId?: SortOrder
-    createdBy?: SortOrder
-    studentName?: SortOrder
-    studentEmail?: SortOrder
-    studentPhone?: SortOrder
-    studentAddress?: SortOrderInput | SortOrder
-    dateOfBirth?: SortOrderInput | SortOrder
-    passportNumber?: SortOrderInput | SortOrder
-    destinationCountry?: SortOrder
-    universityName?: SortOrder
-    courseName?: SortOrder
-    intake?: SortOrder
-    intakeYear?: SortOrderInput | SortOrder
-    documents?: SortOrder
-    status?: SortOrder
-    opsRemarks?: SortOrderInput | SortOrder
-    financeRemarks?: SortOrderInput | SortOrder
-    opsReviewedBy?: SortOrderInput | SortOrder
-    opsReviewedAt?: SortOrderInput | SortOrder
-    financeReviewedBy?: SortOrderInput | SortOrder
-    financeReviewedAt?: SortOrderInput | SortOrder
-    serviceFee?: SortOrderInput | SortOrder
-    debitedAt?: SortOrderInput | SortOrder
-    statusHistory?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    organization?: OrganizationOrderByWithRelationInput
-    partner?: StudyAbroadPartnerOrderByWithRelationInput
-    creator?: UserOrderByWithRelationInput
-  }
-
-  export type StudyAbroadEnrollmentWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: StudyAbroadEnrollmentWhereInput | StudyAbroadEnrollmentWhereInput[]
-    OR?: StudyAbroadEnrollmentWhereInput[]
-    NOT?: StudyAbroadEnrollmentWhereInput | StudyAbroadEnrollmentWhereInput[]
-    organizationId?: StringFilter<"StudyAbroadEnrollment"> | string
-    partnerId?: StringFilter<"StudyAbroadEnrollment"> | string
-    createdBy?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentName?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentEmail?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentPhone?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentAddress?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    dateOfBirth?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    passportNumber?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    destinationCountry?: StringFilter<"StudyAbroadEnrollment"> | string
-    universityName?: StringFilter<"StudyAbroadEnrollment"> | string
-    courseName?: StringFilter<"StudyAbroadEnrollment"> | string
-    intake?: StringFilter<"StudyAbroadEnrollment"> | string
-    intakeYear?: IntNullableFilter<"StudyAbroadEnrollment"> | number | null
-    documents?: JsonFilter<"StudyAbroadEnrollment">
-    status?: StringFilter<"StudyAbroadEnrollment"> | string
-    opsRemarks?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    financeRemarks?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    opsReviewedBy?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    opsReviewedAt?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    financeReviewedBy?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    financeReviewedAt?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    serviceFee?: FloatNullableFilter<"StudyAbroadEnrollment"> | number | null
-    debitedAt?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    statusHistory?: JsonFilter<"StudyAbroadEnrollment">
-    createdAt?: DateTimeFilter<"StudyAbroadEnrollment"> | Date | string
-    updatedAt?: DateTimeFilter<"StudyAbroadEnrollment"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    partner?: XOR<StudyAbroadPartnerScalarRelationFilter, StudyAbroadPartnerWhereInput>
-    creator?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
-
-  export type StudyAbroadEnrollmentOrderByWithAggregationInput = {
-    id?: SortOrder
-    organizationId?: SortOrder
-    partnerId?: SortOrder
-    createdBy?: SortOrder
-    studentName?: SortOrder
-    studentEmail?: SortOrder
-    studentPhone?: SortOrder
-    studentAddress?: SortOrderInput | SortOrder
-    dateOfBirth?: SortOrderInput | SortOrder
-    passportNumber?: SortOrderInput | SortOrder
-    destinationCountry?: SortOrder
-    universityName?: SortOrder
-    courseName?: SortOrder
-    intake?: SortOrder
-    intakeYear?: SortOrderInput | SortOrder
-    documents?: SortOrder
-    status?: SortOrder
-    opsRemarks?: SortOrderInput | SortOrder
-    financeRemarks?: SortOrderInput | SortOrder
-    opsReviewedBy?: SortOrderInput | SortOrder
-    opsReviewedAt?: SortOrderInput | SortOrder
-    financeReviewedBy?: SortOrderInput | SortOrder
-    financeReviewedAt?: SortOrderInput | SortOrder
-    serviceFee?: SortOrderInput | SortOrder
-    debitedAt?: SortOrderInput | SortOrder
-    statusHistory?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: StudyAbroadEnrollmentCountOrderByAggregateInput
-    _avg?: StudyAbroadEnrollmentAvgOrderByAggregateInput
-    _max?: StudyAbroadEnrollmentMaxOrderByAggregateInput
-    _min?: StudyAbroadEnrollmentMinOrderByAggregateInput
-    _sum?: StudyAbroadEnrollmentSumOrderByAggregateInput
-  }
-
-  export type StudyAbroadEnrollmentScalarWhereWithAggregatesInput = {
-    AND?: StudyAbroadEnrollmentScalarWhereWithAggregatesInput | StudyAbroadEnrollmentScalarWhereWithAggregatesInput[]
-    OR?: StudyAbroadEnrollmentScalarWhereWithAggregatesInput[]
-    NOT?: StudyAbroadEnrollmentScalarWhereWithAggregatesInput | StudyAbroadEnrollmentScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    organizationId?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    partnerId?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    createdBy?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    studentName?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    studentEmail?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    studentPhone?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    studentAddress?: StringNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | string | null
-    dateOfBirth?: DateTimeNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | Date | string | null
-    passportNumber?: StringNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | string | null
-    destinationCountry?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    universityName?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    courseName?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    intake?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    intakeYear?: IntNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | number | null
-    documents?: JsonWithAggregatesFilter<"StudyAbroadEnrollment">
-    status?: StringWithAggregatesFilter<"StudyAbroadEnrollment"> | string
-    opsRemarks?: StringNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | string | null
-    financeRemarks?: StringNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | string | null
-    opsReviewedBy?: StringNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | string | null
-    opsReviewedAt?: DateTimeNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | Date | string | null
-    financeReviewedBy?: StringNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | string | null
-    financeReviewedAt?: DateTimeNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | Date | string | null
-    serviceFee?: FloatNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | number | null
-    debitedAt?: DateTimeNullableWithAggregatesFilter<"StudyAbroadEnrollment"> | Date | string | null
-    statusHistory?: JsonWithAggregatesFilter<"StudyAbroadEnrollment">
-    createdAt?: DateTimeWithAggregatesFilter<"StudyAbroadEnrollment"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"StudyAbroadEnrollment"> | Date | string
   }
 
   export type CountryWhereInput = {
@@ -145937,7 +144162,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -146034,7 +144258,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -146131,7 +144354,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -146228,7 +144450,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -146691,7 +144912,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -146811,7 +145031,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -146927,7 +145146,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -147047,7 +145265,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -148129,6 +146346,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -148205,6 +146423,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -148261,6 +146480,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -148337,6 +146557,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -148403,6 +146624,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -148443,6 +146665,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -148493,6 +146716,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -150498,6 +148722,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -150570,6 +148797,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -150622,6 +148852,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -150694,6 +148927,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -150756,6 +148992,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type EnrollmentUpdateManyMutationInput = {
@@ -150807,6 +149046,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type EnrollmentUncheckedUpdateManyInput = {
@@ -150868,6 +149110,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type ExpenseClaimCreateInput = {
@@ -156841,7 +155086,6 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutStudyAbroadPartnersInput
     referrer?: UserCreateNestedOneWithoutStudyAbroadPartnersReferredInput
     adminUser?: UserCreateNestedOneWithoutStudyAbroadPartnerAdminOfInput
-    enrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutPartnerInput
   }
 
   export type StudyAbroadPartnerUncheckedCreateInput = {
@@ -156862,7 +155106,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     adminUserId?: string | null
-    enrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutPartnerInput
   }
 
   export type StudyAbroadPartnerUpdateInput = {
@@ -156883,7 +155126,6 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutStudyAbroadPartnersNestedInput
     referrer?: UserUpdateOneWithoutStudyAbroadPartnersReferredNestedInput
     adminUser?: UserUpdateOneWithoutStudyAbroadPartnerAdminOfNestedInput
-    enrollments?: StudyAbroadEnrollmentUpdateManyWithoutPartnerNestedInput
   }
 
   export type StudyAbroadPartnerUncheckedUpdateInput = {
@@ -156904,7 +155146,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminUserId?: NullableStringFieldUpdateOperationsInput | string | null
-    enrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutPartnerNestedInput
   }
 
   export type StudyAbroadPartnerCreateManyInput = {
@@ -156962,220 +155203,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminUserId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type StudyAbroadEnrollmentCreateInput = {
-    id?: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutStudyAbroadEnrollmentsInput
-    partner: StudyAbroadPartnerCreateNestedOneWithoutEnrollmentsInput
-    creator: UserCreateNestedOneWithoutStudyAbroadEnrollmentsCreatedInput
-  }
-
-  export type StudyAbroadEnrollmentUncheckedCreateInput = {
-    id?: string
-    organizationId: string
-    partnerId: string
-    createdBy: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type StudyAbroadEnrollmentUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutStudyAbroadEnrollmentsNestedInput
-    partner?: StudyAbroadPartnerUpdateOneRequiredWithoutEnrollmentsNestedInput
-    creator?: UserUpdateOneRequiredWithoutStudyAbroadEnrollmentsCreatedNestedInput
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    partnerId?: StringFieldUpdateOperationsInput | string
-    createdBy?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StudyAbroadEnrollmentCreateManyInput = {
-    id?: string
-    organizationId: string
-    partnerId: string
-    createdBy: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type StudyAbroadEnrollmentUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    partnerId?: StringFieldUpdateOperationsInput | string
-    createdBy?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CountryCreateInput = {
@@ -157562,12 +155589,6 @@ export namespace Prisma {
     every?: CountryWhereInput
     some?: CountryWhereInput
     none?: CountryWhereInput
-  }
-
-  export type StudyAbroadEnrollmentListRelationFilter = {
-    every?: StudyAbroadEnrollmentWhereInput
-    some?: StudyAbroadEnrollmentWhereInput
-    none?: StudyAbroadEnrollmentWhereInput
   }
 
   export type PollListRelationFilter = {
@@ -157958,10 +155979,6 @@ export namespace Prisma {
   }
 
   export type CountryOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type StudyAbroadEnrollmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -159347,6 +157364,7 @@ export namespace Prisma {
     familyPhone?: SortOrder
     universityId?: SortOrder
     enrolledBy?: SortOrder
+    source?: SortOrder
     academicProgress?: SortOrder
     admissionProgress?: SortOrder
     discountAmount?: SortOrder
@@ -159398,6 +157416,7 @@ export namespace Prisma {
     familyPhone?: SortOrder
     universityId?: SortOrder
     enrolledBy?: SortOrder
+    source?: SortOrder
     discountAmount?: SortOrder
     discountReason?: SortOrder
   }
@@ -159443,6 +157462,7 @@ export namespace Prisma {
     familyPhone?: SortOrder
     universityId?: SortOrder
     enrolledBy?: SortOrder
+    source?: SortOrder
     discountAmount?: SortOrder
     discountReason?: SortOrder
   }
@@ -160603,10 +158623,14 @@ export namespace Prisma {
     initialPaymentAmount?: SortOrder
     initialPaymentDate?: SortOrder
     paymentPlan?: SortOrder
+    source?: SortOrder
+    studyAbroadPartnerId?: SortOrder
+    serviceFee?: SortOrder
   }
 
   export type EnrollmentAvgOrderByAggregateInput = {
     initialPaymentAmount?: SortOrder
+    serviceFee?: SortOrder
   }
 
   export type EnrollmentMaxOrderByAggregateInput = {
@@ -160664,6 +158688,9 @@ export namespace Prisma {
     initialPaymentAmount?: SortOrder
     initialPaymentDate?: SortOrder
     paymentPlan?: SortOrder
+    source?: SortOrder
+    studyAbroadPartnerId?: SortOrder
+    serviceFee?: SortOrder
   }
 
   export type EnrollmentMinOrderByAggregateInput = {
@@ -160721,10 +158748,14 @@ export namespace Prisma {
     initialPaymentAmount?: SortOrder
     initialPaymentDate?: SortOrder
     paymentPlan?: SortOrder
+    source?: SortOrder
+    studyAbroadPartnerId?: SortOrder
+    serviceFee?: SortOrder
   }
 
   export type EnrollmentSumOrderByAggregateInput = {
     initialPaymentAmount?: SortOrder
+    serviceFee?: SortOrder
   }
 
   export type EnumExpenseStatusFilter<$PrismaModel = never> = {
@@ -163824,110 +161855,6 @@ export namespace Prisma {
     adminUserId?: SortOrder
   }
 
-  export type StudyAbroadPartnerScalarRelationFilter = {
-    is?: StudyAbroadPartnerWhereInput
-    isNot?: StudyAbroadPartnerWhereInput
-  }
-
-  export type StudyAbroadEnrollmentCountOrderByAggregateInput = {
-    id?: SortOrder
-    organizationId?: SortOrder
-    partnerId?: SortOrder
-    createdBy?: SortOrder
-    studentName?: SortOrder
-    studentEmail?: SortOrder
-    studentPhone?: SortOrder
-    studentAddress?: SortOrder
-    dateOfBirth?: SortOrder
-    passportNumber?: SortOrder
-    destinationCountry?: SortOrder
-    universityName?: SortOrder
-    courseName?: SortOrder
-    intake?: SortOrder
-    intakeYear?: SortOrder
-    documents?: SortOrder
-    status?: SortOrder
-    opsRemarks?: SortOrder
-    financeRemarks?: SortOrder
-    opsReviewedBy?: SortOrder
-    opsReviewedAt?: SortOrder
-    financeReviewedBy?: SortOrder
-    financeReviewedAt?: SortOrder
-    serviceFee?: SortOrder
-    debitedAt?: SortOrder
-    statusHistory?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type StudyAbroadEnrollmentAvgOrderByAggregateInput = {
-    intakeYear?: SortOrder
-    serviceFee?: SortOrder
-  }
-
-  export type StudyAbroadEnrollmentMaxOrderByAggregateInput = {
-    id?: SortOrder
-    organizationId?: SortOrder
-    partnerId?: SortOrder
-    createdBy?: SortOrder
-    studentName?: SortOrder
-    studentEmail?: SortOrder
-    studentPhone?: SortOrder
-    studentAddress?: SortOrder
-    dateOfBirth?: SortOrder
-    passportNumber?: SortOrder
-    destinationCountry?: SortOrder
-    universityName?: SortOrder
-    courseName?: SortOrder
-    intake?: SortOrder
-    intakeYear?: SortOrder
-    status?: SortOrder
-    opsRemarks?: SortOrder
-    financeRemarks?: SortOrder
-    opsReviewedBy?: SortOrder
-    opsReviewedAt?: SortOrder
-    financeReviewedBy?: SortOrder
-    financeReviewedAt?: SortOrder
-    serviceFee?: SortOrder
-    debitedAt?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type StudyAbroadEnrollmentMinOrderByAggregateInput = {
-    id?: SortOrder
-    organizationId?: SortOrder
-    partnerId?: SortOrder
-    createdBy?: SortOrder
-    studentName?: SortOrder
-    studentEmail?: SortOrder
-    studentPhone?: SortOrder
-    studentAddress?: SortOrder
-    dateOfBirth?: SortOrder
-    passportNumber?: SortOrder
-    destinationCountry?: SortOrder
-    universityName?: SortOrder
-    courseName?: SortOrder
-    intake?: SortOrder
-    intakeYear?: SortOrder
-    status?: SortOrder
-    opsRemarks?: SortOrder
-    financeRemarks?: SortOrder
-    opsReviewedBy?: SortOrder
-    opsReviewedAt?: SortOrder
-    financeReviewedBy?: SortOrder
-    financeReviewedAt?: SortOrder
-    serviceFee?: SortOrder
-    debitedAt?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type StudyAbroadEnrollmentSumOrderByAggregateInput = {
-    intakeYear?: SortOrder
-    serviceFee?: SortOrder
-  }
-
   export type CountryOrganizationIdNameCompoundUniqueInput = {
     organizationId: string
     name: string
@@ -164251,13 +162178,6 @@ export namespace Prisma {
     connectOrCreate?: CountryCreateOrConnectWithoutOrganizationInput | CountryCreateOrConnectWithoutOrganizationInput[]
     createMany?: CountryCreateManyOrganizationInputEnvelope
     connect?: CountryWhereUniqueInput | CountryWhereUniqueInput[]
-  }
-
-  export type StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutOrganizationInput, StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput> | StudyAbroadEnrollmentCreateWithoutOrganizationInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutOrganizationInput | StudyAbroadEnrollmentCreateOrConnectWithoutOrganizationInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyOrganizationInputEnvelope
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
   }
 
   export type PollCreateNestedManyWithoutOrganizationInput = {
@@ -164810,13 +162730,6 @@ export namespace Prisma {
     connectOrCreate?: CountryCreateOrConnectWithoutOrganizationInput | CountryCreateOrConnectWithoutOrganizationInput[]
     createMany?: CountryCreateManyOrganizationInputEnvelope
     connect?: CountryWhereUniqueInput | CountryWhereUniqueInput[]
-  }
-
-  export type StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutOrganizationInput, StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput> | StudyAbroadEnrollmentCreateWithoutOrganizationInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutOrganizationInput | StudyAbroadEnrollmentCreateOrConnectWithoutOrganizationInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyOrganizationInputEnvelope
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
   }
 
   export type PollUncheckedCreateNestedManyWithoutOrganizationInput = {
@@ -165690,20 +163603,6 @@ export namespace Prisma {
     update?: CountryUpdateWithWhereUniqueWithoutOrganizationInput | CountryUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: CountryUpdateManyWithWhereWithoutOrganizationInput | CountryUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: CountryScalarWhereInput | CountryScalarWhereInput[]
-  }
-
-  export type StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutOrganizationInput, StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput> | StudyAbroadEnrollmentCreateWithoutOrganizationInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutOrganizationInput | StudyAbroadEnrollmentCreateOrConnectWithoutOrganizationInput[]
-    upsert?: StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutOrganizationInput | StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutOrganizationInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyOrganizationInputEnvelope
-    set?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    disconnect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    delete?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    update?: StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutOrganizationInput | StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutOrganizationInput[]
-    updateMany?: StudyAbroadEnrollmentUpdateManyWithWhereWithoutOrganizationInput | StudyAbroadEnrollmentUpdateManyWithWhereWithoutOrganizationInput[]
-    deleteMany?: StudyAbroadEnrollmentScalarWhereInput | StudyAbroadEnrollmentScalarWhereInput[]
   }
 
   export type PollUpdateManyWithoutOrganizationNestedInput = {
@@ -166806,20 +164705,6 @@ export namespace Prisma {
     update?: CountryUpdateWithWhereUniqueWithoutOrganizationInput | CountryUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: CountryUpdateManyWithWhereWithoutOrganizationInput | CountryUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: CountryScalarWhereInput | CountryScalarWhereInput[]
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutOrganizationInput, StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput> | StudyAbroadEnrollmentCreateWithoutOrganizationInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutOrganizationInput | StudyAbroadEnrollmentCreateOrConnectWithoutOrganizationInput[]
-    upsert?: StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutOrganizationInput | StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutOrganizationInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyOrganizationInputEnvelope
-    set?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    disconnect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    delete?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    update?: StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutOrganizationInput | StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutOrganizationInput[]
-    updateMany?: StudyAbroadEnrollmentUpdateManyWithWhereWithoutOrganizationInput | StudyAbroadEnrollmentUpdateManyWithWhereWithoutOrganizationInput[]
-    deleteMany?: StudyAbroadEnrollmentScalarWhereInput | StudyAbroadEnrollmentScalarWhereInput[]
   }
 
   export type PollUncheckedUpdateManyWithoutOrganizationNestedInput = {
@@ -168504,13 +166389,6 @@ export namespace Prisma {
     connect?: StudyAbroadPartnerWhereUniqueInput | StudyAbroadPartnerWhereUniqueInput[]
   }
 
-  export type StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutCreatorInput, StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput> | StudyAbroadEnrollmentCreateWithoutCreatorInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutCreatorInput | StudyAbroadEnrollmentCreateOrConnectWithoutCreatorInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyCreatorInputEnvelope
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-  }
-
   export type SubDepartmentCreateNestedOneWithoutUsersInput = {
     create?: XOR<SubDepartmentCreateWithoutUsersInput, SubDepartmentUncheckedCreateWithoutUsersInput>
     connectOrCreate?: SubDepartmentCreateOrConnectWithoutUsersInput
@@ -169099,13 +166977,6 @@ export namespace Prisma {
     connectOrCreate?: StudyAbroadPartnerCreateOrConnectWithoutReferrerInput | StudyAbroadPartnerCreateOrConnectWithoutReferrerInput[]
     createMany?: StudyAbroadPartnerCreateManyReferrerInputEnvelope
     connect?: StudyAbroadPartnerWhereUniqueInput | StudyAbroadPartnerWhereUniqueInput[]
-  }
-
-  export type StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutCreatorInput, StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput> | StudyAbroadEnrollmentCreateWithoutCreatorInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutCreatorInput | StudyAbroadEnrollmentCreateOrConnectWithoutCreatorInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyCreatorInputEnvelope
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
   }
 
   export type WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput = {
@@ -170264,20 +168135,6 @@ export namespace Prisma {
     update?: StudyAbroadPartnerUpdateWithWhereUniqueWithoutReferrerInput | StudyAbroadPartnerUpdateWithWhereUniqueWithoutReferrerInput[]
     updateMany?: StudyAbroadPartnerUpdateManyWithWhereWithoutReferrerInput | StudyAbroadPartnerUpdateManyWithWhereWithoutReferrerInput[]
     deleteMany?: StudyAbroadPartnerScalarWhereInput | StudyAbroadPartnerScalarWhereInput[]
-  }
-
-  export type StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutCreatorInput, StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput> | StudyAbroadEnrollmentCreateWithoutCreatorInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutCreatorInput | StudyAbroadEnrollmentCreateOrConnectWithoutCreatorInput[]
-    upsert?: StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutCreatorInput | StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutCreatorInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyCreatorInputEnvelope
-    set?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    disconnect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    delete?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    update?: StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutCreatorInput | StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutCreatorInput[]
-    updateMany?: StudyAbroadEnrollmentUpdateManyWithWhereWithoutCreatorInput | StudyAbroadEnrollmentUpdateManyWithWhereWithoutCreatorInput[]
-    deleteMany?: StudyAbroadEnrollmentScalarWhereInput | StudyAbroadEnrollmentScalarWhereInput[]
   }
 
   export type SubDepartmentUpdateOneWithoutUsersNestedInput = {
@@ -171440,20 +169297,6 @@ export namespace Prisma {
     update?: StudyAbroadPartnerUpdateWithWhereUniqueWithoutReferrerInput | StudyAbroadPartnerUpdateWithWhereUniqueWithoutReferrerInput[]
     updateMany?: StudyAbroadPartnerUpdateManyWithWhereWithoutReferrerInput | StudyAbroadPartnerUpdateManyWithWhereWithoutReferrerInput[]
     deleteMany?: StudyAbroadPartnerScalarWhereInput | StudyAbroadPartnerScalarWhereInput[]
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutCreatorInput, StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput> | StudyAbroadEnrollmentCreateWithoutCreatorInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutCreatorInput | StudyAbroadEnrollmentCreateOrConnectWithoutCreatorInput[]
-    upsert?: StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutCreatorInput | StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutCreatorInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyCreatorInputEnvelope
-    set?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    disconnect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    delete?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    update?: StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutCreatorInput | StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutCreatorInput[]
-    updateMany?: StudyAbroadEnrollmentUpdateManyWithWhereWithoutCreatorInput | StudyAbroadEnrollmentUpdateManyWithWhereWithoutCreatorInput[]
-    deleteMany?: StudyAbroadEnrollmentScalarWhereInput | StudyAbroadEnrollmentScalarWhereInput[]
   }
 
   export type WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput = {
@@ -180277,20 +178120,6 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type StudyAbroadEnrollmentCreateNestedManyWithoutPartnerInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutPartnerInput, StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput> | StudyAbroadEnrollmentCreateWithoutPartnerInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutPartnerInput | StudyAbroadEnrollmentCreateOrConnectWithoutPartnerInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyPartnerInputEnvelope
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-  }
-
-  export type StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutPartnerInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutPartnerInput, StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput> | StudyAbroadEnrollmentCreateWithoutPartnerInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutPartnerInput | StudyAbroadEnrollmentCreateOrConnectWithoutPartnerInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyPartnerInputEnvelope
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-  }
-
   export type StudyAbroadPartnerUpdatedestinationCountriesInput = {
     set?: string[]
     push?: string | string[]
@@ -180322,76 +178151,6 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutStudyAbroadPartnerAdminOfInput, UserUpdateWithoutStudyAbroadPartnerAdminOfInput>, UserUncheckedUpdateWithoutStudyAbroadPartnerAdminOfInput>
-  }
-
-  export type StudyAbroadEnrollmentUpdateManyWithoutPartnerNestedInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutPartnerInput, StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput> | StudyAbroadEnrollmentCreateWithoutPartnerInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutPartnerInput | StudyAbroadEnrollmentCreateOrConnectWithoutPartnerInput[]
-    upsert?: StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutPartnerInput | StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutPartnerInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyPartnerInputEnvelope
-    set?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    disconnect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    delete?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    update?: StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutPartnerInput | StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutPartnerInput[]
-    updateMany?: StudyAbroadEnrollmentUpdateManyWithWhereWithoutPartnerInput | StudyAbroadEnrollmentUpdateManyWithWhereWithoutPartnerInput[]
-    deleteMany?: StudyAbroadEnrollmentScalarWhereInput | StudyAbroadEnrollmentScalarWhereInput[]
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateManyWithoutPartnerNestedInput = {
-    create?: XOR<StudyAbroadEnrollmentCreateWithoutPartnerInput, StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput> | StudyAbroadEnrollmentCreateWithoutPartnerInput[] | StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput[]
-    connectOrCreate?: StudyAbroadEnrollmentCreateOrConnectWithoutPartnerInput | StudyAbroadEnrollmentCreateOrConnectWithoutPartnerInput[]
-    upsert?: StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutPartnerInput | StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutPartnerInput[]
-    createMany?: StudyAbroadEnrollmentCreateManyPartnerInputEnvelope
-    set?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    disconnect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    delete?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    connect?: StudyAbroadEnrollmentWhereUniqueInput | StudyAbroadEnrollmentWhereUniqueInput[]
-    update?: StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutPartnerInput | StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutPartnerInput[]
-    updateMany?: StudyAbroadEnrollmentUpdateManyWithWhereWithoutPartnerInput | StudyAbroadEnrollmentUpdateManyWithWhereWithoutPartnerInput[]
-    deleteMany?: StudyAbroadEnrollmentScalarWhereInput | StudyAbroadEnrollmentScalarWhereInput[]
-  }
-
-  export type OrganizationCreateNestedOneWithoutStudyAbroadEnrollmentsInput = {
-    create?: XOR<OrganizationCreateWithoutStudyAbroadEnrollmentsInput, OrganizationUncheckedCreateWithoutStudyAbroadEnrollmentsInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutStudyAbroadEnrollmentsInput
-    connect?: OrganizationWhereUniqueInput
-  }
-
-  export type StudyAbroadPartnerCreateNestedOneWithoutEnrollmentsInput = {
-    create?: XOR<StudyAbroadPartnerCreateWithoutEnrollmentsInput, StudyAbroadPartnerUncheckedCreateWithoutEnrollmentsInput>
-    connectOrCreate?: StudyAbroadPartnerCreateOrConnectWithoutEnrollmentsInput
-    connect?: StudyAbroadPartnerWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutStudyAbroadEnrollmentsCreatedInput = {
-    create?: XOR<UserCreateWithoutStudyAbroadEnrollmentsCreatedInput, UserUncheckedCreateWithoutStudyAbroadEnrollmentsCreatedInput>
-    connectOrCreate?: UserCreateOrConnectWithoutStudyAbroadEnrollmentsCreatedInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type OrganizationUpdateOneRequiredWithoutStudyAbroadEnrollmentsNestedInput = {
-    create?: XOR<OrganizationCreateWithoutStudyAbroadEnrollmentsInput, OrganizationUncheckedCreateWithoutStudyAbroadEnrollmentsInput>
-    connectOrCreate?: OrganizationCreateOrConnectWithoutStudyAbroadEnrollmentsInput
-    upsert?: OrganizationUpsertWithoutStudyAbroadEnrollmentsInput
-    connect?: OrganizationWhereUniqueInput
-    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutStudyAbroadEnrollmentsInput, OrganizationUpdateWithoutStudyAbroadEnrollmentsInput>, OrganizationUncheckedUpdateWithoutStudyAbroadEnrollmentsInput>
-  }
-
-  export type StudyAbroadPartnerUpdateOneRequiredWithoutEnrollmentsNestedInput = {
-    create?: XOR<StudyAbroadPartnerCreateWithoutEnrollmentsInput, StudyAbroadPartnerUncheckedCreateWithoutEnrollmentsInput>
-    connectOrCreate?: StudyAbroadPartnerCreateOrConnectWithoutEnrollmentsInput
-    upsert?: StudyAbroadPartnerUpsertWithoutEnrollmentsInput
-    connect?: StudyAbroadPartnerWhereUniqueInput
-    update?: XOR<XOR<StudyAbroadPartnerUpdateToOneWithWhereWithoutEnrollmentsInput, StudyAbroadPartnerUpdateWithoutEnrollmentsInput>, StudyAbroadPartnerUncheckedUpdateWithoutEnrollmentsInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutStudyAbroadEnrollmentsCreatedNestedInput = {
-    create?: XOR<UserCreateWithoutStudyAbroadEnrollmentsCreatedInput, UserUncheckedCreateWithoutStudyAbroadEnrollmentsCreatedInput>
-    connectOrCreate?: UserCreateOrConnectWithoutStudyAbroadEnrollmentsCreatedInput
-    upsert?: UserUpsertWithoutStudyAbroadEnrollmentsCreatedInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutStudyAbroadEnrollmentsCreatedInput, UserUpdateWithoutStudyAbroadEnrollmentsCreatedInput>, UserUncheckedUpdateWithoutStudyAbroadEnrollmentsCreatedInput>
   }
 
   export type OrganizationCreateNestedOneWithoutCountriesInput = {
@@ -182010,6 +179769,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
@@ -182080,6 +179842,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -183010,7 +180775,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     referrer?: UserCreateNestedOneWithoutStudyAbroadPartnersReferredInput
     adminUser?: UserCreateNestedOneWithoutStudyAbroadPartnerAdminOfInput
-    enrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutPartnerInput
   }
 
   export type StudyAbroadPartnerUncheckedCreateWithoutOrganizationInput = {
@@ -183030,7 +180794,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     adminUserId?: string | null
-    enrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutPartnerInput
   }
 
   export type StudyAbroadPartnerCreateOrConnectWithoutOrganizationInput = {
@@ -183062,76 +180825,6 @@ export namespace Prisma {
 
   export type CountryCreateManyOrganizationInputEnvelope = {
     data: CountryCreateManyOrganizationInput | CountryCreateManyOrganizationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type StudyAbroadEnrollmentCreateWithoutOrganizationInput = {
-    id?: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    partner: StudyAbroadPartnerCreateNestedOneWithoutEnrollmentsInput
-    creator: UserCreateNestedOneWithoutStudyAbroadEnrollmentsCreatedInput
-  }
-
-  export type StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput = {
-    id?: string
-    partnerId: string
-    createdBy: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type StudyAbroadEnrollmentCreateOrConnectWithoutOrganizationInput = {
-    where: StudyAbroadEnrollmentWhereUniqueInput
-    create: XOR<StudyAbroadEnrollmentCreateWithoutOrganizationInput, StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput>
-  }
-
-  export type StudyAbroadEnrollmentCreateManyOrganizationInputEnvelope = {
-    data: StudyAbroadEnrollmentCreateManyOrganizationInput | StudyAbroadEnrollmentCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -183467,6 +181160,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -183541,6 +181235,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -184145,7 +181840,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -184264,7 +181958,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -185647,6 +183340,9 @@ export namespace Prisma {
     initialPaymentAmount?: FloatNullableFilter<"Enrollment"> | number | null
     initialPaymentDate?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     paymentPlan?: StringNullableFilter<"Enrollment"> | string | null
+    source?: StringNullableFilter<"Enrollment"> | string | null
+    studyAbroadPartnerId?: StringNullableFilter<"Enrollment"> | string | null
+    serviceFee?: FloatNullableFilter<"Enrollment"> | number | null
   }
 
   export type EscalationUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -186490,56 +184186,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Country"> | Date | string
   }
 
-  export type StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutOrganizationInput = {
-    where: StudyAbroadEnrollmentWhereUniqueInput
-    update: XOR<StudyAbroadEnrollmentUpdateWithoutOrganizationInput, StudyAbroadEnrollmentUncheckedUpdateWithoutOrganizationInput>
-    create: XOR<StudyAbroadEnrollmentCreateWithoutOrganizationInput, StudyAbroadEnrollmentUncheckedCreateWithoutOrganizationInput>
-  }
-
-  export type StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutOrganizationInput = {
-    where: StudyAbroadEnrollmentWhereUniqueInput
-    data: XOR<StudyAbroadEnrollmentUpdateWithoutOrganizationInput, StudyAbroadEnrollmentUncheckedUpdateWithoutOrganizationInput>
-  }
-
-  export type StudyAbroadEnrollmentUpdateManyWithWhereWithoutOrganizationInput = {
-    where: StudyAbroadEnrollmentScalarWhereInput
-    data: XOR<StudyAbroadEnrollmentUpdateManyMutationInput, StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationInput>
-  }
-
-  export type StudyAbroadEnrollmentScalarWhereInput = {
-    AND?: StudyAbroadEnrollmentScalarWhereInput | StudyAbroadEnrollmentScalarWhereInput[]
-    OR?: StudyAbroadEnrollmentScalarWhereInput[]
-    NOT?: StudyAbroadEnrollmentScalarWhereInput | StudyAbroadEnrollmentScalarWhereInput[]
-    id?: StringFilter<"StudyAbroadEnrollment"> | string
-    organizationId?: StringFilter<"StudyAbroadEnrollment"> | string
-    partnerId?: StringFilter<"StudyAbroadEnrollment"> | string
-    createdBy?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentName?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentEmail?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentPhone?: StringFilter<"StudyAbroadEnrollment"> | string
-    studentAddress?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    dateOfBirth?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    passportNumber?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    destinationCountry?: StringFilter<"StudyAbroadEnrollment"> | string
-    universityName?: StringFilter<"StudyAbroadEnrollment"> | string
-    courseName?: StringFilter<"StudyAbroadEnrollment"> | string
-    intake?: StringFilter<"StudyAbroadEnrollment"> | string
-    intakeYear?: IntNullableFilter<"StudyAbroadEnrollment"> | number | null
-    documents?: JsonFilter<"StudyAbroadEnrollment">
-    status?: StringFilter<"StudyAbroadEnrollment"> | string
-    opsRemarks?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    financeRemarks?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    opsReviewedBy?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    opsReviewedAt?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    financeReviewedBy?: StringNullableFilter<"StudyAbroadEnrollment"> | string | null
-    financeReviewedAt?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    serviceFee?: FloatNullableFilter<"StudyAbroadEnrollment"> | number | null
-    debitedAt?: DateTimeNullableFilter<"StudyAbroadEnrollment"> | Date | string | null
-    statusHistory?: JsonFilter<"StudyAbroadEnrollment">
-    createdAt?: DateTimeFilter<"StudyAbroadEnrollment"> | Date | string
-    updatedAt?: DateTimeFilter<"StudyAbroadEnrollment"> | Date | string
-  }
-
   export type PollUpsertWithWhereUniqueWithoutOrganizationInput = {
     where: PollWhereUniqueInput
     update: XOR<PollUpdateWithoutOrganizationInput, PollUncheckedUpdateWithoutOrganizationInput>
@@ -186863,6 +184509,7 @@ export namespace Prisma {
     familyPhone?: StringNullableFilter<"Student"> | string | null
     universityId?: StringNullableFilter<"Student"> | string | null
     enrolledBy?: StringNullableFilter<"Student"> | string | null
+    source?: StringNullableFilter<"Student"> | string | null
     academicProgress?: JsonNullableFilter<"Student">
     admissionProgress?: JsonNullableFilter<"Student">
     discountAmount?: FloatFilter<"Student"> | number
@@ -187866,7 +185513,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -187962,7 +185608,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -188290,7 +185935,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -188409,7 +186053,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -188479,7 +186122,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -188575,7 +186217,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -189085,7 +186726,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -189204,7 +186844,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -189362,7 +187001,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -189481,7 +187119,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
@@ -189737,7 +187374,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -189856,7 +187492,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -189932,7 +187567,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -190028,7 +187662,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -191142,6 +188775,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
@@ -191212,6 +188848,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -191274,6 +188913,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
@@ -191344,6 +188986,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -191406,6 +189051,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -191476,6 +189124,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -191538,6 +189189,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -191608,6 +189262,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -191670,6 +189327,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -191740,6 +189400,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -193551,6 +191214,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -193625,6 +191289,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -193686,6 +191351,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -193760,6 +191426,7 @@ export namespace Prisma {
     guardianName?: string | null
     familyPhone?: string | null
     universityId?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -193826,6 +191493,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -193900,6 +191568,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -194709,7 +192378,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -194805,7 +192473,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -194955,7 +192622,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -195074,7 +192740,6 @@ export namespace Prisma {
     configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -195194,7 +192859,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -195313,7 +192977,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -195440,7 +193103,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutStudyAbroadPartnersInput
     referrer?: UserCreateNestedOneWithoutStudyAbroadPartnersReferredInput
-    enrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutPartnerInput
   }
 
   export type StudyAbroadPartnerUncheckedCreateWithoutAdminUserInput = {
@@ -195460,7 +193122,6 @@ export namespace Prisma {
     statusHistory?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    enrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutPartnerInput
   }
 
   export type StudyAbroadPartnerCreateOrConnectWithoutAdminUserInput = {
@@ -195485,7 +193146,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutStudyAbroadPartnersInput
     adminUser?: UserCreateNestedOneWithoutStudyAbroadPartnerAdminOfInput
-    enrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutPartnerInput
   }
 
   export type StudyAbroadPartnerUncheckedCreateWithoutReferrerInput = {
@@ -195505,7 +193165,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     adminUserId?: string | null
-    enrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutPartnerInput
   }
 
   export type StudyAbroadPartnerCreateOrConnectWithoutReferrerInput = {
@@ -195515,76 +193174,6 @@ export namespace Prisma {
 
   export type StudyAbroadPartnerCreateManyReferrerInputEnvelope = {
     data: StudyAbroadPartnerCreateManyReferrerInput | StudyAbroadPartnerCreateManyReferrerInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type StudyAbroadEnrollmentCreateWithoutCreatorInput = {
-    id?: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutStudyAbroadEnrollmentsInput
-    partner: StudyAbroadPartnerCreateNestedOneWithoutEnrollmentsInput
-  }
-
-  export type StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput = {
-    id?: string
-    organizationId: string
-    partnerId: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type StudyAbroadEnrollmentCreateOrConnectWithoutCreatorInput = {
-    where: StudyAbroadEnrollmentWhereUniqueInput
-    create: XOR<StudyAbroadEnrollmentCreateWithoutCreatorInput, StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput>
-  }
-
-  export type StudyAbroadEnrollmentCreateManyCreatorInputEnvelope = {
-    data: StudyAbroadEnrollmentCreateManyCreatorInput | StudyAbroadEnrollmentCreateManyCreatorInput[]
     skipDuplicates?: boolean
   }
 
@@ -197211,6 +194800,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -197285,6 +194875,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -197685,7 +195276,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -197781,7 +195371,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -197937,7 +195526,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -198056,7 +195644,6 @@ export namespace Prisma {
     configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -198206,7 +195793,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutStudyAbroadPartnersNestedInput
     referrer?: UserUpdateOneWithoutStudyAbroadPartnersReferredNestedInput
-    enrollments?: StudyAbroadEnrollmentUpdateManyWithoutPartnerNestedInput
   }
 
   export type StudyAbroadPartnerUncheckedUpdateWithoutAdminUserInput = {
@@ -198226,7 +195812,6 @@ export namespace Prisma {
     statusHistory?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    enrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutPartnerNestedInput
   }
 
   export type StudyAbroadPartnerUpsertWithWhereUniqueWithoutReferrerInput = {
@@ -198243,22 +195828,6 @@ export namespace Prisma {
   export type StudyAbroadPartnerUpdateManyWithWhereWithoutReferrerInput = {
     where: StudyAbroadPartnerScalarWhereInput
     data: XOR<StudyAbroadPartnerUpdateManyMutationInput, StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerInput>
-  }
-
-  export type StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutCreatorInput = {
-    where: StudyAbroadEnrollmentWhereUniqueInput
-    update: XOR<StudyAbroadEnrollmentUpdateWithoutCreatorInput, StudyAbroadEnrollmentUncheckedUpdateWithoutCreatorInput>
-    create: XOR<StudyAbroadEnrollmentCreateWithoutCreatorInput, StudyAbroadEnrollmentUncheckedCreateWithoutCreatorInput>
-  }
-
-  export type StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutCreatorInput = {
-    where: StudyAbroadEnrollmentWhereUniqueInput
-    data: XOR<StudyAbroadEnrollmentUpdateWithoutCreatorInput, StudyAbroadEnrollmentUncheckedUpdateWithoutCreatorInput>
-  }
-
-  export type StudyAbroadEnrollmentUpdateManyWithWhereWithoutCreatorInput = {
-    where: StudyAbroadEnrollmentScalarWhereInput
-    data: XOR<StudyAbroadEnrollmentUpdateManyMutationInput, StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorInput>
   }
 
   export type SubDepartmentUpsertWithoutUsersInput = {
@@ -198533,7 +196102,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -198629,7 +196197,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -198780,7 +196347,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -198899,7 +196465,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -198980,7 +196545,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -199076,7 +196640,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -199233,7 +196796,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -199352,7 +196914,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -199519,7 +197080,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -199638,7 +197198,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -199758,7 +197317,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -199877,7 +197435,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -200054,7 +197611,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -200173,7 +197729,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -200244,7 +197799,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -200340,7 +197894,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -200517,7 +198070,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -200636,7 +198188,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -200762,7 +198313,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -200881,7 +198431,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -201070,7 +198619,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -201189,7 +198737,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -201266,7 +198813,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -201362,7 +198908,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -201507,7 +199052,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -201626,7 +199170,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -201696,7 +199239,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -201792,7 +199334,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -201954,7 +199495,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -202073,7 +199613,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -202149,7 +199688,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -202245,7 +199783,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -202497,6 +200034,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -202571,6 +200109,7 @@ export namespace Prisma {
     guardianName?: string | null
     familyPhone?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -202660,7 +200199,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -202756,7 +200294,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -203003,7 +200540,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
@@ -203121,7 +200657,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -203453,7 +200988,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -203549,7 +201083,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -203805,6 +201338,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -203875,6 +201411,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -204009,7 +201548,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
@@ -204105,7 +201643,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
@@ -204334,6 +201871,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -204408,6 +201946,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -204688,7 +202227,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
@@ -204784,7 +202322,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -205085,6 +202622,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -205155,6 +202695,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -205384,6 +202927,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -205458,6 +203002,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -205596,7 +203141,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -205715,7 +203259,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -205786,7 +203329,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -205882,7 +203424,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -206032,7 +203573,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -206151,7 +203691,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -206271,7 +203810,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -206390,7 +203928,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -206575,7 +204112,6 @@ export namespace Prisma {
     subordinates?: UserCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -206694,7 +204230,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -207161,7 +204696,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -207280,7 +204814,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -207357,7 +204890,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -207453,7 +204985,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -207609,7 +205140,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -207728,7 +205258,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -207854,7 +205383,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -207973,7 +205501,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -208307,6 +205834,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -208377,6 +205907,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -208842,7 +206375,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -208961,7 +206493,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -209081,7 +206612,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -209200,7 +206730,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -209271,7 +206800,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -209367,7 +206895,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -209570,7 +207097,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -209689,7 +207215,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -210487,7 +208012,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -210606,7 +208130,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -210732,7 +208255,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -210851,7 +208373,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -210928,7 +208449,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -211024,7 +208544,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -211239,7 +208758,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -211358,7 +208876,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -211757,7 +209274,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -211853,7 +209369,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -211971,6 +209486,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -212046,6 +209562,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -212272,7 +209789,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -212368,7 +209884,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -212498,6 +210013,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -212573,6 +210089,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -212666,7 +210183,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -212762,7 +210278,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -212913,7 +210428,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -213032,7 +210546,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -213113,7 +210626,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -213209,7 +210721,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -213366,7 +210877,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -213485,7 +210995,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -213600,7 +211109,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -213719,7 +211227,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -213789,7 +211296,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -213885,7 +211391,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -214047,7 +211552,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -214166,7 +211670,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -214242,7 +211745,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -214338,7 +211840,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -214434,7 +211935,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -214530,7 +212030,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -214681,7 +212180,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -214800,7 +212298,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -214881,7 +212378,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -214977,7 +212473,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -215134,7 +212629,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -215253,7 +212747,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -215318,7 +212811,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -215414,7 +212906,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -215565,7 +213056,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -215684,7 +213174,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -215765,7 +213254,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -215861,7 +213349,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -216018,7 +213505,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -216137,7 +213623,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -216259,7 +213744,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -216355,7 +213839,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -216506,7 +213989,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -216625,7 +214107,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -216769,7 +214250,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -216865,7 +214345,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -217022,7 +214501,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -217141,7 +214619,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -217206,7 +214683,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -217302,7 +214778,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -217414,7 +214889,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -217510,7 +214984,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -217713,7 +215186,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -217832,7 +215304,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -217952,7 +215423,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -218071,7 +215541,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -218191,7 +215660,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -218310,7 +215778,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -218380,7 +215847,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -218476,7 +215942,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -218701,7 +216166,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -218820,7 +216284,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -218946,7 +216409,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -219065,7 +216527,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -219191,7 +216652,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -219310,7 +216770,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -219386,7 +216845,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -219482,7 +216940,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -219628,7 +217085,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -219747,7 +217203,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -219867,7 +217322,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -219986,7 +217440,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -220057,7 +217510,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -220153,7 +217605,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -220303,7 +217754,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -220422,7 +217872,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -220553,7 +218002,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -220672,7 +218120,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -220798,7 +218245,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -220917,7 +218363,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -220994,7 +218439,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -221090,7 +218534,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -221246,7 +218689,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -221365,7 +218807,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -221480,7 +218921,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -221599,7 +219039,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -221719,7 +219158,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -221838,7 +219276,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -221958,7 +219395,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -222077,7 +219513,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -222147,7 +219582,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -222243,7 +219677,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -222394,7 +219827,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -222513,7 +219945,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -222633,7 +220064,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -222752,7 +220182,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -222883,7 +220312,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -223002,7 +220430,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -223128,7 +220555,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -223247,7 +220673,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -223373,7 +220798,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -223492,7 +220916,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -223568,7 +220991,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -223664,7 +221086,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -223821,7 +221242,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -223940,7 +221360,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -224066,7 +221485,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -224185,7 +221603,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -224300,7 +221717,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -224419,7 +221835,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -224546,7 +221961,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -224642,7 +222056,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -224824,6 +222237,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -224898,6 +222312,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -225078,7 +222493,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -225197,7 +222611,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -225422,7 +222835,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -225541,7 +222953,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -225680,7 +223091,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -225776,7 +223186,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -226183,7 +223592,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -226302,7 +223710,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -226373,7 +223780,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -226469,7 +223875,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -226677,7 +224082,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
@@ -226795,7 +224199,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -227162,7 +224565,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -227281,7 +224683,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -227358,7 +224759,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -227454,7 +224854,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -227782,7 +225181,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -227878,7 +225276,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -228158,7 +225555,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -228277,7 +225673,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
@@ -228475,7 +225870,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -228571,7 +225965,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -228843,7 +226236,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -228962,7 +226354,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -229032,7 +226423,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -229128,7 +226518,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -229290,7 +226679,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -229409,7 +226797,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -229485,7 +226872,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -229581,7 +226967,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -229735,7 +227120,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -229831,7 +227215,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -230006,7 +227389,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -230102,7 +227484,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -230247,7 +227628,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -230366,7 +227746,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -230486,7 +227865,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -230605,7 +227983,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -230675,7 +228052,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -230771,7 +228147,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -231105,6 +228480,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -231175,6 +228553,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -231286,6 +228667,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -231360,6 +228742,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -231509,7 +228892,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -231628,7 +229010,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -231754,7 +229135,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -231873,7 +229253,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -231949,7 +229328,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -232045,7 +229423,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -232503,7 +229880,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -232622,7 +229998,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -232742,7 +230117,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -232861,7 +230235,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -232931,7 +230304,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -233027,7 +230399,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -233231,7 +230602,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -233350,7 +230720,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -233470,7 +230839,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -233589,7 +230957,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -233688,6 +231055,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -233763,6 +231131,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -233986,7 +231355,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -234105,7 +231473,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -234261,7 +231628,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -234380,7 +231746,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -234506,7 +231871,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -234625,7 +231989,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -234701,7 +232064,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -234797,7 +232159,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -235013,7 +232374,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -235132,7 +232492,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -235258,7 +232617,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -235377,7 +232735,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -235488,6 +232845,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -235563,6 +232921,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -235798,7 +233157,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -235917,7 +233275,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -236063,7 +233420,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -236182,7 +233538,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -236302,7 +233657,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -236421,7 +233775,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -236491,7 +233844,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -236587,7 +233939,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -236749,7 +234100,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -236868,7 +234218,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -236994,7 +234343,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -237113,7 +234461,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -237189,7 +234536,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -237285,7 +234631,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -237412,7 +234757,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -237508,7 +234852,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -237727,7 +235070,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -237823,7 +235165,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -238016,7 +235357,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -238112,7 +235452,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -238354,7 +235693,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
@@ -238473,7 +235811,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
@@ -238554,7 +235891,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -238650,7 +235986,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -238904,7 +236239,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
@@ -239023,7 +236357,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
@@ -239130,7 +236463,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -239226,7 +236558,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -239377,7 +236708,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -239496,7 +236826,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -239626,7 +236955,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -239722,7 +237050,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -239879,7 +237206,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -239998,7 +237324,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -240113,7 +237438,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -240232,7 +237556,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -240302,7 +237625,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -240398,7 +237720,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -240560,7 +237881,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -240679,7 +237999,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -240755,7 +238074,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -240851,7 +238169,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -240947,7 +238264,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -241043,7 +238359,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -241194,7 +238509,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -241313,7 +238627,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -241394,7 +238707,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -241490,7 +238802,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -241647,7 +238958,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -241766,7 +239076,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -241831,7 +239140,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -241927,7 +239235,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -242039,7 +239346,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -242135,7 +239441,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -242231,7 +239536,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -242327,7 +239631,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -242478,7 +239781,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -242597,7 +239899,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -242678,7 +239979,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -242774,7 +240074,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -242931,7 +240230,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -243050,7 +240348,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -243115,7 +240412,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -243211,7 +240507,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -243362,7 +240657,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -243481,7 +240775,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -243601,7 +240894,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -243720,7 +241012,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -243801,7 +241092,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -243897,7 +241187,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -244054,7 +241343,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -244173,7 +241461,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -244299,7 +241586,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -244418,7 +241704,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -244483,7 +241768,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -244579,7 +241863,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -244730,7 +242013,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -244849,7 +242131,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -244969,7 +242250,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -245088,7 +242368,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -245224,7 +242503,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -245320,7 +242598,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -245477,7 +242754,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -245596,7 +242872,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -245722,7 +242997,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -245841,7 +243115,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -246017,7 +243290,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -246136,7 +243408,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -246256,7 +243527,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -246375,7 +243645,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -246495,7 +243764,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -246614,7 +243882,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -246684,7 +243951,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -246780,7 +244046,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -246931,7 +244196,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -247050,7 +244314,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -247258,7 +244521,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -247377,7 +244639,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -247503,7 +244764,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -247622,7 +244882,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -247748,7 +245007,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -247867,7 +245125,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -247943,7 +245200,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -248039,7 +245295,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -248196,7 +245451,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -248315,7 +245569,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -248500,7 +245753,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -248596,7 +245848,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -248761,7 +246012,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -248857,7 +246107,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -249003,7 +246252,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -249122,7 +246370,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -249192,7 +246439,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -249288,7 +246534,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -249367,6 +246612,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -249442,6 +246688,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -249676,7 +246923,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -249795,7 +247041,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -249871,7 +247116,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -249967,7 +247211,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -250052,6 +247295,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -250127,6 +247371,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -250351,7 +247596,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -250470,7 +247714,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -250540,7 +247783,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -250636,7 +247878,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -250787,7 +248028,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -250906,7 +248146,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -251037,7 +248276,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -251156,7 +248394,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -251232,7 +248469,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -251328,7 +248564,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -251485,7 +248720,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -251604,7 +248838,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -251719,7 +248952,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -251838,7 +249070,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -251908,7 +249139,6 @@ export namespace Prisma {
     payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -252004,7 +249234,6 @@ export namespace Prisma {
     payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -252155,7 +249384,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -252274,7 +249502,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -252394,7 +249621,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -252513,7 +249739,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -252644,7 +249869,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -252763,7 +249987,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -252839,7 +250062,6 @@ export namespace Prisma {
     payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -252935,7 +250157,6 @@ export namespace Prisma {
     payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -253092,7 +250313,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -253211,7 +250431,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -253337,7 +250556,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -253456,7 +250674,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -253571,7 +250788,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -253690,7 +250906,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -253761,7 +250976,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
@@ -253857,7 +251071,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
@@ -254018,7 +251231,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -254137,7 +251349,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -254214,7 +251425,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
@@ -254310,7 +251520,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -254455,7 +251664,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -254574,7 +251782,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -254695,7 +251902,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -254814,7 +252020,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -254975,7 +252180,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
@@ -255071,7 +252275,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
@@ -255285,7 +252488,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -255404,7 +252606,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -255531,7 +252732,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -255650,7 +252850,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -255823,7 +253022,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
@@ -255919,7 +253117,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -256074,7 +253271,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -256170,7 +253366,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -256320,7 +253515,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -256439,7 +253633,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -256521,7 +253714,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -256617,7 +253809,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -256773,7 +253964,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -256892,7 +254082,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -256958,7 +254147,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -257054,7 +254242,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -257219,7 +254406,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -257315,7 +254501,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -257519,7 +254704,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -257638,7 +254822,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -257800,7 +254983,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -257896,7 +255078,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -258046,7 +255227,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -258165,7 +255345,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -258296,7 +255475,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -258415,7 +255593,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -258589,7 +255766,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -258685,7 +255861,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -258841,7 +256016,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -258960,7 +256134,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -259075,7 +256248,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -259171,7 +256343,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -259321,7 +256492,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -259440,7 +256610,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -259577,7 +256746,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -259673,7 +256841,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -259829,7 +256996,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -259948,7 +257114,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -260211,7 +257376,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -260330,7 +257494,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -260401,7 +257564,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -260497,7 +257659,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -260818,7 +257979,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -260937,7 +258097,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -261014,7 +258173,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -261110,7 +258268,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -261255,7 +258412,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -261374,7 +258530,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -261445,7 +258600,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -261541,7 +258695,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -261757,7 +258910,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -261876,7 +259028,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -261953,7 +259104,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -262049,7 +259199,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -262255,7 +259404,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -262374,7 +259522,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -262444,7 +259591,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -262540,7 +259686,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -262861,7 +260006,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -262980,7 +260124,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -263056,7 +260199,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -263152,7 +260294,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -263426,7 +260567,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -263522,7 +260662,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -263600,6 +260739,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -263675,6 +260815,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -263824,7 +260965,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -263920,7 +261060,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -264004,6 +261143,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -264079,6 +261219,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -264210,6 +261351,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -264281,6 +261425,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type EnrollmentCreateOrConnectWithoutPaymentInput = {
@@ -264462,6 +261609,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -264533,6 +261683,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type StudyCenterUpsertWithoutEnrollmentPaymentsInput = {
@@ -264767,7 +261920,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -264886,7 +262038,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -265006,7 +262157,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -265125,7 +262275,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -265195,7 +262344,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -265291,7 +262439,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -265453,7 +262600,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -265572,7 +262718,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -265698,7 +262843,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -265817,7 +262961,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -265893,7 +263036,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -265989,7 +263131,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -266086,7 +263227,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -266182,7 +263322,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -266385,7 +263524,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -266504,7 +263642,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -266586,7 +263723,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -266682,7 +263818,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -266897,7 +264032,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -267016,7 +264150,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -267171,7 +264304,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -267267,7 +264399,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -267346,6 +264477,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -267421,6 +264553,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -267546,7 +264679,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -267642,7 +264774,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -267727,6 +264858,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -267802,6 +264934,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -267929,7 +265062,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -268048,7 +265180,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -268118,7 +265249,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -268214,7 +265344,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -268332,6 +265461,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -268407,6 +265537,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -268550,7 +265681,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -268669,7 +265799,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -268745,7 +265874,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -268841,7 +265969,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -268971,6 +266098,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -269046,6 +266174,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -269123,7 +266252,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -269219,7 +266347,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -269370,7 +266497,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -269489,7 +266615,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -269570,7 +266695,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -269666,7 +266790,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -269823,7 +266946,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -269942,7 +267064,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -270008,7 +267129,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -270104,7 +267224,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -270182,6 +267301,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -270257,6 +267377,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -270406,7 +267527,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -270502,7 +267622,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -270586,6 +267705,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -270661,6 +267781,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -270849,7 +267970,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -270968,7 +268088,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -271099,7 +268218,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -271218,7 +268336,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -271333,7 +268450,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -271452,7 +268568,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -271500,6 +268615,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -271575,6 +268691,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -271718,7 +268835,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -271837,7 +268953,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -271891,6 +269006,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -271966,6 +269082,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -272044,7 +269161,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -272140,7 +269256,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -272301,7 +269416,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -272397,7 +269511,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -272548,7 +269661,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -272644,7 +269756,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -272722,6 +269833,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -272797,6 +269909,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -272891,7 +270004,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -272987,7 +270099,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -273071,6 +270182,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -273146,6 +270258,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -273224,7 +270337,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -273320,7 +270432,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -273471,7 +270582,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -273590,7 +270700,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -273671,7 +270780,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -273767,7 +270875,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -273924,7 +271031,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -274043,7 +271149,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -274158,7 +271263,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -274277,7 +271381,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -274408,7 +271511,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -274527,7 +271629,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -274592,7 +271693,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -274688,7 +271788,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -275252,7 +272351,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -275348,7 +272446,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -275635,7 +272732,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -275731,7 +272827,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -275885,7 +272980,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -275981,7 +273075,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -276211,7 +273304,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -276307,7 +273399,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -276693,7 +273784,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -276789,7 +273879,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -276987,7 +274076,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -277083,7 +274171,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -277238,7 +274325,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -277334,7 +274420,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -277467,7 +274552,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -277563,7 +274647,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -277852,7 +274935,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -277948,7 +275030,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -278123,7 +275204,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -278219,7 +275299,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -278420,7 +275499,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -278516,7 +275594,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -278741,7 +275818,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -278837,7 +275913,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -279349,7 +276424,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -279445,7 +276519,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -279954,6 +277027,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -280029,6 +277103,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -280133,6 +277208,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -280208,6 +277284,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -280263,6 +277340,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -280338,6 +277416,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -280468,7 +277547,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -280564,7 +277642,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -280653,6 +277730,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -280728,6 +277806,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -280870,7 +277949,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -280966,7 +278044,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -281086,6 +278163,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -281161,6 +278239,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -281244,7 +278323,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -281340,7 +278418,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -281510,6 +278587,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -281585,6 +278663,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -281674,7 +278753,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -281770,7 +278848,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -281886,6 +278963,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -281961,6 +279039,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -282099,7 +279178,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -282195,7 +279273,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -282317,6 +279394,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -282392,6 +279470,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -282542,7 +279621,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -282638,7 +279716,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -282758,6 +279835,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -282833,6 +279911,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -282916,7 +279995,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -283012,7 +280090,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -283154,6 +280231,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -283229,6 +280307,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -283318,7 +280397,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -283414,7 +280492,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -283722,7 +280799,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -283818,7 +280894,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -284166,7 +281241,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -284262,7 +281336,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -284460,7 +281533,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -284556,7 +281628,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -284782,7 +281853,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -284878,7 +281948,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -285078,7 +282147,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -285174,7 +282242,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -285303,6 +282370,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -285377,6 +282445,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -285579,7 +282648,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -285675,7 +282743,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -285797,6 +282864,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -285872,6 +282940,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -286119,7 +283188,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -286238,7 +283306,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -286352,6 +283419,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -286427,6 +283495,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -286698,7 +283767,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -286817,7 +283885,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -287085,7 +284152,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -287181,7 +284247,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -287452,7 +284517,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -287548,7 +284612,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -287907,7 +284970,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -288003,7 +285065,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -288449,7 +285510,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -288545,7 +285605,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -288680,6 +285739,7 @@ export namespace Prisma {
     employmentStatus?: string | null
     guardianName?: string | null
     familyPhone?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -288755,6 +285815,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -288837,7 +285898,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -288933,7 +285993,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -289074,6 +286133,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -289149,6 +286209,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -289237,7 +286298,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -289333,7 +286393,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -289429,7 +286488,6 @@ export namespace Prisma {
     payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     countries?: CountryCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -289525,7 +286583,6 @@ export namespace Prisma {
     payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -289676,7 +286733,6 @@ export namespace Prisma {
     subordinates?: UserCreateNestedManyWithoutManagerInput
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -289795,7 +286851,6 @@ export namespace Prisma {
     configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -289915,7 +286970,6 @@ export namespace Prisma {
     subordinates?: UserCreateNestedManyWithoutManagerInput
     studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentCreateNestedManyWithoutCreatorInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
@@ -290034,7 +287088,6 @@ export namespace Prisma {
     configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutCreatorInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
@@ -290046,76 +287099,6 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutStudyAbroadPartnerAdminOfInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutStudyAbroadPartnerAdminOfInput, UserUncheckedCreateWithoutStudyAbroadPartnerAdminOfInput>
-  }
-
-  export type StudyAbroadEnrollmentCreateWithoutPartnerInput = {
-    id?: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutStudyAbroadEnrollmentsInput
-    creator: UserCreateNestedOneWithoutStudyAbroadEnrollmentsCreatedInput
-  }
-
-  export type StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput = {
-    id?: string
-    organizationId: string
-    createdBy: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type StudyAbroadEnrollmentCreateOrConnectWithoutPartnerInput = {
-    where: StudyAbroadEnrollmentWhereUniqueInput
-    create: XOR<StudyAbroadEnrollmentCreateWithoutPartnerInput, StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput>
-  }
-
-  export type StudyAbroadEnrollmentCreateManyPartnerInputEnvelope = {
-    data: StudyAbroadEnrollmentCreateManyPartnerInput | StudyAbroadEnrollmentCreateManyPartnerInput[]
-    skipDuplicates?: boolean
   }
 
   export type OrganizationUpsertWithoutStudyAbroadPartnersInput = {
@@ -290185,7 +287168,6 @@ export namespace Prisma {
     payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -290281,7 +287263,6 @@ export namespace Prisma {
     payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -290438,7 +287419,6 @@ export namespace Prisma {
     subordinates?: UserUpdateManyWithoutManagerNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -290557,7 +287537,6 @@ export namespace Prisma {
     configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -290683,7 +287662,6 @@ export namespace Prisma {
     subordinates?: UserUpdateManyWithoutManagerNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -290802,1003 +287780,6 @@ export namespace Prisma {
     configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
-    verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
-    assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
-    designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
-    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
-    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
-    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
-  }
-
-  export type StudyAbroadEnrollmentUpsertWithWhereUniqueWithoutPartnerInput = {
-    where: StudyAbroadEnrollmentWhereUniqueInput
-    update: XOR<StudyAbroadEnrollmentUpdateWithoutPartnerInput, StudyAbroadEnrollmentUncheckedUpdateWithoutPartnerInput>
-    create: XOR<StudyAbroadEnrollmentCreateWithoutPartnerInput, StudyAbroadEnrollmentUncheckedCreateWithoutPartnerInput>
-  }
-
-  export type StudyAbroadEnrollmentUpdateWithWhereUniqueWithoutPartnerInput = {
-    where: StudyAbroadEnrollmentWhereUniqueInput
-    data: XOR<StudyAbroadEnrollmentUpdateWithoutPartnerInput, StudyAbroadEnrollmentUncheckedUpdateWithoutPartnerInput>
-  }
-
-  export type StudyAbroadEnrollmentUpdateManyWithWhereWithoutPartnerInput = {
-    where: StudyAbroadEnrollmentScalarWhereInput
-    data: XOR<StudyAbroadEnrollmentUpdateManyMutationInput, StudyAbroadEnrollmentUncheckedUpdateManyWithoutPartnerInput>
-  }
-
-  export type OrganizationCreateWithoutStudyAbroadEnrollmentsInput = {
-    id?: string
-    name: string
-    email: string
-    phone: string
-    address: string
-    logo?: string | null
-    customLoginSlug?: string | null
-    loginBranding?: NullableJsonNullValueInput | InputJsonValue
-    status?: $Enums.OrganizationStatus
-    licenseExpiry?: Date | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    academicSessions?: AcademicSessionCreateNestedManyWithoutOrganizationInput
-    studentAcademicAttendances?: StudentAcademicAttendanceCreateNestedManyWithoutOrganizationInput
-    academicCenters?: AcademicCenterCreateNestedManyWithoutOrganizationInput
-    academicClasses?: AcademicClassCreateNestedManyWithoutOrganizationInput
-    academicBatches?: AcademicBatchCreateNestedManyWithoutOrganizationInput
-    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
-    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
-    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
-    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
-    branches?: BranchCreateNestedManyWithoutOrganizationInput
-    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
-    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutOrganizationInput
-    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
-    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
-    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
-    designations?: DesignationCreateNestedManyWithoutOrganizationInput
-    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
-    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
-    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
-    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
-    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
-    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
-    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
-    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
-    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
-    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
-    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
-    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
-    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
-    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
-    leads?: LeadCreateNestedManyWithoutOrganizationInput
-    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
-    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
-    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
-    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
-    license?: LicenseCreateNestedOneWithoutOrganizationsInput
-    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
-    paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
-    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
-    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
-    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
-    studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
-    countries?: CountryCreateNestedManyWithoutOrganizationInput
-    polls?: PollCreateNestedManyWithoutOrganizationInput
-    programs?: ProgramCreateNestedManyWithoutOrganizationInput
-    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
-    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
-    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
-    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
-    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
-    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
-    students?: StudentCreateNestedManyWithoutOrganizationInput
-    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
-    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
-    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
-    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
-    targets?: TargetCreateNestedManyWithoutOrganizationInput
-    tasks?: TaskCreateNestedManyWithoutOrganizationInput
-    universities?: UniversityCreateNestedManyWithoutOrganizationInput
-    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
-    commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
-    universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
-    users?: UserCreateNestedManyWithoutOrganizationInput
-    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
-    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
-    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
-    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
-    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
-    faculties?: FacultyCreateNestedManyWithoutOrganizationInput
-    classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
-    classTrialVideos?: ClassTrialVideoCreateNestedManyWithoutOrganizationInput
-    lessonDoubts?: LessonDoubtCreateNestedManyWithoutOrganizationInput
-    lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutOrganizationInput
-    lessonNotes?: LessonNoteCreateNestedManyWithoutOrganizationInput
-    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
-    classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
-    moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
-    lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
-    batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
-    studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationUncheckedCreateWithoutStudyAbroadEnrollmentsInput = {
-    id?: string
-    name: string
-    email: string
-    phone: string
-    address: string
-    logo?: string | null
-    customLoginSlug?: string | null
-    loginBranding?: NullableJsonNullValueInput | InputJsonValue
-    status?: $Enums.OrganizationStatus
-    licenseId?: string | null
-    licenseExpiry?: Date | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutOrganizationInput
-    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutOrganizationInput
-    academicCenters?: AcademicCenterUncheckedCreateNestedManyWithoutOrganizationInput
-    academicClasses?: AcademicClassUncheckedCreateNestedManyWithoutOrganizationInput
-    academicBatches?: AcademicBatchUncheckedCreateNestedManyWithoutOrganizationInput
-    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
-    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
-    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
-    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
-    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
-    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutOrganizationInput
-    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
-    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
-    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
-    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
-    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
-    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
-    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
-    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
-    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
-    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
-    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
-    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
-    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
-    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
-    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
-    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
-    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
-    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
-    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
-    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
-    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
-    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
-    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
-    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
-    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
-    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
-    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
-    countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
-    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
-    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
-    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
-    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
-    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
-    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
-    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
-    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
-    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
-    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
-    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
-    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
-    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
-    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
-    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
-    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
-    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
-    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
-    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
-    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
-    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
-    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
-    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
-    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
-    faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
-    classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
-    classTrialVideos?: ClassTrialVideoUncheckedCreateNestedManyWithoutOrganizationInput
-    lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutOrganizationInput
-    lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutOrganizationInput
-    lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutOrganizationInput
-    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
-    classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
-    moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
-    lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
-    batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
-    studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationCreateOrConnectWithoutStudyAbroadEnrollmentsInput = {
-    where: OrganizationWhereUniqueInput
-    create: XOR<OrganizationCreateWithoutStudyAbroadEnrollmentsInput, OrganizationUncheckedCreateWithoutStudyAbroadEnrollmentsInput>
-  }
-
-  export type StudyAbroadPartnerCreateWithoutEnrollmentsInput = {
-    id?: string
-    name: string
-    code: string
-    address?: string | null
-    contact?: string | null
-    email?: string | null
-    city?: string | null
-    state?: string | null
-    country?: string | null
-    status?: string
-    destinationCountries?: StudyAbroadPartnerCreatedestinationCountriesInput | string[]
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    organization: OrganizationCreateNestedOneWithoutStudyAbroadPartnersInput
-    referrer?: UserCreateNestedOneWithoutStudyAbroadPartnersReferredInput
-    adminUser?: UserCreateNestedOneWithoutStudyAbroadPartnerAdminOfInput
-  }
-
-  export type StudyAbroadPartnerUncheckedCreateWithoutEnrollmentsInput = {
-    id?: string
-    organizationId: string
-    name: string
-    code: string
-    address?: string | null
-    contact?: string | null
-    email?: string | null
-    city?: string | null
-    state?: string | null
-    country?: string | null
-    status?: string
-    destinationCountries?: StudyAbroadPartnerCreatedestinationCountriesInput | string[]
-    referredBy?: string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    adminUserId?: string | null
-  }
-
-  export type StudyAbroadPartnerCreateOrConnectWithoutEnrollmentsInput = {
-    where: StudyAbroadPartnerWhereUniqueInput
-    create: XOR<StudyAbroadPartnerCreateWithoutEnrollmentsInput, StudyAbroadPartnerUncheckedCreateWithoutEnrollmentsInput>
-  }
-
-  export type UserCreateWithoutStudyAbroadEnrollmentsCreatedInput = {
-    id?: string
-    userId?: string | null
-    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
-    ceoPanelId?: string | null
-    email: string
-    password: string
-    name: string
-    role: $Enums.UserRole
-    avatar?: string | null
-    phone?: string | null
-    designation?: string | null
-    status?: $Enums.UserStatus
-    lastLogin?: Date | string | null
-    biometricId?: string | null
-    allowSystemPunchIn?: boolean
-    requireSelfiePunchIn?: boolean
-    allowAnywherePunchIn?: boolean
-    requiresAttendance?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
-    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
-    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
-    approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
-    createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
-    postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
-    assets?: AssetCreateNestedManyWithoutUserInput
-    attendances?: AttendanceCreateNestedManyWithoutUserInput
-    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
-    managedBranch?: BranchCreateNestedOneWithoutBranchManagerInput
-    ceoPanel?: CeoPanelCreateNestedOneWithoutUserInput
-    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
-    complaints?: ComplaintCreateNestedManyWithoutUserInput
-    credentialResponder?: CredentialRequestCreateNestedManyWithoutResponderInput
-    credentialRequester?: CredentialRequestCreateNestedManyWithoutUserInput
-    managedDepartments?: DepartmentCreateNestedManyWithoutManagerInput
-    documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
-    editDeleteResponder?: EditDeleteRequestCreateNestedManyWithoutResponderInput
-    editDeleteRequester?: EditDeleteRequestCreateNestedManyWithoutUserInput
-    employeeProfile?: EmployeeCreateNestedOneWithoutUserInput
-    employeeProfileDetail?: EmployeeProfileCreateNestedOneWithoutUserInput
-    deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
-    financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
-    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
-    salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
-    universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
-    deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
-    employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
-    handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
-    resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
-    approvedExpenseClaims?: ExpenseClaimCreateNestedManyWithoutApproverInput
-    expenseClaims?: ExpenseClaimCreateNestedManyWithoutUserInput
-    createdFees?: FeeStructureCreateNestedManyWithoutCreatorInput
-    createdGstSettings?: GSTSettingCreateNestedManyWithoutCreatorInput
-    approvedIncentives?: IncentiveStructureCreateNestedManyWithoutApproverInput
-    createdIncentives?: IncentiveStructureCreateNestedManyWithoutCreatorInput
-    enteredMarks?: InternalMarkCreateNestedManyWithoutEnteredByUserInput
-    referredLeads?: LeadCreateNestedManyWithoutReferrerInput
-    createdLeaveAllocations?: LeaveAllocationCreateNestedManyWithoutCreatorInput
-    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutUserInput
-    deptApprovedLeaves?: LeaveRequestCreateNestedManyWithoutDeptApproverInput
-    leaveRequests?: LeaveRequestCreateNestedManyWithoutUserInput
-    hrApprovedLeaves?: LeaveRequestCreateNestedManyWithoutHrApproverInput
-    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-    receivedPayments?: PaymentEntryCreateNestedManyWithoutReceiverInput
-    createdPaymentLinks?: PaymentLinkCreateNestedManyWithoutCreatorInput
-    confirmedPayrolls?: PayrollCreateNestedManyWithoutConfirmerInput
-    payrolls?: PayrollCreateNestedManyWithoutUserInput
-    financeApprovedPayrolls?: PayrollCreateNestedManyWithoutFinanceApproverInput
-    processedPayrolls?: PayrollCreateNestedManyWithoutProcessorInput
-    transferredPayrolls?: PayrollCreateNestedManyWithoutTransfererInput
-    batchApproved?: PayrollBatchCreateNestedManyWithoutApproverInput
-    batchRejected?: PayrollBatchCreateNestedManyWithoutRejectorInput
-    batchTransferred?: PayrollBatchCreateNestedManyWithoutTransfererInput
-    createdPolls?: PollCreateNestedManyWithoutCreatorInput
-    programAllocations?: ProgramAllocationCreateNestedManyWithoutAllocatedByMgrInput
-    uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
-    referralLink?: ReferralLinkCreateNestedOneWithoutUserInput
-    salaryApproved?: SalaryConfigCreateNestedManyWithoutApproverInput
-    salaryCreated?: SalaryConfigCreateNestedManyWithoutCreatorInput
-    salaryConfig?: SalaryConfigCreateNestedOneWithoutUserInput
-    approvedRequests?: SessionRequestCreateNestedManyWithoutApproverInput
-    sessionRequests?: SessionRequestCreateNestedManyWithoutUserInput
-    studentProfile?: StudentCreateNestedOneWithoutUserInput
-    enrolledStudents?: StudentCreateNestedManyWithoutEnrolledByUserInput
-    referredStudents?: StudentCreateNestedManyWithoutReferrerInput
-    financeApprovedCenters?: StudyCenterCreateNestedManyWithoutApproverInput
-    referredStudyCenters?: StudyCenterCreateNestedManyWithoutReferrerInput
-    verifiedStudyCenters?: StudyCenterCreateNestedManyWithoutVerifierInput
-    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutReferrerInput
-    managedSubDepartments?: SubDepartmentCreateNestedManyWithoutManagerUserInput
-    targets?: TargetCreateNestedManyWithoutEmployeeInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
-    createdTasks?: TaskCreateNestedManyWithoutAssignerInput
-    escalatedTasks?: TaskCreateNestedManyWithoutEscalatedUserInput
-    configuredAuthFees?: UniversityAuthFeeCreateNestedManyWithoutConfiguredByUserInput
-    branch?: BranchCreateNestedOneWithoutUsersInput
-    department?: DepartmentCreateNestedOneWithoutUsersInput
-    organization?: OrganizationCreateNestedOneWithoutUsersInput
-    manager?: UserCreateNestedOneWithoutSubordinatesInput
-    subordinates?: UserCreateNestedManyWithoutManagerInput
-    studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
-    studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
-    studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
-    subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
-    university?: UniversityCreateNestedOneWithoutAdminsInput
-    verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
-    assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
-    designations?: DesignationCreateNestedManyWithoutFilledByInput
-    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
-    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
-    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
-  }
-
-  export type UserUncheckedCreateWithoutStudyAbroadEnrollmentsCreatedInput = {
-    id?: string
-    userId?: string | null
-    organizationId?: string | null
-    departmentId?: string | null
-    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
-    branchId?: string | null
-    subDepartmentId?: string | null
-    ceoPanelId?: string | null
-    studyCenterId?: string | null
-    universityId?: string | null
-    email: string
-    password: string
-    name: string
-    role: $Enums.UserRole
-    avatar?: string | null
-    phone?: string | null
-    designation?: string | null
-    reportingTo?: string | null
-    status?: $Enums.UserStatus
-    lastLogin?: Date | string | null
-    biometricId?: string | null
-    allowSystemPunchIn?: boolean
-    requireSelfiePunchIn?: boolean
-    allowAnywherePunchIn?: boolean
-    requiresAttendance?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
-    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
-    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
-    approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
-    createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
-    postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
-    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
-    attendances?: AttendanceUncheckedCreateNestedManyWithoutUserInput
-    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
-    managedBranch?: BranchUncheckedCreateNestedOneWithoutBranchManagerInput
-    ceoPanel?: CeoPanelUncheckedCreateNestedOneWithoutUserInput
-    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
-    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
-    credentialResponder?: CredentialRequestUncheckedCreateNestedManyWithoutResponderInput
-    credentialRequester?: CredentialRequestUncheckedCreateNestedManyWithoutUserInput
-    managedDepartments?: DepartmentUncheckedCreateNestedManyWithoutManagerInput
-    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
-    editDeleteResponder?: EditDeleteRequestUncheckedCreateNestedManyWithoutResponderInput
-    editDeleteRequester?: EditDeleteRequestUncheckedCreateNestedManyWithoutUserInput
-    employeeProfile?: EmployeeUncheckedCreateNestedOneWithoutUserInput
-    employeeProfileDetail?: EmployeeProfileUncheckedCreateNestedOneWithoutUserInput
-    deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
-    financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
-    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
-    salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
-    universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
-    deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
-    employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
-    handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
-    resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
-    approvedExpenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutApproverInput
-    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutUserInput
-    createdFees?: FeeStructureUncheckedCreateNestedManyWithoutCreatorInput
-    createdGstSettings?: GSTSettingUncheckedCreateNestedManyWithoutCreatorInput
-    approvedIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutApproverInput
-    createdIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutCreatorInput
-    enteredMarks?: InternalMarkUncheckedCreateNestedManyWithoutEnteredByUserInput
-    referredLeads?: LeadUncheckedCreateNestedManyWithoutReferrerInput
-    createdLeaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutCreatorInput
-    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutUserInput
-    deptApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutDeptApproverInput
-    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutUserInput
-    hrApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutHrApproverInput
-    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    receivedPayments?: PaymentEntryUncheckedCreateNestedManyWithoutReceiverInput
-    createdPaymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutCreatorInput
-    confirmedPayrolls?: PayrollUncheckedCreateNestedManyWithoutConfirmerInput
-    payrolls?: PayrollUncheckedCreateNestedManyWithoutUserInput
-    financeApprovedPayrolls?: PayrollUncheckedCreateNestedManyWithoutFinanceApproverInput
-    processedPayrolls?: PayrollUncheckedCreateNestedManyWithoutProcessorInput
-    transferredPayrolls?: PayrollUncheckedCreateNestedManyWithoutTransfererInput
-    batchApproved?: PayrollBatchUncheckedCreateNestedManyWithoutApproverInput
-    batchRejected?: PayrollBatchUncheckedCreateNestedManyWithoutRejectorInput
-    batchTransferred?: PayrollBatchUncheckedCreateNestedManyWithoutTransfererInput
-    createdPolls?: PollUncheckedCreateNestedManyWithoutCreatorInput
-    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutAllocatedByMgrInput
-    uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
-    referralLink?: ReferralLinkUncheckedCreateNestedOneWithoutUserInput
-    salaryApproved?: SalaryConfigUncheckedCreateNestedManyWithoutApproverInput
-    salaryCreated?: SalaryConfigUncheckedCreateNestedManyWithoutCreatorInput
-    salaryConfig?: SalaryConfigUncheckedCreateNestedOneWithoutUserInput
-    approvedRequests?: SessionRequestUncheckedCreateNestedManyWithoutApproverInput
-    sessionRequests?: SessionRequestUncheckedCreateNestedManyWithoutUserInput
-    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
-    enrolledStudents?: StudentUncheckedCreateNestedManyWithoutEnrolledByUserInput
-    referredStudents?: StudentUncheckedCreateNestedManyWithoutReferrerInput
-    financeApprovedCenters?: StudyCenterUncheckedCreateNestedManyWithoutApproverInput
-    referredStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutReferrerInput
-    verifiedStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutVerifierInput
-    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutReferrerInput
-    managedSubDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutManagerUserInput
-    targets?: TargetUncheckedCreateNestedManyWithoutEmployeeInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignerInput
-    escalatedTasks?: TaskUncheckedCreateNestedManyWithoutEscalatedUserInput
-    configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
-    subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
-    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
-    studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
-    verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
-    assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
-    designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
-    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
-    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
-    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
-  }
-
-  export type UserCreateOrConnectWithoutStudyAbroadEnrollmentsCreatedInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutStudyAbroadEnrollmentsCreatedInput, UserUncheckedCreateWithoutStudyAbroadEnrollmentsCreatedInput>
-  }
-
-  export type OrganizationUpsertWithoutStudyAbroadEnrollmentsInput = {
-    update: XOR<OrganizationUpdateWithoutStudyAbroadEnrollmentsInput, OrganizationUncheckedUpdateWithoutStudyAbroadEnrollmentsInput>
-    create: XOR<OrganizationCreateWithoutStudyAbroadEnrollmentsInput, OrganizationUncheckedCreateWithoutStudyAbroadEnrollmentsInput>
-    where?: OrganizationWhereInput
-  }
-
-  export type OrganizationUpdateToOneWithWhereWithoutStudyAbroadEnrollmentsInput = {
-    where?: OrganizationWhereInput
-    data: XOR<OrganizationUpdateWithoutStudyAbroadEnrollmentsInput, OrganizationUncheckedUpdateWithoutStudyAbroadEnrollmentsInput>
-  }
-
-  export type OrganizationUpdateWithoutStudyAbroadEnrollmentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
-    loginBranding?: NullableJsonNullValueInput | InputJsonValue
-    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
-    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    academicSessions?: AcademicSessionUpdateManyWithoutOrganizationNestedInput
-    studentAcademicAttendances?: StudentAcademicAttendanceUpdateManyWithoutOrganizationNestedInput
-    academicCenters?: AcademicCenterUpdateManyWithoutOrganizationNestedInput
-    academicClasses?: AcademicClassUpdateManyWithoutOrganizationNestedInput
-    academicBatches?: AcademicBatchUpdateManyWithoutOrganizationNestedInput
-    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
-    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
-    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
-    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
-    branches?: BranchUpdateManyWithoutOrganizationNestedInput
-    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
-    collectionOverseers?: CollectionOverseerUpdateManyWithoutOrganizationNestedInput
-    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
-    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
-    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
-    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
-    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
-    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
-    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
-    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
-    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
-    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
-    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
-    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
-    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
-    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
-    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
-    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
-    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
-    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
-    leads?: LeadUpdateManyWithoutOrganizationNestedInput
-    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
-    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
-    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
-    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
-    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
-    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
-    paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
-    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
-    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
-    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
-    studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
-    countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    polls?: PollUpdateManyWithoutOrganizationNestedInput
-    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
-    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
-    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
-    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
-    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
-    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
-    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
-    students?: StudentUpdateManyWithoutOrganizationNestedInput
-    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
-    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
-    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
-    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
-    targets?: TargetUpdateManyWithoutOrganizationNestedInput
-    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
-    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
-    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
-    commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
-    universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
-    users?: UserUpdateManyWithoutOrganizationNestedInput
-    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
-    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
-    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
-    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
-    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
-    faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
-    classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
-    classTrialVideos?: ClassTrialVideoUpdateManyWithoutOrganizationNestedInput
-    lessonDoubts?: LessonDoubtUpdateManyWithoutOrganizationNestedInput
-    lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutOrganizationNestedInput
-    lessonNotes?: LessonNoteUpdateManyWithoutOrganizationNestedInput
-    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
-    classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
-    moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
-    lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
-    batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
-    studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
-  }
-
-  export type OrganizationUncheckedUpdateWithoutStudyAbroadEnrollmentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    logo?: NullableStringFieldUpdateOperationsInput | string | null
-    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
-    loginBranding?: NullableJsonNullValueInput | InputJsonValue
-    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
-    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
-    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    academicSessions?: AcademicSessionUncheckedUpdateManyWithoutOrganizationNestedInput
-    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
-    academicCenters?: AcademicCenterUncheckedUpdateManyWithoutOrganizationNestedInput
-    academicClasses?: AcademicClassUncheckedUpdateManyWithoutOrganizationNestedInput
-    academicBatches?: AcademicBatchUncheckedUpdateManyWithoutOrganizationNestedInput
-    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
-    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
-    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
-    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
-    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
-    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutOrganizationNestedInput
-    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
-    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
-    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
-    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
-    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
-    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
-    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
-    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
-    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
-    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
-    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
-    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
-    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
-    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
-    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
-    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
-    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
-    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
-    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
-    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
-    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
-    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
-    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
-    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
-    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
-    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
-    countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
-    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
-    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
-    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
-    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
-    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
-    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
-    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
-    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
-    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
-    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
-    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
-    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
-    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
-    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
-    commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
-    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
-    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
-    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
-    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
-    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
-    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
-    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
-    faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
-    classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
-    classTrialVideos?: ClassTrialVideoUncheckedUpdateManyWithoutOrganizationNestedInput
-    lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutOrganizationNestedInput
-    lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutOrganizationNestedInput
-    lessonNotes?: LessonNoteUncheckedUpdateManyWithoutOrganizationNestedInput
-    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
-    classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
-    moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
-    lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
-    batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
-    studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
-  }
-
-  export type StudyAbroadPartnerUpsertWithoutEnrollmentsInput = {
-    update: XOR<StudyAbroadPartnerUpdateWithoutEnrollmentsInput, StudyAbroadPartnerUncheckedUpdateWithoutEnrollmentsInput>
-    create: XOR<StudyAbroadPartnerCreateWithoutEnrollmentsInput, StudyAbroadPartnerUncheckedCreateWithoutEnrollmentsInput>
-    where?: StudyAbroadPartnerWhereInput
-  }
-
-  export type StudyAbroadPartnerUpdateToOneWithWhereWithoutEnrollmentsInput = {
-    where?: StudyAbroadPartnerWhereInput
-    data: XOR<StudyAbroadPartnerUpdateWithoutEnrollmentsInput, StudyAbroadPartnerUncheckedUpdateWithoutEnrollmentsInput>
-  }
-
-  export type StudyAbroadPartnerUpdateWithoutEnrollmentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    state?: NullableStringFieldUpdateOperationsInput | string | null
-    country?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    destinationCountries?: StudyAbroadPartnerUpdatedestinationCountriesInput | string[]
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutStudyAbroadPartnersNestedInput
-    referrer?: UserUpdateOneWithoutStudyAbroadPartnersReferredNestedInput
-    adminUser?: UserUpdateOneWithoutStudyAbroadPartnerAdminOfNestedInput
-  }
-
-  export type StudyAbroadPartnerUncheckedUpdateWithoutEnrollmentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    contact?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    state?: NullableStringFieldUpdateOperationsInput | string | null
-    country?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    destinationCountries?: StudyAbroadPartnerUpdatedestinationCountriesInput | string[]
-    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminUserId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type UserUpsertWithoutStudyAbroadEnrollmentsCreatedInput = {
-    update: XOR<UserUpdateWithoutStudyAbroadEnrollmentsCreatedInput, UserUncheckedUpdateWithoutStudyAbroadEnrollmentsCreatedInput>
-    create: XOR<UserCreateWithoutStudyAbroadEnrollmentsCreatedInput, UserUncheckedCreateWithoutStudyAbroadEnrollmentsCreatedInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutStudyAbroadEnrollmentsCreatedInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutStudyAbroadEnrollmentsCreatedInput, UserUncheckedUpdateWithoutStudyAbroadEnrollmentsCreatedInput>
-  }
-
-  export type UserUpdateWithoutStudyAbroadEnrollmentsCreatedInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: NullableStringFieldUpdateOperationsInput | string | null
-    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
-    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    designation?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
-    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
-    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
-    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
-    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
-    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
-    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
-    approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
-    createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
-    postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
-    assets?: AssetUpdateManyWithoutUserNestedInput
-    attendances?: AttendanceUpdateManyWithoutUserNestedInput
-    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
-    managedBranch?: BranchUpdateOneWithoutBranchManagerNestedInput
-    ceoPanel?: CeoPanelUpdateOneWithoutUserNestedInput
-    collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
-    complaints?: ComplaintUpdateManyWithoutUserNestedInput
-    credentialResponder?: CredentialRequestUpdateManyWithoutResponderNestedInput
-    credentialRequester?: CredentialRequestUpdateManyWithoutUserNestedInput
-    managedDepartments?: DepartmentUpdateManyWithoutManagerNestedInput
-    documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
-    editDeleteResponder?: EditDeleteRequestUpdateManyWithoutResponderNestedInput
-    editDeleteRequester?: EditDeleteRequestUpdateManyWithoutUserNestedInput
-    employeeProfile?: EmployeeUpdateOneWithoutUserNestedInput
-    employeeProfileDetail?: EmployeeProfileUpdateOneWithoutUserNestedInput
-    deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
-    financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
-    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
-    salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
-    universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
-    deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
-    employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
-    handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
-    resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
-    approvedExpenseClaims?: ExpenseClaimUpdateManyWithoutApproverNestedInput
-    expenseClaims?: ExpenseClaimUpdateManyWithoutUserNestedInput
-    createdFees?: FeeStructureUpdateManyWithoutCreatorNestedInput
-    createdGstSettings?: GSTSettingUpdateManyWithoutCreatorNestedInput
-    approvedIncentives?: IncentiveStructureUpdateManyWithoutApproverNestedInput
-    createdIncentives?: IncentiveStructureUpdateManyWithoutCreatorNestedInput
-    enteredMarks?: InternalMarkUpdateManyWithoutEnteredByUserNestedInput
-    referredLeads?: LeadUpdateManyWithoutReferrerNestedInput
-    createdLeaveAllocations?: LeaveAllocationUpdateManyWithoutCreatorNestedInput
-    leaveAllocations?: LeaveAllocationUpdateManyWithoutUserNestedInput
-    deptApprovedLeaves?: LeaveRequestUpdateManyWithoutDeptApproverNestedInput
-    leaveRequests?: LeaveRequestUpdateManyWithoutUserNestedInput
-    hrApprovedLeaves?: LeaveRequestUpdateManyWithoutHrApproverNestedInput
-    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-    receivedPayments?: PaymentEntryUpdateManyWithoutReceiverNestedInput
-    createdPaymentLinks?: PaymentLinkUpdateManyWithoutCreatorNestedInput
-    confirmedPayrolls?: PayrollUpdateManyWithoutConfirmerNestedInput
-    payrolls?: PayrollUpdateManyWithoutUserNestedInput
-    financeApprovedPayrolls?: PayrollUpdateManyWithoutFinanceApproverNestedInput
-    processedPayrolls?: PayrollUpdateManyWithoutProcessorNestedInput
-    transferredPayrolls?: PayrollUpdateManyWithoutTransfererNestedInput
-    batchApproved?: PayrollBatchUpdateManyWithoutApproverNestedInput
-    batchRejected?: PayrollBatchUpdateManyWithoutRejectorNestedInput
-    batchTransferred?: PayrollBatchUpdateManyWithoutTransfererNestedInput
-    createdPolls?: PollUpdateManyWithoutCreatorNestedInput
-    programAllocations?: ProgramAllocationUpdateManyWithoutAllocatedByMgrNestedInput
-    uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
-    referralLink?: ReferralLinkUpdateOneWithoutUserNestedInput
-    salaryApproved?: SalaryConfigUpdateManyWithoutApproverNestedInput
-    salaryCreated?: SalaryConfigUpdateManyWithoutCreatorNestedInput
-    salaryConfig?: SalaryConfigUpdateOneWithoutUserNestedInput
-    approvedRequests?: SessionRequestUpdateManyWithoutApproverNestedInput
-    sessionRequests?: SessionRequestUpdateManyWithoutUserNestedInput
-    studentProfile?: StudentUpdateOneWithoutUserNestedInput
-    enrolledStudents?: StudentUpdateManyWithoutEnrolledByUserNestedInput
-    referredStudents?: StudentUpdateManyWithoutReferrerNestedInput
-    financeApprovedCenters?: StudyCenterUpdateManyWithoutApproverNestedInput
-    referredStudyCenters?: StudyCenterUpdateManyWithoutReferrerNestedInput
-    verifiedStudyCenters?: StudyCenterUpdateManyWithoutVerifierNestedInput
-    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutReferrerNestedInput
-    managedSubDepartments?: SubDepartmentUpdateManyWithoutManagerUserNestedInput
-    targets?: TargetUpdateManyWithoutEmployeeNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
-    createdTasks?: TaskUpdateManyWithoutAssignerNestedInput
-    escalatedTasks?: TaskUpdateManyWithoutEscalatedUserNestedInput
-    configuredAuthFees?: UniversityAuthFeeUpdateManyWithoutConfiguredByUserNestedInput
-    branch?: BranchUpdateOneWithoutUsersNestedInput
-    department?: DepartmentUpdateOneWithoutUsersNestedInput
-    organization?: OrganizationUpdateOneWithoutUsersNestedInput
-    manager?: UserUpdateOneWithoutSubordinatesNestedInput
-    subordinates?: UserUpdateManyWithoutManagerNestedInput
-    studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
-    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
-    studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
-    university?: UniversityUpdateOneWithoutAdminsNestedInput
-    verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
-    assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
-    designations?: DesignationUpdateManyWithoutFilledByNestedInput
-    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
-    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
-    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutStudyAbroadEnrollmentsCreatedInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: NullableStringFieldUpdateOperationsInput | string | null
-    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
-    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
-    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
-    branchId?: NullableStringFieldUpdateOperationsInput | string | null
-    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
-    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
-    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    designation?: NullableStringFieldUpdateOperationsInput | string | null
-    reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
-    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
-    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
-    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
-    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
-    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
-    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
-    approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
-    createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
-    postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
-    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
-    attendances?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
-    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
-    managedBranch?: BranchUncheckedUpdateOneWithoutBranchManagerNestedInput
-    ceoPanel?: CeoPanelUncheckedUpdateOneWithoutUserNestedInput
-    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
-    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
-    credentialResponder?: CredentialRequestUncheckedUpdateManyWithoutResponderNestedInput
-    credentialRequester?: CredentialRequestUncheckedUpdateManyWithoutUserNestedInput
-    managedDepartments?: DepartmentUncheckedUpdateManyWithoutManagerNestedInput
-    documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
-    editDeleteResponder?: EditDeleteRequestUncheckedUpdateManyWithoutResponderNestedInput
-    editDeleteRequester?: EditDeleteRequestUncheckedUpdateManyWithoutUserNestedInput
-    employeeProfile?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
-    employeeProfileDetail?: EmployeeProfileUncheckedUpdateOneWithoutUserNestedInput
-    deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
-    financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
-    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
-    salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
-    universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
-    deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
-    employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
-    handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
-    resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
-    approvedExpenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutApproverNestedInput
-    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutUserNestedInput
-    createdFees?: FeeStructureUncheckedUpdateManyWithoutCreatorNestedInput
-    createdGstSettings?: GSTSettingUncheckedUpdateManyWithoutCreatorNestedInput
-    approvedIncentives?: IncentiveStructureUncheckedUpdateManyWithoutApproverNestedInput
-    createdIncentives?: IncentiveStructureUncheckedUpdateManyWithoutCreatorNestedInput
-    enteredMarks?: InternalMarkUncheckedUpdateManyWithoutEnteredByUserNestedInput
-    referredLeads?: LeadUncheckedUpdateManyWithoutReferrerNestedInput
-    createdLeaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutCreatorNestedInput
-    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutUserNestedInput
-    deptApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutDeptApproverNestedInput
-    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutUserNestedInput
-    hrApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutHrApproverNestedInput
-    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-    receivedPayments?: PaymentEntryUncheckedUpdateManyWithoutReceiverNestedInput
-    createdPaymentLinks?: PaymentLinkUncheckedUpdateManyWithoutCreatorNestedInput
-    confirmedPayrolls?: PayrollUncheckedUpdateManyWithoutConfirmerNestedInput
-    payrolls?: PayrollUncheckedUpdateManyWithoutUserNestedInput
-    financeApprovedPayrolls?: PayrollUncheckedUpdateManyWithoutFinanceApproverNestedInput
-    processedPayrolls?: PayrollUncheckedUpdateManyWithoutProcessorNestedInput
-    transferredPayrolls?: PayrollUncheckedUpdateManyWithoutTransfererNestedInput
-    batchApproved?: PayrollBatchUncheckedUpdateManyWithoutApproverNestedInput
-    batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
-    batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
-    createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
-    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrNestedInput
-    uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
-    referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
-    salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
-    salaryCreated?: SalaryConfigUncheckedUpdateManyWithoutCreatorNestedInput
-    salaryConfig?: SalaryConfigUncheckedUpdateOneWithoutUserNestedInput
-    approvedRequests?: SessionRequestUncheckedUpdateManyWithoutApproverNestedInput
-    sessionRequests?: SessionRequestUncheckedUpdateManyWithoutUserNestedInput
-    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
-    enrolledStudents?: StudentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
-    referredStudents?: StudentUncheckedUpdateManyWithoutReferrerNestedInput
-    financeApprovedCenters?: StudyCenterUncheckedUpdateManyWithoutApproverNestedInput
-    referredStudyCenters?: StudyCenterUncheckedUpdateManyWithoutReferrerNestedInput
-    verifiedStudyCenters?: StudyCenterUncheckedUpdateManyWithoutVerifierNestedInput
-    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutReferrerNestedInput
-    managedSubDepartments?: SubDepartmentUncheckedUpdateManyWithoutManagerUserNestedInput
-    targets?: TargetUncheckedUpdateManyWithoutEmployeeNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutAssignerNestedInput
-    escalatedTasks?: TaskUncheckedUpdateManyWithoutEscalatedUserNestedInput
-    configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
-    subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
-    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
-    studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -291863,7 +287844,6 @@ export namespace Prisma {
     payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
     payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentCreateNestedManyWithoutOrganizationInput
     polls?: PollCreateNestedManyWithoutOrganizationInput
     programs?: ProgramCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
@@ -291959,7 +287939,6 @@ export namespace Prisma {
     payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
     payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
     polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
     programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -292071,7 +288050,6 @@ export namespace Prisma {
     payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -292167,7 +288145,6 @@ export namespace Prisma {
     payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -292551,6 +288528,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type EscalationCreateManyOrganizationInput = {
@@ -292896,36 +288876,6 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type StudyAbroadEnrollmentCreateManyOrganizationInput = {
-    id?: string
-    partnerId: string
-    createdBy: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type PollCreateManyOrganizationInput = {
     id?: string
     question: string
@@ -293069,6 +289019,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -294433,6 +290384,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -294503,6 +290457,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -294564,6 +290521,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type EscalationUpdateWithoutOrganizationInput = {
@@ -295545,7 +291505,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referrer?: UserUpdateOneWithoutStudyAbroadPartnersReferredNestedInput
     adminUser?: UserUpdateOneWithoutStudyAbroadPartnerAdminOfNestedInput
-    enrollments?: StudyAbroadEnrollmentUpdateManyWithoutPartnerNestedInput
   }
 
   export type StudyAbroadPartnerUncheckedUpdateWithoutOrganizationInput = {
@@ -295565,7 +291524,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminUserId?: NullableStringFieldUpdateOperationsInput | string | null
-    enrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutPartnerNestedInput
   }
 
   export type StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationInput = {
@@ -295603,96 +291561,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StudyAbroadEnrollmentUpdateWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    partner?: StudyAbroadPartnerUpdateOneRequiredWithoutEnrollmentsNestedInput
-    creator?: UserUpdateOneRequiredWithoutStudyAbroadEnrollmentsCreatedNestedInput
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    partnerId?: StringFieldUpdateOperationsInput | string
-    createdBy?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    partnerId?: StringFieldUpdateOperationsInput | string
-    createdBy?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PollUpdateWithoutOrganizationInput = {
@@ -296047,6 +291915,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -296121,6 +291990,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -296186,6 +292056,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -296813,7 +292684,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -296932,7 +292802,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -297695,7 +293564,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUpdateManyWithoutOrganizationNestedInput
     polls?: PollUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
@@ -297791,7 +293659,6 @@ export namespace Prisma {
     payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
     studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
     countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
-    studyAbroadEnrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
     polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -298494,7 +294361,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -298613,7 +294479,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -298794,7 +294659,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -298913,7 +294777,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
@@ -299239,6 +295102,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type EnrollmentCreateManyFinanceReviewerInput = {
@@ -299299,6 +295165,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type EnrollmentCreateManyReceiptVerifierInput = {
@@ -299359,6 +295228,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type EnrollmentCreateManySalesUserInput = {
@@ -299419,6 +295291,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type EnrollmentCreateManyUniversityReviewerInput = {
@@ -299479,6 +295354,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type EscalationCreateManyDeptAdminInput = {
@@ -300188,6 +296066,7 @@ export namespace Prisma {
     guardianName?: string | null
     familyPhone?: string | null
     universityId?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -300237,6 +296116,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -300495,36 +296375,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     adminUserId?: string | null
-  }
-
-  export type StudyAbroadEnrollmentCreateManyCreatorInput = {
-    id?: string
-    organizationId: string
-    partnerId: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type WalletTopUpCreateManyVerifierInput = {
@@ -301347,6 +297197,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -301417,6 +297270,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -301478,6 +297334,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type EnrollmentUpdateWithoutFinanceReviewerInput = {
@@ -301529,6 +297388,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -301599,6 +297461,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -301660,6 +297525,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type EnrollmentUpdateWithoutReceiptVerifierInput = {
@@ -301711,6 +297579,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -301781,6 +297652,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -301842,6 +297716,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type EnrollmentUpdateWithoutSalesUserInput = {
@@ -301893,6 +297770,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -301963,6 +297843,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -302024,6 +297907,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type EnrollmentUpdateWithoutUniversityReviewerInput = {
@@ -302075,6 +297961,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -302145,6 +298034,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -302206,6 +298098,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type EscalationUpdateWithoutDeptAdminInput = {
@@ -304242,6 +300137,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -304316,6 +300212,7 @@ export namespace Prisma {
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -304381,6 +300278,7 @@ export namespace Prisma {
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -304421,6 +300319,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -304495,6 +300394,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -304560,6 +300460,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -305389,7 +301290,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -305508,7 +301408,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -305566,7 +301465,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutStudyAbroadPartnersNestedInput
     adminUser?: UserUpdateOneWithoutStudyAbroadPartnerAdminOfNestedInput
-    enrollments?: StudyAbroadEnrollmentUpdateManyWithoutPartnerNestedInput
   }
 
   export type StudyAbroadPartnerUncheckedUpdateWithoutReferrerInput = {
@@ -305586,7 +301484,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminUserId?: NullableStringFieldUpdateOperationsInput | string | null
-    enrollments?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutPartnerNestedInput
   }
 
   export type StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerInput = {
@@ -305606,96 +301503,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminUserId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type StudyAbroadEnrollmentUpdateWithoutCreatorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutStudyAbroadEnrollmentsNestedInput
-    partner?: StudyAbroadPartnerUpdateOneRequiredWithoutEnrollmentsNestedInput
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateWithoutCreatorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    partnerId?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    partnerId?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WalletTopUpUpdateWithoutVerifierInput = {
@@ -306167,6 +301974,7 @@ export namespace Prisma {
     guardianName?: string | null
     familyPhone?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -306482,6 +302290,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -306556,6 +302365,7 @@ export namespace Prisma {
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -306621,6 +302431,7 @@ export namespace Prisma {
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -306833,7 +302644,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
@@ -306951,7 +302761,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -307295,6 +303104,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type FeeStructureCreateManyProgramInput = {
@@ -307400,6 +303212,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -307521,6 +303334,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -307591,6 +303407,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -307652,6 +303471,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type FeeStructureUpdateWithoutProgramInput = {
@@ -307868,6 +303690,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -307942,6 +303765,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -308007,6 +303831,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -308255,6 +304080,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type EnrollmentPaymentCreateManyStudyCenterInput = {
@@ -308365,6 +304193,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -308549,6 +304378,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -308619,6 +304451,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -308680,6 +304515,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type EnrollmentPaymentUpdateWithoutStudyCenterInput = {
@@ -308913,6 +304751,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -308987,6 +304826,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -309052,6 +304892,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -309212,7 +305053,6 @@ export namespace Prisma {
     subordinates?: UserUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -309331,7 +305171,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -309694,6 +305533,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type InternalMarkCreateManyStudentInput = {
@@ -310017,6 +305859,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -310087,6 +305932,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -310148,6 +305996,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type InternalMarkUpdateWithoutStudentInput = {
@@ -310716,6 +306567,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -310868,6 +306720,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -310942,6 +306795,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -311007,6 +306861,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -311167,7 +307022,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -311286,7 +307140,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -311721,7 +307574,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
@@ -311839,7 +307691,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
@@ -312299,7 +308150,6 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUpdateManyWithoutCreatorNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
@@ -312418,7 +308268,6 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
     studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
-    studyAbroadEnrollmentsCreated?: StudyAbroadEnrollmentUncheckedUpdateManyWithoutCreatorNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
@@ -312517,6 +308366,9 @@ export namespace Prisma {
     initialPaymentAmount?: number | null
     initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
   }
 
   export type FeeStructureCreateManySessionInput = {
@@ -312589,6 +308441,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -312644,6 +308497,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -312714,6 +308570,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -312775,6 +308634,9 @@ export namespace Prisma {
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type FeeStructureUpdateWithoutSessionInput = {
@@ -312892,6 +308754,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -312966,6 +308829,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -313031,6 +308895,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -315003,6 +310868,7 @@ export namespace Prisma {
     familyPhone?: string | null
     universityId?: string | null
     enrolledBy?: string | null
+    source?: string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: number
@@ -315183,6 +311049,7 @@ export namespace Prisma {
     employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -315257,6 +311124,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -315322,6 +311190,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
     enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     discountAmount?: FloatFieldUpdateOperationsInput | number
@@ -315399,126 +311268,6 @@ export namespace Prisma {
     rating?: NullableIntFieldUpdateOperationsInput | number | null
     review?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StudyAbroadEnrollmentCreateManyPartnerInput = {
-    id?: string
-    organizationId: string
-    createdBy: string
-    studentName: string
-    studentEmail: string
-    studentPhone: string
-    studentAddress?: string | null
-    dateOfBirth?: Date | string | null
-    passportNumber?: string | null
-    destinationCountry: string
-    universityName: string
-    courseName: string
-    intake: string
-    intakeYear?: number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: string
-    opsRemarks?: string | null
-    financeRemarks?: string | null
-    opsReviewedBy?: string | null
-    opsReviewedAt?: Date | string | null
-    financeReviewedBy?: string | null
-    financeReviewedAt?: Date | string | null
-    serviceFee?: number | null
-    debitedAt?: Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type StudyAbroadEnrollmentUpdateWithoutPartnerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutStudyAbroadEnrollmentsNestedInput
-    creator?: UserUpdateOneRequiredWithoutStudyAbroadEnrollmentsCreatedNestedInput
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateWithoutPartnerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    createdBy?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StudyAbroadEnrollmentUncheckedUpdateManyWithoutPartnerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    createdBy?: StringFieldUpdateOperationsInput | string
-    studentName?: StringFieldUpdateOperationsInput | string
-    studentEmail?: StringFieldUpdateOperationsInput | string
-    studentPhone?: StringFieldUpdateOperationsInput | string
-    studentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    passportNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    destinationCountry?: StringFieldUpdateOperationsInput | string
-    universityName?: StringFieldUpdateOperationsInput | string
-    courseName?: StringFieldUpdateOperationsInput | string
-    intake?: StringFieldUpdateOperationsInput | string
-    intakeYear?: NullableIntFieldUpdateOperationsInput | number | null
-    documents?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    opsRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    opsReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
-    debitedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    statusHistory?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

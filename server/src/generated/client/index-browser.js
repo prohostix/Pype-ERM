@@ -362,6 +362,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   familyPhone: 'familyPhone',
   universityId: 'universityId',
   enrolledBy: 'enrolledBy',
+  source: 'source',
   academicProgress: 'academicProgress',
   admissionProgress: 'admissionProgress',
   discountAmount: 'discountAmount',
@@ -702,7 +703,10 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   receiptVerifiedBy: 'receiptVerifiedBy',
   initialPaymentAmount: 'initialPaymentAmount',
   initialPaymentDate: 'initialPaymentDate',
-  paymentPlan: 'paymentPlan'
+  paymentPlan: 'paymentPlan',
+  source: 'source',
+  studyAbroadPartnerId: 'studyAbroadPartnerId',
+  serviceFee: 'serviceFee'
 };
 
 exports.Prisma.ExpenseClaimScalarFieldEnum = {
@@ -1575,37 +1579,6 @@ exports.Prisma.StudyAbroadPartnerScalarFieldEnum = {
   adminUserId: 'adminUserId'
 };
 
-exports.Prisma.StudyAbroadEnrollmentScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  partnerId: 'partnerId',
-  createdBy: 'createdBy',
-  studentName: 'studentName',
-  studentEmail: 'studentEmail',
-  studentPhone: 'studentPhone',
-  studentAddress: 'studentAddress',
-  dateOfBirth: 'dateOfBirth',
-  passportNumber: 'passportNumber',
-  destinationCountry: 'destinationCountry',
-  universityName: 'universityName',
-  courseName: 'courseName',
-  intake: 'intake',
-  intakeYear: 'intakeYear',
-  documents: 'documents',
-  status: 'status',
-  opsRemarks: 'opsRemarks',
-  financeRemarks: 'financeRemarks',
-  opsReviewedBy: 'opsReviewedBy',
-  opsReviewedAt: 'opsReviewedAt',
-  financeReviewedBy: 'financeReviewedBy',
-  financeReviewedAt: 'financeReviewedAt',
-  serviceFee: 'serviceFee',
-  debitedAt: 'debitedAt',
-  statusHistory: 'statusHistory',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.CountryScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -1945,7 +1918,6 @@ exports.Prisma.ModelName = {
   AcademicSession: 'AcademicSession',
   StudentAcademicAttendance: 'StudentAcademicAttendance',
   StudyAbroadPartner: 'StudyAbroadPartner',
-  StudyAbroadEnrollment: 'StudyAbroadEnrollment',
   Country: 'Country'
 };
 

@@ -35,9 +35,23 @@ const ACTION_COPY: Record<Action, { title: string; needsRemarks: boolean; destru
   reactivate: { title: 'Reactivate partner', needsRemarks: false },
 };
 
-const emptyForm = { name: '', code: '', email: '', password: '', contact: '', city: '', state: '', country: '', destinationCountries: '' };
+const emptyForm = { name: '', code: '', email: '', password: '', contact: '', city: '', state: '', country: '', destinationCountries: [] as string[] };
 
-const parseCountries = (v: string) => v.split(',').map(s => s.trim()).filter(Boolean);
+/** Pick destination countries from the organization's own list (managed in University management). */
+function CountryPicker({ options, value, onChange }: { options: string[]; value: string[]; onChange: (v: string[]) => void }) {
+  if (options.length === 0) {
+    return <p className="text-xs text-muted-foreground">No countries yet. Add them in University management first, then pick them here. Leave empty to allow all.</p>;
+  }
+  const toggle = (c: string) => onChange(value.includes(c) ? value.filter(x => x !== c) : [...value, c]);
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map(c => (
+        <button key={c} type="button" onClick={() => toggle(c)}
+          className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${value.includes(c) ? 'bg-primary text-primary-foreground border-primary' : 'hover:bg-muted'}`}>{c}</button>
+      ))}
+    </div>
+  );
+}
 
 export function StudyAbroadPartnersPanel() {
   const { user } = useAuth();
@@ -72,7 +86,11 @@ export function StudyAbroadPartnersPanel() {
   const [action, setAction] = useState<{ type: Action; partner: Partner } | null>(null);
   const [remarks, setRemarks] = useState('');
   const [countriesFor, setCountriesFor] = useState<Partner | null>(null);
-  const [countriesText, setCountriesText] = useState('');
+  const [countriesSel, setCountriesSel] = useState<string[]>([]);
+  const [countryOptions, setCountryOptions] = useState<string[]>([]);
+  useEffect(() => {
+    api.get('/operations/countries').then(r => setCountryOptions((r.data.data || []).map((c: any) => c.name))).catch(() => {});
+  }, []);
   const [editing, setEditing] = useState<Partner | null>(null);
   const [editForm, setEditForm] = useState({ name: '', email: '', contact: '', address: '', city: '', state: '', country: '' });
 
@@ -96,7 +114,7 @@ export function StudyAbroadPartnersPanel() {
       const res = await api.post('/study-abroad/partners', {
         ...form,
         password: form.password || undefined,
-        destinationCountries: parseCountries(form.destinationCountries),
+        destinationCountries: form.destinationCountries,
       });
       setCreated({ ...res.data.credentials, name: form.name });
       setCreateOpen(false);
@@ -125,7 +143,7 @@ export function StudyAbroadPartnersPanel() {
   const saveCountries = async () => {
     if (!countriesFor) return;
     try {
-      await api.put(`/study-abroad/partners/${countriesFor.id}/countries`, { destinationCountries: parseCountries(countriesText) });
+      await api.put(`/study-abroad/partners/${countriesFor.id}/countries`, { destinationCountries: countriesSel });
       toast.success('Destination countries updated');
       setCountriesFor(null);
       load();
@@ -219,7 +237,7 @@ export function StudyAbroadPartnersPanel() {
                           ? <span className="text-xs text-muted-foreground">No countries allocated (all allowed)</span>
                           : p.destinationCountries.map(c => <Badge key={c} variant="secondary" className="text-xs">{c}</Badge>)}
                         {canEditCountries && (
-                          <button className="text-xs text-primary hover:underline ml-1" onClick={() => { setCountriesFor(p); setCountriesText(p.destinationCountries.join(', ')); }}>
+                          <button className="text-xs text-primary hover:underline ml-1" onClick={() => { setCountriesFor(p); setCountriesSel(p.destinationCountries.filter(c => countryOptions.includes(c))); }}>
                             Edit
                           </button>
                         )}
@@ -266,8 +284,8 @@ export function StudyAbroadPartnersPanel() {
               <p className="text-[11px] text-muted-foreground">The partner signs in with the email above and this password.</p>
             </div>
             <div className="space-y-1 col-span-2">
-              <Label>Destination countries (comma separated)</Label>
-              <Input value={form.destinationCountries} onChange={e => setForm(f => ({ ...f, destinationCountries: e.target.value }))} placeholder="UK, Canada, Australia" />
+              <Label>Destination countries</Label>
+              <CountryPicker options={countryOptions} value={form.destinationCountries} onChange={v => setForm(f => ({ ...f, destinationCountries: v }))} />
             </div>
           </div>
           <DialogFooter>
@@ -348,8 +366,8 @@ export function StudyAbroadPartnersPanel() {
             <DialogDescription>{countriesFor?.name} can submit applications only for these countries. Leave empty to allow all.</DialogDescription>
           </DialogHeader>
           <div className="space-y-2 py-2">
-            <Label>Countries (comma separated)</Label>
-            <Input value={countriesText} onChange={e => setCountriesText(e.target.value)} placeholder="UK, Canada, Australia" />
+            <Label>Countries</Label>
+            <CountryPicker options={countryOptions} value={countriesSel} onChange={setCountriesSel} />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCountriesFor(null)}>Cancel</Button>

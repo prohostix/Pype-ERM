@@ -337,7 +337,7 @@ export const getSalesCounts = asyncHandler(async (req: AuthRequest, res: Respons
   thirtyDaysAgo.setHours(0, 0, 0, 0);
 
   const [totalSales, revenueAgg, totalAdmission, totalPendingPayments] = await Promise.all([
-    prisma.enrollment.count({ where: { organizationId: orgId, createdAt: { gte: thirtyDaysAgo } } }),
+    prisma.enrollment.count({ where: { organizationId: orgId, source: null, createdAt: { gte: thirtyDaysAgo } } }),
     prisma.paymentEntry.aggregate({ where: { organizationId: orgId, receivedAt: { gte: thirtyDaysAgo } }, _sum: { amount: true } }),
     prisma.student.count({ where: { organizationId: orgId, createdAt: { gte: thirtyDaysAgo } } }),
     prisma.invoice.count({ where: { organizationId: orgId, status: 'draft', createdAt: { gte: thirtyDaysAgo } } })
@@ -352,7 +352,7 @@ export const getOverallSalesCounts = asyncHandler(async (req: AuthRequest, res: 
   const orgId = req.user.organizationId;
   
   const [totalSales, revenueAgg, totalAdmission, totalPendingPayments] = await Promise.all([
-    prisma.enrollment.count({ where: { organizationId: orgId } }),
+    prisma.enrollment.count({ where: { organizationId: orgId, source: null } }),
     prisma.paymentEntry.aggregate({ where: { organizationId: orgId }, _sum: { amount: true } }),
     prisma.student.count({ where: { organizationId: orgId } }),
     prisma.invoice.count({ where: { organizationId: orgId, status: 'draft' } })
