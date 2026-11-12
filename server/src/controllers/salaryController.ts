@@ -3,10 +3,19 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { getPayrollBranchId } from '../utils/payrollScope.js';
+import { branchUserFilter, getScopedBranchId, isUserInScope } from '../utils/branchScope.js';
+
+// Only these fields can be written from a request. Identity and approval fields (id, userId,
+// organizationId, approvalStatus, approvedBy, ...) are never taken from the client.
+const SALARY_CONFIG_FIELDS = [
+  'basicSalary', 'allowances', 'deductions', 'unpaidLeaveRule',
+  'lateDeductionPerMinute', 'earlyExitDeductionPerMinute', 'wfhDeductionPerDay',
+] as const;
+const LEAVE_ALLOCATION_FIELDS = ['sickLeave', 'casualLeave', 'earnedLeave', 'complementaryLeave', 'wfh'] as const;
 
 export const getSalaryConfigs = asyncHandler(async (req: AuthRequest, res: Response) => {
   const configs = await prisma.salaryConfig.findMany({
-    where: { organizationId: req.user.organizationId },
+    where: { organizationId: req.user.organizationId, ...branchUserFilter(req) },
     include: { user: { select: { name: true, email: true, designation: true } } }
   });
   res.json({ success: true, count: configs.length, data: configs });
@@ -14,7 +23,7 @@ export const getSalaryConfigs = asyncHandler(async (req: AuthRequest, res: Respo
 
 export const getFinanceSalaryConfigs = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { status } = req.query;
-  const whereClause: any = { organizationId: req.user.organizationId };
+  const whereClause: any = { organizationId: req.user.organizationId, ...branchUserFilter(req) };
   if (status) {
     whereClause.approvalStatus = status;
   }
@@ -27,7 +36,7 @@ export const getFinanceSalaryConfigs = asyncHandler(async (req: AuthRequest, res
 
   const allConfigs = await prisma.salaryConfig.groupBy({
     by: ['approvalStatus'],
-    where: { organizationId: req.user.organizationId },
+    where: { organizationId: req.user.organizationId, ...branchUserFilter(req) },
     _count: { approvalStatus: true }
   });
 
@@ -47,7 +56,10 @@ export const getFinanceSalaryConfigs = asyncHandler(async (req: AuthRequest, res
 });
 
 export const getSalaryConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const config = await prisma.salaryConfig.findUnique({ where: { userId: req.params.userId } });
+  const inScope = await isUserInScope(req, req.params.userId);
+  const config = inScope
+    ? await prisma.salaryConfig.findFirst({ where: { userId: req.params.userId, organizationId: req.user.organizationId } })
+    : null;
   if (!config) {
     res.status(404).json({ success: false, message: 'Salary config not found' });
     return;
@@ -56,21 +68,41 @@ export const getSalaryConfig = asyncHandler(async (req: AuthRequest, res: Respon
 });
 
 export const upsertSalaryConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const payload = { ...req.body, organizationId: req.user.organizationId, createdBy: req.user.id };
-  if (payload.effectiveFrom) {
-    payload.effectiveFrom = new Date(payload.effectiveFrom).toISOString();
+  // The employee must be in the requester's organization and branch.
+  if (!(await isUserInScope(req, req.params.userId))) {
+    res.status(404).json({ success: false, message: 'Employee not found' });
+    return;
+  }
+  const body = req.body || {};
+  const payload: any = { organizationId: req.user.organizationId, createdBy: req.user.id };
+  for (const field of SALARY_CONFIG_FIELDS) if (body[field] !== undefined) payload[field] = body[field];
+  if (body.effectiveFrom) payload.effectiveFrom = new Date(body.effectiveFrom).toISOString();
+
+  if (payload.basicSalary !== undefined) {
+    const basic = Number(payload.basicSalary);
+    if (!Number.isFinite(basic) || basic < 0) {
+      res.status(400).json({ success: false, message: 'basicSalary must be a number, 0 or more' });
+      return;
+    }
+    payload.basicSalary = basic;
   }
 
-  const config = await prisma.salaryConfig.upsert({
-    where: { userId: req.params.userId },
-    update: payload,
-    create: { ...payload, userId: req.params.userId }
-  });
+  // Update when a config exists; a new config needs a basic salary.
+  const existing = await prisma.salaryConfig.findUnique({ where: { userId: req.params.userId }, select: { id: true } });
+  if (!existing && payload.basicSalary === undefined) {
+    res.status(400).json({ success: false, message: 'basicSalary is required for a new salary config' });
+    return;
+  }
+  const config = existing
+    ? await prisma.salaryConfig.update({ where: { userId: req.params.userId }, data: payload })
+    : await prisma.salaryConfig.create({ data: { ...payload, userId: req.params.userId } });
   res.json({ success: true, data: config });
 });
 
 export const deleteSalaryConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const config = await prisma.salaryConfig.findUnique({ where: { userId: req.params.userId } });
+  const config = (await isUserInScope(req, req.params.userId))
+    ? await prisma.salaryConfig.findFirst({ where: { userId: req.params.userId, organizationId: req.user.organizationId } })
+    : null;
   if (!config) {
     res.status(404).json({ success: false, message: 'Salary config not found' });
     return;
@@ -83,7 +115,7 @@ export const getLeaveAllocations = asyncHandler(async (req: AuthRequest, res: Re
   const year = Number(req.query.year) || new Date().getFullYear();
   const month = Number(req.query.month) || (new Date().getMonth() + 1);
   const allocations = await prisma.leaveAllocation.findMany({
-    where: { organizationId: req.user.organizationId, year, month },
+    where: { organizationId: req.user.organizationId, year, month, ...branchUserFilter(req) },
     include: { user: { select: { name: true, email: true, role: true, designation: true, employeeProfileDetail: { select: { joinDate: true, probationEndDate: true } } } } }
   });
   res.json({ success: true, count: allocations.length, data: allocations });
@@ -92,19 +124,39 @@ export const getLeaveAllocations = asyncHandler(async (req: AuthRequest, res: Re
 export const getLeaveAllocation = asyncHandler(async (req: AuthRequest, res: Response) => {
   const year = Number(req.query.year) || new Date().getFullYear();
   const month = Number(req.query.month) || (new Date().getMonth() + 1);
-  const allocation = await prisma.leaveAllocation.findUnique({
-    where: { userId_year_month: { userId: req.params.userId, year, month } }
+  if (!(await isUserInScope(req, req.params.userId))) {
+    res.status(404).json({ success: false, message: 'Employee not found' });
+    return;
+  }
+  const allocation = await prisma.leaveAllocation.findFirst({
+    where: { userId: req.params.userId, organizationId: req.user.organizationId, year, month }
   });
   res.json({ success: true, data: allocation });
 });
 
 export const upsertLeaveAllocation = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const year = Number(req.body.year) || new Date().getFullYear();
-  const month = Number(req.body.month) || (new Date().getMonth() + 1);
+  if (!(await isUserInScope(req, req.params.userId))) {
+    res.status(404).json({ success: false, message: 'Employee not found' });
+    return;
+  }
+  const year = Number(req.body?.year) || new Date().getFullYear();
+  const month = Number(req.body?.month) || (new Date().getMonth() + 1);
+
+  const values: Record<string, number> = {};
+  for (const field of LEAVE_ALLOCATION_FIELDS) {
+    if (req.body?.[field] === undefined) continue;
+    const n = Number(req.body[field]);
+    if (!Number.isFinite(n) || n < 0) {
+      res.status(400).json({ success: false, message: `${field} must be a number, 0 or more` });
+      return;
+    }
+    values[field] = n;
+  }
+
   const allocation = await prisma.leaveAllocation.upsert({
     where: { userId_year_month: { userId: req.params.userId, year, month } },
-    update: { ...req.body, createdBy: req.user.id },
-    create: { ...req.body, userId: req.params.userId, organizationId: req.user.organizationId, year, month, createdBy: req.user.id }
+    update: { ...values, createdBy: req.user.id },
+    create: { ...values, userId: req.params.userId, organizationId: req.user.organizationId, year, month, createdBy: req.user.id }
   });
   res.json({ success: true, data: allocation });
 });
@@ -112,6 +164,11 @@ export const upsertLeaveAllocation = asyncHandler(async (req: AuthRequest, res: 
 export const deleteLeaveAllocation = asyncHandler(async (req: AuthRequest, res: Response) => {
   const year = Number(req.query.year) || new Date().getFullYear();
   const month = Number(req.query.month) || (new Date().getMonth() + 1);
+
+  if (!(await isUserInScope(req, req.params.userId))) {
+    res.status(404).json({ success: false, message: 'Employee not found' });
+    return;
+  }
 
   await prisma.leaveAllocation.deleteMany({
     where: {
@@ -126,18 +183,68 @@ export const deleteLeaveAllocation = asyncHandler(async (req: AuthRequest, res: 
 });
 
 export const bulkInitLeaveAllocations = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { year = new Date().getFullYear(), month = (new Date().getMonth() + 1), casual, sick, earned } = req.body;
-  const users = await prisma.user.findMany({ where: { organizationId: req.user.organizationId, status: 'active', NOT: { role: { in: ['student', 'center_admin'] } } } });
-  
-  const results = await Promise.all(users.map(u => 
-    prisma.leaveAllocation.upsert({
-      where: { userId_year_month: { userId: u.id, year, month } },
-      update: { casualLeave: casual, sickLeave: sick, earnedLeave: earned },
-      create: { userId: u.id, organizationId: req.user.organizationId, year, month, casualLeave: casual, sickLeave: sick, earnedLeave: earned, createdBy: req.user.id }
-    })
-  ));
+  const body = req.body || {};
+  const year = Number(body.year) || new Date().getFullYear();
+  const month = Number(body.month) || (new Date().getMonth() + 1);
+  if (!Number.isInteger(month) || month < 1 || month > 12) {
+    res.status(400).json({ success: false, message: 'month must be between 1 and 12' });
+    return;
+  }
 
-  res.json({ success: true, message: `Initialized for ${results.length} users` });
+  // The panel sends sickLeave/casualLeave/...; the older short names (sick/casual/earned) still work.
+  const FIELD_NAMES: Record<(typeof LEAVE_ALLOCATION_FIELDS)[number], string[]> = {
+    sickLeave: ['sickLeave', 'sick'],
+    casualLeave: ['casualLeave', 'casual'],
+    earnedLeave: ['earnedLeave', 'earned'],
+    complementaryLeave: ['complementaryLeave'],
+    wfh: ['wfh'],
+  };
+  const values: Record<string, number> = {};
+  for (const field of LEAVE_ALLOCATION_FIELDS) {
+    const sent = FIELD_NAMES[field].find(name => body[name] !== undefined && body[name] !== null && body[name] !== '');
+    if (!sent) continue;
+    const n = Number(body[sent]);
+    if (!Number.isFinite(n) || n < 0) {
+      res.status(400).json({ success: false, message: `${sent} must be a number, 0 or more` });
+      return;
+    }
+    values[field] = n;
+  }
+
+  // Employees in scope: the requester's own branch when they are branch-restricted, otherwise the
+  // whole organization (or one branch, if an unrestricted HR/admin asks for it with branchId).
+  const scopedBranchId = getScopedBranchId(req);
+  const users = await prisma.user.findMany({
+    where: {
+      organizationId: req.user.organizationId,
+      status: 'active',
+      NOT: { role: { in: ['student', 'center_admin'] } },
+      ...(scopedBranchId ? { branchId: scopedBranchId } : {}),
+    },
+    select: { id: true },
+  });
+
+  // Only employees without an allocation for this month are set up; existing ones keep whatever HR gave them.
+  const existing = await prisma.leaveAllocation.findMany({
+    where: { organizationId: req.user.organizationId, year, month, userId: { in: users.map(u => u.id) } },
+    select: { userId: true },
+  });
+  const have = new Set(existing.map(a => a.userId));
+  const missing = users.filter(u => !have.has(u.id));
+
+  if (missing.length > 0) {
+    await prisma.leaveAllocation.createMany({
+      data: missing.map(u => ({ ...values, userId: u.id, organizationId: req.user.organizationId, year, month, createdBy: req.user.id })),
+      skipDuplicates: true,
+    });
+  }
+
+  const skipped = users.length - missing.length;
+  res.json({
+    success: true,
+    message: `Initialized ${missing.length} employee${missing.length === 1 ? '' : 's'}${skipped ? ` (${skipped} already had an allocation)` : ''}`,
+    data: { created: missing.length, skipped },
+  });
 });
 
 export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -355,6 +462,15 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
 });
 
 export const approveSalaryConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
+  // Finance can only approve configs of their own organization and branch.
+  const existing = await prisma.salaryConfig.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId, ...branchUserFilter(req) },
+    select: { id: true },
+  });
+  if (!existing) {
+    res.status(404).json({ success: false, message: 'Salary config not found' });
+    return;
+  }
   const config = await prisma.salaryConfig.update({
     where: { id: req.params.id },
     data: { approvalStatus: 'approved', approvedBy: req.user.id, approvedAt: new Date() }

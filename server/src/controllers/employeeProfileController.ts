@@ -2,13 +2,21 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { isUserInScope } from '../utils/branchScope.js';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-/** Loads the target user and enforces tenant isolation (superadmin may cross orgs). */
+/**
+ * Loads the target user and enforces tenant isolation (superadmin may cross orgs) and, for
+ * branch-restricted HR, branch isolation.
+ */
 async function loadTargetUser(req: AuthRequest, res: Response, userId: string) {
   const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (!user || (req.user.role !== 'superadmin' && user.organizationId !== req.user.organizationId)) {
+  if (
+    !user ||
+    (req.user.role !== 'superadmin' &&
+      (user.organizationId !== req.user.organizationId || !(await isUserInScope(req, userId))))
+  ) {
     res.status(404).json({ success: false, message: 'User not found' });
     return null;
   }

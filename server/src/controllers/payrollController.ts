@@ -8,12 +8,73 @@ import { getPayrollBranchId, payrollScopeWhere } from '../utils/payrollScope.js'
 const findScopedPayroll = (req: AuthRequest, id: string) =>
   prisma.payroll.findFirst({ where: { ...payrollScopeWhere(req), id } });
 
+// Roles that work with other people's payroll. Everyone else (employees, department admins, ...)
+// can only ever see their own.
+const PAYROLL_STAFF_ROLES = [
+  'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin',
+  'superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager',
+];
+const isPayrollStaff = (req: AuthRequest) => PAYROLL_STAFF_ROLES.includes(req.user.role);
+
+const NET_INCLUDE = { user: { select: { name: true, employeeProfile: { select: { employeeId: true } } } } };
+
+/**
+ * A batch as the requester may see it. A branch-restricted user (HR/Finance tied to a branch) only
+ * sees their own branch's payrolls in it, with totals recomputed to match, so amounts and ids of
+ * other branches never leave the server. `partial` is true when the batch also holds other branches.
+ */
+const batchViewFor = async (req: AuthRequest, batch: any) => {
+  const inOrg = { organizationId: req.user.organizationId, id: { in: batch.payrollIds } };
+  const visible = await prisma.payroll.findMany({ where: { ...payrollScopeWhere(req), id: { in: batch.payrollIds } }, include: NET_INCLUDE });
+  if (!getPayrollBranchId(req)) return { ...batch, payrolls: visible, partial: false };
+  const total = await prisma.payroll.count({ where: inOrg });
+  return {
+    ...batch,
+    payrolls: visible,
+    payrollIds: visible.map(p => p.id),
+    totalAmount: visible.reduce((sum, p) => sum + p.netSalary, 0),
+    employeeCount: visible.length,
+    partial: visible.length < total,
+  };
+};
+
+/**
+ * Loads a batch for an action (approve, reject, pay, ...). It must belong to the requester's
+ * organization; a branch-restricted user may act only on batches made up entirely of their own
+ * branch's payroll, since an action moves every payroll in the batch.
+ */
+const loadBatchForAction = async (req: AuthRequest, res: Response, id: string) => {
+  const batch = await prisma.payrollBatch.findFirst({ where: { id, organizationId: req.user.organizationId } });
+  if (!batch) {
+    res.status(404).json({ success: false, message: 'Payroll batch not found' });
+    return null;
+  }
+  if (getPayrollBranchId(req)) {
+    const [visible, total] = await Promise.all([
+      prisma.payroll.count({ where: { ...payrollScopeWhere(req), id: { in: batch.payrollIds } } }),
+      prisma.payroll.count({ where: { organizationId: req.user.organizationId, id: { in: batch.payrollIds } } }),
+    ]);
+    if (visible === 0) {
+      res.status(404).json({ success: false, message: 'Payroll batch not found' });
+      return null;
+    }
+    if (visible < total) {
+      res.status(403).json({ success: false, message: "This batch includes other branches' payroll. It has to be processed by someone who isn't limited to one branch." });
+      return null;
+    }
+  }
+  return batch;
+};
+
 export const getPayrolls = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = payrollScopeWhere(req);
   if (['hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
     where.user = { ...(where.user || {}), role: { not: 'center_admin' } };
   }
-  if (req.query.employeeId) {
+  if (!isPayrollStaff(req)) {
+    // Employees (and other non-payroll roles) only ever see their own payslips.
+    where.employeeId = req.user.id;
+  } else if (req.query.employeeId) {
     where.employeeId = req.query.employeeId as string;
   }
   const payrolls = await prisma.payroll.findMany({
@@ -26,8 +87,8 @@ export const getPayrolls = asyncHandler(async (req: AuthRequest, res: Response) 
 
 export const getPayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
   const payroll = await prisma.payroll.findFirst({
-    where: { ...payrollScopeWhere(req), id: req.params.id },
-    include: { user: true }
+    where: { ...payrollScopeWhere(req), id: req.params.id, ...(isPayrollStaff(req) ? {} : { employeeId: req.user.id }) },
+    include: { user: { select: { id: true, name: true, email: true, designation: true, branchId: true } } }
   });
   if (!payroll) {
     res.status(404).json({ success: false, message: 'Payroll record not found' });
@@ -171,67 +232,76 @@ export const getPayrollBatches = asyncHandler(async (req: AuthRequest, res: Resp
     orderBy: { createdAt: 'desc' }
   });
 
-  const batchesWithPayrolls = await Promise.all(
-    batches.map(async (batch) => {
-      const payrolls = await prisma.payroll.findMany({
-        where: { ...payrollScopeWhere(req), id: { in: batch.payrollIds } },
-        include: { user: { select: { name: true, employeeProfile: { select: { employeeId: true } } } } }
-      });
-      return { ...batch, payrolls };
-    })
-  );
-
-  const visible = getPayrollBranchId(req)
-    ? batchesWithPayrolls.filter(b => b.payrolls.length > 0)
-    : batchesWithPayrolls;
+  const views = await Promise.all(batches.map(batch => batchViewFor(req, batch)));
+  // Branch-restricted users only see batches that contain at least one payroll of their branch.
+  const visible = getPayrollBranchId(req) ? views.filter(b => b.payrolls.length > 0) : views;
 
   res.status(200).json({ success: true, count: visible.length, data: visible });
 });
 
 export const getPayrollBatch = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const batch = await prisma.payrollBatch.findUnique({ where: { id: req.params.id } });
-  res.json({ success: true, data: batch });
+  const batch = await prisma.payrollBatch.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId },
+    include: { transferer: { select: { name: true } }, approver: { select: { name: true } }, rejector: { select: { name: true } } },
+  });
+  const view = batch ? await batchViewFor(req, batch) : null;
+  if (!view || (getPayrollBranchId(req) && view.payrolls.length === 0)) {
+    res.status(404).json({ success: false, message: 'Payroll batch not found' });
+    return;
+  }
+  res.json({ success: true, data: view });
 });
 
+const batchPayrollsWhere = (req: AuthRequest, batch: { payrollIds: string[] }) =>
+  ({ organizationId: req.user.organizationId, id: { in: batch.payrollIds } });
+
 export const financeApprovePayrollBatch = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const found = await loadBatchForAction(req, res, req.params.id);
+  if (!found) return;
   const batch = await prisma.payrollBatch.update({
-    where: { id: req.params.id },
+    where: { id: found.id },
     data: { status: 'approved_by_finance', approvedBy: req.user.id, approvedAt: new Date() }
   });
   await prisma.payroll.updateMany({
-    where: { id: { in: batch.payrollIds } },
+    where: batchPayrollsWhere(req, batch),
     data: { financeApprovedBy: req.user.id, financeApprovedAt: new Date() }
   });
   res.status(200).json({ success: true, data: batch });
 });
 
 export const financeRejectPayrollBatch = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const found = await loadBatchForAction(req, res, req.params.id);
+  if (!found) return;
   const batch = await prisma.payrollBatch.update({
-    where: { id: req.params.id },
+    where: { id: found.id },
     data: { status: 'rejected', rejectionReason: req.body.rejectionReason || req.body.remarks, rejectedBy: req.user.id, rejectedAt: new Date() }
   });
   await prisma.payroll.updateMany({
-    where: { id: { in: batch.payrollIds } },
+    where: batchPayrollsWhere(req, batch),
     data: { status: 'confirmed' }
   });
   res.status(200).json({ success: true, data: batch });
 });
 
 export const markBatchPaymentInProgress = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const found = await loadBatchForAction(req, res, req.params.id);
+  if (!found) return;
   const batch = await prisma.payrollBatch.update({
-    where: { id: req.params.id },
+    where: { id: found.id },
     data: { status: 'payment_in_progress' }
   });
   res.status(200).json({ success: true, data: batch });
 });
 
 export const completeBatchPayment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const found = await loadBatchForAction(req, res, req.params.id);
+  if (!found) return;
   const batch = await prisma.payrollBatch.update({
-    where: { id: req.params.id },
+    where: { id: found.id },
     data: { status: 'completed', completedAt: new Date() }
   });
   await prisma.payroll.updateMany({
-    where: { id: { in: batch.payrollIds } },
+    where: batchPayrollsWhere(req, batch),
     data: { 
       status: 'paid', 
       paymentDate: new Date(), 

@@ -18,6 +18,16 @@ export const getScopedBranchId = (req: AuthRequest): string | null => {
 };
 
 /**
+ * Prisma filter for rows that belong to an employee (through a `user` relation), limited to the
+ * requester's branch. Empty when the requester isn't branch-restricted.
+ * Usage: prisma.salaryConfig.findMany({ where: { organizationId, ...branchUserFilter(req) } })
+ */
+export const branchUserFilter = (req: AuthRequest): { user?: { branchId: string } } => {
+  const branchId = getScopedBranchId(req);
+  return branchId ? { user: { branchId } } : {};
+};
+
+/**
  * True when `userId` is in the requester's organization and branch scope.
  * Center admins may also reach users of their study center.
  */

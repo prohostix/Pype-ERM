@@ -3,49 +3,18 @@ import { AuthRequest } from '../middleware/auth.js';
 import { sendPushNotification } from '../services/notification.service.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { leaveVisibilityWhere, hrAdminsFor, executivesFor } from '../utils/leaveScope.js';
 
 // --- Leave Requests ---
 export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { role, id: userId, organizationId, departmentId, branchId } = req.user;
+  const { role } = req.user;
 
-  // Enforce visibility scoping
-  const where: any = { organizationId };
+  // Visibility rules live in utils/leaveScope.ts (HR only receives their own branch's requests).
+  const where: any = leaveVisibilityWhere(req);
 
-  const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin'];
   const isHR = ['hr_admin', 'hr_sub_admin'].includes(role);
   const isGlobalAdmin = ['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(role);
   const isBranchManager = role === 'branch_manager';
-
-  if (isGlobalAdmin) {
-    // Global admins see all leaves
-  } else if (isHR) {
-    // HR admins see all leaves except center_admin
-    where.user = { role: { not: 'center_admin' } };
-    if (branchId) {
-      where.user.branchId = branchId;
-    }
-  } else if (DEPT_MANAGER_ROLES.includes(role)) {
-    // Department managers see leaves in their department plus their own leaves
-    where.OR = [
-      { employeeId: userId },
-      { department: { managerId: userId } },
-      { user: { reportingTo: userId } },
-      { user: { department: { managerId: userId } } },
-      { user: { subDepartment: { managerId: userId } } }
-    ];
-    if (departmentId) {
-      where.OR.push({ departmentId });
-    }
-  } else if (branchId) {
-    // Branch managers see leaves of employees in their branch plus their own leaves
-    where.OR = [
-      { employeeId: userId },
-      { user: { branchId } }
-    ];
-  } else {
-    // Standard employees only see their own leaves
-    where.employeeId = userId;
-  }
 
   if (req.query.status) {
     if (req.query.status === 'pending' && (isHR || isGlobalAdmin || isBranchManager)) {
@@ -192,7 +161,7 @@ export const getMyLeaveBalance = asyncHandler(async (req: AuthRequest, res: Resp
 
 export const getLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
   const leave = await prisma.leaveRequest.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId }
+    where: { id: req.params.id, ...leaveVisibilityWhere(req) }
   });
   if (!leave) {
     res.status(404).json({ success: false, message: 'Leave request not found' });
@@ -309,9 +278,7 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
     const reqLabel = finalType === 'late_coming' ? 'Late Coming Permission' : finalType === 'early_exit' ? 'Early Exit Permission' : 'Leave';
     
     if (me?.role === 'hr_admin') {
-      const executives = await prisma.user.findMany({
-        where: { role: { in: ['ceo', 'general_manager', 'branch_manager'] }, organizationId: req.user.organizationId }
-      });
+      const executives = await executivesFor(req.user.organizationId, me.branchId);
       executives.forEach(exec => {
         sendPushNotification(exec.id, `New ${reqLabel} Request from HR`, `${me?.name || 'HR'} has requested ${reqLabel.toLowerCase()}. Pending your approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
       });
@@ -327,9 +294,7 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
       if (notifyUserId) {
         sendPushNotification(notifyUserId, `New ${reqLabel} Request`, `${me?.name || 'An employee'} has requested ${reqLabel.toLowerCase()}`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
       } else {
-        const hrAdmins = await prisma.user.findMany({
-          where: { role: 'hr_admin', organizationId: req.user.organizationId }
-        });
+        const hrAdmins = await hrAdminsFor(req.user.organizationId, me?.branchId);
         hrAdmins.forEach(hr => {
           sendPushNotification(hr.id, `New ${reqLabel} Request`, `${me?.name || 'An employee'} has requested ${reqLabel.toLowerCase()}`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
         });
@@ -343,7 +308,7 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const updateLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  const exists = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, ...leaveVisibilityWhere(req) } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Leave request not found' });
     return;
@@ -363,7 +328,7 @@ export const updateLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const deleteLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  const exists = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, ...leaveVisibilityWhere(req) } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Leave request not found' });
     return;
@@ -374,6 +339,12 @@ export const deleteLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
 
 export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { action, remarks } = req.body;
+  // Only requests the caller can see (their own organization, branch or department).
+  const visible = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, ...leaveVisibilityWhere(req) }, select: { id: true } });
+  if (!visible) {
+    res.status(404).json({ success: false, message: 'Leave request not found' });
+    return;
+  }
   const leave = await prisma.leaveRequest.update({
     where: { id: req.params.id },
     data: { 
@@ -394,16 +365,12 @@ export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Respo
     if (action === 'approve' && employee) {
       const approvalTitle = leave.type === 'late_coming' ? 'Late Coming' : leave.type === 'early_exit' ? 'Early Exit' : 'Leave';
       if (req.user.role === 'hr_admin') {
-        const execs = await prisma.user.findMany({
-          where: { role: { in: ['ceo', 'general_manager', 'branch_manager'] }, organizationId: employee.organizationId }
-        });
+        const execs = await executivesFor(employee.organizationId, employee.branchId);
         execs.forEach(exec => {
           sendPushNotification(exec.id, "Pending Final Approval", `HR approved ${approvalTitle.toLowerCase()} for ${employee.name}. Pending your final approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
         });
       } else {
-        const hrAdmins = await prisma.user.findMany({
-          where: { role: 'hr_admin', organizationId: employee.organizationId }
-        });
+        const hrAdmins = await hrAdminsFor(employee.organizationId, employee.branchId);
         hrAdmins.forEach(hr => {
           sendPushNotification(hr.id, "Pending HR Approval", `Department approved ${approvalTitle.toLowerCase()} for ${employee.name}. Pending final HR approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
         });
@@ -428,6 +395,10 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
       return res.status(403).json({ success: false, message: 'You can only approve leave requests from your own branch.' });
     }
   }
+
+  // Everyone else may only decide requests they can see: HR their own branch, managers their own team.
+  const visible = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, ...leaveVisibilityWhere(req) }, select: { id: true } });
+  if (!visible) return res.status(404).json({ success: false, message: 'Not found' });
 
   let newStatus: any = action === 'approve' ? 'approved' : 'rejected';
   if (currentLeave.status === 'withdraw_pending') {
@@ -586,13 +557,14 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
 });
 
 export const getLeaveStats = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const orgId = req.user.organizationId;
+  // Counts cover only the requests this person can see (HR: their own branch).
+  const visible = leaveVisibilityWhere(req);
   const [pending, approved, rejected, deptApproved, total] = await Promise.all([
-    prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'pending' } }),
-    prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'approved' } }),
-    prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'rejected' } }),
-    prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'dept_approved' } }),
-    prisma.leaveRequest.count({ where: { organizationId: orgId } }),
+    prisma.leaveRequest.count({ where: { ...visible, status: 'pending' } }),
+    prisma.leaveRequest.count({ where: { ...visible, status: 'approved' } }),
+    prisma.leaveRequest.count({ where: { ...visible, status: 'rejected' } }),
+    prisma.leaveRequest.count({ where: { ...visible, status: 'dept_approved' } }),
+    prisma.leaveRequest.count({ where: visible }),
   ]);
   res.json({ success: true, data: { pending, approved, rejected, deptApproved, total } });
 });

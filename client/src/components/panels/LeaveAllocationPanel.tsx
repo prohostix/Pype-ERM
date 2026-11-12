@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
 
 interface LeaveAllocation {
   id?: string;
@@ -42,6 +43,10 @@ export function LeaveAllocationPanel() {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
+  // HR tied to a branch only ever initializes (and sees) their own branch's employees.
+  const { user: me } = useAuth();
+  const myBranchId = (me as any)?.branchId as string | undefined;
+  const myBranchName = (me as any)?.branch?.name as string | undefined;
   const [editingUserId, setEditingUserId] = useState('');
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
@@ -317,7 +322,10 @@ export function LeaveAllocationPanel() {
           <DialogHeader>
             <DialogTitle>Bulk Initialize Leave — {month}/{year}</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-muted-foreground">Sets default leave balances for all active employees who don't have an allocation yet for {month}/{year}.</p>
+          <p className="text-sm text-muted-foreground">
+            Sets default leave balances for all active employees{myBranchId ? ` in your branch${myBranchName ? ` (${myBranchName})` : ''}` : ''} who don't have an allocation yet for {month}/{year}.
+            Employees who already have one are left unchanged.
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             {([
               { key: 'sickLeave', label: 'Sick Leave' },
@@ -336,7 +344,7 @@ export function LeaveAllocationPanel() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setBulkDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleBulkInit} disabled={saving}>
-              <Zap className="w-4 h-4 mr-1" />{saving ? 'Initializing...' : 'Initialize All'}
+              <Zap className="w-4 h-4 mr-1" />{saving ? 'Initializing...' : myBranchId ? 'Initialize Branch' : 'Initialize All'}
             </Button>
           </DialogFooter>
         </DialogContent>
