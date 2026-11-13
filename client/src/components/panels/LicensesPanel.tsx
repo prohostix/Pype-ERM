@@ -70,6 +70,7 @@ export interface GeneratedBillItem {
   studentCount: number;
   partnerStudentCount?: number;
   directStudentCount?: number;
+  studyAbroadStudentCount?: number;
   totalStudentCount?: number;
   enrollments?: MonthEnrollmentItem[];
   academicPartner: {
@@ -89,6 +90,14 @@ export interface GeneratedBillItem {
   academicCenter: {
     enabled: boolean;
     basePrice: number;
+    subtotal: number;
+  };
+  studyAbroad?: {
+    enabled: boolean;
+    basePrice: number;
+    perEnrollmentFee: number;
+    studentCount: number;
+    enrollmentTotal: number;
     subtotal: number;
   };
   totalAmount: number;
@@ -119,6 +128,8 @@ export interface OrganizationPlanItem {
       academicPartnerPerEnrollmentFee?: number;
       directPerEnrollmentFee?: number;
       academicCenterBasePrice?: number;
+      studyAbroadBasePrice?: number;
+      studyAbroadPerEnrollmentFee?: number;
       features?: string[];
       status?: string;
     };
@@ -127,6 +138,8 @@ export interface OrganizationPlanItem {
       academicPartnerPerEnrollmentFee?: number;
       directPerEnrollmentFee?: number;
       academicCenterBasePrice?: number;
+      studyAbroadBasePrice?: number;
+      studyAbroadPerEnrollmentFee?: number;
       features?: string[];
     };
     billHistory?: GeneratedBillItem[];
@@ -136,6 +149,7 @@ export interface OrganizationPlanItem {
   monthEnrollmentCount?: number;
   monthPartnerEnrollmentCount?: number;
   monthDirectEnrollmentCount?: number;
+  monthStudyAbroadEnrollmentCount?: number;
   monthTotalEnrollmentCount?: number;
   _count?: {
     students?: number;
@@ -196,6 +210,8 @@ export function LicensesPanel() {
     academic_centers: true,
     academicCenterBasePrice: '0',
     study_abroad_partners: false,
+    studyAbroadBasePrice: '0',
+    studyAbroadPerEnrollmentFee: '0',
   });
 
   // Statement / Invoice Dialog State
@@ -219,6 +235,11 @@ export function LicensesPanel() {
     centerEnabled: boolean;
     centerBase: number;
     centerSubtotal: number;
+    studyAbroadEnabled: boolean;
+    studyAbroadBase: number;
+    studyAbroadPerEnrollment: number;
+    studyAbroadStudentCount: number;
+    studyAbroadSubtotal: number;
     studentCount: number;
     partnerStudentCount: number;
     directStudentCount: number;
@@ -300,6 +321,10 @@ export function LicensesPanel() {
       ? Number(planConfig.academicCenterBasePrice)
       : (billingConfig.academicCenterBasePrice !== undefined ? Number(billingConfig.academicCenterBasePrice) : 0);
 
+    // Study Abroad Partner: Base value + Per study-abroad enrollment value
+    const studyAbroadBasePrice = Number(planConfig.studyAbroadBasePrice ?? billingConfig.studyAbroadBasePrice ?? 0);
+    const studyAbroadPerEnrollmentFee = Number(planConfig.studyAbroadPerEnrollmentFee ?? billingConfig.studyAbroadPerEnrollmentFee ?? 0);
+
     // Check if bill for selected month has already been generated
     const orgHistory = org.metadata?.billHistory || [];
     const generatedBillForSelectedMonth = orgHistory.find(b => b.billingMonth === selectedMonth);
@@ -317,16 +342,21 @@ export function LicensesPanel() {
           ? (generatedBillForSelectedMonth.directStudentCount ?? (generatedBillForSelectedMonth.directEnrollment?.studentCount ?? 0))
           : 0);
 
+    const studyAbroadStudentCount = org.monthStudyAbroadEnrollmentCount !== undefined
+      ? org.monthStudyAbroadEnrollmentCount
+      : (generatedBillForSelectedMonth ? (generatedBillForSelectedMonth.studyAbroadStudentCount ?? 0) : 0);
+
     const totalStudentCount = org.monthTotalEnrollmentCount !== undefined
       ? org.monthTotalEnrollmentCount
-      : (partnerStudentCount + directStudentCount);
+      : (partnerStudentCount + directStudentCount + studyAbroadStudentCount);
 
     // Calculations
     const partnerEnrollmentTotal = partnerStudentCount * academicPartnerPerEnrollmentFee;
     const effectivePartnerTotal = hasAcademicPartners ? (academicPartnerBasePrice + partnerEnrollmentTotal) : 0;
     const directEnrollmentTotal = directStudentCount * directPerEnrollmentFee;
     const effectiveCenterTotal = hasAcademicCenters ? academicCenterBasePrice : 0;
-    const totalBill = effectivePartnerTotal + directEnrollmentTotal + effectiveCenterTotal;
+    const effectiveStudyAbroadTotal = hasStudyAbroad ? (studyAbroadBasePrice + studyAbroadStudentCount * studyAbroadPerEnrollmentFee) : 0;
+    const totalBill = effectivePartnerTotal + directEnrollmentTotal + effectiveCenterTotal + effectiveStudyAbroadTotal;
 
     return {
       planName,
@@ -337,6 +367,10 @@ export function LicensesPanel() {
       hasAcademicPartners,
       hasAcademicCenters,
       hasStudyAbroad,
+      studyAbroadBasePrice,
+      studyAbroadPerEnrollmentFee,
+      studyAbroadStudentCount,
+      effectiveStudyAbroadTotal,
       studentCount: totalStudentCount,
       partnerStudentCount,
       directStudentCount,
@@ -363,6 +397,8 @@ export function LicensesPanel() {
       academic_centers: details.hasAcademicCenters,
       academicCenterBasePrice: details.academicCenterBasePrice.toString(),
       study_abroad_partners: details.hasStudyAbroad,
+      studyAbroadBasePrice: details.studyAbroadBasePrice.toString(),
+      studyAbroadPerEnrollmentFee: details.studyAbroadPerEnrollmentFee.toString(),
     });
     setConfigDialogOpen(true);
   };
@@ -383,6 +419,8 @@ export function LicensesPanel() {
       academicPartnerPerEnrollmentFee: Number(planForm.academicPartnerPerEnrollmentFee || 0),
       directPerEnrollmentFee: Number(planForm.directPerEnrollmentFee || 0),
       academicCenterBasePrice: Number(planForm.academicCenterBasePrice || 0),
+      studyAbroadBasePrice: Number(planForm.studyAbroadBasePrice || 0),
+      studyAbroadPerEnrollmentFee: Number(planForm.studyAbroadPerEnrollmentFee || 0),
       features,
     };
 
@@ -481,12 +519,16 @@ export function LicensesPanel() {
     let enrollments: MonthEnrollmentItem[] = [];
     let partnerCount = details.partnerStudentCount;
     let directCount = details.directStudentCount;
+    let studyAbroadCount = details.studyAbroadStudentCount;
 
     try {
       const res = await api.get(`/organizations/${org.id}/month-enrollments?month=${selectedMonth}`);
       enrollments = res.data.data || [];
       partnerCount = res.data.partnerCount ?? enrollments.filter(e => e.isPartnerEnrollment).length;
-      directCount = res.data.directCount ?? enrollments.filter(e => !e.isPartnerEnrollment).length;
+      studyAbroadCount = details.hasStudyAbroad ? (res.data.studyAbroadCount ?? 0) : 0;
+      directCount = details.hasStudyAbroad
+        ? (res.data.directCount ?? enrollments.filter(e => !e.isPartnerEnrollment).length)
+        : enrollments.filter(e => !e.isPartnerEnrollment).length;
     } catch (err) {
       console.warn('Failed to load month enrollments for preview:', err);
     }
@@ -513,10 +555,15 @@ export function LicensesPanel() {
       centerEnabled: details.hasAcademicCenters,
       centerBase: details.academicCenterBasePrice,
       centerSubtotal: details.effectiveCenterTotal,
-      studentCount: partnerCount + directCount,
+      studyAbroadEnabled: details.hasStudyAbroad,
+      studyAbroadBase: details.studyAbroadBasePrice,
+      studyAbroadPerEnrollment: details.studyAbroadPerEnrollmentFee,
+      studyAbroadStudentCount: studyAbroadCount,
+      studyAbroadSubtotal: details.hasStudyAbroad ? details.studyAbroadBasePrice + studyAbroadCount * details.studyAbroadPerEnrollmentFee : 0,
+      studentCount: partnerCount + directCount + studyAbroadCount,
       partnerStudentCount: partnerCount,
       directStudentCount: directCount,
-      totalStudentCount: partnerCount + directCount,
+      totalStudentCount: partnerCount + directCount + studyAbroadCount,
       totalAmount: details.totalBill,
       status: 'unpaid',
       enrollments,
@@ -563,6 +610,11 @@ export function LicensesPanel() {
       centerEnabled: bill.academicCenter.enabled,
       centerBase: bill.academicCenter.basePrice,
       centerSubtotal: bill.academicCenter.subtotal,
+      studyAbroadEnabled: Boolean(bill.studyAbroad?.enabled),
+      studyAbroadBase: bill.studyAbroad?.basePrice ?? 0,
+      studyAbroadPerEnrollment: bill.studyAbroad?.perEnrollmentFee ?? 0,
+      studyAbroadStudentCount: bill.studyAbroad?.studentCount ?? bill.studyAbroadStudentCount ?? 0,
+      studyAbroadSubtotal: bill.studyAbroad?.subtotal ?? 0,
       studentCount: totalCount,
       partnerStudentCount: partnerCount,
       directStudentCount: directCount,
@@ -644,7 +696,11 @@ export function LicensesPanel() {
   const totalOrgs = organizations.length;
   const totalPartnerEnrollments = organizations.reduce((acc, org) => acc + getOrgPlanDetails(org).partnerStudentCount, 0);
   const totalDirectEnrollments = organizations.reduce((acc, org) => acc + getOrgPlanDetails(org).directStudentCount, 0);
+  const totalStudyAbroadEnrollments = organizations.reduce((acc, org) => acc + getOrgPlanDetails(org).studyAbroadStudentCount, 0);
+  const totalAllEnrollments = totalPartnerEnrollments + totalDirectEnrollments + totalStudyAbroadEnrollments;
   const totalCalculatedBilling = organizations.reduce((acc, org) => acc + getOrgPlanDetails(org).totalBill, 0);
+  const billsGenerated = organizations.filter(org => getOrgPlanDetails(org).generatedBillForSelectedMonth).length;
+  const billsPaid = organizations.filter(org => getOrgPlanDetails(org).generatedBillForSelectedMonth?.status === 'paid').length;
 
   // Filtered Organizations
   const filteredOrgs = organizations.filter(org => {
@@ -656,6 +712,7 @@ export function LicensesPanel() {
 
     if (featureFilter === 'partners' && !details.hasAcademicPartners) return false;
     if (featureFilter === 'centers' && !details.hasAcademicCenters) return false;
+    if (featureFilter === 'abroad' && !details.hasStudyAbroad) return false;
     if (featureFilter === 'both' && (!details.hasAcademicPartners || !details.hasAcademicCenters)) return false;
 
     return true;
@@ -732,101 +789,85 @@ export function LicensesPanel() {
         </TabsList>
 
         {/* TAB 1: Current Month Billing */}
-        <TabsContent value="current" className="space-y-6">
-          {/* Summary KPI Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-            <Card className="border-border/70 shadow-xs">
-              <CardContent className="p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 flex items-center justify-center shrink-0">
-                  <Building2 className="w-5 h-5" />
+        <TabsContent value="current" className="space-y-5">
+          {/* Summary strip */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <Card className="lg:col-span-1 border-border/70 shadow-xs bg-gradient-to-br from-emerald-50 to-background dark:from-emerald-950/30 dark:to-background">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{selectedMonthLabel} billing</p>
+                  <TrendingUp className="w-4 h-4 text-emerald-600" />
                 </div>
-                <div>
-                  <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">Organizations</p>
-                  <p className="text-xl font-bold tracking-tight mt-0.5">{totalOrgs}</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/70 shadow-xs">
-              <CardContent className="p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400 flex items-center justify-center shrink-0">
-                  <Users className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">
-                    Partner Students
-                  </p>
-                  <p className="text-xl font-bold tracking-tight mt-0.5 text-indigo-600 dark:text-indigo-400">
-                    {totalPartnerEnrollments.toLocaleString()}
-                  </p>
-                  <p className="text-[10px] text-muted-foreground">Via franchise study centers</p>
+                <p className="mt-2 text-3xl font-bold tracking-tight text-emerald-700 dark:text-emerald-400">
+                  ₹{totalCalculatedBilling.toLocaleString('en-IN')}
+                </p>
+                <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1"><Building2 className="w-3.5 h-3.5" />{totalOrgs} organizations</span>
+                  <span className="inline-flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />{billsGenerated} generated</span>
+                  <span>{billsPaid} paid</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-border/70 shadow-xs">
-              <CardContent className="p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 flex items-center justify-center shrink-0">
-                  <UserCheck className="w-5 h-5" />
+            <Card className="lg:col-span-2 border-border/70 shadow-xs">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Enrollments this month</p>
+                  <p className="text-sm font-bold">{totalAllEnrollments.toLocaleString()} total</p>
                 </div>
-                <div>
-                  <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">
-                    Direct Admissions
-                  </p>
-                  <p className="text-xl font-bold tracking-tight mt-0.5 text-foreground">
-                    {totalDirectEnrollments.toLocaleString()}
-                  </p>
-                  <p className="text-[10px] text-muted-foreground">Enrolled directly at institution</p>
+                <div className="mt-3 flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
+                  {totalAllEnrollments > 0 && (
+                    <>
+                      <div className="bg-indigo-500" style={{ width: `${(totalPartnerEnrollments / totalAllEnrollments) * 100}%` }} />
+                      <div className="bg-slate-500" style={{ width: `${(totalDirectEnrollments / totalAllEnrollments) * 100}%` }} />
+                      <div className="bg-sky-500" style={{ width: `${(totalStudyAbroadEnrollments / totalAllEnrollments) * 100}%` }} />
+                    </>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/70 shadow-xs">
-              <CardContent className="p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                  <TrendingUp className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">
-                    {selectedMonthLabel} Volume
-                  </p>
-                  <p className="text-xl font-bold tracking-tight mt-0.5 text-emerald-600 dark:text-emerald-400">
-                    ₹{totalCalculatedBilling.toLocaleString('en-IN')}
-                  </p>
-                  <p className="text-[10px] text-muted-foreground">Monthly total billing volume</p>
+                <div className="mt-4 grid grid-cols-3 gap-3">
+                  {[
+                    { label: 'Academic Partner', value: totalPartnerEnrollments, dot: 'bg-indigo-500', icon: Users },
+                    { label: 'Direct Admissions', value: totalDirectEnrollments, dot: 'bg-slate-500', icon: UserCheck },
+                    { label: 'Study Abroad', value: totalStudyAbroadEnrollments, dot: 'bg-sky-500', icon: Globe2 },
+                  ].map(item => (
+                    <div key={item.label}>
+                      <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                        <span className={`h-2 w-2 rounded-full ${item.dot}`} />{item.label}
+                      </div>
+                      <p className="mt-0.5 text-xl font-bold tracking-tight">{item.value.toLocaleString()}</p>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Search & Feature Filter */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-muted/30 p-3 rounded-xl border border-border/60">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <Input 
-                placeholder="Search organization or email..." 
+              <Input
+                placeholder="Search organization, email or plan..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="pl-9 h-9 text-xs bg-background"
+                className="pl-9 h-9 text-sm bg-background"
               />
             </div>
-
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <Select value={featureFilter} onValueChange={setFeatureFilter}>
-                <SelectTrigger className="h-9 text-xs w-[190px] bg-background">
-                  <SelectValue placeholder="Filter Feature" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Organizations</SelectItem>
-                  <SelectItem value="partners">Academic Partners Enabled</SelectItem>
-                  <SelectItem value="centers">Academic Centers Enabled</SelectItem>
-                  <SelectItem value="both">Both Features Enabled</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <Select value={featureFilter} onValueChange={setFeatureFilter}>
+              <SelectTrigger className="h-9 text-sm w-full sm:w-[210px] bg-background">
+                <SelectValue placeholder="Filter Feature" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Organizations</SelectItem>
+                <SelectItem value="partners">Academic Partner enabled</SelectItem>
+                <SelectItem value="centers">Academic Center enabled</SelectItem>
+                <SelectItem value="abroad">Study Abroad enabled</SelectItem>
+                <SelectItem value="both">Partner + Center enabled</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
-          {/* Organizations Table */}
+          {/* Organization cards */}
           {loading ? (
             <div className="flex justify-center items-center py-20">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary" />
@@ -838,238 +879,142 @@ export function LicensesPanel() {
               <p className="text-xs">Adjust your search query or filters.</p>
             </Card>
           ) : (
-            <div className="rounded-xl border border-border/80 bg-card overflow-hidden shadow-xs">
-              <Table>
-                <TableHeader className="bg-muted/40">
-                  <TableRow>
-                    <TableHead className="font-semibold text-xs">Organization</TableHead>
-                    <TableHead className="font-semibold text-xs">Plan</TableHead>
-                    <TableHead className="font-semibold text-xs text-center">Academic Partner</TableHead>
-                    <TableHead className="font-semibold text-xs text-center">Direct Admissions</TableHead>
-                    <TableHead className="font-semibold text-xs text-center">Academic Center</TableHead>
-                    <TableHead className="font-semibold text-xs text-center">Study Abroad</TableHead>
-                    <TableHead className="font-semibold text-xs text-right">Enrollments ({selectedMonthLabel})</TableHead>
-                    <TableHead className="font-semibold text-xs text-right">{selectedMonthLabel} Bill</TableHead>
-                    <TableHead className="font-semibold text-xs text-center">Cycle Status</TableHead>
-                    <TableHead className="font-semibold text-xs text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredOrgs.map(org => {
-                    const details = getOrgPlanDetails(org);
-                    const existingBill = details.generatedBillForSelectedMonth;
-                    const orgHistory = (org.metadata as any)?.billHistory || [];
+            <div className="space-y-4">
+              {filteredOrgs.map(org => {
+                const details = getOrgPlanDetails(org);
+                const existingBill = details.generatedBillForSelectedMonth;
+                const orgHistory = (org.metadata as any)?.billHistory || [];
+                const stale = Boolean(existingBill && existingBill.totalStudentCount !== details.totalStudentCount);
 
-                    return (
-                      <TableRow key={org.id} className="hover:bg-muted/30 transition-colors">
-                        {/* Organization info */}
-                        <TableCell>
-                          <div className="font-medium text-foreground text-sm flex items-center gap-2">
-                            <span>{org.name}</span>
-                          </div>
-                          <div className="text-xs text-muted-foreground truncate max-w-[180px] mt-0.5">
-                            {org.email}
-                          </div>
-                        </TableCell>
-
-                        {/* Plan Name */}
-                        <TableCell>
-                          <Badge variant="outline" className="font-semibold text-xs border-indigo-200 text-indigo-700 bg-indigo-50/70 dark:bg-indigo-950/40 dark:text-indigo-300">
+                return (
+                  <Card key={org.id} className="border-border/70 shadow-xs overflow-hidden">
+                    {/* Card header */}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 px-5 py-4 border-b bg-muted/20">
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="text-base font-semibold truncate">{org.name}</h3>
+                          <Badge variant="outline" className="text-[11px] font-medium border-indigo-200 text-indigo-700 bg-indigo-50/70 dark:bg-indigo-950/40 dark:text-indigo-300">
                             {details.planName}
                           </Badge>
-                        </TableCell>
-
-                        {/* Academic Partner */}
-                        <TableCell className="text-center">
-                          {details.hasAcademicPartners ? (
-                            <div className="inline-flex flex-col items-center">
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300">
-                                <Check className="w-3 h-3 text-indigo-600" /> Enabled
-                              </span>
-                              <span className="text-xs font-semibold text-foreground mt-0.5">
-                                Base: ₹{details.academicPartnerBasePrice.toLocaleString('en-IN')}
-                              </span>
-                              <span className="text-[10px] text-muted-foreground">
-                                + ₹{details.academicPartnerPerEnrollmentFee}/partner student
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] text-slate-400 bg-slate-100 border border-slate-200 dark:bg-slate-800 dark:text-slate-500">
-                              <X className="w-3 h-3" /> Disabled
-                            </span>
-                          )}
-                        </TableCell>
-
-                        {/* Direct Admissions Fee */}
-                        <TableCell className="text-center">
-                          <div className="inline-flex flex-col items-center">
-                            <span className="text-xs font-semibold text-foreground">
-                              ₹{details.directPerEnrollmentFee}/student
-                            </span>
-                            <span className="text-[10px] text-muted-foreground">
-                              {details.directStudentCount} enrolled
-                            </span>
-                          </div>
-                        </TableCell>
-
-                        {/* Academic Center */}
-                        <TableCell className="text-center">
-                          {details.hasAcademicCenters ? (
-                            <div className="inline-flex flex-col items-center">
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300">
-                                <Check className="w-3 h-3 text-emerald-600" /> Enabled
-                              </span>
-                              <span className="text-xs font-semibold text-foreground mt-0.5">
-                                Base: ₹{details.academicCenterBasePrice.toLocaleString('en-IN')}
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] text-slate-400 bg-slate-100 border border-slate-200 dark:bg-slate-800 dark:text-slate-500">
-                              <X className="w-3 h-3" /> Disabled
-                            </span>
-                          )}
-                        </TableCell>
-
-                        {/* Study Abroad Partner access */}
-                        <TableCell className="text-center">
-                          {details.hasStudyAbroad ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-sky-50 text-sky-700 border border-sky-200 dark:bg-sky-950/40 dark:text-sky-300">
-                              <Check className="w-3 h-3 text-sky-600" /> Enabled
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] text-slate-400 bg-slate-100 border border-slate-200 dark:bg-slate-800 dark:text-slate-500">
-                              <X className="w-3 h-3" /> Disabled
-                            </span>
-                          )}
-                        </TableCell>
-
-                        {/* Month Enrollments Breakdown */}
-                        <TableCell className="text-right">
-                          <div className="font-semibold text-xs text-foreground flex items-center justify-end gap-1.5">
-                            <span className="text-indigo-600 dark:text-indigo-400">{details.partnerStudentCount} partner</span>
-                            <span className="text-muted-foreground">+</span>
-                            <span>{details.directStudentCount} direct</span>
-                          </div>
-                          <div className="text-[11px] text-muted-foreground mt-0.5">
-                            Total: <strong>{details.totalStudentCount} students</strong>
-                          </div>
-                          {existingBill && org.monthTotalEnrollmentCount !== undefined && org.monthTotalEnrollmentCount !== details.totalStudentCount && (
-                            <div className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold mt-0.5">
-                              Live: {org.monthTotalEnrollmentCount} (new enrollments)
-                            </div>
-                          )}
-                          <Button 
-                            variant="link" 
-                            size="sm"
-                            className="h-auto p-0 text-[11px] text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 font-medium inline-flex items-center gap-1 mt-0.5"
-                            onClick={() => handleOpenMonthEnrollments(org)}
-                            title={`View itemized list for ${selectedMonthLabel}`}
-                          >
-                            <Eye className="w-3 h-3" />
-                            <span>View List</span>
-                          </Button>
-                        </TableCell>
-
-                        {/* Total Bill & Subtotals */}
-                        <TableCell className="text-right">
-                          <div className="font-bold text-sm text-emerald-600 dark:text-emerald-400">
-                            ₹{details.totalBill.toLocaleString('en-IN')}
-                          </div>
-                          <div className="text-[10px] text-muted-foreground mt-0.5 leading-tight">
-                            P: ₹{details.effectivePartnerTotal.toLocaleString('en-IN')} | D: ₹{details.directEnrollmentTotal.toLocaleString('en-IN')} | C: ₹{details.effectiveCenterTotal.toLocaleString('en-IN')}
-                          </div>
-                        </TableCell>
-
-                        {/* Bill Cycle Status */}
-                        <TableCell className="text-center">
-                          {existingBill ? (
-                            <div className="inline-flex flex-col items-center gap-1">
-                              <Badge variant="outline" className="text-[11px] bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300">
-                                <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-600" /> Generated
-                              </Badge>
-                              <Badge 
-                                variant={existingBill.status === 'paid' ? 'default' : 'secondary'} 
-                                className={`text-[10px] px-1.5 py-0 capitalize ${
-                                  existingBill.status === 'paid' 
-                                    ? 'bg-emerald-600 text-white' 
-                                    : 'bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300'
-                                }`}
-                              >
-                                {existingBill.status}
-                              </Badge>
-                              {existingBill.totalStudentCount !== details.totalStudentCount && (
-                                <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium whitespace-nowrap">
-                                  Billed: {existingBill.totalStudentCount} (click Regenerate)
-                                </span>
-                              )}
-                            </div>
-                          ) : (
-                            <Badge variant="secondary" className="text-[11px] text-muted-foreground font-normal">
-                              Pending Generation
+                        </div>
+                        <p className="text-xs text-muted-foreground truncate mt-0.5">{org.email}</p>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {existingBill ? (
+                          <>
+                            <Badge variant="outline" className="text-[11px] bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300">
+                              <CheckCircle2 className="w-3 h-3 mr-1" /> Bill generated
                             </Badge>
-                          )}
-                        </TableCell>
+                            <Badge className={`text-[11px] capitalize ${existingBill.status === 'paid' ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300'}`}>
+                              {existingBill.status}
+                            </Badge>
+                          </>
+                        ) : (
+                          <Badge variant="secondary" className="text-[11px] font-normal text-muted-foreground">Not generated yet</Badge>
+                        )}
+                      </div>
+                    </div>
 
-                        {/* Actions */}
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-1.5">
-                            {/* Generate / Regenerate Bill Button */}
-                            <Button 
-                              variant="default" 
-                              size="sm" 
-                              className="h-8 text-xs px-2.5 shadow-xs bg-indigo-600 hover:bg-indigo-700 text-white"
-                              onClick={() => handleGenerateBill(org)}
-                              disabled={generatingId === org.id}
-                              title={`Generate Bill for ${selectedMonthLabel}`}
-                            >
-                              <Receipt className="w-3.5 h-3.5 mr-1" />
-                              {existingBill ? 'Regenerate Bill' : 'Generate Bill'}
-                            </Button>
+                    <CardContent className="p-5 space-y-4">
+                      {stale && (
+                        <div className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-300">
+                          <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                          <span>
+                            The generated bill covers {existingBill!.totalStudentCount} students but there are now {details.totalStudentCount}. Regenerate the bill to include the latest enrollments.
+                          </span>
+                        </div>
+                      )}
 
-                            {/* View History Button */}
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-8 text-xs px-2 text-indigo-700 bg-indigo-50/60 hover:bg-indigo-100 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-800"
-                              onClick={() => {
-                                setSearchQuery(org.name);
-                                setHistoryMonthFilter('all');
-                                setActiveTab('history');
-                              }}
-                              title={`View all past bills for ${org.name}`}
-                            >
-                              <History className="w-3.5 h-3.5 mr-1" />
-                              History ({orgHistory.length})
-                            </Button>
+                      {/* Component breakdown */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                        <ComponentTile
+                          icon={Users} tone="indigo" title="Academic Partner"
+                          enabled={details.hasAcademicPartners}
+                          amount={details.effectivePartnerTotal}
+                          lines={[
+                            `Base ₹${details.academicPartnerBasePrice.toLocaleString('en-IN')}`,
+                            `${details.partnerStudentCount} students × ₹${details.academicPartnerPerEnrollmentFee}`,
+                          ]}
+                        />
+                        <ComponentTile
+                          icon={UserCheck} tone="slate" title="Direct Admissions"
+                          enabled
+                          amount={details.directEnrollmentTotal}
+                          lines={[`${details.directStudentCount} students × ₹${details.directPerEnrollmentFee}`]}
+                        />
+                        <ComponentTile
+                          icon={Globe2} tone="sky" title="Study Abroad"
+                          enabled={details.hasStudyAbroad}
+                          amount={details.effectiveStudyAbroadTotal}
+                          lines={[
+                            `Base ₹${details.studyAbroadBasePrice.toLocaleString('en-IN')}`,
+                            `${details.studyAbroadStudentCount} students × ₹${details.studyAbroadPerEnrollmentFee}`,
+                          ]}
+                        />
+                        <ComponentTile
+                          icon={School} tone="emerald" title="Academic Center"
+                          enabled={details.hasAcademicCenters}
+                          amount={details.effectiveCenterTotal}
+                          lines={[`Base ₹${details.academicCenterBasePrice.toLocaleString('en-IN')}`]}
+                        />
+                      </div>
 
-                            {/* Configure Plan Button */}
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="h-8 text-xs px-2.5"
-                              onClick={() => handleOpenConfigure(org)}
-                              title="Configure pricing per feature and student enrollment"
-                            >
-                              <Sliders className="w-3.5 h-3.5 mr-1" /> Configure
-                            </Button>
-
-                            {/* View Statement Button */}
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className="h-8 text-xs px-2 text-muted-foreground hover:text-foreground"
-                              onClick={() => handleViewStatementFromOrg(org)}
-                              title="View statement & invoice"
-                            >
-                              <FileText className="w-3.5 h-3.5" />
-                            </Button>
+                      {/* Footer: total + actions */}
+                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-4 border-t">
+                        <div className="flex items-center gap-6">
+                          <div>
+                            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{selectedMonthLabel} bill</p>
+                            <p className="text-2xl font-bold tracking-tight text-emerald-700 dark:text-emerald-400">
+                              ₹{details.totalBill.toLocaleString('en-IN')}
+                            </p>
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                          <div className="text-xs text-muted-foreground">
+                            <p><strong className="text-foreground">{details.totalStudentCount}</strong> enrollments</p>
+                            <button
+                              type="button"
+                              className="mt-0.5 inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 font-medium"
+                              onClick={() => handleOpenMonthEnrollments(org)}
+                              title={`View itemized list for ${selectedMonthLabel}`}
+                            >
+                              <Eye className="w-3 h-3" /> View list
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Button
+                            size="sm"
+                            className="h-8 text-xs bg-indigo-600 hover:bg-indigo-700 text-white"
+                            onClick={() => handleGenerateBill(org)}
+                            disabled={generatingId === org.id}
+                          >
+                            {generatingId === org.id ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Receipt className="w-3.5 h-3.5 mr-1" />}
+                            {existingBill ? 'Regenerate bill' : 'Generate bill'}
+                          </Button>
+                          <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => handleOpenConfigure(org)}>
+                            <Sliders className="w-3.5 h-3.5 mr-1" /> Configure pricing
+                          </Button>
+                          <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => handleViewStatementFromOrg(org)}>
+                            <FileText className="w-3.5 h-3.5 mr-1" /> Statement
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 text-xs text-muted-foreground"
+                            onClick={() => {
+                              setSearchQuery(org.name);
+                              setHistoryMonthFilter('all');
+                              setActiveTab('history');
+                            }}
+                          >
+                            <History className="w-3.5 h-3.5 mr-1" /> History ({orgHistory.length})
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           )}
         </TabsContent>
@@ -1296,7 +1241,11 @@ export function LicensesPanel() {
             const directEnrollmentTotal = directCount * directPerFee;
 
             const centerBase = planForm.academic_centers ? Number(planForm.academicCenterBasePrice || 0) : 0;
-            const previewTotalBill = partnerSubtotal + directEnrollmentTotal + centerBase;
+            const studyAbroadCount = selectedOrg.monthStudyAbroadEnrollmentCount ?? 0;
+            const studyAbroadBase = planForm.study_abroad_partners ? Number(planForm.studyAbroadBasePrice || 0) : 0;
+            const studyAbroadPerFee = planForm.study_abroad_partners ? Number(planForm.studyAbroadPerEnrollmentFee || 0) : 0;
+            const studyAbroadSubtotal = studyAbroadBase + studyAbroadCount * studyAbroadPerFee;
+            const previewTotalBill = partnerSubtotal + directEnrollmentTotal + centerBase + studyAbroadSubtotal;
 
             return (
               <form onSubmit={handleSaveOrgPlan} className="space-y-4 pt-1">
@@ -1339,7 +1288,8 @@ export function LicensesPanel() {
                   />
                 </div>
 
-                {/* FEATURE 1: Academic Partner (Base Value + Value Per Partner Enrollment) */}
+                {/* FEATURE 1: Academic Partner — shown only when enabled under Organizations → Manage Features */}
+                {planForm.academic_partners && (
                 <div className="rounded-xl border border-indigo-200/90 bg-indigo-50/30 dark:bg-indigo-950/20 dark:border-indigo-900/60 p-4 space-y-3">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3">
@@ -1353,13 +1303,9 @@ export function LicensesPanel() {
                         </p>
                       </div>
                     </div>
-                    <Switch 
-                      checked={planForm.academic_partners} 
-                      onCheckedChange={checked => setPlanForm({ ...planForm, academic_partners: checked })} 
-                    />
                   </div>
 
-                  {planForm.academic_partners && (
+                  {(
                     <div className="pt-3 border-t border-indigo-200/60 dark:border-indigo-900/50 space-y-3">
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
@@ -1404,27 +1350,56 @@ export function LicensesPanel() {
                     </div>
                   )}
                 </div>
+                )}
 
-                {/* Study Abroad Partner: access switch (no pricing) */}
-                <div className="rounded-xl border border-sky-200/90 bg-sky-50/30 dark:bg-sky-950/20 dark:border-sky-900/60 p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center shrink-0 mt-0.5">
-                        <Globe2 className="w-4 h-4" />
+                {/* Study Abroad Partner — shown only when enabled under Organizations → Manage Features */}
+                {planForm.study_abroad_partners && (
+                <div className="rounded-xl border border-sky-200/90 bg-sky-50/30 dark:bg-sky-950/20 dark:border-sky-900/60 p-4 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                      <Globe2 className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-foreground">Study Abroad Partner</h4>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Overseas-education partners, their student applications and wallets
+                      </p>
+                    </div>
+                  </div>
+                  <div className="pt-3 border-t border-sky-200/60 dark:border-sky-900/50 space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs font-semibold text-sky-950 dark:text-sky-200">Base Value (₹) *</Label>
+                        <Input
+                          type="number" min="0" step="0.01"
+                          value={planForm.studyAbroadBasePrice}
+                          onChange={e => setPlanForm({ ...planForm, studyAbroadBasePrice: e.target.value })}
+                          placeholder="e.g. 5000"
+                          className="bg-white dark:bg-slate-900 font-semibold"
+                          required
+                        />
+                        <p className="text-[10px] text-muted-foreground">Fixed periodic fee for Study Abroad Partner</p>
                       </div>
-                      <div>
-                        <h4 className="text-sm font-semibold text-foreground">Study Abroad Partner</h4>
-                        <p className="text-xs text-muted-foreground mt-0.5">
-                          Lets this organization's admins create study abroad partners, receive their student applications and manage their wallets. Turn off to block all access; existing data is kept.
-                        </p>
+                      <div className="space-y-1">
+                        <Label className="text-xs font-semibold text-sky-950 dark:text-sky-200">Rate Per Study Abroad Student (₹) *</Label>
+                        <Input
+                          type="number" min="0" step="0.01"
+                          value={planForm.studyAbroadPerEnrollmentFee}
+                          onChange={e => setPlanForm({ ...planForm, studyAbroadPerEnrollmentFee: e.target.value })}
+                          placeholder="e.g. 100"
+                          className="bg-white dark:bg-slate-900 font-semibold"
+                          required
+                        />
+                        <p className="text-[10px] text-muted-foreground">Charged per student enrolled via Study Abroad partners</p>
                       </div>
                     </div>
-                    <Switch
-                      checked={planForm.study_abroad_partners}
-                      onCheckedChange={checked => setPlanForm({ ...planForm, study_abroad_partners: checked })}
-                    />
+                    <div className="text-xs text-sky-900/80 dark:text-sky-300 bg-sky-100/50 dark:bg-sky-950/60 px-3 py-1.5 rounded-lg flex items-center justify-between">
+                      <span>Study Abroad Subtotal:</span>
+                      <strong>₹{studyAbroadBase.toLocaleString('en-IN')} (Base) + ({studyAbroadCount} study abroad students × ₹{studyAbroadPerFee}) = ₹{studyAbroadSubtotal.toLocaleString('en-IN')}</strong>
+                    </div>
                   </div>
                 </div>
+                )}
 
                 {/* FEATURE 2: Direct Student Admissions Pricing */}
                 <div className="rounded-xl border border-slate-200 bg-slate-50/50 dark:bg-slate-900/40 dark:border-slate-800 p-4 space-y-3">
@@ -1469,7 +1444,8 @@ export function LicensesPanel() {
                   </div>
                 </div>
 
-                {/* FEATURE 3: Academic Center (Base Value Only) */}
+                {/* FEATURE 3: Academic Center — shown only when enabled under Organizations → Manage Features */}
+                {planForm.academic_centers && (
                 <div className="rounded-xl border border-emerald-200/90 bg-emerald-50/30 dark:bg-emerald-950/20 dark:border-emerald-900/60 p-4 space-y-3">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3">
@@ -1483,13 +1459,9 @@ export function LicensesPanel() {
                         </p>
                       </div>
                     </div>
-                    <Switch 
-                      checked={planForm.academic_centers} 
-                      onCheckedChange={checked => setPlanForm({ ...planForm, academic_centers: checked })} 
-                    />
                   </div>
 
-                  {planForm.academic_centers && (
+                  {(
                     <div className="pt-3 border-t border-emerald-200/60 dark:border-emerald-900/50 flex items-center justify-between gap-4">
                       <div>
                         <Label className="text-xs font-semibold text-emerald-950 dark:text-emerald-200">
@@ -1512,6 +1484,7 @@ export function LicensesPanel() {
                     </div>
                   )}
                 </div>
+                )}
 
                 {/* Live Bill Preview Box */}
                 <div className="rounded-xl border border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/30 dark:border-emerald-800 p-4 space-y-2">
@@ -1520,15 +1493,24 @@ export function LicensesPanel() {
                   </p>
                   <div className="flex items-baseline justify-between">
                     <div className="text-xs text-muted-foreground space-y-0.5">
-                      <div>
-                        Academic Partner: {planForm.academic_partners ? `₹${partnerBase.toLocaleString('en-IN')} (Base) + (${partnerCount} partner × ₹${partnerPerFee}) = ₹${partnerSubtotal.toLocaleString('en-IN')}` : 'Disabled (₹0)'}
-                      </div>
+                      {planForm.academic_partners && (
+                        <div>
+                          Academic Partner: ₹{partnerBase.toLocaleString('en-IN')} (Base) + ({partnerCount} partner × ₹{partnerPerFee}) = ₹{partnerSubtotal.toLocaleString('en-IN')}
+                        </div>
+                      )}
                       <div>
                         Direct Admissions: {directCount} direct × ₹{directPerFee} = ₹{directEnrollmentTotal.toLocaleString('en-IN')}
                       </div>
-                      <div>
-                        Academic Center: {planForm.academic_centers ? `₹${centerBase.toLocaleString('en-IN')} (Base)` : 'Disabled (₹0)'}
-                      </div>
+                      {planForm.study_abroad_partners && (
+                        <div>
+                          Study Abroad: ₹{studyAbroadBase.toLocaleString('en-IN')} (Base) + ({studyAbroadCount} × ₹{studyAbroadPerFee}) = ₹{studyAbroadSubtotal.toLocaleString('en-IN')}
+                        </div>
+                      )}
+                      {planForm.academic_centers && (
+                        <div>
+                          Academic Center: ₹{centerBase.toLocaleString('en-IN')} (Base)
+                        </div>
+                      )}
                     </div>
                     <div className="text-right">
                       <span className="text-2xl font-black text-emerald-700 dark:text-emerald-300">
@@ -1623,7 +1605,7 @@ export function LicensesPanel() {
                   <p className="text-muted-foreground mt-1">
                     Total Month Students: <strong className="text-foreground">{statementData.totalStudentCount}</strong>
                     <span className="text-[11px] text-muted-foreground block">
-                      ({statementData.partnerStudentCount} partner + {statementData.directStudentCount} direct)
+                      ({statementData.partnerStudentCount} partner + {statementData.directStudentCount} direct{statementData.studyAbroadEnabled ? ` + ${statementData.studyAbroadStudentCount} study abroad` : ''})
                     </span>
                   </p>
                 </div>
@@ -1707,6 +1689,23 @@ export function LicensesPanel() {
                         ₹{statementData.directEnrollmentTotal.toLocaleString('en-IN')}
                       </TableCell>
                     </TableRow>
+
+                    {/* Study Abroad Partner: Base + Per Enrollment */}
+                    {statementData.studyAbroadEnabled && (
+                      <TableRow>
+                        <TableCell>
+                          <div className="font-semibold text-xs">Study Abroad Partner — Base + Per Enrollment Value</div>
+                          <div className="text-[11px] text-muted-foreground">
+                            Base ₹{statementData.studyAbroadBase.toLocaleString('en-IN')} + {statementData.studyAbroadStudentCount} study abroad students × ₹{statementData.studyAbroadPerEnrollment}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center text-xs">
+                          <span className="font-semibold text-foreground">{statementData.studyAbroadStudentCount} study abroad students</span>
+                        </TableCell>
+                        <TableCell className="text-right text-xs">₹{statementData.studyAbroadPerEnrollment} / study abroad student</TableCell>
+                        <TableCell className="text-right text-xs font-medium">₹{statementData.studyAbroadSubtotal.toLocaleString('en-IN')}</TableCell>
+                      </TableRow>
+                    )}
 
                     {/* Academic Center Base */}
                     <TableRow>
@@ -2082,6 +2081,49 @@ export function LicensesPanel() {
           })()}
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+
+const TILE_TONES = {
+  indigo: { box: 'border-indigo-200/80 bg-indigo-50/40 dark:border-indigo-900/60 dark:bg-indigo-950/20', icon: 'bg-indigo-600', text: 'text-indigo-700 dark:text-indigo-300' },
+  slate: { box: 'border-slate-200 bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/40', icon: 'bg-slate-700', text: 'text-slate-700 dark:text-slate-300' },
+  sky: { box: 'border-sky-200/80 bg-sky-50/40 dark:border-sky-900/60 dark:bg-sky-950/20', icon: 'bg-sky-600', text: 'text-sky-700 dark:text-sky-300' },
+  emerald: { box: 'border-emerald-200/80 bg-emerald-50/40 dark:border-emerald-900/60 dark:bg-emerald-950/20', icon: 'bg-emerald-600', text: 'text-emerald-700 dark:text-emerald-300' },
+} as const;
+
+/** One billable component of an organization's plan: what it is, how it is priced, what it adds to the bill. */
+function ComponentTile({ icon: Icon, tone, title, enabled, amount, lines }: {
+  icon: any;
+  tone: keyof typeof TILE_TONES;
+  title: string;
+  enabled: boolean;
+  amount: number;
+  lines: string[];
+}) {
+  const t = TILE_TONES[tone];
+  if (!enabled) {
+    return (
+      <div className="rounded-xl border border-dashed border-border/80 p-3.5 opacity-60">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-muted text-muted-foreground flex items-center justify-center"><Icon className="w-3.5 h-3.5" /></div>
+          <span className="text-sm font-medium text-muted-foreground">{title}</span>
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">Not enabled for this organization</p>
+      </div>
+    );
+  }
+  return (
+    <div className={`rounded-xl border p-3.5 ${t.box}`}>
+      <div className="flex items-center gap-2">
+        <div className={`w-7 h-7 rounded-lg text-white flex items-center justify-center ${t.icon}`}><Icon className="w-3.5 h-3.5" /></div>
+        <span className="text-sm font-medium">{title}</span>
+      </div>
+      <p className={`mt-3 text-lg font-bold tracking-tight ${t.text}`}>₹{amount.toLocaleString('en-IN')}</p>
+      <div className="mt-1 space-y-0.5">
+        {lines.map(l => <p key={l} className="text-[11px] text-muted-foreground">{l}</p>)}
+      </div>
     </div>
   );
 }

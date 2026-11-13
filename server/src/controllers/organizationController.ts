@@ -22,63 +22,79 @@ export async function getOrgBillingDateRange(orgId: string, billingMonth: string
   return { startDate, endDate, billingCycleLabel, salaryCycle: null };
 }
 
+/** Money is kept to 2 decimals so per-student fees like 0.1 x 3 do not drift. */
+const roundMoney = (n: number) => Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+
 /**
  * Helper to fetch and deduplicate students/enrollments for an organization strictly within its salary billing cycle.
  */
 export async function getOrganizationMonthEnrollments(orgId: string, billingMonth: string) {
   const { startDate, endDate } = await getOrgBillingDateRange(orgId, billingMonth);
 
-  const [enrollments, students] = await Promise.all([
-    prisma.enrollment.findMany({
+  // Billing is per enrollment record, whatever its status (document review, pending, rejected, ...).
+  // Each enrollment is dated by enrolledAt, else the day it was created.
+  const inRange = { gte: startDate, lte: endDate };
+  const enrollments = await prisma.enrollment.findMany({
+    where: {
+      organizationId: orgId,
+      OR: [
+        { enrolledAt: inRange },
+        { AND: [{ enrolledAt: null }, { createdAt: inRange }] },
+      ],
+    },
+    include: {
+      program: { select: { id: true, name: true, code: true } },
+      studyCenter: { select: { id: true, name: true, code: true } }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  // Students with no enrollment record at all (legacy imports / manually added). A student who has an
+  // enrollment record is counted through that record only, so applicants are not counted twice.
+  const candidateStudents = await prisma.student.findMany({
+    where: {
+      organizationId: orgId,
+      OR: [
+        { enrolledAt: inRange },
+        { AND: [{ enrolledAt: null }, { admissionDate: inRange }] },
+        { AND: [{ enrolledAt: null }, { admissionDate: null }, { createdAt: inRange }] },
+      ],
+    },
+    include: {
+      program: { select: { id: true, name: true, code: true } },
+      center: { select: { id: true, name: true, code: true } }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+  let students = candidateStudents;
+  if (candidateStudents.length) {
+    const linked = await prisma.enrollment.findMany({
       where: {
         organizationId: orgId,
         OR: [
-          { enrolledAt: { gte: startDate, lte: endDate } },
-          {
-            AND: [
-              { enrolledAt: null },
-              { createdAt: { gte: startDate, lte: endDate } }
-            ]
-          }
-        ]
+          { studentId: { in: candidateStudents.map(c => c.id) } },
+          { studentEmail: { in: candidateStudents.flatMap(c => c.email ? [c.email, c.email.toLowerCase().trim()] : []) } },
+        ],
       },
-      include: {
-        program: { select: { id: true, name: true, code: true } },
-        studyCenter: { select: { id: true, name: true, code: true } }
-      },
-      orderBy: { createdAt: 'desc' }
-    }),
-    prisma.student.findMany({
-      where: {
-        organizationId: orgId,
-        OR: [
-          { enrolledAt: { gte: startDate, lte: endDate } },
-          { admissionDate: { gte: startDate, lte: endDate } },
-          {
-            AND: [
-              { enrolledAt: null },
-              { admissionDate: null },
-              { createdAt: { gte: startDate, lte: endDate } }
-            ]
-          }
-        ]
-      },
-      include: {
-        program: { select: { id: true, name: true, code: true } },
-        center: { select: { id: true, name: true, code: true } }
-      },
-      orderBy: { createdAt: 'desc' }
-    })
-  ]);
+      select: { studentId: true, studentEmail: true },
+    });
+    const linkedIds = new Set(linked.map(l => l.studentId).filter(Boolean) as string[]);
+    const linkedEmails = new Set(linked.map(l => (l.studentEmail || '').toLowerCase().trim()));
+    students = candidateStudents.filter(c => !linkedIds.has(c.id) && !linkedEmails.has((c.email || '').toLowerCase().trim()));
+  }
 
   const list: any[] = [];
   const seen = new Set<string>();
 
   for (const e of enrollments) {
-    const key = (e.studentEmail || e.enrollmentNumber || e.id).toLowerCase().trim();
-    if (!seen.has(key)) {
-      seen.add(key);
+    const keys = [e.studentEmail, e.enrollmentNumber, e.studentId]
+      .filter(Boolean).map(k => String(k).toLowerCase().trim());
+    if (!keys.length) keys.push(e.id);
+    // The same student enrolled twice in one cycle is billed once.
+    if (!keys.some(k => seen.has(k))) {
+      keys.forEach(k => seen.add(k));
       const isPartner = Boolean(e.studyCenterId || e.studyCenter);
+      const isStudyAbroad = !isPartner && (e.source === 'study_abroad' || Boolean(e.studyAbroadPartnerId));
       list.push({
         id: e.id,
         studentName: e.studentName || 'Student',
@@ -89,7 +105,8 @@ export async function getOrganizationMonthEnrollments(orgId: string, billingMont
         studyCenterId: e.studyCenterId || null,
         studyCenterName: e.studyCenter?.name || null,
         isPartnerEnrollment: isPartner,
-        enrollmentType: isPartner ? 'Academic Partner' : 'Direct Admission',
+        isStudyAbroadEnrollment: isStudyAbroad,
+        enrollmentType: isPartner ? 'Academic Partner' : isStudyAbroad ? 'Study Abroad' : 'Direct Admission',
         enrolledAt: (e.enrolledAt || e.createdAt).toISOString(),
         status: e.status || 'enrolled',
         source: 'enrollment'
@@ -107,6 +124,7 @@ export async function getOrganizationMonthEnrollments(orgId: string, billingMont
     if (enrollKey) seen.add(enrollKey);
 
     const isPartner = Boolean(s.centerId || s.center);
+    const isStudyAbroad = !isPartner && s.source === 'study_abroad';
     list.push({
       id: s.id,
       studentName: s.name || 'Student',
@@ -117,7 +135,8 @@ export async function getOrganizationMonthEnrollments(orgId: string, billingMont
       studyCenterId: s.centerId || null,
       studyCenterName: s.center?.name || null,
       isPartnerEnrollment: isPartner,
-      enrollmentType: isPartner ? 'Academic Partner' : 'Direct Admission',
+      isStudyAbroadEnrollment: isStudyAbroad,
+      enrollmentType: isPartner ? 'Academic Partner' : isStudyAbroad ? 'Study Abroad' : 'Direct Admission',
       enrolledAt: (s.enrolledAt || s.admissionDate || s.createdAt).toISOString(),
       status: s.status || 'enrolled',
       source: 'student'
@@ -172,13 +191,18 @@ export const getOrganizations = asyncHandler(async (req: AuthRequest, res: Respo
       organizations.map(async (org) => {
         const monthEnrollments = await getOrganizationMonthEnrollments(org.id, monthParam);
         const partnerCount = monthEnrollments.filter(e => e.isPartnerEnrollment).length;
-        const directCount = monthEnrollments.filter(e => !e.isPartnerEnrollment).length;
+        const orgMeta: any = org.metadata || {};
+        const orgFeatures = orgMeta.planConfig?.features ?? orgMeta.billingConfig?.features ?? org.license?.features;
+        const orgHasStudyAbroad = Array.isArray(orgFeatures) && orgFeatures.includes('study_abroad_partners');
+        const studyAbroadCount = orgHasStudyAbroad ? monthEnrollments.filter(e => e.isStudyAbroadEnrollment).length : 0;
+        const directCount = monthEnrollments.filter(e => !e.isPartnerEnrollment && !(orgHasStudyAbroad && e.isStudyAbroadEnrollment)).length;
         return {
           ...org,
           selectedMonth: monthParam,
           monthEnrollmentCount: partnerCount,
           monthPartnerEnrollmentCount: partnerCount,
           monthDirectEnrollmentCount: directCount,
+          monthStudyAbroadEnrollmentCount: studyAbroadCount,
           monthTotalEnrollmentCount: monthEnrollments.length,
         };
       })
@@ -246,7 +270,7 @@ export const deleteOrganization = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 // Features Superadmin can switch on/off for one organization without opening the full plan dialog.
-const TOGGLEABLE_FEATURES = ['study_abroad_partners'];
+const TOGGLEABLE_FEATURES = ['academic_partners', 'academic_centers', 'study_abroad_partners'];
 // What the org menus assume when nothing has been configured for an organization.
 const DEFAULT_ORG_FEATURES = ['academic_partners', 'academic_centers'];
 
@@ -301,6 +325,8 @@ export const assignLicense = asyncHandler(async (req: AuthRequest, res: Response
     academicPartnerPerEnrollmentFee = 0,
     directPerEnrollmentFee = 0,
     academicCenterBasePrice = 0,
+    studyAbroadBasePrice = 0,
+    studyAbroadPerEnrollmentFee = 0,
     durationMonths, 
     licenseExpiry,
     maxUsers,
@@ -316,6 +342,18 @@ export const assignLicense = asyncHandler(async (req: AuthRequest, res: Response
   if (!existingOrg) {
     res.status(404).json({ success: false, message: 'Organization not found' });
     return;
+  }
+
+  const priceFields: Record<string, unknown> = {
+    academicPartnerBasePrice, academicPartnerPerEnrollmentFee, directPerEnrollmentFee,
+    academicCenterBasePrice, studyAbroadBasePrice, studyAbroadPerEnrollmentFee,
+  };
+  for (const [name, value] of Object.entries(priceFields)) {
+    const n = Number(value ?? 0);
+    if (!Number.isFinite(n) || n < 0) {
+      res.status(400).json({ success: false, message: `${name} must be a number that is 0 or more` });
+      return;
+    }
   }
 
   const expiryDate = new Date();
@@ -338,7 +376,11 @@ export const assignLicense = asyncHandler(async (req: AuthRequest, res: Response
   // Academic Center values: Base Value
   const centerBase = Number(academicCenterBasePrice ?? academicCentersPrice ?? 0);
 
-  const totalBasePrice = Number(basePrice || 0) + (planFeatures.includes('academic_partners') ? partnerBase : 0) + (planFeatures.includes('academic_centers') ? centerBase : 0);
+  // Study Abroad Partner values: Base Value + Per Study Abroad Enrollment Value
+  const studyAbroadBase = Number(studyAbroadBasePrice || 0);
+  const studyAbroadPerEnrollment = Number(studyAbroadPerEnrollmentFee || 0);
+
+  const totalBasePrice = Number(basePrice || 0) + (planFeatures.includes('academic_partners') ? partnerBase : 0) + (planFeatures.includes('academic_centers') ? centerBase : 0) + (planFeatures.includes('study_abroad_partners') ? studyAbroadBase : 0);
   const numericDuration = Number(durationMonths ?? existingOrg.license?.durationMonths ?? 12);
   const numericMaxUsers = Number(maxUsers ?? existingOrg.license?.maxUsers ?? 25);
   const numericMaxStorage = Number(maxStorage ?? existingOrg.license?.maxStorage ?? 2048);
@@ -384,6 +426,8 @@ export const assignLicense = asyncHandler(async (req: AuthRequest, res: Response
     academicPartnerPerEnrollmentFee: partnerPerEnrollment,
     directPerEnrollmentFee: directPerFee,
     academicCenterBasePrice: centerBase,
+    studyAbroadBasePrice: studyAbroadBase,
+    studyAbroadPerEnrollmentFee: studyAbroadPerEnrollment,
     academicPartnersPrice: partnerBase,
     academicCentersPrice: centerBase,
     perEnrollmentFee: partnerPerEnrollment,
@@ -400,6 +444,8 @@ export const assignLicense = asyncHandler(async (req: AuthRequest, res: Response
     academicPartnerPerEnrollmentFee: partnerPerEnrollment,
     directPerEnrollmentFee: directPerFee,
     academicCenterBasePrice: centerBase,
+    studyAbroadBasePrice: studyAbroadBase,
+    studyAbroadPerEnrollmentFee: studyAbroadPerEnrollment,
     academicPartnersPrice: partnerBase,
     academicCentersPrice: centerBase,
     perEnrollmentFee: partnerPerEnrollment,
@@ -587,8 +633,13 @@ export const generateOrgBill = asyncHandler(async (req: AuthRequest, res: Respon
   const { id } = req.params;
   const { billingMonth } = req.body; // e.g. "2026-10"
 
-  if (!billingMonth || !/^\d{4}-\d{2}$/.test(billingMonth)) {
+  if (!billingMonth || !/^\d{4}-(0[1-9]|1[0-2])$/.test(billingMonth)) {
     res.status(400).json({ success: false, message: 'Valid billingMonth in YYYY-MM format is required' });
+    return;
+  }
+  const currentMonth = new Date().toISOString().slice(0, 7);
+  if (billingMonth > currentMonth) {
+    res.status(400).json({ success: false, message: 'Cannot generate a bill for a future month' });
     return;
   }
 
@@ -620,6 +671,7 @@ export const generateOrgBill = asyncHandler(async (req: AuthRequest, res: Respon
 
   const hasAcademicPartners = features.includes('academic_partners');
   const hasAcademicCenters = features.includes('academic_centers');
+  const hasStudyAbroad = features.includes('study_abroad_partners');
 
   const partnerBase = hasAcademicPartners
     ? Number(planConfig.academicPartnerBasePrice ?? billingConfig.academicPartnerBasePrice ?? 0)
@@ -635,22 +687,35 @@ export const generateOrgBill = asyncHandler(async (req: AuthRequest, res: Respon
     ? Number(planConfig.academicCenterBasePrice ?? billingConfig.academicCenterBasePrice ?? 0)
     : 0;
 
+  const studyAbroadBase = hasStudyAbroad
+    ? Number(planConfig.studyAbroadBasePrice ?? billingConfig.studyAbroadBasePrice ?? 0)
+    : 0;
+  const studyAbroadPerEnrollment = hasStudyAbroad
+    ? Number(planConfig.studyAbroadPerEnrollmentFee ?? billingConfig.studyAbroadPerEnrollmentFee ?? 0)
+    : 0;
+
   // Query strictly for the selected billing month within organization's salary billing cycle
   const { startDate, endDate, billingCycleLabel } = await getOrgBillingDateRange(org.id, billingMonth);
   const monthEnrollments = await getOrganizationMonthEnrollments(org.id, billingMonth);
   const partnerEnrollments = monthEnrollments.filter(e => e.isPartnerEnrollment);
-  const directEnrollments = monthEnrollments.filter(e => !e.isPartnerEnrollment);
+  // Study Abroad students are billed on their own rate only when the feature is on; otherwise they stay direct.
+  const studyAbroadEnrollments = hasStudyAbroad ? monthEnrollments.filter(e => e.isStudyAbroadEnrollment) : [];
+  const directEnrollments = monthEnrollments.filter(e => !e.isPartnerEnrollment && !(hasStudyAbroad && e.isStudyAbroadEnrollment));
 
   const partnerStudentCount = partnerEnrollments.length;
+  const studyAbroadStudentCount = studyAbroadEnrollments.length;
   const directStudentCount = directEnrollments.length;
   const totalStudentCount = monthEnrollments.length;
 
-  const partnerEnrollmentTotal = partnerStudentCount * partnerPerEnrollment;
-  const partnerSubtotal = partnerBase + partnerEnrollmentTotal;
+  const partnerEnrollmentTotal = roundMoney(partnerStudentCount * partnerPerEnrollment);
+  const partnerSubtotal = roundMoney(partnerBase + partnerEnrollmentTotal);
 
-  const directEnrollmentTotal = directStudentCount * directPerEnrollment;
+  const directEnrollmentTotal = roundMoney(directStudentCount * directPerEnrollment);
 
-  const totalAmount = (hasAcademicPartners ? partnerSubtotal : 0) + directEnrollmentTotal + (hasAcademicCenters ? centerBase : 0);
+  const studyAbroadEnrollmentTotal = roundMoney(studyAbroadStudentCount * studyAbroadPerEnrollment);
+  const studyAbroadSubtotal = roundMoney(studyAbroadBase + studyAbroadEnrollmentTotal);
+
+  const totalAmount = roundMoney((hasAcademicPartners ? partnerSubtotal : 0) + directEnrollmentTotal + (hasAcademicCenters ? centerBase : 0) + (hasStudyAbroad ? studyAbroadSubtotal : 0));
 
   const [yearStr, monthStr] = billingMonth.split('-');
   const monthDate = new Date(Number(yearStr), Number(monthStr) - 1, 1);
@@ -662,6 +727,11 @@ export const generateOrgBill = asyncHandler(async (req: AuthRequest, res: Respon
   const existingHistory: any[] = Array.isArray(currentMetadata.billHistory) ? currentMetadata.billHistory : [];
   const existingIdx = existingHistory.findIndex((b: any) => b.billingMonth === billingMonth);
   const existingStatus = existingIdx >= 0 ? (existingHistory[existingIdx].status || 'unpaid') : 'unpaid';
+  if (existingStatus === 'paid') {
+    // A settled invoice must not silently change amount; mark it unpaid first if it truly needs re-issuing.
+    res.status(409).json({ success: false, message: `The bill for ${billingMonth} is already marked paid. Mark it unpaid before regenerating.` });
+    return;
+  }
 
   const billRecord = {
     id: billId,
@@ -681,6 +751,7 @@ export const generateOrgBill = asyncHandler(async (req: AuthRequest, res: Respon
     studentCount: totalStudentCount,
     partnerStudentCount: partnerStudentCount,
     directStudentCount: directStudentCount,
+    studyAbroadStudentCount: studyAbroadStudentCount,
     totalStudentCount: totalStudentCount,
     enrollments: monthEnrollments,
     academicPartner: {
@@ -701,6 +772,14 @@ export const generateOrgBill = asyncHandler(async (req: AuthRequest, res: Respon
       enabled: hasAcademicCenters,
       basePrice: centerBase,
       subtotal: centerBase,
+    },
+    studyAbroad: {
+      enabled: hasStudyAbroad,
+      basePrice: studyAbroadBase,
+      perEnrollmentFee: studyAbroadPerEnrollment,
+      studentCount: studyAbroadStudentCount,
+      enrollmentTotal: studyAbroadEnrollmentTotal,
+      subtotal: studyAbroadSubtotal,
     },
     totalAmount: totalAmount,
   };
@@ -735,6 +814,12 @@ export const getOrgMonthEnrollments = asyncHandler(async (req: AuthRequest, res:
     ? req.query.month
     : new Date().toISOString().slice(0, 7);
 
+  // An org admin may only read their own organization's enrollments.
+  if (req.user.role !== 'superadmin' && req.user.organizationId !== id) {
+    res.status(403).json({ success: false, message: 'Not authorized to view this organization' });
+    return;
+  }
+
   const org = await prisma.organization.findUnique({
     where: { id },
     select: { id: true, name: true }
@@ -752,7 +837,8 @@ export const getOrgMonthEnrollments = asyncHandler(async (req: AuthRequest, res:
   const { startDate, endDate, billingCycleLabel } = await getOrgBillingDateRange(id, monthParam);
   const enrollments = await getOrganizationMonthEnrollments(id, monthParam);
   const partnerEnrollments = enrollments.filter(e => e.isPartnerEnrollment);
-  const directEnrollments = enrollments.filter(e => !e.isPartnerEnrollment);
+  const studyAbroadEnrollments = enrollments.filter(e => e.isStudyAbroadEnrollment);
+  const directEnrollments = enrollments.filter(e => !e.isPartnerEnrollment && !e.isStudyAbroadEnrollment);
 
   res.status(200).json({
     success: true,
@@ -766,6 +852,7 @@ export const getOrgMonthEnrollments = asyncHandler(async (req: AuthRequest, res:
     count: enrollments.length,
     partnerCount: partnerEnrollments.length,
     directCount: directEnrollments.length,
+    studyAbroadCount: studyAbroadEnrollments.length,
     data: enrollments
   });
 });

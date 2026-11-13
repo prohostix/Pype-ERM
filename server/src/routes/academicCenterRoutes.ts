@@ -10,10 +10,12 @@ import {
   deleteAcademicCenter
 } from '../controllers/academicCenterController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { requireAcademicCentersEnabled } from '../middleware/orgFeature.js';
 
 const router = express.Router();
 
 router.use(protect);
+router.use(requireAcademicCentersEnabled);
 router.use(authorize('org_admin', 'superadmin'));
 
 // Program-level access and fee locking configs

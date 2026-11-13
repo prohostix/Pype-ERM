@@ -11,11 +11,13 @@ import {
   transferStudent
 } from '../controllers/academicBatchController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { requireAcademicCentersEnabled } from '../middleware/orgFeature.js';
 
 const router = Router();
 
 // Protect all routes
 router.use(protect);
+router.use(requireAcademicCentersEnabled);
 
 // Get batches for a specific class
 router.get('/class/:classId', getBatchesByClass);

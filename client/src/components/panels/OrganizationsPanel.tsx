@@ -92,6 +92,18 @@ import { featuresOfOrg } from '@/lib/orgFeatures';
 // To offer another one, add it here AND to TOGGLEABLE_FEATURES in the server's organizationController.
 const ORG_FEATURE_CATALOG: { key: string; label: string; description: string; icon: any }[] = [
   {
+    key: 'academic_partners',
+    label: 'Academic Partner',
+    description: 'Franchise study centers (academic partners) and their student allocations, portal and enrollments.',
+    icon: Building2,
+  },
+  {
+    key: 'academic_centers',
+    label: 'Academic Center',
+    description: 'Physical center venues, offline classes, batches and venue scheduling.',
+    icon: School,
+  },
+  {
     key: 'study_abroad_partners',
     label: 'Study Abroad Partner',
     description: 'Lets the organization onboard overseas-education partners, receive their student applications, and manage partner wallets and top-ups.',
@@ -1463,7 +1475,7 @@ export function OrganizationsPanel() {
                   );
                 })}
                 <p className="text-[11px] text-muted-foreground pt-1">
-                  Pricing and the core Academic features are configured under Pricings and Bills.
+                  Pricing is configured under Pricings and Bills.
                 </p>
               </div>
             </>

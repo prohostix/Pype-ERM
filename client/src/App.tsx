@@ -22,7 +22,7 @@ import { getBranchManagerNavItems } from '@/pages/ModernBranchManagerDashboard';
 import { getExecutiveNavItems } from '@/pages/ModernCEODashboard';
 import { getCollectionsNavItems } from '@/pages/ModernCollectionsDashboard';
 import api from '@/lib/api';
-import { hasStudyAbroadAccess } from '@/lib/orgFeatures';
+import { hasStudyAbroadAccess, getOrgFeatures } from '@/lib/orgFeatures';
 import { toast } from 'sonner';
 
 type ViewMode = 'dashboard' | 'table';
@@ -339,11 +339,15 @@ function App() {
 
   const tables = useMemo(() => {
     const items = withAIReports(getAvailableTables());
-    if (hasStudyAbroadAccess(user)) return items;
+    const orgFeatures = getOrgFeatures(user);
+    const isSuper = user?.role === 'superadmin';
     // Feature not granted to this organization: drop the menu entry (and its now-empty section header).
     return items.filter((t: any) => {
-      if (t.id === 'study_abroad_partners') return false;
-      if (t.isSection && t.id === '__study_abroad') return false;
+      if (isSuper) return true;
+      if (t.id === 'study_abroad_partners' && !hasStudyAbroadAccess(user)) return false;
+      if (t.isSection && t.id === '__study_abroad' && !hasStudyAbroadAccess(user)) return false;
+      if ((t.id === 'study_centers' || t.id === 'centers') && !orgFeatures.includes('academic_partners')) return false;
+      if (t.id === 'academic_centers' && !orgFeatures.includes('academic_centers')) return false;
       return true;
     });
   }, [user?.role, (user as any)?.organization, (user as any)?.subDepartmentId, (user as any)?.isBranchManager, deptType, isCollectionsOverseer]);

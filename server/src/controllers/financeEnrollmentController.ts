@@ -210,6 +210,7 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
     where: { id: req.params.id },
     data: { 
       status: 'enrolled', 
+      enrolledAt: (existingEnrollment as any).enrolledAt ?? new Date(),
       financeReviewedBy: req.user.id, 
       financeReviewedAt: new Date(),
       statusHistory: {

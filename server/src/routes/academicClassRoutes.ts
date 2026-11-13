@@ -7,11 +7,13 @@ import {
   getTransferHistory
 } from '../controllers/academicClassController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { requireAcademicCentersEnabled } from '../middleware/orgFeature.js';
 
 const router = Router();
 
 // Protect all routes
 router.use(protect);
+router.use(requireAcademicCentersEnabled);
 
 // Get classes for a specific center
 router.get('/center/:centerId', getClassesByCenter);
