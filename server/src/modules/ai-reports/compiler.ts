@@ -66,7 +66,9 @@ const has = <T extends readonly string[]>(list: T, v: unknown): v is T[number] =
 // ─── Validation ────────────────────────────────────────────────────────────────
 
 /** `allowed` = datasetsFor(panel, ctx): only datasets this user can access */
-export function validateSpec(raw: any, allowed: Record<string, DatasetDef>): { spec: ReportSpec; ds: DatasetDef } {
+export interface ValidateOptions { maxColumns?: number; maxListRows?: number }
+
+export function validateSpec(raw: any, allowed: Record<string, DatasetDef>, opts: ValidateOptions = {}): { spec: ReportSpec; ds: DatasetDef } {
   if (!raw || typeof raw !== 'object') throw new ReportError(400, 'Invalid report spec');
   const ds = allowed[raw.dataset];
   if (!ds) {
@@ -135,14 +137,14 @@ export function validateSpec(raw: any, allowed: Record<string, DatasetDef>): { s
   // columns (list mode)
   let columns: string[] = (Array.isArray(raw.columns) ? raw.columns : []).filter((c: unknown) => typeof c === 'string' && ds.fields[c as string]);
   if (mode === 'list' && columns.length === 0) columns = Object.keys(ds.fields).slice(0, 8);
-  columns = [...new Set(columns)].slice(0, 12);
+  columns = [...new Set(columns)].slice(0, opts.maxColumns ?? 12);
 
   // sort: a field key (list) or an output column key (aggregate) — checked after we know output columns
   const sort = raw.sort && typeof raw.sort.by === 'string'
     ? { by: raw.sort.by, dir: raw.sort.dir === 'asc' ? 'asc' as const : 'desc' as const }
     : null;
 
-  const maxLimit = mode === 'list' ? MAX_LIST_ROWS : MAX_GROUPS;
+  const maxLimit = mode === 'list' ? (opts.maxListRows ?? MAX_LIST_ROWS) : MAX_GROUPS;
   const limit = Math.min(Math.max(parseInt(raw.limit, 10) || maxLimit, 1), maxLimit);
 
   let chart: Chart = has(CHARTS, raw.chart) ? raw.chart : 'table';

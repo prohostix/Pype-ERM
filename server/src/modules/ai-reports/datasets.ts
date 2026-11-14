@@ -35,6 +35,12 @@ export interface FieldDef {
   groupable?: boolean;
   /** Date field that also has a meaningful time of day (check-in/out) */
   time?: boolean;
+  /**
+   * Personal / financial detail (contact, DOB, family, discounts...). Hidden from
+   * everyone, including the AI, unless `datasetsFor` is given an `allowSensitive`
+   * rule that approves it (the per-department policy, not built yet).
+   */
+  sensitive?: boolean;
 }
 
 type Where = Record<string, unknown>;
@@ -249,22 +255,70 @@ export const DATASETS: Record<string, DatasetDef> = {
     model: 'student',
     panels: [...ALL, 'finance', 'ops', 'sales', 'collections', 'center', 'branch', 'staff', 'faculty'],
     defaultDateField: 'createdAt',
+    // One row per student; only direct and to-one columns. Fees, invoices, attendance and
+    // per-enrollment detail live in their own datasets (to-many, can't be one column).
+    // Never listed: credentials (password), photo, documents, raw progress JSON, ids.
     fields: {
-      status:        { label: 'Status', type: 'string', path: ['status'], groupable: true, hints: ['pending', 'active', 'completed', 'dropped'] },
-      program:       { label: 'Program', type: 'string', path: ['program', 'name'], groupable: true },
-      university:    { label: 'University', type: 'string', path: ['program', 'university', 'name'], groupable: true },
-      studyCenter:   { label: 'Study center', type: 'string', path: ['center', 'name'], groupable: true },
-      branch:        { label: 'Branch', type: 'string', path: ['branch', 'name'], groupable: true },
-      session:       { label: 'Admission session', type: 'string', path: ['session', 'name'], groupable: true },
-      batch:         { label: 'Batch', type: 'string', path: ['academicBatch', 'name'], groupable: true },
-      gender:        { label: 'Gender', type: 'string', path: ['gender'], groupable: true },
-      category:      { label: 'Category', type: 'string', path: ['category'], groupable: true },
-      isPrevious:    { label: 'Previous student', type: 'boolean', path: ['isPrevious'], groupable: true },
-      joinDate:      { label: 'Joined on', type: 'date', path: ['joinDate'] },
-      admissionDate: { label: 'Admission date', type: 'date', path: ['admissionDate'] },
-      createdAt:     { label: 'Created on', type: 'date', path: ['createdAt'] },
+      // Identity
       name:          { label: 'Student', type: 'string', path: ['name'] },
       enrollmentNo:  { label: 'Enrollment no.', type: 'string', path: ['enrollmentNo'] },
+      admissionNo:   { label: 'Admission no.', type: 'string', path: ['admissionNo'] },
+      status:        { label: 'Status', type: 'string', path: ['status'], groupable: true, hints: ['pending', 'active', 'completed', 'dropped'] },
+      isPrevious:    { label: 'Previous student', type: 'boolean', path: ['isPrevious'], groupable: true },
+      source:        { label: 'Lead source', type: 'string', path: ['source'], groupable: true },
+      // Academic
+      program:       { label: 'Program', type: 'string', path: ['program', 'name'], groupable: true },
+      programCode:   { label: 'Program code', type: 'string', path: ['program', 'code'], groupable: true },
+      courseType:    { label: 'Course type', type: 'string', path: ['program', 'courseType'], groupable: true },
+      programDuration: { label: 'Program duration', type: 'number', path: ['program', 'duration'], groupable: true },
+      hasSemesters:  { label: 'Semester based', type: 'boolean', path: ['program', 'hasSemesters'], groupable: true },
+      specialisation:{ label: 'Specialisation', type: 'string', path: ['specialisation'], groupable: true },
+      university:    { label: 'University', type: 'string', path: ['program', 'university', 'name'], groupable: true },
+      universityCode:{ label: 'University code', type: 'string', path: ['program', 'university', 'code'], groupable: true },
+      universityCountry: { label: 'University country', type: 'string', path: ['program', 'university', 'country'], groupable: true },
+      session:       { label: 'Admission session', type: 'string', path: ['session', 'name'], groupable: true },
+      sessionStart:  { label: 'Session start', type: 'date', path: ['session', 'startDate'] },
+      sessionEnd:    { label: 'Session end', type: 'date', path: ['session', 'endDate'] },
+      batch:         { label: 'Batch', type: 'string', path: ['academicBatch', 'name'], groupable: true },
+      // Where
+      studyCenter:   { label: 'Study center', type: 'string', path: ['center', 'name'], groupable: true },
+      studyCenterCode: { label: 'Study center code', type: 'string', path: ['center', 'code'], groupable: true },
+      studyCenterCity: { label: 'Study center city', type: 'string', path: ['center', 'city'], groupable: true },
+      studyCenterState: { label: 'Study center state', type: 'string', path: ['center', 'state'], groupable: true },
+      branch:        { label: 'Branch', type: 'string', path: ['branch', 'name'], groupable: true },
+      branchCode:    { label: 'Branch code', type: 'string', path: ['branch', 'code'], groupable: true },
+      branchCity:    { label: 'Branch city', type: 'string', path: ['branch', 'city'], groupable: true },
+      // Who
+      enrolledBy:    { label: 'Enrolled by', type: 'string', path: ['enrolledByUser', 'name'], groupable: true },
+      referredBy:    { label: 'Referred by', type: 'string', path: ['referrer', 'name'], groupable: true },
+      // Profile (non-identifying)
+      gender:        { label: 'Gender', type: 'string', path: ['gender'], groupable: true },
+      category:      { label: 'Category', type: 'string', path: ['category'], groupable: true },
+      maritalStatus: { label: 'Marital status', type: 'string', path: ['maritalStatus'], groupable: true },
+      employmentStatus: { label: 'Employment status', type: 'string', path: ['employmentStatus'], groupable: true },
+      // Dates
+      joinDate:      { label: 'Joined on', type: 'date', path: ['joinDate'] },
+      admissionDate: { label: 'Admission date', type: 'date', path: ['admissionDate'] },
+      enrolledAt:    { label: 'Enrolled on', type: 'date', path: ['enrolledAt'] },
+      createdAt:     { label: 'Created on', type: 'date', path: ['createdAt'] },
+      updatedAt:     { label: 'Last updated', type: 'date', path: ['updatedAt'] },
+      // Sensitive: hidden until a department policy allows them
+      email:         { label: 'Email', type: 'string', path: ['email'], sensitive: true },
+      phone:         { label: 'Phone', type: 'string', path: ['phone'], sensitive: true },
+      altPhone:      { label: 'Alternate phone', type: 'string', path: ['altPhone'], sensitive: true },
+      address:       { label: 'Address', type: 'string', path: ['address'], sensitive: true },
+      pinCode:       { label: 'PIN code', type: 'string', path: ['pinCode'], groupable: true, sensitive: true },
+      dob:           { label: 'Date of birth', type: 'date', path: ['dob'], sensitive: true },
+      religion:      { label: 'Religion', type: 'string', path: ['religion'], groupable: true, sensitive: true },
+      caste:         { label: 'Caste', type: 'string', path: ['caste'], groupable: true, sensitive: true },
+      fatherName:    { label: 'Father name', type: 'string', path: ['fatherName'], sensitive: true },
+      fatherPhone:   { label: 'Father phone', type: 'string', path: ['fatherPhone'], sensitive: true },
+      motherName:    { label: 'Mother name', type: 'string', path: ['motherName'], sensitive: true },
+      motherPhone:   { label: 'Mother phone', type: 'string', path: ['motherPhone'], sensitive: true },
+      guardianName:  { label: 'Guardian name', type: 'string', path: ['guardianName'], sensitive: true },
+      familyPhone:   { label: 'Family phone', type: 'string', path: ['familyPhone'], sensitive: true },
+      discountAmount:{ label: 'Discount amount', type: 'number', path: ['discountAmount'], aggregatable: true, sensitive: true },
+      discountReason:{ label: 'Discount reason', type: 'string', path: ['discountReason'], sensitive: true },
     },
     scope: studentScope,
   },
@@ -546,6 +600,19 @@ function PERSONAL_PANELS() {
 }
 
 /** Suggested questions shown in the UI, per panel */
+/** How the Students columns are grouped in the manual report picker (Student Management) */
+export const STUDENT_COLUMN_GROUPS: { label: string; fields: string[] }[] = [
+  { label: 'Identity', fields: ['name', 'enrollmentNo', 'admissionNo', 'status', 'isPrevious', 'source'] },
+  { label: 'Academic', fields: ['program', 'programCode', 'courseType', 'programDuration', 'hasSemesters', 'specialisation', 'university', 'universityCode', 'universityCountry', 'session', 'sessionStart', 'sessionEnd', 'batch'] },
+  { label: 'Branch & center', fields: ['studyCenter', 'studyCenterCode', 'studyCenterCity', 'studyCenterState', 'branch', 'branchCode', 'branchCity'] },
+  { label: 'Handled by', fields: ['enrolledBy', 'referredBy'] },
+  { label: 'Profile', fields: ['gender', 'category', 'maritalStatus', 'employmentStatus', 'dob', 'religion', 'caste'] },
+  { label: 'Contact', fields: ['email', 'phone', 'altPhone', 'address', 'pinCode'] },
+  { label: 'Family', fields: ['fatherName', 'fatherPhone', 'motherName', 'motherPhone', 'guardianName', 'familyPhone'] },
+  { label: 'Fees', fields: ['discountAmount', 'discountReason'] },
+  { label: 'Dates', fields: ['joinDate', 'admissionDate', 'enrolledAt', 'createdAt', 'updatedAt'] },
+];
+
 export const SUGGESTIONS: Record<string, string[]> = {
   org_admin: ['Who is absent today?', 'Attendance per employee this month (present, absent, leave, late)', 'Enrollments by status this month', 'Fee collection by branch this year', 'Monthly enrollment payments this financial year', 'Employees by department', 'Pending fee dues by study center', 'Leave requests by status this month'],
   ceo: ['Who is absent today?', 'Attendance % by department this month', 'Monthly enrollment payments this financial year', 'Enrollments by university this year', 'Fee collection by branch this quarter', 'Overdue fee dues by branch', 'Top 10 programs by enrollments this year', 'Employees by department'],
@@ -562,10 +629,26 @@ export const SUGGESTIONS: Record<string, string[]> = {
   faculty: ['Class attendance by batch this month', 'Absent students this week', 'Attendance by lesson', 'Students by batch', 'Average rating by class'],
 };
 
-/** Datasets offered in this panel that this user can access */
-export function datasetsFor(panel: string, ctx: AccessContext): Record<string, DatasetDef> {
+/**
+ * Decides whether a sensitive field may be shown to this user. Default: never.
+ * The per-department report policy will plug in here.
+ */
+export type SensitiveFieldRule = (datasetKey: string, fieldKey: string, ctx: AccessContext) => boolean;
+
+/** Datasets offered in this panel that this user can access, with sensitive fields removed unless allowed */
+export function datasetsFor(panel: string, ctx: AccessContext, allowSensitive?: SensitiveFieldRule): Record<string, DatasetDef> {
   return Object.fromEntries(
-    Object.entries(DATASETS).filter(([, d]) => d.panels.includes(panel) && d.scope(ctx) !== null),
+    Object.entries(DATASETS)
+      .filter(([, d]) => d.panels.includes(panel) && d.scope(ctx) !== null)
+      .map(([key, d]): [string, DatasetDef] => [
+        key,
+        {
+          ...d,
+          fields: Object.fromEntries(
+            Object.entries(d.fields).filter(([fk, f]) => !f.sensitive || allowSensitive?.(key, fk, ctx) === true),
+          ),
+        },
+      ]),
   );
 }
 

@@ -18,6 +18,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { uploadFormFile } from '@/lib/uploadFile';
 import { StudentProfilePanel } from './StudentProfilePanel';
+import { StudentReportDialog } from './StudentReportDialog';
 import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
 interface MultiSelectFilterOption {
@@ -503,6 +504,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
   const isOrgAdmin = ['org_admin', 'superadmin'].includes(user?.role || '');
+  // Custom column report: same roles the server allows (/student-reports)
+  const canBuildReport = !isSalesMode && ['org_admin', 'ceo', 'general_manager'].includes(user?.role || '');
+  const [reportDialogOpen, setReportDialogOpen] = useState(false);
 
   const toggleStudentSelection = (id: string) => {
     setSelectedStudentIds(prev => {
@@ -3867,6 +3871,22 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
               {selectedStudentIds.size > 0 ? `(${selectedStudentIds.size})` : 'Export'}
             </span>
           </Button>
+
+          {canBuildReport && (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setReportDialogOpen(true)}
+                className="border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+                title="Choose columns and build a custom student report"
+              >
+                <FileText className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Build Report</span>
+              </Button>
+              <StudentReportDialog open={reportDialogOpen} onOpenChange={setReportDialogOpen} />
+            </>
+          )}
 
           {canWrite && (
             <>

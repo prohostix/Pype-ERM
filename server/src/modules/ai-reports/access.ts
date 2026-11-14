@@ -73,8 +73,13 @@ type ReqUser = {
   branch?: { name?: string } | null; studyCenter?: { name?: string } | null;
 };
 
-export async function buildContext(user: ReqUser): Promise<AccessContext> {
-  if (!user || !AI_REPORT_ROLES.includes(user.role)) throw new AccessError(403, 'AI reports are only available to Org Admin, CEO and General Manager accounts');
+/** `allowedRoles` lets other report features (e.g. student reports) reuse this context with their own role list */
+export async function buildContext(user: ReqUser, allowedRoles: string[] = AI_REPORT_ROLES): Promise<AccessContext> {
+  if (!user || !allowedRoles.includes(user.role)) {
+    throw new AccessError(403, allowedRoles === AI_REPORT_ROLES
+      ? 'AI reports are only available to Org Admin, CEO and General Manager accounts'
+      : 'You do not have access to reports');
+  }
   if (!user.organizationId) throw new AccessError(403, 'AI reports need an organization account');
 
   const isGlobal = GLOBAL_ROLES.includes(user.role);
