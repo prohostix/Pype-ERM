@@ -5,24 +5,18 @@
  * Partners are created by the org admin and are active immediately; the generated login is
  * shown once and emailed. active ⇄ suspended.
  *
- * Applications are core Enrollment rows tagged source = "study_abroad" (see the applications
- * section below). Lifecycle (Enrollment.status):
- *   document_review → (Operations approves) → finance_review → (Finance approves) → enrolled
- *   Operations rejects → ops_rejected, Finance rejects → rejected; the partner fixes and resubmits.
+ * Applications run in their own pipeline (applications.ts): application → interview → offer → payment → visa
+ * documents → visa decision → enrolled → commission released. They are independent of the core Enrollment flow.
  */
 import { Response } from 'express';
 import { AuthRequest } from '../../middleware/auth.js';
 import prisma from '../../lib/prisma.js';
 import { asyncHandler } from '../../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../../utils/authUtils.js';
-import { notifyStaff } from './notify.js';
 import { checkStudentOrEnrollmentExists } from '../../utils/studentValidation.js';
 import { enqueueNotification } from '../../utils/notificationQueue.js';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
-
-/** Marks an Enrollment as a Study Abroad application. */
-export const STUDY_ABROAD_SOURCE = 'study_abroad';
 
 /** Set the HTTP status and throw so the shared error handler formats the response. */
 const fail = (res: Response, status: number, message: string): never => {
@@ -68,8 +62,6 @@ const chosenPassword = (v: unknown, res: Response): string | undefined => {
 
 const generatePassword = () => `Abroad@${Math.floor(100000 + Math.random() * 900000)}`;
 
-const fileUrl = (f: any): string => `/uploads/${f.key || f.filename}`;
-
 /**
  * The partner a portal user administers. Resolved from the partner row (adminUserId) rather
  * than a column on User, so the core auth path never depends on this feature's schema.
@@ -93,15 +85,15 @@ const findPartner = async (req: AuthRequest, res: Response, id: string) => {
 
 // ─── staff: partner management ──────────────────────────────────────────────
 
-/** Application totals per partner, counted from the (tagged) Enrollment rows. */
+/** Application totals per partner. */
 const applicationCounts = async (organizationId: string, partnerIds: string[]): Promise<Record<string, number>> => {
   if (partnerIds.length === 0) return {};
-  const rows = await prisma.enrollment.groupBy({
-    by: ['studyAbroadPartnerId'],
-    where: { organizationId, source: STUDY_ABROAD_SOURCE, studyAbroadPartnerId: { in: partnerIds } },
+  const rows = await prisma.studyAbroadApplication.groupBy({
+    by: ['partnerId'],
+    where: { organizationId, partnerId: { in: partnerIds } },
     _count: { _all: true },
   });
-  return Object.fromEntries(rows.map(r => [r.studyAbroadPartnerId as string, r._count._all]));
+  return Object.fromEntries(rows.map(r => [r.partnerId, r._count._all]));
 };
 
 export const listPartners = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -300,15 +292,11 @@ export const getMyPartner = asyncHandler(async (req: AuthRequest, res: Response)
     where: { id: partnerId, organizationId: req.user.organizationId },
   });
   if (!partner) return fail(res, 404, 'Study abroad partner not found');
-  const grouped = await prisma.enrollment.groupBy({
-    by: ['status'], where: { organizationId: req.user.organizationId, source: STUDY_ABROAD_SOURCE, studyAbroadPartnerId: partnerId }, _count: { _all: true },
+  const grouped = await prisma.studyAbroadApplication.groupBy({
+    by: ['stage'], where: { organizationId: req.user.organizationId, partnerId }, _count: { _all: true },
   });
-  // Core statuses → the names the portal uses
-  const counts: Record<string, number> = {};
-  for (const g of grouped) {
-    const k = g.status === 'rejected' ? 'finance_rejected' : g.status === 'department_rejected' ? 'ops_rejected' : g.status;
-    counts[k] = (counts[k] || 0) + g._count._all;
-  }
+  // Applications per pipeline stage (application, interview, offer, payment, ... enrolled, withdrawn)
+  const counts: Record<string, number> = Object.fromEntries(grouped.map(g => [g.stage, g._count._all]));
   res.json({ success: true, data: { ...partner, enrollmentCounts: counts } });
 });
 
@@ -377,67 +365,7 @@ export const getMyCatalog = asyncHandler(async (req: AuthRequest, res: Response)
   res.json({ success: true, data: await buildCatalog(req.user.organizationId, [], true) });
 });
 
-// ─── applications (stored as core Enrollment rows tagged source = "study_abroad") ─────────────
-//
-// A Study Abroad application is an Enrollment with source "study_abroad" and the partner's id. It has no Student or User
-// row until Finance approves it; approval then creates the student's portal login like any other enrollment, and the
-// partner's payment receipt becomes the invoice. Operations and Finance review it in the normal Enrollment screens.
-
-const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-/** An uploaded file reference: only our own /uploads path or an http(s) URL is accepted. */
-function fileRef(v: unknown): string | undefined {
-  const u = str(v, 500);
-  return u && (u.startsWith('/uploads/') || /^https?:\/\//i.test(u)) ? u : undefined;
-}
-
-/** Documents the wizard uploaded ahead of submitting — same shape Direct Enrollment stores. */
-const parseDocuments = (raw: unknown) => {
-  let list: any = raw;
-  if (typeof raw === 'string') { try { list = JSON.parse(raw); } catch { list = []; } }
-  if (!Array.isArray(list)) return [];
-  return list.slice(0, 30).flatMap((d: any) => {
-    const url = fileRef(d?.url);
-    if (!url) return [];
-    return [{ type: str(d.type, 60) || 'Other', url, label: str(d.label, 100), status: 'pending' }];
-  });
-};
-
-/** What the partner portal shows for an Enrollment (kept in the shape the portal pages already use). */
-const PORTAL_INCLUDE = { program: { include: { university: true } }, session: true } as const;
-const toPortal = (e: any) => {
-  const status = e.status === 'rejected' || e.status === 'department_rejected'
-    ? (e.status === 'rejected' ? 'finance_rejected' : 'ops_rejected') : e.status;
-  const start: Date | undefined = e.session?.startDate;
-  const docs = (Array.isArray(e.documents) ? e.documents : []).map((d: any) => ({ ...d, name: d.label || d.name || d.type }));
-  return {
-    id: e.id,
-    status,
-    studentName: e.studentName, studentEmail: e.studentEmail, studentPhone: e.studentPhone,
-    studentAddress: e.studentAddress === 'Pending' ? null : e.studentAddress,
-    dateOfBirth: e.dob,
-    destinationCountry: e.program?.university?.country || NO_COUNTRY,
-    universityName: e.program?.university?.name || '',
-    courseName: e.specialisation ? `${e.program?.name} - ${e.specialisation}` : e.program?.name,
-    intake: start ? MONTH_NAMES[start.getUTCMonth()] : 'Not specified',
-    intakeYear: start ? start.getUTCFullYear() : null,
-    opsRemarks: e.departmentRemarks, financeRemarks: e.financeRemarks,
-    financeReviewedAt: e.financeReviewedAt, createdAt: e.createdAt,
-    photoStatus: e.photoStatus,
-    receiptUrl: e.receiptUrl, initialPaymentAmount: e.initialPaymentAmount, initialPaymentDate: e.initialPaymentDate,
-    documents: docs,
-    studentDetails: {
-      gender: e.gender, altPhone: e.altPhone, religion: e.religion, caste: e.caste, fatherName: e.fatherName,
-      fatherPhone: e.fatherPhone, motherName: e.motherName, motherPhone: e.motherPhone, pinCode: e.pinCode,
-      session: e.session?.name, photo: e.photo,
-    },
-  };
-};
-
-const pushStatus = (history: unknown, status: string, by: string, name: string, role: string, note: string) => ([
-  ...(Array.isArray(history) ? history : []),
-  { status, changedAt: new Date().toISOString(), changedBy: by, actorName: name, actorRole: role, note },
-]);
+// ─── student verification (used by the apply wizard) ───────────────────────
 
 /**
  * Same uniqueness rules as every other enrollment: the email and phone must not belong to an existing
@@ -477,222 +405,4 @@ export const verifyStudent = asyncHandler(async (req: AuthRequest, res: Response
       phone: phoneRes?.state, email: emailRes?.state,
     },
   });
-});
-
-export const createMyEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const partnerId = await myPartnerId(req, res);
-  const partner = await findPartner(req, res, partnerId);
-  if (partner.status !== 'active') return fail(res, 403, 'Your account must be active to submit applications');
-  const b = req.body || {};
-
-  const studentName = str(b.studentName, 200);
-  const studentEmail = str(b.studentEmail, 200)?.toLowerCase();
-  const studentPhone = str(b.studentPhone, 40);
-  const programId = str(b.programId, 100);
-  if (!studentName || !studentEmail || !studentPhone || !programId) {
-    return fail(res, 400, 'studentName, studentEmail, studentPhone and programId are required');
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(studentEmail)) return fail(res, 400, 'A valid email is required');
-  const dob = b.dob ? new Date(b.dob) : undefined;
-  if (dob && Number.isNaN(dob.getTime())) return fail(res, 400, 'dob is not a valid date');
-
-  const orgId = req.user.organizationId;
-  const program = await prisma.program.findFirst({
-    where: { id: programId, organizationId: orgId, status: 'active', university: { isAcademicPartnerOnly: false } },
-    select: { id: true, universityId: true, specialisations: true },
-  });
-  if (!program) return fail(res, 400, 'This program is not available');
-
-  const specialisation = str(b.specialisation, 100);
-  if (program.specialisations.length > 0 && (!specialisation || !program.specialisations.includes(specialisation))) {
-    return fail(res, 400, 'Please choose one of the program’s specialisations');
-  }
-  const sessionId = str(b.sessionId, 100);
-  if (sessionId) {
-    const ok = await prisma.admissionSession.findFirst({
-      where: { id: sessionId, organizationId: orgId, universityId: program.universityId, OR: [{ programId: null }, { programId: program.id }] },
-      select: { id: true },
-    });
-    if (!ok) return fail(res, 400, 'This session is not available for the chosen program');
-  }
-
-  // The payment to the organization is part of the application: amount, date and a receipt are required.
-  const paidAmount = Number(b.initialPaymentAmount);
-  const paidDate = b.initialPaymentDate ? new Date(b.initialPaymentDate) : undefined;
-  const receiptUrl = fileRef(b.receiptUrl);
-  if (!Number.isFinite(paidAmount) || paidAmount <= 0) return fail(res, 400, 'Enter the amount paid');
-  if (!paidDate || Number.isNaN(paidDate.getTime())) return fail(res, 400, 'Enter the payment date');
-  if (!receiptUrl) return fail(res, 400, 'Upload the payment receipt');
-
-  const u = await uniqueness(orgId, studentEmail, studentPhone);
-  if (u.state !== 'new') return fail(res, 409, u.message);
-
-  const enrollment = await prisma.enrollment.create({
-    data: {
-      organizationId: orgId,
-      programId: program.id,
-      specialisation: specialisation || null,
-      sessionId: sessionId || null,
-      studentName, studentEmail, studentPhone,
-      studentAddress: str(b.studentAddress, 500) || 'Pending',
-      dob,
-      gender: str(b.gender, 20), caste: str(b.caste, 40), religion: str(b.religion, 60),
-      fatherName: str(b.fatherName, 200), fatherPhone: str(b.fatherPhone, 40),
-      motherName: str(b.motherName, 200), motherPhone: str(b.motherPhone, 40),
-      altPhone: str(b.altPhone, 40), pinCode: str(b.pinCode, 20),
-      photo: fileRef(b.photo),
-      documents: parseDocuments(b.documents),
-      initialPaymentAmount: paidAmount, initialPaymentDate: paidDate, receiptUrl,
-      status: 'document_review',
-      source: STUDY_ABROAD_SOURCE,
-      studyAbroadPartnerId: partnerId,
-      statusHistory: pushStatus([], 'document_review', req.user.id, req.user.name, req.user.role, `Submitted by study abroad partner ${partner.name}`),
-    },
-    include: PORTAL_INCLUDE,
-  });
-  res.status(201).json({ success: true, data: toPortal(enrollment) });
-});
-
-export const getMyEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const partnerId = await myPartnerId(req, res);
-  const rows = await prisma.enrollment.findMany({
-    where: { organizationId: req.user.organizationId, source: STUDY_ABROAD_SOURCE, studyAbroadPartnerId: partnerId },
-    include: PORTAL_INCLUDE, orderBy: { createdAt: 'desc' }, take: 500,
-  });
-  res.json({ success: true, count: rows.length, data: rows.map(toPortal) });
-});
-
-const findMine = async (req: AuthRequest, res: Response) => {
-  const partnerId = await myPartnerId(req, res);
-  const e = await prisma.enrollment.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId, source: STUDY_ABROAD_SOURCE, studyAbroadPartnerId: partnerId },
-  });
-  if (!e) return fail(res, 404, 'Application not found');
-  return e;
-};
-
-export const uploadEnrollmentDocuments = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const e = await findMine(req, res);
-  const files = (req.files as any[]) || [];
-  if (files.length === 0) return fail(res, 400, 'No documents uploaded');
-  if (!['document_review', 'ops_rejected', 'rejected', 'department_rejected'].includes(e.status)) {
-    return fail(res, 409, 'Documents can no longer be changed for this application');
-  }
-  const existing = Array.isArray(e.documents) ? (e.documents as any[]) : [];
-  const type = str(req.body.type, 60) || 'Other';
-  const added = files.map(f => ({ type, url: fileUrl(f), label: f.originalname, status: 'pending' }));
-  const updated = await prisma.enrollment.update({ where: { id: e.id }, data: { documents: [...existing, ...added] }, include: PORTAL_INCLUDE });
-  res.status(201).json({ success: true, data: toPortal(updated) });
-});
-
-/** Resubmit a rejected application; it returns to the stage that rejected it. */
-export const resubmitMyEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const e = await findMine(req, res);
-  const next = (e.status === 'ops_rejected' || e.status === 'department_rejected') ? 'document_review'
-    : e.status === 'rejected' ? 'finance_review' : null;
-  if (!next) return fail(res, 409, 'Only rejected applications can be resubmitted');
-  if (next === 'document_review') {
-    const stillRejected = ((Array.isArray(e.documents) ? e.documents : []) as any[]).some(d => d?.status === 'rejected') || e.photoStatus === 'rejected';
-    if (stillRejected) return fail(res, 409, 'Replace the rejected documents before resubmitting');
-  }
-  const { count } = await prisma.enrollment.updateMany({
-    where: { id: e.id, status: e.status },
-    data: {
-      status: next,
-      statusHistory: pushStatus(e.statusHistory, next, req.user.id, req.user.name, req.user.role, str(req.body.remarks) || 'Resubmitted by partner') as any,
-    },
-  });
-  if (count === 0) return fail(res, 409, 'Application was updated by someone else. Please refresh.');
-  res.json({ success: true, data: toPortal(await prisma.enrollment.findUnique({ where: { id: e.id }, include: PORTAL_INCLUDE })) });
-});
-
-// ─── re-upload after a rejection (Academic Partner style) ───────────────────
-//
-// Operations can reject one document (or the photo) without rejecting the whole application; Finance can reject the receipt.
-// The partner replaces just that item; accepted ones are left alone.
-
-const DOC_EDITABLE = ['document_review', 'ops_rejected', 'department_rejected'];
-const RECEIPT_EDITABLE = ['document_review', 'finance_review', 'rejected'];
-
-const anyRejected = (e: { documents: unknown; photoStatus?: string | null }) =>
-  ((Array.isArray(e.documents) ? e.documents : []) as any[]).some(d => d?.status === 'rejected') || e.photoStatus === 'rejected';
-
-/** After a replacement: an Operations-rejected application with nothing left to fix goes back to Operations. */
-const returnToOperations = async (req: AuthRequest, e: any, data: Record<string, unknown>, note: string) => {
-  const nowRejected = anyRejected({ documents: data.documents ?? e.documents, photoStatus: (data.photoStatus as string | undefined) ?? e.photoStatus });
-  const back = (e.status === 'ops_rejected' || e.status === 'department_rejected') && !nowRejected;
-  return prisma.enrollment.update({
-    where: { id: e.id },
-    data: {
-      ...data,
-      ...(back ? { status: 'document_review', statusHistory: pushStatus(e.statusHistory, 'document_review', req.user.id, req.user.name, req.user.role, note) as any } : {}),
-    },
-    include: PORTAL_INCLUDE,
-  });
-};
-
-/** Replace one rejected (or any) document. Body: { url } of the already-uploaded file. */
-export const replaceDocument = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const e = await findMine(req, res);
-  if (!DOC_EDITABLE.includes(e.status)) return fail(res, 409, 'Documents can no longer be changed for this application');
-  const docs = (Array.isArray(e.documents) ? e.documents : []) as any[];
-  const index = Number.parseInt(req.params.index, 10);
-  if (!Number.isInteger(index) || index < 0 || index >= docs.length) return fail(res, 400, 'Invalid document');
-  const url = fileRef(req.body?.url);
-  if (!url) return fail(res, 400, 'Upload the new file first');
-  const wasRejected = docs[index].status === 'rejected';
-  docs[index] = { ...docs[index], url, status: 'pending', remarks: undefined, replacedAt: new Date().toISOString() };
-  const updated = await returnToOperations(req, e, { documents: docs }, 'Partner replaced the rejected documents');
-  if (wasRejected) {
-    await notifyStaff(e.organizationId, ['ops_admin', 'ops_sub_admin'], 'Document re-uploaded',
-      `${e.studentName}: a rejected ${docs[index].label || docs[index].type || 'document'} was replaced and is ready to review again.`, 'enrollment_review');
-  }
-  res.json({ success: true, data: toPortal(updated) });
-});
-
-/** Replace the student's photo. Body: { url }. */
-export const replacePhoto = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const e = await findMine(req, res);
-  if (!DOC_EDITABLE.includes(e.status)) return fail(res, 409, 'The photo can no longer be changed for this application');
-  const url = fileRef(req.body?.url);
-  if (!url) return fail(res, 400, 'Upload the new photo first');
-  const wasRejected = e.photoStatus === 'rejected';
-  const updated = await returnToOperations(req, e, { photo: url, photoStatus: 'pending' }, 'Partner replaced the rejected photo');
-  if (wasRejected) {
-    await notifyStaff(e.organizationId, ['ops_admin', 'ops_sub_admin'], 'Photo re-uploaded', `${e.studentName}: the rejected photo was replaced and is ready to review again.`, 'enrollment_review');
-  }
-  res.json({ success: true, data: toPortal(updated) });
-});
-
-/** Replace the payment receipt (and optionally the amount / date). Body: { url, amount?, date? }. */
-export const replaceReceipt = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const e = await findMine(req, res);
-  if (!RECEIPT_EDITABLE.includes(e.status)) return fail(res, 409, 'The receipt can no longer be changed for this application');
-  const url = fileRef(req.body?.url);
-  if (!url) return fail(res, 400, 'Upload the new receipt first');
-  const data: Record<string, unknown> = { receiptUrl: url };
-  if (req.body?.amount !== undefined && req.body.amount !== '') {
-    const amount = Number(req.body.amount);
-    if (!Number.isFinite(amount) || amount <= 0) return fail(res, 400, 'Enter a valid amount');
-    data.initialPaymentAmount = amount;
-  }
-  if (req.body?.date) {
-    const d = new Date(req.body.date);
-    if (Number.isNaN(d.getTime())) return fail(res, 400, 'Enter a valid payment date');
-    data.initialPaymentDate = d;
-  }
-  const financeRejected = e.status === 'rejected';
-  const updated = await prisma.enrollment.update({
-    where: { id: e.id },
-    data: {
-      ...data,
-      ...(financeRejected ? { status: 'finance_review', statusHistory: pushStatus(e.statusHistory, 'finance_review', req.user.id, req.user.name, req.user.role, 'Partner re-uploaded the payment receipt') as any } : {}),
-    },
-    include: PORTAL_INCLUDE,
-  });
-  if (financeRejected || e.status === 'finance_review') {
-    await notifyStaff(e.organizationId, ['finance_admin', 'finance_sub_admin'], 'Payment receipt updated',
-      `${e.studentName}: the payment receipt was replaced and is ready to verify.`, 'enrollments_finance');
-  }
-  res.json({ success: true, data: toPortal(updated) });
 });

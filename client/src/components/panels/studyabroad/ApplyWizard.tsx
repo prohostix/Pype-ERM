@@ -13,6 +13,7 @@ import api from '@/lib/api';
 import { uploadFormFile } from '@/lib/uploadFile';
 import { toast } from 'sonner';
 import { apiError, fmtMonths, MONTHS, type CatalogCountry, type Prefill } from './shared';
+import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
 /**
  * Student application wizard — follows the Direct Enrollment wizard:
@@ -29,7 +30,6 @@ const STEPS = [
 ];
 
 // Same document list as Direct Enrollment.
-const DOC_TYPES = ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'];
 const DEFAULT_CONFIG = { requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'], requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] };
 
 interface UploadedDoc { type: string; url: string; label?: string; status: string }
@@ -67,10 +67,6 @@ export function ApplyWizard({ prefill, onDone }: { prefill: Prefill | null; onDo
   const [photo, setPhoto] = useState('');
   const [documents, setDocuments] = useState<UploadedDoc[]>([]);
   const [customOtherName, setCustomOtherName] = useState('');
-  // Payment to the organization (amount, date, receipt) — required, like Direct Enrollment's initial payment
-  const [payAmount, setPayAmount] = useState('');
-  const [payDate, setPayDate] = useState('');
-  const [receipt, setReceipt] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -158,12 +154,6 @@ export function ApplyWizard({ prefill, onDone }: { prefill: Prefill | null; onDo
       toast.success(`${docType} uploaded successfully`, { id: tid });
     } catch (err: any) { toast.error(err.message || `Failed to upload ${docType}`, { id: tid }); }
   };
-  const uploadReceipt = async (file?: File) => {
-    if (!file) return;
-    const tid = toast.loading('Compressing & uploading receipt...');
-    try { setReceipt(await uploadFormFile(file)); toast.success('Receipt uploaded', { id: tid }); }
-    catch (err: any) { toast.error(err.message || 'Failed to upload receipt', { id: tid }); }
-  };
   const uploadPhoto = async (file?: File) => {
     if (!file) return;
     const tid = toast.loading('Compressing & uploading photo...');
@@ -199,19 +189,15 @@ export function ApplyWizard({ prefill, onDone }: { prefill: Prefill | null; onDo
     if (!program || !university) return;
     const missingDocs = config.requiredDocuments.filter(r => !documents.some(d => sameDoc(r, d.type)));
     if (missingDocs.length) return toast.error(`Missing required documents: ${missingDocs.join(', ')}`);
-    if (!(Number(payAmount) > 0)) return toast.error('Enter the amount paid');
-    if (!payDate) return toast.error('Enter the payment date');
-    if (!receipt) return toast.error('Upload the payment receipt');
     setSubmitting(true);
     try {
-      await api.post('/study-abroad/me/enrollments', {
+      await api.post('/study-abroad/me/applications', {
         studentName: form.studentName, studentEmail: form.studentEmail, studentPhone: form.studentPhone,
         studentAddress: form.studentAddress, dob: form.dob || undefined,
         programId: program.id, specialisation: specialisation || undefined, sessionId: intake?.id,
         gender: form.gender, altPhone: form.altPhone, pinCode: form.pinCode, religion: form.religion, caste: form.caste,
         fatherName: form.fatherName, fatherPhone: form.fatherPhone, motherName: form.motherName, motherPhone: form.motherPhone,
         photo, documents,
-        initialPaymentAmount: Number(payAmount), initialPaymentDate: payDate, receiptUrl: receipt,
       });
       toast.success('Application submitted');
       onDone();
@@ -268,7 +254,7 @@ export function ApplyWizard({ prefill, onDone }: { prefill: Prefill | null; onDo
             {step === 2 && 'Choose the destination country, then a university in that country.'}
             {step === 3 && 'Choose the program, specialisation and session.'}
             {step === 4 && 'Fill in the student’s details. Fields marked * are required.'}
-            {step === 5 && 'Upload the student’s documents and the payment receipt. Fields marked * are required.'}
+            {step === 5 && 'Upload the student’s documents. Payment comes later, after the offer. Fields marked * are required.'}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -482,7 +468,7 @@ export function ApplyWizard({ prefill, onDone }: { prefill: Prefill | null; onDo
                 <h4 className="text-sm font-bold uppercase tracking-wider">Required Documents</h4>
                 <p className="text-xs text-muted-foreground mt-1">Upload clear, legible copies of the following documents.</p>
               </div>
-              {DOC_TYPES.map(docType => {
+              {visibleDocTypes(university?.enrollmentFormConfig, config.requiredDocuments).map(docType => {
                 const existing = documents.find(d => d.type === docType);
                 const optional = !isDocReq(docType);
                 const id = `sa-doc-${docType.replace(/\W+/g, '-')}`;
@@ -516,33 +502,6 @@ export function ApplyWizard({ prefill, onDone }: { prefill: Prefill | null; onDo
                   </div>
                 );
               })}
-
-              <div className="mt-2">
-                <h4 className="text-lg font-bold mb-3">Payment Details</h4>
-                <div className="p-4 rounded-xl border bg-muted/30 space-y-4">
-                  <p className="text-xs text-muted-foreground">Enter the payment made to the organization for this student, and upload its receipt. Finance verifies it.</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="font-semibold text-xs">Amount Paid *</Label>
-                      <Input type="number" min="0" className="h-10 text-sm bg-background" placeholder="e.g. 5000" value={payAmount} onChange={e => setPayAmount(e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="font-semibold text-xs">Payment Date *</Label>
-                      <Input type="date" className="h-10 text-sm bg-background" value={payDate} onChange={e => setPayDate(e.target.value)} />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="font-semibold text-xs">Upload Receipt *</Label>
-                    <div className="flex items-center gap-3">
-                      {receipt && <a href={api.getFileUrl(receipt)} target="_blank" rel="noreferrer" className="text-xs font-medium text-emerald-600 underline">✓ View uploaded receipt</a>}
-                      <input type="file" id="sa-receipt" className="hidden" onChange={e => { uploadReceipt(e.target.files?.[0]); e.target.value = ''; }} />
-                      <Label htmlFor="sa-receipt" className="inline-flex items-center justify-center h-10 px-4 rounded-lg bg-background border text-xs font-semibold cursor-pointer shadow-sm">
-                        <Upload className="w-4 h-4 mr-2 text-muted-foreground" />{receipt ? 'Change Receipt' : 'Upload File'}
-                      </Label>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               <div className="rounded-xl border bg-muted/30 p-4 space-y-2 text-sm">
                 <p className="font-semibold">Review</p>

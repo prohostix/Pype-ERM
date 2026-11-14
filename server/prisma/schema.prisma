@@ -65,6 +65,9 @@ model Organization {
   payrolls                   Payroll[]
   payrollBatches             PayrollBatch[]
   studyAbroadPartners        StudyAbroadPartner[]
+  studyAbroadApplications    StudyAbroadApplication[]
+  studyAbroadPayouts         StudyAbroadPartnerPayout[]
+  studyAbroadProgramCommissions StudyAbroadProgramCommission[]
   countries                  Country[]
   polls                      Poll[]
   programs                   Program[]
@@ -2477,9 +2480,81 @@ model StudyAbroadPartner {
   referrer             User?                   @relation("StudyAbroadPartnerReferredBy", fields: [referredBy], references: [id])
   adminUserId          String?                 @unique
   adminUser            User?                   @relation("StudyAbroadPartnerAdmin", fields: [adminUserId], references: [id])
+  applications         StudyAbroadApplication[]
+  payouts              StudyAbroadPartnerPayout[]
 
   @@unique([organizationId, code])
   @@index([organizationId, status])
+}
+
+// A student's study abroad journey. Deliberately separate from Enrollment: it has its own stages and only
+// creates a Student when the visa is approved.
+// stage: application | interview | offer | payment | visa_documents | visa_decision | enrolled | commission_released
+//        or a terminal state: withdrawn | interview_failed | offer_declined | visa_refused
+model StudyAbroadApplication {
+  id               String                     @id @default(uuid())
+  organizationId   String
+  partnerId        String
+  stage            String                     @default("application")
+  studentName      String
+  studentEmail     String
+  studentPhone     String
+  details          Json                       @default("{}")
+  programId        String
+  universityId     String?
+  sessionId        String?
+  specialisation   String?
+  documents        Json                       @default("[]")
+  // One object per stage: application, interview, offer, payment, visaDocuments, visaDecision (each has its own status)
+  stageData        Json                       @default("{}")
+  stageHistory     Json                       @default("[]")
+  studentId        String?
+  enrolledAt       DateTime?
+  commissionStatus String                     @default("not_eligible")
+  commissionAmount Float                      @default(0)
+  commissionTerms  Json?
+  createdAt        DateTime                   @default(now())
+  updatedAt        DateTime                   @updatedAt
+  organization     Organization               @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  partner          StudyAbroadPartner         @relation(fields: [partnerId], references: [id])
+  payouts          StudyAbroadPartnerPayout[]
+
+  @@index([organizationId, stage])
+  @@index([partnerId, stage])
+}
+
+// Commission the organization pays a study abroad partner for each student enrolled in a program.
+// Set per program by the org admin. type: percentage (of the payment verified at the Payment stage) | fixed
+model StudyAbroadProgramCommission {
+  id              String       @id @default(uuid())
+  organizationId  String
+  programId       String
+  commissionType  String       @default("fixed")
+  commissionValue Float        @default(0)
+  updatedBy       String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, programId])
+}
+
+model StudyAbroadPartnerPayout {
+  id             String                 @id @default(uuid())
+  organizationId String
+  partnerId      String
+  applicationId  String
+  amount         Float
+  reference      String?
+  notes          String?
+  paidAt         DateTime               @default(now())
+  paidBy         String?
+  createdAt      DateTime               @default(now())
+  organization   Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  partner        StudyAbroadPartner     @relation(fields: [partnerId], references: [id])
+  application    StudyAbroadApplication @relation(fields: [applicationId], references: [id])
+
+  @@index([organizationId, partnerId])
 }
 
 // Countries an organization offers when setting up universities (University.country stores the name).

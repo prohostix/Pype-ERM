@@ -1579,6 +1579,55 @@ exports.Prisma.StudyAbroadPartnerScalarFieldEnum = {
   adminUserId: 'adminUserId'
 };
 
+exports.Prisma.StudyAbroadApplicationScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  partnerId: 'partnerId',
+  stage: 'stage',
+  studentName: 'studentName',
+  studentEmail: 'studentEmail',
+  studentPhone: 'studentPhone',
+  details: 'details',
+  programId: 'programId',
+  universityId: 'universityId',
+  sessionId: 'sessionId',
+  specialisation: 'specialisation',
+  documents: 'documents',
+  stageData: 'stageData',
+  stageHistory: 'stageHistory',
+  studentId: 'studentId',
+  enrolledAt: 'enrolledAt',
+  commissionStatus: 'commissionStatus',
+  commissionAmount: 'commissionAmount',
+  commissionTerms: 'commissionTerms',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudyAbroadProgramCommissionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  programId: 'programId',
+  commissionType: 'commissionType',
+  commissionValue: 'commissionValue',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudyAbroadPartnerPayoutScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  partnerId: 'partnerId',
+  applicationId: 'applicationId',
+  amount: 'amount',
+  reference: 'reference',
+  notes: 'notes',
+  paidAt: 'paidAt',
+  paidBy: 'paidBy',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.CountryScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -1918,6 +1967,9 @@ exports.Prisma.ModelName = {
   AcademicSession: 'AcademicSession',
   StudentAcademicAttendance: 'StudentAcademicAttendance',
   StudyAbroadPartner: 'StudyAbroadPartner',
+  StudyAbroadApplication: 'StudyAbroadApplication',
+  StudyAbroadProgramCommission: 'StudyAbroadProgramCommission',
+  StudyAbroadPartnerPayout: 'StudyAbroadPartnerPayout',
   Country: 'Country'
 };
 

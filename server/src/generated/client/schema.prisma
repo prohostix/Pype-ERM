@@ -9,100 +9,103 @@ datasource db {
 }
 
 model Organization {
-  id                         String                      @id @default(uuid())
-  name                       String
-  email                      String                      @unique
-  phone                      String
-  address                    String
-  logo                       String?
-  customLoginSlug            String?                     @unique
-  loginBranding              Json?
-  status                     OrganizationStatus          @default(active)
-  licenseId                  String?
-  licenseExpiry              DateTime?
-  metadata                   Json?
-  academicSessions           AcademicSession[]
-  studentAcademicAttendances StudentAcademicAttendance[]
-  createdAt                  DateTime                    @default(now())
-  updatedAt                  DateTime                    @updatedAt
-  academicCenters            AcademicCenter[]
-  academicClasses            AcademicClass[]
-  academicBatches            AcademicBatch[]
-  sessions                   AdmissionSession[]
-  announcements              Announcement[]
-  attendances                Attendance[]
-  auditLogs                  AuditLog[]
-  branches                   Branch[]
-  ceoPanels                  CeoPanel[]
-  collectionOverseers        CollectionOverseer[]
-  complaints                 Complaint[]
-  credentialRequests         CredentialRequest[]
-  departments                Department[]
-  designations               Designation[]
-  editDeleteRequests         EditDeleteRequest[]
-  employees                  Employee[]
-  employeeProfiles           EmployeeProfile[]
-  enrollments                Enrollment[]
-  escalations                Escalation[]
-  escalationLogs             EscalationLog[]
-  expenseClaims              ExpenseClaim[]
-  feeStructures              FeeStructure[]
-  gstSettings                GSTSetting[]
-  hrSettings                 HRSettings?
-  holidays                   Holiday[]
-  incentiveStructures        IncentiveStructure[]
-  internalMarks              InternalMark[]
-  invoices                   Invoice[]
-  leads                      Lead[]
-  leaveAllocations           LeaveAllocation[]
-  leaveRequests              LeaveRequest[]
-  meetings                   Meeting[]
-  notifications              Notification[]
-  license                    License?                    @relation(fields: [licenseId], references: [id])
-  payments                   PaymentEntry[]
-  paymentLinks               PaymentLink[]
-  paymentSchedules           PaymentSchedule[]
-  payrolls                   Payroll[]
-  payrollBatches             PayrollBatch[]
-  studyAbroadPartners        StudyAbroadPartner[]
-  countries                  Country[]
-  polls                      Poll[]
-  programs                   Program[]
-  programAllocations         ProgramAllocation[]
-  programMaterials           ProgramMaterial[]
-  referralLinks              ReferralLink[]
-  reregRules                 ReregRule[]
-  salaryConfigs              SalaryConfig[]
-  sessionReqs                SessionRequest[]
-  students                   Student[]
-  studyCenters               StudyCenter[]
-  studyCenterInvites         StudyCenterInvite[]
-  centerWallets              StudyCenterWallet[]
-  subDepartments             SubDepartment[]
-  targets                    Target[]
-  tasks                      Task[]
-  universities               University[]
-  authFees                   UniversityAuthFee[]
-  commissions                UniversityCommission[]
-  universityPayments         UniversityPayment[]
-  users                      User[]
-  vacancies                  Vacancy[]
-  walletTopUps               WalletTopUp[]
-  biometricDevices           BiometricDevice[]
-  examRegistrations          ExamRegistration[]
-  communicationLogs          CommunicationLog[]
-  faculties                  Faculty[]
-  classModules               ClassModule[]
-  classTrialVideos           ClassTrialVideo[]
-  lessonDoubts               LessonDoubt[]
-  lessonDoubtReplies         LessonDoubtReply[]
-  lessonNotes                LessonNote[]
-  classSubModules            ClassSubModule[]
-  classMaterials             ClassMaterial[]
-  moduleLessons              ModuleLesson[]
-  lessonFacultyHistories     LessonFacultyHistory[]
-  batchLessonAssignments     BatchLessonAssignment[]
-  studentVideoLogs           StudentVideoLog[]
+  id                            String                         @id @default(uuid())
+  name                          String
+  email                         String                         @unique
+  phone                         String
+  address                       String
+  logo                          String?
+  customLoginSlug               String?                        @unique
+  loginBranding                 Json?
+  status                        OrganizationStatus             @default(active)
+  licenseId                     String?
+  licenseExpiry                 DateTime?
+  metadata                      Json?
+  academicSessions              AcademicSession[]
+  studentAcademicAttendances    StudentAcademicAttendance[]
+  createdAt                     DateTime                       @default(now())
+  updatedAt                     DateTime                       @updatedAt
+  academicCenters               AcademicCenter[]
+  academicClasses               AcademicClass[]
+  academicBatches               AcademicBatch[]
+  sessions                      AdmissionSession[]
+  announcements                 Announcement[]
+  attendances                   Attendance[]
+  auditLogs                     AuditLog[]
+  branches                      Branch[]
+  ceoPanels                     CeoPanel[]
+  collectionOverseers           CollectionOverseer[]
+  complaints                    Complaint[]
+  credentialRequests            CredentialRequest[]
+  departments                   Department[]
+  designations                  Designation[]
+  editDeleteRequests            EditDeleteRequest[]
+  employees                     Employee[]
+  employeeProfiles              EmployeeProfile[]
+  enrollments                   Enrollment[]
+  escalations                   Escalation[]
+  escalationLogs                EscalationLog[]
+  expenseClaims                 ExpenseClaim[]
+  feeStructures                 FeeStructure[]
+  gstSettings                   GSTSetting[]
+  hrSettings                    HRSettings?
+  holidays                      Holiday[]
+  incentiveStructures           IncentiveStructure[]
+  internalMarks                 InternalMark[]
+  invoices                      Invoice[]
+  leads                         Lead[]
+  leaveAllocations              LeaveAllocation[]
+  leaveRequests                 LeaveRequest[]
+  meetings                      Meeting[]
+  notifications                 Notification[]
+  license                       License?                       @relation(fields: [licenseId], references: [id])
+  payments                      PaymentEntry[]
+  paymentLinks                  PaymentLink[]
+  paymentSchedules              PaymentSchedule[]
+  payrolls                      Payroll[]
+  payrollBatches                PayrollBatch[]
+  studyAbroadPartners           StudyAbroadPartner[]
+  studyAbroadApplications       StudyAbroadApplication[]
+  studyAbroadPayouts            StudyAbroadPartnerPayout[]
+  studyAbroadProgramCommissions StudyAbroadProgramCommission[]
+  countries                     Country[]
+  polls                         Poll[]
+  programs                      Program[]
+  programAllocations            ProgramAllocation[]
+  programMaterials              ProgramMaterial[]
+  referralLinks                 ReferralLink[]
+  reregRules                    ReregRule[]
+  salaryConfigs                 SalaryConfig[]
+  sessionReqs                   SessionRequest[]
+  students                      Student[]
+  studyCenters                  StudyCenter[]
+  studyCenterInvites            StudyCenterInvite[]
+  centerWallets                 StudyCenterWallet[]
+  subDepartments                SubDepartment[]
+  targets                       Target[]
+  tasks                         Task[]
+  universities                  University[]
+  authFees                      UniversityAuthFee[]
+  commissions                   UniversityCommission[]
+  universityPayments            UniversityPayment[]
+  users                         User[]
+  vacancies                     Vacancy[]
+  walletTopUps                  WalletTopUp[]
+  biometricDevices              BiometricDevice[]
+  examRegistrations             ExamRegistration[]
+  communicationLogs             CommunicationLog[]
+  faculties                     Faculty[]
+  classModules                  ClassModule[]
+  classTrialVideos              ClassTrialVideo[]
+  lessonDoubts                  LessonDoubt[]
+  lessonDoubtReplies            LessonDoubtReply[]
+  lessonNotes                   LessonNote[]
+  classSubModules               ClassSubModule[]
+  classMaterials                ClassMaterial[]
+  moduleLessons                 ModuleLesson[]
+  lessonFacultyHistories        LessonFacultyHistory[]
+  batchLessonAssignments        BatchLessonAssignment[]
+  studentVideoLogs              StudentVideoLog[]
 
   @@index([status])
 }
@@ -2455,7 +2458,7 @@ model StudentAcademicAttendance {
 // are active immediately, like Academic Partners.
 
 model StudyAbroadPartner {
-  id                   String       @id @default(uuid())
+  id                   String                     @id @default(uuid())
   organizationId       String
   name                 String
   code                 String
@@ -2465,19 +2468,91 @@ model StudyAbroadPartner {
   city                 String?
   state                String?
   country              String?
-  status               String       @default("active")
-  destinationCountries String[]     @default([])
+  status               String                     @default("active")
+  destinationCountries String[]                   @default([])
   referredBy           String?
-  statusHistory        Json         @default("[]")
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
-  organization         Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  referrer             User?        @relation("StudyAbroadPartnerReferredBy", fields: [referredBy], references: [id])
-  adminUserId          String?      @unique
-  adminUser            User?        @relation("StudyAbroadPartnerAdmin", fields: [adminUserId], references: [id])
+  statusHistory        Json                       @default("[]")
+  createdAt            DateTime                   @default(now())
+  updatedAt            DateTime                   @updatedAt
+  organization         Organization               @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  referrer             User?                      @relation("StudyAbroadPartnerReferredBy", fields: [referredBy], references: [id])
+  adminUserId          String?                    @unique
+  adminUser            User?                      @relation("StudyAbroadPartnerAdmin", fields: [adminUserId], references: [id])
+  applications         StudyAbroadApplication[]
+  payouts              StudyAbroadPartnerPayout[]
 
   @@unique([organizationId, code])
   @@index([organizationId, status])
+}
+
+// A student's study abroad journey. Deliberately separate from Enrollment: it has its own stages and only
+// creates a Student when the visa is approved.
+// stage: application | interview | offer | payment | visa_documents | visa_decision | enrolled | commission_released
+//        or a terminal state: withdrawn | interview_failed | offer_declined | visa_refused
+model StudyAbroadApplication {
+  id               String                     @id @default(uuid())
+  organizationId   String
+  partnerId        String
+  stage            String                     @default("application")
+  studentName      String
+  studentEmail     String
+  studentPhone     String
+  details          Json                       @default("{}")
+  programId        String
+  universityId     String?
+  sessionId        String?
+  specialisation   String?
+  documents        Json                       @default("[]")
+  // One object per stage: application, interview, offer, payment, visaDocuments, visaDecision (each has its own status)
+  stageData        Json                       @default("{}")
+  stageHistory     Json                       @default("[]")
+  studentId        String?
+  enrolledAt       DateTime?
+  commissionStatus String                     @default("not_eligible")
+  commissionAmount Float                      @default(0)
+  commissionTerms  Json?
+  createdAt        DateTime                   @default(now())
+  updatedAt        DateTime                   @updatedAt
+  organization     Organization               @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  partner          StudyAbroadPartner         @relation(fields: [partnerId], references: [id])
+  payouts          StudyAbroadPartnerPayout[]
+
+  @@index([organizationId, stage])
+  @@index([partnerId, stage])
+}
+
+// Commission the organization pays a study abroad partner for each student enrolled in a program.
+// Set per program by the org admin. type: percentage (of the payment verified at the Payment stage) | fixed
+model StudyAbroadProgramCommission {
+  id              String       @id @default(uuid())
+  organizationId  String
+  programId       String
+  commissionType  String       @default("fixed")
+  commissionValue Float        @default(0)
+  updatedBy       String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, programId])
+}
+
+model StudyAbroadPartnerPayout {
+  id             String                 @id @default(uuid())
+  organizationId String
+  partnerId      String
+  applicationId  String
+  amount         Float
+  reference      String?
+  notes          String?
+  paidAt         DateTime               @default(now())
+  paidBy         String?
+  createdAt      DateTime               @default(now())
+  organization   Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  partner        StudyAbroadPartner     @relation(fields: [partnerId], references: [id])
+  application    StudyAbroadApplication @relation(fields: [applicationId], references: [id])
+
+  @@index([organizationId, partnerId])
 }
 
 // Countries an organization offers when setting up universities (University.country stores the name).

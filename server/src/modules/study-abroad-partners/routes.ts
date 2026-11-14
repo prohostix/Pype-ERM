@@ -2,13 +2,13 @@
  * Study Abroad Partners — HTTP endpoints (mounted at /api/v1/study-abroad)
  *
  * Org admin only:  /partners (partner management and logins)
- * Applications are normal Enrollment rows, reviewed in Enrollment Review (Operations) and Enrollments (Finance).
+ * Applications run in their own pipeline (applications.ts), separate from the core Enrollment flow.
  * Partner portal (study_abroad_admin):  /me/*
  */
 import express from 'express';
 import { protect, authorize } from '../../middleware/auth.js';
-import { upload } from '../../middleware/upload.js';
 import * as c from './controller.js';
+import * as a from './applications.js';
 import { requireStudyAbroadEnabled } from './featureGate.js';
 
 const router = express.Router();
@@ -23,14 +23,32 @@ const PARTNER = 'study_abroad_admin';
 router.get('/me', authorize(PARTNER), c.getMyPartner);
 router.post('/me/verify-student', authorize(PARTNER), c.verifyStudent);
 router.get('/me/catalog', authorize(PARTNER), c.getMyCatalog);
-router.get('/me/enrollments', authorize(PARTNER), c.getMyEnrollments);
-router.post('/me/enrollments', authorize(PARTNER), c.createMyEnrollment);
-router.post('/me/enrollments/:id/documents', authorize(PARTNER), upload.array('documents', 10), c.uploadEnrollmentDocuments);
-router.put('/me/enrollments/:id/resubmit', authorize(PARTNER), c.resubmitMyEnrollment);
-router.put('/me/enrollments/:id/documents/:index', authorize(PARTNER), c.replaceDocument);
-router.put('/me/enrollments/:id/photo', authorize(PARTNER), c.replacePhoto);
-router.put('/me/enrollments/:id/receipt', authorize(PARTNER), c.replaceReceipt);
 
+// ── Partner portal: the study abroad pipeline (separate from the core Enrollment flow) ──
+router.get('/me/applications', authorize(PARTNER), a.listMyApplications);
+router.post('/me/applications', authorize(PARTNER), a.createMyApplication);
+router.get('/me/commission', authorize(PARTNER), a.myCommission);
+router.get('/me/applications/:id', authorize(PARTNER), a.getMyApplication);
+router.put('/me/applications/:id/documents', authorize(PARTNER), a.updateMyDocuments);
+router.put('/me/applications/:id/offer-response', authorize(PARTNER), a.respondToOffer);
+router.put('/me/applications/:id/payment', authorize(PARTNER), a.submitPayment);
+router.put('/me/applications/:id/visa-documents', authorize(PARTNER), a.submitVisaDocuments);
+router.put('/me/applications/:id/withdraw', authorize(PARTNER), a.withdrawMine);
+
+// ── Org admin: pipeline and commission ──
+router.get('/applications', authorize(...ORG), a.listApplications);
+router.get('/commissions', authorize(...ORG), a.commissionSummary);
+router.get('/commission-rates', authorize(...ORG), a.listCommissionRates);
+router.put('/commission-rates/:programId', authorize(...ORG), a.setCommissionRate);
+router.get('/applications/:id', authorize(...ORG), a.getApplication);
+router.put('/applications/:id/review', authorize(...ORG), a.reviewApplication);
+router.put('/applications/:id/interview', authorize(...ORG), a.updateInterview);
+router.put('/applications/:id/offer', authorize(...ORG), a.issueOffer);
+router.put('/applications/:id/verify-payment', authorize(...ORG), a.verifyPayment);
+router.put('/applications/:id/verify-visa-documents', authorize(...ORG), a.verifyVisaDocuments);
+router.put('/applications/:id/visa-decision', authorize(...ORG), a.setVisaDecision);
+router.put('/applications/:id/withdraw', authorize(...ORG), a.withdrawApplication);
+router.post('/applications/:id/release-commission', authorize(...ORG), a.releaseCommission);
 
 // ── Partner management (static paths above must stay before /partners/:id) ──
 router.get('/partners', authorize(...ORG), c.listPartners);
