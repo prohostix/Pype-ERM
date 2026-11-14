@@ -2,7 +2,6 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import { notifyStudyAbroadPartner } from '../modules/study-abroad-partners/notify.js';
 
 export const getPendingReviews = asyncHandler(async (req: AuthRequest, res: Response) => {
   const enrollments = await prisma.enrollment.findMany({ where: { organizationId: req.user.organizationId, status: 'document_review' }, include: { program: true, studyCenter: true } });
@@ -35,8 +34,7 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
       baseWhere.OR = [
         { student: { branchId: req.user.branchId } },
         { salesUser: { branchId: req.user.branchId } },
-        { studyCenterId: { not: null } },
-        { source: 'study_abroad' }
+        { studyCenterId: { not: null } }
       ];
     }
 
@@ -48,8 +46,7 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
         delete baseWhere.student;
         baseWhere.OR = [
           { salesUserId: { in: assignedIds } },
-          { studyCenterId: { not: null } },
-          { source: 'study_abroad' }
+          { studyCenterId: { not: null } }
         ];
       }
     } else if (req.user.role === 'ops_admin') {
@@ -69,8 +66,7 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
         const branchRestriction = [
           { student: { branchId: req.user.branchId } },
           { salesUser: { branchId: req.user.branchId } },
-          { studyCenterId: { not: null } },
-          { source: 'study_abroad' }
+          { studyCenterId: { not: null } }
         ];
 
         delete baseWhere.student;
@@ -141,8 +137,7 @@ export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: 
     if (assignedIds.length > 0) {
       whereClause.OR = [
         { salesUserId: { in: assignedIds } },
-        { studyCenterId: { not: null } },
-        { source: 'study_abroad' }
+        { studyCenterId: { not: null } }
       ];
     }
   }
@@ -179,8 +174,6 @@ export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: 
       statusHistory: [...history, newHistoryEntry] as any,
     }
   });
-
-  await notifyStudyAbroadPartner(existing, 'Documents approved by Operations', '{student}\'s documents were approved. The application moved to Finance review.');
 
   // Notify sales user
   if (existing.salesUserId) {
@@ -234,8 +227,7 @@ export const rejectDeptEnrollment = asyncHandler(async (req: AuthRequest, res: R
     if (assignedIds.length > 0) {
       whereClause.OR = [
         { salesUserId: { in: assignedIds } },
-        { studyCenterId: { not: null } },
-        { source: 'study_abroad' }
+        { studyCenterId: { not: null } }
       ];
     }
   }
@@ -268,8 +260,6 @@ export const rejectDeptEnrollment = asyncHandler(async (req: AuthRequest, res: R
       }
     }
   });
-
-  await notifyStudyAbroadPartner(existing, 'Application rejected by Operations', `{student}'s application was rejected by Operations. Reason: ${remarksText}. Please fix it and resubmit.`);
 
   // Notify sales user
   if (existing.salesUserId) {
@@ -367,8 +357,7 @@ export const updateEnrollmentDocumentStatus = asyncHandler(async (req: AuthReque
     if (assignedIds.length > 0) {
       whereClause.OR = [
         { salesUserId: { in: assignedIds } },
-        { studyCenterId: { not: null } },
-        { source: 'study_abroad' }
+        { studyCenterId: { not: null } }
       ];
     }
   }
@@ -394,10 +383,6 @@ export const updateEnrollmentDocumentStatus = asyncHandler(async (req: AuthReque
   if (remarks !== undefined) {
     currentDocs[index].remarks = remarks;
   }
-  if (status === 'rejected') {
-    await notifyStudyAbroadPartner(enrollment, 'Document rejected', `A document for {student} was rejected: ${currentDocs[index].label || currentDocs[index].type || 'document'}${remarks ? ` — ${remarks}` : ''}. Please re-upload it.`);
-  }
-
   await prisma.enrollment.update({
     where: { id },
     data: {
@@ -426,8 +411,7 @@ export const updateEnrollmentPhotoStatus = asyncHandler(async (req: AuthRequest,
     if (assignedIds.length > 0) {
       whereClause.OR = [
         { salesUserId: { in: assignedIds } },
-        { studyCenterId: { not: null } },
-        { source: 'study_abroad' }
+        { studyCenterId: { not: null } }
       ];
     }
   }
@@ -447,10 +431,6 @@ export const updateEnrollmentPhotoStatus = asyncHandler(async (req: AuthRequest,
       photoStatus: status,
     },
   });
-  if (status === 'rejected') {
-    await notifyStudyAbroadPartner(enrollment, 'Photo rejected', `The photo for {student} was rejected. Please upload a clearer one.`);
-  }
-
   if (enrollment.studentId) {
     const student = await prisma.student.findUnique({ where: { id: enrollment.studentId } });
     if (student) {

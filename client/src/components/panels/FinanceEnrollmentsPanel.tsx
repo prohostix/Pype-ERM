@@ -26,7 +26,6 @@ interface Enrollment {
   program?: any;
   studyCenter?: any;
   status: string;
-  source?: string | null;
   departmentRemarks?: string;
   financeRemarks?: string;
   payment?: { amount: number; debitedAt: string } | null;
@@ -313,7 +312,7 @@ export function FinanceEnrollmentsPanel() {
                 return (
                   <tr key={e.id} className="hover:bg-muted/30 transition-colors">
                     <td className="p-3">
-                      <p className="font-medium flex items-center gap-1.5 flex-wrap">{e.studentName}{e.source === 'study_abroad' && <Badge variant="outline" className="text-[9px] h-4 px-1.5 bg-sky-50 text-sky-700 border-sky-200">Study Abroad</Badge>}</p>
+                      <p className="font-medium">{e.studentName}</p>
                       <p className="text-xs text-muted-foreground">{e.studentEmail}</p>
                       {e.enrollmentNumber && <p className="text-[10px] text-muted-foreground font-mono">{e.enrollmentNumber}</p>}
                     </td>
@@ -484,20 +483,6 @@ export function FinanceEnrollmentsPanel() {
                           <p className="text-[10px] text-amber-700 font-medium opacity-80">(Deducted from Total)</p>
                         </div>
                       )}
-                    </div>
-                  )}
-                  {viewStudent.source === 'study_abroad' && (
-                    <div className="flex items-center justify-between gap-3 p-3 rounded-lg bg-sky-50 border border-sky-100 mb-2">
-                      <div>
-                        <p className="text-sky-800 font-medium text-xs">Study Abroad payment receipt</p>
-                        <p className="text-xs text-sky-700">
-                          {viewStudent.initialPaymentAmount ? `₹${viewStudent.initialPaymentAmount.toLocaleString()}` : 'No amount'}
-                          {(viewStudent as any).initialPaymentDate ? ` · paid ${new Date((viewStudent as any).initialPaymentDate).toLocaleDateString('en-IN')}` : ''}
-                        </p>
-                      </div>
-                      {viewStudent.receiptUrl
-                        ? <a href={getDocUrl(viewStudent.receiptUrl)} target="_blank" rel="noreferrer" className="text-xs font-semibold text-sky-700 underline">View receipt</a>
-                        : <span className="text-xs text-rose-600 font-medium">No receipt uploaded</span>}
                     </div>
                   )}
                   {!viewStudent.payment && viewStudent.initialPaymentAmount ? (

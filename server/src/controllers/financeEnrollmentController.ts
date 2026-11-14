@@ -3,7 +3,6 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { provisionStudentAfterApproval } from '../utils/studentProvisioning.js';
-import { notifyStudyAbroadPartner } from '../modules/study-abroad-partners/notify.js';
 import { enqueueNotification } from '../utils/notificationQueue.js';
 import { appendHistory } from '../utils/statusHistory.js';
 
@@ -29,8 +28,7 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
         { salesUser: { branchId: req.user.branchId } },
         { salesUser: { department: { salesBranch: { id: req.user.branchId } } } },
         { salesUser: { department: { opsBranch: { id: req.user.branchId } } } },
-        { studyCenterId: { not: null } },
-        { source: 'study_abroad' }
+        { studyCenterId: { not: null } }
       ]
     };
     if (where.OR) {
@@ -102,8 +100,7 @@ export const getFinanceEnrollments = asyncHandler(async (req: AuthRequest, res: 
       { salesUser: { branchId: req.user.branchId } },
       { salesUser: { department: { salesBranch: { id: req.user.branchId } } } },
       { salesUser: { department: { opsBranch: { id: req.user.branchId } } } },
-      { studyCenterId: { not: null } },
-      { source: 'study_abroad' }
+      { studyCenterId: { not: null } }
     ];
   }
 
@@ -147,9 +144,6 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
     }
   }
 
-  // Study Abroad applications: the partner's payment receipt creates the invoice and payment as usual, and after approval the
-  // student gets a portal login like any other student (provisioning below).
-  const isStudyAbroad = existingEnrollment.source === 'study_abroad';
   let createdInvoice: any = null;
 
   // If receipt hasn't been verified yet, but there is an initial payment amount, generate the invoice
@@ -182,8 +176,8 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
         status: 'paid',
         dueDate: existingEnrollment.initialPaymentDate ? new Date(existingEnrollment.initialPaymentDate) : new Date(),
         paidAt: existingEnrollment.initialPaymentDate ? new Date(existingEnrollment.initialPaymentDate) : new Date(),
-        notes: isStudyAbroad ? `Study Abroad application payment — ${existingEnrollment.studentName} (${existingEnrollment.studentEmail})` : 'Initial Admission Payment',
-        items: [{ description: isStudyAbroad ? 'Study Abroad application fee' : 'Admission/Initial Fee', amount: amountPaid }],
+        notes: 'Initial Admission Payment',
+        items: [{ description: 'Admission/Initial Fee', amount: amountPaid }],
         payments: {
           create: {
             organizationId: existingEnrollment.organizationId,
@@ -219,16 +213,8 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
     }
   });
 
-  // Provision student/user account post-approval (generates credentials). Study Abroad students get the same student portal
-  // login as everyone else; their Student row is tagged so they can be told apart.
+  // Provision student/user account post-approval (generates credentials)
   await provisionStudentAfterApproval(enrollment.id);
-  if (isStudyAbroad) {
-    await prisma.student.updateMany({
-      where: { email: { equals: enrollment.studentEmail, mode: 'insensitive' }, organizationId: enrollment.organizationId, source: null },
-      data: { source: 'study_abroad' },
-    }).catch(err => console.error('[Finance] Could not tag the Study Abroad student:', err?.message));
-    await notifyStudyAbroadPartner(enrollment, 'Application enrolled', '{student}\'s application was approved by Finance. The student is enrolled and their portal login was created.');
-  }
   
   // Refetch the updated enrollment with provisioned student info
   const updatedEnrollment = await prisma.enrollment.findUnique({
@@ -317,8 +303,6 @@ export const rejectFinanceEnrollment = asyncHandler(async (req: AuthRequest, res
       }
     }
   });
-
-  await notifyStudyAbroadPartner(enrollment, 'Application rejected by Finance', `{student}'s application was rejected by Finance. Reason: ${req.body.remarks || 'Not specified'}. You can fix it and resubmit.`);
 
   // Notify sales user
   try {

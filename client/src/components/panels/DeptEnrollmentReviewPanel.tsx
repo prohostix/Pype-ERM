@@ -33,7 +33,6 @@ interface Enrollment {
   studyCenter: { name: string; code?: string } | null;
   session: { name: string } | null;
   status: string;
-  source?: string | null;
   statusHistory: { status: string; changedAt: string; remarks?: string; changedBy?: string }[];
   departmentRemarks?: string;
   financeRemarks?: string;
@@ -387,7 +386,7 @@ export function DeptEnrollmentReviewPanel() {
                         )}
                         {e.enrollmentNumber && <span className="text-xs font-mono text-muted-foreground">{e.enrollmentNumber}</span>}
                       </div>
-                      <h4 className="font-semibold flex items-center gap-1.5 flex-wrap">{e.studentName}{e.source === 'study_abroad' && <Badge variant="outline" className="text-[9px] h-4 px-1.5 bg-sky-50 text-sky-700 border-sky-200">Study Abroad</Badge>}</h4>
+                      <h4 className="font-semibold">{e.studentName}</h4>
                       <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground flex-wrap">
                         <span>{e.studentEmail}</span>
                         {e.program && <span>{e.program.name} ({e.program.code})</span>}
