@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Building2, GitBranch, Globe, Lock, BookOpen, Calendar } from 'lucide-react';
+import { Plus, Edit, Trash2, Building2, GitBranch, Globe, Lock, BookOpen, Calendar, Eye, EyeOff } from 'lucide-react';
+import { DOCUMENT_GROUPS, DEFAULT_REQUIRED_DOCUMENTS, sameDocType } from '@/lib/enrollmentDocs';
 // Card import removed — using custom sections instead
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -37,7 +38,8 @@ export function UniversitiesPanel() {
     name: '', code: '', address: '', contact: '', country: '', status: 'active', logo: '',
     enrollmentFormConfig: {
       requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'] as string[],
-      requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] as string[]
+      requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] as string[],
+      visibleDocuments: [...DEFAULT_REQUIRED_DOCUMENTS] as string[]
     }
   });
   const [selectedBranchIds, setSelectedBranchIds] = useState<string[]>([]);
@@ -76,6 +78,7 @@ export function UniversitiesPanel() {
       setSavingCountry(false);
     }
   };
+  const [dialogTab, setDialogTab] = useState<'details' | 'form' | 'access'>('details');
   const [accessMode, setAccessMode] = useState<'all' | 'exclusive' | 'multi' | 'academic_partners'>('all');
 
   const [addProgramUniId, setAddProgramUniId] = useState<string | null>(null);
@@ -135,6 +138,7 @@ export function UniversitiesPanel() {
 
   const handleEdit = (u: University) => {
     setEditingId(u.id);
+    setDialogTab('details');
     const defaultConf = { requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'], requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] };
     const conf = u.enrollmentFormConfig ? (typeof u.enrollmentFormConfig === 'string' ? JSON.parse(u.enrollmentFormConfig) : u.enrollmentFormConfig) : defaultConf;
 
@@ -148,7 +152,8 @@ export function UniversitiesPanel() {
       logo: u.logo || '',
       enrollmentFormConfig: {
         requiredFields: conf.requiredFields || defaultConf.requiredFields,
-        requiredDocuments: conf.requiredDocuments || defaultConf.requiredDocuments
+        requiredDocuments: conf.requiredDocuments || defaultConf.requiredDocuments,
+        visibleDocuments: conf.visibleDocuments || conf.requiredDocuments || defaultConf.requiredDocuments
       }
     });
     const ids = (u.allowedBranchIds || []).map(b => b.id);
@@ -172,13 +177,15 @@ export function UniversitiesPanel() {
 
   const resetForm = () => {
     setEditingId(null);
+    setDialogTab('details');
     setAddingCountry(false);
     setNewCountry('');
     setFormData({
       name: '', code: '', address: '', contact: '', country: '', status: 'active', logo: '',
       enrollmentFormConfig: {
         requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'],
-        requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate']
+        requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'],
+        visibleDocuments: [...DEFAULT_REQUIRED_DOCUMENTS]
       }
     });
     setSelectedBranchIds([]);
@@ -202,12 +209,35 @@ export function UniversitiesPanel() {
               <Button><Plus className="w-4 h-4 mr-2" />Add University</Button>
             </DialogTrigger>
           )}
-          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit University' : 'Add New University'}</DialogTitle>
+          <DialogContent className="max-w-3xl max-h-[90vh] p-0 gap-0 flex flex-col overflow-hidden">
+            <DialogHeader className="px-6 pt-5 pb-3 border-b">
+              <DialogTitle className="flex items-center gap-2">
+                <span className="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center"><Building2 className="h-4 w-4 text-white" /></span>
+                {editingId ? 'Edit University' : 'Add New University'}
+              </DialogTitle>
+              <div className="flex gap-1 pt-3 -mb-3" role="tablist">
+                {([
+                  ['details', 'Details', true],
+                  ['form', 'Enrollment Form', isOrgAdmin],
+                  ['access', 'Branch Access', isOrgAdmin && branches.length > 0],
+                ] as const).filter(t => t[2]).map(([key, label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    role="tab"
+                    aria-selected={dialogTab === key}
+                    onClick={() => setDialogTab(key)}
+                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${dialogTab === key ? 'border-cyan-600 text-cyan-700' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
+            <form onSubmit={handleSubmit} className="flex flex-col min-h-0 flex-1">
+              <div className="flex-1 overflow-y-auto px-6 py-5">
+              <div className={dialogTab === 'details' ? 'space-y-4' : 'hidden'}>
+              <div className="rounded-xl border bg-slate-50 dark:bg-slate-900 p-4">
                 <Label>University Logo</Label>
                 <div className="mt-2 flex items-center gap-4">
                   <div className="w-16 h-16 rounded border bg-slate-50 flex items-center justify-center overflow-hidden">
@@ -304,9 +334,11 @@ export function UniversitiesPanel() {
                 </Select>
               </div>
 
+              </div>
+
               {/* Enrollment Form Config */}
               {isOrgAdmin && (
-                <div className="rounded-xl border p-4 space-y-4 bg-slate-50 dark:bg-slate-900">
+                <div className={dialogTab === 'form' ? 'space-y-5' : 'hidden'}>
                   <div>
                     <h3 className="font-semibold text-slate-800 dark:text-slate-200">Mandatory Form Fields</h3>
                     <p className="text-xs text-muted-foreground mb-3">Select which fields are strictly required when enrolling students for this university.</p>
@@ -351,33 +383,39 @@ export function UniversitiesPanel() {
                   </div>
 
                   <div className="pt-2 border-t">
-                    <h3 className="font-semibold text-slate-800 dark:text-slate-200">Mandatory Documents</h3>
-                    <p className="text-xs text-muted-foreground mb-3">Select which documents MUST be uploaded during direct enrollment.</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {[
-                        'Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate',
-                        'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate'
-                      ].map(doc => (
-                        <div key={doc} className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            id={`doc-${doc.replace(/\s+/g, '-')}`}
-                            checked={formData.enrollmentFormConfig.requiredDocuments.includes(doc)}
-                            onChange={(e) => {
-                              const checked = e.target.checked;
-                              setFormData(prev => ({
-                                ...prev,
-                                enrollmentFormConfig: {
-                                  ...prev.enrollmentFormConfig,
-                                  requiredDocuments: checked
-                                    ? [...prev.enrollmentFormConfig.requiredDocuments, doc]
-                                    : prev.enrollmentFormConfig.requiredDocuments.filter(d => d !== doc)
-                                }
-                              }));
-                            }}
-                            className="rounded border-gray-300"
-                          />
-                          <label htmlFor={`doc-${doc.replace(/\s+/g, '-')}`} className="text-sm cursor-pointer">{doc}</label>
+                    <h3 className="font-semibold text-slate-800 dark:text-slate-200">Documents</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Use the eye to choose which documents appear on the enrollment form. Every visible document is mandatory; hidden documents are not asked for.
+                    </p>
+                    <div className="space-y-3">
+                      {DOCUMENT_GROUPS.map(group => (
+                        <div key={group.title}>
+                          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">{group.title}</p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {group.docs.map(doc => {
+                              const visible = formData.enrollmentFormConfig.visibleDocuments.some(d => sameDocType(d, doc));
+                              const toggle = () => setFormData(prev => {
+                                const cur = prev.enrollmentFormConfig.visibleDocuments;
+                                const next = visible ? cur.filter(d => !sameDocType(d, doc)) : [...cur, doc];
+                                // Visible == mandatory, so both lists always stay identical.
+                                return { ...prev, enrollmentFormConfig: { ...prev.enrollmentFormConfig, visibleDocuments: next, requiredDocuments: next } };
+                              });
+                              return (
+                                <button
+                                  key={doc}
+                                  type="button"
+                                  onClick={toggle}
+                                  title={visible ? 'Shown and mandatory - click to hide' : 'Hidden - click to show (mandatory)'}
+                                  aria-label={visible ? `Hide ${doc}` : `Show ${doc}`}
+                                  aria-pressed={visible}
+                                  className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 text-left text-sm ${visible ? 'bg-white dark:bg-slate-950' : 'opacity-60'}`}
+                                >
+                                  <span className="flex-1">{doc}</span>
+                                  {visible ? <Eye className="h-4 w-4 text-emerald-600" /> : <EyeOff className="h-4 w-4 text-slate-400" />}
+                                </button>
+                              );
+                            })}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -387,7 +425,7 @@ export function UniversitiesPanel() {
 
               {/* ── Branch Access ── */}
               {isOrgAdmin && branches.length > 0 && (
-                <div className="rounded-xl border-2 border-dashed border-cyan-200 bg-cyan-50/40 p-4 space-y-3">
+                <div className={`rounded-xl border-2 border-dashed border-cyan-200 bg-cyan-50/40 p-4 space-y-3 ${dialogTab === 'access' ? '' : 'hidden'}`}>
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-lg bg-cyan-600 flex items-center justify-center">
                       <GitBranch className="h-4 w-4 text-white" />
@@ -538,9 +576,11 @@ export function UniversitiesPanel() {
                 </div>
               )}
 
-              <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
+              </div>
+
+              <div className="flex gap-2 justify-end px-6 py-3 border-t bg-background">
                 <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                <Button type="submit" className="min-w-28">{editingId ? 'Save Changes' : 'Create University'}</Button>
               </div>
             </form>
           </DialogContent>

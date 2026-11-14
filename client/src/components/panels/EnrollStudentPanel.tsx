@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { uploadFormFile } from '@/lib/uploadFile';
 import api from '@/lib/api';
+import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
 interface University {
   id: string;
@@ -1588,7 +1589,7 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                   <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Required Documents</h4>
                   <p className="text-xs text-muted-foreground mt-1">Upload clear, legible copies of the following documents.</p>
                 </div>
-                {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                {visibleDocTypes(selectedProgram?.university?.enrollmentFormConfig, getEnrollmentConfig().requiredDocuments).map((docType) => {
                   const existing = form.documents.find((d: any) => d.type === docType);
                   const isOptional = !isDocReq(docType);
                   const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;

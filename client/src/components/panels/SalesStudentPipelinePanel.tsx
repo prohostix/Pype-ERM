@@ -11,6 +11,7 @@ import { StudentsPanel } from './StudentsPanel';
 import { useAuth } from '@/hooks/useAuth';
 import { uploadFormFile } from '@/lib/uploadFile';
 import { toast } from 'sonner';
+import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
 interface StatusHistoryEntry {
   status: string;
@@ -818,7 +819,7 @@ export function SalesStudentPipelinePanel() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                  {visibleDocTypes(verifyingStudent?.program?.university?.enrollmentFormConfig).map((docType) => {
                     const existing = (verifyForm.documents || []).find((d: any) => d.type === docType);
                     const requiredDocs: string[] = verifyingStudent?.program?.university?.enrollmentFormConfig?.requiredDocuments || ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'];
                     const isOptional = !requiredDocs.some((req: string) => 

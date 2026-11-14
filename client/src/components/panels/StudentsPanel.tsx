@@ -18,6 +18,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { uploadFormFile } from '@/lib/uploadFile';
 import { StudentProfilePanel } from './StudentProfilePanel';
+import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
 interface MultiSelectFilterOption {
   value: string;
@@ -3586,7 +3587,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           {currentStepType === 'documents' && (
             <div className="space-y-4">
               <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
-              {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+              {visibleDocTypes((filteredPrograms.find((p: any) => p.id === formData.programId) || completingEnrollment?.program)?.university?.enrollmentFormConfig || completingEnrollment?.university?.enrollmentFormConfig, getEnrollmentConfig().requiredDocuments).map((docType) => {
                 const isOptional = !isDocReq(docType);
                 const existing = (formData.documents || []).find((d: any) => d.type.toLowerCase() === docType.toLowerCase());
                 const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
