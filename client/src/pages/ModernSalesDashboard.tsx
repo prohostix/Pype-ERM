@@ -22,7 +22,6 @@ import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { SubSalesPortalPanel } from '@/components/panels/SubSalesPortalPanel';
 import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
-import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { EnrollStudentPanel } from '@/components/panels/EnrollStudentPanel';
 import { ProvisionalEnrollmentPanel } from '@/components/panels/ProvisionalEnrollmentPanel';
 import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
@@ -56,6 +55,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
@@ -200,7 +200,6 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       case 'my_profile': return <MyProfilePanel />;
       case 'my_leaves': return <LeavesPanel />;
       case 'my_attendance': return <AttendancePanel isMyPortal />;
-      case 'my_payslips': return <PayrollPanel />;
       case 'holidays': return <HolidaysPanel />;
 
       default: return (
@@ -272,7 +271,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
       { id: 'my_profile', label: 'My Profile' },
       { id: 'my_attendance', label: 'Attendance' },
       { id: 'my_leaves', label: 'Leave' },
-      { id: 'my_payslips', label: 'Payslip' },
       { id: 'holidays', label: 'Holidays' },
       { id: 'announcements', label: 'Announcements' },
       { id: 'notice-board', label: 'Notifications' },
@@ -285,7 +283,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
     { id: 'overview', label: 'Overview' },
     { id: 'enrolled_students', label: 'Enrolled Students' },
     { id: 'payment_status', label: 'Payment Status' },
-    { id: 'course_details_dash', label: 'Course Details' },
 
     { id: '__pipeline', label: 'Student Pipeline', isSection: true },
     { id: 'invite_links', label: 'Generate Student Link' },
@@ -298,10 +295,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
     { id: '__performance', label: 'My Performance', isSection: true },
     { id: 'targets', label: 'Target' },
     { id: 'incentive_status', label: 'Incentive Status' },
-
-    { id: '__reports', label: 'Reports', isSection: true },
-    { id: 'counselor_admission_reports', label: 'Admission Reports' },
-    { id: 'performance_reports', label: 'Performance Reports' },
 
     { id: '__resources', label: 'Sales Resources', isSection: true },
     { id: 'course_details_res', label: 'Course Details' },
@@ -316,7 +309,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
     { id: 'my_profile', label: 'My Profile' },
     { id: 'my_attendance', label: 'Attendance' },
     { id: 'my_leaves', label: 'Leave' },
-    { id: 'my_payslips', label: 'Payslip' },
     { id: 'holidays', label: 'Holidays' },
     { id: 'announcements', label: 'Announcements' },
     { id: 'notice-board', label: 'Notifications' },
@@ -597,6 +589,13 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
   const [students, setStudents] = useState<any[]>([]);
   const [targets, setTargets] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  // Overview cards follow one month ('YYYY-MM') or 'all' for every month together
+  const monthKeyOf = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  const [month, setMonth] = useState(() => monthKeyOf(new Date()));
+  const monthOptions = Array.from({ length: 12 }, (_, i) => {
+    const d = new Date(new Date().getFullYear(), new Date().getMonth() - i, 1);
+    return { value: monthKeyOf(d), label: d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) };
+  });
 
   const handleNavigate = (tab: string) => {
     setActiveTab(tab);
@@ -638,15 +637,39 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
     return empId?.toString() === user?.id?.toString();
   });
 
-  const actualCollection = myStudents.reduce((sum: number, s: any) => {
-    let studentSum = 0;
+  const inMonth = (d: any) => month === 'all' || (!!d && monthKeyOf(new Date(d)) === month);
+
+  // Admission counts follow the month the admission was created in
+  const monthStudents = myStudents.filter((s: any) => inMonth(s.createdAt));
+
+  // Collection follows the date the payment was made (falls back to the admission date)
+  const collectionOf = (s: any) => {
+    const entries: { amount: number; date: any }[] = [];
     if (s.enrollments && s.enrollments.length > 0) {
-      studentSum = s.enrollments.reduce((eSum: number, e: any) => eSum + Number(e.payment?.amount || e.initialPaymentAmount || 0), 0);
+      for (const e of s.enrollments) {
+        entries.push({
+          amount: Number(e.payment?.amount || e.initialPaymentAmount || 0),
+          date: e.payment?.debitedAt || e.admissionProgress?.initialPaymentDate || s.admissionProgress?.initialPaymentDate || e.createdAt || s.createdAt,
+        });
+      }
     } else if (s.admissionProgress?.initialPaymentAmount) {
-      studentSum = Number(s.admissionProgress.initialPaymentAmount);
+      entries.push({ amount: Number(s.admissionProgress.initialPaymentAmount), date: s.admissionProgress.initialPaymentDate || s.createdAt });
     }
-    return sum + studentSum;
-  }, 0);
+    return entries.filter((e) => inMonth(e.date)).reduce((sum, e) => sum + e.amount, 0);
+  };
+  const actualCollection = myStudents.reduce((sum: number, s: any) => sum + collectionOf(s), 0);
+
+  // A monthly target applies to every month. For a chosen month, achievement is that month's
+  // collection (revenue targets) or admissions (other targets); "all" keeps the stored value.
+  const achievedFor = (t: any) => {
+    if (month === 'all') return Number(t.achieved || 0);
+    return t.type === 'revenue' ? actualCollection : monthStudents.length;
+  };
+  const targetTotal = myTargets.reduce((sum: number, t: any) => sum + (t.target || 0), 0);
+  const achievementPct = myTargets.length > 0
+    ? Math.round(myTargets.reduce((sum: number, t: any) => sum + (t.target > 0 ? (achievedFor(t) / t.target) * 100 : 0), 0) / myTargets.length)
+    : 0;
+  const expectedIncentive = myTargets.reduce((sum: number, t: any) => sum + (achievedFor(t) >= t.target ? (t.incentive || 0) : 0), 0);
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -655,26 +678,35 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
           <h1 className="text-3xl font-bold tracking-tight text-foreground">{user?.name || 'Sales Dashboard'}</h1>
           <p className="text-muted-foreground mt-1">{user?.designation || (user?.role === 'sales_sub_admin' ? 'Sales Sub Admin' : 'Sales Professional')}</p>
         </div>
+        {activeTab === 'overview' && (
+          <Select value={month} onValueChange={setMonth}>
+            <SelectTrigger className="w-full md:w-52"><SelectValue placeholder="Select month" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All time</SelectItem>
+              {monthOptions.map((m) => <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        )}
       </div>
 
+      {/* Summary cards: Overview page only */}
+      {activeTab === 'overview' && (<>
       {/* Executive Overview Row 1: Performance */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">My Admissions</p>
-          <p className="text-2xl font-bold mt-1 text-primary">{loading ? '...' : myStudents.length}</p>
+          <p className="text-2xl font-bold mt-1 text-primary">{loading ? '...' : monthStudents.length}</p>
         </CardContent></Card>
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('targets')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">My Target</p>
           <p className="text-2xl font-bold mt-1">
-            {loading ? '...' : myTargets.reduce((s: number, t: any) => s + (t.target || 0), 0)}
+            {loading ? '...' : targetTotal}
           </p>
         </CardContent></Card>
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('targets')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">Achievement %</p>
           <p className="text-2xl font-bold mt-1 text-info">
-            {loading ? '...' : (myTargets.length > 0
-              ? Math.round(myTargets.reduce((s:number, t:any) => s + (t.target > 0 ? (t.achieved/t.target)*100 : 0), 0) / myTargets.length)
-              : 0)}%
+            {loading ? '...' : achievementPct}%
           </p>
         </CardContent></Card>
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 text-center">
@@ -686,7 +718,7 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('targets')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">Expected Incentive</p>
           <p className="text-2xl font-bold mt-1 text-warning">
-            {loading ? '...' : `₹${myTargets.reduce((s: number, t: any) => s + (t.achieved >= t.target ? (t.incentive || 0) : 0), 0).toLocaleString('en-IN')}`}
+            {loading ? '...' : `₹${expectedIncentive.toLocaleString('en-IN')}`}
           </p>
         </CardContent></Card>
       </div>
@@ -697,38 +729,39 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
           <div className="p-2 bg-yellow-500/10 rounded-full text-yellow-500"><Clock className="w-4 h-4" /></div>
           <div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold">Verification Pending</p>
-            <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'pending').length}</p>
+            <p className="text-xl font-bold">{loading ? '...' : monthStudents.filter((s: any) => s.status === 'pending').length}</p>
           </div>
         </CardContent></Card>
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
           <div className="p-2 bg-orange-500/10 rounded-full text-orange-500"><Zap className="w-4 h-4" /></div>
           <div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold">Payment Pending</p>
-            <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'payment_pending').length}</p>
+            <p className="text-xl font-bold">{loading ? '...' : monthStudents.filter((s: any) => s.status === 'payment_pending').length}</p>
           </div>
         </CardContent></Card>
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('admission_status_overview')}><CardContent className="p-4 flex items-center gap-3">
           <div className="p-2 bg-blue-500/10 rounded-full text-blue-500"><ArrowUpRight className="w-4 h-4" /></div>
           <div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold">Ops Handover Pending</p>
-            <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'ops_pending').length}</p>
+            <p className="text-xl font-bold">{loading ? '...' : monthStudents.filter((s: any) => s.status === 'ops_pending').length}</p>
           </div>
         </CardContent></Card>
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
           <div className="p-2 bg-green-500/10 rounded-full text-green-500"><Target className="w-4 h-4" /></div>
           <div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold">Ops Accepted</p>
-            <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'active').length}</p>
+            <p className="text-xl font-bold">{loading ? '...' : monthStudents.filter((s: any) => s.status === 'active').length}</p>
           </div>
         </CardContent></Card>
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
           <div className="p-2 bg-red-500/10 rounded-full text-red-500"><BarChart3 className="w-4 h-4" /></div>
           <div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold">Cancelled Admissions</p>
-            <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'cancelled').length}</p>
+            <p className="text-xl font-bold">{loading ? '...' : monthStudents.filter((s: any) => s.status === 'cancelled').length}</p>
           </div>
         </CardContent></Card>
       </div>
+      </>)}
 
       {/* Content rendered by active tab — tabs are in the sidebar */}
       {(() => {
@@ -860,13 +893,6 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
           case 'follow_up_status':
           case 'hot_leads': return <LeadsPanel />;
 
-          // Reports
-          case 'counselor_admission_reports':
-          case 'admission_reports': return <SalesAdmissionReportPanel />;
-          case 'performance_reports':
-          case 'counselor_reports': return <SalesCounselorReportPanel />;
-          case 'team_reports': return <SalesTeamReportPanel />;
-          case 'conversion_report': return <SalesConversionReportPanel />;
           case 'daily_activity_report':
           case 'attendance_overview': return <EmployeeActivityReportPanel />;
 
@@ -899,7 +925,6 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
           case 'my_profile': return <MyProfilePanel />;
           case 'my_attendance': return <AttendancePanel isMyPortal />;
           case 'my_leaves': return <LeavesPanel />;
-          case 'my_payslips': return <PayrollPanel />;
           case 'holidays': return <HolidaysPanel />;
           case 'announcements':
           case 'team_announcements': return <AnnouncementsPanel />;

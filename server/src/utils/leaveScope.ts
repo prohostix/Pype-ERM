@@ -12,8 +12,8 @@ const HR_ROLES = ['hr_admin', 'hr_sub_admin'];
  *  - org admin / CEO / general manager: the whole organization
  *  - HR: employees of their own branch (all branches if the HR user has no branch); never study-center admins
  *  - department managers: their department's and reports' requests, plus their own
- *  - anyone else with a branch (branch managers): their branch's requests, plus their own
- *  - everyone else: their own
+ *  - branch managers and everyone else: their own, plus the people they manage (department / sub-department
+ *    manager or reporting manager), plus their branch's requests when they have a branch
  */
 export const leaveVisibilityWhere = (req: AuthRequest): any => {
   const { role, id: userId, organizationId, departmentId, branchId } = req.user;
@@ -33,10 +33,18 @@ export const leaveVisibilityWhere = (req: AuthRequest): any => {
       { user: { subDepartment: { managerId: userId } } },
     ];
     if (departmentId) where.OR.push({ departmentId });
-  } else if (branchId) {
-    where.OR = [{ employeeId: userId }, { user: { branchId } }];
   } else {
-    where.employeeId = userId;
+    // Branch managers and anyone else: their own requests, plus the people they manage (as
+    // department or sub-department manager, or as reporting manager), plus their branch when
+    // they have one. A branch manager with no branch set still sees the departments they manage.
+    where.OR = [
+      { employeeId: userId },
+      { department: { managerId: userId } },
+      { user: { reportingTo: userId } },
+      { user: { department: { managerId: userId } } },
+      { user: { subDepartment: { managerId: userId } } },
+    ];
+    if (branchId) where.OR.push({ user: { branchId } });
   }
   return where;
 };

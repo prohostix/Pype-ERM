@@ -35,6 +35,7 @@ import {
 } from '../controllers/salesEnrollmentController.js';
 import {
   getTeamReport,
+  getReportMembers,
   getCounselorReport,
   getAdmissionReport,
   getConversionReport
@@ -87,6 +88,7 @@ router.put('/student-applications/:id/sales-admin-approve', authorize('sales_adm
 router.put('/student-applications/:id/sales-admin-reject', authorize('sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'), rejectBySalesAdmin);
 
 // Sales Reports
+router.get('/reports/members', getReportMembers);
 router.get('/reports/team', getTeamReport);
 router.get('/reports/counselor', getCounselorReport);
 router.get('/reports/admissions', getAdmissionReport);

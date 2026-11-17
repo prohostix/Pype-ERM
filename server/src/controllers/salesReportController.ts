@@ -3,11 +3,62 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { AuthRequest } from '../middleware/auth.js';
 
-// Helper to build hierarchy clause based on the authenticated user's role
-const buildHierarchyClause = (req: AuthRequest) => {
-  let whereClause: any = { organizationId: req.user.organizationId };
+const GLOBAL_ROLES = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'];
 
-  if (['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'].includes(req.user.role)) {
+/**
+ * A user who belongs to a branch only sees that branch's data (people, admissions, payments).
+ * Organization owners (org admin, superadmin) are never limited.
+ */
+const branchLimitOf = (req: AuthRequest): string | null =>
+  req.user.branchId && !['superadmin', 'org_admin'].includes(req.user.role) ? req.user.branchId : null;
+
+/**
+ * Everyone below this user: people who report to them (and to those people, and so on), and anyone
+ * in a department or sub-department they manage. Includes the user. Being in the same department
+ * is not enough on its own.
+ */
+const getSubordinateIds = async (req: AuthRequest): Promise<string[]> => {
+  const { id: userId, organizationId } = req.user;
+  const seen = new Set<string>([userId]);
+
+  // Reporting line, any depth
+  let frontier = [userId];
+  while (frontier.length > 0 && seen.size < 5000) {
+    const reports = await prisma.user.findMany({
+      where: { organizationId, reportingTo: { in: frontier }, status: { not: 'resigned' } },
+      select: { id: true },
+    });
+    frontier = reports.map((r) => r.id).filter((id) => !seen.has(id));
+    frontier.forEach((id) => seen.add(id));
+  }
+
+  // Departments / sub-departments this user manages
+  const [managedDepts, managedSubs] = await Promise.all([
+    prisma.department.findMany({ where: { organizationId, managerId: userId }, select: { id: true } }),
+    prisma.subDepartment.findMany({ where: { managerId: userId }, select: { id: true } }),
+  ]);
+  const deptIds = managedDepts.map((d) => d.id);
+  const people = await prisma.user.findMany({
+    where: {
+      organizationId,
+      status: { not: 'resigned' },
+      OR: [
+        ...(deptIds.length ? [{ departmentId: { in: deptIds } }] : []),
+        ...(managedSubs.length ? [{ subDepartmentId: { in: managedSubs.map((m) => m.id) } }] : []),
+      ],
+    },
+    select: { id: true },
+  });
+  people.forEach((u) => seen.add(u.id));
+
+  return [...seen];
+};
+
+// Helper to build the "who is in this report" clause based on the authenticated user's role
+const buildHierarchyClause = async (req: AuthRequest) => {
+  const whereClause: any = { organizationId: req.user.organizationId };
+
+  if (GLOBAL_ROLES.includes(req.user.role)) {
     // See all users
   } else if (req.user.role === 'center_admin') {
     whereClause.OR = [];
@@ -15,24 +66,58 @@ const buildHierarchyClause = (req: AuthRequest) => {
     if (req.user.studyCenterId) whereClause.OR.push({ studyCenterId: req.user.studyCenterId });
     if (whereClause.OR.length === 0) delete whereClause.OR;
   } else {
-    // Sales Admin / Managers
-    whereClause.OR = [
-      { reportingTo: req.user.id },
-      { id: req.user.id }
-    ];
-    if (req.user.departmentId) {
-      whereClause.OR.push({ departmentId: req.user.departmentId });
-    }
+    // Sales admin / managers: themselves and everyone below them
+    whereClause.id = { in: await getSubordinateIds(req) };
   }
 
   whereClause.status = { not: 'resigned' };
+
+  // A user with a branch only sees people of that branch
+  const branchLimit = branchLimitOf(req);
+  if (branchLimit && req.user.role !== 'center_admin') whereClause.branchId = branchLimit;
+
+  // Counselor filter: narrow the report to one person (only if they are in scope)
+  const counselorId = typeof req.query.counselorId === 'string' ? req.query.counselorId : '';
+  if (counselorId) {
+    const inScope = await prisma.user.findFirst({ where: { ...whereClause, id: counselorId }, select: { id: true } });
+    return { ...whereClause, id: inScope ? counselorId : '__none__' };
+  }
   return whereClause;
 };
 
+/**
+ * Month filter: ?month=YYYY-MM (new) or ?month=M&year=YYYY (admission report's older form).
+ * Returns a date range, or null for "all time".
+ */
+const getMonthRange = (req: AuthRequest): { gte: Date; lte: Date } | null => {
+  const month = typeof req.query.month === 'string' ? req.query.month : '';
+  const year = typeof req.query.year === 'string' ? req.query.year : '';
+  let y: number, m: number;
+  const iso = /^(\d{4})-(\d{2})$/.exec(month);
+  if (iso) { y = Number(iso[1]); m = Number(iso[2]); }
+  else if (month && year) { y = Number(year); m = Number(month); }
+  else return null;
+  if (!(m >= 1 && m <= 12) || !Number.isFinite(y)) return null;
+  return { gte: new Date(y, m - 1, 1), lte: new Date(y, m, 0, 23, 59, 59, 999) };
+};
+
+// ─── People in this report (for the counselor filter) ────────────────────────
+export const getReportMembers = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = await buildHierarchyClause({ ...req, query: {} } as AuthRequest);
+  const members = await prisma.user.findMany({
+    where,
+    select: { id: true, name: true, designation: true },
+    orderBy: { name: 'asc' },
+  });
+  res.json({ success: true, data: members });
+});
+
 // ─── Team Report ─────────────────────────────────────────────────────────────
 export const getTeamReport = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const userWhere = buildHierarchyClause(req);
-  
+  const userWhere = await buildHierarchyClause(req);
+  const range = getMonthRange(req);
+  const studentBranch = branchLimitOf(req) ? { branchId: branchLimitOf(req) as string } : {};
+
   const teammates = await prisma.user.findMany({
     where: userWhere,
     select: { id: true, name: true, designation: true, status: true, departmentId: true }
@@ -51,19 +136,23 @@ export const getTeamReport = asyncHandler(async (req: AuthRequest, res: Response
         OR: [
           { referredBy: member.id },
           { enrolledBy: member.id }
-        ]
+        ],
+        ...(range ? { joinDate: range } : {}),
+        ...studentBranch
       }
     });
 
     const payments = await prisma.paymentEntry.aggregate({
       _sum: { amount: true },
       where: {
+        ...(range ? { receivedAt: range } : {}),
         invoice: {
           student: {
             OR: [
               { referredBy: member.id },
               { enrolledBy: member.id }
-            ]
+            ],
+            ...studentBranch
           }
         }
       }
@@ -91,10 +180,12 @@ export const getTeamReport = asyncHandler(async (req: AuthRequest, res: Response
 
 // ─── Counselor Report ────────────────────────────────────────────────────────
 export const getCounselorReport = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const userWhere = buildHierarchyClause(req);
-  
-  // Also only include roles that are typically counselors
-  userWhere.role = { in: ['sales'] }; 
+  const userWhere = await buildHierarchyClause(req);
+  const range = getMonthRange(req);
+  const studentBranch = branchLimitOf(req) ? { branchId: branchLimitOf(req) as string } : {};
+
+  // Sales team roles that work leads and admissions (sub admins included)
+  userWhere.role = { in: ['sales', 'sales_sub_admin', 'academic_counselor'] };
 
   const counselors = await prisma.user.findMany({
     where: userWhere,
@@ -103,16 +194,17 @@ export const getCounselorReport = asyncHandler(async (req: AuthRequest, res: Res
 
   const counselorData = await Promise.all(counselors.map(async (c) => {
     // Lead generation & conversion
-    const totalLeads = await prisma.lead.count({ where: { referredBy: c.id } });
-    const convertedLeads = await prisma.lead.count({ where: { referredBy: c.id, status: 'converted' } });
+    const created = range ? { createdAt: range } : {};
+    const totalLeads = await prisma.lead.count({ where: { referredBy: c.id, ...created } });
+    const convertedLeads = await prisma.lead.count({ where: { referredBy: c.id, status: 'converted', ...created } });
     
     // Tasks 
-    const totalTasks = await prisma.task.count({ where: { assignedTo: c.id } });
-    const completedTasks = await prisma.task.count({ where: { assignedTo: c.id, status: 'completed' } });
+    const totalTasks = await prisma.task.count({ where: { assignedTo: c.id, ...created } });
+    const completedTasks = await prisma.task.count({ where: { assignedTo: c.id, status: 'completed', ...created } });
 
     // Enrollments
     const enrollments = await prisma.student.count({
-      where: { OR: [{ referredBy: c.id }, { enrolledBy: c.id }] }
+      where: { OR: [{ referredBy: c.id }, { enrolledBy: c.id }], ...(range ? { joinDate: range } : {}), ...studentBranch }
     });
 
     const conversionRate = totalLeads > 0 ? Math.round((convertedLeads / totalLeads) * 100) : 0;
@@ -134,8 +226,8 @@ export const getCounselorReport = asyncHandler(async (req: AuthRequest, res: Res
 
 // ─── Admission Report ────────────────────────────────────────────────────────
 export const getAdmissionReport = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { month, year } = req.query;
-  const userWhere = buildHierarchyClause(req);
+  const userWhere = await buildHierarchyClause(req);
+  const range = getMonthRange(req);
   
   const teammates = await prisma.user.findMany({ where: userWhere, select: { id: true } });
   const memberIds = teammates.map(t => t.id);
@@ -151,12 +243,9 @@ export const getAdmissionReport = asyncHandler(async (req: AuthRequest, res: Res
     ]
   };
 
-  // If we only want specific months/years
-  if (month && year) {
-    const startDate = new Date(Number(year), Number(month) - 1, 1);
-    const endDate = new Date(Number(year), Number(month), 0, 23, 59, 59, 999);
-    studentWhere.joinDate = { gte: startDate, lte: endDate };
-  }
+  // If we only want a specific month
+  if (range) studentWhere.joinDate = range;
+  if (branchLimitOf(req)) studentWhere.branchId = branchLimitOf(req);
 
   const admissions = await prisma.student.findMany({
     where: studentWhere,
@@ -218,7 +307,8 @@ export const getAdmissionReport = asyncHandler(async (req: AuthRequest, res: Res
 
 // ─── Conversion Report (Funnel) ──────────────────────────────────────────────
 export const getConversionReport = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const userWhere = buildHierarchyClause(req);
+  const userWhere = await buildHierarchyClause(req);
+  const range = getMonthRange(req);
   
   const teammates = await prisma.user.findMany({ where: userWhere, select: { id: true } });
   const memberIds = teammates.map(t => t.id);
@@ -228,7 +318,7 @@ export const getConversionReport = asyncHandler(async (req: AuthRequest, res: Re
   }
 
   const leads = await prisma.lead.findMany({
-    where: { referredBy: { in: memberIds } },
+    where: { referredBy: { in: memberIds }, ...(range ? { createdAt: range } : {}) },
     select: { status: true }
   });
 
