@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { isIncharge } from '../utils/incharge.js';
 
 export const getBatchesByClass = asyncHandler(async (req: Request, res: Response) => {
   const { classId } = req.params;
@@ -138,7 +139,7 @@ export const getBatchStudents = asyncHandler(async (req: Request, res: Response)
     where: { id, organizationId },
     include: {
       students: {
-        select: { id: true, name: true, enrollmentNo: true, programId: true }
+        select: { id: true, name: true, enrollmentNo: true, programId: true, videoBlocked: true, videoBlockReason: true }
       }
     }
   });
@@ -220,7 +221,7 @@ export const smartAllocate = asyncHandler(async (req: Request, res: Response) =>
     return res.status(404).json({ success: false, message: 'Batch not found' });
   }
 
-  if (user.role === 'faculty' && batch.academicClass.inchargeId !== user.id) {
+  if (user.role === 'faculty' && !isIncharge(batch.academicClass, user.id)) {
     return res.status(403).json({ success: false, message: 'Only the principal in charge can allocate students to this batch' });
   }
 
@@ -305,7 +306,7 @@ export const manualAllocate = asyncHandler(async (req: Request, res: Response) =
     return res.status(404).json({ success: false, message: 'Batch not found' });
   }
 
-  if (user.role === 'faculty' && batch.academicClass.inchargeId !== user.id) {
+  if (user.role === 'faculty' && !isIncharge(batch.academicClass, user.id)) {
     return res.status(403).json({ success: false, message: 'Only the principal in charge can allocate students to this batch' });
   }
 
@@ -380,7 +381,7 @@ export const transferStudent = asyncHandler(async (req: Request, res: Response) 
     return res.status(404).json({ success: false, message: 'Source batch not found' });
   }
 
-  if (user.role === 'faculty' && fromBatch.academicClass.inchargeId !== user.id) {
+  if (user.role === 'faculty' && !isIncharge(fromBatch.academicClass, user.id)) {
     return res.status(403).json({ success: false, message: 'Only the principal in charge can transfer students from this batch' });
   }
 

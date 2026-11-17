@@ -1,7 +1,6 @@
 // Rules for online-center video access: fee-paid locking and the daily viewing quota.
 
 const IST_OFFSET_MS = 330 * 60000;
-const DAY_MS = 24 * 60 * 60 * 1000;
 const NON_BILLABLE_INVOICE_STATUSES = ['cancelled', 'canceled', 'void'];
 
 // The quota resets at midnight IST, whatever timezone the server runs in.
@@ -52,6 +51,37 @@ function getStructureTotal(feeStructures: any[], student?: any) {
   return base + (base * (structure.gstPercentage || 0)) / 100;
 }
 
+/** One step of the fee-based video allowance: paid at least X% → can watch N videos (null = all) */
+export interface FeeTier { minPaidPercentage: number; videoCount: number | null }
+
+export function normalizeTiers(raw: any): FeeTier[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((t: any) => ({
+      minPaidPercentage: Math.round(Number(t?.minPaidPercentage)),
+      videoCount: t?.videoCount === null || t?.videoCount === undefined || t?.videoCount === '' ? null : Math.round(Number(t.videoCount)),
+    }))
+    .filter((t) => t.minPaidPercentage >= 1 && t.minPaidPercentage <= 100 && (t.videoCount === null || (Number.isFinite(t.videoCount) && t.videoCount >= 0)))
+    .sort((a, b) => a.minPaidPercentage - b.minPaidPercentage);
+}
+
+/**
+ * Position of each lesson that has a video, in course order (class → module → the
+ * module's own lessons, then its sub-module lessons). Used to unlock "the first N videos".
+ */
+export function rankVideoLessons(classes: any[]): Map<string, number> {
+  const rank = new Map<string, number>();
+  let i = 0;
+  const add = (lesson: any) => { if (lesson?.videoUrl && !rank.has(lesson.id)) rank.set(lesson.id, i++); };
+  for (const cls of classes) {
+    for (const mod of cls.modules || []) {
+      (mod.lessons || []).filter((l: any) => !l.classSubModuleId).forEach(add);
+      for (const sub of mod.subModules || []) (sub.lessons || []).forEach(add);
+    }
+  }
+  return rank;
+}
+
 export function evaluateFeeLock(
   config: any,
   invoices: any[] = [],
@@ -66,19 +96,13 @@ export function evaluateFeeLock(
     totalFee: 0,
     paidFee: 0,
     paidPercentage: 100,
-    minPaidPercentage
+    minPaidPercentage,
+    videoQuota: null as number | null
   });
 
   if (!config?.feeLocking?.enabled) return unlocked();
 
   const minPaidPercentage = Number(config.feeLocking.minPaidPercentage ?? 50);
-  const gracePeriodDays = Number(config.feeLocking.gracePeriodDays ?? 0);
-
-  const joinDate = student?.enrolledAt || student?.joinDate || student?.createdAt;
-  if (gracePeriodDays > 0 && joinDate) {
-    const daysSinceJoin = (now.getTime() - new Date(joinDate).getTime()) / DAY_MS;
-    if (daysSinceJoin < gracePeriodDays) return unlocked(minPaidPercentage);
-  }
 
   const schedule = getScheduleTotals(schedules);
   const invoice = getInvoiceTotals(invoices);
@@ -95,22 +119,50 @@ export function evaluateFeeLock(
   const paidFee = Math.max(schedule.paid, invoice.paid);
   const paidPercentage = Math.min(100, Math.round((paidFee / totalFee) * 100));
 
-  if (paidPercentage >= minPaidPercentage) {
-    return { isFeeLocked: false, message: '', totalFee, paidFee, paidPercentage, minPaidPercentage };
-  }
-
   const paid = paidFee.toLocaleString('en-IN');
   const total = totalFee.toLocaleString('en-IN');
   const customMessage = config.feeLocking.lockMessage?.trim();
-  const message = customMessage
-    ? customMessage
-        .replace(/{paidPercent}/g, String(paidPercentage))
-        .replace(/{requiredPercent}/g, String(minPaidPercentage))
-        .replace(/{paidFee}/g, paid)
-        .replace(/{totalFee}/g, total)
-    : `Video lectures are locked because you have paid ${paidPercentage}% of your total course fee (₹${paid} of ₹${total}). A minimum payment of ${minPaidPercentage}% is required to unlock.`;
+  const build = (required: number, videoCount: number, fallback: string) => {
+    const text = customMessage || fallback;
+    return text
+      .replace(/{paidPercent}/g, String(paidPercentage))
+      .replace(/{requiredPercent}/g, String(required))
+      .replace(/{paidFee}/g, paid)
+      .replace(/{totalFee}/g, total)
+      .replace(/{videoCount}/g, String(videoCount));
+  };
 
-  return { isFeeLocked: true, message, totalFee, paidFee, paidPercentage, minPaidPercentage };
+  // Tiered mode: how much has been paid decides how many videos can be watched
+  const tiers = normalizeTiers(config.feeLocking.tiers);
+  if (tiers.length > 0) {
+    const reached = tiers.filter((t) => paidPercentage >= t.minPaidPercentage);
+    if (reached.some((t) => t.videoCount === null)) {
+      return { isFeeLocked: false, message: '', totalFee, paidFee, paidPercentage, minPaidPercentage, videoQuota: null as number | null };
+    }
+    const videoQuota = reached.reduce((max, t) => Math.max(max, t.videoCount as number), 0);
+    const next = tiers.find((t) => t.minPaidPercentage > paidPercentage);
+    const required = next?.minPaidPercentage ?? 100;
+    const message = build(
+      required,
+      videoQuota,
+      videoQuota > 0
+        ? `You have paid ${paidPercentage}% of your total course fee (₹${paid} of ₹${total}), so you can watch the first ${videoQuota} videos. Pay at least ${required}% to unlock more.`
+        : `Video lectures are locked because you have paid ${paidPercentage}% of your total course fee (₹${paid} of ₹${total}). A minimum payment of ${required}% is required to unlock.`
+    );
+    return { isFeeLocked: videoQuota === 0, message, totalFee, paidFee, paidPercentage, minPaidPercentage: required, videoQuota: videoQuota as number | null };
+  }
+
+  if (paidPercentage >= minPaidPercentage) {
+    return { isFeeLocked: false, message: '', totalFee, paidFee, paidPercentage, minPaidPercentage, videoQuota: null as number | null };
+  }
+
+  const message = build(
+    minPaidPercentage,
+    0,
+    `Video lectures are locked because you have paid ${paidPercentage}% of your total course fee (₹${paid} of ₹${total}). A minimum payment of ${minPaidPercentage}% is required to unlock.`
+  );
+
+  return { isFeeLocked: true, message, totalFee, paidFee, paidPercentage, minPaidPercentage, videoQuota: 0 as number | null };
 }
 
 // --- Watch progress ---

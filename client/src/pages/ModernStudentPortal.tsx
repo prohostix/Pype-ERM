@@ -536,7 +536,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
 
             if (lesson.isFeeLocked) {
               lesson.isLocked = true;
-              lesson.lockReason = 'fee_overdue';
+              lesson.lockReason = lesson.lockReason === 'admin_blocked' ? 'admin_blocked' : 'fee_overdue';
             } else if (lesson.isDailyLimitLocked) {
               lesson.isLocked = true;
               lesson.lockReason = 'daily_limit';
@@ -561,7 +561,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
 
                 if (lesson.isFeeLocked) {
                   lesson.isLocked = true;
-                  lesson.lockReason = 'fee_overdue';
+                  lesson.lockReason = lesson.lockReason === 'admin_blocked' ? 'admin_blocked' : 'fee_overdue';
                 } else if (lesson.isDailyLimitLocked) {
                   lesson.isLocked = true;
                   lesson.lockReason = 'daily_limit';
@@ -668,7 +668,12 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
 
   // Calculate stats
   const pendingSchedules = schedules.filter(s => s.status !== 'PAID');
-  const totalDueAmount = pendingSchedules.reduce((sum, s) => sum + Number(s.amount || 0), 0);
+  // Invoices tied to an installment are already counted in that installment's balance
+  const unpaidOtherInvoices = invoices.filter((inv) => !inv.scheduleId && Number(inv.balanceAmount) > 0);
+  const totalDueAmount =
+    pendingSchedules.reduce((sum, s) => sum + Number(s.balanceAmount ?? s.amount ?? 0), 0) +
+    unpaidOtherInvoices.reduce((sum, inv) => sum + Number(inv.balanceAmount || 0), 0);
+  const pendingPaymentsCount = pendingSchedules.length + unpaidOtherInvoices.length;
   const nextPayment = pendingSchedules.length > 0 ? pendingSchedules[0] : null;
   const isOverdue = nextPayment && new Date(nextPayment.dueDate) < new Date();
 
@@ -804,7 +809,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
 
   const handlePayNowClick = (target: any) => {
     setShowPaymentGateway(target);
-    setPaymentAmount(target.balanceAmount || target.amount || '');
+    setPaymentAmount(target.balanceAmount ?? target.amount ?? '');
   };
 
   const handleProcessPayment = async () => {
@@ -865,7 +870,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
     { id: 'overview', label: 'Overview', icon: <User className="w-4 h-4" /> },
     // { id: 'classes', label: 'Live Classes', icon: <Video className="w-4 h-4" />, count: upcomingClasses.length },
     { id: 'materials', label: 'Classes & E-Books', icon: <BookOpen className="w-4 h-4" />, count: materials.length },
-    { id: 'fees', label: 'Fee & Invoices', icon: <CreditCard className="w-4 h-4" />, count: pendingSchedules.length },
+    { id: 'fees', label: 'Fee & Invoices', icon: <CreditCard className="w-4 h-4" />, count: pendingPaymentsCount },
     { id: 'notifications', label: 'Notifications', icon: <Bell className="w-4 h-4" />, count: notifications.length + announcements.length },
     { id: 'refer_admission', label: 'Refer Admission', icon: <TrendingUp className="w-4 h-4" /> },
     { id: 'terms', label: 'Terms & Conditions', icon: <ShieldCheck className="w-4 h-4" /> },
@@ -893,7 +898,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                 {isOverdue ? "Overdue Payment Notice" : "Upcoming Payment Reminder"}
               </span>
               <span className="text-xs opacity-90">
-                Installment of <strong>${nextPayment.amount}</strong> is due on <strong>{new Date(nextPayment.dueDate).toLocaleDateString()}</strong>.
+                Installment of <strong>₹{nextPayment.balanceAmount ?? nextPayment.amount}</strong> is due on <strong>{new Date(nextPayment.dueDate).toLocaleDateString()}</strong>.
               </span>
             </div>
           </div>
@@ -959,12 +964,12 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
               <div className="text-center md:text-right border-r border-white/10 pr-6">
                 <span className="text-[10px] uppercase font-bold text-indigo-300 tracking-widest block mb-1">Total Due</span>
                 <span className="text-3xl font-black text-white flex items-center justify-center md:justify-end gap-1">
-                  <span className="text-indigo-400 text-xl">$</span>{totalDueAmount.toFixed(2)}
+                  <span className="text-indigo-400 text-xl">₹</span>{totalDueAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
               <div className="text-center md:text-right pl-2">
-                <span className="text-[10px] uppercase font-bold text-purple-300 tracking-widest block mb-1">Pending Schedules</span>
-                <span className="text-3xl font-black text-white">{schedules.length}</span>
+                <span className="text-[10px] uppercase font-bold text-purple-300 tracking-widest block mb-1">Pending Payments</span>
+                <span className="text-3xl font-black text-white">{pendingPaymentsCount}</span>
               </div>
             </div>
           </div>
@@ -1104,7 +1109,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                           <CreditCard className="w-24 h-24 text-emerald-500 transform rotate-12" />
                         </div>
                         <span className="relative z-10 text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest">Next Installment</span>
-                        <div className="relative z-10 text-5xl font-black text-emerald-600 dark:text-emerald-400 mt-2 tracking-tight">${nextPayment.amount}</div>
+                        <div className="relative z-10 text-5xl font-black text-emerald-600 dark:text-emerald-400 mt-2 tracking-tight">₹{nextPayment.balanceAmount ?? nextPayment.amount}</div>
                       </div>
                       <div className="flex items-center justify-between text-sm px-4 py-3 bg-white/50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
                         <span className="font-bold text-slate-500 dark:text-slate-400">Due Date</span>
@@ -1961,7 +1966,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                               )}
                               {selectedCurriculumLesson.lesson.isFeeLocked && (
                                 <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
-                                  <ShieldAlert className="w-3 h-3" /> Fee Locked ({selectedCurriculumLesson.lesson.paidPercentage ?? 0}% / {selectedCurriculumLesson.lesson.minPaidPercentage ?? 50}%)
+                                  <ShieldAlert className="w-3 h-3" /> {selectedCurriculumLesson.lesson.lockReason === 'admin_blocked' ? 'Blocked by admin' : `Fee Locked (${selectedCurriculumLesson.lesson.paidPercentage ?? 0}% / ${selectedCurriculumLesson.lesson.minPaidPercentage ?? 50}%)`}
                                 </span>
                               )}
                               {selectedCurriculumLesson.lesson.isDailyLimitLocked && (
@@ -2557,7 +2562,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                                     )}
                                                     {isFeeLocked ? (
                                                       <span className="text-[9px] px-1 py-0 border border-rose-300 dark:border-rose-800 bg-rose-500/10 text-rose-600 dark:text-rose-400 shrink-0 font-medium rounded">
-                                                        Fee
+                                                        {lesson.lockReason === 'admin_blocked' ? 'Blocked' : 'Fee'}
                                                       </span>
                                                     ) : isDailyLimitLocked ? (
                                                       <span className="text-[9px] px-1 py-0 border border-amber-300 dark:border-amber-800 bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0 font-medium rounded">
@@ -2680,51 +2685,60 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
 
             {/* Program Fee Details */}
             {feeStructures.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {feeStructures.map((structure) => {
-                  const totalBaseFee = (structure.registrationFee || 0) + (structure.tuitionFee || 0) + (structure.examFee || 0);
-                  const taxAmount = (totalBaseFee * (structure.gstPercentage || 0)) / 100;
-                  const netFee = totalBaseFee + taxAmount;
-                  
+                  const inr = (n: number) => `₹${Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                  const additionalFees: { label: string; amount: number }[] = Array.isArray(structure.additionalFees)
+                    ? structure.additionalFees.filter((f: any) => f && Number(f.amount) > 0)
+                    : [];
+                  // Zero-amount fees are not listed
+                  const lineItems: { label: string; amount: number }[] = [
+                    { label: 'Tuition Fee', amount: Number(structure.tuitionFee) || 0 },
+                    { label: 'Registration Fee', amount: Number(structure.registrationFee) || 0 },
+                    { label: 'Exam Fee', amount: Number(structure.examFee) || 0 },
+                    ...additionalFees.map((f) => ({ label: f.label, amount: Number(f.amount) })),
+                  ].filter((i) => i.amount > 0);
+                  const netFee = lineItems.reduce((sum, i) => sum + i.amount, 0);
+
                   return (
-                  <Card key={structure.id} className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
-                    <CardHeader className="bg-muted/30 border-b border-border/50 pb-4">
-                      <div className="flex items-center justify-between mb-1">
-                        <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">
-                          {structure.program?.name || 'General Program'}
-                        </Badge>
+                    <Card key={structure.id} className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="p-6 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-b border-border/50">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="min-w-0">
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1.5">Your Program</p>
+                            <h3 className="text-xl font-bold text-foreground leading-tight break-words">
+                              {structure.program?.name || 'General Program'}
+                            </h3>
+                            {structure.specialisation && (
+                              <p className="text-sm text-muted-foreground mt-1">{structure.specialisation}</p>
+                            )}
+                          </div>
+                          <div className="p-2.5 bg-primary/10 rounded-xl border border-primary/20 text-primary flex-shrink-0">
+                            <GraduationCap className="w-5 h-5" />
+                          </div>
+                        </div>
+                        <div className="mt-5">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Total Fee</p>
+                          <p className="text-4xl font-black tracking-tight text-primary">{inr(netFee)}</p>
+                        </div>
                       </div>
-                      <CardTitle className="text-xl font-bold text-foreground">
-                        Program Fee Structure
-                      </CardTitle>
-                      {structure.specialisation && (
-                        <CardDescription>{structure.specialisation}</CardDescription>
-                      )}
-                    </CardHeader>
-                    <CardContent className="p-5 space-y-4">
-                      <div className="flex justify-between items-center py-2 border-b border-border/50">
-                        <span className="text-muted-foreground text-sm">Tuition Fee</span>
-                        <span className="font-semibold text-foreground">₹{structure.tuitionFee?.toFixed(2) || '0.00'}</span>
-                      </div>
-                      <div className="flex justify-between items-center py-2 border-b border-border/50">
-                        <span className="text-muted-foreground text-sm">Registration Fee</span>
-                        <span className="font-semibold text-foreground">₹{structure.registrationFee?.toFixed(2) || '0.00'}</span>
-                      </div>
-                      <div className="flex justify-between items-center py-2 border-b border-border/50">
-                        <span className="text-muted-foreground text-sm">Exam Fee</span>
-                        <span className="font-semibold text-foreground">₹{structure.examFee?.toFixed(2) || '0.00'}</span>
-                      </div>
-                      <div className="flex justify-between items-center py-2 border-b border-border/50">
-                        <span className="text-muted-foreground text-sm">GST ({structure.gstPercentage || 0}%)</span>
-                        <span className="font-semibold text-foreground">₹{taxAmount.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between items-center py-2 bg-muted/30 px-3 rounded-lg">
-                        <span className="font-semibold text-foreground">Total Fee</span>
-                        <span className="font-black text-primary text-lg">₹{netFee.toFixed(2)}</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )})}
+                      <CardContent className="p-6">
+                        {lineItems.length === 0 ? (
+                          <p className="text-sm text-muted-foreground text-center py-4">No fee breakdown available.</p>
+                        ) : (
+                          <div className="divide-y divide-border/50">
+                            {lineItems.map((item, i) => (
+                              <div key={`${item.label}-${i}`} className="flex justify-between items-center gap-4 py-3 first:pt-0 last:pb-0">
+                                <span className="text-sm text-muted-foreground">{item.label}</span>
+                                <span className="font-semibold text-foreground tabular-nums">{inr(item.amount)}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             )}
 
@@ -2754,7 +2768,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                             </div>
                             <div>
                               <div className="flex items-center gap-3 mb-1.5">
-                                <h4 className="font-semibold text-lg text-foreground tracking-tight">Installment</h4>
+                                <h4 className="font-semibold text-lg text-foreground tracking-tight">{sched.title || 'Installment'}</h4>
                                 <Badge
                                   variant="secondary"
                                   className={cn(
@@ -2774,12 +2788,12 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                               <div className="flex items-center gap-8 text-sm bg-muted/40 px-4 py-2.5 rounded-lg border border-border/50">
                                 <div>
                                   <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold block mb-0.5">Total Amount</span>
-                                  <span className="font-semibold text-foreground">${sched.amount}</span>
+                                  <span className="font-semibold text-foreground">₹{sched.amount}</span>
                                 </div>
                                 {sched.status !== 'PAID' && (
                                   <div>
                                     <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold block mb-0.5">Remaining Balance</span>
-                                    <span className="font-bold text-foreground">${sched.balanceAmount !== undefined ? sched.balanceAmount : sched.amount}</span>
+                                    <span className="font-bold text-foreground">₹{sched.balanceAmount !== undefined ? sched.balanceAmount : sched.amount}</span>
                                   </div>
                                 )}
                               </div>
@@ -2792,7 +2806,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                 variant={isSchedOverdue ? "destructive" : "default"}
                                 onClick={() => handlePayNowClick(sched)}
                               >
-                                Pay ${sched.balanceAmount !== undefined ? sched.balanceAmount : sched.amount}
+                                Pay ₹{sched.balanceAmount !== undefined ? sched.balanceAmount : sched.amount}
                               </Button>
                             )}
                             {sched.status === 'PAID' && (
@@ -3296,7 +3310,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-muted-foreground block mb-1">Amount to Pay ($)</label>
+                <label className="text-xs font-semibold text-muted-foreground block mb-1">Amount to Pay (₹)</label>
                 <input
                   type="number"
                   value={paymentAmount}
@@ -3305,7 +3319,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                   placeholder="Enter amount"
                 />
                 <span className="text-[10px] text-muted-foreground block mt-1">
-                  Remaining Balance: ${showPaymentGateway.balanceAmount || showPaymentGateway.amount}
+                  Remaining Balance: ₹{showPaymentGateway.balanceAmount ?? showPaymentGateway.amount}
                 </span>
               </div>
             </div>

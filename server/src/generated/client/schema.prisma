@@ -482,6 +482,11 @@ model Student {
   centerId              String?
   organizationId        String
   enrollmentNo          String?                     @unique
+  // Admin block: the student keeps portal access but every video lecture is locked
+  videoBlocked          Boolean                     @default(false)
+  videoBlockReason      String?
+  videoBlockedAt        DateTime?
+  videoBlockedBy        String?
   name                  String
   email                 String                      @unique
   phone                 String
@@ -2057,6 +2062,8 @@ model AcademicClass {
   programIds            String[]
   inchargeId            String?
   incharge              Faculty?               @relation("AcademicClassIncharge", fields: [inchargeId], references: [id])
+  // All principals in charge; inchargeId is the first of them
+  inchargeIds           String[]               @default([])
   status                String                 @default("active")
   organizationId        String
   organization          Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)

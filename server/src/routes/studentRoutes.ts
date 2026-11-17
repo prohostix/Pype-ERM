@@ -24,6 +24,7 @@ import {
   updateDocumentStatus,
   updatePhotoStatus,
   checkStudentUniqueness,
+  setStudentVideoBlock,
 } from '../controllers/studentController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
@@ -53,6 +54,7 @@ router.route('/').get(getStudents).post(authorize('org_admin', 'superadmin', 'ce
 router.route('/:id').get(getStudent).put(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudent).delete(authorize('org_admin', 'superadmin'), deleteStudent);
 router.put('/:id/progress/:stepId', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), upload.single('proof'), updateAdmissionProgress);
 router.put('/:id/academic-progress', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudentAcademicProgress);
+router.put('/:id/video-block', authorize('org_admin', 'superadmin'), setStudentVideoBlock);
 router.put('/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), approveStudent);
 router.get('/:id/enrollments', getStudentEnrollments);
 router.put('/:id/enrollments/:enrollmentId/dropout', authorize('org_admin', 'superadmin'), markEnrollmentDropout);

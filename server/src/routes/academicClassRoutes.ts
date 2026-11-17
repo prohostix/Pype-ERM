@@ -4,7 +4,8 @@ import {
   createClass, 
   updateClass, 
   deleteClass,
-  getTransferHistory
+  getTransferHistory,
+  getClassStudents
 } from '../controllers/academicClassController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { requireAcademicCentersEnabled } from '../middleware/orgFeature.js';
@@ -22,6 +23,9 @@ router.get('/center/:centerId', getClassesByCenter);
 router.post('/', authorize('org_admin', 'superadmin'), createClass);
 router.put('/:id', authorize('org_admin', 'superadmin'), updateClass);
 router.delete('/:id', authorize('org_admin', 'superadmin'), deleteClass);
+
+// Students of a class (used for blocking video access in online classes)
+router.get('/:id/students', authorize('org_admin', 'superadmin'), getClassStudents);
 
 // Get transfer history for a class
 router.get('/:id/transfer-history', authorize('faculty'), getTransferHistory);

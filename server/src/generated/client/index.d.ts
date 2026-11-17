@@ -31555,6 +31555,10 @@ export namespace Prisma {
     centerId: string | null
     organizationId: string | null
     enrollmentNo: string | null
+    videoBlocked: boolean | null
+    videoBlockReason: string | null
+    videoBlockedAt: Date | null
+    videoBlockedBy: string | null
     name: string | null
     email: string | null
     phone: string | null
@@ -31601,6 +31605,10 @@ export namespace Prisma {
     centerId: string | null
     organizationId: string | null
     enrollmentNo: string | null
+    videoBlocked: boolean | null
+    videoBlockReason: string | null
+    videoBlockedAt: Date | null
+    videoBlockedBy: string | null
     name: string | null
     email: string | null
     phone: string | null
@@ -31647,6 +31655,10 @@ export namespace Prisma {
     centerId: number
     organizationId: number
     enrollmentNo: number
+    videoBlocked: number
+    videoBlockReason: number
+    videoBlockedAt: number
+    videoBlockedBy: number
     name: number
     email: number
     phone: number
@@ -31708,6 +31720,10 @@ export namespace Prisma {
     centerId?: true
     organizationId?: true
     enrollmentNo?: true
+    videoBlocked?: true
+    videoBlockReason?: true
+    videoBlockedAt?: true
+    videoBlockedBy?: true
     name?: true
     email?: true
     phone?: true
@@ -31754,6 +31770,10 @@ export namespace Prisma {
     centerId?: true
     organizationId?: true
     enrollmentNo?: true
+    videoBlocked?: true
+    videoBlockReason?: true
+    videoBlockedAt?: true
+    videoBlockedBy?: true
     name?: true
     email?: true
     phone?: true
@@ -31800,6 +31820,10 @@ export namespace Prisma {
     centerId?: true
     organizationId?: true
     enrollmentNo?: true
+    videoBlocked?: true
+    videoBlockReason?: true
+    videoBlockedAt?: true
+    videoBlockedBy?: true
     name?: true
     email?: true
     phone?: true
@@ -31938,6 +31962,10 @@ export namespace Prisma {
     centerId: string | null
     organizationId: string
     enrollmentNo: string | null
+    videoBlocked: boolean
+    videoBlockReason: string | null
+    videoBlockedAt: Date | null
+    videoBlockedBy: string | null
     name: string
     email: string
     phone: string
@@ -32008,6 +32036,10 @@ export namespace Prisma {
     centerId?: boolean
     organizationId?: boolean
     enrollmentNo?: boolean
+    videoBlocked?: boolean
+    videoBlockReason?: boolean
+    videoBlockedAt?: boolean
+    videoBlockedBy?: boolean
     name?: boolean
     email?: boolean
     phone?: boolean
@@ -32086,6 +32118,10 @@ export namespace Prisma {
     centerId?: boolean
     organizationId?: boolean
     enrollmentNo?: boolean
+    videoBlocked?: boolean
+    videoBlockReason?: boolean
+    videoBlockedAt?: boolean
+    videoBlockedBy?: boolean
     name?: boolean
     email?: boolean
     phone?: boolean
@@ -32147,6 +32183,10 @@ export namespace Prisma {
     centerId?: boolean
     organizationId?: boolean
     enrollmentNo?: boolean
+    videoBlocked?: boolean
+    videoBlockReason?: boolean
+    videoBlockedAt?: boolean
+    videoBlockedBy?: boolean
     name?: boolean
     email?: boolean
     phone?: boolean
@@ -32208,6 +32248,10 @@ export namespace Prisma {
     centerId?: boolean
     organizationId?: boolean
     enrollmentNo?: boolean
+    videoBlocked?: boolean
+    videoBlockReason?: boolean
+    videoBlockedAt?: boolean
+    videoBlockedBy?: boolean
     name?: boolean
     email?: boolean
     phone?: boolean
@@ -32254,7 +32298,7 @@ export namespace Prisma {
     discountReason?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "name" | "email" | "phone" | "address" | "programId" | "specialisation" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "academicBatchId" | "createdAt" | "updatedAt" | "referredBy" | "isPrevious" | "credentials" | "altPhone" | "dob" | "fatherName" | "pinCode" | "documents" | "admissionDate" | "admissionNo" | "branchId" | "caste" | "fatherPhone" | "motherName" | "motherPhone" | "photo" | "religion" | "gender" | "category" | "maritalStatus" | "employmentStatus" | "guardianName" | "familyPhone" | "universityId" | "enrolledBy" | "source" | "academicProgress" | "admissionProgress" | "discountAmount" | "discountReason", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "videoBlocked" | "videoBlockReason" | "videoBlockedAt" | "videoBlockedBy" | "name" | "email" | "phone" | "address" | "programId" | "specialisation" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "academicBatchId" | "createdAt" | "updatedAt" | "referredBy" | "isPrevious" | "credentials" | "altPhone" | "dob" | "fatherName" | "pinCode" | "documents" | "admissionDate" | "admissionNo" | "branchId" | "caste" | "fatherPhone" | "motherName" | "motherPhone" | "photo" | "religion" | "gender" | "category" | "maritalStatus" | "employmentStatus" | "guardianName" | "familyPhone" | "universityId" | "enrolledBy" | "source" | "academicProgress" | "admissionProgress" | "discountAmount" | "discountReason", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     studentBatchTransfers?: boolean | Student$studentBatchTransfersArgs<ExtArgs>
     academicBatch?: boolean | Student$academicBatchArgs<ExtArgs>
@@ -32344,6 +32388,10 @@ export namespace Prisma {
       centerId: string | null
       organizationId: string
       enrollmentNo: string | null
+      videoBlocked: boolean
+      videoBlockReason: string | null
+      videoBlockedAt: Date | null
+      videoBlockedBy: string | null
       name: string
       email: string
       phone: string
@@ -32841,6 +32889,10 @@ export namespace Prisma {
     readonly centerId: FieldRef<"Student", 'String'>
     readonly organizationId: FieldRef<"Student", 'String'>
     readonly enrollmentNo: FieldRef<"Student", 'String'>
+    readonly videoBlocked: FieldRef<"Student", 'Boolean'>
+    readonly videoBlockReason: FieldRef<"Student", 'String'>
+    readonly videoBlockedAt: FieldRef<"Student", 'DateTime'>
+    readonly videoBlockedBy: FieldRef<"Student", 'String'>
     readonly name: FieldRef<"Student", 'String'>
     readonly email: FieldRef<"Student", 'String'>
     readonly phone: FieldRef<"Student", 'String'>
@@ -106953,6 +107005,7 @@ export namespace Prisma {
     academicCenterId: number
     programIds: number
     inchargeId: number
+    inchargeIds: number
     status: number
     organizationId: number
     createdAt: number
@@ -106989,6 +107042,7 @@ export namespace Prisma {
     academicCenterId?: true
     programIds?: true
     inchargeId?: true
+    inchargeIds?: true
     status?: true
     organizationId?: true
     createdAt?: true
@@ -107074,6 +107128,7 @@ export namespace Prisma {
     academicCenterId: string
     programIds: string[]
     inchargeId: string | null
+    inchargeIds: string[]
     status: string
     organizationId: string
     createdAt: Date
@@ -107103,6 +107158,7 @@ export namespace Prisma {
     academicCenterId?: boolean
     programIds?: boolean
     inchargeId?: boolean
+    inchargeIds?: boolean
     status?: boolean
     organizationId?: boolean
     createdAt?: boolean
@@ -107124,6 +107180,7 @@ export namespace Prisma {
     academicCenterId?: boolean
     programIds?: boolean
     inchargeId?: boolean
+    inchargeIds?: boolean
     status?: boolean
     organizationId?: boolean
     createdAt?: boolean
@@ -107139,6 +107196,7 @@ export namespace Prisma {
     academicCenterId?: boolean
     programIds?: boolean
     inchargeId?: boolean
+    inchargeIds?: boolean
     status?: boolean
     organizationId?: boolean
     createdAt?: boolean
@@ -107154,13 +107212,14 @@ export namespace Prisma {
     academicCenterId?: boolean
     programIds?: boolean
     inchargeId?: boolean
+    inchargeIds?: boolean
     status?: boolean
     organizationId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AcademicClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "academicCenterId" | "programIds" | "inchargeId" | "status" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["academicClass"]>
+  export type AcademicClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "academicCenterId" | "programIds" | "inchargeId" | "inchargeIds" | "status" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["academicClass"]>
   export type AcademicClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     studentBatchTransfers?: boolean | AcademicClass$studentBatchTransfersArgs<ExtArgs>
     academicCenter?: boolean | AcademicCenterDefaultArgs<ExtArgs>
@@ -107201,6 +107260,7 @@ export namespace Prisma {
       academicCenterId: string
       programIds: string[]
       inchargeId: string | null
+      inchargeIds: string[]
       status: string
       organizationId: string
       createdAt: Date
@@ -107641,6 +107701,7 @@ export namespace Prisma {
     readonly academicCenterId: FieldRef<"AcademicClass", 'String'>
     readonly programIds: FieldRef<"AcademicClass", 'String[]'>
     readonly inchargeId: FieldRef<"AcademicClass", 'String'>
+    readonly inchargeIds: FieldRef<"AcademicClass", 'String[]'>
     readonly status: FieldRef<"AcademicClass", 'String'>
     readonly organizationId: FieldRef<"AcademicClass", 'String'>
     readonly createdAt: FieldRef<"AcademicClass", 'DateTime'>
@@ -136048,6 +136109,10 @@ export namespace Prisma {
     centerId: 'centerId',
     organizationId: 'organizationId',
     enrollmentNo: 'enrollmentNo',
+    videoBlocked: 'videoBlocked',
+    videoBlockReason: 'videoBlockReason',
+    videoBlockedAt: 'videoBlockedAt',
+    videoBlockedBy: 'videoBlockedBy',
     name: 'name',
     email: 'email',
     phone: 'phone',
@@ -137239,6 +137304,7 @@ export namespace Prisma {
     academicCenterId: 'academicCenterId',
     programIds: 'programIds',
     inchargeId: 'inchargeId',
+    inchargeIds: 'inchargeIds',
     status: 'status',
     organizationId: 'organizationId',
     createdAt: 'createdAt',
@@ -139964,6 +140030,10 @@ export namespace Prisma {
     centerId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
     enrollmentNo?: StringNullableFilter<"Student"> | string | null
+    videoBlocked?: BoolFilter<"Student"> | boolean
+    videoBlockReason?: StringNullableFilter<"Student"> | string | null
+    videoBlockedAt?: DateTimeNullableFilter<"Student"> | Date | string | null
+    videoBlockedBy?: StringNullableFilter<"Student"> | string | null
     name?: StringFilter<"Student"> | string
     email?: StringFilter<"Student"> | string
     phone?: StringFilter<"Student"> | string
@@ -140041,6 +140111,10 @@ export namespace Prisma {
     centerId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrderInput | SortOrder
+    videoBlocked?: SortOrder
+    videoBlockReason?: SortOrderInput | SortOrder
+    videoBlockedAt?: SortOrderInput | SortOrder
+    videoBlockedBy?: SortOrderInput | SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -140122,6 +140196,10 @@ export namespace Prisma {
     NOT?: StudentWhereInput | StudentWhereInput[]
     centerId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
+    videoBlocked?: BoolFilter<"Student"> | boolean
+    videoBlockReason?: StringNullableFilter<"Student"> | string | null
+    videoBlockedAt?: DateTimeNullableFilter<"Student"> | Date | string | null
+    videoBlockedBy?: StringNullableFilter<"Student"> | string | null
     name?: StringFilter<"Student"> | string
     phone?: StringFilter<"Student"> | string
     address?: StringFilter<"Student"> | string
@@ -140198,6 +140276,10 @@ export namespace Prisma {
     centerId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrderInput | SortOrder
+    videoBlocked?: SortOrder
+    videoBlockReason?: SortOrderInput | SortOrder
+    videoBlockedAt?: SortOrderInput | SortOrder
+    videoBlockedBy?: SortOrderInput | SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -140257,6 +140339,10 @@ export namespace Prisma {
     centerId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     organizationId?: StringWithAggregatesFilter<"Student"> | string
     enrollmentNo?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    videoBlocked?: BoolWithAggregatesFilter<"Student"> | boolean
+    videoBlockReason?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    videoBlockedAt?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
+    videoBlockedBy?: StringNullableWithAggregatesFilter<"Student"> | string | null
     name?: StringWithAggregatesFilter<"Student"> | string
     email?: StringWithAggregatesFilter<"Student"> | string
     phone?: StringWithAggregatesFilter<"Student"> | string
@@ -146505,6 +146591,7 @@ export namespace Prisma {
     academicCenterId?: StringFilter<"AcademicClass"> | string
     programIds?: StringNullableListFilter<"AcademicClass">
     inchargeId?: StringNullableFilter<"AcademicClass"> | string | null
+    inchargeIds?: StringNullableListFilter<"AcademicClass">
     status?: StringFilter<"AcademicClass"> | string
     organizationId?: StringFilter<"AcademicClass"> | string
     createdAt?: DateTimeFilter<"AcademicClass"> | Date | string
@@ -146525,6 +146612,7 @@ export namespace Prisma {
     academicCenterId?: SortOrder
     programIds?: SortOrder
     inchargeId?: SortOrderInput | SortOrder
+    inchargeIds?: SortOrder
     status?: SortOrder
     organizationId?: SortOrder
     createdAt?: SortOrder
@@ -146548,6 +146636,7 @@ export namespace Prisma {
     academicCenterId?: StringFilter<"AcademicClass"> | string
     programIds?: StringNullableListFilter<"AcademicClass">
     inchargeId?: StringNullableFilter<"AcademicClass"> | string | null
+    inchargeIds?: StringNullableListFilter<"AcademicClass">
     status?: StringFilter<"AcademicClass"> | string
     organizationId?: StringFilter<"AcademicClass"> | string
     createdAt?: DateTimeFilter<"AcademicClass"> | Date | string
@@ -146568,6 +146657,7 @@ export namespace Prisma {
     academicCenterId?: SortOrder
     programIds?: SortOrder
     inchargeId?: SortOrderInput | SortOrder
+    inchargeIds?: SortOrder
     status?: SortOrder
     organizationId?: SortOrder
     createdAt?: SortOrder
@@ -146586,6 +146676,7 @@ export namespace Prisma {
     academicCenterId?: StringWithAggregatesFilter<"AcademicClass"> | string
     programIds?: StringNullableListFilter<"AcademicClass">
     inchargeId?: StringNullableWithAggregatesFilter<"AcademicClass"> | string | null
+    inchargeIds?: StringNullableListFilter<"AcademicClass">
     status?: StringWithAggregatesFilter<"AcademicClass"> | string
     organizationId?: StringWithAggregatesFilter<"AcademicClass"> | string
     createdAt?: DateTimeWithAggregatesFilter<"AcademicClass"> | Date | string
@@ -150872,6 +150963,10 @@ export namespace Prisma {
   export type StudentCreateInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -150941,6 +151036,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -151006,6 +151105,10 @@ export namespace Prisma {
   export type StudentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -151075,6 +151178,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -151142,6 +151249,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -151191,6 +151302,10 @@ export namespace Prisma {
   export type StudentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -151234,6 +151349,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -157968,6 +158087,7 @@ export namespace Prisma {
     id?: string
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -157987,6 +158107,7 @@ export namespace Prisma {
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -158002,6 +158123,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -158021,6 +158143,7 @@ export namespace Prisma {
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -158038,6 +158161,7 @@ export namespace Prisma {
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -158048,6 +158172,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -158059,6 +158184,7 @@ export namespace Prisma {
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -162261,6 +162387,10 @@ export namespace Prisma {
     centerId?: SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrder
+    videoBlocked?: SortOrder
+    videoBlockReason?: SortOrder
+    videoBlockedAt?: SortOrder
+    videoBlockedBy?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -162316,6 +162446,10 @@ export namespace Prisma {
     centerId?: SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrder
+    videoBlocked?: SortOrder
+    videoBlockReason?: SortOrder
+    videoBlockedAt?: SortOrder
+    videoBlockedBy?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -162362,6 +162496,10 @@ export namespace Prisma {
     centerId?: SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrder
+    videoBlocked?: SortOrder
+    videoBlockReason?: SortOrder
+    videoBlockedAt?: SortOrder
+    videoBlockedBy?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -165842,6 +165980,7 @@ export namespace Prisma {
     academicCenterId?: SortOrder
     programIds?: SortOrder
     inchargeId?: SortOrder
+    inchargeIds?: SortOrder
     status?: SortOrder
     organizationId?: SortOrder
     createdAt?: SortOrder
@@ -181381,6 +181520,10 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type AcademicClassCreateinchargeIdsInput = {
+    set: string[]
+  }
+
   export type StudentBatchTransferCreateNestedManyWithoutAcademicClassInput = {
     create?: XOR<StudentBatchTransferCreateWithoutAcademicClassInput, StudentBatchTransferUncheckedCreateWithoutAcademicClassInput> | StudentBatchTransferCreateWithoutAcademicClassInput[] | StudentBatchTransferUncheckedCreateWithoutAcademicClassInput[]
     connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutAcademicClassInput | StudentBatchTransferCreateOrConnectWithoutAcademicClassInput[]
@@ -181470,6 +181613,11 @@ export namespace Prisma {
   }
 
   export type AcademicClassUpdateprogramIdsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type AcademicClassUpdateinchargeIdsInput = {
     set?: string[]
     push?: string | string[]
   }
@@ -184458,6 +184606,7 @@ export namespace Prisma {
     id?: string
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -184476,6 +184625,7 @@ export namespace Prisma {
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -186705,6 +186855,10 @@ export namespace Prisma {
   export type StudentCreateWithoutOrganizationInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -186772,6 +186926,10 @@ export namespace Prisma {
     id?: string
     centerId?: string | null
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -188299,6 +188457,7 @@ export namespace Prisma {
     academicCenterId?: StringFilter<"AcademicClass"> | string
     programIds?: StringNullableListFilter<"AcademicClass">
     inchargeId?: StringNullableFilter<"AcademicClass"> | string | null
+    inchargeIds?: StringNullableListFilter<"AcademicClass">
     status?: StringFilter<"AcademicClass"> | string
     organizationId?: StringFilter<"AcademicClass"> | string
     createdAt?: DateTimeFilter<"AcademicClass"> | Date | string
@@ -190152,6 +190311,10 @@ export namespace Prisma {
     centerId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
     enrollmentNo?: StringNullableFilter<"Student"> | string | null
+    videoBlocked?: BoolFilter<"Student"> | boolean
+    videoBlockReason?: StringNullableFilter<"Student"> | string | null
+    videoBlockedAt?: DateTimeNullableFilter<"Student"> | Date | string | null
+    videoBlockedBy?: StringNullableFilter<"Student"> | string | null
     name?: StringFilter<"Student"> | string
     email?: StringFilter<"Student"> | string
     phone?: StringFilter<"Student"> | string
@@ -196883,6 +197046,10 @@ export namespace Prisma {
   export type StudentCreateWithoutUserInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -196951,6 +197118,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -197020,6 +197191,10 @@ export namespace Prisma {
   export type StudentCreateWithoutEnrolledByUserInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -197088,6 +197263,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -197162,6 +197341,10 @@ export namespace Prisma {
   export type StudentCreateWithoutReferrerInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -197230,6 +197413,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -200483,6 +200670,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -200551,6 +200742,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -205763,6 +205958,10 @@ export namespace Prisma {
   export type StudentCreateWithoutUniversityInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -205831,6 +206030,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -207618,6 +207821,10 @@ export namespace Prisma {
   export type StudentCreateWithoutProgramInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -207686,6 +207893,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -208680,6 +208891,10 @@ export namespace Prisma {
   export type StudentCreateWithoutCenterInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -208747,6 +208962,10 @@ export namespace Prisma {
     id?: string
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -215269,6 +215488,10 @@ export namespace Prisma {
   export type StudentCreateWithoutInvoicesInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -215337,6 +215560,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -215802,6 +216029,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -215870,6 +216101,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -228140,6 +228375,10 @@ export namespace Prisma {
   export type StudentCreateWithoutBranchInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -228208,6 +228447,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -234630,6 +234873,10 @@ export namespace Prisma {
   export type StudentCreateWithoutSessionInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -234698,6 +234945,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -237030,6 +237281,10 @@ export namespace Prisma {
   export type StudentCreateWithoutEnrollmentsInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -237098,6 +237353,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -238826,6 +239085,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -238894,6 +239157,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -252743,6 +253010,10 @@ export namespace Prisma {
   export type StudentCreateWithoutInternalMarksInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -252811,6 +253082,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -253432,6 +253707,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutInternalMarksInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -253500,6 +253779,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -267014,6 +267297,10 @@ export namespace Prisma {
   export type StudentCreateWithoutCommissionsInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -267082,6 +267369,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -267424,6 +267715,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutCommissionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -267492,6 +267787,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -270788,6 +271087,10 @@ export namespace Prisma {
   export type StudentCreateWithoutPaymentSchedulesInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -270856,6 +271159,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -271175,6 +271482,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutPaymentSchedulesInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -271243,6 +271554,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -271784,6 +272099,10 @@ export namespace Prisma {
   export type StudentCreateWithoutPaymentLinksInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -271852,6 +272171,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -272427,6 +272750,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutPaymentLinksInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -272495,6 +272822,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -273648,6 +273979,10 @@ export namespace Prisma {
   export type StudentCreateWithoutUniversityPaymentsInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -273716,6 +274051,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -274058,6 +274397,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutUniversityPaymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -274126,6 +274469,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -274968,6 +275315,10 @@ export namespace Prisma {
   export type StudentCreateWithoutDocumentLogsInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -275036,6 +275387,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -275359,6 +275714,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutDocumentLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -275427,6 +275786,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -276204,6 +276567,10 @@ export namespace Prisma {
   export type StudentCreateWithoutExamRegistrationsInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -276272,6 +276639,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -276559,6 +276930,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutExamRegistrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -276627,6 +277002,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -278261,6 +278640,7 @@ export namespace Prisma {
     id?: string
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -278278,6 +278658,7 @@ export namespace Prisma {
     name: string
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -279313,6 +279694,7 @@ export namespace Prisma {
     id?: string
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -279330,6 +279712,7 @@ export namespace Prisma {
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -280442,6 +280825,7 @@ export namespace Prisma {
     id?: string
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -280460,6 +280844,7 @@ export namespace Prisma {
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -280691,6 +281076,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -280709,6 +281095,7 @@ export namespace Prisma {
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -280930,6 +281317,7 @@ export namespace Prisma {
     id?: string
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -280948,6 +281336,7 @@ export namespace Prisma {
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -281313,6 +281702,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -281331,6 +281721,7 @@ export namespace Prisma {
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -283500,6 +283891,10 @@ export namespace Prisma {
   export type StudentCreateWithoutAssessmentAttemptsInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -283568,6 +283963,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -283681,6 +284080,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutAssessmentAttemptsInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -283749,6 +284152,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -283813,6 +284220,10 @@ export namespace Prisma {
   export type StudentCreateWithoutVideoLogsInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -283881,6 +284292,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -284209,6 +284624,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutVideoLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -284277,6 +284696,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -284648,6 +285071,10 @@ export namespace Prisma {
   export type StudentCreateWithoutLessonDoubtsInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -284716,6 +285143,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -285078,6 +285509,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutLessonDoubtsInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -285146,6 +285581,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -285460,6 +285899,10 @@ export namespace Prisma {
   export type StudentCreateWithoutLessonDoubtRepliesInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -285528,6 +285971,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -285897,6 +286344,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutLessonDoubtRepliesInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -285965,6 +286416,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -286344,6 +286799,10 @@ export namespace Prisma {
   export type StudentCreateWithoutLessonNotesInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -286412,6 +286871,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -286746,6 +287209,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutLessonNotesInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -286814,6 +287281,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -288634,6 +289105,7 @@ export namespace Prisma {
     id?: string
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -288652,6 +289124,7 @@ export namespace Prisma {
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -288921,6 +289394,10 @@ export namespace Prisma {
   export type StudentCreateWithoutAcademicBatchInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -288989,6 +289466,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -289135,6 +289616,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -289153,6 +289635,7 @@ export namespace Prisma {
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -289421,6 +289904,10 @@ export namespace Prisma {
   export type StudentCreateWithoutStudentBatchTransfersInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -289489,6 +289976,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -289637,6 +290128,7 @@ export namespace Prisma {
     id?: string
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -289655,6 +290147,7 @@ export namespace Prisma {
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -289976,6 +290469,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutStudentBatchTransfersInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -290044,6 +290541,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -290210,6 +290711,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -290228,6 +290730,7 @@ export namespace Prisma {
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -291254,6 +291757,7 @@ export namespace Prisma {
     id?: string
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -291272,6 +291776,7 @@ export namespace Prisma {
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -291764,6 +292269,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -291782,6 +292288,7 @@ export namespace Prisma {
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -292320,6 +292827,10 @@ export namespace Prisma {
   export type StudentCreateWithoutAcademicAttendancesInput = {
     id?: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     phone: string
     address: string
@@ -292388,6 +292899,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -292720,6 +293235,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutAcademicAttendancesInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -292788,6 +293307,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -296596,6 +297119,7 @@ export namespace Prisma {
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -297390,6 +297914,10 @@ export namespace Prisma {
     id?: string
     centerId?: string | null
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -297951,6 +298479,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -297969,6 +298498,7 @@ export namespace Prisma {
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -297985,6 +298515,7 @@ export namespace Prisma {
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -300438,6 +300969,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -300505,6 +301040,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -300571,6 +301110,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -304588,6 +305131,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -304638,6 +305185,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -308666,6 +309217,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutEnrolledByUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -308734,6 +309289,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -308800,6 +309359,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -308848,6 +309411,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutReferrerInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -308916,6 +309483,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -308982,6 +309553,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -310500,6 +311075,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -310823,6 +311402,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutUniversityInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -310891,6 +311474,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -310957,6 +311544,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -311738,6 +312329,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -312223,6 +312818,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -312291,6 +312890,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -312357,6 +312960,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -312718,6 +313325,10 @@ export namespace Prisma {
     id?: string
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -313284,6 +313895,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutCenterInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -313351,6 +313966,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -313417,6 +314036,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -315093,6 +315716,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -315253,6 +315880,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -315321,6 +315952,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -315387,6 +316022,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -316967,6 +317606,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -317287,6 +317930,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutSessionInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -317355,6 +318002,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -317421,6 +318072,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -317681,6 +318336,7 @@ export namespace Prisma {
     name: string
     academicCenterId: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -317831,6 +318487,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -317848,6 +318505,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -317864,6 +318522,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     academicCenterId?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -318315,6 +318974,7 @@ export namespace Prisma {
     name: string
     programIds?: AcademicClassCreateprogramIdsInput | string[]
     inchargeId?: string | null
+    inchargeIds?: AcademicClassCreateinchargeIdsInput | string[]
     status?: string
     organizationId: string
     createdAt?: Date | string
@@ -318325,6 +318985,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -318342,6 +319003,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -318358,6 +319020,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     programIds?: AcademicClassUpdateprogramIdsInput | string[]
     inchargeId?: NullableStringFieldUpdateOperationsInput | string | null
+    inchargeIds?: AcademicClassUpdateinchargeIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -319394,6 +320057,10 @@ export namespace Prisma {
     centerId?: string | null
     organizationId: string
     enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
     name: string
     email: string
     phone: string
@@ -319582,6 +320249,10 @@ export namespace Prisma {
   export type StudentUpdateWithoutAcademicBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
@@ -319650,6 +320321,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -319716,6 +320391,10 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string

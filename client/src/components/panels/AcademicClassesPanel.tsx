@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, ArrowLeft, Layers, MoreVertical, BookOpen } from 'lucide-react';
+import { Plus, Edit, Trash2, ArrowLeft, Layers, MoreVertical, BookOpen, Users, VideoOff, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -21,6 +21,48 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
   const [programs, setPrograms] = useState<any[]>([]);
   const [faculties, setFaculties] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // Online classes: list the class's students so an admin can block or restore their videos
+  const [studentsClass, setStudentsClass] = useState<any | null>(null);
+  const [classStudents, setClassStudents] = useState<any[]>([]);
+  const [loadingStudents, setLoadingStudents] = useState(false);
+  const [studentSearch, setStudentSearch] = useState('');
+  const [blockTarget, setBlockTarget] = useState<any | null>(null);
+  const [blockReason, setBlockReason] = useState('');
+  const [savingBlock, setSavingBlock] = useState(false);
+
+  const openStudents = async (cls: any) => {
+    setStudentsClass(cls);
+    setStudentSearch('');
+    setClassStudents([]);
+    setLoadingStudents(true);
+    try {
+      const res = await api.get(`/academic-classes/${cls.id}/students`);
+      setClassStudents(res.data.data || []);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to load students');
+    } finally {
+      setLoadingStudents(false);
+    }
+  };
+
+  const handleVideoBlock = async (blocked: boolean) => {
+    if (!blockTarget) return;
+    setSavingBlock(true);
+    try {
+      await api.put(`/students/${blockTarget.id}/video-block`, { blocked, reason: blockReason });
+      toast.success(blocked ? 'Video lectures blocked for this student' : 'Video lectures restored');
+      setClassStudents(prev => prev.map(st =>
+        st.id === blockTarget.id ? { ...st, videoBlocked: blocked, videoBlockReason: blocked ? (blockReason.trim() || null) : null } : st
+      ));
+      setBlockTarget(null);
+      setBlockReason('');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update video access');
+    } finally {
+      setSavingBlock(false);
+    }
+  };
   const [activeClass, setActiveClass] = useState<any | null>(null);
   
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -32,7 +74,7 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
     name: '',
     programIds: [] as string[],
     status: 'active',
-    inchargeId: 'none'
+    inchargeIds: [] as string[]
   });
 
   useEffect(() => {
@@ -74,16 +116,13 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ name: '', programIds: [], status: 'active', inchargeId: 'none' });
+    setFormData({ name: '', programIds: [], status: 'active', inchargeIds: [] });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const payload = {
-        ...formData,
-        inchargeId: formData.inchargeId === 'none' ? null : formData.inchargeId
-      };
+      const payload = { ...formData };
       
       if (editingId) {
         await api.put(`/academic-classes/${editingId}`, payload);
@@ -106,7 +145,7 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
       name: c.name || '',
       programIds: c.programIds || [],
       status: c.status || 'active',
-      inchargeId: c.inchargeId || 'none'
+      inchargeIds: c.inchargeIds?.length ? c.inchargeIds : (c.inchargeId ? [c.inchargeId] : [])
     });
     setDialogOpen(true);
   };
@@ -133,7 +172,7 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
   };
 
   if (activeClass) {
-    return <AcademicBatchesPanel academicClass={activeClass} onBack={() => setActiveClass(null)} />;
+    return <AcademicBatchesPanel academicClass={activeClass} isOnline={center.type === 'online'} onBack={() => setActiveClass(null)} />;
   }
 
   return (
@@ -229,18 +268,28 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
                 </div>
               </div>
               <div className="p-5 flex-1 bg-muted/10 space-y-4">
-                {c.incharge && (
-                  <div>
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Principal In-charge</p>
-                    <div className="flex items-center gap-2 text-sm font-medium">
-                      <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">
-                        {c.incharge.name.charAt(0)}
+                {(() => {
+                  const principals: any[] = c.incharges?.length ? c.incharges : (c.incharge ? [c.incharge] : []);
+                  if (principals.length === 0) return null;
+                  return (
+                    <div>
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                        {principals.length > 1 ? 'Principals In-charge' : 'Principal In-charge'}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {principals.map((p: any) => (
+                          <div key={p.id} className="flex items-center gap-2 text-sm font-medium">
+                            <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">
+                              {p.name.charAt(0)}
+                            </div>
+                            {p.name}
+                          </div>
+                        ))}
                       </div>
-                      {c.incharge.name}
                     </div>
-                  </div>
-                )}
-                
+                  );
+                })()}
+
                 <div>
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Assigned Programs</p>
                   {c.programIds && c.programIds.length > 0 ? (
@@ -258,11 +307,87 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
                     <p className="text-sm text-muted-foreground italic">No programs assigned.</p>
                   )}
                 </div>
+
+                {center.type === 'online' && canWrite && (
+                  <Button variant="outline" size="sm" className="w-full" onClick={() => openStudents(c)}>
+                    <Users className="w-4 h-4 mr-2" /> Students &amp; Video Access
+                  </Button>
+                )}
               </div>
             </div>
           ))
         )}
       </div>
+
+      {/* Students & video access (online classes) */}
+      <Dialog open={!!studentsClass} onOpenChange={(o) => { if (!o) { setStudentsClass(null); setBlockTarget(null); } }}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Students: {studentsClass?.name}</DialogTitle>
+          </DialogHeader>
+          <Input
+            placeholder="Search by name, email or enrollment no..."
+            value={studentSearch}
+            onChange={(e) => setStudentSearch(e.target.value)}
+          />
+          <div className="max-h-[420px] overflow-y-auto space-y-1">
+            {loadingStudents ? (
+              <p className="p-8 text-center text-sm text-muted-foreground">Loading students...</p>
+            ) : (() => {
+              const q = studentSearch.toLowerCase();
+              const rows = classStudents.filter(st =>
+                (st.name || '').toLowerCase().includes(q) || (st.email || '').toLowerCase().includes(q) || (st.enrollmentNo || '').toLowerCase().includes(q)
+              );
+              if (rows.length === 0) return <p className="p-8 text-center text-sm text-muted-foreground">No students found for this class.</p>;
+              return rows.map(st => (
+                <div key={st.id} className="flex items-center gap-3 p-3 rounded-lg border border-border/50">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{st.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{st.enrollmentNo || 'No enrollment no'} · {st.program?.name || 'N/A'}</p>
+                  </div>
+                  {st.videoBlocked && <Badge variant="destructive" className="text-[10px] shrink-0" title={st.videoBlockReason || undefined}>Videos blocked</Badge>}
+                  <Button
+                    size="sm"
+                    variant={st.videoBlocked ? 'default' : 'outline'}
+                    className="shrink-0"
+                    onClick={() => { setBlockTarget(st); setBlockReason(st.videoBlockReason || ''); }}
+                  >
+                    {st.videoBlocked ? <Video className="w-4 h-4 mr-1.5" /> : <VideoOff className="w-4 h-4 mr-1.5" />}
+                    {st.videoBlocked ? 'Unblock' : 'Block videos'}
+                  </Button>
+                </div>
+              ));
+            })()}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!blockTarget} onOpenChange={(o) => { if (!o) { setBlockTarget(null); setBlockReason(''); } }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{blockTarget?.videoBlocked ? 'Restore video lectures' : 'Block video lectures'}: {blockTarget?.name}</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            {blockTarget?.videoBlocked
+              ? 'The student will be able to watch their online class videos again (fee rules still apply).'
+              : 'The student can still sign in and see fees and profile, but every online class video is locked until you unblock them.'}
+          </p>
+          {!blockTarget?.videoBlocked && (
+            <div className="space-y-2">
+              <Label>Reason (shown to the student)</Label>
+              <Textarea rows={3} value={blockReason} onChange={(e) => setBlockReason(e.target.value)} maxLength={300} placeholder="e.g. Pending dues, disciplinary action…" className="resize-none" />
+            </div>
+          )}
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setBlockTarget(null)} disabled={savingBlock}>Cancel</Button>
+            {blockTarget?.videoBlocked ? (
+              <Button onClick={() => handleVideoBlock(false)} disabled={savingBlock}>{savingBlock ? 'Saving...' : 'Unblock Videos'}</Button>
+            ) : (
+              <Button variant="destructive" onClick={() => handleVideoBlock(true)} disabled={savingBlock}>{savingBlock ? 'Saving...' : 'Block Videos'}</Button>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Create / Edit Modal */}
       <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
@@ -296,18 +421,32 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Principal In-charge</Label>
-                <Select value={formData.inchargeId} onValueChange={(v) => setFormData({ ...formData, inchargeId: v })}>
-                  <SelectTrigger className="bg-background shadow-sm border-muted-foreground/20">
-                    <SelectValue placeholder="Select faculty" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    {faculties.map((f: any) => (
-                      <SelectItem key={f.id} value={f.id}>{f.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center justify-between">
+                  <Label className="text-sm font-medium">Principals In-charge</Label>
+                  <Badge variant="secondary">{formData.inchargeIds.length} Selected</Badge>
+                </div>
+                <div className="bg-muted/20 border border-border/50 rounded-lg p-3 max-h-[180px] overflow-y-auto custom-scrollbar space-y-2">
+                  {faculties.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-2">No faculty available.</p>
+                  ) : (
+                    faculties.map((f: any) => (
+                      <label key={f.id} className="flex items-center gap-3 cursor-pointer text-sm">
+                        <Checkbox
+                          checked={formData.inchargeIds.includes(f.id)}
+                          onCheckedChange={(checked) =>
+                            setFormData({
+                              ...formData,
+                              inchargeIds: checked
+                                ? [...formData.inchargeIds, f.id]
+                                : formData.inchargeIds.filter((id) => id !== f.id),
+                            })
+                          }
+                        />
+                        {f.name}
+                      </label>
+                    ))
+                  )}
+                </div>
               </div>
               <div className="space-y-3 pt-2">
                 <div className="flex items-center justify-between">

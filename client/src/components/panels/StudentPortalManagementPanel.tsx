@@ -6,11 +6,18 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { RefreshCw, MonitorSmartphone, Shield, UserX, Lock } from 'lucide-react';
+import { RefreshCw, MonitorSmartphone, Shield, UserX, Lock, VideoOff, Video } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
 export function StudentPortalManagementPanel() {
+  const { user } = useAuth();
+  // Only org admins can block or restore a student's videos
+  const canBlockVideos = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const [blockTarget, setBlockTarget] = useState<any>(null);
+  const [blockReason, setBlockReason] = useState('');
   const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -67,6 +74,22 @@ export function StudentPortalManagementPanel() {
       fetchStudents();
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to update credentials');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleVideoBlock = async (blocked: boolean) => {
+    if (!blockTarget) return;
+    setIsSaving(true);
+    try {
+      await api.put(`/students/${blockTarget.id}/video-block`, { blocked, reason: blockReason });
+      toast.success(blocked ? 'Video lectures blocked for this student' : 'Video lectures restored');
+      setBlockTarget(null);
+      setBlockReason('');
+      fetchStudents();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update video access');
     } finally {
       setIsSaving(false);
     }
@@ -158,21 +181,38 @@ export function StudentPortalManagementPanel() {
                     </TableCell>
                     <TableCell>{student.program?.name || 'N/A'}</TableCell>
                     <TableCell>
-                      {student.credentials ? (
-                        <Badge variant="default" className="bg-green-500 hover:bg-green-600">Active</Badge>
-                      ) : (
-                        <Badge variant="secondary">Inactive</Badge>
-                      )}
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {student.credentials ? (
+                          <Badge variant="default" className="bg-green-500 hover:bg-green-600">Active</Badge>
+                        ) : (
+                          <Badge variant="secondary">Inactive</Badge>
+                        )}
+                        {student.videoBlocked && (
+                          <Badge variant="destructive" title={student.videoBlockReason || undefined}>Videos blocked</Badge>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="text-muted-foreground text-sm">
                       {/* Placeholder for last login */}
                       Not available
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button size="sm" variant={student.credentials ? "outline" : "default"} onClick={() => openManageDialog(student)}>
-                        <Shield className="w-4 h-4 mr-2" />
-                        Manage Access
-                      </Button>
+                      <div className="flex items-center justify-end gap-2">
+                        {canBlockVideos && (
+                          <Button
+                            size="sm"
+                            variant={student.videoBlocked ? "default" : "outline"}
+                            onClick={() => { setBlockTarget(student); setBlockReason(student.videoBlockReason || ''); }}
+                          >
+                            {student.videoBlocked ? <Video className="w-4 h-4 mr-2" /> : <VideoOff className="w-4 h-4 mr-2" />}
+                            {student.videoBlocked ? 'Unblock Videos' : 'Block Videos'}
+                          </Button>
+                        )}
+                        <Button size="sm" variant={student.credentials ? "outline" : "default"} onClick={() => openManageDialog(student)}>
+                          <Shield className="w-4 h-4 mr-2" />
+                          Manage Access
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -211,6 +251,40 @@ export function StudentPortalManagementPanel() {
           )}
         </div>
       </CardContent>
+
+      <Dialog open={!!blockTarget} onOpenChange={(o) => { if (!o) { setBlockTarget(null); setBlockReason(''); } }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{blockTarget?.videoBlocked ? 'Restore video lectures' : 'Block video lectures'}: {blockTarget?.name}</DialogTitle>
+            <DialogDescription>
+              {blockTarget?.videoBlocked
+                ? 'The student will be able to watch their video lectures again (fee rules still apply).'
+                : 'The student can still sign in and see fees and profile, but every video lecture is locked until you unblock them.'}
+            </DialogDescription>
+          </DialogHeader>
+          {!blockTarget?.videoBlocked && (
+            <div className="space-y-2 py-2">
+              <Label>Reason (shown to the student)</Label>
+              <Textarea
+                rows={3}
+                value={blockReason}
+                onChange={(e) => setBlockReason(e.target.value)}
+                maxLength={300}
+                placeholder="e.g. Pending dues, disciplinary action…"
+                className="resize-none"
+              />
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setBlockTarget(null)} disabled={isSaving}>Cancel</Button>
+            {blockTarget?.videoBlocked ? (
+              <Button onClick={() => handleVideoBlock(false)} disabled={isSaving}>{isSaving ? 'Saving...' : 'Unblock Videos'}</Button>
+            ) : (
+              <Button variant="destructive" onClick={() => handleVideoBlock(true)} disabled={isSaving}>{isSaving ? 'Saving...' : 'Block Videos'}</Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={manageDialogOpen} onOpenChange={setManageDialogOpen}>
         <DialogContent className="max-w-md">

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { normalizeTiers } from '../utils/videoAccess.js';
 
 export interface AcademicCenterAccessConfig {
   dailyClassLimitEnabled: boolean;
@@ -26,9 +27,9 @@ export interface ProgramAccessConfig {
   feeLocking: {
     enabled: boolean;
     minPaidPercentage: number;
-    gracePeriodDays: number;
     lockMessage: string;
     lockPolicy?: string;
+    tiers?: { minPaidPercentage: number; videoCount: number | null }[];
   };
 }
 
@@ -38,7 +39,6 @@ export const DEFAULT_PROGRAM_ACCESS_CONFIG: ProgramAccessConfig = {
   feeLocking: {
     enabled: false,
     minPaidPercentage: 50,
-    gracePeriodDays: 3,
     lockMessage: 'Video lectures are locked because you have only paid {paidPercent}% of your total course fee. A minimum payment of {requiredPercent}% is required to unlock.'
   }
 };
@@ -70,8 +70,9 @@ function sanitizeProgramAccessConfig(config: any): ProgramAccessConfig {
     feeLocking: {
       enabled: fee?.enabled === true,
       minPaidPercentage: clampInt(fee?.minPaidPercentage, 1, 100, defaults.feeLocking.minPaidPercentage),
-      gracePeriodDays: clampInt(fee?.gracePeriodDays, 0, 90, defaults.feeLocking.gracePeriodDays),
-      lockMessage: typeof fee?.lockMessage === 'string' ? fee.lockMessage.slice(0, 1000) : defaults.feeLocking.lockMessage
+      lockMessage: typeof fee?.lockMessage === 'string' ? fee.lockMessage.slice(0, 1000) : defaults.feeLocking.lockMessage,
+      // Optional: paid X% → can watch the first N videos (videoCount null = all). Empty = lock everything below minPaidPercentage.
+      tiers: normalizeTiers(fee?.tiers).slice(0, 10).map((t) => ({ ...t, videoCount: t.videoCount === null ? null : Math.min(t.videoCount, 100000) }))
     }
   };
 }

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { isIncharge, parseInchargeIds } from '../utils/incharge.js';
 
 export const getClassesByCenter = asyncHandler(async (req: Request, res: Response) => {
   const { centerId } = req.params;
@@ -25,13 +26,22 @@ export const getClassesByCenter = asyncHandler(async (req: Request, res: Respons
     orderBy: { createdAt: 'desc' }
   });
 
-  res.json({ success: true, data: classes });
+  // inchargeIds is a plain list of faculty ids: look the names up once for all classes
+  const facultyIds = [...new Set(classes.flatMap((c) => c.inchargeIds))];
+  const faculty = facultyIds.length
+    ? await prisma.faculty.findMany({ where: { id: { in: facultyIds }, organizationId }, select: { id: true, name: true, email: true } })
+    : [];
+  const byId = new Map(faculty.map((f) => [f.id, f]));
+  const data = classes.map((c) => ({ ...c, incharges: c.inchargeIds.map((id) => byId.get(id)).filter(Boolean) }));
+
+  res.json({ success: true, data });
 });
 
 export const createClass = asyncHandler(async (req: Request, res: Response) => {
   const user = (req as any).user;
   const organizationId = user.organizationId;
-  const { name, academicCenterId, programIds, status, inchargeId } = req.body;
+  const { name, academicCenterId, programIds, status } = req.body;
+  const inchargeIds = parseInchargeIds(req.body.inchargeIds, req.body.inchargeId);
 
   if (!name || !academicCenterId) {
     return res.status(400).json({ success: false, message: 'Name and academic center ID are required' });
@@ -54,13 +64,22 @@ export const createClass = asyncHandler(async (req: Request, res: Response) => {
     }
   }
 
+
+  if (inchargeIds.length > 0) {
+    const found = await prisma.faculty.count({ where: { id: { in: inchargeIds }, organizationId } });
+    if (found !== inchargeIds.length) {
+      return res.status(400).json({ success: false, message: 'One or more selected principals were not found' });
+    }
+  }
+
   const academicClass = await prisma.academicClass.create({
     data: {
       name,
       academicCenterId,
       programIds: programIds || [],
       status: status || 'active',
-      inchargeId: inchargeId || null,
+      inchargeId: inchargeIds[0] ?? null,
+      inchargeIds,
       organizationId,
       ...(center.type === 'online' && {
         batches: {
@@ -81,7 +100,8 @@ export const updateClass = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = (req as any).user;
   const organizationId = user.organizationId;
-  const { name, programIds, status, inchargeId } = req.body;
+  const { name, programIds, status } = req.body;
+  const inchargeIds = parseInchargeIds(req.body.inchargeIds, req.body.inchargeId);
 
   const existingClass = await prisma.academicClass.findFirst({
     where: { id, organizationId },
@@ -99,13 +119,22 @@ export const updateClass = asyncHandler(async (req: Request, res: Response) => {
     }
   }
 
+
+  if (inchargeIds.length > 0) {
+    const found = await prisma.faculty.count({ where: { id: { in: inchargeIds }, organizationId } });
+    if (found !== inchargeIds.length) {
+      return res.status(400).json({ success: false, message: 'One or more selected principals were not found' });
+    }
+  }
+
   const academicClass = await prisma.academicClass.update({
     where: { id },
     data: {
       name,
       programIds,
       status,
-      inchargeId: inchargeId || null
+      inchargeId: inchargeIds[0] ?? null,
+      inchargeIds
     }
   });
 
@@ -171,7 +200,7 @@ export const getTransferHistory = asyncHandler(async (req: Request, res: Respons
     const academicClass = await prisma.academicClass.findFirst({
       where: { id, organizationId }
     });
-    if (!academicClass || academicClass.inchargeId !== user.id) {
+    if (!academicClass || !isIncharge(academicClass, user.id)) {
       return res.status(403).json({ success: false, message: 'Only the principal in charge can view transfer history' });
     }
   }
@@ -191,4 +220,41 @@ export const getTransferHistory = asyncHandler(async (req: Request, res: Respons
   });
 
   res.json({ success: true, data: history });
+});
+
+
+// @desc    Students of an online class: allocated to one of its batches, or enrolled in one of its programs
+// @route   GET /api/v1/academic-classes/:id/students
+// @access  Private (org admin)
+export const getClassStudents = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const organizationId = (req as any).user.organizationId;
+
+  const academicClass = await prisma.academicClass.findFirst({
+    where: { id, organizationId },
+    select: { programIds: true, batches: { select: { id: true } } }
+  });
+  if (!academicClass) {
+    return res.status(404).json({ success: false, message: 'Academic class not found' });
+  }
+
+  const students = await prisma.student.findMany({
+    where: {
+      organizationId,
+      status: { not: 'rejected' },
+      OR: [
+        { programId: { in: academicClass.programIds } },
+        { academicBatchId: { in: academicClass.batches.map((b) => b.id) } }
+      ]
+    },
+    select: {
+      id: true, name: true, email: true, enrollmentNo: true,
+      program: { select: { name: true } },
+      videoBlocked: true, videoBlockReason: true
+    },
+    orderBy: { name: 'asc' },
+    take: 2000
+  });
+
+  res.json({ success: true, data: students });
 });

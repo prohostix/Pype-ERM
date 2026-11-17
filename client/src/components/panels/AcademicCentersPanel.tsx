@@ -24,7 +24,8 @@ import {
   Search,
   Filter,
   Copy,
-  ChevronRight
+  ChevronRight,
+  X
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -52,9 +53,10 @@ export interface ProgramAccessConfig {
   feeLocking: {
     enabled: boolean;
     lockPolicy?: string;
-    gracePeriodDays: number;
     minPaidPercentage: number;
     lockMessage: string;
+    /** Paid X% → can watch the first N videos (videoCount null = all). Empty = single minimum % above. */
+    tiers?: { minPaidPercentage: number; videoCount: number | null }[];
   };
 }
 
@@ -64,7 +66,6 @@ export const DEFAULT_PROGRAM_CONFIG: ProgramAccessConfig = {
   feeLocking: {
     enabled: false,
     lockPolicy: 'min_percentage',
-    gracePeriodDays: 3,
     minPaidPercentage: 50,
     lockMessage: 'Video lectures are locked because you have paid {paidPercent}% of your total course fee (₹{paidFee} of ₹{totalFee}). A minimum payment of {requiredPercent}% is required to unlock.'
   }
@@ -989,26 +990,109 @@ export function AcademicCentersPanel() {
                           </p>
                         </div>
 
-                        {/* Grace Period */}
-                        <div className="space-y-1.5">
-                          <Label className="text-xs font-semibold">New Enrollment Grace Period (Days)</Label>
-                          <Input 
-                            type="number"
-                            min={0}
-                            max={90}
-                            value={activeSelectedConfig.feeLocking.gracePeriodDays}
-                            onChange={(e) => {
-                              const val = parseInt(e.target.value) || 0;
-                              updateProgramConfig(activeSelectedProgram.id, {
-                                feeLocking: { ...activeSelectedConfig.feeLocking, gracePeriodDays: Math.max(0, val) }
-                              });
-                            }}
-                            className="bg-background h-9 text-xs"
-                          />
-                          <p className="text-[11px] text-muted-foreground">
-                            Days granted to newly enrolled students before this fee gating rule starts locking video lectures.
-                          </p>
-                        </div>
+                        {/* Videos unlocked by payment (tiers) */}
+                        {(() => {
+                          const tiers = activeSelectedConfig.feeLocking.tiers || [];
+                          const setTiers = (next: { minPaidPercentage: number; videoCount: number | null }[]) =>
+                            updateProgramConfig(activeSelectedProgram.id, {
+                              feeLocking: { ...activeSelectedConfig.feeLocking, tiers: next }
+                            });
+                          const patchTier = (i: number, patch: Partial<{ minPaidPercentage: number; videoCount: number | null }>) =>
+                            setTiers(tiers.map((t, idx) => (idx === i ? { ...t, ...patch } : t)));
+                          return (
+                            <div className="space-y-3 p-3.5 rounded-xl border border-border/60 bg-muted/20">
+                              <div className="flex items-start justify-between gap-3">
+                                <div>
+                                  <Label className="text-xs font-semibold">Unlock videos by payment</Label>
+                                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                                    Set how many videos a student can watch at each payment level. Videos open in course order. When steps are set, they replace the single minimum above.
+                                  </p>
+                                </div>
+                                {tiers.length === 0 ? (
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-7 text-xs shrink-0"
+                                    onClick={() => setTiers([
+                                      { minPaidPercentage: 25, videoCount: 10 },
+                                      { minPaidPercentage: 50, videoCount: 30 },
+                                      { minPaidPercentage: 100, videoCount: null },
+                                    ])}
+                                  >
+                                    Set up steps
+                                  </Button>
+                                ) : (
+                                  <Button type="button" size="sm" variant="ghost" className="h-7 text-xs shrink-0 text-muted-foreground" onClick={() => setTiers([])}>
+                                    Remove steps
+                                  </Button>
+                                )}
+                              </div>
+
+                              {tiers.length > 0 && (
+                                <div className="space-y-2">
+                                  {tiers.map((t, i) => (
+                                    <div key={i} className="flex flex-wrap items-center gap-2 text-xs">
+                                      <span className="text-muted-foreground">Paid at least</span>
+                                      <Input
+                                        type="number"
+                                        min={1}
+                                        max={100}
+                                        value={t.minPaidPercentage}
+                                        onChange={(e) => patchTier(i, { minPaidPercentage: Math.min(100, Math.max(1, parseInt(e.target.value) || 1)) })}
+                                        className="h-8 w-16 text-xs bg-background"
+                                      />
+                                      <span className="text-muted-foreground">% →</span>
+                                      {t.videoCount === null ? (
+                                        <span className="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-semibold">All videos</span>
+                                      ) : (
+                                        <>
+                                          <Input
+                                            type="number"
+                                            min={0}
+                                            value={t.videoCount}
+                                            onChange={(e) => patchTier(i, { videoCount: Math.max(0, parseInt(e.target.value) || 0) })}
+                                            className="h-8 w-20 text-xs bg-background"
+                                          />
+                                          <span className="text-muted-foreground">videos</span>
+                                        </>
+                                      )}
+                                      <label className="flex items-center gap-1.5 text-muted-foreground cursor-pointer ml-1">
+                                        <Checkbox
+                                          checked={t.videoCount === null}
+                                          onCheckedChange={(c) => patchTier(i, { videoCount: c ? null : 10 })}
+                                        />
+                                        All
+                                      </label>
+                                      <Button
+                                        type="button"
+                                        size="icon"
+                                        variant="ghost"
+                                        className="h-7 w-7 ml-auto text-muted-foreground"
+                                        onClick={() => setTiers(tiers.filter((_, idx) => idx !== i))}
+                                        aria-label="Remove step"
+                                      >
+                                        <X className="w-3.5 h-3.5" />
+                                      </Button>
+                                    </div>
+                                  ))}
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-7 text-xs"
+                                    onClick={() => setTiers([...tiers, { minPaidPercentage: Math.min(100, (tiers[tiers.length - 1]?.minPaidPercentage || 0) + 25), videoCount: 10 }])}
+                                  >
+                                    + Add step
+                                  </Button>
+                                  <p className="text-[11px] text-muted-foreground">
+                                    Below the lowest step, no videos are open. You can use {'{videoCount}'} in the notice below.
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })()}
 
                         {/* Custom Notice for Students */}
                         <div className="space-y-2">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, ArrowLeft, MoreVertical, CalendarDays, Users, ArrowRightLeft, History, Clock, GraduationCap, Sparkles, CheckSquare } from 'lucide-react';
+import { Plus, Edit, Trash2, ArrowLeft, MoreVertical, CalendarDays, Users, ArrowRightLeft, History, Clock, GraduationCap, Sparkles, CheckSquare, VideoOff, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -14,10 +14,10 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 
-export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass: any; onBack: () => void }) {
+export function AcademicBatchesPanel({ academicClass, onBack, isOnline = false }: { academicClass: any; onBack: () => void; isOnline?: boolean }) {
   const { user } = useAuth();
   const canWrite = ['org_admin', 'superadmin'].includes(user?.role || '');
-  const isPrincipal = user?.role === 'faculty' && user?.id === academicClass?.inchargeId;
+  const isPrincipal = user?.role === 'faculty' && !!user?.id && (user.id === academicClass?.inchargeId || (academicClass?.inchargeIds ?? []).includes(user.id));
   const canAllocate = isPrincipal;
   const [batches, setBatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -42,6 +42,11 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
   const [batchStats, setBatchStats] = useState<any>({ currentCount: 0, remainingSlots: null, capacity: null });
   const [allocating, setAllocating] = useState(false);
 
+  // Block / restore a student's video lectures (org admin only)
+  const [blockTarget, setBlockTarget] = useState<any | null>(null);
+  const [blockReason, setBlockReason] = useState('');
+  const [savingBlock, setSavingBlock] = useState(false);
+
   const [formData, setFormData] = useState({
     name: '',
     startDate: '',
@@ -53,6 +58,28 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
   useEffect(() => {
     fetchBatches();
   }, []);
+
+  const handleVideoBlock = async (blocked: boolean) => {
+    if (!blockTarget) return;
+    setSavingBlock(true);
+    try {
+      await api.put(`/students/${blockTarget.id}/video-block`, { blocked, reason: blockReason });
+      toast.success(blocked ? 'Video lectures blocked for this student' : 'Video lectures restored');
+      // Reflect the change in the open list without reloading it
+      setBatchStats((prev: any) => ({
+        ...prev,
+        students: (prev.students || []).map((st: any) =>
+          st.id === blockTarget.id ? { ...st, videoBlocked: blocked, videoBlockReason: blocked ? (blockReason.trim() || null) : null } : st
+        ),
+      }));
+      setBlockTarget(null);
+      setBlockReason('');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update video access');
+    } finally {
+      setSavingBlock(false);
+    }
+  };
 
   const fetchBatches = async () => {
     setLoading(true);
@@ -418,6 +445,21 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
                             <p className="text-sm font-medium truncate">{student.name}</p>
                             <p className="text-xs text-muted-foreground">ID: {student.enrollmentNo || 'N/A'}</p>
                           </div>
+                          {student.videoBlocked && (
+                            <Badge variant="destructive" className="text-[10px] shrink-0" title={student.videoBlockReason || undefined}>Videos blocked</Badge>
+                          )}
+                          {canWrite && isOnline && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 text-xs shrink-0"
+                              onClick={() => { setBlockTarget(student); setBlockReason(student.videoBlockReason || ''); }}
+                            >
+                              {student.videoBlocked ? <Video className="w-3 h-3 mr-1" /> : <VideoOff className="w-3 h-3 mr-1" />}
+                              {student.videoBlocked ? 'Unblock videos' : 'Block videos'}
+                            </Button>
+                          )}
                           {canAllocate && (
                             <Button 
                               type="button" 
@@ -593,6 +635,40 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
 
 
       {/* Transfer Dialog */}
+      <Dialog open={!!blockTarget} onOpenChange={(o) => { if (!o) { setBlockTarget(null); setBlockReason(''); } }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{blockTarget?.videoBlocked ? 'Restore video lectures' : 'Block video lectures'}: {blockTarget?.name}</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            {blockTarget?.videoBlocked
+              ? 'The student will be able to watch their video lectures again (fee rules still apply).'
+              : 'The student can still sign in and see fees and profile, but every video lecture is locked until you unblock them.'}
+          </p>
+          {!blockTarget?.videoBlocked && (
+            <div className="space-y-2">
+              <Label>Reason (shown to the student)</Label>
+              <Textarea
+                rows={3}
+                value={blockReason}
+                onChange={(e) => setBlockReason(e.target.value)}
+                maxLength={300}
+                placeholder="e.g. Pending dues, disciplinary action…"
+                className="resize-none"
+              />
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setBlockTarget(null)} disabled={savingBlock}>Cancel</Button>
+            {blockTarget?.videoBlocked ? (
+              <Button onClick={() => handleVideoBlock(false)} disabled={savingBlock}>{savingBlock ? 'Saving...' : 'Unblock Videos'}</Button>
+            ) : (
+              <Button variant="destructive" onClick={() => handleVideoBlock(true)} disabled={savingBlock}>{savingBlock ? 'Saving...' : 'Block Videos'}</Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={transferDialogOpen} onOpenChange={setTransferDialogOpen}>
         <DialogContent>
           <DialogHeader>

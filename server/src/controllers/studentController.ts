@@ -642,6 +642,8 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
 
   const dataToUpdate: any = { ...req.body };
   delete dataToUpdate.id;
+  // The video block has its own org-admin-only endpoint
+  for (const key of ['videoBlocked', 'videoBlockReason', 'videoBlockedAt', 'videoBlockedBy']) delete dataToUpdate[key];
   delete dataToUpdate.email; // Do not allow updating primary email directly
   delete dataToUpdate.organizationId; // a student never moves to another organization
   // The enrollment form also sends fields that live on other models
@@ -1683,4 +1685,43 @@ export const checkStudentUniqueness = asyncHandler(async (req: AuthRequest, res:
   });
 
   res.status(200).json({ success: true, ...result });
+});
+
+
+// PUT /students/:id/video-block  { blocked: boolean, reason?: string }  (org admin only)
+export const setStudentVideoBlock = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const blocked = req.body?.blocked === true;
+  const reason = typeof req.body?.reason === 'string' ? req.body.reason.trim().slice(0, 300) : '';
+
+  const student = await prisma.student.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId },
+    select: { id: true, name: true, videoBlocked: true }
+  });
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+
+  const updated = await prisma.student.update({
+    where: { id: student.id },
+    data: blocked
+      ? { videoBlocked: true, videoBlockReason: reason || null, videoBlockedAt: new Date(), videoBlockedBy: req.user.id }
+      : { videoBlocked: false, videoBlockReason: null, videoBlockedAt: null, videoBlockedBy: null },
+    select: { id: true, videoBlocked: true, videoBlockReason: true, videoBlockedAt: true, videoBlockedBy: true }
+  });
+
+  prisma.auditLog.create({
+    data: {
+      organizationId: req.user.organizationId,
+      userId: req.user.id,
+      action: blocked ? 'STUDENT_VIDEO_BLOCKED' : 'STUDENT_VIDEO_UNBLOCKED',
+      entityType: 'student',
+      entityId: student.id,
+      oldValue: { videoBlocked: student.videoBlocked },
+      newValue: { videoBlocked: blocked, reason: reason || null },
+      ipAddress: req.ip || '0.0.0.0',
+    },
+  }).catch((e) => console.error('[students] video block audit error', e));
+
+  res.json({ success: true, data: updated, message: blocked ? 'Video access blocked' : 'Video access restored' });
 });

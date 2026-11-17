@@ -9,7 +9,8 @@ import {
   getResumePosition,
   getStartOfIstDay,
   getWatchedPercent,
-  isVideoLogWatched
+  isVideoLogWatched,
+  rankVideoLessons
 } from '../utils/videoAccess.js';
 
 // Helper: get the Student record linked to the logged-in user (via email or direct ID)
@@ -139,8 +140,45 @@ function getStudentFeeRecords(student: any) {
   ]);
 }
 
+function getVideoBlockMessage(student: any) {
+  const reason = typeof student.videoBlockReason === 'string' ? student.videoBlockReason.trim() : '';
+  return `Your access to video lectures has been blocked by the administration.${reason ? ` Reason: ${reason}.` : ''} Please contact the office.`;
+}
+
 function getDailyLimitMessage(limit: number, watchedCount: number) {
   return `Daily viewing limit of ${limit} classes reached for today (${watchedCount}/${limit} watched). New classes unlock tomorrow at 12:00 AM.`;
+}
+
+// The student's online classes with just enough structure to number their videos in course order
+async function getOnlineClassesForRanking(student: any) {
+  const batches = await prisma.academicBatch.findMany({
+    where: {
+      OR: [
+        { students: { some: { id: student.id } } },
+        student.academicBatchId ? { id: student.academicBatchId } : {}
+      ].filter(condition => Object.keys(condition).length > 0)
+    },
+    select: { academicClassId: true, academicClass: { select: { academicCenter: { select: { type: true } } } } }
+  });
+  const onlineBatchClassIds = batches.filter(b => b.academicClass?.academicCenter?.type === 'online').map(b => b.academicClassId);
+  const lessonSelect = { select: { id: true, videoUrl: true, classSubModuleId: true }, orderBy: { order: 'asc' as const } };
+  return prisma.academicClass.findMany({
+    where: {
+      organizationId: student.organizationId,
+      academicCenter: { type: 'online' },
+      OR: [{ programIds: { has: student.programId || '' } }, { id: { in: onlineBatchClassIds } }]
+    },
+    orderBy: { createdAt: 'asc' },
+    select: {
+      modules: {
+        orderBy: { order: 'asc' },
+        select: {
+          lessons: lessonSelect,
+          subModules: { orderBy: { order: 'asc' }, select: { lessons: lessonSelect } }
+        }
+      }
+    }
+  });
 }
 
 // Helper: check access to a lesson before recording a view or watch time.
@@ -163,6 +201,11 @@ async function checkLessonAccessForStudent(student: any, moduleLessonId: string)
     return { allowed: true };
   }
 
+  // An admin block applies to online-class videos only
+  if (student.videoBlocked) {
+    return { allowed: false, status: 403, reason: 'admin_blocked', message: getVideoBlockMessage(student) };
+  }
+
   const org = await prisma.organization.findUnique({
     where: { id: student.organizationId },
     select: { metadata: true }
@@ -178,6 +221,13 @@ async function checkLessonAccessForStudent(student: any, moduleLessonId: string)
       reason: 'fee_overdue',
       message: feeStatus.message
     };
+  }
+  // Tiered fee lock: only the first N videos (in course order) are open
+  if (feeStatus.videoQuota !== null) {
+    const rank = rankVideoLessons(await getOnlineClassesForRanking(student));
+    if ((rank.get(moduleLessonId) ?? Infinity) >= feeStatus.videoQuota) {
+      return { allowed: false, status: 403, reason: 'fee_overdue', message: feeStatus.message };
+    }
   }
 
   const dailyLimit = getDailyLimit(activeConfig);
@@ -333,6 +383,9 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
   const watchedLessonsToday = new Set(todayVideoLogs.map(l => l.moduleLessonId));
   const watchedCountToday = watchedLessonsToday.size;
   const feeStatus = evaluateFeeLock(programAccessConfig, studentInvoices, studentSchedules, studentFeeStructures, student);
+  const videoRank = rankVideoLessons(onlineClasses);
+  const isBeyondFeeQuota = (lessonId: string) =>
+    feeStatus.videoQuota !== null && (videoRank.get(lessonId) ?? Infinity) >= feeStatus.videoQuota;
   const dailyLimit = getDailyLimit(programAccessConfig);
   const isDailyLimitReached = dailyLimit !== null && watchedCountToday >= dailyLimit;
 
@@ -400,7 +453,11 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
       let lockReason: string | null = null;
       let lockMessage: string | null = null;
 
-      if (lesson.videoUrl && feeStatus.isFeeLocked) {
+      if (lesson.videoUrl && student.videoBlocked) {
+        isFeeLocked = true;
+        lockReason = 'admin_blocked';
+        lockMessage = getVideoBlockMessage(student);
+      } else if (lesson.videoUrl && (feeStatus.isFeeLocked || isBeyondFeeQuota(lesson.id))) {
         isFeeLocked = true;
         lockReason = 'fee_overdue';
         lockMessage = feeStatus.message;
@@ -441,7 +498,7 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
         totalFee: feeStatus.totalFee,
         paidFee: feeStatus.paidFee,
         paidPercentage: feeStatus.paidPercentage,
-        minPaidPercentage: feeStatus.minPaidPercentage
+        minPaidPercentage: student.videoBlocked ? 0 : feeStatus.minPaidPercentage
       };
     };
 
@@ -467,8 +524,8 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
       centerName: classData.academicCenter?.name,
       dailyLimit,
       watchedTodayCount: watchedCountToday,
-      isFeeLocked: feeStatus.isFeeLocked,
-      feeLockMessage: feeStatus.message,
+      isFeeLocked: feeStatus.isFeeLocked || !!student.videoBlocked,
+      feeLockMessage: student.videoBlocked ? getVideoBlockMessage(student) : feeStatus.message,
       totalFee: feeStatus.totalFee,
       paidFee: feeStatus.paidFee,
       paidPercentage: feeStatus.paidPercentage,
@@ -566,22 +623,43 @@ export const getStudentFees = asyncHandler(async (req: AuthRequest, res: Respons
     res.json({ success: true, data: { schedules: [], feeStructures: [] } });
     return;
   }
-  const schedules = await prisma.paymentSchedule.findMany({
+  const rawSchedules = await prisma.paymentSchedule.findMany({
     where: { studentId: student.id },
     orderBy: { dueDate: 'asc' },
+    include: { invoices: { include: { payments: true } } },
   });
-  const feeStructures = await prisma.feeStructure.findMany({
+  // Admins save the status in lower case ("paid"); the portal reads an upper-case
+  // status plus the amount paid and the balance left on each installment.
+  const schedules = rawSchedules.map(({ invoices, ...sch }: any) => {
+    const amount = Number(sch.amount || 0);
+    const isPaid = sch.status?.toLowerCase() === 'paid' || !!sch.paidAt;
+    const received = (invoices || [])
+      .filter((inv: any) => !['cancelled', 'canceled', 'void'].includes(inv.status?.toLowerCase()))
+      .reduce((sum: number, inv: any) => sum + (inv.payments || []).reduce((t: number, p: any) => t + Number(p.amount || 0), 0), 0);
+    const paidAmount = isPaid ? amount : Math.min(received, amount);
+    const balanceAmount = Math.max(amount - paidAmount, 0);
+    const status = isPaid || (amount > 0 && balanceAmount <= 0) ? 'PAID' : paidAmount > 0 ? 'PARTIALLY_PAID' : 'PENDING';
+    return { ...sch, status, paidAmount, balanceAmount };
+  });
+  const candidates = await prisma.feeStructure.findMany({
     where: {
-      organizationId: req.user.organizationId,
-      OR: [
-        { programId: student.programId, specialisation: student.specialisation || null },
-        { programId: student.programId, specialisation: null },
-        { programId: null },
-      ],
+      organizationId: student.organizationId,
+      OR: [{ programId: student.programId }, { programId: null }],
     },
     include: { program: true, university: true },
     orderBy: { createdAt: 'desc' },
   });
+  // Show only the one structure that applies to this student: the closest match on
+  // program, specialisation and admission session (a structure tied to another
+  // session or specialisation is not theirs).
+  const scored = candidates
+    .filter((f) => (!f.sessionId || f.sessionId === student.sessionId) && (!f.specialisation || f.specialisation === student.specialisation))
+    .map((f) => ({
+      f,
+      score: (f.programId === student.programId && student.programId ? 4 : 0) + (f.sessionId ? 2 : 0) + (f.specialisation ? 1 : 0),
+    }))
+    .sort((a, b) => b.score - a.score);
+  const feeStructures = scored.length ? [scored[0].f] : [];
   res.json({ success: true, data: { schedules, feeStructures } });
 });
 

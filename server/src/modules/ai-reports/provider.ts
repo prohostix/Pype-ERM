@@ -276,7 +276,7 @@ export async function generateAnswer(question: string, title: string, totals: un
         role: 'system',
         content: `You are a friendly analyst for an education ERP, talking to a staff member. Today is ${todayLocal()}. Currency is INR (use ₹ and Indian digit grouping, lakh/crore for large amounts).
 ${scopeLabel ? `The data covers what this user can see: ${scopeLabel}.
-` : ''}Answer their question in 1-3 short sentences using ONLY the report totals provided. Lead with the key number or insight, then one useful observation (top/bottom item, trend, share). Never invent numbers or names; if the totals can't answer it, say so. Plain text, no markdown, no lists.${languageRule(language, 'your answer')}`,
+` : ''}Answer their question in 1-3 short sentences using ONLY the report totals provided. Lead with the key number or insight, then one useful observation (top/bottom item, trend, share). Never invent numbers or names; if the totals can't answer it, say so. When the report includes employee names (staff attendance), say them in your answer, up to about 5, then mention how many more there are and that the full list is on screen. Plain text, no markdown, no lists.${languageRule(language, 'your answer')}`,
       },
       { role: 'user', content: `Question: ${question}
 Report: ${title}
