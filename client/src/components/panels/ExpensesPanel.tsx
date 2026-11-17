@@ -15,11 +15,15 @@ export function ExpensesPanel() {
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  // Local date as YYYY-MM-DD, the format the date picker uses
+  const toDateInput = (d: Date = new Date()) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   const [formData, setFormData] = useState({
     amount: '',
     category: 'travel',
     description: '',
-    status: 'pending'
+    status: 'pending',
+    date: toDateInput()
   });
 
   useEffect(() => {
@@ -66,7 +70,8 @@ export function ExpensesPanel() {
       amount: expense.amount?.toString() || '',
       category: expense.category || 'travel',
       description: expense.description || '',
-      status: expense.status || 'pending'
+      status: expense.status || 'pending',
+      date: expense.submittedAt ? toDateInput(new Date(expense.submittedAt)) : toDateInput()
     });
     setDialogOpen(true);
   };
@@ -97,7 +102,8 @@ export function ExpensesPanel() {
       amount: '',
       category: 'travel',
       description: '',
-      status: 'pending'
+      status: 'pending',
+      date: toDateInput()
     });
   };
 
@@ -121,6 +127,10 @@ export function ExpensesPanel() {
                 <div>
                   <Label>Amount</Label>
                   <Input type="number" value={formData.amount} onChange={(e) => setFormData({...formData, amount: e.target.value})} required />
+                </div>
+                <div>
+                  <Label>Expense date</Label>
+                  <Input type="date" value={formData.date} max={toDateInput()} onChange={(e) => setFormData({...formData, date: e.target.value})} required />
                 </div>
                 <div>
                   <Label>Category</Label>

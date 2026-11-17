@@ -22,23 +22,33 @@ export const getScopedBranchId = (req: AuthRequest): string | null => {
  * requester's branch. Empty when the requester isn't branch-restricted.
  * Usage: prisma.salaryConfig.findMany({ where: { organizationId, ...branchUserFilter(req) } })
  */
-export const branchUserFilter = (req: AuthRequest): { user?: { branchId: string } } => {
+export const branchUserFilter = (req: AuthRequest, opts: { includeGeneralManager?: boolean } = {}): { user?: any } => {
   const branchId = getScopedBranchId(req);
-  return branchId ? { user: { branchId } } : {};
+  if (!branchId) return {};
+  // The General Manager belongs to no branch, so a branch-locked HR user would never see them.
+  // Where asked, the GM (and only the GM) is added to what a branch-locked user can reach.
+  if (opts.includeGeneralManager && isBranchLocked(req)) {
+    return { user: { OR: [{ branchId }, { role: 'general_manager', branchId: null }] } };
+  }
+  return { user: { branchId } };
 };
+
+/** True when this user is locked to their own branch (as opposed to a global role narrowing by choice) */
+const isBranchLocked = (req: AuthRequest): boolean => !GLOBAL_ROLES.includes(req.user.role) && !!req.user.branchId;
 
 /**
  * True when `userId` is in the requester's organization and branch scope.
  * Center admins may also reach users of their study center.
  */
-export const isUserInScope = async (req: AuthRequest, userId: string): Promise<boolean> => {
+export const isUserInScope = async (req: AuthRequest, userId: string, opts: { includeGeneralManager?: boolean } = {}): Promise<boolean> => {
   if (userId === req.user.id) return true;
   const target = await prisma.user.findFirst({
     where: { id: userId, organizationId: req.user.organizationId },
-    select: { branchId: true, studyCenterId: true }
+    select: { branchId: true, studyCenterId: true, role: true }
   });
   if (!target) return false;
   const branchId = getScopedBranchId(req);
   if (!branchId || target.branchId === branchId) return true;
+  if (opts.includeGeneralManager && isBranchLocked(req) && target.role === 'general_manager' && !target.branchId) return true;
   return req.user.role === 'center_admin' && !!req.user.studyCenterId && target.studyCenterId === req.user.studyCenterId;
 };

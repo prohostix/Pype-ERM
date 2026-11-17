@@ -3,7 +3,7 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { getPayrollBranchId } from '../utils/payrollScope.js';
-import { branchUserFilter, getScopedBranchId, isUserInScope } from '../utils/branchScope.js';
+import { branchUserFilter, getScopedBranchId, isUserInScope, GLOBAL_ROLES as GLOBAL_ROLES_FOR_SCOPE } from '../utils/branchScope.js';
 
 // Only these fields can be written from a request. Identity and approval fields (id, userId,
 // organizationId, approvalStatus, approvedBy, ...) are never taken from the client.
@@ -15,7 +15,7 @@ const LEAVE_ALLOCATION_FIELDS = ['sickLeave', 'casualLeave', 'earnedLeave', 'com
 
 export const getSalaryConfigs = asyncHandler(async (req: AuthRequest, res: Response) => {
   const configs = await prisma.salaryConfig.findMany({
-    where: { organizationId: req.user.organizationId, ...branchUserFilter(req) },
+    where: { organizationId: req.user.organizationId, ...branchUserFilter(req, { includeGeneralManager: true }) },
     include: { user: { select: { name: true, email: true, designation: true } } }
   });
   res.json({ success: true, count: configs.length, data: configs });
@@ -23,7 +23,7 @@ export const getSalaryConfigs = asyncHandler(async (req: AuthRequest, res: Respo
 
 export const getFinanceSalaryConfigs = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { status } = req.query;
-  const whereClause: any = { organizationId: req.user.organizationId, ...branchUserFilter(req) };
+  const whereClause: any = { organizationId: req.user.organizationId, ...branchUserFilter(req, { includeGeneralManager: true }) };
   if (status) {
     whereClause.approvalStatus = status;
   }
@@ -36,7 +36,7 @@ export const getFinanceSalaryConfigs = asyncHandler(async (req: AuthRequest, res
 
   const allConfigs = await prisma.salaryConfig.groupBy({
     by: ['approvalStatus'],
-    where: { organizationId: req.user.organizationId, ...branchUserFilter(req) },
+    where: { organizationId: req.user.organizationId, ...branchUserFilter(req, { includeGeneralManager: true }) },
     _count: { approvalStatus: true }
   });
 
@@ -56,7 +56,7 @@ export const getFinanceSalaryConfigs = asyncHandler(async (req: AuthRequest, res
 });
 
 export const getSalaryConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const inScope = await isUserInScope(req, req.params.userId);
+  const inScope = await isUserInScope(req, req.params.userId, { includeGeneralManager: true });
   const config = inScope
     ? await prisma.salaryConfig.findFirst({ where: { userId: req.params.userId, organizationId: req.user.organizationId } })
     : null;
@@ -69,7 +69,7 @@ export const getSalaryConfig = asyncHandler(async (req: AuthRequest, res: Respon
 
 export const upsertSalaryConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
   // The employee must be in the requester's organization and branch.
-  if (!(await isUserInScope(req, req.params.userId))) {
+  if (!(await isUserInScope(req, req.params.userId, { includeGeneralManager: true }))) {
     res.status(404).json({ success: false, message: 'Employee not found' });
     return;
   }
@@ -100,7 +100,7 @@ export const upsertSalaryConfig = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const deleteSalaryConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const config = (await isUserInScope(req, req.params.userId))
+  const config = (await isUserInScope(req, req.params.userId, { includeGeneralManager: true }))
     ? await prisma.salaryConfig.findFirst({ where: { userId: req.params.userId, organizationId: req.user.organizationId } })
     : null;
   if (!config) {
@@ -115,7 +115,7 @@ export const getLeaveAllocations = asyncHandler(async (req: AuthRequest, res: Re
   const year = Number(req.query.year) || new Date().getFullYear();
   const month = Number(req.query.month) || (new Date().getMonth() + 1);
   const allocations = await prisma.leaveAllocation.findMany({
-    where: { organizationId: req.user.organizationId, year, month, ...branchUserFilter(req) },
+    where: { organizationId: req.user.organizationId, year, month, ...branchUserFilter(req, { includeGeneralManager: true }) },
     include: { user: { select: { name: true, email: true, role: true, designation: true, employeeProfileDetail: { select: { joinDate: true, probationEndDate: true } } } } }
   });
   res.json({ success: true, count: allocations.length, data: allocations });
@@ -124,7 +124,7 @@ export const getLeaveAllocations = asyncHandler(async (req: AuthRequest, res: Re
 export const getLeaveAllocation = asyncHandler(async (req: AuthRequest, res: Response) => {
   const year = Number(req.query.year) || new Date().getFullYear();
   const month = Number(req.query.month) || (new Date().getMonth() + 1);
-  if (!(await isUserInScope(req, req.params.userId))) {
+  if (!(await isUserInScope(req, req.params.userId, { includeGeneralManager: true }))) {
     res.status(404).json({ success: false, message: 'Employee not found' });
     return;
   }
@@ -135,7 +135,7 @@ export const getLeaveAllocation = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const upsertLeaveAllocation = asyncHandler(async (req: AuthRequest, res: Response) => {
-  if (!(await isUserInScope(req, req.params.userId))) {
+  if (!(await isUserInScope(req, req.params.userId, { includeGeneralManager: true }))) {
     res.status(404).json({ success: false, message: 'Employee not found' });
     return;
   }
@@ -165,7 +165,7 @@ export const deleteLeaveAllocation = asyncHandler(async (req: AuthRequest, res: 
   const year = Number(req.query.year) || new Date().getFullYear();
   const month = Number(req.query.month) || (new Date().getMonth() + 1);
 
-  if (!(await isUserInScope(req, req.params.userId))) {
+  if (!(await isUserInScope(req, req.params.userId, { includeGeneralManager: true }))) {
     res.status(404).json({ success: false, message: 'Employee not found' });
     return;
   }
@@ -219,7 +219,10 @@ export const bulkInitLeaveAllocations = asyncHandler(async (req: AuthRequest, re
       organizationId: req.user.organizationId,
       status: 'active',
       NOT: { role: { in: ['student', 'center_admin'] } },
-      ...(scopedBranchId ? { branchId: scopedBranchId } : {}),
+      // A branch-locked HR user also covers the General Manager, who has no branch
+      ...(scopedBranchId
+        ? { OR: [{ branchId: scopedBranchId }, ...(!GLOBAL_ROLES_FOR_SCOPE.includes(req.user.role) ? [{ role: 'general_manager' as const, branchId: null }] : [])] }
+        : {}),
     },
     select: { id: true },
   });
@@ -464,7 +467,7 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
 export const approveSalaryConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
   // Finance can only approve configs of their own organization and branch.
   const existing = await prisma.salaryConfig.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId, ...branchUserFilter(req) },
+    where: { id: req.params.id, organizationId: req.user.organizationId, ...branchUserFilter(req, { includeGeneralManager: true }) },
     select: { id: true },
   });
   if (!existing) {

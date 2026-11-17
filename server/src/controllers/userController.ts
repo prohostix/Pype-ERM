@@ -48,7 +48,12 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
   ];
   
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
-    where.branchId = req.user.branchId;
+    if (['hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
+      // HR also sees the General Manager, who belongs to no branch
+      where.OR = [{ branchId: req.user.branchId }, { role: 'general_manager', branchId: null }];
+    } else {
+      where.branchId = req.user.branchId;
+    }
   }
 
   if (req.query.role) {

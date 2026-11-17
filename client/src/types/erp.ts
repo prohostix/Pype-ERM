@@ -25,7 +25,8 @@ export type UserRole =
   | 'center_student'
   | 'center_teacher'
   | 'teacher'
-  | 'general_manager';
+  | 'general_manager'
+  | 'branch_manager';
 
 export type DepartmentType = 'operations' | 'finance' | 'hr' | 'sales' | 'custom' | 'general_manager' | 'ceo' | 'org_admin' | 'study_center';
 export type SubDepartmentType = 'openschool' | 'online' | 'skill' | 'bvoc';

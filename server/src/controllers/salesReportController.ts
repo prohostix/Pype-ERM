@@ -185,7 +185,7 @@ export const getCounselorReport = asyncHandler(async (req: AuthRequest, res: Res
   const studentBranch = branchLimitOf(req) ? { branchId: branchLimitOf(req) as string } : {};
 
   // Sales team roles that work leads and admissions (sub admins included)
-  userWhere.role = { in: ['sales', 'sales_sub_admin', 'academic_counselor'] };
+  userWhere.role = { in: ['sales', 'sales_sub_admin'] };
 
   const counselors = await prisma.user.findMany({
     where: userWhere,

@@ -475,6 +475,16 @@ export const getExpense = asyncHandler(async (req: AuthRequest, res: Response) =
   }
   res.json({ success: true, data: expense });
 });
+// The expense date picked on the form (YYYY-MM-DD). Stored as the claim's date; it can't be in the future.
+const parseExpenseDate = (value: unknown): Date | null | 'invalid' => {
+  if (value === undefined || value === null || value === '') return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(value));
+  if (!m) return 'invalid';
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12, 0, 0); // midday keeps the day stable across time zones
+  if (Number.isNaN(d.getTime()) || d.getTime() > Date.now() + 24 * 60 * 60 * 1000) return 'invalid';
+  return d;
+};
+
 export const createExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { amount, category, description, title, receipts, receiptUrl, status, remarks } = req.body;
 
@@ -483,8 +493,15 @@ export const createExpense = asyncHandler(async (req: AuthRequest, res: Response
     return;
   }
 
+  const expenseDate = parseExpenseDate(req.body.date);
+  if (expenseDate === 'invalid') {
+    res.status(400).json({ success: false, message: 'Expense date must be a valid date that is not in the future' });
+    return;
+  }
+
   const expense = await prisma.expenseClaim.create({
     data: {
+      ...(expenseDate ? { submittedAt: expenseDate } : {}),
       amount: Number(amount),
       category: category || 'other',
       description: description || title || '',
@@ -513,6 +530,12 @@ export const updateExpense = asyncHandler(async (req: AuthRequest, res: Response
   else if (receiptUrl !== undefined) updateData.receipts = [receiptUrl];
   if (status !== undefined) updateData.status = status;
   if (remarks !== undefined) updateData.remarks = remarks;
+  const expenseDate = parseExpenseDate(req.body.date);
+  if (expenseDate === 'invalid') {
+    res.status(400).json({ success: false, message: 'Expense date must be a valid date that is not in the future' });
+    return;
+  }
+  if (expenseDate) updateData.submittedAt = expenseDate;
 
   const expense = await prisma.expenseClaim.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: expense });

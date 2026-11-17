@@ -74,8 +74,8 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
   // Action dialog (approve/reject with remarks)
   const [actionDialog, setActionDialog] = useState(false);
   const [actionLeave, setActionLeave] = useState<LeaveRequest | null>(null);
-  const [actionType, setActionType] = useState<'dept' | 'hr'>('dept');
-  const [actionMode, setActionMode] = useState<'approve' | 'reject'>('approve');
+  const [actionType, setActionType] = useState<'dept' | 'hr' | 'employee'>('dept');
+  const [actionMode, setActionMode] = useState<'approve' | 'reject' | 'withdraw'>('approve');
   const [remarks, setRemarks] = useState('');
   const [actionSubmitting, setActionSubmitting] = useState(false);
 
@@ -392,9 +392,13 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                 const isExpanded = expanded === leave.id;
                 const isOwner = leave.employeeId === userId;
                 const isExecutive = role === 'ceo' || role === 'superadmin' || role === 'org_admin' || role === 'general_manager' || role === 'branch_manager';
-                const canDeptAct = !isOwner && ((isDeptManager && leave.status === 'pending') || (isHR && leave.status === 'pending'));
-                const canHRAct = !isOwner && ((isHR && leave.status === 'dept_approved') || (isExecutive && (leave.status === 'pending' || leave.status === 'dept_approved')));
-                const canWithdrawAct = !isOwner && leave.status === 'withdraw_pending' && (isHR || isExecutive);
+                // The General Manager's requests are decided by the CEO (or org admin); others can only view them
+                const isGmLeave = (leave as any).user?.role === 'general_manager';
+                const canDecideGm = ['ceo', 'org_admin', 'superadmin'].includes(role);
+                const blockedGm = isGmLeave && !canDecideGm;
+                const canDeptAct = !isOwner && !blockedGm && ((isDeptManager && leave.status === 'pending') || (isHR && leave.status === 'pending'));
+                const canHRAct = !isOwner && !blockedGm && ((isHR && leave.status === 'dept_approved') || (isExecutive && (leave.status === 'pending' || leave.status === 'dept_approved')));
+                const canWithdrawAct = !isOwner && !blockedGm && leave.status === 'withdraw_pending' && (isHR || isExecutive);
 
                 return (
                   <Card key={leave.id} className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm hover:shadow-lg rounded-2xl hover:border-primary/30 transition-all duration-300 bg-card/60 backdrop-blur-xl group overflow-hidden">

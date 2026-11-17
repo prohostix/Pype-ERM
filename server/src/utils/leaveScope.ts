@@ -10,7 +10,8 @@ const HR_ROLES = ['hr_admin', 'hr_sub_admin'];
  * approving, editing, deleting and the stats all start from this, so they cannot disagree.
  *
  *  - org admin / CEO / general manager: the whole organization
- *  - HR: employees of their own branch (all branches if the HR user has no branch); never study-center admins
+ *  - HR: employees of their own branch (all branches if the HR user has no branch), plus the General Manager;
+ *    never study-center admins
  *  - department managers: their department's and reports' requests, plus their own
  *  - branch managers and everyone else: their own, plus the people they manage (department / sub-department
  *    manager or reporting manager), plus their branch's requests when they have a branch
@@ -22,8 +23,15 @@ export const leaveVisibilityWhere = (req: AuthRequest): any => {
   if (GLOBAL_ADMIN_ROLES.includes(role)) {
     // sees every request in the organization
   } else if (HR_ROLES.includes(role)) {
-    where.user = { role: { not: 'center_admin' } };
-    if (branchId) where.user.branchId = branchId;
+    if (branchId) {
+      // The General Manager belongs to no branch; HR still sees their requests (the CEO decides them)
+      where.OR = [
+        { user: { role: { not: 'center_admin' }, branchId } },
+        { user: { role: 'general_manager' } },
+      ];
+    } else {
+      where.user = { role: { not: 'center_admin' } };
+    }
   } else if (DEPT_MANAGER_ROLES.includes(role)) {
     where.OR = [
       { employeeId: userId },
@@ -53,6 +61,23 @@ export const leaveVisibilityWhere = (req: AuthRequest): any => {
  * HR admins who should hear about a request from an employee of `employeeBranchId`:
  * the HR of that branch, plus HR with no branch (who oversee every branch).
  */
+/** Roles that may decide the General Manager's leave requests */
+const GM_LEAVE_DECIDERS = ['ceo', 'org_admin', 'superadmin'];
+
+/**
+ * True when `leaveId` belongs to a General Manager and the caller is neither the GM themselves
+ * nor one of the roles allowed to decide it. HR and department managers can see such a request
+ * but not approve, reject, edit or delete it.
+ */
+export const isGeneralManagerLeaveLocked = async (req: AuthRequest, leaveId: string): Promise<boolean> => {
+  if (GM_LEAVE_DECIDERS.includes(req.user.role)) return false;
+  const leave = await prisma.leaveRequest.findUnique({
+    where: { id: leaveId },
+    select: { employeeId: true, user: { select: { role: true } } },
+  });
+  return !!leave && leave.user?.role === 'general_manager' && leave.employeeId !== req.user.id;
+};
+
 export const hrAdminsFor = async (organizationId: string | null | undefined, employeeBranchId: string | null | undefined) =>
   !organizationId ? [] : prisma.user.findMany({
     where: {

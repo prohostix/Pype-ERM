@@ -3,7 +3,7 @@ import { AuthRequest } from '../middleware/auth.js';
 import { sendPushNotification } from '../services/notification.service.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import { leaveVisibilityWhere, hrAdminsFor, executivesFor } from '../utils/leaveScope.js';
+import { leaveVisibilityWhere, hrAdminsFor, executivesFor, isGeneralManagerLeaveLocked } from '../utils/leaveScope.js';
 
 // --- Leave Requests ---
 export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -27,7 +27,7 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
   const leaves = await prisma.leaveRequest.findMany({
     where,
     include: {
-      user: { select: { name: true, email: true, designation: true } },
+      user: { select: { name: true, email: true, designation: true, role: true } },
       department: { select: { name: true } },
       deptApprover: { select: { name: true, role: true, designation: true } },
       hrApprover: { select: { name: true, role: true, designation: true } }
@@ -308,6 +308,10 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const updateLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (await isGeneralManagerLeaveLocked(req, req.params.id)) {
+    res.status(403).json({ success: false, message: "Only the CEO can decide the General Manager's leave requests." });
+    return;
+  }
   const exists = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, ...leaveVisibilityWhere(req) } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Leave request not found' });
@@ -328,6 +332,10 @@ export const updateLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const deleteLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (await isGeneralManagerLeaveLocked(req, req.params.id)) {
+    res.status(403).json({ success: false, message: "Only the CEO can decide the General Manager's leave requests." });
+    return;
+  }
   const exists = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, ...leaveVisibilityWhere(req) } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Leave request not found' });
@@ -338,6 +346,10 @@ export const deleteLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (await isGeneralManagerLeaveLocked(req, req.params.id)) {
+    res.status(403).json({ success: false, message: "Only the CEO can decide the General Manager's leave requests." });
+    return;
+  }
   const { action, remarks } = req.body;
   // Only requests the caller can see (their own organization, branch or department).
   const visible = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, ...leaveVisibilityWhere(req) }, select: { id: true } });
@@ -384,6 +396,10 @@ export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Respo
 });
 
 export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (await isGeneralManagerLeaveLocked(req, req.params.id)) {
+    res.status(403).json({ success: false, message: "Only the CEO can decide the General Manager's leave requests." });
+    return;
+  }
   const { action, remarks } = req.body;
   const currentLeave = await prisma.leaveRequest.findUnique({ where: { id: req.params.id } });
   if (!currentLeave) return res.status(404).json({ success: false, message: 'Not found' });
