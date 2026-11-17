@@ -630,12 +630,34 @@ export const getStudentFees = asyncHandler(async (req: AuthRequest, res: Respons
   });
   // Admins save the status in lower case ("paid"); the portal reads an upper-case
   // status plus the amount paid and the balance left on each installment.
+  // Money finance recorded without choosing an installment sits on invoices that belong to
+  // no schedule. Fully paid ones count toward the earliest unpaid installments, so the
+  // balance is right however the payment was recorded. (Part-paid ones stay as their own
+  // amount due, so nothing is counted twice.)
+  const unlinkedInvoices = await prisma.invoice.findMany({
+    where: { studentId: student.id, scheduleId: null },
+    include: { payments: true },
+  });
+  let unallocated = unlinkedInvoices.reduce((sum: number, inv: any) => {
+    if (['cancelled', 'canceled', 'void', 'draft'].includes(inv.status?.toLowerCase())) return sum;
+    const total = Number(inv.total ?? inv.amount ?? 0);
+    const received = (inv.payments || []).reduce((t: number, p: any) => t + Number(p.amount || 0), 0);
+    const paid = inv.status?.toLowerCase() === 'paid' ? Math.max(received, total) : received;
+    return paid >= total && total > 0 ? sum + paid : sum;
+  }, 0);
+
   const schedules = rawSchedules.map(({ invoices, ...sch }: any) => {
     const amount = Number(sch.amount || 0);
     const isPaid = sch.status?.toLowerCase() === 'paid' || !!sch.paidAt;
-    const received = (invoices || [])
+    const linked = (invoices || [])
       .filter((inv: any) => !['cancelled', 'canceled', 'void'].includes(inv.status?.toLowerCase()))
       .reduce((sum: number, inv: any) => sum + (inv.payments || []).reduce((t: number, p: any) => t + Number(p.amount || 0), 0), 0);
+    let received = linked;
+    if (!isPaid && unallocated > 0 && linked < amount) {
+      const used = Math.min(unallocated, amount - linked);
+      received += used;
+      unallocated -= used;
+    }
     const paidAmount = isPaid ? amount : Math.min(received, amount);
     const balanceAmount = Math.max(amount - paidAmount, 0);
     const status = isPaid || (amount > 0 && balanceAmount <= 0) ? 'PAID' : paidAmount > 0 ? 'PARTIALLY_PAID' : 'PENDING';

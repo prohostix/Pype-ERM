@@ -21,9 +21,18 @@ const poolConfig: pg.PoolConfig = {
   database: pgConfig.database || undefined,
   user: pgConfig.user || undefined,
   password: pgConfig.password || undefined,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
+  // A connection that sat idle can be silently dropped by RDS, a NAT or a router. Without these
+  // settings the next query on it just hangs until the socket times out (about 30 seconds).
+  keepAlive: true,
+  keepAliveInitialDelayMillis: 10_000,
+  idleTimeoutMillis: 30_000,        // retire idle connections before the network kills them
+  connectionTimeoutMillis: 10_000,  // fail fast instead of waiting for a free or new connection
+  max: parseInt(process.env.DB_POOL_MAX || '10', 10),
 };
 const pool = new pg.Pool(poolConfig);
+// An idle connection that errors must not crash the server; the pool replaces it
+pool.on('error', (err) => console.error('[db] idle connection error:', err.message));
 
 const adapter = new PrismaPg(pool as any);
 

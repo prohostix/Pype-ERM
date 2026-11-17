@@ -93,6 +93,10 @@ export function PrismaLayout({
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
+  // Attendance settings, salary config and leave allocation are HR admin tools.
+  // The server only accepts these roles, so other roles never see the menu items.
+  const canManageHRSettings = ['hr_admin', 'hr_sub_admin'].includes(userRole || '');
+
   // Normalize tables to TableItem format with enhanced icons
   const normalizedTables: TableItem[] = tables.map(table => {
     if (typeof table === 'string') {
@@ -439,6 +443,7 @@ export function PrismaLayout({
                 <>
                   <div className="fixed inset-0 z-30" onClick={() => setIsSettingsOpen(false)} />
                   <div className="absolute right-0 top-full mt-2 w-56 bg-popover border border-border rounded-xl shadow-xl z-40 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+                    {canManageHRSettings && (<>
                     <div className="px-3 py-2 border-b border-border">
                       <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Settings</p>
                     </div>
@@ -465,7 +470,8 @@ export function PrismaLayout({
                         Leave Allocation
                       </button>
                     </div>
-                    <div className="p-1 border-t border-border">
+                    </>)}
+                    <div className={canManageHRSettings ? 'p-1 border-t border-border' : 'p-1'}>
                       <button
                         className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-foreground hover:bg-muted transition-colors text-left"
                         onClick={() => { toggleTheme(); setIsSettingsOpen(false); }}

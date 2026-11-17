@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
   GraduationCap, RefreshCw, CheckCircle2, ChevronRight, School, User,
-  ClipboardList, BookOpen, Upload, FileText, UserCheck, Phone, Mail, XCircle, ArrowLeft, AlertCircle, AlertTriangle
+  ClipboardList, BookOpen, Upload, FileText, UserCheck, Phone, Mail, XCircle, ArrowLeft, AlertCircle, AlertTriangle, Trash2
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -602,6 +602,27 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
       }
     }
   };
+
+  // Sessions offered for the university chosen in Step 2: sessions of that university that are for
+  // the selected program or not tied to any program. Sessions without a university are hidden.
+  const availableSessions = useMemo(() => {
+    const universityId = selectedProgram?.university?.id;
+    if (!universityId) return [];
+    return sessions.filter((s: any) =>
+      s.universityId === universityId && (!s.programId || s.programId === selectedProgram?.id)
+    );
+  }, [sessions, selectedProgram?.id, selectedProgram?.university?.id]);
+
+  // A session picked earlier must not stay selected after the university or program changes
+  useEffect(() => {
+    if (form.sessionId && !availableSessions.some((s: any) => s.id === form.sessionId)) {
+      setForm(f => ({ ...f, sessionId: '' }));
+    }
+  }, [availableSessions]);
+
+  const formatSessionDate = (d?: string) =>
+    d ? new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+  const isSessionEnded = (s: any) => !!s.endDate && new Date(s.endDate).getTime() < Date.now();
 
   const currentFeeOptions = useMemo(() => selectedProgram ? getFeeOptions(selectedProgram) : [], [selectedProgram]);
 
@@ -1354,9 +1375,27 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                     <Select value={form.sessionId} onValueChange={(val) => setForm(f => ({ ...f, sessionId: val }))}>
                       <SelectTrigger className="h-12"><SelectValue placeholder="Select session (optional)..." /></SelectTrigger>
                       <SelectContent>
-                        {sessions.map((s: any) => (
-                          <SelectItem key={s.id} value={s.id}>{s.name} ({s.year}) - {s.university?.name}</SelectItem>
-                        ))}
+                        {availableSessions.length === 0 ? (
+                          <div className="px-3 py-4 text-sm text-muted-foreground text-center">
+                            No sessions are available for {selectedProgram?.university?.name || 'this university'}.
+                          </div>
+                        ) : (
+                          availableSessions.map((s: any) => (
+                            <SelectItem key={s.id} value={s.id}>
+                              <span className="flex items-center gap-2">
+                                <span>{s.name}</span>
+                                {(s.startDate || s.endDate) && (
+                                  <span className="text-xs text-muted-foreground">
+                                    {formatSessionDate(s.startDate)} – {formatSessionDate(s.endDate)}
+                                  </span>
+                                )}
+                                {isSessionEnded(s) && (
+                                  <span className="text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-600 border border-rose-500/20">Ended</span>
+                                )}
+                              </span>
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                   </div>

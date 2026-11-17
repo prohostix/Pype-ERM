@@ -670,10 +670,20 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
   const pendingSchedules = schedules.filter(s => s.status !== 'PAID');
   // Invoices tied to an installment are already counted in that installment's balance
   const unpaidOtherInvoices = invoices.filter((inv) => !inv.scheduleId && Number(inv.balanceAmount) > 0);
-  const totalDueAmount =
-    pendingSchedules.reduce((sum, s) => sum + Number(s.balanceAmount ?? s.amount ?? 0), 0) +
-    unpaidOtherInvoices.reduce((sum, inv) => sum + Number(inv.balanceAmount || 0), 0);
-  const pendingPaymentsCount = pendingSchedules.length + unpaidOtherInvoices.length;
+  // Nothing billed yet (no installments, no invoices): the student still owes the program's
+  // course fee, so show that as due instead of zero.
+  const feeStructureTotal = (() => {
+    const fs = feeStructures[0];
+    if (!fs) return 0;
+    const extras = Array.isArray(fs.additionalFees) ? fs.additionalFees.reduce((t: number, f: any) => t + (Number(f?.amount) || 0), 0) : 0;
+    return (Number(fs.registrationFee) || 0) + (Number(fs.tuitionFee) || 0) + (Number(fs.examFee) || 0) + extras;
+  })();
+  const nothingBilled = schedules.length === 0 && invoices.length === 0 && feeStructureTotal > 0;
+  const totalDueAmount = nothingBilled
+    ? feeStructureTotal
+    : pendingSchedules.reduce((sum, s) => sum + Number(s.balanceAmount ?? s.amount ?? 0), 0) +
+      unpaidOtherInvoices.reduce((sum, inv) => sum + Number(inv.balanceAmount || 0), 0);
+  const pendingPaymentsCount = nothingBilled ? 1 : pendingSchedules.length + unpaidOtherInvoices.length;
   const nextPayment = pendingSchedules.length > 0 ? pendingSchedules[0] : null;
   const isOverdue = nextPayment && new Date(nextPayment.dueDate) < new Date();
 
@@ -1112,17 +1122,61 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                         <div className="relative z-10 text-5xl font-black text-emerald-600 dark:text-emerald-400 mt-2 tracking-tight">₹{nextPayment.balanceAmount ?? nextPayment.amount}</div>
                       </div>
                       <div className="flex items-center justify-between text-sm px-4 py-3 bg-white/50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                        <span className="font-bold text-slate-500 dark:text-slate-400">Due Date</span>
-                        <span className="font-extrabold text-slate-800 dark:text-slate-200">{new Date(nextPayment.dueDate).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                        <span className="font-bold text-slate-500 dark:text-slate-400">{nextPayment.title || 'Due Date'}</span>
+                        <span className={cn("font-extrabold", isOverdue ? "text-destructive" : "text-slate-800 dark:text-slate-200")}>
+                          {isOverdue ? 'Overdue · ' : ''}{new Date(nextPayment.dueDate).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
                       </div>
+                      {Number(nextPayment.paidAmount) > 0 && (
+                        <div className="flex items-center justify-between text-xs px-4 text-slate-500 dark:text-slate-400">
+                          <span className="font-semibold">Paid so far</span>
+                          <span className="font-bold text-emerald-600 dark:text-emerald-400">₹{nextPayment.paidAmount} of ₹{nextPayment.amount}</span>
+                        </div>
+                      )}
+
+                      {/* Upcoming installments after the next one */}
+                      {pendingSchedules.length > 1 && (
+                        <div>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 px-1">Upcoming</p>
+                          <div className="space-y-2">
+                            {pendingSchedules.slice(1, 4).map((sch: any) => (
+                              <div key={sch.id} className="flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl bg-white/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                                <div className="min-w-0">
+                                  <p className="text-sm font-bold text-slate-700 dark:text-slate-200 truncate">{sch.title || 'Installment'}</p>
+                                  <p className="text-xs text-slate-500">{new Date(sch.dueDate).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                                </div>
+                                <span className="font-extrabold text-emerald-700 dark:text-emerald-400 shrink-0">₹{sch.balanceAmount ?? sch.amount}</span>
+                              </div>
+                            ))}
+                          </div>
+                          {pendingSchedules.length > 4 && (
+                            <button
+                              type="button"
+                              onClick={() => handleNavigate('fees')}
+                              className="mt-2 w-full text-center text-xs font-bold text-emerald-600 hover:underline"
+                            >
+                              +{pendingSchedules.length - 4} more installments
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="text-center py-8 flex flex-col items-center justify-center h-full">
                       <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 rounded-[2rem] flex items-center justify-center mb-6 shadow-inner">
                         <CheckCircle className="w-10 h-10" />
                       </div>
-                      <h4 className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mb-2">All Clear!</h4>
-                      <p className="text-sm font-medium text-slate-500">You have no pending installments.</p>
+                      {nothingBilled ? (
+                        <>
+                          <h4 className="text-2xl font-black text-amber-600 dark:text-amber-400 mb-2">₹{feeStructureTotal.toLocaleString('en-IN')} due</h4>
+                          <p className="text-sm font-medium text-slate-500">Your course fee has not been billed yet. See the Fees tab, or contact the office for your installment plan.</p>
+                        </>
+                      ) : (
+                        <>
+                          <h4 className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mb-2">All Clear!</h4>
+                          <p className="text-sm font-medium text-slate-500">You have no pending installments.</p>
+                        </>
+                      )}
                     </div>
                   )}
 
