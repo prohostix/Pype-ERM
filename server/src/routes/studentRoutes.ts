@@ -25,6 +25,10 @@ import {
   updatePhotoStatus,
   checkStudentUniqueness,
   setStudentVideoBlock,
+  getStudentCommunications,
+  getStudentRemarks,
+  addStudentRemark,
+  deleteStudentRemark,
 } from '../controllers/studentController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
@@ -57,6 +61,10 @@ router.put('/:id/academic-progress', authorize('org_admin', 'superadmin', 'cente
 router.put('/:id/video-block', authorize('org_admin', 'superadmin'), setStudentVideoBlock);
 router.put('/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), approveStudent);
 router.get('/:id/enrollments', getStudentEnrollments);
+const REMARK_ROLES = ['org_admin', 'superadmin', 'ceo', 'general_manager', 'branch_manager', 'center_admin', 'sales_admin', 'sales_sub_admin', 'ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'employee'];
+router.get('/:id/communications', authorize(...REMARK_ROLES), getStudentCommunications);
+router.route('/:id/remarks').get(authorize(...REMARK_ROLES), getStudentRemarks).post(authorize(...REMARK_ROLES), addStudentRemark);
+router.delete('/:id/remarks/:remarkId', authorize(...REMARK_ROLES), deleteStudentRemark);
 router.put('/:id/enrollments/:enrollmentId/dropout', authorize('org_admin', 'superadmin'), markEnrollmentDropout);
 
 export default router;

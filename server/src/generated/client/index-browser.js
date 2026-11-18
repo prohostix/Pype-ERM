@@ -449,7 +449,17 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   oldValue: 'oldValue',
   newValue: 'newValue',
   ipAddress: 'ipAddress',
-  timestamp: 'timestamp'
+  timestamp: 'timestamp',
+  actorId: 'actorId',
+  actorType: 'actorType',
+  actorName: 'actorName',
+  actorRole: 'actorRole',
+  userAgent: 'userAgent',
+  method: 'method',
+  route: 'route',
+  statusCode: 'statusCode',
+  module: 'module',
+  description: 'description'
 };
 
 exports.Prisma.AnnouncementScalarFieldEnum = {

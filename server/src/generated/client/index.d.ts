@@ -38765,8 +38765,18 @@ export namespace Prisma {
 
   export type AggregateAuditLog = {
     _count: AuditLogCountAggregateOutputType | null
+    _avg: AuditLogAvgAggregateOutputType | null
+    _sum: AuditLogSumAggregateOutputType | null
     _min: AuditLogMinAggregateOutputType | null
     _max: AuditLogMaxAggregateOutputType | null
+  }
+
+  export type AuditLogAvgAggregateOutputType = {
+    statusCode: number | null
+  }
+
+  export type AuditLogSumAggregateOutputType = {
+    statusCode: number | null
   }
 
   export type AuditLogMinAggregateOutputType = {
@@ -38778,6 +38788,16 @@ export namespace Prisma {
     entityId: string | null
     ipAddress: string | null
     timestamp: Date | null
+    actorId: string | null
+    actorType: string | null
+    actorName: string | null
+    actorRole: string | null
+    userAgent: string | null
+    method: string | null
+    route: string | null
+    statusCode: number | null
+    module: string | null
+    description: string | null
   }
 
   export type AuditLogMaxAggregateOutputType = {
@@ -38789,6 +38809,16 @@ export namespace Prisma {
     entityId: string | null
     ipAddress: string | null
     timestamp: Date | null
+    actorId: string | null
+    actorType: string | null
+    actorName: string | null
+    actorRole: string | null
+    userAgent: string | null
+    method: string | null
+    route: string | null
+    statusCode: number | null
+    module: string | null
+    description: string | null
   }
 
   export type AuditLogCountAggregateOutputType = {
@@ -38802,9 +38832,27 @@ export namespace Prisma {
     newValue: number
     ipAddress: number
     timestamp: number
+    actorId: number
+    actorType: number
+    actorName: number
+    actorRole: number
+    userAgent: number
+    method: number
+    route: number
+    statusCode: number
+    module: number
+    description: number
     _all: number
   }
 
+
+  export type AuditLogAvgAggregateInputType = {
+    statusCode?: true
+  }
+
+  export type AuditLogSumAggregateInputType = {
+    statusCode?: true
+  }
 
   export type AuditLogMinAggregateInputType = {
     id?: true
@@ -38815,6 +38863,16 @@ export namespace Prisma {
     entityId?: true
     ipAddress?: true
     timestamp?: true
+    actorId?: true
+    actorType?: true
+    actorName?: true
+    actorRole?: true
+    userAgent?: true
+    method?: true
+    route?: true
+    statusCode?: true
+    module?: true
+    description?: true
   }
 
   export type AuditLogMaxAggregateInputType = {
@@ -38826,6 +38884,16 @@ export namespace Prisma {
     entityId?: true
     ipAddress?: true
     timestamp?: true
+    actorId?: true
+    actorType?: true
+    actorName?: true
+    actorRole?: true
+    userAgent?: true
+    method?: true
+    route?: true
+    statusCode?: true
+    module?: true
+    description?: true
   }
 
   export type AuditLogCountAggregateInputType = {
@@ -38839,6 +38907,16 @@ export namespace Prisma {
     newValue?: true
     ipAddress?: true
     timestamp?: true
+    actorId?: true
+    actorType?: true
+    actorName?: true
+    actorRole?: true
+    userAgent?: true
+    method?: true
+    route?: true
+    statusCode?: true
+    module?: true
+    description?: true
     _all?: true
   }
 
@@ -38880,6 +38958,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: AuditLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AuditLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: AuditLogMinAggregateInputType
@@ -38910,14 +39000,16 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: AuditLogCountAggregateInputType | true
+    _avg?: AuditLogAvgAggregateInputType
+    _sum?: AuditLogSumAggregateInputType
     _min?: AuditLogMinAggregateInputType
     _max?: AuditLogMaxAggregateInputType
   }
 
   export type AuditLogGroupByOutputType = {
     id: string
-    organizationId: string
-    userId: string
+    organizationId: string | null
+    userId: string | null
     action: string
     entityType: string
     entityId: string
@@ -38925,7 +39017,19 @@ export namespace Prisma {
     newValue: JsonValue | null
     ipAddress: string | null
     timestamp: Date
+    actorId: string | null
+    actorType: string | null
+    actorName: string | null
+    actorRole: string | null
+    userAgent: string | null
+    method: string | null
+    route: string | null
+    statusCode: number | null
+    module: string | null
+    description: string | null
     _count: AuditLogCountAggregateOutputType | null
+    _avg: AuditLogAvgAggregateOutputType | null
+    _sum: AuditLogSumAggregateOutputType | null
     _min: AuditLogMinAggregateOutputType | null
     _max: AuditLogMaxAggregateOutputType | null
   }
@@ -38955,8 +39059,18 @@ export namespace Prisma {
     newValue?: boolean
     ipAddress?: boolean
     timestamp?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    actorId?: boolean
+    actorType?: boolean
+    actorName?: boolean
+    actorRole?: boolean
+    userAgent?: boolean
+    method?: boolean
+    route?: boolean
+    statusCode?: boolean
+    module?: boolean
+    description?: boolean
+    organization?: boolean | AuditLog$organizationArgs<ExtArgs>
+    user?: boolean | AuditLog$userArgs<ExtArgs>
   }, ExtArgs["result"]["auditLog"]>
 
   export type AuditLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -38970,8 +39084,18 @@ export namespace Prisma {
     newValue?: boolean
     ipAddress?: boolean
     timestamp?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    actorId?: boolean
+    actorType?: boolean
+    actorName?: boolean
+    actorRole?: boolean
+    userAgent?: boolean
+    method?: boolean
+    route?: boolean
+    statusCode?: boolean
+    module?: boolean
+    description?: boolean
+    organization?: boolean | AuditLog$organizationArgs<ExtArgs>
+    user?: boolean | AuditLog$userArgs<ExtArgs>
   }, ExtArgs["result"]["auditLog"]>
 
   export type AuditLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -38985,8 +39109,18 @@ export namespace Prisma {
     newValue?: boolean
     ipAddress?: boolean
     timestamp?: boolean
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    actorId?: boolean
+    actorType?: boolean
+    actorName?: boolean
+    actorRole?: boolean
+    userAgent?: boolean
+    method?: boolean
+    route?: boolean
+    statusCode?: boolean
+    module?: boolean
+    description?: boolean
+    organization?: boolean | AuditLog$organizationArgs<ExtArgs>
+    user?: boolean | AuditLog$userArgs<ExtArgs>
   }, ExtArgs["result"]["auditLog"]>
 
   export type AuditLogSelectScalar = {
@@ -39000,32 +39134,42 @@ export namespace Prisma {
     newValue?: boolean
     ipAddress?: boolean
     timestamp?: boolean
+    actorId?: boolean
+    actorType?: boolean
+    actorName?: boolean
+    actorRole?: boolean
+    userAgent?: boolean
+    method?: boolean
+    route?: boolean
+    statusCode?: boolean
+    module?: boolean
+    description?: boolean
   }
 
-  export type AuditLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "userId" | "action" | "entityType" | "entityId" | "oldValue" | "newValue" | "ipAddress" | "timestamp", ExtArgs["result"]["auditLog"]>
+  export type AuditLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "userId" | "action" | "entityType" | "entityId" | "oldValue" | "newValue" | "ipAddress" | "timestamp" | "actorId" | "actorType" | "actorName" | "actorRole" | "userAgent" | "method" | "route" | "statusCode" | "module" | "description", ExtArgs["result"]["auditLog"]>
   export type AuditLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    organization?: boolean | AuditLog$organizationArgs<ExtArgs>
+    user?: boolean | AuditLog$userArgs<ExtArgs>
   }
   export type AuditLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    organization?: boolean | AuditLog$organizationArgs<ExtArgs>
+    user?: boolean | AuditLog$userArgs<ExtArgs>
   }
   export type AuditLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    organization?: boolean | AuditLog$organizationArgs<ExtArgs>
+    user?: boolean | AuditLog$userArgs<ExtArgs>
   }
 
   export type $AuditLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AuditLog"
     objects: {
-      organization: Prisma.$OrganizationPayload<ExtArgs>
-      user: Prisma.$UserPayload<ExtArgs>
+      organization: Prisma.$OrganizationPayload<ExtArgs> | null
+      user: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      organizationId: string
-      userId: string
+      organizationId: string | null
+      userId: string | null
       action: string
       entityType: string
       entityId: string
@@ -39033,6 +39177,16 @@ export namespace Prisma {
       newValue: Prisma.JsonValue | null
       ipAddress: string | null
       timestamp: Date
+      actorId: string | null
+      actorType: string | null
+      actorName: string | null
+      actorRole: string | null
+      userAgent: string | null
+      method: string | null
+      route: string | null
+      statusCode: number | null
+      module: string | null
+      description: string | null
     }, ExtArgs["result"]["auditLog"]>
     composites: {}
   }
@@ -39427,8 +39581,8 @@ export namespace Prisma {
    */
   export interface Prisma__AuditLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    organization<T extends AuditLog$organizationArgs<ExtArgs> = {}>(args?: Subset<T, AuditLog$organizationArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    user<T extends AuditLog$userArgs<ExtArgs> = {}>(args?: Subset<T, AuditLog$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -39468,6 +39622,16 @@ export namespace Prisma {
     readonly newValue: FieldRef<"AuditLog", 'Json'>
     readonly ipAddress: FieldRef<"AuditLog", 'String'>
     readonly timestamp: FieldRef<"AuditLog", 'DateTime'>
+    readonly actorId: FieldRef<"AuditLog", 'String'>
+    readonly actorType: FieldRef<"AuditLog", 'String'>
+    readonly actorName: FieldRef<"AuditLog", 'String'>
+    readonly actorRole: FieldRef<"AuditLog", 'String'>
+    readonly userAgent: FieldRef<"AuditLog", 'String'>
+    readonly method: FieldRef<"AuditLog", 'String'>
+    readonly route: FieldRef<"AuditLog", 'String'>
+    readonly statusCode: FieldRef<"AuditLog", 'Int'>
+    readonly module: FieldRef<"AuditLog", 'String'>
+    readonly description: FieldRef<"AuditLog", 'String'>
   }
     
 
@@ -39866,6 +40030,44 @@ export namespace Prisma {
      * Limit how many AuditLogs to delete.
      */
     limit?: number
+  }
+
+  /**
+   * AuditLog.organization
+   */
+  export type AuditLog$organizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Organization
+     */
+    select?: OrganizationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Organization
+     */
+    omit?: OrganizationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizationInclude<ExtArgs> | null
+    where?: OrganizationWhereInput
+  }
+
+  /**
+   * AuditLog.user
+   */
+  export type AuditLog$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -136250,7 +136452,17 @@ export namespace Prisma {
     oldValue: 'oldValue',
     newValue: 'newValue',
     ipAddress: 'ipAddress',
-    timestamp: 'timestamp'
+    timestamp: 'timestamp',
+    actorId: 'actorId',
+    actorType: 'actorType',
+    actorName: 'actorName',
+    actorRole: 'actorRole',
+    userAgent: 'userAgent',
+    method: 'method',
+    route: 'route',
+    statusCode: 'statusCode',
+    module: 'module',
+    description: 'description'
   };
 
   export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
@@ -140807,8 +141019,8 @@ export namespace Prisma {
     OR?: AuditLogWhereInput[]
     NOT?: AuditLogWhereInput | AuditLogWhereInput[]
     id?: StringFilter<"AuditLog"> | string
-    organizationId?: StringFilter<"AuditLog"> | string
-    userId?: StringFilter<"AuditLog"> | string
+    organizationId?: StringNullableFilter<"AuditLog"> | string | null
+    userId?: StringNullableFilter<"AuditLog"> | string | null
     action?: StringFilter<"AuditLog"> | string
     entityType?: StringFilter<"AuditLog"> | string
     entityId?: StringFilter<"AuditLog"> | string
@@ -140816,14 +141028,24 @@ export namespace Prisma {
     newValue?: JsonNullableFilter<"AuditLog">
     ipAddress?: StringNullableFilter<"AuditLog"> | string | null
     timestamp?: DateTimeFilter<"AuditLog"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    actorId?: StringNullableFilter<"AuditLog"> | string | null
+    actorType?: StringNullableFilter<"AuditLog"> | string | null
+    actorName?: StringNullableFilter<"AuditLog"> | string | null
+    actorRole?: StringNullableFilter<"AuditLog"> | string | null
+    userAgent?: StringNullableFilter<"AuditLog"> | string | null
+    method?: StringNullableFilter<"AuditLog"> | string | null
+    route?: StringNullableFilter<"AuditLog"> | string | null
+    statusCode?: IntNullableFilter<"AuditLog"> | number | null
+    module?: StringNullableFilter<"AuditLog"> | string | null
+    description?: StringNullableFilter<"AuditLog"> | string | null
+    organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type AuditLogOrderByWithRelationInput = {
     id?: SortOrder
-    organizationId?: SortOrder
-    userId?: SortOrder
+    organizationId?: SortOrderInput | SortOrder
+    userId?: SortOrderInput | SortOrder
     action?: SortOrder
     entityType?: SortOrder
     entityId?: SortOrder
@@ -140831,6 +141053,16 @@ export namespace Prisma {
     newValue?: SortOrderInput | SortOrder
     ipAddress?: SortOrderInput | SortOrder
     timestamp?: SortOrder
+    actorId?: SortOrderInput | SortOrder
+    actorType?: SortOrderInput | SortOrder
+    actorName?: SortOrderInput | SortOrder
+    actorRole?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    method?: SortOrderInput | SortOrder
+    route?: SortOrderInput | SortOrder
+    statusCode?: SortOrderInput | SortOrder
+    module?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     organization?: OrganizationOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
@@ -140840,8 +141072,8 @@ export namespace Prisma {
     AND?: AuditLogWhereInput | AuditLogWhereInput[]
     OR?: AuditLogWhereInput[]
     NOT?: AuditLogWhereInput | AuditLogWhereInput[]
-    organizationId?: StringFilter<"AuditLog"> | string
-    userId?: StringFilter<"AuditLog"> | string
+    organizationId?: StringNullableFilter<"AuditLog"> | string | null
+    userId?: StringNullableFilter<"AuditLog"> | string | null
     action?: StringFilter<"AuditLog"> | string
     entityType?: StringFilter<"AuditLog"> | string
     entityId?: StringFilter<"AuditLog"> | string
@@ -140849,14 +141081,24 @@ export namespace Prisma {
     newValue?: JsonNullableFilter<"AuditLog">
     ipAddress?: StringNullableFilter<"AuditLog"> | string | null
     timestamp?: DateTimeFilter<"AuditLog"> | Date | string
-    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    actorId?: StringNullableFilter<"AuditLog"> | string | null
+    actorType?: StringNullableFilter<"AuditLog"> | string | null
+    actorName?: StringNullableFilter<"AuditLog"> | string | null
+    actorRole?: StringNullableFilter<"AuditLog"> | string | null
+    userAgent?: StringNullableFilter<"AuditLog"> | string | null
+    method?: StringNullableFilter<"AuditLog"> | string | null
+    route?: StringNullableFilter<"AuditLog"> | string | null
+    statusCode?: IntNullableFilter<"AuditLog"> | number | null
+    module?: StringNullableFilter<"AuditLog"> | string | null
+    description?: StringNullableFilter<"AuditLog"> | string | null
+    organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type AuditLogOrderByWithAggregationInput = {
     id?: SortOrder
-    organizationId?: SortOrder
-    userId?: SortOrder
+    organizationId?: SortOrderInput | SortOrder
+    userId?: SortOrderInput | SortOrder
     action?: SortOrder
     entityType?: SortOrder
     entityId?: SortOrder
@@ -140864,9 +141106,21 @@ export namespace Prisma {
     newValue?: SortOrderInput | SortOrder
     ipAddress?: SortOrderInput | SortOrder
     timestamp?: SortOrder
+    actorId?: SortOrderInput | SortOrder
+    actorType?: SortOrderInput | SortOrder
+    actorName?: SortOrderInput | SortOrder
+    actorRole?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    method?: SortOrderInput | SortOrder
+    route?: SortOrderInput | SortOrder
+    statusCode?: SortOrderInput | SortOrder
+    module?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     _count?: AuditLogCountOrderByAggregateInput
+    _avg?: AuditLogAvgOrderByAggregateInput
     _max?: AuditLogMaxOrderByAggregateInput
     _min?: AuditLogMinOrderByAggregateInput
+    _sum?: AuditLogSumOrderByAggregateInput
   }
 
   export type AuditLogScalarWhereWithAggregatesInput = {
@@ -140874,8 +141128,8 @@ export namespace Prisma {
     OR?: AuditLogScalarWhereWithAggregatesInput[]
     NOT?: AuditLogScalarWhereWithAggregatesInput | AuditLogScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AuditLog"> | string
-    organizationId?: StringWithAggregatesFilter<"AuditLog"> | string
-    userId?: StringWithAggregatesFilter<"AuditLog"> | string
+    organizationId?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    userId?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
     action?: StringWithAggregatesFilter<"AuditLog"> | string
     entityType?: StringWithAggregatesFilter<"AuditLog"> | string
     entityId?: StringWithAggregatesFilter<"AuditLog"> | string
@@ -140883,6 +141137,16 @@ export namespace Prisma {
     newValue?: JsonNullableWithAggregatesFilter<"AuditLog">
     ipAddress?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
     timestamp?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
+    actorId?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    actorType?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    actorName?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    actorRole?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    method?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    route?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    statusCode?: IntNullableWithAggregatesFilter<"AuditLog"> | number | null
+    module?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    description?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
   }
 
   export type AnnouncementWhereInput = {
@@ -151864,14 +152128,24 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: string | null
     timestamp?: Date | string
-    organization: OrganizationCreateNestedOneWithoutAuditLogsInput
-    user: UserCreateNestedOneWithoutAuditLogsInput
+    actorId?: string | null
+    actorType?: string | null
+    actorName?: string | null
+    actorRole?: string | null
+    userAgent?: string | null
+    method?: string | null
+    route?: string | null
+    statusCode?: number | null
+    module?: string | null
+    description?: string | null
+    organization?: OrganizationCreateNestedOneWithoutAuditLogsInput
+    user?: UserCreateNestedOneWithoutAuditLogsInput
   }
 
   export type AuditLogUncheckedCreateInput = {
     id?: string
-    organizationId: string
-    userId: string
+    organizationId?: string | null
+    userId?: string | null
     action: string
     entityType: string
     entityId: string
@@ -151879,6 +152153,16 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: string | null
     timestamp?: Date | string
+    actorId?: string | null
+    actorType?: string | null
+    actorName?: string | null
+    actorRole?: string | null
+    userAgent?: string | null
+    method?: string | null
+    route?: string | null
+    statusCode?: number | null
+    module?: string | null
+    description?: string | null
   }
 
   export type AuditLogUpdateInput = {
@@ -151890,14 +152174,24 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutAuditLogsNestedInput
-    user?: UserUpdateOneRequiredWithoutAuditLogsNestedInput
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: NullableStringFieldUpdateOperationsInput | string | null
+    actorName?: NullableStringFieldUpdateOperationsInput | string | null
+    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    module?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: OrganizationUpdateOneWithoutAuditLogsNestedInput
+    user?: UserUpdateOneWithoutAuditLogsNestedInput
   }
 
   export type AuditLogUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: StringFieldUpdateOperationsInput | string
     entityType?: StringFieldUpdateOperationsInput | string
     entityId?: StringFieldUpdateOperationsInput | string
@@ -151905,12 +152199,22 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: NullableStringFieldUpdateOperationsInput | string | null
+    actorName?: NullableStringFieldUpdateOperationsInput | string | null
+    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    module?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AuditLogCreateManyInput = {
     id?: string
-    organizationId: string
-    userId: string
+    organizationId?: string | null
+    userId?: string | null
     action: string
     entityType: string
     entityId: string
@@ -151918,6 +152222,16 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: string | null
     timestamp?: Date | string
+    actorId?: string | null
+    actorType?: string | null
+    actorName?: string | null
+    actorRole?: string | null
+    userAgent?: string | null
+    method?: string | null
+    route?: string | null
+    statusCode?: number | null
+    module?: string | null
+    description?: string | null
   }
 
   export type AuditLogUpdateManyMutationInput = {
@@ -151929,12 +152243,22 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: NullableStringFieldUpdateOperationsInput | string | null
+    actorName?: NullableStringFieldUpdateOperationsInput | string | null
+    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    module?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AuditLogUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: StringFieldUpdateOperationsInput | string
     entityType?: StringFieldUpdateOperationsInput | string
     entityId?: StringFieldUpdateOperationsInput | string
@@ -151942,6 +152266,16 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: NullableStringFieldUpdateOperationsInput | string | null
+    actorName?: NullableStringFieldUpdateOperationsInput | string | null
+    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    module?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AnnouncementCreateInput = {
@@ -162826,6 +163160,17 @@ export namespace Prisma {
     _max?: NestedEnumNotificationPriorityFilter<$PrismaModel>
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type AuditLogCountOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
@@ -162837,6 +163182,20 @@ export namespace Prisma {
     newValue?: SortOrder
     ipAddress?: SortOrder
     timestamp?: SortOrder
+    actorId?: SortOrder
+    actorType?: SortOrder
+    actorName?: SortOrder
+    actorRole?: SortOrder
+    userAgent?: SortOrder
+    method?: SortOrder
+    route?: SortOrder
+    statusCode?: SortOrder
+    module?: SortOrder
+    description?: SortOrder
+  }
+
+  export type AuditLogAvgOrderByAggregateInput = {
+    statusCode?: SortOrder
   }
 
   export type AuditLogMaxOrderByAggregateInput = {
@@ -162848,6 +163207,16 @@ export namespace Prisma {
     entityId?: SortOrder
     ipAddress?: SortOrder
     timestamp?: SortOrder
+    actorId?: SortOrder
+    actorType?: SortOrder
+    actorName?: SortOrder
+    actorRole?: SortOrder
+    userAgent?: SortOrder
+    method?: SortOrder
+    route?: SortOrder
+    statusCode?: SortOrder
+    module?: SortOrder
+    description?: SortOrder
   }
 
   export type AuditLogMinOrderByAggregateInput = {
@@ -162859,6 +163228,36 @@ export namespace Prisma {
     entityId?: SortOrder
     ipAddress?: SortOrder
     timestamp?: SortOrder
+    actorId?: SortOrder
+    actorType?: SortOrder
+    actorName?: SortOrder
+    actorRole?: SortOrder
+    userAgent?: SortOrder
+    method?: SortOrder
+    route?: SortOrder
+    statusCode?: SortOrder
+    module?: SortOrder
+    description?: SortOrder
+  }
+
+  export type AuditLogSumOrderByAggregateInput = {
+    statusCode?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type AnnouncementCountOrderByAggregateInput = {
@@ -163420,17 +163819,6 @@ export namespace Prisma {
     maxHeadcount?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type MeetingCountOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
@@ -163491,22 +163879,6 @@ export namespace Prisma {
 
   export type MeetingSumOrderByAggregateInput = {
     duration?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type VacancyCountOrderByAggregateInput = {
@@ -177561,18 +177933,30 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type OrganizationUpdateOneRequiredWithoutAuditLogsNestedInput = {
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type OrganizationUpdateOneWithoutAuditLogsNestedInput = {
     create?: XOR<OrganizationCreateWithoutAuditLogsInput, OrganizationUncheckedCreateWithoutAuditLogsInput>
     connectOrCreate?: OrganizationCreateOrConnectWithoutAuditLogsInput
     upsert?: OrganizationUpsertWithoutAuditLogsInput
+    disconnect?: OrganizationWhereInput | boolean
+    delete?: OrganizationWhereInput | boolean
     connect?: OrganizationWhereUniqueInput
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutAuditLogsInput, OrganizationUpdateWithoutAuditLogsInput>, OrganizationUncheckedUpdateWithoutAuditLogsInput>
   }
 
-  export type UserUpdateOneRequiredWithoutAuditLogsNestedInput = {
+  export type UserUpdateOneWithoutAuditLogsNestedInput = {
     create?: XOR<UserCreateWithoutAuditLogsInput, UserUncheckedCreateWithoutAuditLogsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAuditLogsInput
     upsert?: UserUpsertWithoutAuditLogsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAuditLogsInput, UserUpdateWithoutAuditLogsInput>, UserUncheckedUpdateWithoutAuditLogsInput>
   }
@@ -178645,14 +179029,6 @@ export namespace Prisma {
     create?: XOR<OrganizationCreateWithoutMeetingsInput, OrganizationUncheckedCreateWithoutMeetingsInput>
     connectOrCreate?: OrganizationCreateOrConnectWithoutMeetingsInput
     connect?: OrganizationWhereUniqueInput
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type UserUpdateOneRequiredWithoutHostedMeetingsNestedInput = {
@@ -184264,6 +184640,22 @@ export namespace Prisma {
     _max?: NestedEnumNotificationPriorityFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumLeaveTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.LeaveType | EnumLeaveTypeFieldRefInput<$PrismaModel>
     in?: $Enums.LeaveType[] | ListEnumLeaveTypeFieldRefInput<$PrismaModel>
@@ -184347,22 +184739,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumPaymentMethodNullableFilter<$PrismaModel>
     _max?: NestedEnumPaymentMethodNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumExpenseStatusFilter<$PrismaModel = never> = {
@@ -184845,12 +185221,22 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: string | null
     timestamp?: Date | string
-    user: UserCreateNestedOneWithoutAuditLogsInput
+    actorId?: string | null
+    actorType?: string | null
+    actorName?: string | null
+    actorRole?: string | null
+    userAgent?: string | null
+    method?: string | null
+    route?: string | null
+    statusCode?: number | null
+    module?: string | null
+    description?: string | null
+    user?: UserCreateNestedOneWithoutAuditLogsInput
   }
 
   export type AuditLogUncheckedCreateWithoutOrganizationInput = {
     id?: string
-    userId: string
+    userId?: string | null
     action: string
     entityType: string
     entityId: string
@@ -184858,6 +185244,16 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: string | null
     timestamp?: Date | string
+    actorId?: string | null
+    actorType?: string | null
+    actorName?: string | null
+    actorRole?: string | null
+    userAgent?: string | null
+    method?: string | null
+    route?: string | null
+    statusCode?: number | null
+    module?: string | null
+    description?: string | null
   }
 
   export type AuditLogCreateOrConnectWithoutOrganizationInput = {
@@ -188632,8 +189028,8 @@ export namespace Prisma {
     OR?: AuditLogScalarWhereInput[]
     NOT?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
     id?: StringFilter<"AuditLog"> | string
-    organizationId?: StringFilter<"AuditLog"> | string
-    userId?: StringFilter<"AuditLog"> | string
+    organizationId?: StringNullableFilter<"AuditLog"> | string | null
+    userId?: StringNullableFilter<"AuditLog"> | string | null
     action?: StringFilter<"AuditLog"> | string
     entityType?: StringFilter<"AuditLog"> | string
     entityId?: StringFilter<"AuditLog"> | string
@@ -188641,6 +189037,16 @@ export namespace Prisma {
     newValue?: JsonNullableFilter<"AuditLog">
     ipAddress?: StringNullableFilter<"AuditLog"> | string | null
     timestamp?: DateTimeFilter<"AuditLog"> | Date | string
+    actorId?: StringNullableFilter<"AuditLog"> | string | null
+    actorType?: StringNullableFilter<"AuditLog"> | string | null
+    actorName?: StringNullableFilter<"AuditLog"> | string | null
+    actorRole?: StringNullableFilter<"AuditLog"> | string | null
+    userAgent?: StringNullableFilter<"AuditLog"> | string | null
+    method?: StringNullableFilter<"AuditLog"> | string | null
+    route?: StringNullableFilter<"AuditLog"> | string | null
+    statusCode?: IntNullableFilter<"AuditLog"> | number | null
+    module?: StringNullableFilter<"AuditLog"> | string | null
+    description?: StringNullableFilter<"AuditLog"> | string | null
   }
 
   export type BranchUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -194060,12 +194466,22 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: string | null
     timestamp?: Date | string
-    organization: OrganizationCreateNestedOneWithoutAuditLogsInput
+    actorId?: string | null
+    actorType?: string | null
+    actorName?: string | null
+    actorRole?: string | null
+    userAgent?: string | null
+    method?: string | null
+    route?: string | null
+    statusCode?: number | null
+    module?: string | null
+    description?: string | null
+    organization?: OrganizationCreateNestedOneWithoutAuditLogsInput
   }
 
   export type AuditLogUncheckedCreateWithoutUserInput = {
     id?: string
-    organizationId: string
+    organizationId?: string | null
     action: string
     entityType: string
     entityId: string
@@ -194073,6 +194489,16 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: string | null
     timestamp?: Date | string
+    actorId?: string | null
+    actorType?: string | null
+    actorName?: string | null
+    actorRole?: string | null
+    userAgent?: string | null
+    method?: string | null
+    route?: string | null
+    statusCode?: number | null
+    module?: string | null
+    description?: string | null
   }
 
   export type AuditLogCreateOrConnectWithoutUserInput = {
@@ -297194,7 +297620,7 @@ export namespace Prisma {
 
   export type AuditLogCreateManyOrganizationInput = {
     id?: string
-    userId: string
+    userId?: string | null
     action: string
     entityType: string
     entityId: string
@@ -297202,6 +297628,16 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: string | null
     timestamp?: Date | string
+    actorId?: string | null
+    actorType?: string | null
+    actorName?: string | null
+    actorRole?: string | null
+    userAgent?: string | null
+    method?: string | null
+    route?: string | null
+    statusCode?: number | null
+    module?: string | null
+    description?: string | null
   }
 
   export type BranchCreateManyOrganizationInput = {
@@ -298747,12 +299183,22 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutAuditLogsNestedInput
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: NullableStringFieldUpdateOperationsInput | string | null
+    actorName?: NullableStringFieldUpdateOperationsInput | string | null
+    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    module?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneWithoutAuditLogsNestedInput
   }
 
   export type AuditLogUncheckedUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: StringFieldUpdateOperationsInput | string
     entityType?: StringFieldUpdateOperationsInput | string
     entityId?: StringFieldUpdateOperationsInput | string
@@ -298760,11 +299206,21 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: NullableStringFieldUpdateOperationsInput | string | null
+    actorName?: NullableStringFieldUpdateOperationsInput | string | null
+    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    module?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AuditLogUncheckedUpdateManyWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: StringFieldUpdateOperationsInput | string
     entityType?: StringFieldUpdateOperationsInput | string
     entityId?: StringFieldUpdateOperationsInput | string
@@ -298772,6 +299228,16 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: NullableStringFieldUpdateOperationsInput | string | null
+    actorName?: NullableStringFieldUpdateOperationsInput | string | null
+    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    module?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BranchUpdateWithoutOrganizationInput = {
@@ -304026,7 +304492,7 @@ export namespace Prisma {
 
   export type AuditLogCreateManyUserInput = {
     id?: string
-    organizationId: string
+    organizationId?: string | null
     action: string
     entityType: string
     entityId: string
@@ -304034,6 +304500,16 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: string | null
     timestamp?: Date | string
+    actorId?: string | null
+    actorType?: string | null
+    actorName?: string | null
+    actorRole?: string | null
+    userAgent?: string | null
+    method?: string | null
+    route?: string | null
+    statusCode?: number | null
+    module?: string | null
+    description?: string | null
   }
 
   export type CollectionOverseerCreateManyUserInput = {
@@ -305875,12 +306351,22 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutAuditLogsNestedInput
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: NullableStringFieldUpdateOperationsInput | string | null
+    actorName?: NullableStringFieldUpdateOperationsInput | string | null
+    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    module?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: OrganizationUpdateOneWithoutAuditLogsNestedInput
   }
 
   export type AuditLogUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: StringFieldUpdateOperationsInput | string
     entityType?: StringFieldUpdateOperationsInput | string
     entityId?: StringFieldUpdateOperationsInput | string
@@ -305888,11 +306374,21 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: NullableStringFieldUpdateOperationsInput | string | null
+    actorName?: NullableStringFieldUpdateOperationsInput | string | null
+    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    module?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AuditLogUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: StringFieldUpdateOperationsInput | string
     entityType?: StringFieldUpdateOperationsInput | string
     entityId?: StringFieldUpdateOperationsInput | string
@@ -305900,6 +306396,16 @@ export namespace Prisma {
     newValue?: NullableJsonNullValueInput | InputJsonValue
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    actorType?: NullableStringFieldUpdateOperationsInput | string | null
+    actorName?: NullableStringFieldUpdateOperationsInput | string | null
+    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    method?: NullableStringFieldUpdateOperationsInput | string | null
+    route?: NullableStringFieldUpdateOperationsInput | string | null
+    statusCode?: NullableIntFieldUpdateOperationsInput | number | null
+    module?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CollectionOverseerUpdateWithoutUserInput = {

@@ -6,7 +6,6 @@ import {
   MapPin,
   Phone,
   Mail,
-  CreditCard,
   FileText,
   Key,
   Copy,
@@ -14,7 +13,15 @@ import {
   BookOpen,
   Eye,
   UserX,
-  AlertTriangle
+  AlertTriangle,
+  User,
+  Wallet,
+  Building2,
+  KeyRound,
+  Star,
+  MessageSquare,
+  StickyNote,
+  Hash
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,9 +35,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
-import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
+import { StudentFeesTab, StudentCommunicationTab, StudentRemarksTab } from '@/components/panels/StudentProfileTabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { format } from 'date-fns';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
@@ -139,21 +145,27 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
   const latestEnrollment = enrollments && enrollments.length > 0 ? enrollments[0] : null;
   const universityName = latestEnrollment?.program?.university?.name || student.university?.name || student.universityId?.name || 'Not Assigned';
   const programName = latestEnrollment?.program?.name || student.program?.name || student.programId?.name || 'Not Assigned';
-  const branchName = student.branch?.name || student.branchId?.name || 'Main Campus';
+  const branchName = student.branch?.name || student.branchId?.name || 'Not assigned';
+  const fmt = (d: any, pattern = 'dd MMM yyyy') => {
+    if (!d) return 'N/A';
+    const dt = new Date(d);
+    return isNaN(dt.getTime()) ? 'N/A' : format(dt, pattern);
+  };
+
+  const joined = student.admissionDate || student.enrollments?.[0]?.createdAt || student.createdAt;
+  const completed = student.status === 'completed' || student.isPrevious;
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button variant="outline" size="icon" onClick={onBack} className="h-8 w-8">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground min-w-0">
+          <Button variant="outline" size="icon" onClick={onBack} className="h-8 w-8 shrink-0">
             <ArrowLeft className="w-4 h-4" />
           </Button>
-          <h2 className="text-xl font-bold">Student Profile</h2>
+          <span>Students</span><span>/</span><span className="font-medium text-foreground truncate">{student.name}</span>
         </div>
-        {student.status === 'completed' || student.isPrevious ? (
-          <Badge className="bg-emerald-600 text-white px-3 py-1 uppercase font-bold tracking-wider">
-            🎓 Completed
-          </Badge>
+        {completed ? (
+          <Badge className="bg-emerald-600 text-white px-3 py-1 uppercase font-bold tracking-wider">Completed</Badge>
         ) : (
           <Badge variant="secondary" className="px-3 py-1 uppercase">{student.status}</Badge>
         )}
@@ -161,41 +173,58 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left Column: Summary Card */}
-        <Card className="md:col-span-1 shadow-sm border-border bg-card">
-          <CardContent className="pt-6">
-            <div className="flex flex-col items-center text-center space-y-4">
+        <Card className="md:col-span-1 overflow-hidden shadow-sm border-border bg-card self-start">
+          <div className="h-20 bg-gradient-to-r from-primary/25 via-primary/10 to-transparent" />
+          <CardContent className="pt-0 pb-6">
+            <div className="flex flex-col items-center text-center -mt-12">
               <Avatar className="w-24 h-24 border-4 border-background shadow-lg">
                 <AvatarImage src={photoUrl} />
                 <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
-                  {student.name.substring(0, 2).toUpperCase()}
+                  {(student.name || '?').substring(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              
-              <div>
-                <h3 className="text-xl font-bold">{student.name}</h3>
-                <p className="text-sm font-medium text-muted-foreground mt-1">
-                  {student.enrollmentNo || 'Pending Enrollment No'}
-                </p>
-                <div className="flex items-center justify-center gap-2 mt-3 text-sm text-slate-600 dark:text-slate-400">
-                  <GraduationCap className="w-4 h-4" />
-                  <span>{programName}</span>
-                </div>
+              <h3 className="text-xl font-bold mt-3">{student.name}</h3>
+              <p className="text-sm font-medium text-muted-foreground mt-1 inline-flex items-center gap-1">
+                <Hash className="w-3.5 h-3.5" />{student.enrollmentNo || 'Enrollment no. pending'}
+              </p>
+              {student.admissionNo && <p className="text-xs text-muted-foreground mt-0.5">Admission No: {student.admissionNo}</p>}
+              <div className="flex items-center justify-center gap-2 mt-2 text-sm text-slate-600 dark:text-slate-400">
+                <GraduationCap className="w-4 h-4 shrink-0" />
+                <span>{programName}</span>
               </div>
+              {student.videoBlocked && (
+                <Badge variant="destructive" className="mt-3 text-[10px] uppercase" title={student.videoBlockReason || ''}>Videos blocked</Badge>
+              )}
             </div>
 
-            <div className="mt-8 space-y-4">
-              <div className="flex items-center gap-3 text-sm">
-                <div className="p-2 bg-muted rounded-md"><Mail className="w-4 h-4 text-muted-foreground" /></div>
-                <div className="truncate font-medium">{student.email}</div>
-              </div>
-              <div className="flex items-center gap-3 text-sm">
-                <div className="p-2 bg-muted rounded-md"><Phone className="w-4 h-4 text-muted-foreground" /></div>
-                <div className="font-medium">{student.phone}</div>
-              </div>
-              <div className="flex items-center gap-3 text-sm">
-                <div className="p-2 bg-muted rounded-md"><MapPin className="w-4 h-4 text-muted-foreground" /></div>
-                <div className="font-medium truncate">{student.address || 'Address not provided'}</div>
-              </div>
+            <div className="mt-6 space-y-2.5">
+              {[
+                { icon: Mail, label: 'Email', value: student.email || 'Not provided' },
+                { icon: Phone, label: 'Phone', value: student.phone || 'Not provided' },
+                { icon: MapPin, label: 'Address', value: student.address || 'Not provided' },
+              ].map(({ icon: Icon, label, value }) => (
+                <div key={label} className="flex items-center gap-3 rounded-xl border bg-muted/30 px-3 py-2.5 min-w-0">
+                  <div className="p-2 rounded-lg bg-background border shrink-0"><Icon className="w-4 h-4 text-muted-foreground" /></div>
+                  <div className="min-w-0">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</p>
+                    <p className="text-sm font-medium truncate" title={String(value)}>{value}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5 mt-2.5">
+              {[
+                { label: 'University', value: universityName },
+                { label: 'Branch', value: branchName },
+                { label: 'Session', value: student.session?.name || 'N/A' },
+                { label: 'Admitted on', value: fmt(joined) },
+              ].map(({ label, value }) => (
+                <div key={label} className="rounded-xl border px-3 py-2.5 min-w-0">
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</p>
+                  <p className="text-sm font-semibold mt-0.5 truncate" title={String(value)}>{value}</p>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -204,183 +233,81 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
         <div className="md:col-span-2">
           <Card className="shadow-sm border-border bg-card h-full">
             <Tabs defaultValue="personal" className="w-full">
-              <CardHeader className="border-b pb-0">
-                <TabsList className="w-full justify-start h-auto bg-transparent p-0 gap-6 overflow-x-auto rounded-none border-b border-transparent">
-                  <TabsTrigger value="personal" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
-                    Personal Details
+              <CardHeader className="border-b p-3 sm:p-4">
+                <TabsList className="w-full justify-start h-auto bg-transparent p-0 gap-1.5 overflow-x-auto rounded-none">
+                  <TabsTrigger value="personal" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                    <User className="w-4 h-4" /> Personal
                   </TabsTrigger>
-                  <TabsTrigger value="enrollments" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-400">
-                    <GraduationCap className="w-4 h-4" /> Enrollments &amp; Upgrades ({enrollments.length})
+                  <TabsTrigger value="enrollments" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                    <GraduationCap className="w-4 h-4" /> Enrollments <span className="opacity-70">({enrollments.length})</span>
                   </TabsTrigger>
-                  <TabsTrigger value="documents" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
-                    Documents
+                  <TabsTrigger value="documents" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                    <FileText className="w-4 h-4" /> Documents
                   </TabsTrigger>
-                  <TabsTrigger value="fees" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
-                    Fee Details
+                  <TabsTrigger value="fees" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                    <Wallet className="w-4 h-4" /> Fees
                   </TabsTrigger>
-                  <TabsTrigger value="university" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
-                    University Details
+                  <TabsTrigger value="university" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                    <Building2 className="w-4 h-4" /> University
                   </TabsTrigger>
-                  <TabsTrigger value="portal" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
-                    Student Portal
+                  <TabsTrigger value="portal" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                    <KeyRound className="w-4 h-4" /> Portal access
                   </TabsTrigger>
-                  <TabsTrigger value="progress" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-amber-500 data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap flex items-center gap-1.5 font-bold">
-                    <span className="text-amber-500">⭐</span> Student Progress
+                  <TabsTrigger value="progress" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                    <Star className="w-4 h-4" /> Progress
                   </TabsTrigger>
-                  <TabsTrigger value="communication" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
-                    Communication History
+                  <TabsTrigger value="communication" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                    <MessageSquare className="w-4 h-4" /> Messages
                   </TabsTrigger>
-                  <TabsTrigger value="remarks" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
-                    Remarks
+                  <TabsTrigger value="remarks" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                    <StickyNote className="w-4 h-4" /> Remarks
                   </TabsTrigger>
                 </TabsList>
               </CardHeader>
-              <CardContent className="p-6">
-                
+              <CardContent className="p-5 sm:p-6">
+
                 {/* Personal Details Tab */}
-                <TabsContent value="personal" className="space-y-6 mt-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Date of Birth</p>
-                      <p className="font-medium mt-1">
-                        {student.dob ? format(new Date(student.dob), 'dd MMM yyyy') : 'N/A'}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Alternate Phone</p>
-                      <p className="font-medium mt-1">{student.altPhone || 'N/A'}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Father's Name</p>
-                      <p className="font-medium mt-1">{student.fatherName || 'N/A'}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Mother's Name</p>
-                      <p className="font-medium mt-1">{student.motherName || 'N/A'}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Religion / Caste</p>
-                      <p className="font-medium mt-1">{student.religion || 'N/A'} {student.caste ? `/ ${student.caste}` : ''}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Pin Code</p>
-                      <p className="font-medium mt-1">{student.pinCode || 'N/A'}</p>
-                    </div>
-                  </div>
+                <TabsContent value="personal" className="space-y-8 mt-0">
+                  <Section title="Identity">
+                    <Field label="Date of Birth" value={fmt(student.dob)} />
+                    <Field label="Gender" value={student.gender} capitalize />
+                    <Field label="Marital Status" value={student.maritalStatus} capitalize />
+                    <Field label="Category" value={student.category} capitalize />
+                    <Field label="Religion / Caste" value={[student.religion, student.caste].filter(Boolean).join(' / ')} />
+                    <Field label="Employment Status" value={student.employmentStatus} capitalize />
+                  </Section>
+                  <Section title="Family">
+                    <Field label="Father's Name" value={student.fatherName} />
+                    <Field label="Father's Phone" value={student.fatherPhone} />
+                    <Field label="Mother's Name" value={student.motherName} />
+                    <Field label="Mother's Phone" value={student.motherPhone} />
+                    <Field label="Guardian" value={student.guardianName} />
+                    <Field label="Family Phone" value={student.familyPhone} />
+                  </Section>
+                  <Section title="Contact">
+                    <Field label="Alternate Phone" value={student.altPhone} />
+                    <Field label="Pin Code" value={student.pinCode} />
+                    <Field label="Address" value={student.address} wide />
+                  </Section>
                 </TabsContent>
 
-                {/* University Details Tab (Replaced Academic Info) */}
-                <TabsContent value="university" className="space-y-6 mt-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">University</p>
-                      <p className="font-medium mt-1">{universityName}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Program</p>
-                      <p className="font-medium mt-1">{programName} {student.specialisation ? `- ${student.specialisation}` : ''}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Branch</p>
-                      <p className="font-medium mt-1">{branchName}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Admission Date</p>
-                      <p className="font-medium mt-1">
-                        {student.admissionDate 
-                          ? format(new Date(student.admissionDate), 'dd MMM yyyy') 
-                          : (student.enrollments?.[0]?.createdAt 
-                              ? format(new Date(student.enrollments[0].createdAt), 'dd MMM yyyy') 
-                              : (student.createdAt ? format(new Date(student.createdAt), 'dd MMM yyyy') : 'N/A'))}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Session</p>
-                      <p className="font-medium mt-1">{student.session?.name || student.sessionId || 'N/A'}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Enrolled At</p>
-                      <p className="font-medium mt-1">
-                        {student.enrolledAt ? format(new Date(student.enrolledAt), 'dd MMM yyyy, hh:mm a') : 'N/A'}
-                      </p>
-                    </div>
-                  </div>
+                {/* University Details Tab */}
+                <TabsContent value="university" className="space-y-8 mt-0">
+                  <Section title="Academic">
+                    <Field label="University" value={universityName} />
+                    <Field label="Program" value={`${programName}${student.specialisation ? ` - ${student.specialisation}` : ''}`} />
+                    <Field label="Session" value={student.session?.name || student.sessionId} />
+                    <Field label="Branch" value={branchName} />
+                  </Section>
+                  <Section title="Dates">
+                    <Field label="Admission Date" value={fmt(joined)} />
+                    <Field label="Enrolled At" value={fmt(student.enrolledAt, 'dd MMM yyyy, hh:mm a')} />
+                  </Section>
                 </TabsContent>
 
                 {/* Fees Tab */}
                 <TabsContent value="fees" className="mt-0">
-                  <div className="space-y-4">
-                    {(() => {
-                      const allFees = [
-                        ...(student.paymentSchedules || []),
-                        ...(student.enrollments?.flatMap((e: any) => e.payment ? [e.payment] : []).map((ep: any) => ({
-                          id: ep.id,
-                          title: 'Initial Admission Fee',
-                          amount: ep.amount,
-                          dueDate: ep.createdAt,
-                          status: 'paid',
-                          paidAt: ep.debitedAt || ep.createdAt,
-                          isEnrollmentPayment: true
-                        })) || [])
-                      ];
-                      
-                      allFees.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
-
-                      if (allFees.length === 0) {
-                        return (
-                          <div className="text-center py-10 space-y-3">
-                            <CreditCard className="w-10 h-10 mx-auto text-muted-foreground opacity-50" />
-                            <h4 className="text-base font-semibold">No Fee Records Found</h4>
-                            <p className="text-sm text-muted-foreground">This student does not have any fee records yet.</p>
-                          </div>
-                        );
-                      }
-
-                      return (
-                        <div className="border rounded-md">
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Title</TableHead>
-                                <TableHead>Due Date</TableHead>
-                                <TableHead>Amount</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Paid At</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {allFees.map((schedule: any) => (
-                                <TableRow key={schedule.id}>
-                                  <TableCell className="font-medium">
-                                    {schedule.title}
-                                    {schedule.isOldFee && <Badge variant="outline" className="ml-2 text-[10px]">OLD FEE</Badge>}
-                                    {schedule.isEnrollmentPayment && <Badge variant="secondary" className="ml-2 text-[10px] bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">ADMISSION</Badge>}
-                                  </TableCell>
-                                  <TableCell>
-                                    {schedule.dueDate ? format(new Date(schedule.dueDate), 'dd MMM yyyy') : 'N/A'}
-                                  </TableCell>
-                                  <TableCell>
-                                    {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(schedule.amount)}
-                                  </TableCell>
-                                  <TableCell>
-                                    <Badge 
-                                      variant={schedule.status === 'paid' ? 'default' : schedule.status === 'overdue' ? 'destructive' : 'secondary'}
-                                      className={schedule.status === 'paid' ? "bg-green-500 hover:bg-green-600 uppercase" : "uppercase"}
-                                    >
-                                      {schedule.status}
-                                    </Badge>
-                                  </TableCell>
-                                  <TableCell>
-                                    {schedule.paidAt ? format(new Date(schedule.paidAt), 'dd MMM yyyy') : '-'}
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </div>
-                      );
-                    })()}
-                  </div>
+                  <StudentFeesTab student={student} />
                 </TabsContent>
 
                 {/* Documents Tab */}
@@ -489,6 +416,14 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                 {/* Student Progress Tab */}
                 <TabsContent value="progress" className="mt-0">
                   <StudentProgressTab student={student} enrollments={enrollments} onUpdate={refreshData} />
+                </TabsContent>
+
+                <TabsContent value="communication" className="mt-0">
+                  <StudentCommunicationTab studentId={student.id} />
+                </TabsContent>
+
+                <TabsContent value="remarks" className="mt-0">
+                  <StudentRemarksTab studentId={student.id} />
                 </TabsContent>
 
                 {/* All Enrollments & Upgrades Tab */}
@@ -816,6 +751,28 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
           </div>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
+        {title}<span className="h-px flex-1 bg-border" />
+      </h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{children}</div>
+    </div>
+  );
+}
+
+function Field({ label, value, capitalize, wide }: { label: string; value?: string | null; capitalize?: boolean; wide?: boolean }) {
+  const empty = !value || !String(value).trim() || value === 'N/A';
+  return (
+    <div className={`rounded-xl border bg-muted/20 px-3.5 py-3 ${wide ? 'sm:col-span-2' : ''}`}>
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</p>
+      <p className={`mt-1 text-sm font-medium break-words ${capitalize ? 'capitalize' : ''} ${empty ? 'text-muted-foreground/60' : ''}`}>{empty ? 'Not provided' : value}</p>
     </div>
   );
 }

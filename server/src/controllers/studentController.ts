@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { Prisma } from '../generated/client/index.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
+import { asyncHandler, asyncHandlerWithoutDeleteApproval } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { sendEmail, sendBrandedStudentCredentials } from '../utils/emailService.js';
 import { enqueueNotification } from '../utils/notificationQueue.js';
@@ -208,7 +208,7 @@ export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) =
 
   const student = await prisma.student.findFirst({
     where: whereClause,
-    include: { enrollments: { include: { payment: true } }, program: { include: { feeStructures: true } }, center: true, university: { include: { feeStructures: true } }, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } } }
+    include: { enrollments: { include: { payment: true } }, program: { include: { feeStructures: true } }, center: true, university: { include: { feeStructures: true } }, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } }, invoices: { include: { payments: true }, orderBy: { createdAt: 'asc' } } }
   });
   if (!student) {
     res.status(404).json({ success: false, message: 'Student not found' });
@@ -1724,4 +1724,127 @@ export const setStudentVideoBlock = asyncHandler(async (req: AuthRequest, res: R
   }).catch((e) => console.error('[students] video block audit error', e));
 
   res.json({ success: true, data: updated, message: blocked ? 'Video access blocked' : 'Video access restored' });
+});
+
+
+// ── Profile: communication history and staff remarks ──────────────────────────────
+
+/** Student in the requester's organization (and branch, for branch-locked staff) */
+const findStudentInScope = async (req: AuthRequest) => {
+  const where: any = { id: req.params.id, organizationId: req.user.organizationId };
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+  if (!globalRoles.includes(req.user.role) && req.user.branchId) where.branchId = req.user.branchId;
+  return prisma.student.findFirst({ where, select: { id: true, email: true, phone: true, admissionProgress: true } });
+};
+
+// @desc    Messages (email / SMS / WhatsApp) sent to this student
+// @route   GET /api/v1/students/:id/communications
+export const getStudentCommunications = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await findStudentInScope(req);
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+  const digits = String(student.phone || '').replace(/\D/g, '').slice(-10);
+  const recipients = [student.email, student.phone, digits].filter((v) => !!v && v.length >= 7 || (v || '').includes('@'));
+  const logs = await prisma.communicationLog.findMany({
+    where: {
+      organizationId: req.user.organizationId,
+      OR: [
+        { recipient: { in: recipients as string[], mode: 'insensitive' } },
+        ...(digits.length === 10 ? [{ recipient: { endsWith: digits } }] : [])
+      ]
+    },
+    select: { id: true, type: true, subject: true, category: true, content: true, status: true, errorMessage: true, createdAt: true, sender: { select: { name: true } } },
+    orderBy: { createdAt: 'desc' },
+    take: 200
+  });
+  res.json({ success: true, data: logs });
+});
+
+const readStaffRemarks = (admissionProgress: any): any[] => {
+  const list = admissionProgress && typeof admissionProgress === 'object' ? admissionProgress.staffRemarks : null;
+  return Array.isArray(list) ? list : [];
+};
+
+// @desc    Staff remarks on a student: the internal notes plus remarks recorded by operations and finance
+// @route   GET /api/v1/students/:id/remarks
+export const getStudentRemarks = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await findStudentInScope(req);
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+  const enrollments = await prisma.enrollment.findMany({
+    where: { studentId: student.id },
+    select: { id: true, departmentRemarks: true, financeRemarks: true, universityRemarks: true, updatedAt: true, program: { select: { name: true } } },
+    orderBy: { createdAt: 'desc' }
+  });
+  const recorded = enrollments.flatMap((e) => ([
+    e.departmentRemarks && { source: 'Operations', text: e.departmentRemarks, program: e.program?.name, at: e.updatedAt },
+    e.financeRemarks && { source: 'Finance', text: e.financeRemarks, program: e.program?.name, at: e.updatedAt },
+    e.universityRemarks && { source: 'University', text: e.universityRemarks, program: e.program?.name, at: e.updatedAt },
+  ])).filter(Boolean);
+  const notes = readStaffRemarks(student.admissionProgress).slice().reverse();
+  res.json({ success: true, data: { notes, recorded } });
+});
+
+// @desc    Add an internal remark to a student
+// @route   POST /api/v1/students/:id/remarks
+export const addStudentRemark = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const text = String(req.body.text || '').trim();
+  if (!text) {
+    res.status(400).json({ success: false, message: 'Remark text is required' });
+    return;
+  }
+  if (text.length > 2000) {
+    res.status(400).json({ success: false, message: 'Remark is too long (max 2000 characters)' });
+    return;
+  }
+  const student = await findStudentInScope(req);
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+  const progress: any = student.admissionProgress && typeof student.admissionProgress === 'object' ? student.admissionProgress : {};
+  const note = {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    text,
+    authorId: req.user.id,
+    authorName: req.user.name || req.user.email || req.user.role,
+    authorRole: req.user.role,
+    createdAt: new Date().toISOString()
+  };
+  await prisma.student.update({
+    where: { id: student.id },
+    data: { admissionProgress: { ...progress, staffRemarks: [...readStaffRemarks(progress), note] } }
+  });
+  res.status(201).json({ success: true, data: note });
+});
+
+// @desc    Delete a remark (its author, or an org admin)
+// @route   DELETE /api/v1/students/:id/remarks/:remarkId
+// Staff's own internal note, so the organization's delete-approval flow doesn't apply
+export const deleteStudentRemark = asyncHandlerWithoutDeleteApproval(async (req: AuthRequest, res: Response) => {
+  const student = await findStudentInScope(req);
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+  const progress: any = student.admissionProgress && typeof student.admissionProgress === 'object' ? student.admissionProgress : {};
+  const notes = readStaffRemarks(progress);
+  const target = notes.find((n: any) => n.id === req.params.remarkId);
+  if (!target) {
+    res.status(404).json({ success: false, message: 'Remark not found' });
+    return;
+  }
+  if (target.authorId !== req.user.id && !['org_admin', 'superadmin'].includes(req.user.role)) {
+    res.status(403).json({ success: false, message: 'Only the author or an admin can delete this remark' });
+    return;
+  }
+  await prisma.student.update({
+    where: { id: student.id },
+    data: { admissionProgress: { ...progress, staffRemarks: notes.filter((n: any) => n.id !== req.params.remarkId) } }
+  });
+  res.json({ success: true });
 });

@@ -1,3 +1,4 @@
+import { activityLogger } from './middleware/activityLogger.js';
 import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -169,6 +170,7 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter);
+app.use('/api', activityLogger);
 
 // iClock ADMS Routes (Mount these directly since biometric machines hardcode /iclock paths)
 app.use('/iclock', iclockRoutes);
