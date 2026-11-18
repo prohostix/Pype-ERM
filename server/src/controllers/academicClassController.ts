@@ -258,3 +258,52 @@ export const getClassStudents = asyncHandler(async (req: Request, res: Response)
 
   res.json({ success: true, data: students });
 });
+
+
+// @desc    Everything faculty have uploaded to a class: modules, lessons, videos, materials and trial videos
+// @route   GET /api/v1/academic-classes/:id/content
+// @access  Private (org admin)
+export const getClassContent = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const organizationId = (req as any).user.organizationId;
+
+  const academicClass = await prisma.academicClass.findFirst({ where: { id, organizationId }, select: { id: true, name: true, inchargeIds: true } });
+  if (!academicClass) {
+    return res.status(404).json({ success: false, message: 'Academic class not found' });
+  }
+  const incharges = academicClass.inchargeIds.length
+    ? await prisma.faculty.findMany({ where: { id: { in: academicClass.inchargeIds }, organizationId }, select: { id: true, name: true } })
+    : [];
+
+  const lessonSelect = {
+    id: true, title: true, description: true, order: true, videoUrl: true, createdAt: true, updatedAt: true, classSubModuleId: true,
+    faculty: { select: { id: true, name: true } },
+    materials: {
+      where: { isActive: true },
+      orderBy: { createdAt: 'asc' as const },
+      select: { id: true, title: true, fileName: true, fileUrl: true, createdAt: true, faculty: { select: { id: true, name: true } } }
+    }
+  };
+
+  const [modules, trialVideos] = await Promise.all([
+    prisma.classModule.findMany({
+      where: { academicClassId: id, organizationId },
+      orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
+      select: {
+        id: true, title: true, description: true, order: true,
+        subModules: {
+          orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
+          select: { id: true, title: true, description: true, order: true, lessons: { orderBy: [{ order: 'asc' }, { createdAt: 'asc' }], select: lessonSelect } }
+        },
+        lessons: { where: { classSubModuleId: null }, orderBy: [{ order: 'asc' }, { createdAt: 'asc' }], select: lessonSelect }
+      }
+    }),
+    prisma.classTrialVideo.findMany({
+      where: { academicClassId: id, organizationId },
+      orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
+      select: { id: true, title: true, description: true, videoUrl: true, createdAt: true }
+    })
+  ]);
+
+  res.json({ success: true, data: { classId: academicClass.id, className: academicClass.name, incharges, modules, trialVideos } });
+});

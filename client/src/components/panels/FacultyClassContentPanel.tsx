@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import api from '@/lib/api';
+import { VideoPreviewDialog } from './VideoPreviewDialog';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { shrinkImage } from '@/lib/uploadFile';
@@ -37,6 +38,8 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   const [trialVideos, setTrialVideos] = useState<any[]>([]);
   const [trialVideoDialogOpen, setTrialVideoDialogOpen] = useState(false);
   const [editingTrialVideoId, setEditingTrialVideoId] = useState<string | null>(null);
+  // Pop-up player so the faculty can watch a video they saved
+  const [previewVideo, setPreviewVideo] = useState<{ title: string; videoUrl: string } | null>(null);
   const [trialVideoForm, setTrialVideoForm] = useState({ title: '', description: '', videoUrl: '', order: '' });
 
   const [lessonDialogOpen, setLessonDialogOpen] = useState(false);
@@ -643,9 +646,14 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
             <div className="flex items-center gap-2">
               <h5 className="font-semibold text-sm leading-tight">{lesson.title}</h5>
               {lesson.videoUrl && (
-                <Badge variant="outline" className="text-[10px] h-4.5 px-1.5 gap-1 border-indigo-200 text-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40 font-normal">
-                  <Video className="w-3 h-3" /> Video
-                </Badge>
+                <button
+                  type="button"
+                  onClick={() => setPreviewVideo({ title: lesson.title, videoUrl: lesson.videoUrl })}
+                  className="inline-flex items-center gap-1 rounded-md border border-indigo-200 bg-indigo-50/50 px-1.5 py-0.5 text-[10px] font-medium text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-950/40 transition-colors"
+                  title="Watch the saved video"
+                >
+                  <Play className="w-3 h-3" /> Watch video
+                </button>
               )}
             </div>
             {lesson.description && (
@@ -774,6 +782,9 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
                       {video.description && <p className="text-xs text-muted-foreground line-clamp-1">{video.description}</p>}
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
+                      <Button variant="ghost" size="sm" onClick={() => setPreviewVideo({ title: video.title, videoUrl: video.videoUrl })} className="h-7 text-xs text-indigo-600" aria-label={`Watch ${video.title}`}>
+                        <Play className="w-3 h-3 mr-1" /> Watch
+                      </Button>
                       <Button variant="ghost" size="icon" onClick={() => openTrialVideoDialog(video)} className="h-7 w-7" aria-label={`Edit ${video.title}`}>
                         <Edit className="w-3 h-3" />
                       </Button>
@@ -1008,6 +1019,8 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
       </div>
 
       {/* Module Modal */}
+      <VideoPreviewDialog video={previewVideo} onClose={() => setPreviewVideo(null)} />
+
       <Dialog open={trialVideoDialogOpen} onOpenChange={setTrialVideoDialogOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>{editingTrialVideoId ? 'Edit Trial Video' : 'Add Trial Video'}</DialogTitle></DialogHeader>
@@ -1127,6 +1140,11 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
                 onChange={e => setLessonForm({ ...lessonForm, videoUrl: e.target.value })} 
                 required={academicClass?.academicCenter?.type === 'online'}
               />
+              {lessonForm.videoUrl.trim() && (
+                <Button type="button" variant="outline" size="sm" onClick={() => setPreviewVideo({ title: lessonForm.title || 'Video preview', videoUrl: lessonForm.videoUrl })}>
+                  <Play className="w-3.5 h-3.5 mr-1.5" /> Preview video
+                </Button>
+              )}
             </div>
             <div className="space-y-2">
               <Label>Order</Label>

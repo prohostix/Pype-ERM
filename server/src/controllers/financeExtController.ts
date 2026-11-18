@@ -253,9 +253,10 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       });
 
       // Include initial payment from student enrollment if present
-      const studentEnrollments = await prisma.enrollment.findMany({
-        where: { studentId: actualStudentId }
-      });
+      // Only this receipt's own program counts: earlier/other-program or dropped enrollments are separate admissions
+      const receiptProgramId = matchedEnrollment?.programId || actualStudent?.programId || fallbackEnrollment?.programId || null;
+      const studentEnrollments = (await prisma.enrollment.findMany({ where: { studentId: actualStudentId } }))
+        .filter((e: any) => !['dropped', 'rejected', 'cancelled'].includes(e.status) && (!receiptProgramId || e.programId === receiptProgramId));
       for (const enr of studentEnrollments) {
         if (enr.initialPaymentAmount && enr.initialPaymentAmount > 0) {
           const alreadyExists = studentPaymentHistory.some(p => Math.abs(p.amount - (enr.initialPaymentAmount || 0)) < 0.01);

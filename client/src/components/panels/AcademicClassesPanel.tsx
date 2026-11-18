@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, ArrowLeft, Layers, MoreVertical, BookOpen, Users, VideoOff, Video } from 'lucide-react';
+import { Plus, Edit, Trash2, ArrowLeft, Layers, MoreVertical, BookOpen, Users, VideoOff, Video, FolderOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { AcademicBatchesPanel } from './AcademicBatchesPanel';
+import { ClassContentViewer } from './ClassContentViewer';
 
 export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: () => void }) {
   const { user } = useAuth();
@@ -21,6 +22,8 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
   const [programs, setPrograms] = useState<any[]>([]);
   const [faculties, setFaculties] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  // Read-only view of what faculty have uploaded to a class
+  const [contentClass, setContentClass] = useState<any | null>(null);
 
   // Online classes: list the class's students so an admin can block or restore their videos
   const [studentsClass, setStudentsClass] = useState<any | null>(null);
@@ -308,6 +311,12 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
                   )}
                 </div>
 
+                {canWrite && (
+                  <Button variant="outline" size="sm" className="w-full" onClick={() => setContentClass(c)}>
+                    <FolderOpen className="w-4 h-4 mr-2" /> Faculty Content
+                  </Button>
+                )}
+
                 {center.type === 'online' && canWrite && (
                   <Button variant="outline" size="sm" className="w-full" onClick={() => openStudents(c)}>
                     <Users className="w-4 h-4 mr-2" /> Students &amp; Video Access
@@ -318,6 +327,8 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
           ))
         )}
       </div>
+
+      <ClassContentViewer academicClass={contentClass} onClose={() => setContentClass(null)} />
 
       {/* Students & video access (online classes) */}
       <Dialog open={!!studentsClass} onOpenChange={(o) => { if (!o) { setStudentsClass(null); setBlockTarget(null); } }}>
