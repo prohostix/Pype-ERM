@@ -482,7 +482,9 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
         myRating: null,
         myReview: null,
         canRate: false,
-        materials: lesson.materials || [],
+        // Study materials open once the video is completed (not tied to the quiz).
+        materials: isVideoWatched ? (lesson.materials || []) : [],
+        materialsCount: (lesson.materials || []).length,
         // A locked lesson must not reveal its video link.
         videoUrl: isFeeLocked || isDailyLimitLocked ? null : lesson.videoUrl || null,
         hasVideo: !!lesson.videoUrl,
@@ -888,11 +890,21 @@ export const recordVideoView = asyncHandler(async (req: AuthRequest, res: Respon
     res.status(200).json({ success: true, data: log });
   }
 });
+// Quiz access: the lesson's video, when it has one, must be completed first.
+async function isLessonVideoDone(studentId: string, lessonId: string): Promise<boolean> {
+  const lesson = await prisma.moduleLesson.findUnique({ where: { id: lessonId }, select: { videoUrl: true } });
+  if (!lesson?.videoUrl) return true;
+  const log = await prisma.studentVideoLog.findUnique({ where: { studentId_moduleLessonId: { studentId, moduleLessonId: lessonId } } });
+  return isVideoLogWatched(log);
+}
+const VIDEO_FIRST_MESSAGE = 'Finish watching the lesson video to unlock the quiz.';
+
 export const getLessonAssessmentForStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
   const student = await getLinkedStudent(req.user.id);
   if (!student) return res.status(404).json({ success: false, message: 'Student record not found' });
 
   const { lessonId } = req.params;
+  if (!(await isLessonVideoDone(student.id, lessonId))) return res.status(403).json({ success: false, code: 'VIDEO_REQUIRED', message: VIDEO_FIRST_MESSAGE });
   const assessment = await prisma.assessment.findFirst({
     where: { lessonId },
     include: {
@@ -924,6 +936,7 @@ export const submitLessonAssessment = asyncHandler(async (req: AuthRequest, res:
 
   const { lessonId } = req.params;
   const { answers } = req.body; // array of { questionId, selectedIndex }
+  if (!(await isLessonVideoDone(student.id, lessonId))) return res.status(403).json({ success: false, code: 'VIDEO_REQUIRED', message: VIDEO_FIRST_MESSAGE });
 
   const assessment = await prisma.assessment.findFirst({
     where: { lessonId },

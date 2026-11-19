@@ -392,6 +392,11 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
       setLessonAssessment(null);
       setTakingAssessment(false);
       setAssessmentAnswers([]);
+      // The quiz stays closed until the lesson's video has been completed.
+      if (!selectedCurriculumLesson.lesson.isVideoWatched) {
+        setLoadingAssessment(false);
+        return;
+      }
       api.get(`/student-portal/lessons/${selectedCurriculumLesson.lesson.id}/assessment`)
         .then(res => {
           if (res.data?.data) {
@@ -402,7 +407,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
         .catch(() => setLessonAssessment(null))
         .finally(() => setLoadingAssessment(false));
     }
-  }, [selectedCurriculumLesson?.lesson.id]);
+  }, [selectedCurriculumLesson?.lesson.id, selectedCurriculumLesson?.lesson.isVideoWatched]);
 
   // The server blocked this video (fee lock or daily quota): swap the player for the lock screen.
   const handleVideoAccessDenied = (err: any) => {
@@ -681,12 +686,20 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
     const extras = Array.isArray(fs.additionalFees) ? fs.additionalFees.reduce((t: number, f: any) => t + (Number(f?.amount) || 0), 0) : 0;
     return (Number(fs.registrationFee) || 0) + (Number(fs.tuitionFee) || 0) + (Number(fs.examFee) || 0) + extras;
   })();
-  const nothingBilled = schedules.length === 0 && invoices.length === 0 && feeStructureTotal > 0;
-  const totalDueAmount = nothingBilled
-    ? feeStructureTotal
-    : pendingSchedules.reduce((sum, s) => sum + Number(s.balanceAmount ?? s.amount ?? 0), 0) +
-      unpaidOtherInvoices.reduce((sum, inv) => sum + Number(inv.balanceAmount || 0), 0);
-  const pendingPaymentsCount = nothingBilled ? 1 : pendingSchedules.length + unpaidOtherInvoices.length;
+  // Part of the course fee may not be billed yet (no installments created, or only the
+  // registration invoice exists). Whatever the fee structure covers beyond installments and
+  // standalone invoices is still owed, so include it in Total Due.
+  const scheduledTotal = schedules.reduce((sum, s) => sum + Number(s.amount || 0), 0);
+  const standaloneInvoiceTotal = invoices
+    .filter((inv) => !inv.scheduleId)
+    .reduce((sum, inv) => sum + Number(inv.total ?? inv.amount ?? 0), 0);
+  const unbilledAmount = Math.max(0, feeStructureTotal - scheduledTotal - standaloneInvoiceTotal);
+  const nothingBilled = unbilledAmount > 0;
+  const totalDueAmount =
+    pendingSchedules.reduce((sum, s) => sum + Number(s.balanceAmount ?? s.amount ?? 0), 0) +
+    unpaidOtherInvoices.reduce((sum, inv) => sum + Number(inv.balanceAmount || 0), 0) +
+    unbilledAmount;
+  const pendingPaymentsCount = pendingSchedules.length + unpaidOtherInvoices.length + (nothingBilled ? 1 : 0);
   const nextPayment = pendingSchedules.length > 0 ? pendingSchedules[0] : null;
   const isOverdue = nextPayment && new Date(nextPayment.dueDate) < new Date();
 
@@ -1171,8 +1184,8 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                       </div>
                       {nothingBilled ? (
                         <>
-                          <h4 className="text-2xl font-black text-amber-600 dark:text-amber-400 mb-2">₹{feeStructureTotal.toLocaleString('en-IN')} due</h4>
-                          <p className="text-sm font-medium text-slate-500">Your course fee has not been billed yet. See the Fees tab, or contact the office for your installment plan.</p>
+                          <h4 className="text-2xl font-black text-amber-600 dark:text-amber-400 mb-2">₹{unbilledAmount.toLocaleString('en-IN')} due</h4>
+                          <p className="text-sm font-medium text-slate-500">Part of your course fee has not been billed yet. See the Fees tab, or contact the office for your installment plan.</p>
                         </>
                       ) : (
                         <>
@@ -2167,7 +2180,15 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
 
                             {/* TAB 2: QUIZ & ASSESSMENT */}
                             <TabsContent value="quiz" className="mt-4 space-y-4">
-                              {loadingAssessment ? (
+                              {selectedCurriculumLesson.lesson.hasAssessment && !selectedCurriculumLesson.lesson.isVideoWatched ? (
+                                <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-xs">
+                                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                                  <div>
+                                    <h5 className="font-semibold text-xs">Quiz Locked</h5>
+                                    <p className="text-[11px] opacity-90 mt-0.5">Finish watching this lesson's video to unlock the quiz.</p>
+                                  </div>
+                                </div>
+                              ) : loadingAssessment ? (
                                 <div className="flex items-center justify-center p-8 text-xs text-muted-foreground">
                                   <Loader2 className="w-4 h-4 animate-spin text-primary mr-2" />
                                   Loading quiz...
@@ -2310,12 +2331,12 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
 
                             {/* TAB 3: STUDY MATERIALS & E-BOOKS */}
                             <TabsContent value="resources" className="mt-4 space-y-3">
-                              {!selectedCurriculumLesson.lesson.isCompleted ? (
+                              {!selectedCurriculumLesson.lesson.isVideoWatched ? (
                                 <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-xs">
                                   <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                                   <div>
                                     <h5 className="font-semibold text-xs">Materials Locked</h5>
-                                    <p className="text-[11px] opacity-90 mt-0.5">Complete this lesson's requirements to unlock downloadable study documents.</p>
+                                    <p className="text-[11px] opacity-90 mt-0.5">Finish watching this lesson's video to unlock the study materials.</p>
                                   </div>
                                 </div>
                               ) : selectedCurriculumLesson.lesson.materials && selectedCurriculumLesson.lesson.materials.length > 0 ? (

@@ -303,6 +303,39 @@ interface SavedStudentFilters {
   sortBy?: string;
 }
 
+// Installments past their due date that are not fully paid (by status or by invoice payments).
+const getOverdueInfo = (s: any): { amount: number; days: number; count: number } => {
+  const startOfToday = new Date(); startOfToday.setHours(0, 0, 0, 0);
+  let amount = 0; let oldest: number | null = null; let count = 0;
+  for (const ps of (Array.isArray(s?.paymentSchedules) ? s.paymentSchedules : [])) {
+    if (!ps?.dueDate) continue;
+    if ((ps.status || '').toLowerCase() === 'paid' || ps.paidAt) continue;
+    const due = new Date(ps.dueDate);
+    if (isNaN(due.getTime()) || due >= startOfToday) continue;
+    const paid = (Array.isArray(s.invoices) ? s.invoices : [])
+      .filter((inv: any) => inv.scheduleId === ps.id && !['cancelled', 'canceled', 'void'].includes((inv.status || '').toLowerCase()))
+      .reduce((t: number, inv: any) => t + (inv.payments || []).reduce((x: number, p: any) => x + (Number(p.amount) || 0), 0), 0);
+    const balance = (Number(ps.amount) || 0) - paid;
+    if (balance <= 0.5) continue;
+    amount += balance; count++;
+    if (oldest === null || due.getTime() < oldest) oldest = due.getTime();
+  }
+  // Organisations that bill by invoice (no installment schedule): an unpaid invoice past its due date.
+  for (const inv of (Array.isArray(s?.invoices) ? s.invoices : [])) {
+    if (inv.scheduleId || !inv.dueDate) continue;
+    const st = (inv.status || '').toLowerCase();
+    if (['paid', 'cancelled', 'canceled', 'void', 'draft'].includes(st)) continue;
+    const due = new Date(inv.dueDate);
+    if (isNaN(due.getTime()) || due >= startOfToday) continue;
+    const received = (inv.payments || []).reduce((x: number, p: any) => x + (Number(p.amount) || 0), 0);
+    const balance = (Number(inv.total ?? inv.amount) || 0) - received;
+    if (balance <= 0.5) continue;
+    amount += balance; count++;
+    if (oldest === null || due.getTime() < oldest) oldest = due.getTime();
+  }
+  return { amount: Math.round(amount * 100) / 100, days: oldest === null ? 0 : Math.floor((startOfToday.getTime() - oldest) / 86400000), count };
+};
+
 const getSavedFilters = (key: string): SavedStudentFilters => {
   try {
     const raw = localStorage.getItem(key);
@@ -433,6 +466,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   // Custom filters defined by the org admin (Student Filters). Selected option ids per filter; NOT_SET matches students with no value.
   const NOT_SET = '__none__';
+  const [filterOverdue, setFilterOverdue] = useState<'all' | 'overdue'>('all');
   const [filterTypes, setFilterTypes] = useState<any[]>([]);
   const [customFilters, setCustomFilters] = useState<Record<string, string[]>>(() => {
     const saved = getSavedFilters(storageKey);
@@ -490,7 +524,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeFilter, filterStatuses, searchQuery, filterUniversityIds, filterSessionIds, filterBranchIds, filterSalesUsers, customFilters, sortBy, filterStartDate, filterEndDate]);
+  }, [activeFilter, filterStatuses, searchQuery, filterUniversityIds, filterSessionIds, filterBranchIds, filterSalesUsers, customFilters, sortBy, filterStartDate, filterEndDate, filterOverdue]);
 
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
@@ -829,6 +863,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     filterSalesUsers.length > 0 ||
     filterSessionIds.length > 0 ||
     activeCustomFilters.length > 0 ||
+    filterOverdue !== 'all' ||
     filterStartDate !== '' ||
     filterEndDate !== '';
 
@@ -841,9 +876,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     if (filterSalesUsers.length > 0) count += filterSalesUsers.length;
     if (filterSessionIds.length > 0) count += filterSessionIds.length;
     activeCustomFilters.forEach((x) => { count += x.ids.length; });
+    if (filterOverdue !== 'all') count++;
     if (filterStartDate !== '' || filterEndDate !== '') count++;
     return count;
-  }, [searchQuery, filterStatuses, filterUniversityIds, filterBranchIds, filterSalesUsers, filterSessionIds, customFilters, filterTypes, filterStartDate, filterEndDate]);
+  }, [searchQuery, filterStatuses, filterUniversityIds, filterBranchIds, filterSalesUsers, filterSessionIds, customFilters, filterTypes, filterStartDate, filterEndDate, filterOverdue]);
 
   const handleResetFilters = () => {
     setSearchQuery('');
@@ -854,6 +890,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     setFilterSalesUsers([]);
     setFilterSessionIds([]);
     setCustomFilters({});
+    setFilterOverdue('all');
     setFilterDatePreset('all');
     setFilterStartDate('');
     setFilterEndDate('');
@@ -2808,6 +2845,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const sessionOptions = useMemo(() => {
     return sessions
       .filter((sess: any) => sess && sess.id)
+      // With universities selected, only offer the sessions that belong to them.
+      .filter((sess: any) => filterUniversityIds.length === 0 || filterUniversityIds.includes(sess.universityId))
       .map((sess: any) => {
         const count = students.filter((s) => {
           if (!s) return false;
@@ -2822,7 +2861,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           count,
         };
       });
-  }, [sessions, students]);
+  }, [sessions, students, filterUniversityIds]);
+
+  // Drop selected sessions that are no longer under the chosen universities.
+  useEffect(() => {
+    if (filterUniversityIds.length === 0 || filterSessionIds.length === 0) return;
+    const allowed = new Set(sessions.filter((sess: any) => filterUniversityIds.includes(sess.universityId)).map((sess: any) => sess.id));
+    const kept = filterSessionIds.filter((id) => allowed.has(id));
+    if (kept.length !== filterSessionIds.length) setFilterSessionIds(kept);
+  }, [filterUniversityIds, sessions]);
 
   const customFilterOptions = useMemo(() => {
     const map: Record<string, { value: string; label: string; count: number; dotHex?: string }[]> = {};
@@ -2840,7 +2887,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     return map;
   }, [filterTypes, students]);
 
-  const filteredStudents = students.filter(s => {
+  const studentsBeforeOverdue = students.filter(s => {
     if (!s) return false;
 
     // Status / State filter (multi-select)
@@ -2937,6 +2984,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       const branchA = (typeof a.branchId === 'object' ? a.branchId?.name : a.branch?.name) || '';
       const branchB = (typeof b.branchId === 'object' ? b.branchId?.name : b.branch?.name) || '';
       return branchA.localeCompare(branchB);
+    } else if (sortBy === 'overdue_days' || sortBy === 'overdue_amount') {
+      const oa = getOverdueInfo(a); const ob = getOverdueInfo(b);
+      const diff = sortBy === 'overdue_days' ? ob.days - oa.days : ob.amount - oa.amount;
+      return diff !== 0 ? diff : (a.name || '').localeCompare(b.name || '');
     } else if (sortBy === 'enrollmentNo') {
       const enA = a.enrollmentNo || '';
       const enB = b.enrollmentNo || '';
@@ -2956,6 +3007,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       return nameA.localeCompare(nameB);
     }
   });
+
+  // Overdue is applied last so its count reflects every other active filter.
+  const overdueStudents = studentsBeforeOverdue.filter((st) => getOverdueInfo(st).amount > 0);
+  const filteredStudents = filterOverdue === 'overdue' ? overdueStudents : studentsBeforeOverdue;
 
   const totalPages = Math.max(1, Math.ceil(filteredStudents.length / itemsPerPage));
   const paginatedStudents = filteredStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -4180,6 +4235,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 onChange={setFilterSessionIds}
               />
 
+              {/* Fee status: overdue installments */}
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Fees</span>
+                <Select value={filterOverdue} onValueChange={(v) => setFilterOverdue(v as 'all' | 'overdue')}>
+                  <SelectTrigger className={cn("h-9 text-xs rounded-lg", filterOverdue === 'overdue' && "bg-red-50 border-red-200 text-red-700")}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all" className="text-xs">All students</SelectItem>
+                    <SelectItem value="overdue" className="text-xs">Overdue fees ({overdueStudents.length})</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Custom filters created by the organisation admin */}
               {filterTypes.map((t) => (
                 <MultiSelectFilter
@@ -4282,6 +4351,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                       <SelectItem value="enrollmentNo" className="text-xs">Enrollment No.</SelectItem>
                       <SelectItem value="admissionDate_desc" className="text-xs">Admission (Newest First)</SelectItem>
                       <SelectItem value="admissionDate_asc" className="text-xs">Admission (Oldest First)</SelectItem>
+                      <SelectItem value="overdue_days" className="text-xs">Overdue (Longest First)</SelectItem>
+                      <SelectItem value="overdue_amount" className="text-xs">Overdue (Highest Amount)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -4373,6 +4444,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                       </button>
                     </Badge>
                   ))}
+
+                  {filterOverdue === 'overdue' && (
+                    <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-300 border border-red-200/50">
+                      Overdue fees
+                      <button type="button" onClick={() => setFilterOverdue('all')} className="hover:bg-red-200/50 rounded p-0.5">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  )}
 
                   {filterSessionIds.map(sId => (
                     <Badge key={sId} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-300 border border-amber-200/50">
