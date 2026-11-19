@@ -14,7 +14,6 @@ import {
   CheckCircle2,
   Printer,
   Sparkles,
-  TrendingUp,
   ShieldCheck,
   ShieldAlert,
   MessageSquare,
@@ -135,7 +134,7 @@ const getYouTubeEmbedUrl = (url: string) => {
 };
 
 export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalProps) {
-  const [activeTab, setActiveTab] = useState(!initialTab || initialTab === 'dashboard' ? 'overview' : initialTab);
+  const [activeTab, setActiveTab] = useState(!initialTab || initialTab === 'dashboard' ? 'overview' : initialTab === 'invoices' ? 'fees' : initialTab);
 
   useEffect(() => {
     setActiveTab(!initialTab || initialTab === 'dashboard' ? 'overview' : initialTab);
@@ -146,6 +145,10 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
     if (onNavigate) onNavigate(tab);
   };
   const [loading, setLoading] = useState(true);
+  const [portalConfig, setPortalConfig] = useState<{ terms: { title: string; body: string }[]; academicEmail: string; financeEmail: string; generalEmail: string }>({ terms: [], academicEmail: '', financeEmail: '', generalEmail: '' });
+  useEffect(() => {
+    api.get('/student-portal/config').then(r => { if (r.data?.data) setPortalConfig(r.data.data); }).catch(() => {});
+  }, []);
   const [isNotStudent, setIsNotStudent] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -882,7 +885,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
     { id: 'materials', label: 'Classes & E-Books', icon: <BookOpen className="w-4 h-4" />, count: materials.length },
     { id: 'fees', label: 'Fee & Invoices', icon: <CreditCard className="w-4 h-4" />, count: pendingPaymentsCount },
     { id: 'notifications', label: 'Notifications', icon: <Bell className="w-4 h-4" />, count: notifications.length + announcements.length },
-    { id: 'refer_admission', label: 'Refer Admission', icon: <TrendingUp className="w-4 h-4" /> },
+    // Refer Admission disabled
     { id: 'terms', label: 'Terms & Conditions', icon: <ShieldCheck className="w-4 h-4" /> },
     { id: 'help', label: 'Help & Support', icon: <MessageSquare className="w-4 h-4" /> },
   ];
@@ -2998,7 +3001,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
         )}
 
         {/* REFER ADMISSION */}
-        {activeTab === 'refer_admission' && (
+        {false && activeTab === 'refer_admission' && (
           <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 pb-6 border-b border-border/50">
               <div className="flex flex-col gap-3">
@@ -3184,47 +3187,20 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
             <Card className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden">
               <CardContent className="p-0">
                 <div className="divide-y divide-border/50">
-
-                  <div className="p-6 md:p-8 hover:bg-muted/30 transition-colors">
-                    <div className="flex gap-4">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 font-bold text-sm border border-primary/20">1</div>
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-lg text-foreground tracking-tight">Academic Integrity & Conduct</h4>
-                        <p className="text-muted-foreground leading-relaxed">Students are expected to adhere to high standards of academic honesty and conduct. Plagiarism, cheating, or behavior disrupting academic operations will lead to disciplinary actions.</p>
+                  {portalConfig.terms.length === 0 && (
+                    <div className="p-8 text-center text-muted-foreground">Terms & Conditions have not been published by your institution yet.</div>
+                  )}
+                  {portalConfig.terms.map((t, i) => (
+                    <div key={i} className="p-6 md:p-8 hover:bg-muted/30 transition-colors">
+                      <div className="flex gap-4">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 font-bold text-sm border border-primary/20">{i + 1}</div>
+                        <div className="space-y-2">
+                          {t.title && <h4 className="font-semibold text-lg text-foreground tracking-tight">{t.title}</h4>}
+                          <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{t.body}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="p-6 md:p-8 hover:bg-muted/30 transition-colors">
-                    <div className="flex gap-4">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 font-bold text-sm border border-primary/20">2</div>
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-lg text-foreground tracking-tight">Fee Payment & Installments</h4>
-                        <p className="text-muted-foreground leading-relaxed">Tuition fees must be settled according to the scheduled milestones. Failure to complete installment payments on or before the due date may restrict access to exams and student portal assets.</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-6 md:p-8 hover:bg-muted/30 transition-colors">
-                    <div className="flex gap-4">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 font-bold text-sm border border-primary/20">3</div>
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-lg text-foreground tracking-tight">Attendance Requirement</h4>
-                        <p className="text-muted-foreground leading-relaxed">A minimum of 75% attendance is required in all classes and coursework to qualify for term examinations, unless approved otherwise by the academic board.</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-6 md:p-8 hover:bg-muted/30 transition-colors">
-                    <div className="flex gap-4">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 font-bold text-sm border border-primary/20">4</div>
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-lg text-foreground tracking-tight">Refund & Cancellation Policy</h4>
-                        <p className="text-muted-foreground leading-relaxed">Admission registration fees are non-refundable. Tuition fee refunds will be processed strictly in accordance with the institution's official refund policy guidelines.</p>
-                      </div>
-                    </div>
-                  </div>
-
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -3258,7 +3234,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
               <div className="lg:col-span-3 space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {/* Academic Queries */}
-                  <Card className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden hover:shadow-md transition-all group">
+                  {portalConfig.academicEmail && (<Card className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden hover:shadow-md transition-all group">
                     <CardContent className="p-6">
                       <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-5 border border-primary/20 group-hover:scale-110 transition-transform">
                         <BookOpen className="w-6 h-6 text-primary" />
@@ -3267,14 +3243,14 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                       <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                         For support with classes, study materials, or exams, reach out to our academics team.
                       </p>
-                      <a href="mailto:support.academics@pypeerm.com" className="inline-flex items-center text-sm text-primary font-medium hover:underline">
-                        support.academics@pypeerm.com <ArrowRight className="w-4 h-4 ml-1" />
+                      <a href={`mailto:${portalConfig.academicEmail}`} className="inline-flex items-center text-sm text-primary font-medium hover:underline">
+                        {portalConfig.academicEmail} <ArrowRight className="w-4 h-4 ml-1" />
                       </a>
                     </CardContent>
-                  </Card>
+                  </Card>)}
 
                   {/* Finance & Billing */}
-                  <Card className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden hover:shadow-md transition-all group">
+                  {portalConfig.financeEmail && (<Card className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden hover:shadow-md transition-all group">
                     <CardContent className="p-6">
                       <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-5 border border-emerald-500/20 group-hover:scale-110 transition-transform">
                         <CreditCard className="w-6 h-6 text-emerald-600" />
@@ -3283,14 +3259,14 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                       <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                         For issues relating to payments, remaining balances, or invoice receipts.
                       </p>
-                      <a href="mailto:support.billing@pypeerm.com" className="inline-flex items-center text-sm text-emerald-600 font-medium hover:underline">
-                        support.billing@pypeerm.com <ArrowRight className="w-4 h-4 ml-1" />
+                      <a href={`mailto:${portalConfig.financeEmail}`} className="inline-flex items-center text-sm text-emerald-600 font-medium hover:underline">
+                        {portalConfig.financeEmail} <ArrowRight className="w-4 h-4 ml-1" />
                       </a>
                     </CardContent>
-                  </Card>
+                  </Card>)}
 
                   {/* General Office */}
-                  <Card className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden sm:col-span-2 hover:shadow-md transition-all group">
+                  {portalConfig.generalEmail && (<Card className="border border-border shadow-sm bg-card rounded-2xl overflow-hidden sm:col-span-2 hover:shadow-md transition-all group">
                     <CardContent className="p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                       <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20 flex-shrink-0 group-hover:scale-110 transition-transform">
                         <MessageSquare className="w-6 h-6 text-amber-600" />
@@ -3300,12 +3276,12 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                         <p className="text-sm text-muted-foreground leading-relaxed mb-2">
                           For general inquiries, campus details, and other operations support across the institution.
                         </p>
-                        <a href="mailto:info@pypeerm.com" className="inline-flex items-center text-sm text-amber-600 font-medium hover:underline">
-                          info@pypeerm.com <ArrowRight className="w-4 h-4 ml-1" />
+                        <a href={`mailto:${portalConfig.generalEmail}`} className="inline-flex items-center text-sm text-amber-600 font-medium hover:underline">
+                          {portalConfig.generalEmail} <ArrowRight className="w-4 h-4 ml-1" />
                         </a>
                       </div>
                     </CardContent>
-                  </Card>
+                  </Card>)}
                 </div>
               </div>
 
@@ -3327,10 +3303,6 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                       <div className="p-6 hover:bg-muted/30 transition-colors">
                         <h5 className="font-medium text-foreground mb-2">Where can I access study materials?</h5>
                         <p className="text-sm text-muted-foreground leading-relaxed">Select the "Curriculum" tab in your sidebar. All videos and PDFs will be available there.</p>
-                      </div>
-                      <div className="p-6 hover:bg-muted/30 transition-colors">
-                        <h5 className="font-medium text-foreground mb-2">How to apply for a referral fee?</h5>
-                        <p className="text-sm text-muted-foreground leading-relaxed">Once your referral registers, sales agents will automatically link the lead to your record.</p>
                       </div>
                     </div>
                   </CardContent>

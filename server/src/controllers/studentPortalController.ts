@@ -1127,3 +1127,16 @@ export const deleteLessonNote = asyncHandlerWithoutDeleteApproval(async (req: Au
   await prisma.lessonNote.delete({ where: { id: note.id } });
   res.json({ success: true, message: 'Note deleted' });
 });
+
+
+// GET /student-portal/config - org-defined Terms & Conditions and support emails
+export const getPortalConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const org = await prisma.organization.findUnique({ where: { id: req.user.organizationId }, select: { metadata: true } });
+  const cfg = ((org?.metadata as any) || {}).studentPortalConfig || {};
+  res.json({ success: true, data: {
+    terms: Array.isArray(cfg.terms) ? cfg.terms : [],
+    academicEmail: cfg.academicEmail || '',
+    financeEmail: cfg.financeEmail || '',
+    generalEmail: cfg.generalEmail || '',
+  } });
+});

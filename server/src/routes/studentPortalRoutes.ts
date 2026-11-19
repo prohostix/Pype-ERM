@@ -15,12 +15,12 @@ import {
   registerClassAttendance,
   getStudentFees,
   getStudentInvoices,
-  submitReferral,
   rateSession,
   videoHeartbeat,
   recordVideoView,
   getLessonAssessmentForStudent,
-  submitLessonAssessment
+  submitLessonAssessment,
+  getPortalConfig
 } from '../controllers/studentPortalController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
@@ -30,6 +30,7 @@ router.use(protect);
 router.use(authorize('student', 'center_student', 'org_admin', 'superadmin'));
 
 router.get('/profile', getStudentProfile);
+router.get('/config', getPortalConfig);
 router.get('/notifications', getStudentNotifications);
 router.get('/materials', getStudentMaterials);
 router.get('/classes', getStudentClasses);
@@ -47,7 +48,8 @@ router.post('/video-heartbeat', videoHeartbeat);
 router.post('/video-view', recordVideoView);
 router.get('/fees', getStudentFees);
 router.get('/invoices', getStudentInvoices);
-router.post('/refer', submitReferral);
+// Refer Admission disabled
+router.post('/refer', (_req, res) => res.status(403).json({ message: 'Refer Admission is currently disabled.' }));
 
 router.get('/lessons/:lessonId/assessment', getLessonAssessmentForStudent);
 router.post('/lessons/:lessonId/assessment', submitLessonAssessment);

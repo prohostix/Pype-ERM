@@ -19,6 +19,7 @@ import {
   TrendingUp,
   School,
   Settings,
+  ShieldCheck,
   UserCog,
   AlertTriangle,
   FileText,
@@ -324,6 +325,12 @@ const navItems: NavItem[] = [
     id: 'communication_settings',
     label: 'SMTP & WhatsApp',
     icon: MessageSquare,
+    roles: ['org_admin', 'superadmin'],
+  },
+  {
+    id: 'student_portal_content',
+    label: 'Student Portal Content',
+    icon: ShieldCheck,
     roles: ['org_admin', 'superadmin'],
   },
   {

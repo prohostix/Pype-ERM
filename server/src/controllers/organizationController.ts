@@ -932,3 +932,43 @@ export const updateBillStatus = asyncHandler(async (req: AuthRequest, res: Respo
 
   res.status(200).json({ success: true, data: bill, message: 'Bill status updated' });
 });
+
+
+// ---- Student portal content (Terms & Conditions + Help & Support emails) ----
+const isEmailish = (v: any) => typeof v === 'string' && (v.trim() === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()));
+
+export const getStudentPortalConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const org = await prisma.organization.findUnique({ where: { id: req.user.organizationId }, select: { metadata: true } });
+  const cfg = ((org?.metadata as any) || {}).studentPortalConfig || {};
+  res.status(200).json({ success: true, data: {
+    terms: Array.isArray(cfg.terms) ? cfg.terms : [],
+    academicEmail: cfg.academicEmail || '',
+    financeEmail: cfg.financeEmail || '',
+    generalEmail: cfg.generalEmail || '',
+  } });
+});
+
+export const updateStudentPortalConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { terms, academicEmail, financeEmail, generalEmail } = req.body || {};
+  for (const e of [academicEmail, financeEmail, generalEmail]) {
+    if (e !== undefined && !isEmailish(e)) {
+      res.status(400).json({ success: false, message: 'One of the email addresses is not valid.' });
+      return;
+    }
+  }
+  const cleanTerms = (Array.isArray(terms) ? terms : [])
+    .map((t: any) => ({ title: String(t?.title || '').trim().slice(0, 200), body: String(t?.body || '').trim().slice(0, 5000) }))
+    .filter((t: any) => t.title || t.body)
+    .slice(0, 50);
+  const orgId = req.user.organizationId;
+  const org = await prisma.organization.findUnique({ where: { id: orgId }, select: { metadata: true } });
+  const existing = (org?.metadata as any) || {};
+  const studentPortalConfig = {
+    terms: cleanTerms,
+    academicEmail: (academicEmail || '').trim(),
+    financeEmail: (financeEmail || '').trim(),
+    generalEmail: (generalEmail || '').trim(),
+  };
+  await prisma.organization.update({ where: { id: orgId }, data: { metadata: { ...existing, studentPortalConfig } } });
+  res.status(200).json({ success: true, data: studentPortalConfig });
+});

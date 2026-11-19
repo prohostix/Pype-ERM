@@ -899,10 +899,25 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       let structureTotal = baseTotal;
       let remainingPaid = totalPaid - extraFeesPaid;
       
-      if (Array.isArray(feeSt.yearlyFees) && feeSt.yearlyFees.length > 0) {
+      // Yearly rows only count when they actually carry amounts; an all-zero row (saved empty)
+      // must not wipe out the structure's own fees.
+      // One-time additional fees (lab, certification, ...) are folded into the first fee row
+      // (Year/Sem 1, or the single Program Fee row), matching the bill total.
+      let addList: any[] = [];
+      if (Array.isArray(feeSt.additionalFees)) addList = feeSt.additionalFees;
+      else if (typeof feeSt.additionalFees === 'string') {
+        try { const parsed = JSON.parse(feeSt.additionalFees); if (Array.isArray(parsed)) addList = parsed; } catch {}
+      }
+      const additionalTotal = addList.reduce((sum: number, f: any) => sum + Math.max(0, Number(f?.amount) || 0), 0);
+
+      const yearlyHasAmounts = Array.isArray(feeSt.yearlyFees) && feeSt.yearlyFees.some((yf: any) =>
+        (Number(yf.registrationFee) || 0) + (Number(yf.tuitionFee) || 0) + (Number(yf.examFee) || 0) > 0);
+
+      if (yearlyHasAmounts) {
         structureTotal = 0; // Prevent double-counting as root fields are aggregates
         feeSt.yearlyFees.forEach((yf: any) => {
-          const yfTotal = (Number(yf.registrationFee) || 0) + (Number(yf.tuitionFee) || 0) + (Number(yf.examFee) || 0);
+          const yfTotal = (Number(yf.registrationFee) || 0) + (Number(yf.tuitionFee) || 0) + (Number(yf.examFee) || 0)
+            + (breakdown.length === 0 ? additionalTotal : 0);
           
           let yfPaid = 0;
           if (remainingPaid >= yfTotal) {
@@ -933,11 +948,12 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
         });
       } else {
         // Fallback if no yearly fees defined
+        structureTotal += additionalTotal;
         breakdown.push({
           year: 'Program Fee',
           totalFee: structureTotal,
-          paid: totalPaid,
-          balance: Math.max(0, structureTotal - totalPaid),
+          paid: remainingPaid,
+          balance: Math.max(0, structureTotal - remainingPaid),
           dueDate: student.joinDate ? new Date(student.joinDate) : null
         });
       }

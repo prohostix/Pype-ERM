@@ -72,6 +72,7 @@ import { EnrollmentLinkConfigPanel } from '@/components/panels/EnrollmentLinkCon
 import { AcademicCentersPanel } from '@/components/panels/AcademicCentersPanel';
 import { FacultiesPanel } from '@/components/panels/FacultiesPanel';
 import { FlowSettingsPanel } from '@/components/panels/FlowSettingsPanel';
+import { StudentPortalContentPanel } from '@/components/panels/StudentPortalContentPanel';
 import { CommunicationSettingsPanel } from '@/components/panels/CommunicationSettingsPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
 import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
@@ -861,6 +862,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
 
         <TabsContent value="settings"><OrganizationSettingsPanel /></TabsContent>
         <TabsContent value="communication_settings"><CommunicationSettingsPanel /></TabsContent>
+        <TabsContent value="student_portal_content"><StudentPortalContentPanel /></TabsContent>
         <TabsContent value="login_branding"><LoginCustomizationPanel /></TabsContent>
         <TabsContent value="flow_settings"><FlowSettingsPanel /></TabsContent>
         <TabsContent value="enrollment_link_config"><EnrollmentLinkConfigPanel /></TabsContent>

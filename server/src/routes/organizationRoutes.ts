@@ -11,6 +11,8 @@ import {
   updateOrgInquiryStatus,
   getEnrollmentLinkConfig,
   updateEnrollmentLinkConfig,
+  getStudentPortalConfig,
+  updateStudentPortalConfig,
   getLoginBrandingBySlug,
   initLoginBranding,
   updateLoginBranding,
@@ -48,6 +50,9 @@ router
 // Enrollment link configuration (must be before /:id to avoid route conflict)
 router.get('/enrollment-link-config', authorize('superadmin', 'org_admin', 'sales_admin', 'sales_sub_admin'), getEnrollmentLinkConfig);
 router.put('/enrollment-link-config', authorize('superadmin', 'org_admin'), updateEnrollmentLinkConfig);
+
+router.get('/student-portal-config', authorize('superadmin', 'org_admin'), getStudentPortalConfig);
+router.put('/student-portal-config', authorize('superadmin', 'org_admin'), updateStudentPortalConfig);
 
 // Communication Settings (SMTP & WhatsApp)
 router.get('/communication-settings', authorize('superadmin', 'org_admin'), getCommunicationSettings);
