@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { numLocale } from '@/lib/currency';
 interface EmployeePerf {
   userId: string;
   name: string;
@@ -207,7 +208,7 @@ export function PerformancePanel() {
             <div>
               <div className="flex items-end justify-between mb-2">
                 <p className="font-semibold">Task pipeline</p>
-                <p className="text-sm text-muted-foreground tabular-nums">{totals.total.toLocaleString('en-IN')} tasks · {totals.total ? Math.round((totals.done / totals.total) * 100) : 0}% done</p>
+                <p className="text-sm text-muted-foreground tabular-nums">{totals.total.toLocaleString(numLocale())} tasks · {totals.total ? Math.round((totals.done / totals.total) * 100) : 0}% done</p>
               </div>
               <div className="flex h-4 rounded-full overflow-hidden bg-muted">
                 {pipeline.filter((p) => p.value > 0).map((p) => <div key={p.label} title={`${p.label}: ${p.value}`} style={{ width: `${(p.value / (totals.total || 1)) * 100}%`, backgroundColor: p.color }} />)}

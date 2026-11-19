@@ -45,7 +45,7 @@ export function todayLocal(): string {
 
 /** Shared context: date, the user's data access and the allowed datasets */
 export function promptContext(req: Pick<SpecRequest, 'catalog' | 'scopeLabel'>): string {
-  return `Today is ${todayLocal()}. Timezone offset ${TZ_OFFSET}. Currency is INR. The Indian financial year runs 1 April to 31 March.
+  return `Today is ${todayLocal()}. Timezone offset ${TZ_OFFSET}. Amounts are in the organisation's own currency, so never assume a currency symbol. The Indian financial year runs 1 April to 31 March.
 
 ${req.scopeLabel ? `Data access: this user can see ${req.scopeLabel}. The server applies this restriction automatically to every report; never add filters for it, and mention it when the user asks what a report covers.\n\n` : ''}You may ONLY use these datasets and fields:
 
@@ -274,7 +274,7 @@ export async function generateAnswer(question: string, title: string, totals: un
     return await grokChat([
       {
         role: 'system',
-        content: `You are a friendly analyst for an education ERP, talking to a staff member. Today is ${todayLocal()}. Currency is INR (use ₹ and Indian digit grouping, lakh/crore for large amounts).
+        content: `You are a friendly analyst for an education ERP, talking to a staff member. Today is ${todayLocal()}. Amounts are in the organisation's own currency: say plain numbers without assuming a currency symbol, and use lakh/crore only if the user does.
 ${scopeLabel ? `The data covers what this user can see: ${scopeLabel}.
 ` : ''}Answer their question in 1-3 short sentences using ONLY the report totals provided. Lead with the key number or insight, then one useful observation (top/bottom item, trend, share). Never invent numbers or names; if the totals can't answer it, say so. When the report includes employee names (staff attendance), say them in your answer, up to about 5, then mention how many more there are and that the full list is on screen. Plain text, no markdown, no lists.${languageRule(language, 'your answer')}`,
       },

@@ -11,6 +11,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
+import { CS, numLocale } from '@/lib/currency';
 type Mode = 'view' | 'verify' | 'reject';
 
 // statusHistory may be an array or (from older writes) an object of entries.
@@ -21,7 +22,7 @@ const lastRejection = (e: any) =>
   [...historyList(e.statusHistory)].reverse().find((h: any) => h?.status === 'provisional_finance_rejected');
 
 const formatINR = (n: number | null | undefined) =>
-  n == null ? '—' : `₹${Number(n).toLocaleString('en-IN')}`;
+  n == null ? '—' : `${CS()}${Number(n).toLocaleString(numLocale())}`;
 
 export function ProvisionalFinancePanel() {
   const [enrollments, setEnrollments] = useState<any[]>([]);
@@ -276,7 +277,7 @@ export function ProvisionalFinancePanel() {
                   <p className="text-muted-foreground">{active.program?.name}</p>
                 </div>
                 <div className="space-y-1.5">
-                  <Label>Verified Amount (₹)</Label>
+                  <Label>Verified Amount ({CS()})</Label>
                   <Input type="number" min="1" value={amount} onChange={(ev) => setAmount(ev.target.value)} autoFocus />
                   <p className="text-xs text-muted-foreground">
                     Sales claimed {formatINR(active.initialPaymentAmount)}. A paid invoice is created for the amount you enter.

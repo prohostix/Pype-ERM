@@ -11,6 +11,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { StudentsPanel } from './StudentsPanel';
 
+import { CS } from '@/lib/currency';
 export function SalesAdminReviewPanel() {
   const { user } = useAuth();
   const [enrollments, setEnrollments] = useState<any[]>([]);
@@ -162,7 +163,7 @@ export function SalesAdminReviewPanel() {
                         Program: {enrollment.program?.name || 'N/A'}
                       </span>
                       <span className="inline-flex items-center bg-slate-100 text-slate-700 px-2 py-1 rounded-md font-medium">
-                        Fee Paid: ₹{enrollment.initialPaymentAmount || 0}
+                        Fee Paid: {CS()}{enrollment.initialPaymentAmount || 0}
                       </span>
                       {enrollment.salesUser && (
                         <span className={`inline-flex items-center px-2 py-1 rounded-md font-medium ${
@@ -286,7 +287,7 @@ export function SalesAdminReviewPanel() {
                 <h4 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Payment Details</h4>
                 <div className="grid grid-cols-2 gap-x-6 gap-y-1 bg-slate-50 rounded-xl p-4 border">
                   <DetailRow icon={IndianRupee} label="Payment Plan" value={e.paymentPlan} />
-                  <DetailRow icon={IndianRupee} label="Initial Payment" value={e.initialPaymentAmount ? `₹${e.initialPaymentAmount}` : null} />
+                  <DetailRow icon={IndianRupee} label="Initial Payment" value={e.initialPaymentAmount ? `${CS()}${e.initialPaymentAmount}` : null} />
                   <DetailRow icon={Clock} label="Applied On" value={e.createdAt ? new Date(e.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : null} />
                   {e.receiptUrl && (
                     <div className="flex items-start gap-3 py-2">

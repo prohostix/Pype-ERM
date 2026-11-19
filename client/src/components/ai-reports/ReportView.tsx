@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { type ChartType, type Column, type Result, type Spec, compact, fmt, isMoney, nf, prettyBucket } from './reportUtils';
 
+import { CS } from '@/lib/currency';
 const SERIES = Array.from({ length: 8 }, (_, i) => `var(--viz-${i + 1})`);
 const MAX_SERIES = 7; // 8th slot is "Other"
 const OP_LABEL: Record<string, string> = {
@@ -184,7 +185,7 @@ function ReportChart({ result, chart, metricKey, onMetricChange }: {
   }
   if (spec.mode === 'list' || chart === 'table' || chart === 'kpi' || !metric) return null;
 
-  const valueFmt = (v: number) => (isMoney(metric.key) ? '₹' : '') + compact.format(v);
+  const valueFmt = (v: number) => (isMoney(metric.key) ? CS() : '') + compact.format(v);
   const data = pivot?.data ?? rows;
   const series = pivot ? pivot.series.map((k) => ({ key: k, label: k })) : [{ key: metric.key, label: metric.label }];
 

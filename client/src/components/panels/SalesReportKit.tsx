@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+import { CS, numLocale } from '@/lib/currency';
 /** Shared building blocks so the four sales report pages look and behave the same */
 
 export type Tone = 'primary' | 'success' | 'info' | 'warning' | 'danger';
@@ -149,4 +150,4 @@ export function monthLabel(month: string): string | null {
   return new Date(Number(month.slice(0, 4)), Number(month.slice(5)) - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 }
 
-export const inr = (n: number) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
+export const inr = (n: number) => `${CS()}${Number(n || 0).toLocaleString(numLocale())}`;

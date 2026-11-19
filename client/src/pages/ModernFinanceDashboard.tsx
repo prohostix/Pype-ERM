@@ -62,6 +62,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS } from '@/lib/currency';
 export function ModernFinanceDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
   const handleNavigate = (tab: string) => {
@@ -264,15 +265,15 @@ function OverviewContent({ onNavigate }: any) {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
-        <FinanceMetric title="Total Receivables" value={`₹${(metrics.totalReceivables / 1000).toFixed(1)}K`} icon={<DollarSign className="w-5 h-5"/>} color="primary" onClick={() => onNavigate('invoices')} />
-        <FinanceMetric title="Total Collected" value={`₹${(metrics.totalCollected / 1000).toFixed(1)}K`} icon={<CreditCard className="w-5 h-5"/>} color="success" onClick={() => onNavigate('payments')} />
-        <FinanceMetric title="Cash & Bank Bal" value={`₹${(metrics.cashAndBankBalance / 1000).toFixed(1)}K`} icon={<Wallet className="w-5 h-5"/>} color="info" />
-        <FinanceMetric title="Operational Exp" value={`₹${(metrics.operationalExpenses / 1000).toFixed(1)}K`} icon={<TrendingUp className="w-5 h-5"/>} color="warning" onClick={() => onNavigate('expenses')} />
+        <FinanceMetric title="Total Receivables" value={`${CS()}${(metrics.totalReceivables / 1000).toFixed(1)}K`} icon={<DollarSign className="w-5 h-5"/>} color="primary" onClick={() => onNavigate('invoices')} />
+        <FinanceMetric title="Total Collected" value={`${CS()}${(metrics.totalCollected / 1000).toFixed(1)}K`} icon={<CreditCard className="w-5 h-5"/>} color="success" onClick={() => onNavigate('payments')} />
+        <FinanceMetric title="Cash & Bank Bal" value={`${CS()}${(metrics.cashAndBankBalance / 1000).toFixed(1)}K`} icon={<Wallet className="w-5 h-5"/>} color="info" />
+        <FinanceMetric title="Operational Exp" value={`${CS()}${(metrics.operationalExpenses / 1000).toFixed(1)}K`} icon={<TrendingUp className="w-5 h-5"/>} color="warning" onClick={() => onNavigate('expenses')} />
         
-        <FinanceMetric title="Univ Fee Pending" value={`₹${(metrics.universityFeePending / 1000).toFixed(1)}K`} icon={<AlertCircle className="w-5 h-5"/>} color="warning" onClick={() => onNavigate('university_fee')} />
-        <FinanceMetric title="Incentive Pending" value={`₹${(metrics.incentivePending / 1000).toFixed(1)}K`} icon={<Users className="w-5 h-5"/>} color="primary" onClick={() => onNavigate('incentive_approval')} />
-        <FinanceMetric title="Payroll Pending" value={`₹${(metrics.payrollPending / 1000).toFixed(1)}K`} icon={<FileText className="w-5 h-5"/>} color="error" onClick={() => onNavigate('payroll')} />
-        <FinanceMetric title="My Target" value={`₹${(metrics.myTargetValue / 1000).toFixed(1)}K`} icon={<CheckCircle className="w-5 h-5"/>} color="success" onClick={() => onNavigate('my_target')} />
+        <FinanceMetric title="Univ Fee Pending" value={`${CS()}${(metrics.universityFeePending / 1000).toFixed(1)}K`} icon={<AlertCircle className="w-5 h-5"/>} color="warning" onClick={() => onNavigate('university_fee')} />
+        <FinanceMetric title="Incentive Pending" value={`${CS()}${(metrics.incentivePending / 1000).toFixed(1)}K`} icon={<Users className="w-5 h-5"/>} color="primary" onClick={() => onNavigate('incentive_approval')} />
+        <FinanceMetric title="Payroll Pending" value={`${CS()}${(metrics.payrollPending / 1000).toFixed(1)}K`} icon={<FileText className="w-5 h-5"/>} color="error" onClick={() => onNavigate('payroll')} />
+        <FinanceMetric title="My Target" value={`${CS()}${(metrics.myTargetValue / 1000).toFixed(1)}K`} icon={<CheckCircle className="w-5 h-5"/>} color="success" onClick={() => onNavigate('my_target')} />
       </div>
 
       {/* Alerts Widget */}
@@ -335,7 +336,7 @@ function OverviewContent({ onNavigate }: any) {
                       <p className="text-xs text-muted-foreground">{new Date(c.createdAt).toLocaleDateString()}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-success">₹{c.amount}</p>
+                      <p className="font-bold text-success">{CS()}{c.amount}</p>
                       <Badge variant="outline" className="text-[10px] uppercase">{c.paymentMode || c.method || 'PAID'}</Badge>
                     </div>
                   </div>
@@ -359,7 +360,7 @@ function OverviewContent({ onNavigate }: any) {
                       <p className="text-xs text-muted-foreground">{e.employee?.user?.name || e.user?.name || 'Unknown'}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-error">₹{e.amount}</p>
+                      <p className="font-bold text-error">{CS()}{e.amount}</p>
                       <Badge variant="outline" className="text-[10px] uppercase">{e.status}</Badge>
                     </div>
                   </div>

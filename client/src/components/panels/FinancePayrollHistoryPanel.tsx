@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
+import { CS } from '@/lib/currency';
 export function FinancePayrollHistoryPanel() {
   const [employees, setEmployees] = useState<any[]>([]);
   const [filteredEmployees, setFilteredEmployees] = useState<any[]>([]);
@@ -136,12 +137,12 @@ export function FinancePayrollHistoryPanel() {
                       </Badge>
                     </div>
                     <div className="text-sm text-muted-foreground flex gap-4 flex-wrap">
-                      <span>Basic: ₹{p.basicSalary?.toLocaleString()}</span>
-                      <span>Gross: ₹{p.grossSalary?.toLocaleString()}</span>
+                      <span>Basic: {CS()}{p.basicSalary?.toLocaleString()}</span>
+                      <span>Gross: {CS()}{p.grossSalary?.toLocaleString()}</span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="block text-xl font-bold text-primary mb-1">₹{p.netSalary?.toLocaleString()}</span>
+                    <span className="block text-xl font-bold text-primary mb-1">{CS()}{p.netSalary?.toLocaleString()}</span>
                   </div>
                 </div>
               ))

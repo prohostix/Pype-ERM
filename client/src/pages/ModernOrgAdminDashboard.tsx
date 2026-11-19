@@ -82,13 +82,15 @@ import { ProvisionalEnrollmentPanel } from '@/components/panels/ProvisionalEnrol
 import { SalesStudentPipelinePanel } from '@/components/panels/SalesStudentPipelinePanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
+import { CS, numLocale, compactMoney } from '@/lib/currency';
 // Helper to format Indian Currency (INR)
 const formatINR = (val: number) => {
-  if (!val && val !== 0) return '₹0';
-  if (val >= 10000000) return `₹${(val / 10000000).toFixed(2)} Cr`;
-  if (val >= 100000) return `₹${(val / 100000).toFixed(2)} L`;
-  if (val >= 1000) return `₹${(val / 1000).toFixed(1)}k`;
-  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);
+  if (!val && val !== 0) return `${CS()}0`;
+  if (numLocale() !== 'en-IN') return compactMoney(val, 2);
+  if (val >= 10000000) return `${CS()}${(val / 10000000).toFixed(2)} Cr`;
+  if (val >= 100000) return `${CS()}${(val / 100000).toFixed(2)} L`;
+  if (val >= 1000) return `${CS()}${(val / 1000).toFixed(1)}k`;
+  return `${CS()}${Number(val).toLocaleString(numLocale(), { maximumFractionDigits: 0 })}`;
 };
 
 // Time elapsed formatter for audit logs
@@ -470,7 +472,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
                         axisLine={false} 
                         tickLine={false} 
                         tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
-                        tickFormatter={(v) => v >= 100000 ? `${(v/100000).toFixed(1)}L` : `${v/1000}k`}
+                        tickFormatter={(v) => numLocale() !== 'en-IN' ? compactMoney(v, 1).replace(CS(), '') : (v >= 100000 ? `${(v/100000).toFixed(1)}L` : `${v/1000}k`)}
                       />
                       <Tooltip 
                         formatter={(val: any) => [formatINR(Number(val)), 'Collected']}

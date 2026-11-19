@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
+import { numLocale } from '@/lib/currency';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface AttendanceInfo {
@@ -225,7 +226,7 @@ export function EmployeeActivityReportPanel() {
             <Tile icon={AlarmClockOff} tint="bg-amber-500/10 text-amber-600" value={String(totals.late)} label="Late" />
             <Tile icon={Users} tint="bg-rose-500/10 text-rose-600" value={String(totals.absent)} label="Not in" />
             <Tile icon={Hourglass} tint="bg-indigo-500/10 text-indigo-600" value={totals.trackedCount ? hoursLabel(totals.avgProductive) : "—"} label={totals.trackedCount ? `Avg active in ERM (${totals.trackedCount} tracked)` : "Avg active in ERM"} />
-            <Tile icon={Zap} tint="bg-cyan-500/10 text-cyan-600" value={totals.erm.toLocaleString('en-IN')} label="ERM actions" />
+            <Tile icon={Zap} tint="bg-cyan-500/10 text-cyan-600" value={totals.erm.toLocaleString(numLocale())} label="ERM actions" />
             <Tile icon={CheckCircle2} tint="bg-violet-500/10 text-violet-600" value={String(totals.done)} label="Tasks done today" />
           </div>
         </CardContent>

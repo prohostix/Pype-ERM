@@ -8,6 +8,7 @@ import {
   buildFeeReceiptEmail
 } from './emailTemplate.js';
 
+import { getOrgCurrencyCode } from './currency.js';
 /**
  * Retrieves the full branding details for an organization
  */
@@ -252,7 +253,8 @@ export async function sendBrandedFeeReceipt(options: {
     receiptNo: options.receiptNo,
     paymentDate: options.paymentDate,
     paymentMode: options.paymentMode,
-    balanceAmount: options.balanceAmount
+    balanceAmount: options.balanceAmount,
+    currencyCode: await getOrgCurrencyCode(options.organizationId)
   });
 
   // Generate PDF receipt attachment

@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 
+import { CS } from '@/lib/currency';
 export function ExpensesPanel() {
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -181,7 +182,7 @@ export function ExpensesPanel() {
                         <Receipt className="w-6 h-6 text-primary" />
                       </div>
                       <div className="flex-1">
-                        <div className="font-medium">₹{expense.amount} - {expense.category}</div>
+                        <div className="font-medium">{CS()}{expense.amount} - {expense.category}</div>
                         <div className="text-sm text-muted-foreground">{expense.description}</div>
                         <div className="text-xs text-muted-foreground mt-1">
                           By: {expense.user?.name || expense.employeeId?.name || expense.employee?.name || 'Unknown'} • {expense.submittedAt ? new Date(expense.submittedAt).toLocaleDateString() : 'N/A'}

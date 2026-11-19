@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
+import { CS } from '@/lib/currency';
 interface Payroll {
   id: string;
   employeeId: any;
@@ -210,9 +211,9 @@ export function PayrollPanel() {
                             </Badge>
                           </div>
                           <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted-foreground mb-2">
-                            <span>Basic: ₹{p.basicSalary?.toLocaleString()}</span>
-                            <span>Gross: ₹{p.grossSalary?.toLocaleString()}</span>
-                            <span className="font-semibold text-foreground">Net: ₹{p.netSalary?.toLocaleString()}</span>
+                            <span>Basic: {CS()}{p.basicSalary?.toLocaleString()}</span>
+                            <span>Gross: {CS()}{p.grossSalary?.toLocaleString()}</span>
+                            <span className="font-semibold text-foreground">Net: {CS()}{p.netSalary?.toLocaleString()}</span>
                             {p.remarks && <span className="text-orange-600">{p.remarks}</span>}
                           </div>
                           
@@ -224,19 +225,19 @@ export function PayrollPanel() {
                                 {Object.entries(p.allowances || {}).map(([key, val]) => (
                                   <div key={key} className="flex justify-between">
                                     <span className="capitalize">{key}:</span>
-                                    <span>₹{Number(val).toLocaleString()}</span>
+                                    <span>{CS()}{Number(val).toLocaleString()}</span>
                                   </div>
                                 ))}
                                 {p.bonus > 0 && (
                                   <div className="flex justify-between">
                                     <span>Bonus:</span>
-                                    <span>₹{p.bonus.toLocaleString()}</span>
+                                    <span>{CS()}{p.bonus.toLocaleString()}</span>
                                   </div>
                                 )}
                                 {p.overtime > 0 && (
                                   <div className="flex justify-between">
                                     <span>Overtime:</span>
-                                    <span>₹{p.overtime.toLocaleString()}</span>
+                                    <span>{CS()}{p.overtime.toLocaleString()}</span>
                                   </div>
                                 )}
                               </div>
@@ -253,7 +254,7 @@ export function PayrollPanel() {
                                        key === 'leaveDeduction' ? 'Leave / LOP' :
                                        key.replace(/([A-Z])/g, ' $1')}:
                                     </span>
-                                    <span>₹{Number(val).toLocaleString()}</span>
+                                    <span>{CS()}{Number(val).toLocaleString()}</span>
                                   </div>
                                 ))}
                                 {Object.keys(p.deductions || {}).length === 0 && <span className="text-muted-foreground">None</span>}
@@ -336,7 +337,7 @@ export function PayrollPanel() {
           </DialogHeader>
           <div className="space-y-5 pt-2">
             <div className="space-y-1">
-              <Label>Basic Salary (₹)</Label>
+              <Label>Basic Salary ({CS()})</Label>
               <Input type="number" min="0" value={editForm.basicSalary}
                 onChange={e => setEditForm((f: any) => ({ ...f, basicSalary: Number(e.target.value) }))} />
             </div>
@@ -345,7 +346,7 @@ export function PayrollPanel() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(['hra', 'transport', 'medical', 'other'] as const).map(key => (
                   <div key={key} className="space-y-1">
-                    <Label className="capitalize">{key} (₹)</Label>
+                    <Label className="capitalize">{key} ({CS()})</Label>
                     <Input type="number" min="0" value={editForm.allowances?.[key] || 0}
                       onChange={e => setEditForm((f: any) => ({ ...f, allowances: { ...f.allowances, [key]: Number(e.target.value) } }))} />
                   </div>
@@ -357,7 +358,7 @@ export function PayrollPanel() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(['pf', 'tax', 'insurance', 'other'] as const).map(key => (
                   <div key={key} className="space-y-1">
-                    <Label className="capitalize">{key} (₹)</Label>
+                    <Label className="capitalize">{key} ({CS()})</Label>
                     <Input type="number" min="0" value={editForm.deductions?.[key] || 0}
                       onChange={e => setEditForm((f: any) => ({ ...f, deductions: { ...f.deductions, [key]: Number(e.target.value) } }))} />
                   </div>
@@ -366,12 +367,12 @@ export function PayrollPanel() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <Label>Bonus (₹)</Label>
+                <Label>Bonus ({CS()})</Label>
                 <Input type="number" min="0" value={editForm.bonus || 0}
                   onChange={e => setEditForm((f: any) => ({ ...f, bonus: Number(e.target.value) }))} />
               </div>
               <div className="space-y-1">
-                <Label>Overtime (₹)</Label>
+                <Label>Overtime ({CS()})</Label>
                 <Input type="number" min="0" value={editForm.overtime || 0}
                   onChange={e => setEditForm((f: any) => ({ ...f, overtime: Number(e.target.value) }))} />
               </div>
@@ -385,17 +386,17 @@ export function PayrollPanel() {
             <div className="p-3 rounded-xl bg-muted/50 grid grid-cols-3 gap-3 text-sm">
               <div>
                 <p className="text-xs text-muted-foreground">Gross</p>
-                <p className="font-bold text-blue-600">₹{calcGross(editForm).toLocaleString()}</p>
+                <p className="font-bold text-blue-600">{CS()}{calcGross(editForm).toLocaleString()}</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Deductions</p>
                 <p className="font-bold text-red-500">
-                  ₹{Object.values(((editForm.deductions || {}) as Record<string, number>)).reduce((s, v) => s + (v || 0), 0).toLocaleString()}
+                  {CS()}{Object.values(((editForm.deductions || {}) as Record<string, number>)).reduce((s, v) => s + (v || 0), 0).toLocaleString()}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Net</p>
-                <p className="font-bold text-green-600">₹{calcNet(editForm).toLocaleString()}</p>
+                <p className="font-bold text-green-600">{CS()}{calcNet(editForm).toLocaleString()}</p>
               </div>
             </div>
           </div>

@@ -8,6 +8,7 @@ import { sendEmail, sendBrandedStudentCredentials } from '../utils/emailService.
 import { enqueueNotification } from '../utils/notificationQueue.js';
 import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
 
+import { findCurrency, getOrgCurrencyCode } from '../utils/currency.js';
 const SALES_ROLES = ['sales_admin', 'sales_sub_admin', 'sales', 'employee', 'student'];
 
 export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -1599,6 +1600,7 @@ export const bulkUpdateProgram = asyncHandler(async (req: AuthRequest, res: Resp
  * Org admin: manually record a payment against the latest enrollment for a set of students
  */
 export const bulkRecordPayment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const curSym = findCurrency(await getOrgCurrencyCode(req.user.organizationId)).symbol;
   const { studentIds, amount, note } = req.body as {
     studentIds: string[];
     amount: number;
@@ -1643,7 +1645,7 @@ export const bulkRecordPayment = asyncHandler(async (req: AuthRequest, res: Resp
       status: enrollment.status,
       changedAt: new Date().toISOString(),
       changedBy: req.user.id,
-      remarks: note || `Manual fee entry of ₹${amount} by ${req.user.name || req.user.role}`
+      remarks: note || `Manual fee entry of ${curSym}${amount} by ${req.user.name || req.user.role}`
     };
     await prisma.enrollment.update({
       where: { id: enrollment.id },
@@ -1657,7 +1659,7 @@ export const bulkRecordPayment = asyncHandler(async (req: AuthRequest, res: Resp
 
   res.status(200).json({
     success: true,
-    message: `Payment of ₹${amount} recorded for ${recorded} student(s)`
+    message: `Payment of ${curSym}${amount} recorded for ${recorded} student(s)`
   });
 });
 

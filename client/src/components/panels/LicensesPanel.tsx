@@ -36,6 +36,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
+import { CS, numLocale } from '@/lib/currency';
 export interface MonthEnrollmentItem {
   id: string;
   studentName: string;
@@ -799,7 +800,7 @@ export function LicensesPanel() {
                   <TrendingUp className="w-4 h-4 text-emerald-600" />
                 </div>
                 <p className="mt-2 text-3xl font-bold tracking-tight text-emerald-700 dark:text-emerald-400">
-                  ₹{totalCalculatedBilling.toLocaleString('en-IN')}
+                  {CS()}{totalCalculatedBilling.toLocaleString(numLocale())}
                 </p>
                 <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
                   <span className="inline-flex items-center gap-1"><Building2 className="w-3.5 h-3.5" />{totalOrgs} organizations</span>
@@ -932,30 +933,30 @@ export function LicensesPanel() {
                           enabled={details.hasAcademicPartners}
                           amount={details.effectivePartnerTotal}
                           lines={[
-                            `Base ₹${details.academicPartnerBasePrice.toLocaleString('en-IN')}`,
-                            `${details.partnerStudentCount} students × ₹${details.academicPartnerPerEnrollmentFee}`,
+                            `Base ${CS()}${details.academicPartnerBasePrice.toLocaleString(numLocale())}`,
+                            `${details.partnerStudentCount} students × ${CS()}${details.academicPartnerPerEnrollmentFee}`,
                           ]}
                         />
                         <ComponentTile
                           icon={UserCheck} tone="slate" title="Direct Admissions"
                           enabled
                           amount={details.directEnrollmentTotal}
-                          lines={[`${details.directStudentCount} students × ₹${details.directPerEnrollmentFee}`]}
+                          lines={[`${details.directStudentCount} students × ${CS()}${details.directPerEnrollmentFee}`]}
                         />
                         <ComponentTile
                           icon={Globe2} tone="sky" title="Study Abroad"
                           enabled={details.hasStudyAbroad}
                           amount={details.effectiveStudyAbroadTotal}
                           lines={[
-                            `Base ₹${details.studyAbroadBasePrice.toLocaleString('en-IN')}`,
-                            `${details.studyAbroadStudentCount} students × ₹${details.studyAbroadPerEnrollmentFee}`,
+                            `Base ${CS()}${details.studyAbroadBasePrice.toLocaleString(numLocale())}`,
+                            `${details.studyAbroadStudentCount} students × ${CS()}${details.studyAbroadPerEnrollmentFee}`,
                           ]}
                         />
                         <ComponentTile
                           icon={School} tone="emerald" title="Academic Center"
                           enabled={details.hasAcademicCenters}
                           amount={details.effectiveCenterTotal}
-                          lines={[`Base ₹${details.academicCenterBasePrice.toLocaleString('en-IN')}`]}
+                          lines={[`Base ${CS()}${details.academicCenterBasePrice.toLocaleString(numLocale())}`]}
                         />
                       </div>
 
@@ -965,7 +966,7 @@ export function LicensesPanel() {
                           <div>
                             <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{selectedMonthLabel} bill</p>
                             <p className="text-2xl font-bold tracking-tight text-emerald-700 dark:text-emerald-400">
-                              ₹{details.totalBill.toLocaleString('en-IN')}
+                              {CS()}{details.totalBill.toLocaleString(numLocale())}
                             </p>
                           </div>
                           <div className="text-xs text-muted-foreground">
@@ -1126,10 +1127,10 @@ export function LicensesPanel() {
                           {bill.academicPartner.enabled ? (
                             <div>
                               <div className="font-semibold text-xs text-indigo-700 dark:text-indigo-300">
-                                ₹{bill.academicPartner.subtotal.toLocaleString('en-IN')}
+                                {CS()}{bill.academicPartner.subtotal.toLocaleString(numLocale())}
                               </div>
                               <div className="text-[10px] text-muted-foreground">
-                                Base: ₹{bill.academicPartner.basePrice} + Usage ({partnerCount} sts): ₹{bill.academicPartner.enrollmentTotal}
+                                Base: {CS()}{bill.academicPartner.basePrice} + Usage ({partnerCount} sts): {CS()}{bill.academicPartner.enrollmentTotal}
                               </div>
                             </div>
                           ) : (
@@ -1140,10 +1141,10 @@ export function LicensesPanel() {
                         {/* Direct Admissions */}
                         <TableCell className="text-right">
                           <div className="font-semibold text-xs text-foreground">
-                            ₹{directTotal.toLocaleString('en-IN')}
+                            {CS()}{directTotal.toLocaleString(numLocale())}
                           </div>
                           <div className="text-[10px] text-muted-foreground">
-                            {directCount} direct students @ ₹{bill.directEnrollment?.perEnrollmentFee ?? 0}
+                            {directCount} direct students @ {CS()}{bill.directEnrollment?.perEnrollmentFee ?? 0}
                           </div>
                         </TableCell>
 
@@ -1151,7 +1152,7 @@ export function LicensesPanel() {
                         <TableCell className="text-right">
                           {bill.academicCenter.enabled ? (
                             <span className="font-semibold text-xs text-emerald-700 dark:text-emerald-300">
-                              ₹{bill.academicCenter.subtotal.toLocaleString('en-IN')}
+                              {CS()}{bill.academicCenter.subtotal.toLocaleString(numLocale())}
                             </span>
                           ) : (
                             <span className="text-xs text-muted-foreground">Disabled</span>
@@ -1161,7 +1162,7 @@ export function LicensesPanel() {
                         {/* Total Amount */}
                         <TableCell className="text-right">
                           <span className="font-bold text-sm text-foreground">
-                            ₹{bill.totalAmount.toLocaleString('en-IN')}
+                            {CS()}{bill.totalAmount.toLocaleString(numLocale())}
                           </span>
                         </TableCell>
 
@@ -1269,7 +1270,7 @@ export function LicensesPanel() {
                     if (generatedBill && (generatedBill.totalStudentCount ?? 0) !== (partnerCount + directCount)) {
                       return (
                         <div className="text-[11px] text-amber-700 dark:text-amber-300 bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-500/20">
-                          ⚠️ An earlier generated bill exists for this month with <strong>{generatedBill.totalStudentCount} students (₹{(generatedBill.totalAmount || 0).toLocaleString('en-IN')})</strong>. Click <strong>"Regenerate Bill"</strong> on the main table to update the bill with all {partnerCount + directCount} current enrollments.
+                          ⚠️ An earlier generated bill exists for this month with <strong>{generatedBill.totalStudentCount} students ({CS()}{(generatedBill.totalAmount || 0).toLocaleString(numLocale())})</strong>. Click <strong>"Regenerate Bill"</strong> on the main table to update the bill with all {partnerCount + directCount} current enrollments.
                         </div>
                       );
                     }
@@ -1310,7 +1311,7 @@ export function LicensesPanel() {
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
                           <Label className="text-xs font-semibold text-indigo-950 dark:text-indigo-200">
-                            Base Value (₹) *
+                            Base Value ({CS()}) *
                           </Label>
                           <Input 
                             type="number" 
@@ -1327,7 +1328,7 @@ export function LicensesPanel() {
 
                         <div className="space-y-1">
                           <Label className="text-xs font-semibold text-indigo-950 dark:text-indigo-200">
-                            Rate Per Partner Student (₹) *
+                            Rate Per Partner Student ({CS()}) *
                           </Label>
                           <Input 
                             type="number" 
@@ -1345,7 +1346,7 @@ export function LicensesPanel() {
 
                       <div className="text-xs text-indigo-900/80 dark:text-indigo-300 bg-indigo-100/50 dark:bg-indigo-950/60 px-3 py-1.5 rounded-lg flex items-center justify-between">
                         <span>Partner Subtotal:</span>
-                        <strong>₹{partnerBase.toLocaleString('en-IN')} (Base) + ({partnerCount} partner students × ₹{partnerPerFee}) = ₹{partnerSubtotal.toLocaleString('en-IN')}</strong>
+                        <strong>{CS()}{partnerBase.toLocaleString(numLocale())} (Base) + ({partnerCount} partner students × {CS()}{partnerPerFee}) = {CS()}{partnerSubtotal.toLocaleString(numLocale())}</strong>
                       </div>
                     </div>
                   )}
@@ -1369,7 +1370,7 @@ export function LicensesPanel() {
                   <div className="pt-3 border-t border-sky-200/60 dark:border-sky-900/50 space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <Label className="text-xs font-semibold text-sky-950 dark:text-sky-200">Base Value (₹) *</Label>
+                        <Label className="text-xs font-semibold text-sky-950 dark:text-sky-200">Base Value ({CS()}) *</Label>
                         <Input
                           type="number" min="0" step="0.01"
                           value={planForm.studyAbroadBasePrice}
@@ -1381,7 +1382,7 @@ export function LicensesPanel() {
                         <p className="text-[10px] text-muted-foreground">Fixed periodic fee for Study Abroad Partner</p>
                       </div>
                       <div className="space-y-1">
-                        <Label className="text-xs font-semibold text-sky-950 dark:text-sky-200">Rate Per Study Abroad Student (₹) *</Label>
+                        <Label className="text-xs font-semibold text-sky-950 dark:text-sky-200">Rate Per Study Abroad Student ({CS()}) *</Label>
                         <Input
                           type="number" min="0" step="0.01"
                           value={planForm.studyAbroadPerEnrollmentFee}
@@ -1395,7 +1396,7 @@ export function LicensesPanel() {
                     </div>
                     <div className="text-xs text-sky-900/80 dark:text-sky-300 bg-sky-100/50 dark:bg-sky-950/60 px-3 py-1.5 rounded-lg flex items-center justify-between">
                       <span>Study Abroad Subtotal:</span>
-                      <strong>₹{studyAbroadBase.toLocaleString('en-IN')} (Base) + ({studyAbroadCount} study abroad students × ₹{studyAbroadPerFee}) = ₹{studyAbroadSubtotal.toLocaleString('en-IN')}</strong>
+                      <strong>{CS()}{studyAbroadBase.toLocaleString(numLocale())} (Base) + ({studyAbroadCount} study abroad students × {CS()}{studyAbroadPerFee}) = {CS()}{studyAbroadSubtotal.toLocaleString(numLocale())}</strong>
                     </div>
                   </div>
                 </div>
@@ -1420,9 +1421,9 @@ export function LicensesPanel() {
                   <div className="pt-2 border-t border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-4">
                     <div>
                       <Label className="text-xs font-semibold text-foreground">
-                        Rate Per Direct Student (₹)
+                        Rate Per Direct Student ({CS()})
                       </Label>
-                      <p className="text-[10px] text-muted-foreground">Set ₹0 if direct enrollments are exempt</p>
+                      <p className="text-[10px] text-muted-foreground">Set {CS()}0 if direct enrollments are exempt</p>
                     </div>
                     <div className="w-44 shrink-0">
                       <Input 
@@ -1440,7 +1441,7 @@ export function LicensesPanel() {
 
                   <div className="text-xs text-slate-800 dark:text-slate-200 bg-slate-200/60 dark:bg-slate-800/80 px-3 py-1.5 rounded-lg flex items-center justify-between">
                     <span>Direct Admissions Total:</span>
-                    <strong>{directCount} direct students × ₹{directPerFee} = ₹{directEnrollmentTotal.toLocaleString('en-IN')}</strong>
+                    <strong>{directCount} direct students × {CS()}{directPerFee} = {CS()}{directEnrollmentTotal.toLocaleString(numLocale())}</strong>
                   </div>
                 </div>
 
@@ -1465,7 +1466,7 @@ export function LicensesPanel() {
                     <div className="pt-3 border-t border-emerald-200/60 dark:border-emerald-900/50 flex items-center justify-between gap-4">
                       <div>
                         <Label className="text-xs font-semibold text-emerald-950 dark:text-emerald-200">
-                          Base Value (₹) *
+                          Base Value ({CS()}) *
                         </Label>
                         <p className="text-[11px] text-muted-foreground">Fixed base fee for Academic Center</p>
                       </div>
@@ -1495,26 +1496,26 @@ export function LicensesPanel() {
                     <div className="text-xs text-muted-foreground space-y-0.5">
                       {planForm.academic_partners && (
                         <div>
-                          Academic Partner: ₹{partnerBase.toLocaleString('en-IN')} (Base) + ({partnerCount} partner × ₹{partnerPerFee}) = ₹{partnerSubtotal.toLocaleString('en-IN')}
+                          Academic Partner: {CS()}{partnerBase.toLocaleString(numLocale())} (Base) + ({partnerCount} partner × {CS()}{partnerPerFee}) = {CS()}{partnerSubtotal.toLocaleString(numLocale())}
                         </div>
                       )}
                       <div>
-                        Direct Admissions: {directCount} direct × ₹{directPerFee} = ₹{directEnrollmentTotal.toLocaleString('en-IN')}
+                        Direct Admissions: {directCount} direct × {CS()}{directPerFee} = {CS()}{directEnrollmentTotal.toLocaleString(numLocale())}
                       </div>
                       {planForm.study_abroad_partners && (
                         <div>
-                          Study Abroad: ₹{studyAbroadBase.toLocaleString('en-IN')} (Base) + ({studyAbroadCount} × ₹{studyAbroadPerFee}) = ₹{studyAbroadSubtotal.toLocaleString('en-IN')}
+                          Study Abroad: {CS()}{studyAbroadBase.toLocaleString(numLocale())} (Base) + ({studyAbroadCount} × {CS()}{studyAbroadPerFee}) = {CS()}{studyAbroadSubtotal.toLocaleString(numLocale())}
                         </div>
                       )}
                       {planForm.academic_centers && (
                         <div>
-                          Academic Center: ₹{centerBase.toLocaleString('en-IN')} (Base)
+                          Academic Center: {CS()}{centerBase.toLocaleString(numLocale())} (Base)
                         </div>
                       )}
                     </div>
                     <div className="text-right">
                       <span className="text-2xl font-black text-emerald-700 dark:text-emerald-300">
-                        ₹{previewTotalBill.toLocaleString('en-IN')}
+                        {CS()}{previewTotalBill.toLocaleString(numLocale())}
                       </span>
                       <p className="text-[10px] text-muted-foreground">monthly total</p>
                     </div>
@@ -1637,10 +1638,10 @@ export function LicensesPanel() {
                         )}
                       </TableCell>
                       <TableCell className="text-right text-xs">
-                        {statementData.partnerEnabled ? `₹${statementData.partnerBase.toLocaleString('en-IN')}` : '—'}
+                        {statementData.partnerEnabled ? `${CS()}${statementData.partnerBase.toLocaleString(numLocale())}` : '—'}
                       </TableCell>
                       <TableCell className="text-right text-xs font-medium">
-                        ₹{(statementData.partnerEnabled ? statementData.partnerBase : 0).toLocaleString('en-IN')}
+                        {CS()}{(statementData.partnerEnabled ? statementData.partnerBase : 0).toLocaleString(numLocale())}
                       </TableCell>
                     </TableRow>
 
@@ -1662,10 +1663,10 @@ export function LicensesPanel() {
                         )}
                       </TableCell>
                       <TableCell className="text-right text-xs">
-                        {statementData.partnerEnabled ? `₹${statementData.partnerPerEnrollment} / partner student` : '—'}
+                        {statementData.partnerEnabled ? `${CS()}${statementData.partnerPerEnrollment} / partner student` : '—'}
                       </TableCell>
                       <TableCell className="text-right text-xs font-medium">
-                        ₹{(statementData.partnerEnabled ? statementData.partnerEnrollmentTotal : 0).toLocaleString('en-IN')}
+                        {CS()}{(statementData.partnerEnabled ? statementData.partnerEnrollmentTotal : 0).toLocaleString(numLocale())}
                       </TableCell>
                     </TableRow>
 
@@ -1683,10 +1684,10 @@ export function LicensesPanel() {
                         </span>
                       </TableCell>
                       <TableCell className="text-right text-xs">
-                        ₹{statementData.directPerEnrollment} / direct student
+                        {CS()}{statementData.directPerEnrollment} / direct student
                       </TableCell>
                       <TableCell className="text-right text-xs font-medium">
-                        ₹{statementData.directEnrollmentTotal.toLocaleString('en-IN')}
+                        {CS()}{statementData.directEnrollmentTotal.toLocaleString(numLocale())}
                       </TableCell>
                     </TableRow>
 
@@ -1696,14 +1697,14 @@ export function LicensesPanel() {
                         <TableCell>
                           <div className="font-semibold text-xs">Study Abroad Partner — Base + Per Enrollment Value</div>
                           <div className="text-[11px] text-muted-foreground">
-                            Base ₹{statementData.studyAbroadBase.toLocaleString('en-IN')} + {statementData.studyAbroadStudentCount} study abroad students × ₹{statementData.studyAbroadPerEnrollment}
+                            Base {CS()}{statementData.studyAbroadBase.toLocaleString(numLocale())} + {statementData.studyAbroadStudentCount} study abroad students × {CS()}{statementData.studyAbroadPerEnrollment}
                           </div>
                         </TableCell>
                         <TableCell className="text-center text-xs">
                           <span className="font-semibold text-foreground">{statementData.studyAbroadStudentCount} study abroad students</span>
                         </TableCell>
-                        <TableCell className="text-right text-xs">₹{statementData.studyAbroadPerEnrollment} / study abroad student</TableCell>
-                        <TableCell className="text-right text-xs font-medium">₹{statementData.studyAbroadSubtotal.toLocaleString('en-IN')}</TableCell>
+                        <TableCell className="text-right text-xs">{CS()}{statementData.studyAbroadPerEnrollment} / study abroad student</TableCell>
+                        <TableCell className="text-right text-xs font-medium">{CS()}{statementData.studyAbroadSubtotal.toLocaleString(numLocale())}</TableCell>
                       </TableRow>
                     )}
 
@@ -1721,10 +1722,10 @@ export function LicensesPanel() {
                         )}
                       </TableCell>
                       <TableCell className="text-right text-xs">
-                        {statementData.centerEnabled ? `₹${statementData.centerBase.toLocaleString('en-IN')}` : '—'}
+                        {statementData.centerEnabled ? `${CS()}${statementData.centerBase.toLocaleString(numLocale())}` : '—'}
                       </TableCell>
                       <TableCell className="text-right text-xs font-medium">
-                        ₹{(statementData.centerEnabled ? statementData.centerBase : 0).toLocaleString('en-IN')}
+                        {CS()}{(statementData.centerEnabled ? statementData.centerBase : 0).toLocaleString(numLocale())}
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -1736,19 +1737,19 @@ export function LicensesPanel() {
                 <div className="w-80 space-y-1.5 text-xs">
                   <div className="flex justify-between text-muted-foreground">
                     <span>Academic Partner Subtotal:</span>
-                    <span>₹{statementData.partnerSubtotal.toLocaleString('en-IN')}</span>
+                    <span>{CS()}{statementData.partnerSubtotal.toLocaleString(numLocale())}</span>
                   </div>
                   <div className="flex justify-between text-muted-foreground">
                     <span>Direct Admissions Total:</span>
-                    <span>₹{statementData.directEnrollmentTotal.toLocaleString('en-IN')}</span>
+                    <span>{CS()}{statementData.directEnrollmentTotal.toLocaleString(numLocale())}</span>
                   </div>
                   <div className="flex justify-between text-muted-foreground">
                     <span>Academic Center Subtotal:</span>
-                    <span>₹{statementData.centerSubtotal.toLocaleString('en-IN')}</span>
+                    <span>{CS()}{statementData.centerSubtotal.toLocaleString(numLocale())}</span>
                   </div>
                   <div className="flex justify-between font-bold text-base text-foreground pt-2 border-t">
                     <span>Total Monthly Bill:</span>
-                    <span className="text-emerald-600 dark:text-emerald-400">₹{statementData.totalAmount.toLocaleString('en-IN')}</span>
+                    <span className="text-emerald-600 dark:text-emerald-400">{CS()}{statementData.totalAmount.toLocaleString(numLocale())}</span>
                   </div>
                 </div>
               </div>
@@ -1762,7 +1763,7 @@ export function LicensesPanel() {
                       Enrolled Students in {statementData.billingMonthLabel} ({statementData.totalStudentCount})
                     </h4>
                     <p className="text-[11px] text-muted-foreground mt-0.5">
-                      {statementData.partnerStudentCount} via Academic Partners (₹{statementData.partnerEnrollmentTotal}) • {statementData.directStudentCount} Direct Admissions (₹{statementData.directEnrollmentTotal})
+                      {statementData.partnerStudentCount} via Academic Partners ({CS()}{statementData.partnerEnrollmentTotal}) • {statementData.directStudentCount} Direct Admissions ({CS()}{statementData.directEnrollmentTotal})
                     </p>
                   </div>
                 </div>
@@ -1908,7 +1909,7 @@ export function LicensesPanel() {
                   <Info className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
                   <div className="text-muted-foreground">
                     <strong className="text-foreground">Monthly Enrollment Breakdown: </strong>
-                    Academic Partner enrollments are billed at ₹{details.academicPartnerPerEnrollmentFee}/partner student. Direct admissions are billed at ₹{details.directPerEnrollmentFee}/direct student.
+                    Academic Partner enrollments are billed at {CS()}{details.academicPartnerPerEnrollmentFee}/partner student. Direct admissions are billed at {CS()}{details.directPerEnrollmentFee}/direct student.
                   </div>
                 </div>
 
@@ -1964,10 +1965,10 @@ export function LicensesPanel() {
                 {/* Billed Partner & Direct Usage Summary */}
                 <div className="flex items-center justify-between text-xs px-1 text-muted-foreground">
                   <div>
-                    Partner Students: <strong className="text-foreground">{partnerCount}</strong> × ₹{details.academicPartnerPerEnrollmentFee} = <strong className="text-indigo-600 dark:text-indigo-400">₹{(partnerCount * details.academicPartnerPerEnrollmentFee).toLocaleString('en-IN')}</strong>
+                    Partner Students: <strong className="text-foreground">{partnerCount}</strong> × {CS()}{details.academicPartnerPerEnrollmentFee} = <strong className="text-indigo-600 dark:text-indigo-400">{CS()}{(partnerCount * details.academicPartnerPerEnrollmentFee).toLocaleString(numLocale())}</strong>
                   </div>
                   <div>
-                    Direct Admissions: <strong className="text-foreground">{directCount}</strong> × ₹{details.directPerEnrollmentFee} = <strong className="text-foreground">₹{(directCount * details.directPerEnrollmentFee).toLocaleString('en-IN')}</strong>
+                    Direct Admissions: <strong className="text-foreground">{directCount}</strong> × {CS()}{details.directPerEnrollmentFee} = <strong className="text-foreground">{CS()}{(directCount * details.directPerEnrollmentFee).toLocaleString(numLocale())}</strong>
                   </div>
                 </div>
 
@@ -2120,7 +2121,7 @@ function ComponentTile({ icon: Icon, tone, title, enabled, amount, lines }: {
         <div className={`w-7 h-7 rounded-lg text-white flex items-center justify-center ${t.icon}`}><Icon className="w-3.5 h-3.5" /></div>
         <span className="text-sm font-medium">{title}</span>
       </div>
-      <p className={`mt-3 text-lg font-bold tracking-tight ${t.text}`}>₹{amount.toLocaleString('en-IN')}</p>
+      <p className={`mt-3 text-lg font-bold tracking-tight ${t.text}`}>{CS()}{amount.toLocaleString(numLocale())}</p>
       <div className="mt-1 space-y-0.5">
         {lines.map(l => <p key={l} className="text-[11px] text-muted-foreground">{l}</p>)}
       </div>

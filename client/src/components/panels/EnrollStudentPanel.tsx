@@ -16,6 +16,7 @@ import { uploadFormFile } from '@/lib/uploadFile';
 import api from '@/lib/api';
 import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
+import { CS } from '@/lib/currency';
 interface University {
   id: string;
   name: string;
@@ -1209,7 +1210,7 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                               {!isSelected ? (
                                 <div className="text-right shrink-0">
                                   <p className="text-xs text-muted-foreground uppercase tracking-wider mb-0.5">Starts at</p>
-                                  <p className="font-bold text-sm bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400">₹{defaultTotal.toLocaleString()}</p>
+                                  <p className="font-bold text-sm bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400">{CS()}{defaultTotal.toLocaleString()}</p>
                                 </div>
                               ) : (
                                 <CheckCircle2 className="w-6 h-6 text-primary shrink-0 drop-shadow-sm" />
@@ -1223,7 +1224,7 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                                   {p.feeStructures!.find(f => {
                                     return (typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId) === null;
                                   })?.additionalFees?.map((f, i) => (
-                                    <Badge key={i} variant="outline" className="text-[10px] bg-background/50">{f.label}: ₹{f.amount}</Badge>
+                                    <Badge key={i} variant="outline" className="text-[10px] bg-background/50">{f.label}: {CS()}{f.amount}</Badge>
                                   ))}
                                 </div>
                               </div>
@@ -1255,7 +1256,7 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                                         <span className="font-semibold text-left">{opt.label}</span>
                                       </div>
                                       <div className="text-right shrink-0">
-                                        <span className="font-bold">₹{opt.totalAmount.toLocaleString()}</span>
+                                        <span className="font-bold">{CS()}{opt.totalAmount.toLocaleString()}</span>
                                       </div>
                                     </button>
                                   );
@@ -1301,7 +1302,7 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
                     <CardTitle className="text-lg">Step 4: Student Details</CardTitle>
                     <CardDescription>
                       {selectedProgram
-                        ? <span className="text-emerald-600 dark:text-emerald-400 font-medium">Ready: {selectedProgram.name} (Fee: ₹{currentRequiredFee.toLocaleString()})</span>
+                        ? <span className="text-emerald-600 dark:text-emerald-400 font-medium">Ready: {selectedProgram.name} (Fee: {CS()}{currentRequiredFee.toLocaleString()})</span>
                         : 'Please select a program first'}
                     </CardDescription>
                   </div>

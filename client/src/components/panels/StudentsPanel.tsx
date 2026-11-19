@@ -21,6 +21,7 @@ import { StudentProfilePanel } from './StudentProfilePanel';
 import { StudentReportDialog } from './StudentReportDialog';
 import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
+import { CS } from '@/lib/currency';
 interface MultiSelectFilterOption {
   value: string;
   label: string;
@@ -28,6 +29,8 @@ interface MultiSelectFilterOption {
   dotColor?: string;
   dotHex?: string; // custom colour (hex) for a dot, when a Tailwind class isn't enough
   avatarText?: string;
+  /** Tailwind classes that draw the label as a coloured tag (used for universities) */
+  tagClass?: string;
 }
 
 interface MultiSelectFilterProps {
@@ -93,7 +96,7 @@ function MultiSelectFilter({
               {match.avatarText}
             </span>
           )}
-          <span className="truncate">{match?.label || selected[0]}</span>
+          <span className={cn('truncate', match?.tagClass && `rounded-full border px-2 py-0.5 text-[11px] font-semibold ${match.tagClass}`)}>{match?.label || selected[0]}</span>
         </span>
       );
     }
@@ -248,7 +251,7 @@ function MultiSelectFilter({
                           {opt.avatarText}
                         </span>
                       )}
-                      <span className="truncate">{opt.label}</span>
+                      <span className={cn('truncate', opt.tagClass && `rounded-full border px-2 py-0.5 text-[11px] font-semibold ${opt.tagClass}`)}>{opt.label}</span>
                     </div>
 
                     {opt.count !== undefined && (
@@ -302,6 +305,26 @@ interface SavedStudentFilters {
   filterEndDate?: string;
   sortBy?: string;
 }
+
+// A fixed colour per university, so the same university looks the same in the list and the filter.
+const UNI_PALETTE = [
+  { dot: 'bg-indigo-500', tag: 'bg-indigo-50 text-indigo-700 border-indigo-200/70 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-800/60' },
+  { dot: 'bg-emerald-500', tag: 'bg-emerald-50 text-emerald-700 border-emerald-200/70 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60' },
+  { dot: 'bg-rose-500', tag: 'bg-rose-50 text-rose-700 border-rose-200/70 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60' },
+  { dot: 'bg-amber-500', tag: 'bg-amber-50 text-amber-700 border-amber-200/70 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60' },
+  { dot: 'bg-sky-500', tag: 'bg-sky-50 text-sky-700 border-sky-200/70 dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800/60' },
+  { dot: 'bg-violet-500', tag: 'bg-violet-50 text-violet-700 border-violet-200/70 dark:bg-violet-950/40 dark:text-violet-300 dark:border-violet-800/60' },
+  { dot: 'bg-teal-500', tag: 'bg-teal-50 text-teal-700 border-teal-200/70 dark:bg-teal-950/40 dark:text-teal-300 dark:border-teal-800/60' },
+  { dot: 'bg-orange-500', tag: 'bg-orange-50 text-orange-700 border-orange-200/70 dark:bg-orange-950/40 dark:text-orange-300 dark:border-orange-800/60' },
+  { dot: 'bg-pink-500', tag: 'bg-pink-50 text-pink-700 border-pink-200/70 dark:bg-pink-950/40 dark:text-pink-300 dark:border-pink-800/60' },
+  { dot: 'bg-cyan-500', tag: 'bg-cyan-50 text-cyan-700 border-cyan-200/70 dark:bg-cyan-950/40 dark:text-cyan-300 dark:border-cyan-800/60' },
+];
+const uniColor = (key?: string | null) => {
+  if (!key) return { dot: 'bg-slate-400', tag: 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' };
+  let h = 0;
+  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+  return UNI_PALETTE[h % UNI_PALETTE.length];
+};
 
 // Installments past their due date that are not fully paid (by status or by invoice payments).
 const getOverdueInfo = (s: any): { amount: number; days: number; count: number } => {
@@ -467,6 +490,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   // Custom filters defined by the org admin (Student Filters). Selected option ids per filter; NOT_SET matches students with no value.
   const NOT_SET = '__none__';
   const [filterOverdue, setFilterOverdue] = useState<'all' | 'overdue'>('all');
+  const [filterProgramIds, setFilterProgramIds] = useState<string[]>([]);
+  const [filterSpecs, setFilterSpecs] = useState<string[]>([]);
+  const [filterGenders, setFilterGenders] = useState<string[]>([]);
   const [filterTypes, setFilterTypes] = useState<any[]>([]);
   const [customFilters, setCustomFilters] = useState<Record<string, string[]>>(() => {
     const saved = getSavedFilters(storageKey);
@@ -524,7 +550,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeFilter, filterStatuses, searchQuery, filterUniversityIds, filterSessionIds, filterBranchIds, filterSalesUsers, customFilters, sortBy, filterStartDate, filterEndDate, filterOverdue]);
+  }, [activeFilter, filterStatuses, searchQuery, filterUniversityIds, filterSessionIds, filterBranchIds, filterSalesUsers, customFilters, sortBy, filterStartDate, filterEndDate, filterOverdue, filterProgramIds, filterSpecs, filterGenders]);
 
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
@@ -864,6 +890,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     filterSessionIds.length > 0 ||
     activeCustomFilters.length > 0 ||
     filterOverdue !== 'all' ||
+    filterProgramIds.length > 0 ||
+    filterSpecs.length > 0 ||
+    filterGenders.length > 0 ||
     filterStartDate !== '' ||
     filterEndDate !== '';
 
@@ -877,9 +906,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     if (filterSessionIds.length > 0) count += filterSessionIds.length;
     activeCustomFilters.forEach((x) => { count += x.ids.length; });
     if (filterOverdue !== 'all') count++;
+    count += filterProgramIds.length + filterSpecs.length + filterGenders.length;
     if (filterStartDate !== '' || filterEndDate !== '') count++;
     return count;
-  }, [searchQuery, filterStatuses, filterUniversityIds, filterBranchIds, filterSalesUsers, filterSessionIds, customFilters, filterTypes, filterStartDate, filterEndDate, filterOverdue]);
+  }, [searchQuery, filterStatuses, filterUniversityIds, filterBranchIds, filterSalesUsers, filterSessionIds, customFilters, filterTypes, filterStartDate, filterEndDate, filterOverdue, filterProgramIds, filterSpecs, filterGenders]);
 
   const handleResetFilters = () => {
     setSearchQuery('');
@@ -891,6 +921,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     setFilterSessionIds([]);
     setCustomFilters({});
     setFilterOverdue('all');
+    setFilterProgramIds([]);
+    setFilterSpecs([]);
+    setFilterGenders([]);
     setFilterDatePreset('all');
     setFilterStartDate('');
     setFilterEndDate('');
@@ -2786,6 +2819,37 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       }));
   }, [availableStatuses]);
 
+  const studentProgramId = (s: any) => (typeof s.programId === 'object' ? s.programId?.id : s.programId) || s.program?.id || null;
+  const universityCode = (id?: string | null) => universities.find((u: any) => u.id === id)?.code || '';
+
+  const programOptions = useMemo(() => {
+    return programs
+      .filter((p: any) => p && p.id)
+      .filter((p: any) => filterUniversityIds.length === 0 || filterUniversityIds.includes(p.universityId || p.university?.id))
+      .map((p: any) => {
+        const code = p.university?.code || universityCode(p.universityId);
+        return {
+          value: p.id,
+          label: `${p.name || 'Unnamed Program'}${code ? ` · ${code}` : ''}`,
+          dotColor: uniColor(p.universityId || p.university?.id).dot,
+          tagClass: uniColor(p.universityId || p.university?.id).tag,
+          count: students.filter((st) => st && studentProgramId(st) === p.id).length,
+        };
+      });
+  }, [programs, universities, students, filterUniversityIds]);
+
+  const specOptions = useMemo(() => {
+    const map = new Map<string, number>();
+    students.forEach((st) => { const v = (st?.specialisation || '').trim(); if (v) map.set(v, (map.get(v) || 0) + 1); });
+    return Array.from(map.entries()).sort((a, b) => a[0].localeCompare(b[0])).map(([v, count]) => ({ value: v, label: v, count }));
+  }, [students]);
+
+  const genderOptions = useMemo(() => {
+    const map = new Map<string, number>();
+    students.forEach((st) => { const v = (st?.gender || '').trim(); if (v) map.set(v, (map.get(v) || 0) + 1); });
+    return Array.from(map.entries()).sort((a, b) => a[0].localeCompare(b[0])).map(([v, count]) => ({ value: v, label: v.charAt(0).toUpperCase() + v.slice(1), count }));
+  }, [students]);
+
   const universityOptions = useMemo(() => {
     return universities
       .filter((u: any) => u && u.id)
@@ -2800,7 +2864,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         }).length;
         return {
           value: u.id,
-          label: u.name || 'Unnamed University',
+          label: `${u.name || 'Unnamed University'}${u.code ? ` (${u.code})` : ''}`,
+          dotColor: uniColor(u.id).dot,
+          tagClass: uniColor(u.id).tag,
           count,
         };
       });
@@ -2857,11 +2923,21 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         }).length;
         return {
           value: sess.id,
-          label: sess.name || 'Unnamed Session',
+          label: `${sess.name || 'Unnamed Session'}${universityCode(sess.universityId) ? ` · ${universityCode(sess.universityId)}` : ''}`,
+          dotColor: uniColor(sess.universityId).dot,
+          tagClass: uniColor(sess.universityId).tag,
           count,
         };
       });
   }, [sessions, students, filterUniversityIds]);
+
+  // Drop selected programs that are no longer under the chosen universities.
+  useEffect(() => {
+    if (filterUniversityIds.length === 0 || filterProgramIds.length === 0) return;
+    const allowed = new Set(programs.filter((p: any) => filterUniversityIds.includes(p.universityId || p.university?.id)).map((p: any) => p.id));
+    const kept = filterProgramIds.filter((id) => allowed.has(id));
+    if (kept.length !== filterProgramIds.length) setFilterProgramIds(kept);
+  }, [filterUniversityIds, programs]);
 
   // Drop selected sessions that are no longer under the chosen universities.
   useEffect(() => {
@@ -2962,6 +3038,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       const current = (s.filterValues || []).find((v: any) => v.filterTypeId === type.id)?.optionId || NOT_SET;
       if (!ids.includes(current)) return false;
     }
+
+    // Program / study center / specialisation / gender (multi-select)
+    if (filterProgramIds.length > 0 && !filterProgramIds.includes(studentProgramId(s))) return false;
+    if (filterSpecs.length > 0 && !filterSpecs.includes((s.specialisation || '').trim())) return false;
+    if (filterGenders.length > 0 && !filterGenders.includes((s.gender || '').trim())) return false;
 
     // Session Filter (multi-select)
     if (filterSessionIds.length > 0) {
@@ -3978,13 +4059,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">Student Management</h2>
-          <p className="text-muted-foreground text-sm hidden sm:block">Manage student records, bulk imports, communications, and installment schedules</p>
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200/60 dark:border-slate-800/60 bg-gradient-to-br from-indigo-50 via-white to-sky-50 dark:from-indigo-950/30 dark:via-slate-900 dark:to-sky-950/20 px-6 py-6 shadow-sm">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-indigo-400/10 blur-3xl" />
+        <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-sky-500 text-white shadow-lg shadow-indigo-500/25">
+            <GraduationCap className="h-6 w-6" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Student Management</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 hidden sm:block mt-0.5">Records, bulk imports, communications and installment schedules in one place</p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex flex-wrap items-center gap-2 flex-shrink-0">
           {/* Export Excel Button */}
           <Button
             variant="outline"
@@ -4037,93 +4125,61 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
             </>
           )}
         </div>
+        </div>
       </div>
 
       {/* Tabs / Filtering Option */}
-      <Tabs value={activeFilter} onValueChange={(val) => handleTabChange(val as any)} className="w-full mb-6">
-        <TabsList className="bg-slate-100/80 dark:bg-slate-800/80 p-1.5 rounded-2xl h-auto flex flex-wrap gap-1.5 shadow-inner border border-slate-200/50 dark:border-slate-700/50">
-          <TabsTrigger value="all" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400 transition-all">
-            <div className="flex items-center justify-center gap-1.5">
-              <Users className="w-3.5 h-3.5" />
-              <span className="font-semibold text-xs">All Students</span>
-              <Badge variant="secondary" className="ml-1 bg-slate-200/70 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-1.5 text-[10px]">
-                {students.length}
-              </Badge>
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="active" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-emerald-600 dark:data-[state=active]:text-emerald-400 transition-all">
-            <div className="flex items-center justify-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="font-semibold text-xs">Active</span>
-              <Badge variant="secondary" className="ml-1 bg-emerald-100/70 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 rounded-lg px-1.5 text-[10px]">
-                {statusCounts.active || 0}
-              </Badge>
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="document_review" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400 transition-all">
-            <div className="flex items-center justify-center gap-1.5">
-              <FileText className="w-3.5 h-3.5" />
-              <span className="font-semibold text-xs">Doc Review</span>
-              <Badge variant="secondary" className="ml-1 bg-blue-100/70 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 rounded-lg px-1.5 text-[10px]">
-                {statusCounts.document_review || 0}
-              </Badge>
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="provisional" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-amber-600 dark:data-[state=active]:text-amber-400 transition-all">
-            <div className="flex items-center justify-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-amber-500" />
-              <span className="font-semibold text-xs">Provisional</span>
-              <Badge variant="secondary" className="ml-1 bg-amber-100/70 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 rounded-lg px-1.5 text-[10px]">
-                {statusCounts.provisional || 0}
-              </Badge>
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="pending" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-orange-600 dark:data-[state=active]:text-orange-400 transition-all">
-            <div className="flex items-center justify-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-orange-500" />
-              <span className="font-semibold text-xs">Pending</span>
-              <Badge variant="secondary" className="ml-1 bg-orange-100/70 dark:bg-orange-950/40 text-orange-700 dark:text-orange-400 rounded-lg px-1.5 text-[10px]">
-                {statusCounts.pending || 0}
-              </Badge>
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="completed" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-purple-600 dark:data-[state=active]:text-purple-400 transition-all">
-            <div className="flex items-center justify-center gap-1.5">
-              <History className="w-3.5 h-3.5" />
-              <span className="font-semibold text-xs">Completed</span>
-              <Badge variant="secondary" className="ml-1 bg-purple-100/70 dark:bg-purple-950/40 text-purple-700 dark:text-purple-400 rounded-lg px-1.5 text-[10px]">
-                {statusCounts.completed || 0}
-              </Badge>
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="current" className="rounded-xl px-3.5 py-2 data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-300 transition-all">
-            <div className="flex items-center justify-center gap-1.5">
-              <GraduationCap className="w-3.5 h-3.5" />
-              <span className="font-semibold text-xs">Current</span>
-              <Badge variant="secondary" className="ml-1 bg-slate-200/70 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg px-1.5 text-[10px]">
-                {statusCounts.current || 0}
-              </Badge>
-            </div>
-          </TabsTrigger>
+      <Tabs value={activeFilter} onValueChange={(val) => handleTabChange(val as any)} className="w-full">
+        <TabsList className="h-auto w-full flex flex-wrap justify-start gap-2 bg-transparent p-0">
+          {([
+            { value: 'all', label: 'All Students', count: students.length, dot: 'bg-slate-400', ring: 'data-[state=active]:ring-slate-400/60', text: 'data-[state=active]:text-slate-900 dark:data-[state=active]:text-white' },
+            { value: 'active', label: 'Active', count: statusCounts.active || 0, dot: 'bg-emerald-500', ring: 'data-[state=active]:ring-emerald-400/60', text: 'data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-300' },
+            { value: 'document_review', label: 'Doc Review', count: statusCounts.document_review || 0, dot: 'bg-blue-500', ring: 'data-[state=active]:ring-blue-400/60', text: 'data-[state=active]:text-blue-700 dark:data-[state=active]:text-blue-300' },
+            { value: 'provisional', label: 'Provisional', count: statusCounts.provisional || 0, dot: 'bg-amber-500', ring: 'data-[state=active]:ring-amber-400/60', text: 'data-[state=active]:text-amber-700 dark:data-[state=active]:text-amber-300' },
+            { value: 'pending', label: 'Pending', count: statusCounts.pending || 0, dot: 'bg-orange-500', ring: 'data-[state=active]:ring-orange-400/60', text: 'data-[state=active]:text-orange-700 dark:data-[state=active]:text-orange-300' },
+            { value: 'completed', label: 'Completed', count: statusCounts.completed || 0, dot: 'bg-purple-500', ring: 'data-[state=active]:ring-purple-400/60', text: 'data-[state=active]:text-purple-700 dark:data-[state=active]:text-purple-300' },
+            { value: 'current', label: 'Current', count: statusCounts.current || 0, dot: 'bg-teal-500', ring: 'data-[state=active]:ring-teal-400/60', text: 'data-[state=active]:text-teal-700 dark:data-[state=active]:text-teal-300' },
+          ] as const).map((t) => (
+            <TabsTrigger
+              key={t.value}
+              value={t.value}
+              className={cn(
+                'group flex-none rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2.5 shadow-sm transition-all',
+                'hover:border-slate-300 hover:shadow-md data-[state=active]:shadow-md data-[state=active]:ring-2 data-[state=active]:border-transparent',
+                t.ring, t.text
+              )}
+            >
+              <span className="flex items-center gap-2">
+                <span className={cn('h-2 w-2 rounded-full', t.dot)} />
+                <span className="text-xs font-semibold tracking-wide">{t.label}</span>
+                <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[11px] font-bold tabular-nums text-slate-600 dark:text-slate-300">{t.count}</span>
+              </span>
+            </TabsTrigger>
+          ))}
         </TabsList>
       </Tabs>
 
-      <Card className="border-none shadow-2xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl overflow-hidden rounded-3xl ring-1 ring-slate-200/50 dark:ring-slate-800/50">
-        <CardHeader className="bg-gradient-to-r from-blue-500/10 via-indigo-500/5 to-purple-500/10 border-b border-slate-200/50 dark:border-slate-800/50 px-6 py-5">
-          <CardTitle className="flex items-center gap-2.5 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300">
-            <div className="p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200/50 dark:border-slate-700/50">
-              <Users className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            </div>
-            Student Directory
-          </CardTitle>
+      <Card className="border-none shadow-xl shadow-slate-200/40 dark:shadow-none bg-white dark:bg-slate-900/50 overflow-hidden rounded-3xl ring-1 ring-slate-200/60 dark:ring-slate-800/60 py-0 gap-0">
+        <CardHeader className="border-b border-slate-200/60 dark:border-slate-800/60 bg-white/70 dark:bg-slate-900/40 px-6 py-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <CardTitle className="flex items-center gap-3 text-lg font-bold text-slate-900 dark:text-slate-100">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-sky-500 text-white shadow-md shadow-indigo-500/20">
+                <Users className="h-4 w-4" />
+              </div>
+              Student Directory
+            </CardTitle>
+            <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300">
+              {filteredStudents.length} of {students.length} students
+            </span>
+          </div>
         </CardHeader>
         <CardContent className="p-6">
           {/* Filters Section */}
-          <div className="bg-white dark:bg-slate-900/40 p-5 rounded-2xl border border-slate-100 dark:border-slate-800/60 shadow-sm mb-6">
+          <div className="bg-slate-50/70 dark:bg-slate-900/40 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 mb-6">
             {/* Filter Header with Title, Count & Clear All Button */}
             <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100 dark:border-slate-800/70">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-lg">
+                <div className="flex h-8 w-8 items-center justify-center bg-indigo-100 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-300 rounded-xl">
                   <Filter className="w-4 h-4" />
                 </div>
                 <div>
@@ -4202,6 +4258,38 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 onChange={setFilterUniversityIds}
               />
 
+              {/* Multi-Select: Program (follows the selected universities) */}
+              <MultiSelectFilter
+                label="Program"
+                icon={<GraduationCap className="w-3 h-3 text-slate-400" />}
+                placeholder="All Programs"
+                options={programOptions}
+                selected={filterProgramIds}
+                onChange={setFilterProgramIds}
+              />
+
+              {specOptions.length > 0 && (
+                <MultiSelectFilter
+                  label="Specialisation"
+                  icon={<BookOpen className="w-3 h-3 text-slate-400" />}
+                  placeholder="All Specialisations"
+                  options={specOptions}
+                  selected={filterSpecs}
+                  onChange={setFilterSpecs}
+                />
+              )}
+
+              {genderOptions.length > 0 && (
+                <MultiSelectFilter
+                  label="Gender"
+                  icon={<User className="w-3 h-3 text-slate-400" />}
+                  placeholder="All Genders"
+                  options={genderOptions}
+                  selected={filterGenders}
+                  onChange={setFilterGenders}
+                />
+              )}
+
               {/* Multi-Select: Branch */}
               <MultiSelectFilter
                 label="Branch"
@@ -4249,20 +4337,31 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 </Select>
               </div>
 
-              {/* Custom filters created by the organisation admin */}
-              {filterTypes.map((t) => (
-                <MultiSelectFilter
-                  key={t.id}
-                  label={t.name}
-                  icon={<Filter className="w-3 h-3 text-violet-500" />}
-                  placeholder={`All ${t.name}`}
-                  options={customFilterOptions[t.id] || []}
-                  selected={customFilters[t.id] || []}
-                  onChange={(ids) => setCustomFilter(t.id, ids)}
-                  triggerClassName="bg-violet-50/30 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/30 hover:bg-violet-50/50"
-                />
-              ))}
             </div>
+
+            {/* Custom filters created by the organisation admin, on their own row */}
+            {filterTypes.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-slate-200/60 dark:border-slate-800/70">
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-500" />
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">Custom Filters</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 xl:gap-5">
+                  {filterTypes.map((t) => (
+                    <MultiSelectFilter
+                      key={t.id}
+                      label={t.name}
+                      icon={<Filter className="w-3 h-3 text-violet-500" />}
+                      placeholder={`All ${t.name}`}
+                      options={customFilterOptions[t.id] || []}
+                      selected={customFilters[t.id] || []}
+                      onChange={(ids) => setCustomFilter(t.id, ids)}
+                      triggerClassName="bg-violet-50/30 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/30 hover:bg-violet-50/50"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Row 2: Admission Date Range & Sort Toolbar */}
             <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -4419,9 +4518,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   )}
 
                   {filterUniversityIds.map(uId => (
-                    <Badge key={uId} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-300 border border-purple-200/50">
-                      Uni: {universities.find((u: any) => u.id === uId)?.name || uId}
-                      <button type="button" onClick={() => setFilterUniversityIds(filterUniversityIds.filter(id => id !== uId))} className="hover:bg-purple-200/50 rounded p-0.5">
+                    <Badge key={uId} variant="secondary" className={`gap-1 pl-2 pr-1 py-0.5 rounded-full text-xs border ${uniColor(uId).tag}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${uniColor(uId).dot}`} />
+                      {universities.find((u: any) => u.id === uId)?.code ? `${universities.find((u: any) => u.id === uId)?.code} · ` : ''}{universities.find((u: any) => u.id === uId)?.name || uId}
+                      <button type="button" onClick={() => setFilterUniversityIds(filterUniversityIds.filter(id => id !== uId))} className="hover:bg-black/10 rounded-full p-0.5">
                         <X className="w-3 h-3" />
                       </button>
                     </Badge>
@@ -4445,6 +4545,25 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                     </Badge>
                   ))}
 
+                  {filterProgramIds.map(id => (
+                    <Badge key={id} variant="secondary" className={`gap-1 pl-2 pr-1 py-0.5 rounded-full text-xs border ${programOptions.find((o) => o.value === id)?.tagClass || ''}`}>
+                      Program: {programOptions.find((o) => o.value === id)?.label || id}
+                      <button type="button" onClick={() => setFilterProgramIds(filterProgramIds.filter(x => x !== id))} className="hover:bg-black/10 rounded-full p-0.5"><X className="w-3 h-3" /></button>
+                    </Badge>
+                  ))}
+                  {filterSpecs.map(v => (
+                    <Badge key={v} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-sky-50 text-sky-700 dark:bg-sky-950/30 dark:text-sky-300 border border-sky-200/50">
+                      Specialisation: {v}
+                      <button type="button" onClick={() => setFilterSpecs(filterSpecs.filter(x => x !== v))} className="hover:bg-sky-200/50 rounded p-0.5"><X className="w-3 h-3" /></button>
+                    </Badge>
+                  ))}
+                  {filterGenders.map(v => (
+                    <Badge key={v} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-pink-50 text-pink-700 dark:bg-pink-950/30 dark:text-pink-300 border border-pink-200/50">
+                      Gender: {v}
+                      <button type="button" onClick={() => setFilterGenders(filterGenders.filter(x => x !== v))} className="hover:bg-pink-200/50 rounded p-0.5"><X className="w-3 h-3" /></button>
+                    </Badge>
+                  ))}
+
                   {filterOverdue === 'overdue' && (
                     <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-300 border border-red-200/50">
                       Overdue fees
@@ -4455,9 +4574,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   )}
 
                   {filterSessionIds.map(sId => (
-                    <Badge key={sId} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-300 border border-amber-200/50">
-                      Session: {sessions.find((s: any) => s.id === sId)?.name || sId}
-                      <button type="button" onClick={() => setFilterSessionIds(filterSessionIds.filter(id => id !== sId))} className="hover:bg-amber-200/50 rounded p-0.5">
+                    <Badge key={sId} variant="secondary" className={`gap-1 pl-2 pr-1 py-0.5 rounded-full text-xs border ${sessionOptions.find((o) => o.value === sId)?.tagClass || 'bg-amber-50 text-amber-700 border-amber-200/50'}`}>
+                      Session: {sessionOptions.find((o) => o.value === sId)?.label || sessions.find((s: any) => s.id === sId)?.name || sId}
+                      <button type="button" onClick={() => setFilterSessionIds(filterSessionIds.filter(id => id !== sId))} className="hover:bg-black/10 rounded-full p-0.5">
                         <X className="w-3 h-3" />
                       </button>
                     </Badge>
@@ -4509,6 +4628,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 const centerName = typeof student.centerId === 'object' ? student.centerId?.name : student.center?.name || '';
                 const programName = typeof student.programId === 'object' ? student.programId?.name : student.program?.name || '';
                 const universityName = typeof student.universityId === 'object' ? student.universityId?.name : student.university?.name || '';
+                const universityKey = (typeof student.universityId === 'object' ? student.universityId?.id : student.universityId) || student.university?.id || (typeof student.program === 'object' ? student.program?.universityId : null);
+                const universityTag = uniColor(universityKey);
+                const universityCodeText = student.university?.code || universityCode(universityKey);
                 const branchName = typeof student.branchId === 'object' ? student.branchId?.name : student.branch?.name || '';
                 const salesUserName = typeof student.enrolledBy === 'object' ? student.enrolledBy?.name : (student.enrolledByUser?.name || salesUsers.find((su: any) => su.id === student.enrolledBy)?.name);
 
@@ -4567,7 +4689,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                             #{student.enrollmentNo || 'PENDING'}
                           </span>
                           <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
-                          <span className="truncate max-w-[200px]" title={universityName}>{universityName}</span>
+                          {universityName && (
+                            <span className={`inline-flex max-w-[260px] items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${universityTag.tag}`} title={universityName}>
+                              <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${universityTag.dot}`} />
+                              {universityCodeText && <span className="font-bold tracking-wide">{universityCodeText}</span>}
+                              <span className="truncate opacity-90">{universityName}</span>
+                            </span>
+                          )}
                           {branchName && (
                             <>
                               <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
@@ -5016,7 +5144,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   <Input value={newSchedule.title} onChange={(e) => setNewSchedule({ ...newSchedule, title: e.target.value })} />
                 </div>
                 <div>
-                  <Label>Amount (₹)</Label>
+                  <Label>Amount ({CS()})</Label>
                   <Input type="number" value={newSchedule.amount} onChange={(e) => setNewSchedule({ ...newSchedule, amount: e.target.value })} />
                 </div>
                 <div>
@@ -5038,7 +5166,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                       <div>
                         <span className="font-semibold text-slate-700 dark:text-slate-350">{sc.title}</span>
                         <div className="text-xs text-muted-foreground mt-0.5">
-                          Due: {new Date(sc.dueDate).toLocaleDateString()} • Amount: ₹{sc.amount}
+                          Due: {new Date(sc.dueDate).toLocaleDateString()} • Amount: {CS()}{sc.amount}
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -5503,7 +5631,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
             </p>
 
             <div className="space-y-1.5">
-              <Label htmlFor="bulkFeeAmount">Amount Received (₹) <span className="text-red-500">*</span></Label>
+              <Label htmlFor="bulkFeeAmount">Amount Received ({CS()}) <span className="text-red-500">*</span></Label>
               <Input
                 id="bulkFeeAmount"
                 type="number"

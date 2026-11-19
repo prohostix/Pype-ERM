@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 
+import { CS } from '@/lib/currency';
 interface SalaryCycle {
   type: 'monthly_day' | 'custom_range';
   startDay: number;
@@ -497,23 +498,23 @@ export function SalaryConfigPanel() {
                       )}                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
                         <div>
                           <p className="text-xs text-muted-foreground">Basic</p>
-                          <p className="font-semibold">₹{config.basicSalary.toLocaleString()}</p>
+                          <p className="font-semibold">{CS()}{config.basicSalary.toLocaleString()}</p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Gross</p>
-                          <p className="font-semibold text-blue-600">₹{grossAmt.toLocaleString()}</p>
+                          <p className="font-semibold text-blue-600">{CS()}{grossAmt.toLocaleString()}</p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Net</p>
-                          <p className="font-semibold text-green-600">₹{netAmt.toLocaleString()}</p>
+                          <p className="font-semibold text-green-600">{CS()}{netAmt.toLocaleString()}</p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Late/min</p>
-                          <p className="font-semibold text-orange-600">₹{config.lateDeductionPerMinute || 0}</p>
+                          <p className="font-semibold text-orange-600">{CS()}{config.lateDeductionPerMinute || 0}</p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Early/min</p>
-                          <p className="font-semibold text-amber-600">₹{config.earlyExitDeductionPerMinute ?? config.lateDeductionPerMinute ?? 0}</p>
+                          <p className="font-semibold text-amber-600">{CS()}{config.earlyExitDeductionPerMinute ?? config.lateDeductionPerMinute ?? 0}</p>
                         </div>
                       </div>
                     </div>
@@ -559,7 +560,7 @@ export function SalaryConfigPanel() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1 col-span-2">
-                <Label>Basic Salary (₹)</Label>
+                <Label>Basic Salary ({CS()})</Label>
                 <Input type="number" min="0" value={form.basicSalary}
                   onChange={e => setForm((f: any) => ({ ...f, basicSalary: Number(e.target.value) }))} />
               </div>
@@ -570,7 +571,7 @@ export function SalaryConfigPanel() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(['hra', 'transport', 'medical', 'other'] as const).map(key => (
                   <div key={key} className="space-y-1">
-                    <Label className="capitalize">{key} (₹)</Label>
+                    <Label className="capitalize">{key} ({CS()})</Label>
                     <Input type="number" min="0" value={form.allowances[key]}
                       onChange={e => setForm((f: any) => ({ ...f, allowances: { ...f.allowances, [key]: Number(e.target.value) } }))} />
                   </div>
@@ -583,7 +584,7 @@ export function SalaryConfigPanel() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(['pf', 'tax', 'insurance', 'other'] as const).map(key => (
                   <div key={key} className="space-y-1">
-                    <Label className="capitalize">{key} (₹)</Label>
+                    <Label className="capitalize">{key} ({CS()})</Label>
                     <Input type="number" min="0" value={form.deductions[key]}
                       onChange={e => setForm((f: any) => ({ ...f, deductions: { ...f.deductions, [key]: Number(e.target.value) } }))} />
                   </div>
@@ -593,16 +594,16 @@ export function SalaryConfigPanel() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1">
-                <Label>Late Deduction (₹/min)</Label>
+                <Label>Late Deduction ({CS()}/min)</Label>
                 <Input type="number" min="0" step="0.01" value={form.lateDeductionPerMinute}
                   onChange={e => setForm((f: any) => ({ ...f, lateDeductionPerMinute: Number(e.target.value) }))} />
                 <p className="text-xs text-muted-foreground">Amount per late minute</p>
               </div>
 
               <div className="space-y-1">
-                <Label>Early Exit Deduction (₹/min)</Label>
+                <Label>Early Exit Deduction ({CS()}/min)</Label>
                 <Input type="number" min="0" step="0.01" value={form.earlyExitDeductionPerMinute ?? ''}
-                  placeholder={form.lateDeductionPerMinute ? `Default: ₹${form.lateDeductionPerMinute}` : '0'}
+                  placeholder={form.lateDeductionPerMinute ? `Default: ${CS()}${form.lateDeductionPerMinute}` : '0'}
                   onChange={e => setForm((f: any) => ({ ...f, earlyExitDeductionPerMinute: Number(e.target.value) }))} />
                 <p className="text-xs text-muted-foreground">Amount per early exit minute</p>
               </div>
@@ -631,7 +632,7 @@ export function SalaryConfigPanel() {
 
               {form.unpaidLeaveRule?.type === 'fixed' && (
                 <div className="space-y-1 mt-2">
-                  <Label>Daily Deduction Amount (₹)</Label>
+                  <Label>Daily Deduction Amount ({CS()})</Label>
                   <Input type="number" min="0" value={form.unpaidLeaveRule?.dailyRate || ''}
                     onChange={e => setForm((f: any) => ({ ...f, unpaidLeaveRule: { ...f.unpaidLeaveRule, dailyRate: Number(e.target.value) } }))} />
                 </div>
@@ -645,12 +646,12 @@ export function SalaryConfigPanel() {
                       onChange={e => setForm((f: any) => ({ ...f, unpaidLeaveRule: { ...f.unpaidLeaveRule, firstXDays: Number(e.target.value) } }))} />
                   </div>
                   <div className="space-y-1">
-                    <Label>First X Rate (₹)</Label>
+                    <Label>First X Rate ({CS()})</Label>
                     <Input type="number" min="0" value={form.unpaidLeaveRule?.firstXRate || ''}
                       onChange={e => setForm((f: any) => ({ ...f, unpaidLeaveRule: { ...f.unpaidLeaveRule, firstXRate: Number(e.target.value) } }))} />
                   </div>
                   <div className="space-y-1">
-                    <Label>Subsequent Rate (₹)</Label>
+                    <Label>Subsequent Rate ({CS()})</Label>
                     <Input type="number" min="0" value={form.unpaidLeaveRule?.subsequentRate || ''}
                       onChange={e => setForm((f: any) => ({ ...f, unpaidLeaveRule: { ...f.unpaidLeaveRule, subsequentRate: Number(e.target.value) } }))} />
                   </div>
@@ -668,17 +669,17 @@ export function SalaryConfigPanel() {
             <div className="p-3 rounded-xl bg-muted/50 grid grid-cols-3 gap-3 text-sm">
               <div>
                 <p className="text-xs text-muted-foreground">Gross</p>
-                <p className="font-bold text-blue-600">₹{gross(form).toLocaleString()}</p>
+                <p className="font-bold text-blue-600">{CS()}{gross(form).toLocaleString()}</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Deductions</p>
                 <p className="font-bold text-red-500">
-                  ₹{Object.values(form.deductions as Record<string, number>).reduce((s, v) => s + (v || 0), 0).toLocaleString()}
+                  {CS()}{Object.values(form.deductions as Record<string, number>).reduce((s, v) => s + (v || 0), 0).toLocaleString()}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Net</p>
-                <p className="font-bold text-green-600">₹{net(form).toLocaleString()}</p>
+                <p className="font-bold text-green-600">{CS()}{net(form).toLocaleString()}</p>
               </div>
             </div>
           </div>

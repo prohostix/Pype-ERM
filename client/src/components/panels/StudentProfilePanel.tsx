@@ -41,6 +41,7 @@ import { format } from 'date-fns';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 
+import { CS } from '@/lib/currency';
 export function StudentProfilePanel({ student: initialStudent, onBack }: { student: any; onBack: () => void }) {
   const { user } = useAuth();
   const isOrgAdmin = ['org_admin', 'superadmin'].includes(user?.role || '');
@@ -549,7 +550,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                               </div>
                               <div>
                                 <span className="text-muted-foreground uppercase text-[10px] font-semibold block">Initial Fee</span>
-                                <span className="font-medium">{enr.initialPaymentAmount ? `₹${enr.initialPaymentAmount}` : 'N/A'}</span>
+                                <span className="font-medium">{enr.initialPaymentAmount ? `${CS()}${enr.initialPaymentAmount}` : 'N/A'}</span>
                               </div>
                               <div>
                                 <span className="text-muted-foreground uppercase text-[10px] font-semibold block">Review Stage</span>

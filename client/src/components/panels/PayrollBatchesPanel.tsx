@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 
+import { CS } from '@/lib/currency';
 interface PayrollBatch {
   id?: string;
   month: string;
@@ -184,7 +185,7 @@ export function PayrollBatchesPanel() {
                           <div className="text-sm text-muted-foreground flex gap-4">
                             <span>{batch.employeeCount} employees</span>
                             <span className="font-medium text-foreground">
-                              Total: ₹{batch.totalAmount?.toLocaleString()}
+                              Total: {CS()}{batch.totalAmount?.toLocaleString()}
                             </span>
                             {batch.transferer && (
                               <span>Transferred by: {batch.transferer.name}</span>
@@ -263,22 +264,22 @@ export function PayrollBatchesPanel() {
                               <div key={p.id} className="bg-background p-3 rounded-md border text-xs">
                                 <div className="flex justify-between font-semibold mb-2">
                                   <span>{p.user?.name || 'Employee'} ({p.user?.employeeProfile?.employeeId || p.employeeId})</span>
-                                  <span className="text-primary">Net: ₹{p.netSalary?.toLocaleString()}</span>
+                                  <span className="text-primary">Net: {CS()}{p.netSalary?.toLocaleString()}</span>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
                                   <div>
                                     <p className="text-emerald-600 font-medium border-b mb-1 pb-0.5">Earnings</p>
-                                    <div className="flex justify-between"><span>Basic:</span><span>₹{p.basicSalary?.toLocaleString()}</span></div>
+                                    <div className="flex justify-between"><span>Basic:</span><span>{CS()}{p.basicSalary?.toLocaleString()}</span></div>
                                     {Object.entries(p.allowances || {}).map(([k, v]) => (
-                                      <div key={k} className="flex justify-between"><span className="capitalize">{k}:</span><span>₹{Number(v).toLocaleString()}</span></div>
+                                      <div key={k} className="flex justify-between"><span className="capitalize">{k}:</span><span>{CS()}{Number(v).toLocaleString()}</span></div>
                                     ))}
-                                    {p.bonus > 0 && <div className="flex justify-between"><span>Bonus:</span><span>₹{p.bonus.toLocaleString()}</span></div>}
-                                    {p.overtime > 0 && <div className="flex justify-between"><span>Overtime:</span><span>₹{p.overtime.toLocaleString()}</span></div>}
+                                    {p.bonus > 0 && <div className="flex justify-between"><span>Bonus:</span><span>{CS()}{p.bonus.toLocaleString()}</span></div>}
+                                    {p.overtime > 0 && <div className="flex justify-between"><span>Overtime:</span><span>{CS()}{p.overtime.toLocaleString()}</span></div>}
                                   </div>
                                   <div>
                                     <p className="text-rose-600 font-medium border-b mb-1 pb-0.5">Deductions</p>
                                     {Object.entries(p.deductions || {}).map(([k, v]) => (
-                                      <div key={k} className="flex justify-between"><span className="capitalize">{k}:</span><span>₹{Number(v).toLocaleString()}</span></div>
+                                      <div key={k} className="flex justify-between"><span className="capitalize">{k}:</span><span>{CS()}{Number(v).toLocaleString()}</span></div>
                                     ))}
                                     {Object.keys(p.deductions || {}).length === 0 && <div className="text-muted-foreground">None</div>}
                                   </div>

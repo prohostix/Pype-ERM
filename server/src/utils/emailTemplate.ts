@@ -1,3 +1,4 @@
+import { findCurrency } from './currency.js';
 /**
  * Branded HTML Email Template Generator for Pype-ERM Organizations
  * Renders high-compatibility, responsive, and beautifully designed emails
@@ -377,11 +378,13 @@ export function buildFeeReceiptEmail(options: {
   paymentDate?: string;
   paymentMode?: string;
   balanceAmount?: string | number;
+  currencyCode?: string;
 }): { subject: string; text: string; html: string } {
+  const cur = findCurrency(options.currencyCode);
   const { org, recipientName, amount, receiptNo, paymentDate = new Date().toLocaleDateString(), paymentMode = 'Online', balanceAmount } = options;
   const orgName = org.name || 'Our Institution';
 
-  const formattedAmount = typeof amount === 'number' ? `₹${amount.toLocaleString('en-IN')}` : (amount.toString().startsWith('₹') ? amount.toString() : `₹${amount}`);
+  const formattedAmount = typeof amount === 'number' ? `${cur.symbol}${amount.toLocaleString(cur.locale)}` : (amount.toString().startsWith(cur.symbol.trim()) ? amount.toString() : `${cur.symbol}${amount}`);
 
   const details: EmailDetailItem[] = [
     { label: 'Receipt Number', value: receiptNo },
@@ -391,7 +394,7 @@ export function buildFeeReceiptEmail(options: {
   ];
 
   if (balanceAmount !== undefined && balanceAmount !== null) {
-    const formattedBal = typeof balanceAmount === 'number' ? `₹${balanceAmount.toLocaleString('en-IN')}` : `₹${balanceAmount}`;
+    const formattedBal = typeof balanceAmount === 'number' ? `${cur.symbol}${balanceAmount.toLocaleString(cur.locale)}` : `${cur.symbol}${balanceAmount}`;
     details.push({ label: 'Remaining Balance', value: formattedBal });
   }
 

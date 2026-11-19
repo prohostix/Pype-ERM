@@ -3,6 +3,7 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
+import { findCurrency, getOrgCurrencyCode } from '../utils/currency.js';
 export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Response) => {
   const orgId = req.user.organizationId;
   const role = req.user.role;
@@ -560,6 +561,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
         orderBy: { createdAt: 'desc' },
         select: { id: true, name: true, createdAt: true }
       });
+      const curForFeed = findCurrency(await getOrgCurrencyCode(req.user.organizationId));
       const recentPayments = await prisma.paymentEntry.findMany({
         where: { organizationId: targetOrgId },
         take: 4,
@@ -586,7 +588,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
         })),
         ...recentPayments.map(p => ({
           id: 'payment-' + p.id,
-          action: `Received fee payment of ₹${Number(p.amount).toLocaleString('en-IN')}`,
+          action: `Received fee payment of ${curForFeed.symbol}${Number(p.amount).toLocaleString(curForFeed.locale)}`,
           entityType: 'Fee Receipt',
           userName: p.receiver?.name || 'Accounts Desk',
           userRole: 'Finance',

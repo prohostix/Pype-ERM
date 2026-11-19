@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 
 
 
+import { CS } from '@/lib/currency';
 interface Program {
   id: string; name: string; code: string; courseType: string;
   duration: number; hasSemesters: boolean; semesters: { number: number; name: string; durationMonths: number }[];
@@ -301,13 +302,13 @@ export function ProgramDetailPanel({
                 <div className="flex justify-between border-b pb-2">
                   <span className="text-muted-foreground">Registration Fee:</span>
                   <span className="font-medium">
-                    ₹{((program.feeStructures || []).find((f: any) => f.feeLevel === 'program')?.registrationFee || 0).toLocaleString()}
+                    {CS()}{((program.feeStructures || []).find((f: any) => f.feeLevel === 'program')?.registrationFee || 0).toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between pt-1">
                   <span className="text-muted-foreground">Tuition Fee:</span>
                   <span className="font-medium">
-                    ₹{((program.feeStructures || []).find((f: any) => f.feeLevel === 'program')?.tuitionFee || 0).toLocaleString()}
+                    {CS()}{((program.feeStructures || []).find((f: any) => f.feeLevel === 'program')?.tuitionFee || 0).toLocaleString()}
                   </span>
                 </div>
               </div>

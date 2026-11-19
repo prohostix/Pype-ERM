@@ -11,6 +11,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 
+import { CS } from '@/lib/currency';
 const getDocUrl = (url: string) => {
   return api.getFileUrl(url);
 };
@@ -320,9 +321,9 @@ export function FinanceEnrollmentsPanel() {
                     <td className="p-3 hidden lg:table-cell text-muted-foreground">{getCenterName(e)}</td>
                     <td className="p-3 hidden sm:table-cell">
                       {e.payment ? (
-                        <span className="text-green-600 font-medium">₹{e.payment.amount.toLocaleString()}</span>
+                        <span className="text-green-600 font-medium">{CS()}{e.payment.amount.toLocaleString()}</span>
                       ) : e.initialPaymentAmount ? (
-                        <span className="text-amber-600 font-medium">₹{e.initialPaymentAmount.toLocaleString()} <span className="text-[10px] text-amber-600/80 block mt-0.5">(Pending Approval)</span></span>
+                        <span className="text-amber-600 font-medium">{CS()}{e.initialPaymentAmount.toLocaleString()} <span className="text-[10px] text-amber-600/80 block mt-0.5">(Pending Approval)</span></span>
                       ) : (
                         <span className="text-muted-foreground text-xs">—</span>
                       )}
@@ -453,13 +454,13 @@ export function FinanceEnrollmentsPanel() {
                           {feeRows.map((r, j) => (
                             <tr key={j}>
                               <td className="px-3 py-2">{r.label} <span className="text-muted-foreground capitalize">({relevantFee.billingCycle || 'per year'})</span></td>
-                              <td className="px-3 py-2 text-right font-medium text-green-600">₹{Number(r.val).toLocaleString()}</td>
+                              <td className="px-3 py-2 text-right font-medium text-green-600">{CS()}{Number(r.val).toLocaleString()}</td>
                             </tr>
                           ))}
                           {feeRows.length > 1 && (
                             <tr className="bg-muted/30 font-semibold border-t">
                               <td className="px-3 py-2 text-foreground">Total Fee</td>
-                              <td className="px-3 py-2 text-right text-foreground font-bold">₹{totalProgramFee.toLocaleString()}</td>
+                              <td className="px-3 py-2 text-right text-foreground font-bold">{CS()}{totalProgramFee.toLocaleString()}</td>
                             </tr>
                           )}
                         </tbody>
@@ -471,7 +472,7 @@ export function FinanceEnrollmentsPanel() {
                       <div className="flex items-center gap-3">
                         <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
                         <div>
-                          <p className="font-semibold text-green-700">Fee Paid: ₹{viewStudent.payment.amount?.toLocaleString()}</p>
+                          <p className="font-semibold text-green-700">Fee Paid: {CS()}{viewStudent.payment.amount?.toLocaleString()}</p>
                           {viewStudent.payment.debitedAt && (
                             <p className="text-xs text-green-600">on {new Date(viewStudent.payment.debitedAt).toLocaleDateString('en-IN')}</p>
                           )}
@@ -490,7 +491,7 @@ export function FinanceEnrollmentsPanel() {
                       <Clock className="w-4 h-4 text-amber-500 shrink-0" />
                       <div>
                         <p className="text-amber-700 font-medium text-xs">Initial Fee Claimed</p>
-                        <p className="font-semibold text-amber-700">₹{viewStudent.initialPaymentAmount.toLocaleString()}</p>
+                        <p className="font-semibold text-amber-700">{CS()}{viewStudent.initialPaymentAmount.toLocaleString()}</p>
                       </div>
                     </div>
                   ) : !viewStudent.payment && (

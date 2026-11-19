@@ -34,6 +34,7 @@ import {
 } from 'recharts';
 import { employees, studyCenters, escalations, getDashboardMetrics } from '@/data/mockData';
 
+import { CS } from '@/lib/currency';
 interface CEODashboardProps {
   activeModule: string;
 }
@@ -122,7 +123,7 @@ export function CEODashboard({ activeModule }: CEODashboardProps) {
         />
         <MetricCard
           title="Monthly Revenue"
-          value={`₹${(metrics.monthlyRevenue || 0).toLocaleString()}`}
+          value={`${CS()}${(metrics.monthlyRevenue || 0).toLocaleString()}`}
           icon={DollarSign}
           trend="up"
           trendValue="+8% vs last month"
@@ -189,7 +190,7 @@ export function CEODashboard({ activeModule }: CEODashboardProps) {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis />
-                <Tooltip formatter={(value: number) => `₹${value.toLocaleString()}`} />
+                <Tooltip formatter={(value: number) => `${CS()}${value.toLocaleString()}`} />
                 <Legend />
                 <Bar dataKey="revenue" fill="#3b82f6" name="Revenue" />
                 <Bar dataKey="target" fill="#e5e7eb" name="Target" />

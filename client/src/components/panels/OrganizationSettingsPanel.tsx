@@ -9,11 +9,15 @@ import { toast } from 'sonner';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { uploadFormFile } from '@/lib/uploadFile';
+import { getCurrencyCode, type CurrencyOption } from '@/lib/currency';
 
 export function OrganizationSettingsPanel() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [currencyCode, setCurrencyCodeState] = useState(getCurrencyCode());
+  const [currencyOptions, setCurrencyOptionsState] = useState<CurrencyOption[]>([]);
+  const [savingCurrency, setSavingCurrency] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,7 +30,20 @@ export function OrganizationSettingsPanel() {
 
   useEffect(() => {
     fetchOrgDetails();
+    api.get('/organizations/currency').then((r) => { setCurrencyOptionsState(r.data?.data?.options || []); setCurrencyCodeState(r.data?.data?.code || 'INR'); }).catch(() => {});
   }, []);
+
+  const saveCurrency = async () => {
+    setSavingCurrency(true);
+    try {
+      await api.put('/organizations/currency', { code: currencyCode });
+      toast.success('Currency saved. Reloading to apply it everywhere...');
+      setTimeout(() => window.location.reload(), 700);
+    } catch (e: any) {
+      toast.error(e.response?.data?.message || 'Failed to save currency');
+      setSavingCurrency(false);
+    }
+  };
 
   const fetchOrgDetails = async () => {
     try {
@@ -264,6 +281,30 @@ export function OrganizationSettingsPanel() {
               />
               <p className="text-xs text-muted-foreground mt-1.5">Prefix added to auto-generated admission numbers. Defaults to first 3 letters of Org name if left blank.</p>
             </div>
+          </div>
+
+          <div className="space-y-3 pt-6 border-t">
+            <h3 className="text-sm font-medium">Currency</h3>
+            <div className="flex flex-col sm:flex-row sm:items-end gap-3 max-w-xl">
+              <div className="space-y-2 flex-1">
+                <Label>Currency used for all amounts</Label>
+                <select
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  value={currencyCode}
+                  onChange={e => setCurrencyCodeState(e.target.value)}
+                >
+                  {currencyOptions.map((c) => (
+                    <option key={c.code} value={c.code}>{c.name} ({c.code}) — {c.symbol.trim()}</option>
+                  ))}
+                </select>
+              </div>
+              <Button type="button" variant="outline" onClick={saveCurrency} disabled={savingCurrency || currencyCode === getCurrencyCode()}>
+                {savingCurrency ? 'Saving...' : 'Apply currency'}
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              This changes only the symbol and number grouping on screens, receipts, emails and reports. Existing amounts are not converted.
+            </p>
           </div>
 
           <div className="flex justify-end pt-6 border-t">

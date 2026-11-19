@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS, numLocale } from '@/lib/currency';
 export function PaymentsPanel() {
   const [payments, setPayments] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
@@ -241,7 +242,7 @@ export function PaymentsPanel() {
                       .filter(inv => paymentTarget === 'student' ? inv.studentId === selectedStudentId : true)
                       .map((inv) => (
                         <SelectItem key={inv.id} value={inv.id.toString()}>
-                          {inv.invoiceNo || inv.id} — ₹{inv.total ?? inv.amount}
+                          {inv.invoiceNo || inv.id} — {CS()}{inv.total ?? inv.amount}
                         </SelectItem>
                       ))}
                   </SelectContent>
@@ -316,7 +317,7 @@ export function PaymentsPanel() {
                       <DollarSign className="w-6 h-6 text-emerald-600" />
                     </div>
                     <div className="flex-1">
-                      <div className="font-semibold text-sm">₹{payment.amount.toLocaleString('en-IN')}</div>
+                      <div className="font-semibold text-sm">{CS()}{payment.amount.toLocaleString(numLocale())}</div>
                       <div className="text-xs text-muted-foreground mt-0.5">
                         {payment.method?.toUpperCase()} • {payment.referenceNo || 'No reference'} • {payment.receivedAt ? new Date(payment.receivedAt).toLocaleDateString('en-GB').replace(/\//g, '-') : ''}
                       </div>

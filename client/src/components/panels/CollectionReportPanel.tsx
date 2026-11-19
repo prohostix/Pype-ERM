@@ -7,6 +7,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import * as XLSX from 'xlsx';
 
+import { CS } from '@/lib/currency';
 export function CollectionReportPanel() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<{ summary: any; ledger: any[] }>({ summary: {}, ledger: [] });
@@ -138,7 +139,7 @@ export function CollectionReportPanel() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-success">
-              ₹{((data.summary?.totalCollected || 0)).toLocaleString()}
+              {CS()}{((data.summary?.totalCollected || 0)).toLocaleString()}
             </div>
           </CardContent>
         </Card>
@@ -209,7 +210,7 @@ export function CollectionReportPanel() {
                         {item.invoice?.student?.enrollmentNo || '-'}
                       </td>
                       <td className="px-4 py-3 font-bold text-success">
-                        ₹{item.amount.toLocaleString()}
+                        {CS()}{item.amount.toLocaleString()}
                       </td>
                       <td className="px-4 py-3 capitalize">
                         {item.method}

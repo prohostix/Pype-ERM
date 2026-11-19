@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS, numLocale } from '@/lib/currency';
 export function InvoiceSchedulePanel() {
   const [students, setStudents] = useState<any[]>([]);
   const [search, setSearch] = useState('');
@@ -207,7 +208,7 @@ export function InvoiceSchedulePanel() {
                           <div className="text-xs text-muted-foreground mt-0.5">
                             Due: <strong>{new Date(s.dueDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</strong>
                           </div>
-                          <div className="text-lg font-bold text-indigo-600 dark:text-indigo-400 mt-1">₹{s.amount.toLocaleString('en-IN')}</div>
+                          <div className="text-lg font-bold text-indigo-600 dark:text-indigo-400 mt-1">{CS()}{s.amount.toLocaleString(numLocale())}</div>
                           {s.remarks && <div className="text-xs text-muted-foreground mt-1">{s.remarks}</div>}
                           {invoiceStatus(s) && <div className="mt-2">{invoiceStatus(s)}</div>}
                         </div>

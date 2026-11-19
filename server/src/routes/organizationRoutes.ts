@@ -12,6 +12,8 @@ import {
   getEnrollmentLinkConfig,
   updateEnrollmentLinkConfig,
   getStudentPortalConfig,
+  getOrgCurrency,
+  updateOrgCurrency,
   updateStudentPortalConfig,
   getLoginBrandingBySlug,
   initLoginBranding,
@@ -38,6 +40,9 @@ const router = express.Router();
 router.get('/login-branding/:slug', getLoginBrandingBySlug);
 
 router.use(protect);
+
+router.get('/currency', getOrgCurrency);
+router.put('/currency', authorize('superadmin', 'org_admin'), updateOrgCurrency);
 
 router.get('/inquiries', authorize('superadmin'), getOrgInquiries);
 router.patch('/inquiries/:id', authorize('superadmin'), updateOrgInquiryStatus);

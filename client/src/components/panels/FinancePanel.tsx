@@ -33,6 +33,7 @@ import {
 import { invoices, paymentEntries, expenseClaims, targets, studyCenters, students, admissionSessions } from '@/data/mockData';
 import type { Invoice, PaymentEntry, ExpenseClaim, Target as TargetType } from '@/types/erp';
 
+import { CS } from '@/lib/currency';
 interface FinancePanelProps {
   activeModule: string;
 }
@@ -73,12 +74,12 @@ export function FinancePanel({ activeModule }: FinancePanelProps) {
     { 
       key: 'amount', 
       header: 'Amount',
-      render: (row: Invoice) => `₹${row.amount.toLocaleString()}`
+      render: (row: Invoice) => `${CS()}${row.amount.toLocaleString()}`
     },
     { 
       key: 'total', 
       header: 'Total',
-      render: (row: Invoice) => `₹${row.total.toLocaleString()}`
+      render: (row: Invoice) => `${CS()}${row.total.toLocaleString()}`
     },
     { key: 'status', header: 'Status' },
     { 
@@ -93,7 +94,7 @@ export function FinancePanel({ activeModule }: FinancePanelProps) {
     { 
       key: 'amount', 
       header: 'Amount',
-      render: (row: PaymentEntry) => `₹${row.amount.toLocaleString()}`
+      render: (row: PaymentEntry) => `${CS()}${row.amount.toLocaleString()}`
     },
     { 
       key: 'method', 
@@ -115,7 +116,7 @@ export function FinancePanel({ activeModule }: FinancePanelProps) {
     { 
       key: 'amount', 
       header: 'Amount',
-      render: (row: ExpenseClaim) => `₹${row.amount.toLocaleString()}`
+      render: (row: ExpenseClaim) => `${CS()}${row.amount.toLocaleString()}`
     },
     { 
       key: 'category', 
@@ -157,26 +158,26 @@ export function FinancePanel({ activeModule }: FinancePanelProps) {
       <MetricCardGrid columns={4}>
         <MetricCard
           title="Total Revenue"
-          value={`₹${totalRevenue.toLocaleString()}`}
+          value={`${CS()}${totalRevenue.toLocaleString()}`}
           icon={DollarSign}
           trend="up"
           trendValue="+12% this month"
         />
         <MetricCard
           title="Pending Invoices"
-          value={`₹${pendingAmount.toLocaleString()}`}
+          value={`${CS()}${pendingAmount.toLocaleString()}`}
           icon={Receipt}
           badge={{ label: `${pendingInvoices.length} invoices`, variant: 'secondary' }}
         />
         <MetricCard
           title="Overdue Amount"
-          value={`₹${overdueAmount.toLocaleString()}`}
+          value={`${CS()}${overdueAmount.toLocaleString()}`}
           icon={AlertTriangle}
           badge={{ label: `${overdueInvoices.length} invoices`, variant: 'destructive' }}
         />
         <MetricCard
           title="Pending Expenses"
-          value={`₹${pendingExpenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString()}`}
+          value={`${CS()}${pendingExpenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString()}`}
           icon={Wallet}
           badge={{ label: `${pendingExpenses.length} claims`, variant: 'secondary' }}
         />
@@ -193,7 +194,7 @@ export function FinancePanel({ activeModule }: FinancePanelProps) {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis />
-                <Tooltip formatter={(value: number) => `₹${value.toLocaleString()}`} />
+                <Tooltip formatter={(value: number) => `${CS()}${value.toLocaleString()}`} />
                 <Legend />
                 <Bar dataKey="revenue" fill="#3b82f6" name="Revenue" />
                 <Bar dataKey="expenses" fill="#ef4444" name="Expenses" />

@@ -13,6 +13,7 @@ import { uploadFormFile } from '@/lib/uploadFile';
 import { toast } from 'sonner';
 import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
+import { CS } from '@/lib/currency';
 interface StatusHistoryEntry {
   status: string;
   actorId: string;
@@ -587,7 +588,7 @@ export function SalesStudentPipelinePanel() {
               </p>
               {receiptTarget.status === 'provisional_finance_rejected' && (
                 <div className="space-y-1.5">
-                  <Label>Amount Paid (₹)</Label>
+                  <Label>Amount Paid ({CS()})</Label>
                   <Input
                     type="number"
                     min="1"

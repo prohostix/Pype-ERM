@@ -6,6 +6,7 @@ import {
   sendLeadWelcomeWhatsApp
 } from './whatsappService.js';
 
+import { findCurrency, getOrgCurrencyCode } from './currency.js';
 export type NotificationJob =
   | {
       type: 'STUDENT_CREDENTIALS';
@@ -263,7 +264,7 @@ class NotificationQueueManager {
                   recipientName: data.recipientName,
                   subject: `Fee Payment Receipt #${data.receiptNo}`,
                   category: 'FEE_RECEIPT',
-                  content: `Payment receipt #${data.receiptNo} of ₹${data.amount} for ${data.recipientName}`,
+                  content: `Payment receipt #${data.receiptNo} of ${findCurrency(await getOrgCurrencyCode(data.organizationId)).symbol}${data.amount} for ${data.recipientName}`,
                   status: 'sent',
                   metadata: data
                 });
@@ -306,7 +307,7 @@ class NotificationQueueManager {
                   recipientName: data.recipientName,
                   subject: `Fee Receipt Notification #${data.receiptNo}`,
                   category: 'FEE_RECEIPT',
-                  content: `Payment receipt #${data.receiptNo} of ₹${data.amount} sent via WhatsApp to ${data.recipientName}`,
+                  content: `Payment receipt #${data.receiptNo} of ${findCurrency(await getOrgCurrencyCode(data.organizationId)).symbol}${data.amount} sent via WhatsApp to ${data.recipientName}`,
                   status: 'sent',
                   metadata: data
                 });
@@ -343,7 +344,7 @@ class NotificationQueueManager {
             recipientName: job.data.studentName,
             subject: 'Fee Installment Reminder',
             category: 'PAYMENT_REMINDER',
-            content: `Reminder for ${job.data.studentName} - Amount Due: ₹${job.data.amount}, Due Date: ${job.data.dueDate}`,
+            content: `Reminder for ${job.data.studentName} - Amount Due: ${findCurrency(await getOrgCurrencyCode(job.data.organizationId)).symbol}${job.data.amount}, Due Date: ${job.data.dueDate}`,
             status: 'sent',
             metadata: job.data
           });

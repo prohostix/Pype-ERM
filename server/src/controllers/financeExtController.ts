@@ -5,6 +5,7 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { sendEmail } from '../utils/emailService.js';
 import { enqueueNotification } from '../utils/notificationQueue.js';
 
+import { findCurrency, getOrgCurrencyCode } from '../utils/currency.js';
 // ── Payment Reminders ────────────────────────────────────────────────────────
 
 export const getOverdueSchedules = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -86,10 +87,11 @@ export const sendPaymentReminder = asyncHandler(async (req: AuthRequest, res: Re
   res.json({ success: true, message: `Payment reminders enqueued for dispatch to ${targetStudents.length} student(s)` });
 
   // Background dispatch via notification queue
+  const curSym = findCurrency(await getOrgCurrencyCode(req.user.organizationId)).symbol;
   for (const student of targetStudents) {
     const emailBody = message
       .replace('{name}', student.name)
-      .replace('{amount}', student.amount ? `₹${student.amount}` : '')
+      .replace('{amount}', student.amount ? `${curSym}${student.amount}` : '')
       .replace('{dueDate}', student.dueDate ? new Date(student.dueDate).toLocaleDateString('en-IN') : '')
       .replace('{closingDate}', closingDate || '');
 

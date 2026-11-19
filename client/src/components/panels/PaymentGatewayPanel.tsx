@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS } from '@/lib/currency';
 // Inline SVG QR-like placeholder using a canvas-free approach
 function QRDisplay({ value }: { value: string }) {
   // Generate a deterministic "pattern" using string hash for visual representation
@@ -202,7 +203,7 @@ export function PaymentGatewayPanel() {
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <div className="text-right mr-2">
-                      <div className="font-bold text-violet-600">₹{link.amount.toLocaleString()}</div>
+                      <div className="font-bold text-violet-600">{CS()}{link.amount.toLocaleString()}</div>
                     </div>
                     <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => copyLink(link)} title="Copy link">
                       <Copy className="w-3.5 h-3.5" />
@@ -286,7 +287,7 @@ export function PaymentGatewayPanel() {
                     <SelectItem value="">— No specific installment —</SelectItem>
                     {schedules.map((s: any) => (
                       <SelectItem key={s.id} value={s.id}>
-                        {s.title} — ₹{s.amount.toLocaleString()} (Due: {new Date(s.dueDate).toLocaleDateString('en-IN')})
+                        {s.title} — {CS()}{s.amount.toLocaleString()} (Due: {new Date(s.dueDate).toLocaleDateString('en-IN')})
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -294,7 +295,7 @@ export function PaymentGatewayPanel() {
               </div>
             )}
             <div>
-              <Label>Amount (₹) <span className="text-rose-500">*</span></Label>
+              <Label>Amount ({CS()}) <span className="text-rose-500">*</span></Label>
               <Input type="number" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} placeholder="Enter amount" />
             </div>
             <div>
@@ -332,7 +333,7 @@ export function PaymentGatewayPanel() {
             <div className="space-y-4 py-2">
               <div className="text-center">
                 <div className="font-semibold">{selectedLink.student?.name}</div>
-                <div className="text-2xl font-bold text-violet-600 mt-1">₹{selectedLink.amount.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-violet-600 mt-1">{CS()}{selectedLink.amount.toLocaleString()}</div>
                 <div className="text-sm text-muted-foreground">{selectedLink.description}</div>
               </div>
               <QRDisplay value={selectedLink.paymentUrl} />

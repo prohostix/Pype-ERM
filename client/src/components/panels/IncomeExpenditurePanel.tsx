@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS, numLocale, compactMoney } from '@/lib/currency';
 interface MonthlyRow {
   month: string;
   income: { invoices: number; enrollments: number; payments: number; total: number };
@@ -26,8 +27,9 @@ interface ReportData {
 }
 
 const fmt = (n: number) =>
-  n >= 100000 ? `₹${(n / 100000).toFixed(1)}L` :
-  n >= 1000 ? `₹${(n / 1000).toFixed(1)}K` : `₹${n.toLocaleString()}`;
+  numLocale() !== 'en-IN' ? compactMoney(n, 1) :
+  n >= 100000 ? `${CS()}${(n / 100000).toFixed(1)}L` :
+  n >= 1000 ? `${CS()}${(n / 1000).toFixed(1)}K` : `${CS()}${n.toLocaleString()}`;
 
 const fmtMonth = (m: string) => {
   const [y, mo] = m.split('-');

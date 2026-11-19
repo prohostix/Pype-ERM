@@ -1,5 +1,6 @@
 import PDFDocument from 'pdfkit';
 import prisma from '../lib/prisma.js';
+import { findCurrency, getOrgCurrencyCode, pdfSymbol } from './currency.js';
 
 export interface BillReceiptData {
   receiptNo: string;
@@ -39,6 +40,8 @@ export interface BillReceiptData {
   balanceFee?: number;
   balanceDue?: number;
   feeStructureMissing?: boolean;
+  organizationId?: string;
+  currencyCode?: string;
   status?: string;
   items?: Array<{ description?: string; studentName?: string; name?: string; amount: number; enrollmentNo?: string }>;
   payments?: Array<any>;
@@ -95,6 +98,9 @@ function numberToWords(amount: number): string {
  * Generates a vector PDF receipt that EXACTLY matches the BillReceiptPanel design
  */
 export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Promise<Buffer> {
+  const curCode = data?.currencyCode || await getOrgCurrencyCode(data?.organizationId);
+  const pdfSym = pdfSymbol(curCode);
+  const pdfLocale = findCurrency(curCode).locale;
   return new Promise((resolve, reject) => {
     try {
       const doc = new PDFDocument({
@@ -312,7 +318,7 @@ export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Pro
       doc.fillColor('#ffffff').font('Helvetica-Bold').fontSize(8);
       doc.text('#', leftX + 12, currentY + 7, { width: 25 });
       doc.text(hasPartnerStudents ? 'ENROLLED STUDENT PARTICULARS' : 'PARTICULARS', leftX + 45, currentY + 7, { width: 340 });
-      doc.text('AMOUNT (₹)', rightX - 120, currentY + 7, { width: 110, align: 'right' });
+      doc.text(`AMOUNT (${pdfSym.trim()})`, rightX - 120, currentY + 7, { width: 110, align: 'right' });
 
       currentY += tableHeaderHeight;
 
@@ -329,7 +335,7 @@ export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Pro
         doc.rect(leftX, currentY, fullWidth, 24).fillAndStroke(rowBg, '#f1f5f9');
         doc.fillColor('#64748b').font('Helvetica').fontSize(8.5).text(String(i + 1), leftX + 12, currentY + 7);
         doc.fillColor('#0f172a').font('Helvetica-Bold').text(itemDesc, leftX + 45, currentY + 7, { width: 350 });
-        doc.fillColor('#0f172a').font('Helvetica-Bold').text(itemAmt.toLocaleString('en-IN', { minimumFractionDigits: 2 }), rightX - 120, currentY + 7, { width: 110, align: 'right' });
+        doc.fillColor('#0f172a').font('Helvetica-Bold').text(itemAmt.toLocaleString(pdfLocale, { minimumFractionDigits: 2 }), rightX - 120, currentY + 7, { width: 110, align: 'right' });
 
         currentY += 24;
       });
@@ -338,7 +344,7 @@ export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Pro
       doc.rect(leftX, currentY, fullWidth, 26).fillAndStroke('#eff6ff', '#2563eb');
       doc.fillColor('#1e40af').font('Helvetica-Bold').fontSize(9);
       doc.text(hasPartnerStudents ? `TOTAL AMOUNT (${data.items?.length || 0} STUDENTS)` : 'TOTAL AMOUNT', leftX + 45, currentY + 8);
-      doc.fontSize(10.5).text(`₹${numTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, rightX - 130, currentY + 7, { width: 120, align: 'right' });
+      doc.fontSize(10.5).text(`${pdfSym}${numTotal.toLocaleString(pdfLocale, { minimumFractionDigits: 2 })}`, rightX - 130, currentY + 7, { width: 120, align: 'right' });
 
       currentY += 34;
 
@@ -370,7 +376,7 @@ export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Pro
         doc.text('DATE', leftX + 35, currentY + 4, { width: 75 });
         doc.text('RECEIPT / REF NO', leftX + 120, currentY + 4, { width: 160 });
         doc.text('MODE', leftX + 300, currentY + 4, { width: 80 });
-        doc.text('AMOUNT (₹)', rightX - 110, currentY + 4, { width: 100, align: 'right' });
+        doc.text(`AMOUNT (${pdfSym.trim()})`, rightX - 110, currentY + 4, { width: 100, align: 'right' });
 
         currentY += 16;
 
@@ -385,7 +391,7 @@ export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Pro
           doc.fillColor('#0f172a').font('Helvetica').text(pDate, leftX + 35, currentY + 5);
           doc.fillColor('#334155').text(pRef, leftX + 120, currentY + 5);
           doc.fillColor('#0f172a').text(pMethod, leftX + 300, currentY + 5);
-          doc.fillColor('#16a34a').font('Helvetica-Bold').text(`₹${pAmt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, rightX - 110, currentY + 5, { width: 100, align: 'right' });
+          doc.fillColor('#16a34a').font('Helvetica-Bold').text(`${pdfSym}${pAmt.toLocaleString(pdfLocale, { minimumFractionDigits: 2 })}`, rightX - 110, currentY + 5, { width: 100, align: 'right' });
 
           currentY += 18;
         });
@@ -420,11 +426,11 @@ export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Pro
 
         let by = summaryStartY + 8;
         doc.fillColor('#475569').font('Helvetica-Bold').fontSize(8).text('Subtotal', summaryBoxX + 12, by);
-        doc.fillColor('#0f172a').text(`₹${numTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, summaryBoxX + 110, by, { width: 118, align: 'right' });
+        doc.fillColor('#0f172a').text(`${pdfSym}${numTotal.toLocaleString(pdfLocale, { minimumFractionDigits: 2 })}`, summaryBoxX + 110, by, { width: 118, align: 'right' });
         by += 18;
 
         doc.fillColor('#16a34a').font('Helvetica-Bold').fontSize(8).text('Total Remitted / Paid', summaryBoxX + 12, by);
-        doc.text(`₹${totalRemittedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, summaryBoxX + 110, by, { width: 118, align: 'right' });
+        doc.text(`${pdfSym}${totalRemittedAmount.toLocaleString(pdfLocale, { minimumFractionDigits: 2 })}`, summaryBoxX + 110, by, { width: 118, align: 'right' });
         by += 18;
 
         doc.moveTo(summaryBoxX + 12, by).lineTo(summaryBoxX + summaryBoxWidth - 12, by).lineWidth(0.8).dash(3, { space: 2 }).strokeColor('#cbd5e1').stroke();
@@ -433,7 +439,7 @@ export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Pro
 
         doc.fillColor('#0f172a').font('Helvetica-Bold').fontSize(9).text('BALANCE DUE', summaryBoxX + 12, by);
         const pBal = Math.max(0, numTotal - totalRemittedAmount);
-        doc.fillColor(pBal <= 0 ? '#16a34a' : '#ef4444').font('Helvetica-Bold').fontSize(11).text(`₹${pBal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, summaryBoxX + 110, by, { width: 118, align: 'right' });
+        doc.fillColor(pBal <= 0 ? '#16a34a' : '#ef4444').font('Helvetica-Bold').fontSize(11).text(`${pdfSym}${pBal.toLocaleString(pdfLocale, { minimumFractionDigits: 2 })}`, summaryBoxX + 110, by, { width: 118, align: 'right' });
 
         currentY = Math.max(summaryStartY + orangeBoxHeight + 20, 720);
       } else {
@@ -449,7 +455,7 @@ export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Pro
 
         // Row 1: Total Fee
         doc.fillColor('#c2410c').font('Helvetica-Bold').fontSize(8.5).text('Total Fee', summaryBoxX + 12, summaryStartY + 10);
-        const totalFeeDisplay = data.feeStructureMissing ? 'Fee not set up' : `₹${totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+        const totalFeeDisplay = data.feeStructureMissing ? 'Fee not set up' : `${pdfSym}${totalFeeAmount.toLocaleString(pdfLocale, { minimumFractionDigits: 2 })}`;
         doc.fillColor('#9a3412').font('Helvetica-Bold').fontSize(9).text(totalFeeDisplay, summaryBoxX + 100, summaryStartY + 10, { width: 128, align: 'right' });
 
         // Dashed divider 1
@@ -458,7 +464,7 @@ export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Pro
 
         // Row 2: Total Remitted Fee
         doc.fillColor('#16a34a').font('Helvetica-Bold').fontSize(8.5).text('Total Remitted Fee', summaryBoxX + 12, summaryStartY + 31);
-        doc.text(`₹${totalRemittedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`, summaryBoxX + 100, summaryStartY + 31, { width: 128, align: 'right' });
+        doc.text(`${pdfSym}${totalRemittedAmount.toLocaleString(pdfLocale, { minimumFractionDigits: 2 })}`, summaryBoxX + 100, summaryStartY + 31, { width: 128, align: 'right' });
 
         // Dashed divider 2
         doc.moveTo(summaryBoxX + 12, summaryStartY + 46).lineTo(summaryBoxX + summaryBoxWidth - 12, summaryStartY + 46).lineWidth(0.8).dash(3, { space: 2 }).strokeColor('#fdba74').stroke();
@@ -467,7 +473,7 @@ export async function generateReceiptPdfBuffer(data: BillReceiptData | any): Pro
         // Row 3: Balance Fee
         doc.fillColor('#0f172a').font('Helvetica-Bold').fontSize(8.5).text('BALANCE FEE', summaryBoxX + 12, summaryStartY + 53);
         const balanceColor = balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444';
-        const balanceDisplay = data.feeStructureMissing ? '—' : `₹${balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+        const balanceDisplay = data.feeStructureMissing ? '—' : `${pdfSym}${balanceFeeAmount.toLocaleString(pdfLocale, { minimumFractionDigits: 2 })}`;
         doc.fillColor(balanceColor).font('Helvetica-Bold').fontSize(11).text(balanceDisplay, summaryBoxX + 100, summaryStartY + 51, { width: 128, align: 'right' });
 
         currentY = Math.max(summaryStartY + orangeBoxHeight + 20, 720);
@@ -788,6 +794,8 @@ export async function getReceiptData(id: string): Promise<BillReceiptData | null
   const latestTransactionDate = billTransactionDate || invoice.paidAt || invoice.createdAt || invoice.updatedAt;
 
   return {
+    organizationId: invoice.organizationId,
+    currencyCode: await getOrgCurrencyCode(invoice.organizationId),
     receiptNo: invoice.invoiceNo ? `RCP-${invoice.invoiceNo}` : `REC-${invoice.id.slice(-6).toUpperCase()}`,
     date: latestTransactionDate,
     billDate: latestTransactionDate,

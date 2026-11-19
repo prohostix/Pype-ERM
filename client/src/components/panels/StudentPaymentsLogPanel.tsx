@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
+import { CS, numLocale } from '@/lib/currency';
 export function StudentPaymentsLogPanel() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -141,7 +142,7 @@ export function StudentPaymentsLogPanel() {
   const hasFilters = !!searchQuery || universityFilter !== 'all' || programFilter !== 'all' || branchFilter !== 'all' || statusTab !== 'all';
   const clearFilters = () => { setSearchQuery(''); setUniversityFilter('all'); setProgramFilter('all'); setBranchFilter('all'); setStatusTab('all'); };
 
-  const inr = (n: number) => `₹${(n || 0).toLocaleString('en-IN')}`;
+  const inr = (n: number) => `${CS()}${(n || 0).toLocaleString(numLocale())}`;
   const initials = (name: string) => (name || '?').split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
   const pctOf = (paid: number, total: number) => (total > 0 ? Math.min(100, Math.round((paid / total) * 100)) : 0);
 
@@ -267,7 +268,7 @@ export function StudentPaymentsLogPanel() {
                       <span className="text-xs text-muted-foreground">of {inr(log.totalFee)}</span>
                     </div>
                     <div className="h-2 rounded-full bg-muted mt-1.5 overflow-hidden"><div className={cn('h-full rounded-full transition-all', done ? 'bg-emerald-500' : overdue ? 'bg-red-500' : 'bg-amber-500')} style={{ width: `${pct}%` }} /></div>
-                    {log.discountAmount > 0 && <p className="text-[10px] text-green-600 mt-1" title={log.discountReason}>₹{log.discountAmount.toLocaleString('en-IN')} discount applied</p>}
+                    {log.discountAmount > 0 && <p className="text-[10px] text-green-600 mt-1" title={log.discountReason}>{CS()}{log.discountAmount.toLocaleString(numLocale())} discount applied</p>}
                   </div>
                   {/* Balance */}
                   <div className="hidden lg:block text-right min-w-[96px]">
@@ -352,7 +353,7 @@ export function StudentPaymentsLogPanel() {
           </DialogHeader>
           <form onSubmit={handleRecordPayment} className="space-y-4">
             <div>
-              <Label>Amount (₹)</Label>
+              <Label>Amount ({CS()})</Label>
               <Input type="number" required value={formData.amount} onChange={(e) => setFormData({ ...formData, amount: e.target.value })} />
             </div>
             <div>
@@ -400,7 +401,7 @@ export function StudentPaymentsLogPanel() {
               <Input required placeholder="e.g. Late Payment Fee" value={extraFeeData.title} onChange={(e) => setExtraFeeData({ ...extraFeeData, title: e.target.value })} />
             </div>
             <div>
-              <Label>Amount (₹)</Label>
+              <Label>Amount ({CS()})</Label>
               <Input type="number" required min="1" value={extraFeeData.amount} onChange={(e) => setExtraFeeData({ ...extraFeeData, amount: e.target.value })} />
             </div>
             <div>

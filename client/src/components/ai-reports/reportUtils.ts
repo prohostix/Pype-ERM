@@ -1,4 +1,5 @@
 /** Shared types, formatting and the spoken/written summary for AI Reports. */
+import { CS, numLocale } from '@/lib/currency';
 
 export type ChartType = 'bar' | 'line' | 'pie' | 'table' | 'kpi';
 export interface Filter { field: string; op: string; value?: string; values?: string[] }
@@ -25,8 +26,8 @@ export interface Catalog {
   serverVoice?: string[];
 }
 
-export const nf = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 });
-export const compact = new Intl.NumberFormat('en-IN', { notation: 'compact', maximumFractionDigits: 1 });
+export const nf = { format: (v: number) => new Intl.NumberFormat(numLocale(), { maximumFractionDigits: 2 }).format(v) };
+export const compact = { format: (v: number) => new Intl.NumberFormat(numLocale(), { notation: 'compact', maximumFractionDigits: 1 }).format(v) };
 export const isMoney = (key: string) => key !== 'count' && /amount|total|tax|paid/i.test(key);
 
 /** Dimensions whose values are people's names — never put in spoken text (it may go to a voice service) */
@@ -49,7 +50,7 @@ export function prettyBucket(v: unknown, long = false): string {
 
 export function fmt(v: unknown, col?: Column): string {
   if (v === null || v === undefined || v === '') return '—';
-  if (col?.type === 'number' && typeof v === 'number') return (isMoney(col.key) ? '₹' : '') + nf.format(v);
+  if (col?.type === 'number' && typeof v === 'number') return (isMoney(col.key) ? CS() : '') + nf.format(v);
   if (col?.type === 'datetime') {
     const d = new Date(v as string);
     return isNaN(d.getTime()) ? String(v) : d.toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true });
@@ -75,7 +76,7 @@ function spokenNumber(n: number, money: boolean): string {
 }
 
 function shortMoney(n: number, money: boolean): string {
-  return (money ? '₹' : '') + nf.format(Math.round(n));
+  return (money ? CS() : '') + nf.format(Math.round(n));
 }
 
 /**

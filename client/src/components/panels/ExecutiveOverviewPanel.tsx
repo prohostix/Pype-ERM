@@ -10,19 +10,21 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 
+import { CS, numLocale, compactMoney } from '@/lib/currency';
 const DEPT_COLORS: Record<string, string> = {
   hr: 'hsl(var(--info))', finance: 'hsl(var(--success))', operations: 'hsl(var(--primary))', sales: 'hsl(var(--warning))',
 };
 const STATUS_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#06b6d4', '#8b5cf6', '#f43f5e', '#64748b'];
 const BRANCH_COLORS = ['#10b981', '#6366f1', '#f59e0b', '#ec4899', '#06b6d4', '#8b5cf6'];
 
-const inr = (n: number) => `₹${Math.round(n || 0).toLocaleString('en-IN')}`;
+const inr = (n: number) => `${CS()}${Math.round(n || 0).toLocaleString(numLocale())}`;
 const inrShort = (n: number) => {
   const v = Math.abs(n || 0);
-  if (v >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`;
-  if (v >= 100000) return `₹${(n / 100000).toFixed(2)} L`;
-  if (v >= 1000) return `₹${(n / 1000).toFixed(1)} K`;
-  return `₹${Math.round(n || 0)}`;
+  if (numLocale() !== 'en-IN') return compactMoney(n, 2);
+  if (v >= 10000000) return `${CS()}${(n / 10000000).toFixed(2)} Cr`;
+  if (v >= 100000) return `${CS()}${(n / 100000).toFixed(2)} L`;
+  if (v >= 1000) return `${CS()}${(n / 1000).toFixed(1)} K`;
+  return `${CS()}${Math.round(n || 0)}`;
 };
 const label = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 const greeting = () => { const h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'; };
@@ -106,7 +108,7 @@ export function ExecutiveOverviewPanel({ onNavigate, refreshKey = 0 }: { onNavig
           </div>
           <div className="flex flex-col items-start lg:items-end gap-3">
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              <HeroStat label="Students" value={adm.totalStudents.toLocaleString('en-IN')} />
+              <HeroStat label="Students" value={adm.totalStudents.toLocaleString(numLocale())} />
               <HeroStat label="Staff" value={String(data.people.staff)} />
               <HeroStat label="Present" value={String(data.people.presentToday)} />
             </div>
@@ -139,7 +141,7 @@ export function ExecutiveOverviewPanel({ onNavigate, refreshKey = 0 }: { onNavig
           delta={collectDelta} sub={c.lastMonth ? `${inrShort(c.lastMonth)} last month` : 'No collections last month'} onClick={() => onNavigate('payments')} />
         <Kpi icon={CreditCard} tone="rose" title="Overdue fees" value={inrShort(c.overdueAmount)} exact={inr(c.overdueAmount)}
           sub={`${c.overdueStudents} student${c.overdueStudents === 1 ? '' : 's'} · ${inrShort(c.dueAmount)} unpaid`} onClick={() => onNavigate('collections')} />
-        <Kpi icon={GraduationCap} tone="indigo" title="New admissions" value={String(adm.newThisMonth)} exact={`${adm.totalStudents.toLocaleString('en-IN')} students in total`}
+        <Kpi icon={GraduationCap} tone="indigo" title="New admissions" value={String(adm.newThisMonth)} exact={`${adm.totalStudents.toLocaleString(numLocale())} students in total`}
           delta={admDelta} sub={`${adm.newLastMonth} last month`} onClick={() => onNavigate('students')} />
         <Kpi icon={UserCheck} tone="amber" title="Staff present today" value={`${data.people.presentToday} / ${data.people.staff}`} exact=""
           sub={data.people.staff ? `${Math.round((data.people.presentToday / data.people.staff) * 100)}% attendance` : ''} onClick={() => onNavigate('attendance')} />
@@ -199,7 +201,7 @@ export function ExecutiveOverviewPanel({ onNavigate, refreshKey = 0 }: { onNavig
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <p className="text-2xl font-bold leading-none">{adm.totalStudents.toLocaleString('en-IN')}</p>
+                <p className="text-2xl font-bold leading-none">{adm.totalStudents.toLocaleString(numLocale())}</p>
                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">students</p>
               </div>
             </div>

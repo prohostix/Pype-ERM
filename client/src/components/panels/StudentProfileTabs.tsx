@@ -10,7 +10,8 @@ import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 
-const inr = (n: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(n || 0);
+import { CS, numLocale } from '@/lib/currency';
+const inr = (n: number) => `${CS()}${Number(n || 0).toLocaleString(numLocale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const fmtDate = (d?: string | Date | null, withTime = false) => {
   if (!d) return '-';
   const dt = new Date(d);

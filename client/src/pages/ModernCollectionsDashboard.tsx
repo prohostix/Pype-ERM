@@ -21,6 +21,7 @@ import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
+import { CS } from '@/lib/currency';
 export function ModernCollectionsDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const [metrics, setMetrics] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
@@ -88,21 +89,21 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any, onNavigate: (t
   const collectionStats = [
     {
       title: 'Collected Today',
-      value: `₹${(metrics?.todayCollection || 0).toLocaleString()}`,
+      value: `${CS()}${(metrics?.todayCollection || 0).toLocaleString()}`,
       description: 'Total payments received today',
       icon: <CheckCircle2 className="w-5 h-5 text-emerald-500" />,
       bg: 'bg-emerald-500/10'
     },
     {
       title: 'Collected This Month',
-      value: `₹${(metrics?.monthlyCollection || 0).toLocaleString()}`,
+      value: `${CS()}${(metrics?.monthlyCollection || 0).toLocaleString()}`,
       description: 'Active billing month progress',
       icon: <TrendingUp className="w-5 h-5 text-blue-500" />,
       bg: 'bg-blue-500/10'
     },
     {
       title: 'Total Overdue',
-      value: `₹${(metrics?.totalOverdueAmount || 0).toLocaleString()}`,
+      value: `${CS()}${(metrics?.totalOverdueAmount || 0).toLocaleString()}`,
       description: 'Unpaid past installments',
       icon: <AlertCircle className="w-5 h-5 text-rose-500" />,
       bg: 'bg-rose-500/10'

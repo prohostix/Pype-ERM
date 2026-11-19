@@ -73,13 +73,15 @@ import {
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
+import { CS, numLocale, compactMoney } from '@/lib/currency';
 // Currency Formatter for INR
 const formatINR = (val: number) => {
-  if (!val && val !== 0) return '₹0';
-  if (val >= 10000000) return `₹${(val / 10000000).toFixed(2)} Cr`;
-  if (val >= 100000) return `₹${(val / 100000).toFixed(2)} L`;
-  if (val >= 1000) return `₹${(val / 1000).toFixed(1)}k`;
-  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);
+  if (!val && val !== 0) return `${CS()}0`;
+  if (numLocale() !== 'en-IN') return compactMoney(val, 2);
+  if (val >= 10000000) return `${CS()}${(val / 10000000).toFixed(2)} Cr`;
+  if (val >= 100000) return `${CS()}${(val / 100000).toFixed(2)} L`;
+  if (val >= 1000) return `${CS()}${(val / 1000).toFixed(1)}k`;
+  return `${CS()}${Number(val).toLocaleString(numLocale(), { maximumFractionDigits: 0 })}`;
 };
 
 // Date Formatter to DD/MM/YYYY

@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { uploadFormFile } from '@/lib/uploadFile';
 
+import { CS } from '@/lib/currency';
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface KPI {
   id?: string;
@@ -631,7 +632,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                   const sum = (o: Record<string, any>) => Object.values(o).reduce((t: number, v: any) => t + (Number(v) || 0), 0);
                   const gross = (Number(sc.basicSalary) || 0) + sum(allowances);
                   const net = gross - sum(deductions);
-                  const inr = (n: any) => `₹${(Number(n) || 0).toLocaleString()}`;
+                  const inr = (n: any) => `${CS()}${(Number(n) || 0).toLocaleString()}`;
                   const rule = sc.unpaidLeaveRule || { type: 'standard' };
                   const statusClass = sc.approvalStatus === 'approved' ? 'bg-green-100 text-green-700'
                     : sc.approvalStatus === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700';
@@ -707,9 +708,9 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                               <Badge className={p.status === 'paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-secondary'}>{p.status.replace(/_/g, ' ')}</Badge>
                             </div>
                             <div className="text-sm text-muted-foreground flex gap-4 flex-wrap">
-                              <span>Basic: ₹{p.basicSalary?.toLocaleString()}</span>
-                              <span>Gross: ₹{p.grossSalary?.toLocaleString()}</span>
-                              <span className="font-bold text-foreground">Net: ₹{p.netSalary?.toLocaleString()}</span>
+                              <span>Basic: {CS()}{p.basicSalary?.toLocaleString()}</span>
+                              <span>Gross: {CS()}{p.grossSalary?.toLocaleString()}</span>
+                              <span className="font-bold text-foreground">Net: {CS()}{p.netSalary?.toLocaleString()}</span>
                             </div>
                           </div>
                           <div className="flex gap-2">

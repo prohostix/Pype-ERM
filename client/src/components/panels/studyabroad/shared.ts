@@ -1,6 +1,7 @@
 // Shared labels/colours for the Study Abroad Partner screens.
 import api from '@/lib/api';
 
+import { CS } from '@/lib/currency';
 export const PARTNER_STATUS: Record<string, { label: string; className: string }> = {
   active: { label: 'Active', className: 'bg-success/10 text-success' },
   suspended: { label: 'Suspended', className: 'bg-destructive/10 text-destructive' },
@@ -8,7 +9,7 @@ export const PARTNER_STATUS: Record<string, { label: string; className: string }
 
 export const apiError = (e: any, fallback: string): string => e?.response?.data?.message || fallback;
 
-export const money = (n?: number | null): string => `₹${Number(n || 0).toLocaleString()}`;
+export const money = (n?: number | null): string => `${CS()}${Number(n || 0).toLocaleString()}`;
 
 export const fmtDate = (d?: string | null): string => (d ? new Date(d).toLocaleDateString() : '—');
 

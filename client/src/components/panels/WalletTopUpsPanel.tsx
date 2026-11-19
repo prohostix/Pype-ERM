@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS } from '@/lib/currency';
 interface TopUp {
   id: string;
   studyCenterId: { name?: string } | string;
@@ -102,7 +103,7 @@ export function WalletTopUpsPanel() {
                   </div>
                   <h4 className="font-semibold">{getCenterName(t)}</h4>
                   <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                    <span>Amount: <strong className="text-foreground">₹{t.amount.toLocaleString()}</strong></span>
+                    <span>Amount: <strong className="text-foreground">{CS()}{t.amount.toLocaleString()}</strong></span>
                     {t.referenceNumber && <span>Ref: {t.referenceNumber}</span>}
                     <span>{new Date(t.createdAt).toLocaleDateString()}</span>
                   </div>

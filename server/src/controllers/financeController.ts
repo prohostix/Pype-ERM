@@ -671,7 +671,7 @@ const feeTotalsMismatch = (data: any): string | null => {
   );
   const base = (Number(data.registrationFee) || 0) + (Number(data.tuitionFee) || 0) + (Number(data.examFee) || 0);
   if (yearly > 0 && base > 0 && Math.abs(yearly - base) > 0.5) {
-    const fmt = (n: number) => '₹' + n.toLocaleString('en-IN');
+    const fmt = (n: number) => n.toLocaleString('en-IN');
     return `The yearly fee rows add up to ${fmt(yearly)} but the base fees add up to ${fmt(base)}. Make them match before saving (receipts and enrollment use the yearly rows).`;
   }
   return null;

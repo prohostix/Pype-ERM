@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS } from '@/lib/currency';
 export function PaymentRemindersPanel() {
   const [schedules, setSchedules] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -163,7 +164,7 @@ export function PaymentRemindersPanel() {
                     <div className="text-xs text-muted-foreground mt-0.5">{s.title}</div>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <div className="font-bold text-sm">₹{s.amount.toLocaleString()}</div>
+                    <div className="font-bold text-sm">{CS()}{s.amount.toLocaleString()}</div>
                     <div className="text-xs text-muted-foreground">{new Date(s.dueDate).toLocaleDateString('en-IN')}</div>
                     <div className="mt-1">{statusBadge(s)}</div>
                   </div>

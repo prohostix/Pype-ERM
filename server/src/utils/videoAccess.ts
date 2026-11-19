@@ -1,3 +1,4 @@
+import { findCurrency } from './currency.js';
 // Rules for online-center video access: fee-paid locking and the daily viewing quota.
 
 const IST_OFFSET_MS = 330 * 60000;
@@ -88,8 +89,10 @@ export function evaluateFeeLock(
   schedules: any[] = [],
   feeStructures: any[] = [],
   student?: any,
-  now: Date = new Date()
+  now: Date = new Date(),
+  currencyCode: string = 'INR'
 ) {
+  const cur = findCurrency(currencyCode);
   const unlocked = (minPaidPercentage = 0) => ({
     isFeeLocked: false,
     message: '',
@@ -119,11 +122,11 @@ export function evaluateFeeLock(
   const paidFee = Math.max(schedule.paid, invoice.paid);
   const paidPercentage = Math.min(100, Math.round((paidFee / totalFee) * 100));
 
-  const paid = paidFee.toLocaleString('en-IN');
-  const total = totalFee.toLocaleString('en-IN');
+  const paid = paidFee.toLocaleString(cur.locale);
+  const total = totalFee.toLocaleString(cur.locale);
   const customMessage = config.feeLocking.lockMessage?.trim();
   const build = (required: number, videoCount: number, fallback: string) => {
-    const text = customMessage || fallback;
+    const text = (customMessage || fallback).replace(/₹/g, cur.symbol);
     return text
       .replace(/{paidPercent}/g, String(paidPercentage))
       .replace(/{requiredPercent}/g, String(required))
@@ -146,8 +149,8 @@ export function evaluateFeeLock(
       required,
       videoQuota,
       videoQuota > 0
-        ? `You have paid ${paidPercentage}% of your total course fee (₹${paid} of ₹${total}), so you can watch the first ${videoQuota} videos. Pay at least ${required}% to unlock more.`
-        : `Video lectures are locked because you have paid ${paidPercentage}% of your total course fee (₹${paid} of ₹${total}). A minimum payment of ${required}% is required to unlock.`
+        ? `You have paid ${paidPercentage}% of your total course fee (${cur.symbol}${paid} of ${cur.symbol}${total}), so you can watch the first ${videoQuota} videos. Pay at least ${required}% to unlock more.`
+        : `Video lectures are locked because you have paid ${paidPercentage}% of your total course fee (${cur.symbol}${paid} of ${cur.symbol}${total}). A minimum payment of ${required}% is required to unlock.`
     );
     return { isFeeLocked: videoQuota === 0, message, totalFee, paidFee, paidPercentage, minPaidPercentage: required, videoQuota: videoQuota as number | null };
   }
@@ -159,7 +162,7 @@ export function evaluateFeeLock(
   const message = build(
     minPaidPercentage,
     0,
-    `Video lectures are locked because you have paid ${paidPercentage}% of your total course fee (₹${paid} of ₹${total}). A minimum payment of ${minPaidPercentage}% is required to unlock.`
+    `Video lectures are locked because you have paid ${paidPercentage}% of your total course fee (${cur.symbol}${paid} of ${cur.symbol}${total}). A minimum payment of ${minPaidPercentage}% is required to unlock.`
   );
 
   return { isFeeLocked: true, message, totalFee, paidFee, paidPercentage, minPaidPercentage, videoQuota: 0 as number | null };

@@ -88,6 +88,7 @@ import { toast } from 'sonner';
 import api from '@/lib/api';
 import { featuresOfOrg } from '@/lib/orgFeatures';
 
+import { CS } from '@/lib/currency';
 // Optional modules Superadmin can switch on per organization (Organizations → ⋮ → Manage Features).
 // To offer another one, add it here AND to TOGGLEABLE_FEATURES in the server's organizationController.
 const ORG_FEATURE_CATALOG: { key: string; label: string; description: string; icon: any }[] = [
@@ -1897,7 +1898,7 @@ export function OrganizationsPanel() {
                       <SelectItem value="unassigned">Unassigned (Default Tier)</SelectItem>
                       {availableLicenses.map((lic) => (
                         <SelectItem key={lic.id} value={lic.id}>
-                          {lic.name} {lic.price ? `(₹${lic.price.toLocaleString()})` : ''}
+                          {lic.name} {lic.price ? `(${CS()}${lic.price.toLocaleString()})` : ''}
                         </SelectItem>
                       ))}
                     </SelectContent>

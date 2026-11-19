@@ -972,3 +972,26 @@ export const updateStudentPortalConfig = asyncHandler(async (req: AuthRequest, r
   await prisma.organization.update({ where: { id: orgId }, data: { metadata: { ...existing, studentPortalConfig } } });
   res.status(200).json({ success: true, data: studentPortalConfig });
 });
+
+
+// ---- Organisation currency (display symbol only; amounts are never converted) ----
+import { CURRENCIES, findCurrency, getOrgCurrencyCode, clearCurrencyCache } from '../utils/currency.js';
+
+export const getOrgCurrency = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const code = await getOrgCurrencyCode(req.user.organizationId);
+  res.status(200).json({ success: true, data: { code, options: CURRENCIES } });
+});
+
+export const updateOrgCurrency = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const code = String(req.body?.code || '').toUpperCase();
+  if (!CURRENCIES.some((c) => c.code === code)) {
+    res.status(400).json({ success: false, message: 'Unsupported currency.' });
+    return;
+  }
+  const orgId = req.user.organizationId;
+  const org = await prisma.organization.findUnique({ where: { id: orgId }, select: { metadata: true } });
+  const existing = (org?.metadata as any) || {};
+  await prisma.organization.update({ where: { id: orgId }, data: { metadata: { ...existing, currency: { code } } } });
+  clearCurrencyCache(orgId);
+  res.status(200).json({ success: true, data: { code: findCurrency(code).code } });
+});

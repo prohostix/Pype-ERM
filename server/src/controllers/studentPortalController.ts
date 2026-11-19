@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler, asyncHandlerWithoutDeleteApproval } from '../utils/asyncHandler.js';
+import { getOrgCurrencyCode } from '../utils/currency.js';
 import {
   computeVideoProgress,
   evaluateFeeLock,
@@ -213,7 +214,7 @@ async function checkLessonAccessForStudent(student: any, moduleLessonId: string)
   const activeConfig = (org?.metadata as any)?.programAccessConfigs?.[student.programId];
 
   const [invoices, schedules, feeStructures] = await getStudentFeeRecords(student);
-  const feeStatus = evaluateFeeLock(activeConfig, invoices, schedules, feeStructures, student);
+  const feeStatus = evaluateFeeLock(activeConfig, invoices, schedules, feeStructures, student, new Date(), await getOrgCurrencyCode(student.organizationId));
   if (feeStatus.isFeeLocked) {
     return {
       allowed: false,
@@ -382,7 +383,7 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
   const programAccessConfig = (org?.metadata as any)?.programAccessConfigs?.[student.programId];
   const watchedLessonsToday = new Set(todayVideoLogs.map(l => l.moduleLessonId));
   const watchedCountToday = watchedLessonsToday.size;
-  const feeStatus = evaluateFeeLock(programAccessConfig, studentInvoices, studentSchedules, studentFeeStructures, student);
+  const feeStatus = evaluateFeeLock(programAccessConfig, studentInvoices, studentSchedules, studentFeeStructures, student, new Date(), await getOrgCurrencyCode(student.organizationId));
   const videoRank = rankVideoLessons(onlineClasses);
   const isBeyondFeeQuota = (lessonId: string) =>
     feeStatus.videoQuota !== null && (videoRank.get(lessonId) ?? Infinity) >= feeStatus.videoQuota;

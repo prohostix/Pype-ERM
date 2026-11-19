@@ -18,6 +18,7 @@ import {
 import { organizations, licenses, getDashboardMetrics } from '@/data/mockData';
 import type { Organization, License } from '@/types/erp';
 
+import { CS } from '@/lib/currency';
 interface SuperadminPanelProps {
   activeModule: string;
 }
@@ -46,7 +47,7 @@ export function SuperadminPanel({ activeModule }: SuperadminPanelProps) {
     )},
     { key: 'maxUsers', header: 'Max Users' },
     { key: 'maxStorage', header: 'Storage (GB)' },
-    { key: 'price', header: 'Price', render: (row: License) => `₹${row.price.toLocaleString()}` },
+    { key: 'price', header: 'Price', render: (row: License) => `${CS()}${row.price.toLocaleString()}` },
     { key: 'status', header: 'Status' },
   ];
 
@@ -76,7 +77,7 @@ export function SuperadminPanel({ activeModule }: SuperadminPanelProps) {
         />
         <MetricCard
           title="Total Revenue"
-          value={`₹${(metrics.totalRevenue || 0).toLocaleString()}`}
+          value={`${CS()}${(metrics.totalRevenue || 0).toLocaleString()}`}
           icon={TrendingUp}
           trend="up"
           trendValue="+15% this quarter"
@@ -111,7 +112,7 @@ export function SuperadminPanel({ activeModule }: SuperadminPanelProps) {
                     <p className="text-sm text-slate-500">{license.features.length} features</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">₹{license.price.toLocaleString()}</p>
+                    <p className="font-medium">{CS()}{license.price.toLocaleString()}</p>
                     <p className="text-sm text-slate-500">{license.durationMonths} months</p>
                   </div>
                 </div>
@@ -237,7 +238,7 @@ export function SuperadminPanel({ activeModule }: SuperadminPanelProps) {
                   <Input type="number" placeholder="12" />
                 </div>
                 <div className="space-y-2">
-                  <Label>Price (₹)</Label>
+                  <Label>Price ({CS()})</Label>
                   <Input type="number" placeholder="49999" />
                 </div>
               </div>

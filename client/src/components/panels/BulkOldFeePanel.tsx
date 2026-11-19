@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS } from '@/lib/currency';
 export function BulkOldFeePanel() {
   const [oldFees, setOldFees] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -177,7 +178,7 @@ export function BulkOldFeePanel() {
                       <tr key={i} className={`border-t ${!row._valid ? 'bg-rose-50/50 dark:bg-rose-900/10' : ''}`}>
                         <td className="px-3 py-2 text-muted-foreground">{i + 1}</td>
                         <td className="px-3 py-2 font-medium">{row.enrollmentNo}</td>
-                        <td className="px-3 py-2 font-bold text-orange-600">₹{(row.amount || 0).toLocaleString()}</td>
+                        <td className="px-3 py-2 font-bold text-orange-600">{CS()}{(row.amount || 0).toLocaleString()}</td>
                         <td className="px-3 py-2 truncate max-w-[180px]">{row.description}</td>
                         <td className="px-3 py-2">{row.dueDate}</td>
                         <td className="px-3 py-2">
@@ -217,7 +218,7 @@ export function BulkOldFeePanel() {
                     {f.student?.program?.name && <div className="text-xs text-muted-foreground">{f.student.program.name}</div>}
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-orange-600">₹{f.amount.toLocaleString()}</div>
+                    <div className="font-bold text-orange-600">{CS()}{f.amount.toLocaleString()}</div>
                     <Badge className={f.status === 'paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}>{f.status}</Badge>
                   </div>
                 </div>

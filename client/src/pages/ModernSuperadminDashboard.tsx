@@ -58,13 +58,15 @@ import { LicensesPanel } from '@/components/panels/LicensesPanel';
 import { InquiriesPanel } from '@/components/panels/InquiriesPanel';
 import { PlatformUsagePanel } from '@/components/panels/PlatformUsagePanel';
 
+import { CS, numLocale, compactMoney } from '@/lib/currency';
 // Helper to format Indian Currency (INR)
 const formatINR = (val: number) => {
-  if (!val && val !== 0) return '₹0';
-  if (val >= 10000000) return `₹${(val / 10000000).toFixed(2)} Cr`;
-  if (val >= 100000) return `₹${(val / 100000).toFixed(2)} L`;
-  if (val >= 1000) return `₹${(val / 1000).toFixed(1)}k`;
-  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);
+  if (!val && val !== 0) return `${CS()}0`;
+  if (numLocale() !== 'en-IN') return compactMoney(val, 2);
+  if (val >= 10000000) return `${CS()}${(val / 10000000).toFixed(2)} Cr`;
+  if (val >= 100000) return `${CS()}${(val / 100000).toFixed(2)} L`;
+  if (val >= 1000) return `${CS()}${(val / 1000).toFixed(1)}k`;
+  return `${CS()}${Number(val).toLocaleString(numLocale(), { maximumFractionDigits: 0 })}`;
 };
 
 // Time elapsed formatter for audit logs
@@ -530,7 +532,7 @@ function OverviewContent({
                     axisLine={false} 
                     tickLine={false} 
                     tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
-                    tickFormatter={(v) => v >= 100000 ? `${(v/100000).toFixed(1)}L` : `${v/1000}k`}
+                    tickFormatter={(v) => numLocale() !== 'en-IN' ? compactMoney(v, 1).replace(CS(), '') : (v >= 100000 ? `${(v/100000).toFixed(1)}L` : `${v/1000}k`)}
                   />
                   <Tooltip 
                     formatter={(val: any) => [formatINR(Number(val)), 'Total Collected']}
@@ -555,7 +557,7 @@ function OverviewContent({
             <div className="grid grid-cols-3 gap-3 pt-5 border-t border-border/40 text-center">
               <div className="p-3 sm:p-3.5 rounded-2xl bg-muted/40 border border-border/40">
                 <p className="text-[11px] text-muted-foreground uppercase font-semibold tracking-wider">Recent Month</p>
-                <p className="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400 mt-1">₹14.58 L</p>
+                <p className="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400 mt-1">{CS()}14.58 L</p>
               </div>
               <div className="p-3 sm:p-3.5 rounded-2xl bg-muted/40 border border-border/40">
                 <p className="text-[11px] text-muted-foreground uppercase font-semibold tracking-wider">Invoices Issued</p>

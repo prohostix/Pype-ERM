@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS } from '@/lib/currency';
 interface TeamMember {
   id: string;
   name: string;
@@ -97,11 +98,11 @@ export function TeamPerformancePanel() {
         <Card>
           <CardContent className="p-5 flex items-center gap-4">
             <div className="p-3 rounded-xl bg-success/10 text-success">
-              <span className="font-bold">₹</span>
+              <span className="font-bold">{CS()}</span>
             </div>
             <div>
               <p className="text-xs text-muted-foreground uppercase font-medium">Total Revenue</p>
-              <p className="text-2xl font-bold">{loading ? '...' : `₹${totalRevenue.toLocaleString()}`}</p>
+              <p className="text-2xl font-bold">{loading ? '...' : `${CS()}${totalRevenue.toLocaleString()}`}</p>
             </div>
           </CardContent>
         </Card>
@@ -180,7 +181,7 @@ export function TeamPerformancePanel() {
                     </div>
                     <div className="text-center">
                       <p className="text-xs text-muted-foreground">Revenue</p>
-                      <p className="font-bold text-lg text-success">₹{member.revenue.toLocaleString()}</p>
+                      <p className="font-bold text-lg text-success">{CS()}{member.revenue.toLocaleString()}</p>
                     </div>
                     <div className="text-center min-w-[100px]">
                       <p className="text-xs text-muted-foreground">Target ({member.targetTotal})</p>

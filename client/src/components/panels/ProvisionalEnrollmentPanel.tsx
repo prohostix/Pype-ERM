@@ -24,6 +24,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { shrinkImage, TARGET_MAX_BYTES } from '@/lib/uploadFile';
 
+import { CS, numLocale } from '@/lib/currency';
 export function ProvisionalEnrollmentPanel() {
   const [programs, setPrograms] = useState<any[]>([]);
   const [sessions, setSessions] = useState<any[]>([]);
@@ -415,21 +416,21 @@ export function ProvisionalEnrollmentPanel() {
                     <div className="bg-background/80 dark:bg-background/50 border rounded-lg p-2.5">
                       <span className="text-muted-foreground block text-[11px]">Registration Fee</span>
                       <span className="font-semibold text-sm text-foreground">
-                        ₹{regFee.toLocaleString('en-IN')}
+                        {CS()}{regFee.toLocaleString(numLocale())}
                       </span>
                     </div>
 
                     <div className="bg-background/80 dark:bg-background/50 border rounded-lg p-2.5">
                       <span className="text-muted-foreground block text-[11px]">Tuition Fee</span>
                       <span className="font-semibold text-sm text-foreground">
-                        ₹{tuitionFee.toLocaleString('en-IN')}
+                        {CS()}{tuitionFee.toLocaleString(numLocale())}
                       </span>
                     </div>
 
                     <div className="bg-background/80 dark:bg-background/50 border rounded-lg p-2.5">
                       <span className="text-muted-foreground block text-[11px]">Exam Fee</span>
                       <span className="font-semibold text-sm text-foreground">
-                        ₹{examFee.toLocaleString('en-IN')}
+                        {CS()}{examFee.toLocaleString(numLocale())}
                       </span>
                     </div>
                   </div>
@@ -437,14 +438,14 @@ export function ProvisionalEnrollmentPanel() {
                   {additionalFeesTotal > 0 && (
                     <div className="text-xs text-muted-foreground flex justify-between px-1">
                       <span>Additional charges / levies:</span>
-                      <span className="font-medium text-foreground">₹{additionalFeesTotal.toLocaleString('en-IN')}</span>
+                      <span className="font-medium text-foreground">{CS()}{additionalFeesTotal.toLocaleString(numLocale())}</span>
                     </div>
                   )}
 
                   <div className="flex items-center justify-between border-t border-primary/20 pt-2.5 px-1">
                     <span className="text-xs font-medium text-muted-foreground">Total Program Fee</span>
                     <span className="text-base font-bold text-emerald-600 dark:text-emerald-400">
-                      ₹{totalCourseFee.toLocaleString('en-IN')}
+                      {CS()}{totalCourseFee.toLocaleString(numLocale())}
                     </span>
                   </div>
                 </>
@@ -476,7 +477,7 @@ export function ProvisionalEnrollmentPanel() {
           {/* Initial Payment Amount with Fee Hint */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <Label>Initial Payment Amount (₹)</Label>
+              <Label>Initial Payment Amount ({CS()})</Label>
               {regFee > 0 && (
                 <button
                   type="button"
@@ -484,7 +485,7 @@ export function ProvisionalEnrollmentPanel() {
                   className="text-[11px] text-primary hover:underline font-medium inline-flex items-center gap-1"
                 >
                   <Sparkles className="w-3 h-3" />
-                  Set to Registration Fee (₹{regFee.toLocaleString('en-IN')})
+                  Set to Registration Fee ({CS()}{regFee.toLocaleString(numLocale())})
                 </button>
               )}
             </div>

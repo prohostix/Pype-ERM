@@ -60,6 +60,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 
+import { CS, numLocale } from '@/lib/currency';
 export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate }: { initialTab?: string; isSubDeptManager?: boolean; onNavigate?: (tab: string) => void }) {
   const { user } = useAuth();
   const isDeptSales = user?.department?.type === 'sales' || user?.department?.name?.toLowerCase().includes('sales');
@@ -712,13 +713,13 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">My Collection</p>
           <p className="text-2xl font-bold mt-1 text-success">
-            {loading ? '...' : `₹${actualCollection.toLocaleString('en-IN')}`}
+            {loading ? '...' : `${CS()}${actualCollection.toLocaleString(numLocale())}`}
           </p>
         </CardContent></Card>
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('targets')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">Expected Incentive</p>
           <p className="text-2xl font-bold mt-1 text-warning">
-            {loading ? '...' : `₹${expectedIncentive.toLocaleString('en-IN')}`}
+            {loading ? '...' : `${CS()}${expectedIncentive.toLocaleString(numLocale())}`}
           </p>
         </CardContent></Card>
       </div>
@@ -811,7 +812,7 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
                                 <span className="font-medium capitalize">{t.type} · {t.period}</span>
                                 {t.incentive > 0 && (
                                   <span className="text-[9px] bg-emerald-500/10 text-emerald-500 px-1.5 py-0.5 rounded-full font-bold">
-                                    Incentive: ₹{t.incentive.toLocaleString('en-IN')}
+                                    Incentive: {CS()}{t.incentive.toLocaleString(numLocale())}
                                   </span>
                                 )}
                               </div>
@@ -826,7 +827,7 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
                               ) : (
                                 <span>
                                   {t.type === 'revenue' ? (
-                                    `₹${remaining.toLocaleString('en-IN')} left to achieve`
+                                    `${CS()}${remaining.toLocaleString(numLocale())} left to achieve`
                                   ) : (
                                     `${remaining} ${t.type} left`
                                   )}

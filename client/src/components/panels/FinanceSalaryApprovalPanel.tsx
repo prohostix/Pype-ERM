@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS } from '@/lib/currency';
 interface SalaryConfig {
   id: string;
   user: { id: string; name: string; email: string; designation?: string; role: string; departmentId?: { name: string } };
@@ -202,25 +203,25 @@ export function FinanceSalaryApprovalPanel() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-5 gap-4 text-sm">
                         <div>
                           <p className="text-xs text-muted-foreground">Basic</p>
-                          <p className="font-semibold">₹{config.basicSalary.toLocaleString()}</p>
+                          <p className="font-semibold">{CS()}{config.basicSalary.toLocaleString()}</p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">HRA</p>
-                          <p className="font-semibold">₹{(config.allowances.hra || 0).toLocaleString()}</p>
+                          <p className="font-semibold">{CS()}{(config.allowances.hra || 0).toLocaleString()}</p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Gross</p>
-                          <p className="font-semibold text-blue-600">₹{grossAmt.toLocaleString()}</p>
+                          <p className="font-semibold text-blue-600">{CS()}{grossAmt.toLocaleString()}</p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Deductions</p>
                           <p className="font-semibold text-red-500">
-                            ₹{Object.values(config.deductions).reduce((s, v) => s + (v || 0), 0).toLocaleString()}
+                            {CS()}{Object.values(config.deductions).reduce((s, v) => s + (v || 0), 0).toLocaleString()}
                           </p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Net</p>
-                          <p className="font-semibold text-green-600">₹{netAmt.toLocaleString()}</p>
+                          <p className="font-semibold text-green-600">{CS()}{netAmt.toLocaleString()}</p>
                         </div>
                       </div>
 
@@ -283,8 +284,8 @@ export function FinanceSalaryApprovalPanel() {
           {detailConfig && (
             <div className="space-y-4 py-2 text-sm">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div><p className="text-xs text-muted-foreground">Basic Salary</p><p className="font-semibold">₹{detailConfig.basicSalary.toLocaleString()}</p></div>
-                <div><p className="text-xs text-muted-foreground">Late/min</p><p className="font-semibold">₹{detailConfig.lateDeductionPerMinute}</p></div>
+                <div><p className="text-xs text-muted-foreground">Basic Salary</p><p className="font-semibold">{CS()}{detailConfig.basicSalary.toLocaleString()}</p></div>
+                <div><p className="text-xs text-muted-foreground">Late/min</p><p className="font-semibold">{CS()}{detailConfig.lateDeductionPerMinute}</p></div>
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Allowances</p>
@@ -292,7 +293,7 @@ export function FinanceSalaryApprovalPanel() {
                   {Object.entries(detailConfig.allowances).map(([k, v]) => (
                     <div key={k} className="flex justify-between p-2 rounded-lg bg-muted/40">
                       <span className="capitalize text-muted-foreground">{k}</span>
-                      <span className="font-medium">₹{(v || 0).toLocaleString()}</span>
+                      <span className="font-medium">{CS()}{(v || 0).toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
@@ -303,15 +304,15 @@ export function FinanceSalaryApprovalPanel() {
                   {Object.entries(detailConfig.deductions).map(([k, v]) => (
                     <div key={k} className="flex justify-between p-2 rounded-lg bg-muted/40">
                       <span className="capitalize text-muted-foreground">{k}</span>
-                      <span className="font-medium text-red-500">₹{(v || 0).toLocaleString()}</span>
+                      <span className="font-medium text-red-500">{CS()}{(v || 0).toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-3 rounded-xl bg-muted/50 font-semibold">
-                <div><p className="text-xs text-muted-foreground">Gross</p><p className="text-blue-600">₹{gross(detailConfig).toLocaleString()}</p></div>
-                <div><p className="text-xs text-muted-foreground">Deductions</p><p className="text-red-500">₹{Object.values(detailConfig.deductions).reduce((s, v) => s + (v || 0), 0).toLocaleString()}</p></div>
-                <div><p className="text-xs text-muted-foreground">Net</p><p className="text-green-600">₹{net(detailConfig).toLocaleString()}</p></div>
+                <div><p className="text-xs text-muted-foreground">Gross</p><p className="text-blue-600">{CS()}{gross(detailConfig).toLocaleString()}</p></div>
+                <div><p className="text-xs text-muted-foreground">Deductions</p><p className="text-red-500">{CS()}{Object.values(detailConfig.deductions).reduce((s, v) => s + (v || 0), 0).toLocaleString()}</p></div>
+                <div><p className="text-xs text-muted-foreground">Net</p><p className="text-green-600">{CS()}{net(detailConfig).toLocaleString()}</p></div>
               </div>
             </div>
           )}

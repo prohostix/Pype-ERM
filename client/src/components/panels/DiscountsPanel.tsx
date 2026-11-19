@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { Tag, Plus, Loader2 } from 'lucide-react';
 import { api } from '../../lib/api';
 
+import { CS } from '@/lib/currency';
 interface StudentDiscount {
   id: string;
   name: string;
@@ -152,7 +153,7 @@ export function DiscountsPanel() {
                     <TableCell>{discount.enrollmentNo}</TableCell>
                     <TableCell>{discount.program?.name}</TableCell>
                     <TableCell className="font-semibold text-green-600">
-                      ₹{discount.discountAmount?.toLocaleString()}
+                      {CS()}{discount.discountAmount?.toLocaleString()}
                     </TableCell>
                     <TableCell>{discount.discountReason || '-'}</TableCell>
                   </TableRow>
@@ -225,7 +226,7 @@ export function DiscountsPanel() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Discount Amount (₹)</Label>
+              <Label>Discount Amount ({CS()})</Label>
               <Input 
                 type="number" 
                 min="0"

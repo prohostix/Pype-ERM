@@ -22,6 +22,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 
+import { CS, numLocale } from '@/lib/currency';
 export function CollectionsPanel() {
   const [loading, setLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(true);
@@ -157,7 +158,7 @@ export function CollectionsPanel() {
     try {
       await api.post(`/students/${sc.studentId}/notify`, {
         title: 'Outstanding Installment Reminder',
-        message: `Dear ${sc.student?.name || 'Student'},\n\nThis is a reminder regarding your scheduled payment of ₹${sc.amount.toLocaleString('en-IN')} which was due on ${new Date(sc.dueDate).toLocaleDateString('en-IN')}. Please complete the payment at the earliest.\n\nThank you,\nCollections Desk`,
+        message: `Dear ${sc.student?.name || 'Student'},\n\nThis is a reminder regarding your scheduled payment of ${CS()}${sc.amount.toLocaleString('en-IN')} which was due on ${new Date(sc.dueDate).toLocaleDateString('en-IN')}. Please complete the payment at the earliest.\n\nThank you,\nCollections Desk`,
         type: 'fee_reminder'
       });
       toast.success('Fee reminder system notification sent');
@@ -173,7 +174,7 @@ export function CollectionsPanel() {
       return;
     }
     const cleanPhone = phone.replace(/[^0-9]/g, '');
-    const message = `Hello ${sc.student?.name}, this is a reminder regarding your payment installment of ₹${sc.amount.toLocaleString('en-IN')} which was due on ${new Date(sc.dueDate).toLocaleDateString('en-IN')}. Please arrange to clear this amount. Thank you!`;
+    const message = `Hello ${sc.student?.name}, this is a reminder regarding your payment installment of ${CS()}${sc.amount.toLocaleString('en-IN')} which was due on ${new Date(sc.dueDate).toLocaleDateString('en-IN')}. Please arrange to clear this amount. Thank you!`;
     const url = `https://wa.me/${cleanPhone.startsWith('91') || cleanPhone.length > 10 ? cleanPhone : '91' + cleanPhone}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };
@@ -292,8 +293,8 @@ export function CollectionsPanel() {
                   <div>
                     <span className="text-[10px] uppercase font-bold text-primary tracking-wider block mb-1">Collection Target</span>
                     <div className="text-3xl font-extrabold text-foreground flex items-baseline gap-2">
-                      ₹{metrics?.targetStats?.achieved?.toLocaleString('en-IN') || 0} 
-                      <span className="text-sm font-semibold text-muted-foreground">/ ₹{metrics?.targetStats?.target?.toLocaleString('en-IN') || 50000}</span>
+                      {CS()}{metrics?.targetStats?.achieved?.toLocaleString(numLocale()) || 0} 
+                      <span className="text-sm font-semibold text-muted-foreground">/ {CS()}{metrics?.targetStats?.target?.toLocaleString(numLocale()) || 50000}</span>
                     </div>
                   </div>
                   <div className="flex-1 max-w-md w-full">
@@ -326,7 +327,7 @@ export function CollectionsPanel() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                    ₹{metrics?.todayCollectingStats?.collectedAmount?.toLocaleString('en-IN') || 0}
+                    {CS()}{metrics?.todayCollectingStats?.collectedAmount?.toLocaleString(numLocale()) || 0}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     {metrics?.todayCollectingStats?.collectedCount || 0} installments collected
@@ -346,7 +347,7 @@ export function CollectionsPanel() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-primary">
-                    ₹{metrics?.paymentPendingStats?.outstandingAmount?.toLocaleString('en-IN') || 0}
+                    {CS()}{metrics?.paymentPendingStats?.outstandingAmount?.toLocaleString(numLocale()) || 0}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     {metrics?.paymentPendingStats?.pendingSchedulesCount || 0} schedules awaiting payment
@@ -366,7 +367,7 @@ export function CollectionsPanel() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-amber-500">
-                    ₹{metrics?.upcomingStats?.dueAmount?.toLocaleString('en-IN') || 0}
+                    {CS()}{metrics?.upcomingStats?.dueAmount?.toLocaleString(numLocale()) || 0}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     {metrics?.upcomingStats?.dueCount || 0} upcoming installments
@@ -386,7 +387,7 @@ export function CollectionsPanel() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-destructive">
-                    ₹{metrics?.paymentPendingStats?.overdueAmount?.toLocaleString('en-IN') || 0}
+                    {CS()}{metrics?.paymentPendingStats?.overdueAmount?.toLocaleString(numLocale()) || 0}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 font-medium">
                     Critical attention required
@@ -407,7 +408,7 @@ export function CollectionsPanel() {
                       Settled Today
                     </div>
                     <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
-                      ₹{(metrics?.todayCollectingStats?.collectedAmount || 0).toLocaleString('en-IN')}
+                      {CS()}{(metrics?.todayCollectingStats?.collectedAmount || 0).toLocaleString(numLocale())}
                     </Badge>
                   </CardTitle>
                 </CardHeader>
@@ -435,7 +436,7 @@ export function CollectionsPanel() {
                               </div>
                             </div>
                             <div className="text-right">
-                              <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm block">₹{sc.amount.toLocaleString('en-IN')}</span>
+                              <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm block">{CS()}{sc.amount.toLocaleString(numLocale())}</span>
                               <Badge variant="secondary" className="text-[9px] h-4 px-1.5 mt-1">Settled</Badge>
                             </div>
                           </div>
@@ -455,7 +456,7 @@ export function CollectionsPanel() {
                       Due Today
                     </div>
                     <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/20">
-                      ₹{(metrics?.todayCollectingStats?.dueAmount || 0).toLocaleString('en-IN')}
+                      {CS()}{(metrics?.todayCollectingStats?.dueAmount || 0).toLocaleString(numLocale())}
                     </Badge>
                   </CardTitle>
                 </CardHeader>
@@ -483,7 +484,7 @@ export function CollectionsPanel() {
                               </div>
                             </div>
                             <div className="flex items-center justify-between sm:justify-end gap-4">
-                              <span className="font-bold text-amber-600 text-sm">₹{sc.amount.toLocaleString('en-IN')}</span>
+                              <span className="font-bold text-amber-600 text-sm">{CS()}{sc.amount.toLocaleString(numLocale())}</span>
                               <div className="flex gap-1.5 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                                 <Button variant="secondary" size="icon" className="w-8 h-8 rounded-full hover:bg-amber-500/10 hover:text-amber-600" onClick={() => handleSendNotification(sc)} title="System Reminder">
                                   <Bell className="w-3.5 h-3.5" />
@@ -536,7 +537,7 @@ export function CollectionsPanel() {
                               <span className="text-[10px] text-muted-foreground">{sc.student?.enrollmentNo}</span>
                             </td>
                             <td className="py-3 px-4">{sc.title}</td>
-                            <td className="py-3 px-4 font-semibold text-rose-500">₹{sc.amount.toLocaleString('en-IN')}</td>
+                            <td className="py-3 px-4 font-semibold text-rose-500">{CS()}{sc.amount.toLocaleString(numLocale())}</td>
                             <td className="py-3 px-4 text-destructive font-semibold">
                               {new Date(sc.dueDate).toLocaleDateString()}
                               <span className="text-[9px] uppercase font-bold text-destructive bg-destructive/10 px-1 rounded ml-1.5">Overdue</span>
@@ -570,7 +571,7 @@ export function CollectionsPanel() {
                               <span className="text-[10px] text-muted-foreground">{sc.student?.enrollmentNo}</span>
                             </td>
                             <td className="py-3 px-4">{sc.title}</td>
-                            <td className="py-3 px-4 font-semibold text-amber-600">₹{sc.amount.toLocaleString('en-IN')}</td>
+                            <td className="py-3 px-4 font-semibold text-amber-600">{CS()}{sc.amount.toLocaleString(numLocale())}</td>
                             <td className="py-3 px-4 font-medium text-amber-600">
                               {new Date(sc.dueDate).toLocaleDateString()}
                               <span className="text-[9px] uppercase font-bold text-amber-600 bg-amber-500/10 px-1 rounded ml-1.5">Upcoming</span>
@@ -601,7 +602,7 @@ export function CollectionsPanel() {
                               <span className="text-[10px] text-muted-foreground">{sc.student?.enrollmentNo}</span>
                             </td>
                             <td className="py-3 px-4">{sc.title}</td>
-                            <td className="py-3 px-4 font-semibold text-foreground">₹{sc.amount.toLocaleString('en-IN')}</td>
+                            <td className="py-3 px-4 font-semibold text-foreground">{CS()}{sc.amount.toLocaleString(numLocale())}</td>
                             <td className="py-3 px-4 text-muted-foreground">{new Date(sc.dueDate).toLocaleDateString()}</td>
                             <td className="py-3 px-4 text-xs text-muted-foreground truncate max-w-[150px]">{sc.remarks || '-'}</td>
                             <td className="py-3 px-4">
@@ -873,7 +874,7 @@ export function CollectionsPanel() {
             </div>
             <div>
               <Label>Due Milestone</Label>
-              <Input value={`${selectedSchedule?.title} (₹${selectedSchedule?.amount?.toLocaleString('en-IN')})`} disabled />
+              <Input value={`${selectedSchedule?.title} (${CS()}${selectedSchedule?.amount?.toLocaleString(numLocale())})`} disabled />
             </div>
             <div>
               <Label>Follow-up Remarks</Label>

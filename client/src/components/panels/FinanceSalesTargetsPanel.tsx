@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS } from '@/lib/currency';
 interface SalesUser {
   id: string;
   name: string;
@@ -309,7 +310,7 @@ export function FinanceSalesTargetsPanel() {
                         <span className="font-semibold text-sm">{t.employeeId?.name || 'Unknown'}</span>
                         <Badge variant="outline" className="text-[10px] uppercase">{TYPE_LABELS[t.type]}</Badge>
                         <Badge variant="outline" className="text-[10px]">{t.period}</Badge>
-                        {t.incentive ? <Badge variant="outline" className="text-[10px] text-success border-success/30">₹{t.incentive.toLocaleString()} incentive</Badge> : null}
+                        {t.incentive ? <Badge variant="outline" className="text-[10px] text-success border-success/30">{CS()}{t.incentive.toLocaleString()} incentive</Badge> : null}
                       </div>
                       <div className="flex items-center gap-3 mt-2">
                         <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">

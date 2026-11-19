@@ -47,6 +47,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { AcademicClassesPanel } from './AcademicClassesPanel';
 
+import { CS } from '@/lib/currency';
 export interface ProgramAccessConfig {
   dailyClassLimitEnabled: boolean;
   dailyClassLimit: number;
@@ -1118,8 +1119,8 @@ export function AcademicCentersPanel() {
                             {[
                               { token: '{paidPercent}', label: '% Paid' },
                               { token: '{requiredPercent}', label: '% Required' },
-                              { token: '{paidFee}', label: 'Paid Fee (₹)' },
-                              { token: '{totalFee}', label: 'Total Fee (₹)' }
+                              { token: '{paidFee}', label: `Paid Fee (${CS()})` },
+                              { token: '{totalFee}', label: `Total Fee (${CS()})` }
                             ].map(({ token, label }) => (
                               <button
                                 key={token}

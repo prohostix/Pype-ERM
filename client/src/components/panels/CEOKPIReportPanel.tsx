@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
+import { CS, numLocale, compactMoney } from '@/lib/currency';
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface KPI {
   id: string; title: string; description?: string; target: number; achieved: number; unit: string; period: string;
@@ -34,8 +35,8 @@ const STATUS: Record<string, { label: string; color: string; soft: string }> = {
 const pctOf = (k: KPI) => (k.target > 0 ? Math.min(100, Math.round((k.achieved / k.target) * 100)) : 0);
 const heat = (pct: number) => (pct >= 100 ? '#10b981' : pct >= 75 ? '#6366f1' : pct >= 50 ? '#f59e0b' : '#f43f5e');
 const initials = (name: string) => (name || '?').split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
-const money = (n: number) => (n >= 100000 ? `₹${(n / 100000).toFixed(2)} L` : `₹${Math.round(n).toLocaleString('en-IN')}`);
-const fmtVal = (k: KPI, v: number) => (k.unit === '₹' ? money(v) : `${v.toLocaleString('en-IN')}${k.unit && k.unit !== '₹' ? (k.unit === '%' ? '%' : ` ${k.unit}`) : ''}`);
+const money = (n: number) => (numLocale() !== 'en-IN' ? compactMoney(n, 2) : n >= 100000 ? `${CS()}${(n / 100000).toFixed(2)} L` : `${CS()}${Math.round(n).toLocaleString(numLocale())}`);
+const fmtVal = (k: KPI, v: number) => (k.unit === '₹' ? money(v) : `${v.toLocaleString(numLocale())}${k.unit && k.unit !== '₹' ? (k.unit === '%' ? '%' : ` ${k.unit}`) : ''}`);
 const monthKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 const CARD = 'rounded-3xl border-0 shadow-md ring-1 ring-border/60 py-6 gap-4';
 

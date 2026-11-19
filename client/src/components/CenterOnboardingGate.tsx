@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Clock, XCircle, Upload, CreditCard, Building2, AlertCircle } from 'lucide-react';
 
+import { CS } from '@/lib/currency';
 interface CenterStatus {
   centerId: string;
   centerName: string;
@@ -164,13 +165,13 @@ export function CenterOnboardingGate({ children }: Props) {
                           <tr key={u.id} className="border-t border-border">
                             <td className="p-3">{u.name} <span className="text-muted-foreground">({u.code})</span></td>
                             <td className="p-3 text-right">
-                              {u.fee !== null ? `₹${u.fee.toLocaleString()}` : <span className="text-muted-foreground">TBD</span>}
+                              {u.fee !== null ? `${CS()}${u.fee.toLocaleString()}` : <span className="text-muted-foreground">TBD</span>}
                             </td>
                           </tr>
                         ))}
                         <tr className="border-t border-border bg-muted/30 font-semibold">
                           <td className="p-3">Total</td>
-                          <td className="p-3 text-right">₹{(data?.totalFee || 0).toLocaleString()}</td>
+                          <td className="p-3 text-right">{CS()}{(data?.totalFee || 0).toLocaleString()}</td>
                         </tr>
                       </tbody>
                     </table>

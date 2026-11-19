@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS } from '@/lib/currency';
 interface WalletData {
   balance: number;
   studyCenterId: string;
@@ -97,7 +98,7 @@ export function StudyCenterWalletPanel() {
           <div>
             <p className="text-sm text-muted-foreground uppercase tracking-widest font-bold">Available Balance</p>
             <p className="text-4xl font-bold tracking-tight mt-1">
-              ₹{(wallet?.balance || 0).toLocaleString()}
+              {CS()}{(wallet?.balance || 0).toLocaleString()}
             </p>
           </div>
         </CardContent>
@@ -124,7 +125,7 @@ export function StudyCenterWalletPanel() {
                       </Badge>
                       <span className="text-xs text-muted-foreground">{t.paymentMethod}</span>
                     </div>
-                    <p className="text-sm font-semibold mt-1">₹{t.amount.toLocaleString()}</p>
+                    <p className="text-sm font-semibold mt-1">{CS()}{t.amount.toLocaleString()}</p>
                     {t.referenceNumber && <p className="text-xs text-muted-foreground">Ref: {t.referenceNumber}</p>}
                     {t.remarks && <p className="text-xs text-destructive mt-1">{t.remarks}</p>}
                   </div>
@@ -141,7 +142,7 @@ export function StudyCenterWalletPanel() {
           <DialogHeader><DialogTitle>Request Wallet Top-Up</DialogTitle></DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-1">
-              <Label>Amount (₹)</Label>
+              <Label>Amount ({CS()})</Label>
               <Input type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))} placeholder="e.g. 10000" />
             </div>
             <div className="space-y-1">

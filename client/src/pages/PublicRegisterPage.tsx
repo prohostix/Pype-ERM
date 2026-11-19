@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import axios from 'axios';
 
+import { CS } from '@/lib/currency';
 const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
 
 interface University { id: string; name: string; code: string; }
@@ -284,7 +285,7 @@ export default function PublicRegisterPage() {
                 <div key={u.id} className="flex items-center justify-between text-sm py-1">
                   <span>{u.name} <span className="text-muted-foreground">({u.code})</span></span>
                   {u.fee !== null ? (
-                    <span className="font-semibold">₹{u.fee.toLocaleString()}</span>
+                    <span className="font-semibold">{CS()}{u.fee.toLocaleString()}</span>
                   ) : (
                     <Badge variant="destructive" className="text-[10px]">Fee not configured</Badge>
                   )}
@@ -292,7 +293,7 @@ export default function PublicRegisterPage() {
               ))}
               <div className="flex items-center justify-between font-bold text-base pt-2 border-t border-border">
                 <span>Total</span>
-                <span>₹{paymentStatus.totalFee.toLocaleString()}</span>
+                <span>{CS()}{paymentStatus.totalFee.toLocaleString()}</span>
               </div>
             </CardContent>
           </Card>

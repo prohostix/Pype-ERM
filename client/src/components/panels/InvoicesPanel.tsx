@@ -13,6 +13,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import html2pdf from 'html2pdf.js';
 
+import { CS, numLocale } from '@/lib/currency';
 function numberToWords(amount: number): string {
   if (amount === 0) return 'Zero Rs. Only';
   
@@ -227,7 +228,7 @@ function ProformaReceiptDocument({ receipt, orgName }: { receipt: any; orgName: 
               </th>
               {hasPartnerStudents && <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Course / Program</th>}
               {hasPartnerStudents && <th style={{ padding: '10px 14px', textAlign: 'center', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '120px' }}>Enrolled Date</th>}
-              <th style={{ padding: '10px 14px', textAlign: 'right', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '150px' }}>Amount (₹)</th>
+              <th style={{ padding: '10px 14px', textAlign: 'right', fontSize: '11px', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', width: '150px' }}>Amount ({CS()})</th>
             </tr>
           </thead>
           <tbody>
@@ -240,20 +241,20 @@ function ProformaReceiptDocument({ receipt, orgName }: { receipt: any; orgName: 
                 </td>
                 {hasPartnerStudents && <td style={{ padding: '10px 14px', fontSize: '13px', color: '#334155' }}>{item.programName || '—'}</td>}
                 {hasPartnerStudents && <td style={{ padding: '10px 14px', fontSize: '12px', color: '#64748b', textAlign: 'center' }}>{item.date || '—'}</td>}
-                <td style={{ padding: '10px 14px', textAlign: 'right', fontSize: '13px', color: '#0f172a', fontWeight: 700 }}>{(item.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                <td style={{ padding: '10px 14px', textAlign: 'right', fontSize: '13px', color: '#0f172a', fontWeight: 700 }}>{(item.amount || 0).toLocaleString(numLocale(), { minimumFractionDigits: 2 })}</td>
               </tr>
             ))}
             {Boolean(receipt.tax && Number(receipt.tax) > 0) && (
               <tr style={{ background: '#f8fafc', borderTop: '1px solid #e2e8f0' }}>
                 <td colSpan={hasPartnerStudents ? 4 : 2} style={{ padding: '8px 14px', fontSize: '13px', color: '#475569', fontWeight: 600, textAlign: 'right' }}>Tax / GST:</td>
-                <td style={{ padding: '8px 14px', textAlign: 'right', fontSize: '13px', color: '#475569', fontWeight: 700 }}>₹{Number(receipt.tax).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                <td style={{ padding: '8px 14px', textAlign: 'right', fontSize: '13px', color: '#475569', fontWeight: 700 }}>{CS()}{Number(receipt.tax).toLocaleString(numLocale(), { minimumFractionDigits: 2 })}</td>
               </tr>
             )}
             <tr style={{ background: '#eff6ff', borderTop: '2px solid #2563eb' }}>
               <td colSpan={hasPartnerStudents ? 4 : 2} style={{ padding: '12px 14px', fontSize: '13px', color: '#1e40af', fontWeight: 800, textAlign: 'right', textTransform: 'uppercase' }}>
                 Total Amount {hasPartnerStudents ? `(${receipt.items?.length || 0} Students)` : ''}
               </td>
-              <td style={{ padding: '12px 14px', textAlign: 'right', fontSize: '16px', color: '#1e40af', fontWeight: 900 }}>₹{(receipt.total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              <td style={{ padding: '12px 14px', textAlign: 'right', fontSize: '16px', color: '#1e40af', fontWeight: 900 }}>{CS()}{(receipt.total || 0).toLocaleString(numLocale(), { minimumFractionDigits: 2 })}</td>
             </tr>
           </tbody>
         </table>
@@ -273,15 +274,15 @@ function ProformaReceiptDocument({ receipt, orgName }: { receipt: any; orgName: 
           <div style={{ width: '320px', background: '#f8fafc', padding: '16px 20px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px dashed #cbd5e1' }}>
               <span style={{ fontSize: '13px', color: '#475569', fontWeight: 600 }}>Subtotal</span>
-              <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 700 }}>₹{((receipt.amount ?? receipt.total) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+              <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 700 }}>{CS()}{((receipt.amount ?? receipt.total) || 0).toLocaleString(numLocale(), { minimumFractionDigits: 2 })}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px dashed #cbd5e1' }}>
               <span style={{ fontSize: '13px', color: '#475569', fontWeight: 600 }}>Tax / GST</span>
-              <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 700 }}>₹{(Number(receipt.tax) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+              <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 700 }}>{CS()}{(Number(receipt.tax) || 0).toLocaleString(numLocale(), { minimumFractionDigits: 2 })}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '14px', color: '#1e40af', fontWeight: 800, textTransform: 'uppercase' }}>Grand Total</span>
-              <span style={{ fontSize: '18px', color: '#1e40af', fontWeight: 900 }}>₹{(receipt.total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+              <span style={{ fontSize: '18px', color: '#1e40af', fontWeight: 900 }}>{CS()}{(receipt.total || 0).toLocaleString(numLocale(), { minimumFractionDigits: 2 })}</span>
             </div>
           </div>
         </div>
@@ -298,15 +299,15 @@ function ProformaReceiptDocument({ receipt, orgName }: { receipt: any; orgName: 
           <div style={{ width: '340px', background: '#fdf8f6', padding: '20px', borderRadius: '8px', border: '1px solid #fed7aa' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px dashed #fdba74' }}>
               <span style={{ fontSize: '13px', color: '#c2410c', fontWeight: 600 }}>Total Fee</span>
-              <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>{receipt.feeStructureMissing ? 'Fee not set up' : `₹${totalFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
+              <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 700 }}>{receipt.feeStructureMissing ? 'Fee not set up' : `${CS()}${totalFeeAmount.toLocaleString(numLocale(), { minimumFractionDigits: 2 })}`}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px dashed #fdba74' }}>
               <span style={{ fontSize: '13px', color: '#16a34a', fontWeight: 600 }}>Total Remitted Fee</span>
-              <span style={{ fontSize: '14px', color: '#16a34a', fontWeight: 700 }}>₹{totalRemittedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+              <span style={{ fontSize: '14px', color: '#16a34a', fontWeight: 700 }}>{CS()}{totalRemittedAmount.toLocaleString(numLocale(), { minimumFractionDigits: 2 })}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '14px', color: '#0f172a', fontWeight: 800, textTransform: 'uppercase' }}>Balance Fee</span>
-              <span style={{ fontSize: '18px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>{receipt.feeStructureMissing ? '—' : `₹${balanceFeeAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}</span>
+              <span style={{ fontSize: '18px', color: balanceFeeAmount <= 0 ? '#16a34a' : '#ef4444', fontWeight: 900 }}>{receipt.feeStructureMissing ? '—' : `${CS()}${balanceFeeAmount.toLocaleString(numLocale(), { minimumFractionDigits: 2 })}`}</span>
             </div>
           </div>
         </div>
@@ -995,7 +996,7 @@ export function InvoicesPanel() {
                             <div className="flex items-center gap-6 pr-2">
                               <span className="hidden sm:inline-block w-48 text-left">Course / Program</span>
                               <span className="hidden sm:inline-block w-28 text-center">Enrolled Date</span>
-                              <span className="w-28 text-right">Fee (₹)</span>
+                              <span className="w-28 text-right">Fee ({CS()})</span>
                             </div>
                           </div>
 
@@ -1050,7 +1051,7 @@ export function InvoicesPanel() {
                                       {dateStr}
                                     </div>
                                     <div className="w-28 text-right font-semibold text-foreground">
-                                      ₹{fee.toLocaleString('en-IN')}
+                                      {CS()}{fee.toLocaleString(numLocale())}
                                     </div>
                                   </div>
                                 </div>
@@ -1090,7 +1091,7 @@ export function InvoicesPanel() {
                           )}
                         </div>
                         <div className="font-semibold text-primary">
-                          Subtotal: ₹{partnerItemsSubtotal.toLocaleString('en-IN')}
+                          Subtotal: {CS()}{partnerItemsSubtotal.toLocaleString(numLocale())}
                         </div>
                       </div>
 
@@ -1099,7 +1100,7 @@ export function InvoicesPanel() {
                           <span>
                             ✓ <strong>{selectedStudentIds.length} enrolled students</strong> selected. An itemized line item will be created for each student in the invoice.
                           </span>
-                          <span className="font-bold">Total: ₹{partnerItemsSubtotal.toLocaleString('en-IN')}</span>
+                          <span className="font-bold">Total: {CS()}{partnerItemsSubtotal.toLocaleString(numLocale())}</span>
                         </div>
                       )}
                     </div>
@@ -1250,7 +1251,7 @@ export function InvoicesPanel() {
                       </div>
                     )}
                     <div>
-                      <Label>Rate (₹)</Label>
+                      <Label>Rate ({CS()})</Label>
                       <Input type="number" min="0" value={formData.itemRate} onChange={(e) => setFormData({ ...formData, itemRate: e.target.value })} required />
                     </div>
                   </div>
@@ -1259,7 +1260,7 @@ export function InvoicesPanel() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label>Tax / GST (₹)</Label>
+                  <Label>Tax / GST ({CS()})</Label>
                   <Input type="number" min="0" value={formData.tax} onChange={(e) => setFormData({ ...formData, tax: e.target.value })} />
                 </div>
                 <div>
@@ -1309,7 +1310,7 @@ export function InvoicesPanel() {
                       <div>
                         <div className="font-medium">{inv.invoiceNo}</div>
                         <div className="text-sm text-muted-foreground">
-                          {billingDisplay} • Total: ₹{Number(inv.total || 0).toLocaleString('en-IN')}
+                          {billingDisplay} • Total: {CS()}{Number(inv.total || 0).toLocaleString(numLocale())}
                           {inv.dueDate && ` • Due: ${new Date(inv.dueDate).toLocaleDateString()}`}
                         </div>
                       </div>

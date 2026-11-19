@@ -11,6 +11,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 
+import { CS, numLocale } from '@/lib/currency';
 interface TargetsPanelProps {
   endpoint: string; // '/finance/targets' or '/sales/targets'
   title?: string;
@@ -213,7 +214,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                 </div>
               </div>
               <div>
-                <Label>Incentive Amount (₹, optional)</Label>
+                <Label>Incentive Amount ({CS()}, optional)</Label>
                 <Input type="number" min="0" value={formData.incentive} onChange={(e) => setFormData({ ...formData, incentive: e.target.value })} placeholder="e.g. 5000" />
               </div>
               <div className="flex gap-2">
@@ -263,12 +264,12 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                     <div className="space-y-1.5">
                       <div className="flex justify-between text-sm items-center">
                         <span className="font-semibold text-slate-300">
-                          {t.type === 'revenue' ? `₹${(t.achieved || 0).toLocaleString('en-IN')}` : t.achieved || 0} / {t.type === 'revenue' ? `₹${(t.target).toLocaleString('en-IN')}` : t.target}
+                          {t.type === 'revenue' ? `${CS()}${(t.achieved || 0).toLocaleString(numLocale())}` : t.achieved || 0} / {t.type === 'revenue' ? `${CS()}${(t.target).toLocaleString(numLocale())}` : t.target}
                         </span>
                         <div className="text-right flex items-center gap-2">
                           {t.incentive > 0 && (
                             <span className="text-xs bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full font-bold">
-                              Incentive: ₹{t.incentive.toLocaleString('en-IN')}
+                              Incentive: {CS()}{t.incentive.toLocaleString(numLocale())}
                             </span>
                           )}
                           <span className="font-bold text-foreground">{pct.toFixed(1)}%</span>
@@ -281,7 +282,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                         ) : (
                           <span>
                             {t.type === 'revenue' ? (
-                              `₹${Math.max(0, t.target - t.achieved).toLocaleString('en-IN')} left to complete`
+                              `${CS()}${Math.max(0, t.target - t.achieved).toLocaleString(numLocale())} left to complete`
                             ) : (
                               `${Math.max(0, t.target - t.achieved)} ${t.type} left to complete`
                             )}

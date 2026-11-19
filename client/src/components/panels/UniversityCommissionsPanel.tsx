@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+import { CS, numLocale } from '@/lib/currency';
 interface CommissionRecord {
   id: string;
   amountReceived: number;
@@ -184,7 +185,7 @@ export function UniversityCommissionsPanel() {
           <CardContent className="p-5 flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground uppercase font-semibold">Total Expected Commission</p>
-              <p className="text-2xl font-bold mt-1">₹{stats.expected.toLocaleString('en-IN')}</p>
+              <p className="text-2xl font-bold mt-1">{CS()}{stats.expected.toLocaleString(numLocale())}</p>
             </div>
             <div className="p-3 bg-primary/10 rounded-full text-primary">
               <Landmark className="w-6 h-6" />
@@ -196,7 +197,7 @@ export function UniversityCommissionsPanel() {
           <CardContent className="p-5 flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground uppercase font-semibold">Total Received Commission</p>
-              <p className="text-2xl font-bold mt-1 text-emerald-500">₹{stats.received.toLocaleString('en-IN')}</p>
+              <p className="text-2xl font-bold mt-1 text-emerald-500">{CS()}{stats.received.toLocaleString(numLocale())}</p>
             </div>
             <div className="p-3 bg-emerald-500/10 rounded-full text-emerald-500">
               <CheckCircle2 className="w-6 h-6" />
@@ -208,7 +209,7 @@ export function UniversityCommissionsPanel() {
           <CardContent className="p-5 flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground uppercase font-semibold">Total Outstanding Balance</p>
-              <p className="text-2xl font-bold mt-1 text-amber-500">₹{stats.pending.toLocaleString('en-IN')}</p>
+              <p className="text-2xl font-bold mt-1 text-amber-500">{CS()}{stats.pending.toLocaleString(numLocale())}</p>
             </div>
             <div className="p-3 bg-amber-500/10 rounded-full text-amber-500">
               <AlertCircle className="w-6 h-6" />
@@ -281,11 +282,11 @@ export function UniversityCommissionsPanel() {
                             </div>
                           </div>
                         </td>
-                        <td className="p-3 text-right">₹{totalUniversityFee.toLocaleString('en-IN')}</td>
+                        <td className="p-3 text-right">{CS()}{totalUniversityFee.toLocaleString(numLocale())}</td>
                         <td className="p-3 text-right">{baseCommissionRate}%</td>
-                        <td className="p-3 text-right font-bold text-primary">₹{expectedCommission.toLocaleString('en-IN')}</td>
-                        <td className="p-3 text-right text-emerald-500 font-medium">₹{received.toLocaleString('en-IN')}</td>
-                        <td className="p-3 text-right text-amber-500 font-semibold">₹{balance.toLocaleString('en-IN')}</td>
+                        <td className="p-3 text-right font-bold text-primary">{CS()}{expectedCommission.toLocaleString(numLocale())}</td>
+                        <td className="p-3 text-right text-emerald-500 font-medium">{CS()}{received.toLocaleString(numLocale())}</td>
+                        <td className="p-3 text-right text-amber-500 font-semibold">{CS()}{balance.toLocaleString(numLocale())}</td>
                         <td className="p-3">
                           <Badge variant="outline" className={statusColor}>{statusLabel}</Badge>
                         </td>
@@ -320,13 +321,13 @@ export function UniversityCommissionsPanel() {
             return (
               <form onSubmit={handleSubmit} className="space-y-4 pt-2">
                 <div className="p-3 rounded-lg bg-muted/40 space-y-1">
-                  <p className="text-xs text-muted-foreground">Expected Commission: <span className="font-bold text-foreground">₹{expectedCommission.toLocaleString('en-IN')}</span></p>
-                  <p className="text-xs text-muted-foreground">Already Received: <span className="font-bold text-emerald-500">₹{received.toLocaleString('en-IN')}</span></p>
-                  <p className="text-xs text-muted-foreground">Remaining Balance: <span className="font-bold text-amber-500">₹{balance.toLocaleString('en-IN')}</span></p>
+                  <p className="text-xs text-muted-foreground">Expected Commission: <span className="font-bold text-foreground">{CS()}{expectedCommission.toLocaleString(numLocale())}</span></p>
+                  <p className="text-xs text-muted-foreground">Already Received: <span className="font-bold text-emerald-500">{CS()}{received.toLocaleString(numLocale())}</span></p>
+                  <p className="text-xs text-muted-foreground">Remaining Balance: <span className="font-bold text-amber-500">{CS()}{balance.toLocaleString(numLocale())}</span></p>
                 </div>
 
                 <div className="space-y-1">
-                  <Label>Amount Received (₹)</Label>
+                  <Label>Amount Received ({CS()})</Label>
                   <Input
                     type="number"
                     min="1"

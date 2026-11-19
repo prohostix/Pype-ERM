@@ -71,6 +71,7 @@ import ReactPlayer from 'react-player';
 import { Slider } from '@/components/ui/slider';
 import { CustomYouTubePlayer, type YouTubePlayerControl } from '@/components/CustomYouTubePlayer';
 
+import { CS, numLocale } from '@/lib/currency';
 interface StudentPortalProps {
   onNavigate?: (tab: string) => void;
   initialTab?: string;
@@ -715,7 +716,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
             <td style="padding: 8px; border-bottom: 1px solid #eee;">${new Date(p.paymentDate).toLocaleDateString()}</td>
             <td style="padding: 8px; border-bottom: 1px solid #eee;">${p.transactionId || 'N/A'}</td>
             <td style="padding: 8px; border-bottom: 1px solid #eee; text-transform: uppercase;">${p.paymentMethod}</td>
-            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">₹${p.amount}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">${CS()}${p.amount}</td>
           </tr>
         `).join('')
       : '<tr><td colspan="4" style="padding: 8px; text-align: center; color: #888;">No payments received yet</td></tr>';
@@ -782,9 +783,9 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
             <tbody>
               <tr>
                 <td>Program Fee Installment / Service Fee</td>
-                <td style="text-align: right;">₹${invoice.amount}</td>
-                <td style="text-align: right;">₹${invoice.paidAmount}</td>
-                <td style="text-align: right;">₹${invoice.balanceAmount}</td>
+                <td style="text-align: right;">${CS()}${invoice.amount}</td>
+                <td style="text-align: right;">${CS()}${invoice.paidAmount}</td>
+                <td style="text-align: right;">${CS()}${invoice.balanceAmount}</td>
               </tr>
             </tbody>
           </table>
@@ -808,15 +809,15 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
             <table>
               <tr>
                 <td><strong>Subtotal:</strong></td>
-                <td style="text-align: right;">₹${invoice.amount}</td>
+                <td style="text-align: right;">${CS()}${invoice.amount}</td>
               </tr>
               <tr>
                 <td><strong>Total Paid:</strong></td>
-                <td style="text-align: right;">₹${invoice.paidAmount}</td>
+                <td style="text-align: right;">${CS()}${invoice.paidAmount}</td>
               </tr>
               <tr style="border-top: 2px solid #5a67d8; font-size: 18px; font-weight: bold;">
                 <td style="padding-top: 10px;">Balance Due:</td>
-                <td style="text-align: right; padding-top: 10px; color: ${invoice.balanceAmount > 0 ? '#e53e3e' : '#2f855a'};">₹${invoice.balanceAmount}</td>
+                <td style="text-align: right; padding-top: 10px; color: ${invoice.balanceAmount > 0 ? '#e53e3e' : '#2f855a'};">${CS()}${invoice.balanceAmount}</td>
               </tr>
             </table>
           </div>
@@ -924,7 +925,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                 {isOverdue ? "Overdue Payment Notice" : "Upcoming Payment Reminder"}
               </span>
               <span className="text-xs opacity-90">
-                Installment of <strong>₹{nextPayment.balanceAmount ?? nextPayment.amount}</strong> is due on <strong>{new Date(nextPayment.dueDate).toLocaleDateString()}</strong>.
+                Installment of <strong>{CS()}{nextPayment.balanceAmount ?? nextPayment.amount}</strong> is due on <strong>{new Date(nextPayment.dueDate).toLocaleDateString()}</strong>.
               </span>
             </div>
           </div>
@@ -990,7 +991,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
               <div className="text-center md:text-right border-r border-white/10 pr-6">
                 <span className="text-[10px] uppercase font-bold text-indigo-300 tracking-widest block mb-1">Total Due</span>
                 <span className="text-3xl font-black text-white flex items-center justify-center md:justify-end gap-1">
-                  <span className="text-indigo-400 text-xl">₹</span>{totalDueAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  <span className="text-indigo-400 text-xl">{CS()}</span>{totalDueAmount.toLocaleString(numLocale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
               <div className="text-center md:text-right pl-2">
@@ -1135,7 +1136,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                           <CreditCard className="w-24 h-24 text-emerald-500 transform rotate-12" />
                         </div>
                         <span className="relative z-10 text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest">Next Installment</span>
-                        <div className="relative z-10 text-5xl font-black text-emerald-600 dark:text-emerald-400 mt-2 tracking-tight">₹{nextPayment.balanceAmount ?? nextPayment.amount}</div>
+                        <div className="relative z-10 text-5xl font-black text-emerald-600 dark:text-emerald-400 mt-2 tracking-tight">{CS()}{nextPayment.balanceAmount ?? nextPayment.amount}</div>
                       </div>
                       <div className="flex items-center justify-between text-sm px-4 py-3 bg-white/50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
                         <span className="font-bold text-slate-500 dark:text-slate-400">{nextPayment.title || 'Due Date'}</span>
@@ -1146,7 +1147,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                       {Number(nextPayment.paidAmount) > 0 && (
                         <div className="flex items-center justify-between text-xs px-4 text-slate-500 dark:text-slate-400">
                           <span className="font-semibold">Paid so far</span>
-                          <span className="font-bold text-emerald-600 dark:text-emerald-400">₹{nextPayment.paidAmount} of ₹{nextPayment.amount}</span>
+                          <span className="font-bold text-emerald-600 dark:text-emerald-400">{CS()}{nextPayment.paidAmount} of {CS()}{nextPayment.amount}</span>
                         </div>
                       )}
 
@@ -1161,7 +1162,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                   <p className="text-sm font-bold text-slate-700 dark:text-slate-200 truncate">{sch.title || 'Installment'}</p>
                                   <p className="text-xs text-slate-500">{new Date(sch.dueDate).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}</p>
                                 </div>
-                                <span className="font-extrabold text-emerald-700 dark:text-emerald-400 shrink-0">₹{sch.balanceAmount ?? sch.amount}</span>
+                                <span className="font-extrabold text-emerald-700 dark:text-emerald-400 shrink-0">{CS()}{sch.balanceAmount ?? sch.amount}</span>
                               </div>
                             ))}
                           </div>
@@ -1184,7 +1185,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                       </div>
                       {nothingBilled ? (
                         <>
-                          <h4 className="text-2xl font-black text-amber-600 dark:text-amber-400 mb-2">₹{unbilledAmount.toLocaleString('en-IN')} due</h4>
+                          <h4 className="text-2xl font-black text-amber-600 dark:text-amber-400 mb-2">{CS()}{unbilledAmount.toLocaleString(numLocale())} due</h4>
                           <p className="text-sm font-medium text-slate-500">Part of your course fee has not been billed yet. See the Fees tab, or contact the office for your installment plan.</p>
                         </>
                       ) : (
@@ -1887,8 +1888,8 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                   />
                                 </div>
                                 <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-1.5">
-                                  <span>Paid: ₹{Number(selectedCurriculumLesson.lesson.paidFee || 0).toLocaleString('en-IN')}</span>
-                                  <span>Total: ₹{Number(selectedCurriculumLesson.lesson.totalFee || 0).toLocaleString('en-IN')}</span>
+                                  <span>Paid: {CS()}{Number(selectedCurriculumLesson.lesson.paidFee || 0).toLocaleString(numLocale())}</span>
+                                  <span>Total: {CS()}{Number(selectedCurriculumLesson.lesson.totalFee || 0).toLocaleString(numLocale())}</span>
                                 </div>
                               </div>
                             )}
@@ -2765,7 +2766,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
             {feeStructures.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {feeStructures.map((structure) => {
-                  const inr = (n: number) => `₹${Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                  const inr = (n: number) => `${CS()}${Number(n).toLocaleString(numLocale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                   const additionalFees: { label: string; amount: number }[] = Array.isArray(structure.additionalFees)
                     ? structure.additionalFees.filter((f: any) => f && Number(f.amount) > 0)
                     : [];
@@ -2866,12 +2867,12 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                               <div className="flex items-center gap-8 text-sm bg-muted/40 px-4 py-2.5 rounded-lg border border-border/50">
                                 <div>
                                   <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold block mb-0.5">Total Amount</span>
-                                  <span className="font-semibold text-foreground">₹{sched.amount}</span>
+                                  <span className="font-semibold text-foreground">{CS()}{sched.amount}</span>
                                 </div>
                                 {sched.status !== 'PAID' && (
                                   <div>
                                     <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold block mb-0.5">Remaining Balance</span>
-                                    <span className="font-bold text-foreground">₹{sched.balanceAmount !== undefined ? sched.balanceAmount : sched.amount}</span>
+                                    <span className="font-bold text-foreground">{CS()}{sched.balanceAmount !== undefined ? sched.balanceAmount : sched.amount}</span>
                                   </div>
                                 )}
                               </div>
@@ -2884,7 +2885,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                 variant={isSchedOverdue ? "destructive" : "default"}
                                 onClick={() => handlePayNowClick(sched)}
                               >
-                                Pay ₹{sched.balanceAmount !== undefined ? sched.balanceAmount : sched.amount}
+                                Pay {CS()}{sched.balanceAmount !== undefined ? sched.balanceAmount : sched.amount}
                               </Button>
                             )}
                             {sched.status === 'PAID' && (
@@ -2972,12 +2973,12 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                               <div className="flex items-center gap-8 text-sm bg-muted/40 px-4 py-2.5 rounded-lg border border-border/50">
                                 <div>
                                   <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold block mb-0.5">Total Amount</span>
-                                  <span className="font-semibold text-foreground">₹{inv.amount}</span>
+                                  <span className="font-semibold text-foreground">{CS()}{inv.amount}</span>
                                 </div>
                                 {!isFullyPaid && (
                                   <div>
                                     <span className="text-muted-foreground text-[10px] uppercase tracking-widest font-bold block mb-0.5">Remaining Balance</span>
-                                    <span className="font-bold text-destructive">₹{inv.balanceAmount}</span>
+                                    <span className="font-bold text-destructive">{CS()}{inv.balanceAmount}</span>
                                   </div>
                                 )}
                               </div>
@@ -2999,7 +3000,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                 variant="premium"
                                 onClick={() => handlePayNowClick(inv)}
                               >
-                                Pay ₹{inv.balanceAmount}
+                                Pay {CS()}{inv.balanceAmount}
                               </Button>
                             ) : (
                               <Button
@@ -3357,7 +3358,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-muted-foreground block mb-1">Amount to Pay (₹)</label>
+                <label className="text-xs font-semibold text-muted-foreground block mb-1">Amount to Pay ({CS()})</label>
                 <input
                   type="number"
                   value={paymentAmount}
@@ -3366,7 +3367,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                   placeholder="Enter amount"
                 />
                 <span className="text-[10px] text-muted-foreground block mt-1">
-                  Remaining Balance: ₹{showPaymentGateway.balanceAmount ?? showPaymentGateway.amount}
+                  Remaining Balance: {CS()}{showPaymentGateway.balanceAmount ?? showPaymentGateway.amount}
                 </span>
               </div>
             </div>

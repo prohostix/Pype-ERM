@@ -33,6 +33,7 @@ import {
 import { leads, targets, employees, studyCenters } from '@/data/mockData';
 import type { Lead, Target as TargetType } from '@/types/erp';
 
+import { CS, numLocale, compactMoney } from '@/lib/currency';
 interface SalesPanelProps {
   activeModule: string;
 }
@@ -174,7 +175,7 @@ export function SalesPanel({ activeModule }: SalesPanelProps) {
                   </div>
                   <p className="text-xs mt-2 font-medium">{stage.name}</p>
                   {stage.value > 0 && (
-                    <p className="text-xs text-slate-500">₹{(stage.value / 100000).toFixed(1)}L</p>
+                    <p className="text-xs text-slate-500">{compactMoney(stage.value, 1)}</p>
                   )}
                 </div>
                 {index < pipelineStages.length - 1 && (
