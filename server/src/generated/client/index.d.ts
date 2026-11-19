@@ -503,6 +503,11 @@ export type StudentFilterValue = $Result.DefaultSelection<Prisma.$StudentFilterV
  * Every change of a student's filter value. Labels are copied as text so history survives renames.
  */
 export type StudentFilterHistory = $Result.DefaultSelection<Prisma.$StudentFilterHistoryPayload>
+/**
+ * Model UsageDay
+ * How long a person actually used the platform on one day (Indian time), built from heartbeats.
+ */
+export type UsageDay = $Result.DefaultSelection<Prisma.$UsageDayPayload>
 
 /**
  * Enums
@@ -2003,6 +2008,16 @@ export class PrismaClient<
     * ```
     */
   get studentFilterHistory(): Prisma.StudentFilterHistoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.usageDay`: Exposes CRUD operations for the **UsageDay** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UsageDays
+    * const usageDays = await prisma.usageDay.findMany()
+    * ```
+    */
+  get usageDay(): Prisma.UsageDayDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2534,7 +2549,8 @@ export namespace Prisma {
     StudentFilterType: 'StudentFilterType',
     StudentFilterOption: 'StudentFilterOption',
     StudentFilterValue: 'StudentFilterValue',
-    StudentFilterHistory: 'StudentFilterHistory'
+    StudentFilterHistory: 'StudentFilterHistory',
+    UsageDay: 'UsageDay'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2550,7 +2566,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadApplication" | "studyAbroadProgramCommission" | "studyAbroadPartnerPayout" | "country" | "studentFilterType" | "studentFilterOption" | "studentFilterValue" | "studentFilterHistory"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadApplication" | "studyAbroadProgramCommission" | "studyAbroadPartnerPayout" | "country" | "studentFilterType" | "studentFilterOption" | "studentFilterValue" | "studentFilterHistory" | "usageDay"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -9806,6 +9822,80 @@ export namespace Prisma {
           }
         }
       }
+      UsageDay: {
+        payload: Prisma.$UsageDayPayload<ExtArgs>
+        fields: Prisma.UsageDayFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UsageDayFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UsageDayFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload>
+          }
+          findFirst: {
+            args: Prisma.UsageDayFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UsageDayFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload>
+          }
+          findMany: {
+            args: Prisma.UsageDayFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload>[]
+          }
+          create: {
+            args: Prisma.UsageDayCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload>
+          }
+          createMany: {
+            args: Prisma.UsageDayCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UsageDayCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload>[]
+          }
+          delete: {
+            args: Prisma.UsageDayDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload>
+          }
+          update: {
+            args: Prisma.UsageDayUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload>
+          }
+          deleteMany: {
+            args: Prisma.UsageDayDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UsageDayUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UsageDayUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload>[]
+          }
+          upsert: {
+            args: Prisma.UsageDayUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageDayPayload>
+          }
+          aggregate: {
+            args: Prisma.UsageDayAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUsageDay>
+          }
+          groupBy: {
+            args: Prisma.UsageDayGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UsageDayGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UsageDayCountArgs<ExtArgs>
+            result: $Utils.Optional<UsageDayCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -10012,6 +10102,7 @@ export namespace Prisma {
     studentFilterOption?: StudentFilterOptionOmit
     studentFilterValue?: StudentFilterValueOmit
     studentFilterHistory?: StudentFilterHistoryOmit
+    usageDay?: UsageDayOmit
   }
 
   /* Types for Logging */
@@ -10174,6 +10265,7 @@ export namespace Prisma {
     batchLessonAssignments: number
     studentVideoLogs: number
     studentFilterTypes: number
+    usageDays: number
   }
 
   export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10259,6 +10351,7 @@ export namespace Prisma {
     batchLessonAssignments?: boolean | OrganizationCountOutputTypeCountBatchLessonAssignmentsArgs
     studentVideoLogs?: boolean | OrganizationCountOutputTypeCountStudentVideoLogsArgs
     studentFilterTypes?: boolean | OrganizationCountOutputTypeCountStudentFilterTypesArgs
+    usageDays?: boolean | OrganizationCountOutputTypeCountUsageDaysArgs
   }
 
   // Custom InputTypes
@@ -10846,6 +10939,13 @@ export namespace Prisma {
     where?: StudentFilterTypeWhereInput
   }
 
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountUsageDaysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UsageDayWhereInput
+  }
+
 
   /**
    * Count Type LicenseCountOutputType
@@ -11071,6 +11171,7 @@ export namespace Prisma {
     communicationLogs: number
     fcmTokens: number
     opsSubAdminAllocations: number
+    usageDays: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11150,6 +11251,7 @@ export namespace Prisma {
     communicationLogs?: boolean | UserCountOutputTypeCountCommunicationLogsArgs
     fcmTokens?: boolean | UserCountOutputTypeCountFcmTokensArgs
     opsSubAdminAllocations?: boolean | UserCountOutputTypeCountOpsSubAdminAllocationsArgs
+    usageDays?: boolean | UserCountOutputTypeCountUsageDaysArgs
   }
 
   // Custom InputTypes
@@ -11693,6 +11795,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountOpsSubAdminAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProgramAllocationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUsageDaysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UsageDayWhereInput
   }
 
 
@@ -13677,6 +13786,7 @@ export namespace Prisma {
     batchLessonAssignments?: boolean | Organization$batchLessonAssignmentsArgs<ExtArgs>
     studentVideoLogs?: boolean | Organization$studentVideoLogsArgs<ExtArgs>
     studentFilterTypes?: boolean | Organization$studentFilterTypesArgs<ExtArgs>
+    usageDays?: boolean | Organization$usageDaysArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
 
@@ -13819,6 +13929,7 @@ export namespace Prisma {
     batchLessonAssignments?: boolean | Organization$batchLessonAssignmentsArgs<ExtArgs>
     studentVideoLogs?: boolean | Organization$studentVideoLogsArgs<ExtArgs>
     studentFilterTypes?: boolean | Organization$studentFilterTypesArgs<ExtArgs>
+    usageDays?: boolean | Organization$usageDaysArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13915,6 +14026,7 @@ export namespace Prisma {
       batchLessonAssignments: Prisma.$BatchLessonAssignmentPayload<ExtArgs>[]
       studentVideoLogs: Prisma.$StudentVideoLogPayload<ExtArgs>[]
       studentFilterTypes: Prisma.$StudentFilterTypePayload<ExtArgs>[]
+      usageDays: Prisma.$UsageDayPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14409,6 +14521,7 @@ export namespace Prisma {
     batchLessonAssignments<T extends Organization$batchLessonAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$batchLessonAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchLessonAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     studentVideoLogs<T extends Organization$studentVideoLogsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$studentVideoLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentVideoLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     studentFilterTypes<T extends Organization$studentFilterTypesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$studentFilterTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    usageDays<T extends Organization$usageDaysArgs<ExtArgs> = {}>(args?: Subset<T, Organization$usageDaysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16856,6 +16969,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudentFilterTypeScalarFieldEnum | StudentFilterTypeScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.usageDays
+   */
+  export type Organization$usageDaysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    where?: UsageDayWhereInput
+    orderBy?: UsageDayOrderByWithRelationInput | UsageDayOrderByWithRelationInput[]
+    cursor?: UsageDayWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UsageDayScalarFieldEnum | UsageDayScalarFieldEnum[]
   }
 
   /**
@@ -20069,6 +20206,7 @@ export namespace Prisma {
     communicationLogs?: boolean | User$communicationLogsArgs<ExtArgs>
     fcmTokens?: boolean | User$fcmTokensArgs<ExtArgs>
     opsSubAdminAllocations?: boolean | User$opsSubAdminAllocationsArgs<ExtArgs>
+    usageDays?: boolean | User$usageDaysArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -20278,6 +20416,7 @@ export namespace Prisma {
     communicationLogs?: boolean | User$communicationLogsArgs<ExtArgs>
     fcmTokens?: boolean | User$fcmTokensArgs<ExtArgs>
     opsSubAdminAllocations?: boolean | User$opsSubAdminAllocationsArgs<ExtArgs>
+    usageDays?: boolean | User$usageDaysArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20393,6 +20532,7 @@ export namespace Prisma {
       communicationLogs: Prisma.$CommunicationLogPayload<ExtArgs>[]
       fcmTokens: Prisma.$UserFCMTokenPayload<ExtArgs>[]
       opsSubAdminAllocations: Prisma.$ProgramAllocationPayload<ExtArgs>[]
+      usageDays: Prisma.$UsageDayPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -20910,6 +21050,7 @@ export namespace Prisma {
     communicationLogs<T extends User$communicationLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$communicationLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fcmTokens<T extends User$fcmTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$fcmTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     opsSubAdminAllocations<T extends User$opsSubAdminAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, User$opsSubAdminAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    usageDays<T extends User$usageDaysArgs<ExtArgs> = {}>(args?: Subset<T, User$usageDaysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -23476,6 +23617,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProgramAllocationScalarFieldEnum | ProgramAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * User.usageDays
+   */
+  export type User$usageDaysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    where?: UsageDayWhereInput
+    orderBy?: UsageDayOrderByWithRelationInput | UsageDayOrderByWithRelationInput[]
+    cursor?: UsageDayWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UsageDayScalarFieldEnum | UsageDayScalarFieldEnum[]
   }
 
   /**
@@ -141204,6 +141369,1232 @@ export namespace Prisma {
 
 
   /**
+   * Model UsageDay
+   */
+
+  export type AggregateUsageDay = {
+    _count: UsageDayCountAggregateOutputType | null
+    _avg: UsageDayAvgAggregateOutputType | null
+    _sum: UsageDaySumAggregateOutputType | null
+    _min: UsageDayMinAggregateOutputType | null
+    _max: UsageDayMaxAggregateOutputType | null
+  }
+
+  export type UsageDayAvgAggregateOutputType = {
+    activeSec: number | null
+    idleSec: number | null
+    awaySec: number | null
+    leaves: number | null
+  }
+
+  export type UsageDaySumAggregateOutputType = {
+    activeSec: number | null
+    idleSec: number | null
+    awaySec: number | null
+    leaves: number | null
+  }
+
+  export type UsageDayMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    userId: string | null
+    date: string | null
+    activeSec: number | null
+    idleSec: number | null
+    awaySec: number | null
+    leaves: number | null
+    firstSeen: Date | null
+    lastSeen: Date | null
+    lastState: string | null
+    updatedAt: Date | null
+  }
+
+  export type UsageDayMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    userId: string | null
+    date: string | null
+    activeSec: number | null
+    idleSec: number | null
+    awaySec: number | null
+    leaves: number | null
+    firstSeen: Date | null
+    lastSeen: Date | null
+    lastState: string | null
+    updatedAt: Date | null
+  }
+
+  export type UsageDayCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    userId: number
+    date: number
+    activeSec: number
+    idleSec: number
+    awaySec: number
+    leaves: number
+    firstSeen: number
+    lastSeen: number
+    lastState: number
+    pages: number
+    segments: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UsageDayAvgAggregateInputType = {
+    activeSec?: true
+    idleSec?: true
+    awaySec?: true
+    leaves?: true
+  }
+
+  export type UsageDaySumAggregateInputType = {
+    activeSec?: true
+    idleSec?: true
+    awaySec?: true
+    leaves?: true
+  }
+
+  export type UsageDayMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    userId?: true
+    date?: true
+    activeSec?: true
+    idleSec?: true
+    awaySec?: true
+    leaves?: true
+    firstSeen?: true
+    lastSeen?: true
+    lastState?: true
+    updatedAt?: true
+  }
+
+  export type UsageDayMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    userId?: true
+    date?: true
+    activeSec?: true
+    idleSec?: true
+    awaySec?: true
+    leaves?: true
+    firstSeen?: true
+    lastSeen?: true
+    lastState?: true
+    updatedAt?: true
+  }
+
+  export type UsageDayCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    userId?: true
+    date?: true
+    activeSec?: true
+    idleSec?: true
+    awaySec?: true
+    leaves?: true
+    firstSeen?: true
+    lastSeen?: true
+    lastState?: true
+    pages?: true
+    segments?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UsageDayAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UsageDay to aggregate.
+     */
+    where?: UsageDayWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageDays to fetch.
+     */
+    orderBy?: UsageDayOrderByWithRelationInput | UsageDayOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UsageDayWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageDays from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageDays.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UsageDays
+    **/
+    _count?: true | UsageDayCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UsageDayAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UsageDaySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UsageDayMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UsageDayMaxAggregateInputType
+  }
+
+  export type GetUsageDayAggregateType<T extends UsageDayAggregateArgs> = {
+        [P in keyof T & keyof AggregateUsageDay]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUsageDay[P]>
+      : GetScalarType<T[P], AggregateUsageDay[P]>
+  }
+
+
+
+
+  export type UsageDayGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UsageDayWhereInput
+    orderBy?: UsageDayOrderByWithAggregationInput | UsageDayOrderByWithAggregationInput[]
+    by: UsageDayScalarFieldEnum[] | UsageDayScalarFieldEnum
+    having?: UsageDayScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UsageDayCountAggregateInputType | true
+    _avg?: UsageDayAvgAggregateInputType
+    _sum?: UsageDaySumAggregateInputType
+    _min?: UsageDayMinAggregateInputType
+    _max?: UsageDayMaxAggregateInputType
+  }
+
+  export type UsageDayGroupByOutputType = {
+    id: string
+    organizationId: string
+    userId: string
+    date: string
+    activeSec: number
+    idleSec: number
+    awaySec: number
+    leaves: number
+    firstSeen: Date | null
+    lastSeen: Date | null
+    lastState: string | null
+    pages: JsonValue
+    segments: JsonValue
+    updatedAt: Date
+    _count: UsageDayCountAggregateOutputType | null
+    _avg: UsageDayAvgAggregateOutputType | null
+    _sum: UsageDaySumAggregateOutputType | null
+    _min: UsageDayMinAggregateOutputType | null
+    _max: UsageDayMaxAggregateOutputType | null
+  }
+
+  type GetUsageDayGroupByPayload<T extends UsageDayGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UsageDayGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UsageDayGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UsageDayGroupByOutputType[P]>
+            : GetScalarType<T[P], UsageDayGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UsageDaySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    userId?: boolean
+    date?: boolean
+    activeSec?: boolean
+    idleSec?: boolean
+    awaySec?: boolean
+    leaves?: boolean
+    firstSeen?: boolean
+    lastSeen?: boolean
+    lastState?: boolean
+    pages?: boolean
+    segments?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["usageDay"]>
+
+  export type UsageDaySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    userId?: boolean
+    date?: boolean
+    activeSec?: boolean
+    idleSec?: boolean
+    awaySec?: boolean
+    leaves?: boolean
+    firstSeen?: boolean
+    lastSeen?: boolean
+    lastState?: boolean
+    pages?: boolean
+    segments?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["usageDay"]>
+
+  export type UsageDaySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    userId?: boolean
+    date?: boolean
+    activeSec?: boolean
+    idleSec?: boolean
+    awaySec?: boolean
+    leaves?: boolean
+    firstSeen?: boolean
+    lastSeen?: boolean
+    lastState?: boolean
+    pages?: boolean
+    segments?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["usageDay"]>
+
+  export type UsageDaySelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    userId?: boolean
+    date?: boolean
+    activeSec?: boolean
+    idleSec?: boolean
+    awaySec?: boolean
+    leaves?: boolean
+    firstSeen?: boolean
+    lastSeen?: boolean
+    lastState?: boolean
+    pages?: boolean
+    segments?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UsageDayOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "userId" | "date" | "activeSec" | "idleSec" | "awaySec" | "leaves" | "firstSeen" | "lastSeen" | "lastState" | "pages" | "segments" | "updatedAt", ExtArgs["result"]["usageDay"]>
+  export type UsageDayInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UsageDayIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UsageDayIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UsageDayPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UsageDay"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      userId: string
+      date: string
+      activeSec: number
+      idleSec: number
+      awaySec: number
+      leaves: number
+      firstSeen: Date | null
+      lastSeen: Date | null
+      lastState: string | null
+      pages: Prisma.JsonValue
+      segments: Prisma.JsonValue
+      updatedAt: Date
+    }, ExtArgs["result"]["usageDay"]>
+    composites: {}
+  }
+
+  type UsageDayGetPayload<S extends boolean | null | undefined | UsageDayDefaultArgs> = $Result.GetResult<Prisma.$UsageDayPayload, S>
+
+  type UsageDayCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UsageDayFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UsageDayCountAggregateInputType | true
+    }
+
+  export interface UsageDayDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UsageDay'], meta: { name: 'UsageDay' } }
+    /**
+     * Find zero or one UsageDay that matches the filter.
+     * @param {UsageDayFindUniqueArgs} args - Arguments to find a UsageDay
+     * @example
+     * // Get one UsageDay
+     * const usageDay = await prisma.usageDay.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UsageDayFindUniqueArgs>(args: SelectSubset<T, UsageDayFindUniqueArgs<ExtArgs>>): Prisma__UsageDayClient<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UsageDay that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UsageDayFindUniqueOrThrowArgs} args - Arguments to find a UsageDay
+     * @example
+     * // Get one UsageDay
+     * const usageDay = await prisma.usageDay.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UsageDayFindUniqueOrThrowArgs>(args: SelectSubset<T, UsageDayFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UsageDayClient<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UsageDay that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageDayFindFirstArgs} args - Arguments to find a UsageDay
+     * @example
+     * // Get one UsageDay
+     * const usageDay = await prisma.usageDay.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UsageDayFindFirstArgs>(args?: SelectSubset<T, UsageDayFindFirstArgs<ExtArgs>>): Prisma__UsageDayClient<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UsageDay that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageDayFindFirstOrThrowArgs} args - Arguments to find a UsageDay
+     * @example
+     * // Get one UsageDay
+     * const usageDay = await prisma.usageDay.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UsageDayFindFirstOrThrowArgs>(args?: SelectSubset<T, UsageDayFindFirstOrThrowArgs<ExtArgs>>): Prisma__UsageDayClient<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UsageDays that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageDayFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UsageDays
+     * const usageDays = await prisma.usageDay.findMany()
+     * 
+     * // Get first 10 UsageDays
+     * const usageDays = await prisma.usageDay.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const usageDayWithIdOnly = await prisma.usageDay.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UsageDayFindManyArgs>(args?: SelectSubset<T, UsageDayFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UsageDay.
+     * @param {UsageDayCreateArgs} args - Arguments to create a UsageDay.
+     * @example
+     * // Create one UsageDay
+     * const UsageDay = await prisma.usageDay.create({
+     *   data: {
+     *     // ... data to create a UsageDay
+     *   }
+     * })
+     * 
+     */
+    create<T extends UsageDayCreateArgs>(args: SelectSubset<T, UsageDayCreateArgs<ExtArgs>>): Prisma__UsageDayClient<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UsageDays.
+     * @param {UsageDayCreateManyArgs} args - Arguments to create many UsageDays.
+     * @example
+     * // Create many UsageDays
+     * const usageDay = await prisma.usageDay.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UsageDayCreateManyArgs>(args?: SelectSubset<T, UsageDayCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UsageDays and returns the data saved in the database.
+     * @param {UsageDayCreateManyAndReturnArgs} args - Arguments to create many UsageDays.
+     * @example
+     * // Create many UsageDays
+     * const usageDay = await prisma.usageDay.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UsageDays and only return the `id`
+     * const usageDayWithIdOnly = await prisma.usageDay.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UsageDayCreateManyAndReturnArgs>(args?: SelectSubset<T, UsageDayCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UsageDay.
+     * @param {UsageDayDeleteArgs} args - Arguments to delete one UsageDay.
+     * @example
+     * // Delete one UsageDay
+     * const UsageDay = await prisma.usageDay.delete({
+     *   where: {
+     *     // ... filter to delete one UsageDay
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UsageDayDeleteArgs>(args: SelectSubset<T, UsageDayDeleteArgs<ExtArgs>>): Prisma__UsageDayClient<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UsageDay.
+     * @param {UsageDayUpdateArgs} args - Arguments to update one UsageDay.
+     * @example
+     * // Update one UsageDay
+     * const usageDay = await prisma.usageDay.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UsageDayUpdateArgs>(args: SelectSubset<T, UsageDayUpdateArgs<ExtArgs>>): Prisma__UsageDayClient<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UsageDays.
+     * @param {UsageDayDeleteManyArgs} args - Arguments to filter UsageDays to delete.
+     * @example
+     * // Delete a few UsageDays
+     * const { count } = await prisma.usageDay.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UsageDayDeleteManyArgs>(args?: SelectSubset<T, UsageDayDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UsageDays.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageDayUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UsageDays
+     * const usageDay = await prisma.usageDay.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UsageDayUpdateManyArgs>(args: SelectSubset<T, UsageDayUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UsageDays and returns the data updated in the database.
+     * @param {UsageDayUpdateManyAndReturnArgs} args - Arguments to update many UsageDays.
+     * @example
+     * // Update many UsageDays
+     * const usageDay = await prisma.usageDay.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UsageDays and only return the `id`
+     * const usageDayWithIdOnly = await prisma.usageDay.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UsageDayUpdateManyAndReturnArgs>(args: SelectSubset<T, UsageDayUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UsageDay.
+     * @param {UsageDayUpsertArgs} args - Arguments to update or create a UsageDay.
+     * @example
+     * // Update or create a UsageDay
+     * const usageDay = await prisma.usageDay.upsert({
+     *   create: {
+     *     // ... data to create a UsageDay
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UsageDay we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UsageDayUpsertArgs>(args: SelectSubset<T, UsageDayUpsertArgs<ExtArgs>>): Prisma__UsageDayClient<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UsageDays.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageDayCountArgs} args - Arguments to filter UsageDays to count.
+     * @example
+     * // Count the number of UsageDays
+     * const count = await prisma.usageDay.count({
+     *   where: {
+     *     // ... the filter for the UsageDays we want to count
+     *   }
+     * })
+    **/
+    count<T extends UsageDayCountArgs>(
+      args?: Subset<T, UsageDayCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UsageDayCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UsageDay.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageDayAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UsageDayAggregateArgs>(args: Subset<T, UsageDayAggregateArgs>): Prisma.PrismaPromise<GetUsageDayAggregateType<T>>
+
+    /**
+     * Group by UsageDay.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageDayGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UsageDayGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UsageDayGroupByArgs['orderBy'] }
+        : { orderBy?: UsageDayGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UsageDayGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUsageDayGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UsageDay model
+   */
+  readonly fields: UsageDayFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UsageDay.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UsageDayClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UsageDay model
+   */
+  interface UsageDayFieldRefs {
+    readonly id: FieldRef<"UsageDay", 'String'>
+    readonly organizationId: FieldRef<"UsageDay", 'String'>
+    readonly userId: FieldRef<"UsageDay", 'String'>
+    readonly date: FieldRef<"UsageDay", 'String'>
+    readonly activeSec: FieldRef<"UsageDay", 'Float'>
+    readonly idleSec: FieldRef<"UsageDay", 'Float'>
+    readonly awaySec: FieldRef<"UsageDay", 'Float'>
+    readonly leaves: FieldRef<"UsageDay", 'Int'>
+    readonly firstSeen: FieldRef<"UsageDay", 'DateTime'>
+    readonly lastSeen: FieldRef<"UsageDay", 'DateTime'>
+    readonly lastState: FieldRef<"UsageDay", 'String'>
+    readonly pages: FieldRef<"UsageDay", 'Json'>
+    readonly segments: FieldRef<"UsageDay", 'Json'>
+    readonly updatedAt: FieldRef<"UsageDay", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UsageDay findUnique
+   */
+  export type UsageDayFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageDay to fetch.
+     */
+    where: UsageDayWhereUniqueInput
+  }
+
+  /**
+   * UsageDay findUniqueOrThrow
+   */
+  export type UsageDayFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageDay to fetch.
+     */
+    where: UsageDayWhereUniqueInput
+  }
+
+  /**
+   * UsageDay findFirst
+   */
+  export type UsageDayFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageDay to fetch.
+     */
+    where?: UsageDayWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageDays to fetch.
+     */
+    orderBy?: UsageDayOrderByWithRelationInput | UsageDayOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UsageDays.
+     */
+    cursor?: UsageDayWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageDays from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageDays.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UsageDays.
+     */
+    distinct?: UsageDayScalarFieldEnum | UsageDayScalarFieldEnum[]
+  }
+
+  /**
+   * UsageDay findFirstOrThrow
+   */
+  export type UsageDayFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageDay to fetch.
+     */
+    where?: UsageDayWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageDays to fetch.
+     */
+    orderBy?: UsageDayOrderByWithRelationInput | UsageDayOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UsageDays.
+     */
+    cursor?: UsageDayWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageDays from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageDays.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UsageDays.
+     */
+    distinct?: UsageDayScalarFieldEnum | UsageDayScalarFieldEnum[]
+  }
+
+  /**
+   * UsageDay findMany
+   */
+  export type UsageDayFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageDays to fetch.
+     */
+    where?: UsageDayWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageDays to fetch.
+     */
+    orderBy?: UsageDayOrderByWithRelationInput | UsageDayOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UsageDays.
+     */
+    cursor?: UsageDayWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageDays from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageDays.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UsageDays.
+     */
+    distinct?: UsageDayScalarFieldEnum | UsageDayScalarFieldEnum[]
+  }
+
+  /**
+   * UsageDay create
+   */
+  export type UsageDayCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UsageDay.
+     */
+    data: XOR<UsageDayCreateInput, UsageDayUncheckedCreateInput>
+  }
+
+  /**
+   * UsageDay createMany
+   */
+  export type UsageDayCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UsageDays.
+     */
+    data: UsageDayCreateManyInput | UsageDayCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UsageDay createManyAndReturn
+   */
+  export type UsageDayCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * The data used to create many UsageDays.
+     */
+    data: UsageDayCreateManyInput | UsageDayCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UsageDay update
+   */
+  export type UsageDayUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UsageDay.
+     */
+    data: XOR<UsageDayUpdateInput, UsageDayUncheckedUpdateInput>
+    /**
+     * Choose, which UsageDay to update.
+     */
+    where: UsageDayWhereUniqueInput
+  }
+
+  /**
+   * UsageDay updateMany
+   */
+  export type UsageDayUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UsageDays.
+     */
+    data: XOR<UsageDayUpdateManyMutationInput, UsageDayUncheckedUpdateManyInput>
+    /**
+     * Filter which UsageDays to update
+     */
+    where?: UsageDayWhereInput
+    /**
+     * Limit how many UsageDays to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UsageDay updateManyAndReturn
+   */
+  export type UsageDayUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * The data used to update UsageDays.
+     */
+    data: XOR<UsageDayUpdateManyMutationInput, UsageDayUncheckedUpdateManyInput>
+    /**
+     * Filter which UsageDays to update
+     */
+    where?: UsageDayWhereInput
+    /**
+     * Limit how many UsageDays to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UsageDay upsert
+   */
+  export type UsageDayUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UsageDay to update in case it exists.
+     */
+    where: UsageDayWhereUniqueInput
+    /**
+     * In case the UsageDay found by the `where` argument doesn't exist, create a new UsageDay with this data.
+     */
+    create: XOR<UsageDayCreateInput, UsageDayUncheckedCreateInput>
+    /**
+     * In case the UsageDay was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UsageDayUpdateInput, UsageDayUncheckedUpdateInput>
+  }
+
+  /**
+   * UsageDay delete
+   */
+  export type UsageDayDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+    /**
+     * Filter which UsageDay to delete.
+     */
+    where: UsageDayWhereUniqueInput
+  }
+
+  /**
+   * UsageDay deleteMany
+   */
+  export type UsageDayDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UsageDays to delete
+     */
+    where?: UsageDayWhereInput
+    /**
+     * Limit how many UsageDays to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UsageDay without action
+   */
+  export type UsageDayDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageDay
+     */
+    select?: UsageDaySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageDay
+     */
+    omit?: UsageDayOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageDayInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -143086,6 +144477,26 @@ export namespace Prisma {
   export type StudentFilterHistoryScalarFieldEnum = (typeof StudentFilterHistoryScalarFieldEnum)[keyof typeof StudentFilterHistoryScalarFieldEnum]
 
 
+  export const UsageDayScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    userId: 'userId',
+    date: 'date',
+    activeSec: 'activeSec',
+    idleSec: 'idleSec',
+    awaySec: 'awaySec',
+    leaves: 'leaves',
+    firstSeen: 'firstSeen',
+    lastSeen: 'lastSeen',
+    lastState: 'lastState',
+    pages: 'pages',
+    segments: 'segments',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UsageDayScalarFieldEnum = (typeof UsageDayScalarFieldEnum)[keyof typeof UsageDayScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -143685,6 +145096,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentListRelationFilter
     studentVideoLogs?: StudentVideoLogListRelationFilter
     studentFilterTypes?: StudentFilterTypeListRelationFilter
+    usageDays?: UsageDayListRelationFilter
   }
 
   export type OrganizationOrderByWithRelationInput = {
@@ -143786,6 +145198,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentOrderByRelationAggregateInput
     studentVideoLogs?: StudentVideoLogOrderByRelationAggregateInput
     studentFilterTypes?: StudentFilterTypeOrderByRelationAggregateInput
+    usageDays?: UsageDayOrderByRelationAggregateInput
   }
 
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -143890,6 +145303,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentListRelationFilter
     studentVideoLogs?: StudentVideoLogListRelationFilter
     studentFilterTypes?: StudentFilterTypeListRelationFilter
+    usageDays?: UsageDayListRelationFilter
   }, "id" | "email" | "customLoginSlug">
 
   export type OrganizationOrderByWithAggregationInput = {
@@ -144286,6 +145700,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogListRelationFilter
     fcmTokens?: UserFCMTokenListRelationFilter
     opsSubAdminAllocations?: ProgramAllocationListRelationFilter
+    usageDays?: UsageDayListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -144410,6 +145825,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogOrderByRelationAggregateInput
     fcmTokens?: UserFCMTokenOrderByRelationAggregateInput
     opsSubAdminAllocations?: ProgramAllocationOrderByRelationAggregateInput
+    usageDays?: UsageDayOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -144537,6 +145953,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogListRelationFilter
     fcmTokens?: UserFCMTokenListRelationFilter
     opsSubAdminAllocations?: ProgramAllocationListRelationFilter
+    usageDays?: UsageDayListRelationFilter
   }, "id" | "userId" | "email" | "biometricId">
 
   export type UserOrderByWithAggregationInput = {
@@ -154515,6 +155932,112 @@ export namespace Prisma {
     changedAt?: DateTimeWithAggregatesFilter<"StudentFilterHistory"> | Date | string
   }
 
+  export type UsageDayWhereInput = {
+    AND?: UsageDayWhereInput | UsageDayWhereInput[]
+    OR?: UsageDayWhereInput[]
+    NOT?: UsageDayWhereInput | UsageDayWhereInput[]
+    id?: StringFilter<"UsageDay"> | string
+    organizationId?: StringFilter<"UsageDay"> | string
+    userId?: StringFilter<"UsageDay"> | string
+    date?: StringFilter<"UsageDay"> | string
+    activeSec?: FloatFilter<"UsageDay"> | number
+    idleSec?: FloatFilter<"UsageDay"> | number
+    awaySec?: FloatFilter<"UsageDay"> | number
+    leaves?: IntFilter<"UsageDay"> | number
+    firstSeen?: DateTimeNullableFilter<"UsageDay"> | Date | string | null
+    lastSeen?: DateTimeNullableFilter<"UsageDay"> | Date | string | null
+    lastState?: StringNullableFilter<"UsageDay"> | string | null
+    pages?: JsonFilter<"UsageDay">
+    segments?: JsonFilter<"UsageDay">
+    updatedAt?: DateTimeFilter<"UsageDay"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UsageDayOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    activeSec?: SortOrder
+    idleSec?: SortOrder
+    awaySec?: SortOrder
+    leaves?: SortOrder
+    firstSeen?: SortOrderInput | SortOrder
+    lastSeen?: SortOrderInput | SortOrder
+    lastState?: SortOrderInput | SortOrder
+    pages?: SortOrder
+    segments?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UsageDayWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_date?: UsageDayUserIdDateCompoundUniqueInput
+    AND?: UsageDayWhereInput | UsageDayWhereInput[]
+    OR?: UsageDayWhereInput[]
+    NOT?: UsageDayWhereInput | UsageDayWhereInput[]
+    organizationId?: StringFilter<"UsageDay"> | string
+    userId?: StringFilter<"UsageDay"> | string
+    date?: StringFilter<"UsageDay"> | string
+    activeSec?: FloatFilter<"UsageDay"> | number
+    idleSec?: FloatFilter<"UsageDay"> | number
+    awaySec?: FloatFilter<"UsageDay"> | number
+    leaves?: IntFilter<"UsageDay"> | number
+    firstSeen?: DateTimeNullableFilter<"UsageDay"> | Date | string | null
+    lastSeen?: DateTimeNullableFilter<"UsageDay"> | Date | string | null
+    lastState?: StringNullableFilter<"UsageDay"> | string | null
+    pages?: JsonFilter<"UsageDay">
+    segments?: JsonFilter<"UsageDay">
+    updatedAt?: DateTimeFilter<"UsageDay"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_date">
+
+  export type UsageDayOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    activeSec?: SortOrder
+    idleSec?: SortOrder
+    awaySec?: SortOrder
+    leaves?: SortOrder
+    firstSeen?: SortOrderInput | SortOrder
+    lastSeen?: SortOrderInput | SortOrder
+    lastState?: SortOrderInput | SortOrder
+    pages?: SortOrder
+    segments?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UsageDayCountOrderByAggregateInput
+    _avg?: UsageDayAvgOrderByAggregateInput
+    _max?: UsageDayMaxOrderByAggregateInput
+    _min?: UsageDayMinOrderByAggregateInput
+    _sum?: UsageDaySumOrderByAggregateInput
+  }
+
+  export type UsageDayScalarWhereWithAggregatesInput = {
+    AND?: UsageDayScalarWhereWithAggregatesInput | UsageDayScalarWhereWithAggregatesInput[]
+    OR?: UsageDayScalarWhereWithAggregatesInput[]
+    NOT?: UsageDayScalarWhereWithAggregatesInput | UsageDayScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UsageDay"> | string
+    organizationId?: StringWithAggregatesFilter<"UsageDay"> | string
+    userId?: StringWithAggregatesFilter<"UsageDay"> | string
+    date?: StringWithAggregatesFilter<"UsageDay"> | string
+    activeSec?: FloatWithAggregatesFilter<"UsageDay"> | number
+    idleSec?: FloatWithAggregatesFilter<"UsageDay"> | number
+    awaySec?: FloatWithAggregatesFilter<"UsageDay"> | number
+    leaves?: IntWithAggregatesFilter<"UsageDay"> | number
+    firstSeen?: DateTimeNullableWithAggregatesFilter<"UsageDay"> | Date | string | null
+    lastSeen?: DateTimeNullableWithAggregatesFilter<"UsageDay"> | Date | string | null
+    lastState?: StringNullableWithAggregatesFilter<"UsageDay"> | string | null
+    pages?: JsonWithAggregatesFilter<"UsageDay">
+    segments?: JsonWithAggregatesFilter<"UsageDay">
+    updatedAt?: DateTimeWithAggregatesFilter<"UsageDay"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -154613,6 +156136,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateInput = {
@@ -154713,6 +156237,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUpdateInput = {
@@ -154813,6 +156338,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateInput = {
@@ -154913,6 +156439,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateManyInput = {
@@ -155346,6 +156873,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -155463,6 +156991,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -155580,6 +157109,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -155697,6 +157227,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -166462,6 +167993,123 @@ export namespace Prisma {
     changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UsageDayCreateInput = {
+    id?: string
+    date: string
+    activeSec?: number
+    idleSec?: number
+    awaySec?: number
+    leaves?: number
+    firstSeen?: Date | string | null
+    lastSeen?: Date | string | null
+    lastState?: string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutUsageDaysInput
+    user: UserCreateNestedOneWithoutUsageDaysInput
+  }
+
+  export type UsageDayUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    userId: string
+    date: string
+    activeSec?: number
+    idleSec?: number
+    awaySec?: number
+    leaves?: number
+    firstSeen?: Date | string | null
+    lastSeen?: Date | string | null
+    lastState?: string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type UsageDayUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: StringFieldUpdateOperationsInput | string
+    activeSec?: FloatFieldUpdateOperationsInput | number
+    idleSec?: FloatFieldUpdateOperationsInput | number
+    awaySec?: FloatFieldUpdateOperationsInput | number
+    leaves?: IntFieldUpdateOperationsInput | number
+    firstSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastState?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutUsageDaysNestedInput
+    user?: UserUpdateOneRequiredWithoutUsageDaysNestedInput
+  }
+
+  export type UsageDayUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: StringFieldUpdateOperationsInput | string
+    activeSec?: FloatFieldUpdateOperationsInput | number
+    idleSec?: FloatFieldUpdateOperationsInput | number
+    awaySec?: FloatFieldUpdateOperationsInput | number
+    leaves?: IntFieldUpdateOperationsInput | number
+    firstSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastState?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageDayCreateManyInput = {
+    id?: string
+    organizationId: string
+    userId: string
+    date: string
+    activeSec?: number
+    idleSec?: number
+    awaySec?: number
+    leaves?: number
+    firstSeen?: Date | string | null
+    lastSeen?: Date | string | null
+    lastState?: string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type UsageDayUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: StringFieldUpdateOperationsInput | string
+    activeSec?: FloatFieldUpdateOperationsInput | number
+    idleSec?: FloatFieldUpdateOperationsInput | number
+    awaySec?: FloatFieldUpdateOperationsInput | number
+    leaves?: IntFieldUpdateOperationsInput | number
+    firstSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastState?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageDayUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: StringFieldUpdateOperationsInput | string
+    activeSec?: FloatFieldUpdateOperationsInput | number
+    idleSec?: FloatFieldUpdateOperationsInput | number
+    awaySec?: FloatFieldUpdateOperationsInput | number
+    leaves?: IntFieldUpdateOperationsInput | number
+    firstSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastState?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -167046,6 +168694,12 @@ export namespace Prisma {
     none?: StudentFilterTypeWhereInput
   }
 
+  export type UsageDayListRelationFilter = {
+    every?: UsageDayWhereInput
+    some?: UsageDayWhereInput
+    none?: UsageDayWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -167376,6 +169030,10 @@ export namespace Prisma {
   }
 
   export type StudentFilterTypeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UsageDayOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -173553,6 +175211,72 @@ export namespace Prisma {
     changedAt?: SortOrder
   }
 
+  export type UsageDayUserIdDateCompoundUniqueInput = {
+    userId: string
+    date: string
+  }
+
+  export type UsageDayCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    activeSec?: SortOrder
+    idleSec?: SortOrder
+    awaySec?: SortOrder
+    leaves?: SortOrder
+    firstSeen?: SortOrder
+    lastSeen?: SortOrder
+    lastState?: SortOrder
+    pages?: SortOrder
+    segments?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UsageDayAvgOrderByAggregateInput = {
+    activeSec?: SortOrder
+    idleSec?: SortOrder
+    awaySec?: SortOrder
+    leaves?: SortOrder
+  }
+
+  export type UsageDayMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    activeSec?: SortOrder
+    idleSec?: SortOrder
+    awaySec?: SortOrder
+    leaves?: SortOrder
+    firstSeen?: SortOrder
+    lastSeen?: SortOrder
+    lastState?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UsageDayMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    activeSec?: SortOrder
+    idleSec?: SortOrder
+    awaySec?: SortOrder
+    leaves?: SortOrder
+    firstSeen?: SortOrder
+    lastSeen?: SortOrder
+    lastState?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UsageDaySumOrderByAggregateInput = {
+    activeSec?: SortOrder
+    idleSec?: SortOrder
+    awaySec?: SortOrder
+    leaves?: SortOrder
+  }
+
   export type AcademicSessionCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AcademicSessionCreateWithoutOrganizationInput, AcademicSessionUncheckedCreateWithoutOrganizationInput> | AcademicSessionCreateWithoutOrganizationInput[] | AcademicSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AcademicSessionCreateOrConnectWithoutOrganizationInput | AcademicSessionCreateOrConnectWithoutOrganizationInput[]
@@ -174139,6 +175863,13 @@ export namespace Prisma {
     connect?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
   }
 
+  export type UsageDayCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<UsageDayCreateWithoutOrganizationInput, UsageDayUncheckedCreateWithoutOrganizationInput> | UsageDayCreateWithoutOrganizationInput[] | UsageDayUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UsageDayCreateOrConnectWithoutOrganizationInput | UsageDayCreateOrConnectWithoutOrganizationInput[]
+    createMany?: UsageDayCreateManyOrganizationInputEnvelope
+    connect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+  }
+
   export type AcademicSessionUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AcademicSessionCreateWithoutOrganizationInput, AcademicSessionUncheckedCreateWithoutOrganizationInput> | AcademicSessionCreateWithoutOrganizationInput[] | AcademicSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AcademicSessionCreateOrConnectWithoutOrganizationInput | AcademicSessionCreateOrConnectWithoutOrganizationInput[]
@@ -174717,6 +176448,13 @@ export namespace Prisma {
     connectOrCreate?: StudentFilterTypeCreateOrConnectWithoutOrganizationInput | StudentFilterTypeCreateOrConnectWithoutOrganizationInput[]
     createMany?: StudentFilterTypeCreateManyOrganizationInputEnvelope
     connect?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
+  }
+
+  export type UsageDayUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<UsageDayCreateWithoutOrganizationInput, UsageDayUncheckedCreateWithoutOrganizationInput> | UsageDayCreateWithoutOrganizationInput[] | UsageDayUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UsageDayCreateOrConnectWithoutOrganizationInput | UsageDayCreateOrConnectWithoutOrganizationInput[]
+    createMany?: UsageDayCreateManyOrganizationInputEnvelope
+    connect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -175907,6 +177645,20 @@ export namespace Prisma {
     deleteMany?: StudentFilterTypeScalarWhereInput | StudentFilterTypeScalarWhereInput[]
   }
 
+  export type UsageDayUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<UsageDayCreateWithoutOrganizationInput, UsageDayUncheckedCreateWithoutOrganizationInput> | UsageDayCreateWithoutOrganizationInput[] | UsageDayUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UsageDayCreateOrConnectWithoutOrganizationInput | UsageDayCreateOrConnectWithoutOrganizationInput[]
+    upsert?: UsageDayUpsertWithWhereUniqueWithoutOrganizationInput | UsageDayUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: UsageDayCreateManyOrganizationInputEnvelope
+    set?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    disconnect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    delete?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    connect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    update?: UsageDayUpdateWithWhereUniqueWithoutOrganizationInput | UsageDayUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: UsageDayUpdateManyWithWhereWithoutOrganizationInput | UsageDayUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: UsageDayScalarWhereInput | UsageDayScalarWhereInput[]
+  }
+
   export type AcademicSessionUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<AcademicSessionCreateWithoutOrganizationInput, AcademicSessionUncheckedCreateWithoutOrganizationInput> | AcademicSessionCreateWithoutOrganizationInput[] | AcademicSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AcademicSessionCreateOrConnectWithoutOrganizationInput | AcademicSessionCreateOrConnectWithoutOrganizationInput[]
@@ -177063,6 +178815,20 @@ export namespace Prisma {
     update?: StudentFilterTypeUpdateWithWhereUniqueWithoutOrganizationInput | StudentFilterTypeUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: StudentFilterTypeUpdateManyWithWhereWithoutOrganizationInput | StudentFilterTypeUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: StudentFilterTypeScalarWhereInput | StudentFilterTypeScalarWhereInput[]
+  }
+
+  export type UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<UsageDayCreateWithoutOrganizationInput, UsageDayUncheckedCreateWithoutOrganizationInput> | UsageDayCreateWithoutOrganizationInput[] | UsageDayUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: UsageDayCreateOrConnectWithoutOrganizationInput | UsageDayCreateOrConnectWithoutOrganizationInput[]
+    upsert?: UsageDayUpsertWithWhereUniqueWithoutOrganizationInput | UsageDayUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: UsageDayCreateManyOrganizationInputEnvelope
+    set?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    disconnect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    delete?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    connect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    update?: UsageDayUpdateWithWhereUniqueWithoutOrganizationInput | UsageDayUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: UsageDayUpdateManyWithWhereWithoutOrganizationInput | UsageDayUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: UsageDayScalarWhereInput | UsageDayScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedManyWithoutLicenseInput = {
@@ -178281,6 +180047,13 @@ export namespace Prisma {
     connect?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
   }
 
+  export type UsageDayCreateNestedManyWithoutUserInput = {
+    create?: XOR<UsageDayCreateWithoutUserInput, UsageDayUncheckedCreateWithoutUserInput> | UsageDayCreateWithoutUserInput[] | UsageDayUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UsageDayCreateOrConnectWithoutUserInput | UsageDayCreateOrConnectWithoutUserInput[]
+    createMany?: UsageDayCreateManyUserInputEnvelope
+    connect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+  }
+
   export type StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput = {
     create?: XOR<StudentBatchTransferCreateWithoutTransferredByInput, StudentBatchTransferUncheckedCreateWithoutTransferredByInput> | StudentBatchTransferCreateWithoutTransferredByInput[] | StudentBatchTransferUncheckedCreateWithoutTransferredByInput[]
     connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutTransferredByInput | StudentBatchTransferCreateOrConnectWithoutTransferredByInput[]
@@ -178857,6 +180630,13 @@ export namespace Prisma {
     connectOrCreate?: ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput | ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput[]
     createMany?: ProgramAllocationCreateManyOpsSubAdminInputEnvelope
     connect?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
+  }
+
+  export type UsageDayUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UsageDayCreateWithoutUserInput, UsageDayUncheckedCreateWithoutUserInput> | UsageDayCreateWithoutUserInput[] | UsageDayUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UsageDayCreateOrConnectWithoutUserInput | UsageDayCreateOrConnectWithoutUserInput[]
+    createMany?: UsageDayCreateManyUserInputEnvelope
+    connect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -180079,6 +181859,20 @@ export namespace Prisma {
     deleteMany?: ProgramAllocationScalarWhereInput | ProgramAllocationScalarWhereInput[]
   }
 
+  export type UsageDayUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UsageDayCreateWithoutUserInput, UsageDayUncheckedCreateWithoutUserInput> | UsageDayCreateWithoutUserInput[] | UsageDayUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UsageDayCreateOrConnectWithoutUserInput | UsageDayCreateOrConnectWithoutUserInput[]
+    upsert?: UsageDayUpsertWithWhereUniqueWithoutUserInput | UsageDayUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UsageDayCreateManyUserInputEnvelope
+    set?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    disconnect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    delete?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    connect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    update?: UsageDayUpdateWithWhereUniqueWithoutUserInput | UsageDayUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UsageDayUpdateManyWithWhereWithoutUserInput | UsageDayUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UsageDayScalarWhereInput | UsageDayScalarWhereInput[]
+  }
+
   export type StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput = {
     create?: XOR<StudentBatchTransferCreateWithoutTransferredByInput, StudentBatchTransferUncheckedCreateWithoutTransferredByInput> | StudentBatchTransferCreateWithoutTransferredByInput[] | StudentBatchTransferUncheckedCreateWithoutTransferredByInput[]
     connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutTransferredByInput | StudentBatchTransferCreateOrConnectWithoutTransferredByInput[]
@@ -181219,6 +183013,20 @@ export namespace Prisma {
     update?: ProgramAllocationUpdateWithWhereUniqueWithoutOpsSubAdminInput | ProgramAllocationUpdateWithWhereUniqueWithoutOpsSubAdminInput[]
     updateMany?: ProgramAllocationUpdateManyWithWhereWithoutOpsSubAdminInput | ProgramAllocationUpdateManyWithWhereWithoutOpsSubAdminInput[]
     deleteMany?: ProgramAllocationScalarWhereInput | ProgramAllocationScalarWhereInput[]
+  }
+
+  export type UsageDayUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UsageDayCreateWithoutUserInput, UsageDayUncheckedCreateWithoutUserInput> | UsageDayCreateWithoutUserInput[] | UsageDayUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UsageDayCreateOrConnectWithoutUserInput | UsageDayCreateOrConnectWithoutUserInput[]
+    upsert?: UsageDayUpsertWithWhereUniqueWithoutUserInput | UsageDayUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UsageDayCreateManyUserInputEnvelope
+    set?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    disconnect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    delete?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    connect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+    update?: UsageDayUpdateWithWhereUniqueWithoutUserInput | UsageDayUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UsageDayUpdateManyWithWhereWithoutUserInput | UsageDayUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UsageDayScalarWhereInput | UsageDayScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutEmployeesInput = {
@@ -190524,6 +192332,34 @@ export namespace Prisma {
     update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutFilterHistoryInput, StudentUpdateWithoutFilterHistoryInput>, StudentUncheckedUpdateWithoutFilterHistoryInput>
   }
 
+  export type OrganizationCreateNestedOneWithoutUsageDaysInput = {
+    create?: XOR<OrganizationCreateWithoutUsageDaysInput, OrganizationUncheckedCreateWithoutUsageDaysInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutUsageDaysInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutUsageDaysInput = {
+    create?: XOR<UserCreateWithoutUsageDaysInput, UserUncheckedCreateWithoutUsageDaysInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUsageDaysInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutUsageDaysNestedInput = {
+    create?: XOR<OrganizationCreateWithoutUsageDaysInput, OrganizationUncheckedCreateWithoutUsageDaysInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutUsageDaysInput
+    upsert?: OrganizationUpsertWithoutUsageDaysInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutUsageDaysInput, OrganizationUpdateWithoutUsageDaysInput>, OrganizationUncheckedUpdateWithoutUsageDaysInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutUsageDaysNestedInput = {
+    create?: XOR<UserCreateWithoutUsageDaysInput, UserUncheckedCreateWithoutUsageDaysInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUsageDaysInput
+    upsert?: UserUpsertWithoutUsageDaysInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUsageDaysInput, UserUpdateWithoutUsageDaysInput>, UserUncheckedUpdateWithoutUsageDaysInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -194367,6 +196203,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrganizationInput = {
@@ -194483,6 +196320,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrganizationInput = {
@@ -195146,6 +196984,48 @@ export namespace Prisma {
 
   export type StudentFilterTypeCreateManyOrganizationInputEnvelope = {
     data: StudentFilterTypeCreateManyOrganizationInput | StudentFilterTypeCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UsageDayCreateWithoutOrganizationInput = {
+    id?: string
+    date: string
+    activeSec?: number
+    idleSec?: number
+    awaySec?: number
+    leaves?: number
+    firstSeen?: Date | string | null
+    lastSeen?: Date | string | null
+    lastState?: string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutUsageDaysInput
+  }
+
+  export type UsageDayUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    userId: string
+    date: string
+    activeSec?: number
+    idleSec?: number
+    awaySec?: number
+    leaves?: number
+    firstSeen?: Date | string | null
+    lastSeen?: Date | string | null
+    lastState?: string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type UsageDayCreateOrConnectWithoutOrganizationInput = {
+    where: UsageDayWhereUniqueInput
+    create: XOR<UsageDayCreateWithoutOrganizationInput, UsageDayUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type UsageDayCreateManyOrganizationInputEnvelope = {
+    data: UsageDayCreateManyOrganizationInput | UsageDayCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -198161,6 +200041,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"StudentFilterType"> | Date | string
   }
 
+  export type UsageDayUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: UsageDayWhereUniqueInput
+    update: XOR<UsageDayUpdateWithoutOrganizationInput, UsageDayUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<UsageDayCreateWithoutOrganizationInput, UsageDayUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type UsageDayUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: UsageDayWhereUniqueInput
+    data: XOR<UsageDayUpdateWithoutOrganizationInput, UsageDayUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type UsageDayUpdateManyWithWhereWithoutOrganizationInput = {
+    where: UsageDayScalarWhereInput
+    data: XOR<UsageDayUpdateManyMutationInput, UsageDayUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type UsageDayScalarWhereInput = {
+    AND?: UsageDayScalarWhereInput | UsageDayScalarWhereInput[]
+    OR?: UsageDayScalarWhereInput[]
+    NOT?: UsageDayScalarWhereInput | UsageDayScalarWhereInput[]
+    id?: StringFilter<"UsageDay"> | string
+    organizationId?: StringFilter<"UsageDay"> | string
+    userId?: StringFilter<"UsageDay"> | string
+    date?: StringFilter<"UsageDay"> | string
+    activeSec?: FloatFilter<"UsageDay"> | number
+    idleSec?: FloatFilter<"UsageDay"> | number
+    awaySec?: FloatFilter<"UsageDay"> | number
+    leaves?: IntFilter<"UsageDay"> | number
+    firstSeen?: DateTimeNullableFilter<"UsageDay"> | Date | string | null
+    lastSeen?: DateTimeNullableFilter<"UsageDay"> | Date | string | null
+    lastState?: StringNullableFilter<"UsageDay"> | string | null
+    pages?: JsonFilter<"UsageDay">
+    segments?: JsonFilter<"UsageDay">
+    updatedAt?: DateTimeFilter<"UsageDay"> | Date | string
+  }
+
   export type OrganizationCreateWithoutLicenseInput = {
     id?: string
     name: string
@@ -198258,6 +200174,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLicenseInput = {
@@ -198357,6 +200274,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLicenseInput = {
@@ -198655,6 +200573,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedDepartmentsInput = {
@@ -198771,6 +200690,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedDepartmentsInput = {
@@ -198875,6 +200795,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDepartmentsInput = {
@@ -198974,6 +200895,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDepartmentsInput = {
@@ -199454,6 +201376,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentInput = {
@@ -199570,6 +201493,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -199728,6 +201652,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssistantManagedDepartmentsInput = {
@@ -199844,6 +201769,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssistantManagedDepartmentsInput = {
@@ -200102,6 +202028,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedDepartmentsInput = {
@@ -200218,6 +202145,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutDepartmentsInput = {
@@ -200328,6 +202256,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDepartmentsInput = {
@@ -200427,6 +202356,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutChildDepartmentsInput = {
@@ -205202,6 +207132,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUsersInput = {
@@ -205301,6 +207232,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUsersInput = {
@@ -205422,6 +207354,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubordinatesInput = {
@@ -205538,6 +207471,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubordinatesInput = {
@@ -205659,6 +207593,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -205775,6 +207710,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -206316,6 +208252,48 @@ export namespace Prisma {
 
   export type ProgramAllocationCreateManyOpsSubAdminInputEnvelope = {
     data: ProgramAllocationCreateManyOpsSubAdminInput | ProgramAllocationCreateManyOpsSubAdminInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UsageDayCreateWithoutUserInput = {
+    id?: string
+    date: string
+    activeSec?: number
+    idleSec?: number
+    awaySec?: number
+    leaves?: number
+    firstSeen?: Date | string | null
+    lastSeen?: Date | string | null
+    lastState?: string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutUsageDaysInput
+  }
+
+  export type UsageDayUncheckedCreateWithoutUserInput = {
+    id?: string
+    organizationId: string
+    date: string
+    activeSec?: number
+    idleSec?: number
+    awaySec?: number
+    leaves?: number
+    firstSeen?: Date | string | null
+    lastSeen?: Date | string | null
+    lastState?: string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type UsageDayCreateOrConnectWithoutUserInput = {
+    where: UsageDayWhereUniqueInput
+    create: XOR<UsageDayCreateWithoutUserInput, UsageDayUncheckedCreateWithoutUserInput>
+  }
+
+  export type UsageDayCreateManyUserInputEnvelope = {
+    data: UsageDayCreateManyUserInput | UsageDayCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -208128,6 +210106,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUsersInput = {
@@ -208227,6 +210206,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSubordinatesInput = {
@@ -208354,6 +210334,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubordinatesInput = {
@@ -208470,6 +210451,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -208870,6 +210852,22 @@ export namespace Prisma {
     data: XOR<ProgramAllocationUpdateManyMutationInput, ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminInput>
   }
 
+  export type UsageDayUpsertWithWhereUniqueWithoutUserInput = {
+    where: UsageDayWhereUniqueInput
+    update: XOR<UsageDayUpdateWithoutUserInput, UsageDayUncheckedUpdateWithoutUserInput>
+    create: XOR<UsageDayCreateWithoutUserInput, UsageDayUncheckedCreateWithoutUserInput>
+  }
+
+  export type UsageDayUpdateWithWhereUniqueWithoutUserInput = {
+    where: UsageDayWhereUniqueInput
+    data: XOR<UsageDayUpdateWithoutUserInput, UsageDayUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UsageDayUpdateManyWithWhereWithoutUserInput = {
+    where: UsageDayScalarWhereInput
+    data: XOR<UsageDayUpdateManyMutationInput, UsageDayUncheckedUpdateManyWithoutUserInput>
+  }
+
   export type OrganizationCreateWithoutEmployeesInput = {
     id?: string
     name: string
@@ -208967,6 +210965,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeesInput = {
@@ -209066,6 +211065,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeesInput = {
@@ -209187,6 +211187,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileInput = {
@@ -209303,6 +211304,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileInput = {
@@ -209418,6 +211420,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
@@ -209517,6 +211520,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileInput = {
@@ -209644,6 +211648,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileInput = {
@@ -209760,6 +211765,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EscalationCreateWithoutTaskInput = {
@@ -209928,6 +211934,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -210044,6 +212051,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -210165,6 +212173,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -210281,6 +212290,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -210459,6 +212469,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEscalatedTasksInput = {
@@ -210575,6 +212586,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEscalatedTasksInput = {
@@ -210679,6 +212691,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTasksInput = {
@@ -210778,6 +212791,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTasksInput = {
@@ -210926,6 +212940,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -211042,6 +213057,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -211169,6 +213185,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -211285,6 +213302,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DepartmentUpsertWithoutTasksInput = {
@@ -211475,6 +213493,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEscalatedTasksInput = {
@@ -211591,6 +213610,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutTasksInput = {
@@ -211701,6 +213721,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTasksInput = {
@@ -211800,6 +213821,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutAttendancesInput = {
@@ -211916,6 +213938,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAttendancesInput = {
@@ -212032,6 +214055,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -212136,6 +214160,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAttendancesInput = {
@@ -212235,6 +214260,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAttendancesInput = {
@@ -212367,6 +214393,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendancesInput = {
@@ -212483,6 +214510,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutAttendancesInput = {
@@ -212593,6 +214621,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAttendancesInput = {
@@ -212692,6 +214721,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AdmissionSessionCreateWithoutUniversityInput = {
@@ -213123,6 +215153,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversitiesInput = {
@@ -213222,6 +215253,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversitiesInput = {
@@ -213439,6 +215471,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUniversityInput = {
@@ -213555,6 +215588,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUniversityInput = {
@@ -213920,6 +215954,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversitiesInput = {
@@ -214019,6 +216054,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityAuthFeeUpsertWithWhereUniqueWithoutUniversityInput = {
@@ -214488,6 +216524,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramsInput = {
@@ -214587,6 +216624,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramsInput = {
@@ -215187,6 +217225,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramsInput = {
@@ -215286,6 +217325,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutProgramsInput = {
@@ -216089,6 +218129,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedCentersInput = {
@@ -216205,6 +218246,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedCentersInput = {
@@ -216309,6 +218351,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCentersInput = {
@@ -216408,6 +218451,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCentersInput = {
@@ -216529,6 +218573,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudyCentersInput = {
@@ -216645,6 +218690,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudyCentersInput = {
@@ -216766,6 +218812,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedStudyCentersInput = {
@@ -216882,6 +218929,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedStudyCentersInput = {
@@ -217068,6 +219116,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInput = {
@@ -217184,6 +219233,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInput = {
@@ -217652,6 +219702,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedCentersInput = {
@@ -217768,6 +219819,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutStudyCentersInput = {
@@ -217878,6 +219930,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCentersInput = {
@@ -217977,6 +220030,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredStudyCentersInput = {
@@ -218104,6 +220158,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudyCentersInput = {
@@ -218220,6 +220275,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutVerifiedStudyCentersInput = {
@@ -218347,6 +220403,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedStudyCentersInput = {
@@ -218463,6 +220520,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterWalletUpsertWithoutStudyCenterInput = {
@@ -219339,6 +221397,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudentProfileInput = {
@@ -219455,6 +221514,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudentProfileInput = {
@@ -219576,6 +221636,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrolledStudentsInput = {
@@ -219692,6 +221753,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrolledStudentsInput = {
@@ -219796,6 +221858,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentsInput = {
@@ -219895,6 +221958,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentsInput = {
@@ -220069,6 +222133,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudentsInput = {
@@ -220185,6 +222250,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudentsInput = {
@@ -221046,6 +223112,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentProfileInput = {
@@ -221162,6 +223229,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutEnrolledStudentsInput = {
@@ -221289,6 +223357,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrolledStudentsInput = {
@@ -221405,6 +223474,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutStudentsInput = {
@@ -221515,6 +223585,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentsInput = {
@@ -221614,6 +223685,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutStudentsInput = {
@@ -221800,6 +223872,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudentsInput = {
@@ -221916,6 +223989,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AdmissionSessionUpsertWithoutStudentsInput = {
@@ -222410,6 +224484,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInvoicesInput = {
@@ -222509,6 +224584,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInvoicesInput = {
@@ -222945,6 +225021,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
@@ -223044,6 +225121,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type PaymentScheduleUpsertWithoutInvoicesInput = {
@@ -223359,6 +225437,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeadsInput = {
@@ -223458,6 +225537,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeadsInput = {
@@ -223579,6 +225659,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredLeadsInput = {
@@ -223695,6 +225776,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredLeadsInput = {
@@ -223810,6 +225892,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeadsInput = {
@@ -223909,6 +225992,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredLeadsInput = {
@@ -224036,6 +226120,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredLeadsInput = {
@@ -224152,6 +226237,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutComplaintsInput = {
@@ -224268,6 +226354,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutComplaintsInput = {
@@ -224384,6 +226471,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutComplaintsInput = {
@@ -224488,6 +226576,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutComplaintsInput = {
@@ -224587,6 +226676,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutComplaintsInput = {
@@ -224719,6 +226809,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutComplaintsInput = {
@@ -224835,6 +226926,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutComplaintsInput = {
@@ -224945,6 +227037,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutComplaintsInput = {
@@ -225044,6 +227137,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutNotificationsInput = {
@@ -225143,6 +227237,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutNotificationsInput = {
@@ -225242,6 +227337,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutNotificationsInput = {
@@ -225363,6 +227459,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -225479,6 +227576,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -225594,6 +227692,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
@@ -225693,6 +227792,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -225820,6 +227920,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -225936,6 +228037,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutAuditLogsInput = {
@@ -226035,6 +228137,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuditLogsInput = {
@@ -226134,6 +228237,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuditLogsInput = {
@@ -226255,6 +228359,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -226371,6 +228476,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -226486,6 +228592,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuditLogsInput = {
@@ -226585,6 +228692,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutAuditLogsInput = {
@@ -226712,6 +228820,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -226828,6 +228937,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DepartmentCreateWithoutAnnouncementsInput = {
@@ -226984,6 +229094,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAnnouncementsInput = {
@@ -227083,6 +229194,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAnnouncementsInput = {
@@ -227204,6 +229316,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostedAnnouncementsInput = {
@@ -227320,6 +229433,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostedAnnouncementsInput = {
@@ -227498,6 +229612,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAnnouncementsInput = {
@@ -227597,6 +229712,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutPostedAnnouncementsInput = {
@@ -227724,6 +229840,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostedAnnouncementsInput = {
@@ -227840,6 +229957,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutHolidaysInput = {
@@ -227939,6 +230057,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHolidaysInput = {
@@ -228038,6 +230157,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHolidaysInput = {
@@ -228153,6 +230273,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
@@ -228252,6 +230373,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentCreateWithoutLeaveRequestsInput = {
@@ -228425,6 +230547,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeptApprovedLeavesInput = {
@@ -228541,6 +230664,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeptApprovedLeavesInput = {
@@ -228662,6 +230786,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeaveRequestsInput = {
@@ -228778,6 +230903,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeaveRequestsInput = {
@@ -228899,6 +231025,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHrApprovedLeavesInput = {
@@ -229015,6 +231142,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHrApprovedLeavesInput = {
@@ -229119,6 +231247,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveRequestsInput = {
@@ -229218,6 +231347,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveRequestsInput = {
@@ -229413,6 +231543,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptApprovedLeavesInput = {
@@ -229529,6 +231660,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutLeaveRequestsInput = {
@@ -229656,6 +231788,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -229772,6 +231905,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutHrApprovedLeavesInput = {
@@ -229899,6 +232033,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHrApprovedLeavesInput = {
@@ -230015,6 +232150,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveRequestsInput = {
@@ -230125,6 +232261,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -230224,6 +232361,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutSalaryApprovedInput = {
@@ -230340,6 +232478,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalaryApprovedInput = {
@@ -230456,6 +232595,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalaryApprovedInput = {
@@ -230577,6 +232717,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalaryCreatedInput = {
@@ -230693,6 +232834,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalaryCreatedInput = {
@@ -230797,6 +232939,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSalaryConfigsInput = {
@@ -230896,6 +233039,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSalaryConfigsInput = {
@@ -231017,6 +233161,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalaryConfigInput = {
@@ -231133,6 +233278,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalaryConfigInput = {
@@ -231265,6 +233411,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryApprovedInput = {
@@ -231381,6 +233528,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSalaryCreatedInput = {
@@ -231508,6 +233656,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryCreatedInput = {
@@ -231624,6 +233773,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutSalaryConfigsInput = {
@@ -231734,6 +233884,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSalaryConfigsInput = {
@@ -231833,6 +233984,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSalaryConfigInput = {
@@ -231960,6 +234112,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryConfigInput = {
@@ -232076,6 +234229,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutConfirmedPayrollsInput = {
@@ -232192,6 +234346,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConfirmedPayrollsInput = {
@@ -232308,6 +234463,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConfirmedPayrollsInput = {
@@ -232429,6 +234585,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPayrollsInput = {
@@ -232545,6 +234702,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPayrollsInput = {
@@ -232666,6 +234824,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedPayrollsInput = {
@@ -232782,6 +234941,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedPayrollsInput = {
@@ -232886,6 +235046,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollsInput = {
@@ -232985,6 +235146,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollsInput = {
@@ -233106,6 +235268,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProcessedPayrollsInput = {
@@ -233222,6 +235385,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProcessedPayrollsInput = {
@@ -233343,6 +235507,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransferredPayrollsInput = {
@@ -233459,6 +235624,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransferredPayrollsInput = {
@@ -233591,6 +235757,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfirmedPayrollsInput = {
@@ -233707,6 +235874,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutPayrollsInput = {
@@ -233834,6 +236002,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayrollsInput = {
@@ -233950,6 +236119,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutFinanceApprovedPayrollsInput = {
@@ -234077,6 +236247,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedPayrollsInput = {
@@ -234193,6 +236364,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollsInput = {
@@ -234303,6 +236475,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollsInput = {
@@ -234402,6 +236575,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutProcessedPayrollsInput = {
@@ -234529,6 +236703,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProcessedPayrollsInput = {
@@ -234645,6 +236820,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutTransferredPayrollsInput = {
@@ -234772,6 +236948,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransferredPayrollsInput = {
@@ -234888,6 +237065,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutManagedBranchInput = {
@@ -235004,6 +237182,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedBranchInput = {
@@ -235120,6 +237299,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedBranchInput = {
@@ -235281,6 +237461,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBranchesInput = {
@@ -235380,6 +237561,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBranchesInput = {
@@ -235800,6 +237982,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBranchInput = {
@@ -235916,6 +238099,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBranchInput = {
@@ -236142,6 +238326,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedBranchInput = {
@@ -236258,6 +238443,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DepartmentUpsertWithoutOpsBranchInput = {
@@ -236431,6 +238617,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBranchesInput = {
@@ -236530,6 +238717,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSalesBranchInput = {
@@ -236907,6 +239095,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedSubDepartmentsInput = {
@@ -237023,6 +239212,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedSubDepartmentsInput = {
@@ -237127,6 +239317,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSubDepartmentsInput = {
@@ -237226,6 +239417,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSubDepartmentsInput = {
@@ -237404,6 +239596,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubDepartmentInput = {
@@ -237520,6 +239713,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubDepartmentInput = {
@@ -237888,6 +240082,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSubDepartmentsInput = {
@@ -238004,6 +240199,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutSubDepartmentsInput = {
@@ -238114,6 +240310,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSubDepartmentsInput = {
@@ -238213,6 +240410,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSubDepartmentsInput = {
@@ -238545,6 +240743,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDesignationsInput = {
@@ -238644,6 +240843,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDesignationsInput = {
@@ -238893,6 +241093,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDesignationsInput = {
@@ -239009,6 +241210,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDesignationsInput = {
@@ -239242,6 +241444,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDesignationsInput = {
@@ -239341,6 +241544,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DesignationUpsertWithoutChildDesignationsInput = {
@@ -239583,6 +241787,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHostedMeetingsInput = {
@@ -239699,6 +241904,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHostedMeetingsInput = {
@@ -239803,6 +242009,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutMeetingsInput = {
@@ -239902,6 +242109,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutMeetingsInput = {
@@ -240034,6 +242242,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedMeetingsInput = {
@@ -240150,6 +242359,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutMeetingsInput = {
@@ -240260,6 +242470,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutMeetingsInput = {
@@ -240359,6 +242570,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentCreateWithoutVacanciesInput = {
@@ -240515,6 +242727,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutVacanciesInput = {
@@ -240614,6 +242827,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutVacanciesInput = {
@@ -240792,6 +243006,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutVacanciesInput = {
@@ -240891,6 +243106,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutApprovedSessionsInput = {
@@ -241007,6 +243223,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSessionsInput = {
@@ -241123,6 +243340,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSessionsInput = {
@@ -241244,6 +243462,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedSessionsInput = {
@@ -241360,6 +243579,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedSessionsInput = {
@@ -241464,6 +243684,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionsInput = {
@@ -241563,6 +243784,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionsInput = {
@@ -242291,6 +244513,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSessionsInput = {
@@ -242407,6 +244630,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedSessionsInput = {
@@ -242534,6 +244758,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
@@ -242650,6 +244875,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutSessionsInput = {
@@ -242760,6 +244986,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionsInput = {
@@ -242859,6 +245086,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutAdmissionSessionsInput = {
@@ -243287,6 +245515,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeptReviewedEnrollmentsInput = {
@@ -243403,6 +245632,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeptReviewedEnrollmentsInput = {
@@ -243524,6 +245754,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFinanceReviewedEnrollmentsInput = {
@@ -243640,6 +245871,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFinanceReviewedEnrollmentsInput = {
@@ -243744,6 +245976,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEnrollmentsInput = {
@@ -243843,6 +246076,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEnrollmentsInput = {
@@ -244017,6 +246251,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedReceiptsInput = {
@@ -244133,6 +246368,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedReceiptsInput = {
@@ -244254,6 +246490,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalesLedEnrollmentsInput = {
@@ -244370,6 +246607,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalesLedEnrollmentsInput = {
@@ -244782,6 +247020,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUniversityReviewedEnrollmentsInput = {
@@ -244898,6 +247137,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUniversityReviewedEnrollmentsInput = {
@@ -245055,6 +247295,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptReviewedEnrollmentsInput = {
@@ -245171,6 +247412,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutFinanceReviewedEnrollmentsInput = {
@@ -245298,6 +247540,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceReviewedEnrollmentsInput = {
@@ -245414,6 +247657,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutEnrollmentsInput = {
@@ -245524,6 +247768,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEnrollmentsInput = {
@@ -245623,6 +247868,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutEnrollmentsInput = {
@@ -245809,6 +248055,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedReceiptsInput = {
@@ -245925,6 +248172,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSalesLedEnrollmentsInput = {
@@ -246052,6 +248300,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalesLedEnrollmentsInput = {
@@ -246168,6 +248417,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AdmissionSessionUpsertWithoutEnrollmentsInput = {
@@ -246604,6 +248854,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityReviewedEnrollmentsInput = {
@@ -246720,6 +248971,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EnrollmentPaymentUpsertWithoutEnrollmentInput = {
@@ -246867,6 +249119,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedExpenseClaimsInput = {
@@ -246983,6 +249236,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedExpenseClaimsInput = {
@@ -247104,6 +249358,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutExpenseClaimsInput = {
@@ -247220,6 +249475,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutExpenseClaimsInput = {
@@ -247324,6 +249580,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutExpenseClaimsInput = {
@@ -247423,6 +249680,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutExpenseClaimsInput = {
@@ -247555,6 +249813,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedExpenseClaimsInput = {
@@ -247671,6 +249930,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutExpenseClaimsInput = {
@@ -247798,6 +250058,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -247914,6 +250175,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutExpenseClaimsInput = {
@@ -248024,6 +250286,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -248123,6 +250386,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type EnrollmentPaymentCreateWithoutWalletInput = {
@@ -248252,6 +250516,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCenterWalletsInput = {
@@ -248351,6 +250616,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCenterWalletsInput = {
@@ -248573,6 +250839,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCenterWalletsInput = {
@@ -248672,6 +250939,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletInput = {
@@ -248868,6 +251136,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutWalletTopUpsInput = {
@@ -248967,6 +251236,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutWalletTopUpsInput = {
@@ -249179,6 +251449,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedWalletTopUpsInput = {
@@ -249295,6 +251566,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedWalletTopUpsInput = {
@@ -249410,6 +251682,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutWalletTopUpsInput = {
@@ -249509,6 +251782,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletTopUpsInput = {
@@ -249733,6 +252007,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedWalletTopUpsInput = {
@@ -249849,6 +252124,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InvoiceCreateWithoutPaymentsInput = {
@@ -249991,6 +252267,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentsInput = {
@@ -250090,6 +252367,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentsInput = {
@@ -250211,6 +252489,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReceivedPaymentsInput = {
@@ -250327,6 +252606,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReceivedPaymentsInput = {
@@ -250491,6 +252771,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
@@ -250590,6 +252871,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReceivedPaymentsInput = {
@@ -250717,6 +252999,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedPaymentsInput = {
@@ -250833,6 +253116,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCreatedGstSettingsInput = {
@@ -250949,6 +253233,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedGstSettingsInput = {
@@ -251065,6 +253350,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedGstSettingsInput = {
@@ -251169,6 +253455,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutGstSettingsInput = {
@@ -251268,6 +253555,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutGstSettingsInput = {
@@ -251400,6 +253688,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedGstSettingsInput = {
@@ -251516,6 +253805,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutGstSettingsInput = {
@@ -251626,6 +253916,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutGstSettingsInput = {
@@ -251725,6 +254016,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutEmployeeProfilesInput = {
@@ -251824,6 +254116,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeeProfilesInput = {
@@ -251923,6 +254216,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeeProfilesInput = {
@@ -252044,6 +254338,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileDetailInput = {
@@ -252160,6 +254455,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileDetailInput = {
@@ -252275,6 +254571,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeeProfilesInput = {
@@ -252374,6 +254671,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileDetailInput = {
@@ -252501,6 +254799,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileDetailInput = {
@@ -252617,6 +254916,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutHrSettingsInput = {
@@ -252716,6 +255016,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHrSettingsInput = {
@@ -252815,6 +255116,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHrSettingsInput = {
@@ -252930,6 +255232,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHrSettingsInput = {
@@ -253029,6 +255332,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutCeoPanelsInput = {
@@ -253128,6 +255432,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCeoPanelsInput = {
@@ -253227,6 +255532,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCeoPanelsInput = {
@@ -253348,6 +255654,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCeoPanelInput = {
@@ -253464,6 +255771,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCeoPanelInput = {
@@ -253579,6 +255887,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCeoPanelsInput = {
@@ -253678,6 +255987,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCeoPanelInput = {
@@ -253805,6 +256115,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCeoPanelInput = {
@@ -253921,6 +256232,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutCredentialRequestsInput = {
@@ -254020,6 +256332,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCredentialRequestsInput = {
@@ -254119,6 +256432,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCredentialRequestsInput = {
@@ -254240,6 +256554,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCredentialResponderInput = {
@@ -254356,6 +256671,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCredentialResponderInput = {
@@ -254477,6 +256793,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCredentialRequesterInput = {
@@ -254593,6 +256910,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCredentialRequesterInput = {
@@ -254708,6 +257026,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCredentialRequestsInput = {
@@ -254807,6 +257126,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCredentialResponderInput = {
@@ -254934,6 +257254,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialResponderInput = {
@@ -255050,6 +257371,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCredentialRequesterInput = {
@@ -255177,6 +257499,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialRequesterInput = {
@@ -255293,6 +257616,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutEditDeleteRequestsInput = {
@@ -255392,6 +257716,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEditDeleteRequestsInput = {
@@ -255491,6 +257816,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEditDeleteRequestsInput = {
@@ -255612,6 +257938,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteResponderInput = {
@@ -255728,6 +258055,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteResponderInput = {
@@ -255849,6 +258177,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteRequesterInput = {
@@ -255965,6 +258294,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteRequesterInput = {
@@ -256135,6 +258465,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEditDeleteRequestsInput = {
@@ -256234,6 +258565,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteResponderInput = {
@@ -256361,6 +258693,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteResponderInput = {
@@ -256477,6 +258810,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteRequesterInput = {
@@ -256604,6 +258938,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteRequesterInput = {
@@ -256720,6 +259055,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FacultyUpsertWithoutEditDeleteRequestsInput = {
@@ -256897,6 +259233,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeptAdminEscalationsInput = {
@@ -257013,6 +259350,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeptAdminEscalationsInput = {
@@ -257134,6 +259472,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeEscalationsInput = {
@@ -257250,6 +259589,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeEscalationsInput = {
@@ -257371,6 +259711,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHandledEscalationsInput = {
@@ -257487,6 +259828,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHandledEscalationsInput = {
@@ -257591,6 +259933,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationsInput = {
@@ -257690,6 +260033,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationsInput = {
@@ -257811,6 +260155,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutResolvedEscalationsInput = {
@@ -257927,6 +260272,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutResolvedEscalationsInput = {
@@ -258136,6 +260482,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptAdminEscalationsInput = {
@@ -258252,6 +260599,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutEmployeeEscalationsInput = {
@@ -258379,6 +260727,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeEscalationsInput = {
@@ -258495,6 +260844,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutHandledEscalationsInput = {
@@ -258622,6 +260972,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHandledEscalationsInput = {
@@ -258738,6 +261089,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutEscalationsInput = {
@@ -258848,6 +261200,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationsInput = {
@@ -258947,6 +261300,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutResolvedEscalationsInput = {
@@ -259074,6 +261428,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedEscalationsInput = {
@@ -259190,6 +261545,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TaskUpsertWithoutEscalationsInput = {
@@ -259409,6 +261765,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationLogsInput = {
@@ -259508,6 +261865,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationLogsInput = {
@@ -259676,6 +262034,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationLogsInput = {
@@ -259775,6 +262134,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutEnteredMarksInput = {
@@ -259891,6 +262251,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnteredMarksInput = {
@@ -260007,6 +262368,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnteredMarksInput = {
@@ -260111,6 +262473,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInternalMarksInput = {
@@ -260210,6 +262573,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInternalMarksInput = {
@@ -260582,6 +262946,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnteredMarksInput = {
@@ -260698,6 +263063,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutInternalMarksInput = {
@@ -260808,6 +263174,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInternalMarksInput = {
@@ -260907,6 +263274,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutInternalMarksInput = {
@@ -261275,6 +263643,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedLeaveAllocationsInput = {
@@ -261391,6 +263760,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedLeaveAllocationsInput = {
@@ -261495,6 +263865,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -261594,6 +263965,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -261715,6 +264087,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -261831,6 +264204,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -261963,6 +264337,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedLeaveAllocationsInput = {
@@ -262079,6 +264454,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveAllocationsInput = {
@@ -262189,6 +264565,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -262288,6 +264665,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutLeaveAllocationsInput = {
@@ -262415,6 +264793,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -262531,6 +264910,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBatchApprovedInput = {
@@ -262647,6 +265027,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatchApprovedInput = {
@@ -262763,6 +265144,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatchApprovedInput = {
@@ -262867,6 +265249,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollBatchesInput = {
@@ -262966,6 +265349,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollBatchesInput = {
@@ -263087,6 +265471,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatchRejectedInput = {
@@ -263203,6 +265588,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatchRejectedInput = {
@@ -263324,6 +265710,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatchTransferredInput = {
@@ -263440,6 +265827,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatchTransferredInput = {
@@ -263572,6 +265960,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchApprovedInput = {
@@ -263688,6 +266077,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollBatchesInput = {
@@ -263798,6 +266188,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollBatchesInput = {
@@ -263897,6 +266288,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutBatchRejectedInput = {
@@ -264024,6 +266416,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchRejectedInput = {
@@ -264140,6 +266533,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBatchTransferredInput = {
@@ -264267,6 +266661,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchTransferredInput = {
@@ -264383,6 +266778,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCreatedPollsInput = {
@@ -264499,6 +266895,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPollsInput = {
@@ -264615,6 +267012,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPollsInput = {
@@ -264719,6 +267117,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPollsInput = {
@@ -264818,6 +267217,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPollsInput = {
@@ -264950,6 +267350,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPollsInput = {
@@ -265066,6 +267467,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPollsInput = {
@@ -265176,6 +267578,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPollsInput = {
@@ -265275,6 +267678,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutProgramAllocationsInput = {
@@ -265391,6 +267795,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProgramAllocationsInput = {
@@ -265507,6 +267912,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProgramAllocationsInput = {
@@ -265628,6 +268034,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOpsSubAdminAllocationsInput = {
@@ -265744,6 +268151,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOpsSubAdminAllocationsInput = {
@@ -265939,6 +268347,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramAllocationsInput = {
@@ -266038,6 +268447,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramAllocationsInput = {
@@ -266223,6 +268633,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -266339,6 +268750,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutOpsSubAdminAllocationsInput = {
@@ -266466,6 +268878,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOpsSubAdminAllocationsInput = {
@@ -266582,6 +268995,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterUpsertWithoutProgramAllocationsInput = {
@@ -266789,6 +269203,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -266888,6 +269303,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutProgramAllocationsInput = {
@@ -267046,6 +269462,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReferralLinksInput = {
@@ -267145,6 +269562,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReferralLinksInput = {
@@ -267266,6 +269684,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralLinkInput = {
@@ -267382,6 +269801,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralLinkInput = {
@@ -267497,6 +269917,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReferralLinksInput = {
@@ -267596,6 +270017,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferralLinkInput = {
@@ -267723,6 +270145,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralLinkInput = {
@@ -267839,6 +270262,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutReregRulesInput = {
@@ -267938,6 +270362,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReregRulesInput = {
@@ -268037,6 +270462,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReregRulesInput = {
@@ -268205,6 +270631,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReregRulesInput = {
@@ -268304,6 +270731,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutReregRulesInput = {
@@ -268479,6 +270907,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedRequestsInput = {
@@ -268595,6 +271024,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedRequestsInput = {
@@ -268790,6 +271220,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionReqsInput = {
@@ -268889,6 +271320,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionReqsInput = {
@@ -269010,6 +271442,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionRequestsInput = {
@@ -269126,6 +271559,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionRequestsInput = {
@@ -269258,6 +271692,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedRequestsInput = {
@@ -269374,6 +271809,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterUpsertWithoutSessionRequestsInput = {
@@ -269581,6 +272017,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionReqsInput = {
@@ -269680,6 +272117,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSessionRequestsInput = {
@@ -269807,6 +272245,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionRequestsInput = {
@@ -269923,6 +272362,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BranchCreateWithoutInvitesInput = {
@@ -270071,6 +272511,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -270170,6 +272611,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -270291,6 +272733,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -270407,6 +272850,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -270577,6 +273021,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -270676,6 +273121,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutStudyCenterInvitesInput = {
@@ -270803,6 +273249,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -270919,6 +273366,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterCreateWithoutTargetsInput = {
@@ -271183,6 +273631,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTargetsInput = {
@@ -271299,6 +273748,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTargetsInput = {
@@ -271403,6 +273853,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTargetsInput = {
@@ -271502,6 +273953,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTargetsInput = {
@@ -271794,6 +274246,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTargetsInput = {
@@ -271910,6 +274363,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutTargetsInput = {
@@ -272020,6 +274474,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTargetsInput = {
@@ -272119,6 +274574,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutConfiguredAuthFeesInput = {
@@ -272235,6 +274691,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConfiguredAuthFeesInput = {
@@ -272351,6 +274808,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConfiguredAuthFeesInput = {
@@ -272455,6 +274913,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuthFeesInput = {
@@ -272554,6 +275013,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuthFeesInput = {
@@ -272741,6 +275201,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfiguredAuthFeesInput = {
@@ -272857,6 +275318,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutAuthFeesInput = {
@@ -272967,6 +275429,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuthFeesInput = {
@@ -273066,6 +275529,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutAuthFeesInput = {
@@ -273243,6 +275707,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFeesInput = {
@@ -273359,6 +275824,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFeesInput = {
@@ -273463,6 +275929,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutFeeStructuresInput = {
@@ -273562,6 +276029,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutFeeStructuresInput = {
@@ -273853,6 +276321,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFeesInput = {
@@ -273969,6 +276438,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutFeeStructuresInput = {
@@ -274079,6 +276549,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutFeeStructuresInput = {
@@ -274178,6 +276649,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutFeeStructuresInput = {
@@ -274454,6 +276926,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCommissionsInput = {
@@ -274553,6 +277026,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCommissionsInput = {
@@ -274872,6 +277346,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCommissionsInput = {
@@ -274971,6 +277446,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutCommissionsInput = {
@@ -275815,6 +278291,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedIncentivesInput = {
@@ -275931,6 +278408,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedIncentivesInput = {
@@ -276052,6 +278530,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedIncentivesInput = {
@@ -276168,6 +278647,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedIncentivesInput = {
@@ -276272,6 +278752,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutIncentiveStructuresInput = {
@@ -276371,6 +278852,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutIncentiveStructuresInput = {
@@ -276503,6 +278985,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedIncentivesInput = {
@@ -276619,6 +279102,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedIncentivesInput = {
@@ -276746,6 +279230,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedIncentivesInput = {
@@ -276862,6 +279347,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutIncentiveStructuresInput = {
@@ -276972,6 +279458,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutIncentiveStructuresInput = {
@@ -277071,6 +279558,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutProgramMaterialsInput = {
@@ -277170,6 +279658,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramMaterialsInput = {
@@ -277269,6 +279758,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramMaterialsInput = {
@@ -277443,6 +279933,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUploadedMaterialsInput = {
@@ -277559,6 +280050,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUploadedMaterialsInput = {
@@ -277674,6 +280166,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramMaterialsInput = {
@@ -277773,6 +280266,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutMaterialsInput = {
@@ -277959,6 +280453,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedMaterialsInput = {
@@ -278075,6 +280570,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InvoiceCreateWithoutScheduleInput = {
@@ -278264,6 +280760,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentSchedulesInput = {
@@ -278363,6 +280860,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentSchedulesInput = {
@@ -278659,6 +281157,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentSchedulesInput = {
@@ -278758,6 +281257,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutPaymentSchedulesInput = {
@@ -279029,6 +281529,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPaymentLinksInput = {
@@ -279145,6 +281646,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPaymentLinksInput = {
@@ -279249,6 +281751,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentLinksInput = {
@@ -279348,6 +281851,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentLinksInput = {
@@ -279668,6 +282172,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPaymentLinksInput = {
@@ -279784,6 +282289,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPaymentLinksInput = {
@@ -279894,6 +282400,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentLinksInput = {
@@ -279993,6 +282500,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type PaymentScheduleUpsertWithoutPaymentLinksInput = {
@@ -280292,6 +282800,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCollectionOverseersInput = {
@@ -280391,6 +282900,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCollectionOverseersInput = {
@@ -280512,6 +283022,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCollectionOverseersInput = {
@@ -280628,6 +283139,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCollectionOverseersInput = {
@@ -280743,6 +283255,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -280842,6 +283355,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCollectionOverseersInput = {
@@ -280969,6 +283483,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -281085,6 +283600,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutUniversityPaymentsInput = {
@@ -281184,6 +283700,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversityPaymentsInput = {
@@ -281283,6 +283800,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversityPaymentsInput = {
@@ -281602,6 +284120,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversityPaymentsInput = {
@@ -281701,6 +284220,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutUniversityPaymentsInput = {
@@ -282033,6 +284553,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssetsInput = {
@@ -282149,6 +284670,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssetsInput = {
@@ -282281,6 +284803,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetsInput = {
@@ -282397,6 +284920,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutDocumentLogsInput = {
@@ -282513,6 +285037,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDocumentLogsInput = {
@@ -282629,6 +285154,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDocumentLogsInput = {
@@ -282910,6 +285436,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDocumentLogsInput = {
@@ -283026,6 +285553,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudentUpsertWithoutDocumentLogsInput = {
@@ -283280,6 +285808,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBiometricDevicesInput = {
@@ -283379,6 +285908,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBiometricDevicesInput = {
@@ -283543,6 +286073,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBiometricDevicesInput = {
@@ -283642,6 +286173,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type BranchUpsertWithoutBiometricDevicesInput = {
@@ -283796,6 +286328,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutExamRegistrationsInput = {
@@ -283895,6 +286428,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutExamRegistrationsInput = {
@@ -284159,6 +286693,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutExamRegistrationsInput = {
@@ -284258,6 +286793,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutExamRegistrationsInput = {
@@ -284512,6 +287048,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCommunicationLogsInput = {
@@ -284611,6 +287148,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCommunicationLogsInput = {
@@ -284732,6 +287270,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommunicationLogsInput = {
@@ -284848,6 +287387,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommunicationLogsInput = {
@@ -284963,6 +287503,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCommunicationLogsInput = {
@@ -285062,6 +287603,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCommunicationLogsInput = {
@@ -285189,6 +287731,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommunicationLogsInput = {
@@ -285305,6 +287848,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutFcmTokensInput = {
@@ -285421,6 +287965,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFcmTokensInput = {
@@ -285537,6 +288082,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFcmTokensInput = {
@@ -285669,6 +288215,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFcmTokensInput = {
@@ -285785,6 +288332,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutFacultiesInput = {
@@ -285884,6 +288432,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutFacultiesInput = {
@@ -285983,6 +288532,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutFacultiesInput = {
@@ -286552,6 +289102,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutFacultiesInput = {
@@ -286651,6 +289202,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicClassUpsertWithWhereUniqueWithoutInchargeInput = {
@@ -286942,6 +289494,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAcademicCentersInput = {
@@ -287041,6 +289594,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAcademicCentersInput = {
@@ -287200,6 +289754,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAcademicCentersInput = {
@@ -287299,6 +289854,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicClassUpsertWithWhereUniqueWithoutAcademicCenterInput = {
@@ -287532,6 +290088,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAcademicClassesInput = {
@@ -287631,6 +290188,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAcademicClassesInput = {
@@ -288020,6 +290578,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAcademicClassesInput = {
@@ -288119,6 +290678,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicSessionUpsertWithWhereUniqueWithoutAcademicClassInput = {
@@ -288321,6 +290881,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutClassTrialVideosInput = {
@@ -288420,6 +290981,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutClassTrialVideosInput = {
@@ -288580,6 +291142,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutClassTrialVideosInput = {
@@ -288679,6 +291242,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicClassCreateWithoutModulesInput = {
@@ -288817,6 +291381,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutClassModulesInput = {
@@ -288916,6 +291481,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutClassModulesInput = {
@@ -289210,6 +291776,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutClassModulesInput = {
@@ -289309,6 +291876,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicSessionUpsertWithWhereUniqueWithoutClassModuleInput = {
@@ -289487,6 +292055,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutClassSubModulesInput = {
@@ -289586,6 +292155,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutClassSubModulesInput = {
@@ -289790,6 +292360,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutClassSubModulesInput = {
@@ -289889,6 +292460,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ModuleLessonUpsertWithWhereUniqueWithoutClassSubModuleInput = {
@@ -290117,6 +292689,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutModuleLessonsInput = {
@@ -290216,6 +292789,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutModuleLessonsInput = {
@@ -290731,6 +293305,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutModuleLessonsInput = {
@@ -290830,6 +293405,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicSessionUpsertWithWhereUniqueWithoutModuleLessonInput = {
@@ -291898,6 +294474,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentVideoLogsInput = {
@@ -291997,6 +294574,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentVideoLogsInput = {
@@ -292320,6 +294898,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentVideoLogsInput = {
@@ -292419,6 +294998,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ModuleLessonCreateWithoutDoubtsInput = {
@@ -292714,6 +295294,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLessonDoubtsInput = {
@@ -292813,6 +295394,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLessonDoubtsInput = {
@@ -293164,6 +295746,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLessonDoubtsInput = {
@@ -293263,6 +295846,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type LessonDoubtReplyUpsertWithWhereUniqueWithoutDoubtInput = {
@@ -293609,6 +296193,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLessonDoubtRepliesInput = {
@@ -293708,6 +296293,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLessonDoubtRepliesInput = {
@@ -294072,6 +296658,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLessonDoubtRepliesInput = {
@@ -294171,6 +296758,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ModuleLessonCreateWithoutNotesInput = {
@@ -294466,6 +297054,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLessonNotesInput = {
@@ -294565,6 +297154,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLessonNotesInput = {
@@ -294888,6 +297478,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLessonNotesInput = {
@@ -294987,6 +297578,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ModuleLessonCreateWithoutFacultyHistoryInput = {
@@ -295298,6 +297890,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLessonFacultyHistoriesInput = {
@@ -295397,6 +297990,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLessonFacultyHistoriesInput = {
@@ -295748,6 +298342,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLessonFacultyHistoriesInput = {
@@ -295847,6 +298442,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ModuleLessonCreateWithoutMaterialsInput = {
@@ -296048,6 +298644,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutClassMaterialsInput = {
@@ -296147,6 +298744,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutClassMaterialsInput = {
@@ -296376,6 +298974,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutClassMaterialsInput = {
@@ -296475,6 +299074,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentBatchTransferCreateWithoutFromBatchInput = {
@@ -296681,6 +299281,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAcademicBatchesInput = {
@@ -296780,6 +299381,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAcademicBatchesInput = {
@@ -297204,6 +299806,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAcademicBatchesInput = {
@@ -297303,6 +299906,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicSessionUpsertWithWhereUniqueWithoutAcademicBatchInput = {
@@ -297733,6 +300337,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudentBatchTransfersInput = {
@@ -297849,6 +300454,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudentBatchTransfersInput = {
@@ -298326,6 +300932,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentBatchTransfersInput = {
@@ -298442,6 +301049,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FacultyUpsertWithoutStudentBatchTransfersInput = {
@@ -298743,6 +301351,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBatchLessonAssignmentsInput = {
@@ -298842,6 +301451,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBatchLessonAssignmentsInput = {
@@ -299116,6 +301726,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBatchLessonAssignmentsInput = {
@@ -299215,6 +301826,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicClassCreateWithoutAcademicSessionsInput = {
@@ -299580,6 +302192,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAcademicSessionsInput = {
@@ -299679,6 +302292,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAcademicSessionsInput = {
@@ -300130,6 +302744,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAcademicSessionsInput = {
@@ -300229,6 +302844,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentAcademicAttendanceUpsertWithWhereUniqueWithoutSessionInput = {
@@ -300538,6 +303154,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentAcademicAttendancesInput = {
@@ -300637,6 +303254,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentAcademicAttendancesInput = {
@@ -300958,6 +303576,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentAcademicAttendancesInput = {
@@ -301057,6 +303676,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutStudyAbroadPartnersInput = {
@@ -301156,6 +303776,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyAbroadPartnersInput = {
@@ -301255,6 +303876,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyAbroadPartnersInput = {
@@ -301376,6 +303998,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudyAbroadPartnersReferredInput = {
@@ -301492,6 +304115,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudyAbroadPartnersReferredInput = {
@@ -301613,6 +304237,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudyAbroadPartnerAdminOfInput = {
@@ -301729,6 +304354,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudyAbroadPartnerAdminOfInput = {
@@ -301938,6 +304564,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyAbroadPartnersInput = {
@@ -302037,6 +304664,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutStudyAbroadPartnersReferredInput = {
@@ -302164,6 +304792,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyAbroadPartnersReferredInput = {
@@ -302280,6 +304909,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutStudyAbroadPartnerAdminOfInput = {
@@ -302407,6 +305037,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyAbroadPartnerAdminOfInput = {
@@ -302523,6 +305154,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyAbroadApplicationUpsertWithWhereUniqueWithoutPartnerInput = {
@@ -302654,6 +305286,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyAbroadApplicationsInput = {
@@ -302753,6 +305386,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyAbroadApplicationsInput = {
@@ -302949,6 +305583,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyAbroadApplicationsInput = {
@@ -303048,6 +305683,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyAbroadPartnerUpsertWithoutApplicationsInput = {
@@ -303216,6 +305852,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyAbroadProgramCommissionsInput = {
@@ -303315,6 +305952,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyAbroadProgramCommissionsInput = {
@@ -303430,6 +306068,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyAbroadProgramCommissionsInput = {
@@ -303529,6 +306168,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutStudyAbroadPayoutsInput = {
@@ -303628,6 +306268,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyAbroadPayoutsInput = {
@@ -303727,6 +306368,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyAbroadPayoutsInput = {
@@ -303944,6 +306586,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyAbroadPayoutsInput = {
@@ -304043,6 +306686,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyAbroadPartnerUpsertWithoutPayoutsInput = {
@@ -304256,6 +306900,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCountriesInput = {
@@ -304355,6 +307000,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
     studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCountriesInput = {
@@ -304470,6 +307116,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCountriesInput = {
@@ -304569,6 +307216,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutStudentFilterTypesInput = {
@@ -304668,6 +307316,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentFilterTypesInput = {
@@ -304767,6 +307416,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentFilterTypesInput = {
@@ -304940,6 +307590,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentFilterTypesInput = {
@@ -305039,6 +307690,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentFilterOptionUpsertWithWhereUniqueWithoutFilterTypeInput = {
@@ -305923,6 +308575,906 @@ export namespace Prisma {
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
     filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type OrganizationCreateWithoutUsageDaysInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.OrganizationStatus
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionCreateNestedManyWithoutOrganizationInput
+    studentAcademicAttendances?: StudentAcademicAttendanceCreateNestedManyWithoutOrganizationInput
+    academicCenters?: AcademicCenterCreateNestedManyWithoutOrganizationInput
+    academicClasses?: AcademicClassCreateNestedManyWithoutOrganizationInput
+    academicBatches?: AcademicBatchCreateNestedManyWithoutOrganizationInput
+    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+    branches?: BranchCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
+    leads?: LeadCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
+    license?: LicenseCreateNestedOneWithoutOrganizationsInput
+    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
+    studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
+    studyAbroadApplications?: StudyAbroadApplicationCreateNestedManyWithoutOrganizationInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutCreateNestedManyWithoutOrganizationInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionCreateNestedManyWithoutOrganizationInput
+    countries?: CountryCreateNestedManyWithoutOrganizationInput
+    polls?: PollCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
+    students?: StudentCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
+    targets?: TargetCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
+    faculties?: FacultyCreateNestedManyWithoutOrganizationInput
+    classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classTrialVideos?: ClassTrialVideoCreateNestedManyWithoutOrganizationInput
+    lessonDoubts?: LessonDoubtCreateNestedManyWithoutOrganizationInput
+    lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutOrganizationInput
+    lessonNotes?: LessonNoteCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
+    classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
+    moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
+    lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
+    batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
+    studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutUsageDaysInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.OrganizationStatus
+    licenseId?: string | null
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    academicCenters?: AcademicCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    academicClasses?: AcademicClassUncheckedCreateNestedManyWithoutOrganizationInput
+    academicBatches?: AcademicBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadApplications?: StudyAbroadApplicationUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
+    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
+    classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classTrialVideos?: ClassTrialVideoUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+    studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutUsageDaysInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutUsageDaysInput, OrganizationUncheckedCreateWithoutUsageDaysInput>
+  }
+
+  export type UserCreateWithoutUsageDaysInput = {
+    id?: string
+    userId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
+    approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    assets?: AssetCreateNestedManyWithoutUserInput
+    attendances?: AttendanceCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    managedBranch?: BranchCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestCreateNestedManyWithoutUserInput
+    studentProfile?: StudentCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentCreateNestedManyWithoutManagerUserInput
+    targets?: TargetCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeCreateNestedManyWithoutConfiguredByUserInput
+    branch?: BranchCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
+    manager?: UserCreateNestedOneWithoutSubordinatesInput
+    subordinates?: UserCreateNestedManyWithoutManagerInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
+    university?: UniversityCreateNestedOneWithoutAdminsInput
+    verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutUsageDaysInput = {
+    id?: string
+    userId?: string | null
+    organizationId?: string | null
+    departmentId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: string | null
+    subDepartmentId?: string | null
+    ceoPanelId?: string | null
+    studyCenterId?: string | null
+    universityId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    reportingTo?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
+    approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    managedBranch?: BranchUncheckedCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelUncheckedCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestUncheckedCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestUncheckedCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentUncheckedCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestUncheckedCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestUncheckedCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileUncheckedCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureUncheckedCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingUncheckedCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkUncheckedCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadUncheckedCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryUncheckedCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollUncheckedCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollUncheckedCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollUncheckedCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollUncheckedCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchUncheckedCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchUncheckedCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchUncheckedCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollUncheckedCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkUncheckedCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigUncheckedCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigUncheckedCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigUncheckedCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestUncheckedCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestUncheckedCreateNestedManyWithoutUserInput
+    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentUncheckedCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterUncheckedCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutManagerUserInput
+    targets?: TargetUncheckedCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskUncheckedCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
+    subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutUsageDaysInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUsageDaysInput, UserUncheckedCreateWithoutUsageDaysInput>
+  }
+
+  export type OrganizationUpsertWithoutUsageDaysInput = {
+    update: XOR<OrganizationUpdateWithoutUsageDaysInput, OrganizationUncheckedUpdateWithoutUsageDaysInput>
+    create: XOR<OrganizationCreateWithoutUsageDaysInput, OrganizationUncheckedCreateWithoutUsageDaysInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutUsageDaysInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutUsageDaysInput, OrganizationUncheckedUpdateWithoutUsageDaysInput>
+  }
+
+  export type OrganizationUpdateWithoutUsageDaysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUpdateManyWithoutOrganizationNestedInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUpdateManyWithoutOrganizationNestedInput
+    academicCenters?: AcademicCenterUpdateManyWithoutOrganizationNestedInput
+    academicClasses?: AcademicClassUpdateManyWithoutOrganizationNestedInput
+    academicBatches?: AcademicBatchUpdateManyWithoutOrganizationNestedInput
+    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
+    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
+    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
+    studyAbroadApplications?: StudyAbroadApplicationUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUpdateManyWithoutOrganizationNestedInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUpdateManyWithoutOrganizationNestedInput
+    countries?: CountryUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
+    faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
+    classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classTrialVideos?: ClassTrialVideoUpdateManyWithoutOrganizationNestedInput
+    lessonDoubts?: LessonDoubtUpdateManyWithoutOrganizationNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutOrganizationNestedInput
+    lessonNotes?: LessonNoteUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
+    classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
+    moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
+    lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
+    studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutUsageDaysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicCenters?: AcademicCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicClasses?: AcademicClassUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicBatches?: AcademicBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadApplications?: StudyAbroadApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
+    classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classTrialVideos?: ClassTrialVideoUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonNotes?: LessonNoteUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type UserUpsertWithoutUsageDaysInput = {
+    update: XOR<UserUpdateWithoutUsageDaysInput, UserUncheckedUpdateWithoutUsageDaysInput>
+    create: XOR<UserCreateWithoutUsageDaysInput, UserUncheckedCreateWithoutUsageDaysInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUsageDaysInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUsageDaysInput, UserUncheckedUpdateWithoutUsageDaysInput>
+  }
+
+  export type UserUpdateWithoutUsageDaysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
+    approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUpdateManyWithoutConfiguredByUserNestedInput
+    branch?: BranchUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
+    manager?: UserUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: UserUpdateManyWithoutManagerNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
+    university?: UniversityUpdateOneWithoutAdminsNestedInput
+    verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUsageDaysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
+    approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUncheckedUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUncheckedUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUncheckedUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUncheckedUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUncheckedUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUncheckedUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUncheckedUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUncheckedUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUncheckedUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUncheckedUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUncheckedUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUncheckedUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUncheckedUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUncheckedUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUncheckedUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUncheckedUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUncheckedUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUncheckedUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUncheckedUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUncheckedUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUncheckedUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUncheckedUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUncheckedUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUncheckedUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUncheckedUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUncheckedUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUncheckedUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
+    subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type AcademicSessionCreateManyOrganizationInput = {
@@ -307216,6 +310768,22 @@ export namespace Prisma {
     sortOrder?: number
     createdBy?: string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UsageDayCreateManyOrganizationInput = {
+    id?: string
+    userId: string
+    date: string
+    activeSec?: number
+    idleSec?: number
+    awaySec?: number
+    leaves?: number
+    firstSeen?: Date | string | null
+    lastSeen?: Date | string | null
+    lastState?: string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
   }
 
@@ -310697,6 +314265,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrganizationInput = {
@@ -310813,6 +314382,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutOrganizationInput = {
@@ -311531,6 +315101,54 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UsageDayUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: StringFieldUpdateOperationsInput | string
+    activeSec?: FloatFieldUpdateOperationsInput | number
+    idleSec?: FloatFieldUpdateOperationsInput | number
+    awaySec?: FloatFieldUpdateOperationsInput | number
+    leaves?: IntFieldUpdateOperationsInput | number
+    firstSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastState?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutUsageDaysNestedInput
+  }
+
+  export type UsageDayUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: StringFieldUpdateOperationsInput | string
+    activeSec?: FloatFieldUpdateOperationsInput | number
+    idleSec?: FloatFieldUpdateOperationsInput | number
+    awaySec?: FloatFieldUpdateOperationsInput | number
+    leaves?: IntFieldUpdateOperationsInput | number
+    firstSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastState?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageDayUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: StringFieldUpdateOperationsInput | string
+    activeSec?: FloatFieldUpdateOperationsInput | number
+    idleSec?: FloatFieldUpdateOperationsInput | number
+    awaySec?: FloatFieldUpdateOperationsInput | number
+    leaves?: IntFieldUpdateOperationsInput | number
+    firstSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastState?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganizationCreateManyLicenseInput = {
     id?: string
     name: string
@@ -311644,6 +315262,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLicenseInput = {
@@ -311743,6 +315362,7 @@ export namespace Prisma {
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
     studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateManyWithoutLicenseInput = {
@@ -312416,6 +316036,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -312532,6 +316153,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -312713,6 +316335,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssistantManagedDepartmentsInput = {
@@ -312829,6 +316452,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutAssistantManagedDepartmentsInput = {
@@ -314493,6 +318117,22 @@ export namespace Prisma {
     allocatedAt?: Date | string
     isActive?: boolean
     createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UsageDayCreateManyUserInput = {
+    id?: string
+    organizationId: string
+    date: string
+    activeSec?: number
+    idleSec?: number
+    awaySec?: number
+    leaves?: number
+    firstSeen?: Date | string | null
+    lastSeen?: Date | string | null
+    lastState?: string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
   }
 
@@ -319425,6 +323065,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -319541,6 +323182,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -319915,6 +323557,54 @@ export namespace Prisma {
     allocatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageDayUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: StringFieldUpdateOperationsInput | string
+    activeSec?: FloatFieldUpdateOperationsInput | number
+    idleSec?: FloatFieldUpdateOperationsInput | number
+    awaySec?: FloatFieldUpdateOperationsInput | number
+    leaves?: IntFieldUpdateOperationsInput | number
+    firstSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastState?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutUsageDaysNestedInput
+  }
+
+  export type UsageDayUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    date?: StringFieldUpdateOperationsInput | string
+    activeSec?: FloatFieldUpdateOperationsInput | number
+    idleSec?: FloatFieldUpdateOperationsInput | number
+    awaySec?: FloatFieldUpdateOperationsInput | number
+    leaves?: IntFieldUpdateOperationsInput | number
+    firstSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastState?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageDayUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    date?: StringFieldUpdateOperationsInput | string
+    activeSec?: FloatFieldUpdateOperationsInput | number
+    idleSec?: FloatFieldUpdateOperationsInput | number
+    awaySec?: FloatFieldUpdateOperationsInput | number
+    leaves?: IntFieldUpdateOperationsInput | number
+    firstSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeen?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastState?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: JsonNullValueInput | InputJsonValue
+    segments?: JsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -320802,6 +324492,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityInput = {
@@ -320918,6 +324609,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutUniversityInput = {
@@ -323252,6 +326944,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInput = {
@@ -323368,6 +327061,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutStudyCenterInput = {
@@ -325325,6 +329019,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBranchInput = {
@@ -325441,6 +329136,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBranchInput = {
@@ -325876,6 +329572,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubDepartmentInput = {
@@ -325992,6 +329689,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutSubDepartmentInput = {
@@ -326452,6 +330150,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDesignationsInput = {
@@ -326568,6 +330267,7 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDesignationsInput = {

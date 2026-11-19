@@ -107,6 +107,7 @@ model Organization {
   batchLessonAssignments        BatchLessonAssignment[]
   studentVideoLogs              StudentVideoLog[]
   studentFilterTypes            StudentFilterType[]
+  usageDays                     UsageDay[]
 
   @@index([status])
 }
@@ -283,6 +284,7 @@ model User {
   assignedOpsUsers              Json?                  @default("[]")
   fcmTokens                     UserFCMToken[]
   opsSubAdminAllocations        ProgramAllocation[]    @relation("OpsSubAdminAllocated")
+  usageDays                     UsageDay[]
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -2660,4 +2662,27 @@ model StudentFilterHistory {
 
   @@index([studentId, changedAt(sort: Desc)])
   @@index([organizationId, filterTypeId])
+}
+
+/// How long a person actually used the platform on one day (Indian time), built from heartbeats.
+model UsageDay {
+  id             String       @id @default(uuid())
+  organizationId String
+  userId         String
+  date           String // YYYY-MM-DD, Indian time
+  activeSec      Float        @default(0)
+  idleSec        Float        @default(0)
+  awaySec        Float        @default(0)
+  leaves         Int          @default(0) // times the user switched away from the platform
+  firstSeen      DateTime?
+  lastSeen       DateTime?
+  lastState      String?
+  pages          Json         @default("{}") // seconds of active time per section
+  segments       Json         @default("[]") // [startMs, endMs, 'a' | 'i' | 'w'] blocks, for the timeline
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([organizationId, date])
 }

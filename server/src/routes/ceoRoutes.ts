@@ -18,6 +18,7 @@ import {
   getRevenueDetails,
   getAdmissionsList,
   getPendingInvoicesList,
+  getExecutiveOverview,
 } from '../controllers/ceoController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
@@ -27,6 +28,7 @@ router.use(protect);
 // router.use(authorize('ceo')); // Removed global restrict to allow specific roles on specific endpoints
 
 // Metrics routes
+router.get('/overview', authorize('ceo', 'general_manager'), getExecutiveOverview);
 router.get('/metrics/performance', authorize('ceo', 'general_manager'), getPerformanceMetrics);
 router.get('/metrics/risk', authorize('ceo', 'general_manager'), getRiskMetrics);
 router.get('/analytics', authorize('ceo', 'general_manager'), getAnalytics);

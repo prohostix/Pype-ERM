@@ -1,18 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Users, Building2, AlertTriangle, RefreshCw, Trophy, Zap } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Building2, Crown, Flame, RefreshCw, Search, Sparkles, Target, Trophy, Users } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import {
-  RadialBarChart,
-  RadialBar,
-  ResponsiveContainer,
-  Tooltip,
-} from 'recharts';
 
 interface EmployeePerf {
   userId: string;
@@ -126,37 +119,23 @@ function GaugeMeter({ value, size = 160 }: { value: number; size?: number }) {
   );
 }
 
-function ScoreBar({ value, max = 100, color = 'bg-primary' }: { value: number; max?: number; color?: string }) {
-  const pct = Math.min(100, Math.round((value / max) * 100));
-  return (
-    <div className="flex items-center gap-3">
-      <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-        <div className={cn('h-full rounded-full transition-all duration-700', color)} style={{ width: `${pct}%` }} />
-      </div>
-      <span className="text-xs font-bold min-w-[32px] text-right">{value}%</span>
-    </div>
-  );
-}
+const scoreLevel = (score: number) =>
+  score >= 80 ? { label: 'Excellent', color: '#10b981', soft: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300' }
+  : score >= 60 ? { label: 'Good', color: '#6366f1', soft: 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-300' }
+  : score >= 40 ? { label: 'Average', color: '#f59e0b', soft: 'bg-amber-500/10 text-amber-700 dark:text-amber-300' }
+  : { label: 'Needs attention', color: '#f43f5e', soft: 'bg-rose-500/10 text-rose-700 dark:text-rose-300' };
 
-function ScoreBadge({ score }: { score: number }) {
-  if (score >= 80) return <Badge className="bg-green-500/10 text-green-600 dark:text-green-400 text-[10px] font-bold">Excellent</Badge>;
-  if (score >= 60) return <Badge className="bg-primary/10 text-primary text-[10px] font-bold">Good</Badge>;
-  if (score >= 40) return <Badge className="bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-[10px] font-bold">Average</Badge>;
-  return <Badge className="bg-red-500/10 text-red-600 dark:text-red-400 text-[10px] font-bold">Needs Attention</Badge>;
-}
-
-// Returns card color classes based on score
-function empCardClasses(score: number) {
-  if (score >= 70) return 'border-green-400/50 bg-green-50/60 dark:bg-green-950/30';
-  if (score >= 40) return 'border-yellow-400/50 bg-yellow-50/60 dark:bg-yellow-950/30';
-  return 'border-red-400/50 bg-red-50/60 dark:bg-red-950/30';
-}
+const DEPT_TYPE_COLORS: Record<string, string> = { hr: '#0ea5e9', finance: '#10b981', operations: '#6366f1', sales: '#f59e0b' };
+const initials = (name: string) => (name || '?').split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+const CARD = 'rounded-3xl border-0 shadow-md ring-1 ring-border/60 py-6 gap-5';
 
 export function PerformancePanel() {
   const [loading, setLoading] = useState(false);
   const [employees, setEmployees] = useState<EmployeePerf[]>([]);
   const [departments, setDepartments] = useState<DeptEfficiency[]>([]);
-  const [tab, setTab] = useState('departments');
+  const [tab, setTab] = useState<'departments' | 'employees'>('departments');
+  const [search, setSearch] = useState('');
+  const [levelFilter, setLevelFilter] = useState<string | null>(null);
 
   const fetchAnalytics = async () => {
     setLoading(true);
@@ -170,210 +149,248 @@ export function PerformancePanel() {
       setLoading(false);
     }
   };
-
   useEffect(() => { fetchAnalytics(); }, []);
 
-  const avgDeptEfficiency = departments.length
-    ? Math.round(departments.reduce((s, d) => s + d.efficiency, 0) / departments.length)
-    : 0;
-  const topEmployee = employees[0];
-  const overdueEmployees = employees.filter(e => e.overdue > 0).length;
+  const rankedDepts = [...departments].sort((a, b) => b.efficiency - a.efficiency);
+  const orgScore = departments.length ? Math.round(departments.reduce((s, d) => s + d.efficiency, 0) / departments.length) : 0;
+  const totals = employees.reduce((t, e) => ({ total: t.total + e.total, done: t.done + e.completed, active: t.active + e.inProgress, overdue: t.overdue + e.overdue }), { total: 0, done: 0, active: 0, overdue: 0 });
+  const waiting = Math.max(0, totals.total - totals.done - totals.active - totals.overdue);
+  const pipeline = [
+    { label: 'Done', value: totals.done, color: '#10b981' },
+    { label: 'In progress', value: totals.active, color: '#0ea5e9' },
+    { label: 'Not started', value: waiting, color: '#cbd5e1' },
+    { label: 'Overdue', value: totals.overdue, color: '#f43f5e' },
+  ];
+  const focus = rankedDepts.filter((d) => d.efficiency < 60 || d.overdue > 0).sort((a, b) => a.efficiency - b.efficiency).slice(0, 4);
+  const levels = ['Excellent', 'Good', 'Average', 'Needs attention'].map((label) => ({
+    label, color: scoreLevel(label === 'Excellent' ? 90 : label === 'Good' ? 70 : label === 'Average' ? 50 : 10).color,
+    count: employees.filter((e) => scoreLevel(e.score).label === label).length,
+  }));
+  const q = search.trim().toLowerCase();
+  const visible = employees.filter((e) => (!q || e.name.toLowerCase().includes(q) || (e.role || '').toLowerCase().includes(q)) && (!levelFilter || scoreLevel(e.score).label === levelFilter));
+  const podium = employees.slice(0, 3);
+  const podiumOrder = podium.length === 3 ? [1, 0, 2] : podium.map((_, i) => i);
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Performance Analytics</h2>
-          <p className="text-muted-foreground text-sm mt-1">Employee productivity and department efficiency across the organisation.</p>
+      {/* Header: light, with the view switch beside the title */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-fuchsia-500 to-indigo-600 text-white shadow-lg"><Sparkles className="w-6 h-6" /></div>
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">Performance Analytics</h2>
+            <p className="text-sm text-muted-foreground">Who is delivering, which teams are slipping, and where to step in.</p>
+          </div>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchAnalytics} disabled={loading}>
-          <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-3">
+          <div className="inline-flex p-1 rounded-full bg-muted/70 border">
+            {([['departments', 'Departments', Building2], ['employees', 'People', Users]] as const).map(([id, text, Icon]) => (
+              <button key={id} onClick={() => setTab(id)}
+                className={cn('inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition', tab === id ? 'bg-gradient-to-r from-fuchsia-500 to-indigo-600 text-white shadow' : 'text-muted-foreground hover:text-foreground')}>
+                <Icon className="w-4 h-4" />{text}
+              </button>
+            ))}
+          </div>
+          <Button variant="outline" size="icon" onClick={fetchAnalytics} disabled={loading} title="Refresh"><RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} /></Button>
+        </div>
       </div>
 
-      {/* Summary KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-5 flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-primary/10 text-primary"><Building2 className="w-5 h-5" /></div>
+      {/* Organisation scoreboard */}
+      <Card className={cn(CARD, 'overflow-hidden bg-gradient-to-br from-fuchsia-50/70 via-white to-indigo-50/60 dark:from-fuchsia-950/20 dark:via-card dark:to-indigo-950/20')}>
+        <CardContent className="px-7 grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8 items-center">
+          <div className="flex flex-col items-center text-center">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Organisation score</p>
+            <GaugeMeter value={orgScore} size={230} />
+            <ScoreBadgeLg score={orgScore} />
+          </div>
+          <div className="space-y-5">
             <div>
-              <p className="text-2xl font-bold">{avgDeptEfficiency}%</p>
-              <p className="text-xs text-muted-foreground">Avg Dept Efficiency</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-5 flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-green-500/10 text-green-600"><Users className="w-5 h-5" /></div>
-            <div>
-              <p className="text-2xl font-bold">{employees.length}</p>
-              <p className="text-xs text-muted-foreground">Active Contributors</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-5 flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-yellow-500/10 text-yellow-600"><AlertTriangle className="w-5 h-5" /></div>
-            <div>
-              <p className="text-2xl font-bold">{overdueEmployees}</p>
-              <p className="text-xs text-muted-foreground">With Overdue Tasks</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-5 flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-yellow-500/10 text-yellow-600"><Trophy className="w-5 h-5" /></div>
-            <div>
-              <p className="text-lg font-bold truncate max-w-[100px]">{topEmployee?.name?.split(' ')[0] || '—'}</p>
-              <p className="text-xs text-muted-foreground">Top Performer</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs value={tab} onValueChange={setTab}>
-        <TabsList>
-          <TabsTrigger value="departments">Department Efficiency</TabsTrigger>
-          <TabsTrigger value="employees">Employee Performance</TabsTrigger>
-        </TabsList>
-
-        {/* Department Efficiency — Gauge Meters */}
-        <TabsContent value="departments" className="space-y-6 mt-4">
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[1,2,3,4].map(i => <div key={i} className="h-52 bg-muted rounded-xl animate-pulse" />)}
-            </div>
-          ) : departments.length === 0 ? (
-            <Card><CardContent className="py-16 text-center text-muted-foreground"><Building2 className="w-10 h-10 mx-auto mb-3 opacity-30" /><p>No department data yet</p></CardContent></Card>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {departments.map((dept) => {
-                const eff = dept.efficiency;
-                const borderColor = eff >= 67 ? 'border-green-400/40' : eff >= 34 ? 'border-yellow-400/40' : 'border-red-400/40';
-                const bgColor = eff >= 67 ? 'bg-green-50/40 dark:bg-green-950/20' : eff >= 34 ? 'bg-yellow-50/40 dark:bg-yellow-950/20' : 'bg-red-50/40 dark:bg-red-950/20';
-                return (
-                  <Card key={dept.departmentId} className={cn('transition-all hover:shadow-lg', borderColor, bgColor)}>
-                    <CardContent className="p-4 flex flex-col items-center">
-                      <div className="flex items-center gap-1.5 mb-1 self-start">
-                        <Zap className="w-3.5 h-3.5 text-muted-foreground" />
-                        <p className="text-sm font-bold">{dept.name}</p>
-                      </div>
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider self-start mb-2">
-                        {dept.type} · {dept.memberCount} members
-                      </p>
-                      <GaugeMeter value={eff} size={150} />
-                      <ScoreBadge score={eff} />
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-1 mt-3 w-full text-center">
-                        <div className="bg-muted/50 rounded-lg p-1.5">
-                          <p className="text-xs font-bold">{dept.total}</p>
-                          <p className="text-[9px] text-muted-foreground">Total</p>
-                        </div>
-                        <div className="bg-green-500/10 rounded-lg p-1.5">
-                          <p className="text-xs font-bold text-green-600 dark:text-green-400">{dept.completed}</p>
-                          <p className="text-[9px] text-muted-foreground">Done</p>
-                        </div>
-                        <div className="bg-red-500/10 rounded-lg p-1.5">
-                          <p className="text-xs font-bold text-red-600 dark:text-red-400">{dept.overdue}</p>
-                          <p className="text-[9px] text-muted-foreground">Overdue</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          )}
-        </TabsContent>
-
-        {/* Employee Performance — color-coded cards */}
-        <TabsContent value="employees" className="space-y-4 mt-4">
-          {loading ? (
-            <div className="space-y-3">{[1,2,3,4,5].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
-          ) : employees.length === 0 ? (
-            <Card><CardContent className="py-16 text-center text-muted-foreground"><Users className="w-10 h-10 mx-auto mb-3 opacity-30" /><p>No employee task data yet</p></CardContent></Card>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* Radial chart for top 5 */}
-              <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
-                <CardHeader>
-                  <CardTitle className="text-base">Top Performers</CardTitle>
-                  <CardDescription>Completion rate — top 5 employees</CardDescription>
-                </CardHeader>
-                <CardContent className="h-[280px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadialBarChart
-                      innerRadius="20%"
-                      outerRadius="90%"
-                      data={employees.slice(0, 5).map((e, i) => ({
-                        name: e.name.split(' ')[0],
-                        value: e.completionRate,
-                        fill: ['#22c55e', '#3b82f6', '#f59e0b', '#8b5cf6', '#6b7280'][i],
-                      }))}
-                      startAngle={180}
-                      endAngle={0}
-                    >
-                      <RadialBar dataKey="value" cornerRadius={4} label={{ position: 'insideStart', fill: '#fff', fontSize: 10 }} />
-                      <Tooltip
-                        contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '10px' }}
-                        formatter={(v: any) => [`${v}%`, 'Completion']}
-                      />
-                    </RadialBarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              {/* Employee list — color-coded by score */}
-              <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
-                {employees.map((emp, idx) => (
-                  <Card key={emp.userId} className={cn('transition-colors border', empCardClasses(emp.score))}>
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className={cn(
-                            'w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0',
-                            idx === 0 ? 'bg-yellow-400 text-yellow-900' : 'bg-muted text-muted-foreground'
-                          )}>
-                            {idx === 0 ? <Trophy className="w-3.5 h-3.5" /> : idx + 1}
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-sm font-bold truncate">{emp.name}</p>
-                            <p className="text-[10px] text-muted-foreground capitalize">{emp.role?.replace(/_/g, ' ')}</p>
-                          </div>
-                        </div>
-                        <ScoreBadge score={emp.score} />
-                      </div>
-                      <ScoreBar
-                        value={emp.completionRate}
-                        color={emp.score >= 70 ? 'bg-green-500' : emp.score >= 40 ? 'bg-yellow-500' : 'bg-red-500'}
-                      />
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 mt-2 text-center">
-                        <div>
-                          <p className="text-xs font-bold">{emp.total}</p>
-                          <p className="text-[9px] text-muted-foreground">Total</p>
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-green-600 dark:text-green-400">{emp.completed}</p>
-                          <p className="text-[9px] text-muted-foreground">Done</p>
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-blue-500">{emp.inProgress}</p>
-                          <p className="text-[9px] text-muted-foreground">Active</p>
-                        </div>
-                        <div>
-                          <p className={cn('text-xs font-bold', emp.overdue > 0 ? 'text-red-500' : 'text-muted-foreground')}>{emp.overdue}</p>
-                          <p className="text-[9px] text-muted-foreground">Overdue</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+              <div className="flex items-end justify-between mb-2">
+                <p className="font-semibold">Task pipeline</p>
+                <p className="text-sm text-muted-foreground tabular-nums">{totals.total.toLocaleString('en-IN')} tasks · {totals.total ? Math.round((totals.done / totals.total) * 100) : 0}% done</p>
+              </div>
+              <div className="flex h-4 rounded-full overflow-hidden bg-muted">
+                {pipeline.filter((p) => p.value > 0).map((p) => <div key={p.label} title={`${p.label}: ${p.value}`} style={{ width: `${(p.value / (totals.total || 1)) * 100}%`, backgroundColor: p.color }} />)}
+              </div>
+              <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-3">
+                {pipeline.map((p) => (
+                  <span key={p.label} className="inline-flex items-center gap-2 text-sm"><span className="w-2.5 h-2.5 rounded-full" style={{ background: p.color }} />{p.label}<span className="font-bold tabular-nums">{p.value}</span></span>
                 ))}
               </div>
             </div>
-          )}
-        </TabsContent>
-      </Tabs>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <Chip icon={Building2} tint="bg-indigo-500/10 text-indigo-600" label="Departments" value={String(departments.length)} />
+              <Chip icon={Users} tint="bg-emerald-500/10 text-emerald-600" label="Contributors" value={String(employees.length)} />
+              <Chip icon={Flame} tint="bg-rose-500/10 text-rose-600" label="With overdue" value={String(employees.filter((e) => e.overdue > 0).length)} />
+              <Chip icon={Crown} tint="bg-amber-500/10 text-amber-600" label="Top performer" value={employees[0]?.name?.split(' ')[0] || '—'} />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Departments */}
+      {tab === 'departments' && (
+        loading ? <div className="h-80 rounded-3xl bg-muted/50 animate-pulse" /> :
+        departments.length === 0 ? (
+          <Card className={CARD}><CardContent className="py-10 text-center text-muted-foreground"><Building2 className="w-10 h-10 mx-auto mb-3 opacity-30" /><p>No department data yet. Scores appear once tasks are assigned.</p></CardContent></Card>
+        ) : (
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+            <Card className={cn(CARD, 'xl:col-span-2')}>
+              <CardContent className="px-7 space-y-4">
+                <div><h3 className="text-lg font-semibold">Department leaderboard</h3><p className="text-sm text-muted-foreground">Efficiency score, with completed and overdue work</p></div>
+                <div className="space-y-3">
+                  {rankedDepts.map((d, i) => {
+                    const l = scoreLevel(d.efficiency); const tc = DEPT_TYPE_COLORS[d.type] || '#64748b';
+                    const done = d.total ? (d.completed / d.total) * 100 : 0, late = d.total ? (d.overdue / d.total) * 100 : 0;
+                    return (
+                      <div key={d.departmentId} className="rounded-2xl border p-4 hover:shadow-md transition" style={{ borderLeft: `4px solid ${tc}` }}>
+                        <div className="flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-xl text-sm font-bold text-white flex items-center justify-center shrink-0" style={{ background: `linear-gradient(135deg, ${tc}, ${tc}bb)` }}>{i + 1}</span>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-semibold truncate">{d.name}</p>
+                            <p className="text-[11px] text-muted-foreground uppercase tracking-wider">{d.type} · {d.memberCount} members · {d.total} tasks</p>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <p className="text-2xl font-bold leading-none tabular-nums" style={{ color: l.color }}>{d.efficiency}</p>
+                            <span className={cn('inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold mt-1', l.soft)}>{l.label}</span>
+                          </div>
+                        </div>
+                        <div className="flex h-2.5 rounded-full overflow-hidden bg-muted mt-3">
+                          <div style={{ width: `${done}%`, background: '#10b981' }} title={`${d.completed} done`} />
+                          <div style={{ width: `${late}%`, background: '#f43f5e' }} title={`${d.overdue} overdue`} />
+                        </div>
+                        <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
+                          <span><b className="text-emerald-600 tabular-nums">{d.completed}</b> done</span>
+                          <span><b className="text-sky-600 tabular-nums">{d.inProgress}</b> active</span>
+                          <span><b className="text-rose-600 tabular-nums">{d.overdue}</b> overdue</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className={cn(CARD, 'self-start')}>
+              <CardContent className="px-7 space-y-4">
+                <div className="flex items-center gap-2"><Target className="w-5 h-5 text-rose-500" /><h3 className="text-lg font-semibold">Focus areas</h3></div>
+                {focus.length === 0 ? (
+                  <p className="text-sm text-muted-foreground rounded-2xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 p-4">Every department is healthy. Nothing to chase.</p>
+                ) : focus.map((d) => (
+                  <div key={d.departmentId} className="rounded-2xl bg-gradient-to-br from-rose-50 to-white dark:from-rose-950/30 dark:to-card border border-rose-200/70 dark:border-rose-900/40 p-4">
+                    <div className="flex items-center justify-between"><p className="font-semibold truncate">{d.name}</p><span className="text-sm font-bold text-rose-600">{d.efficiency}</span></div>
+                    <p className="text-xs text-muted-foreground mt-1">{d.overdue} overdue of {d.total} tasks · {d.completionRate}% done</p>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        )
+      )}
+
+      {/* People */}
+      {tab === 'employees' && (
+        loading ? <div className="h-80 rounded-3xl bg-muted/50 animate-pulse" /> :
+        employees.length === 0 ? (
+          <Card className={CARD}><CardContent className="py-10 text-center text-muted-foreground"><Users className="w-10 h-10 mx-auto mb-3 opacity-30" /><p>No employee task data yet</p></CardContent></Card>
+        ) : (
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+            {/* Podium */}
+            <Card className={cn(CARD, 'self-start overflow-hidden')}>
+              <CardContent className="px-6">
+                <h3 className="text-lg font-semibold flex items-center gap-2"><Trophy className="w-5 h-5 text-amber-500" />Top performers</h3>
+                <div className="flex items-end justify-center gap-3 mt-6 min-h-[230px]">
+                  {podiumOrder.map((idx) => {
+                    const e = podium[idx]; if (!e) return null;
+                    const heights = ['h-36', 'h-28', 'h-20'];
+                    const grads = ['from-amber-300 to-amber-500', 'from-slate-300 to-slate-500', 'from-orange-300 to-orange-600'];
+                    return (
+                      <div key={e.userId} className="flex flex-col items-center w-24 text-center">
+                        {idx === 0 && <Crown className="w-5 h-5 text-amber-500 mb-1" />}
+                        <div className={cn('w-12 h-12 rounded-2xl bg-gradient-to-br text-white flex items-center justify-center font-bold shadow-lg', grads[idx])}>{initials(e.name)}</div>
+                        <p className="text-xs font-semibold mt-2 truncate w-full">{e.name.split(' ')[0]}</p>
+                        <p className="text-[11px] text-muted-foreground">{e.completionRate}% done</p>
+                        <div className={cn('mt-2 w-full rounded-t-2xl bg-gradient-to-b flex items-start justify-center pt-2 text-white font-bold text-lg', heights[idx], grads[idx])}>{idx + 1}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Ranking table */}
+            <Card className={cn(CARD, 'xl:col-span-2')}>
+              <CardContent className="px-7 space-y-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div><h3 className="text-lg font-semibold">Full ranking</h3><p className="text-sm text-muted-foreground">{visible.length} of {employees.length} people</p></div>
+                  <div className="relative w-full md:w-64">
+                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="Search name or role" className="pl-9 h-9" value={search} onChange={(e) => setSearch(e.target.value)} />
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {levels.map((l) => (
+                    <button key={l.label} onClick={() => setLevelFilter(levelFilter === l.label ? null : l.label)}
+                      className={cn('inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium transition', levelFilter === l.label ? 'text-white border-transparent shadow' : 'hover:border-foreground/30')}
+                      style={levelFilter === l.label ? { background: l.color } : undefined}>
+                      <span className="w-2.5 h-2.5 rounded-full" style={{ background: levelFilter === l.label ? '#fff' : l.color }} />{l.label}<b className="tabular-nums">{l.count}</b>
+                    </button>
+                  ))}
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground border-b">
+                        <th className="pb-2 pr-3 font-semibold w-10">#</th><th className="pb-2 pr-3 font-semibold">Person</th>
+                        <th className="pb-2 px-3 font-semibold text-center">Tasks</th><th className="pb-2 px-3 font-semibold text-center">Done</th>
+                        <th className="pb-2 px-3 font-semibold text-center">Active</th><th className="pb-2 px-3 font-semibold text-center">Overdue</th>
+                        <th className="pb-2 pl-3 font-semibold text-right">Score</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y">
+                      {visible.length === 0 && <tr><td colSpan={7} className="py-8 text-center text-muted-foreground">No one matches.</td></tr>}
+                      {visible.map((e) => {
+                        const l = scoreLevel(e.score);
+                        return (
+                          <tr key={e.userId} className="hover:bg-muted/30 transition-colors">
+                            <td className="py-3 pr-3 text-muted-foreground tabular-nums">{employees.indexOf(e) + 1}</td>
+                            <td className="py-3 pr-3">
+                              <div className="flex items-center gap-3">
+                                <span className="w-9 h-9 rounded-xl text-xs font-bold text-white flex items-center justify-center shrink-0" style={{ background: `linear-gradient(135deg, ${l.color}, ${l.color}aa)` }}>{initials(e.name)}</span>
+                                <div className="min-w-0"><p className="font-semibold truncate">{e.name}</p><p className="text-xs text-muted-foreground capitalize truncate">{e.role?.replace(/_/g, ' ')}</p></div>
+                              </div>
+                            </td>
+                            <td className="py-3 px-3 text-center tabular-nums">{e.total}</td>
+                            <td className="py-3 px-3 text-center tabular-nums text-emerald-600 dark:text-emerald-400 font-semibold">{e.completed}</td>
+                            <td className="py-3 px-3 text-center tabular-nums text-sky-600 dark:text-sky-400">{e.inProgress}</td>
+                            <td className={cn('py-3 px-3 text-center tabular-nums', e.overdue > 0 ? 'text-rose-600 dark:text-rose-400 font-semibold' : 'text-muted-foreground')}>{e.overdue}</td>
+                            <td className="py-3 pl-3 text-right"><span className="inline-block min-w-[48px] text-center rounded-lg px-2.5 py-1 font-bold text-white" style={{ background: l.color }}>{e.score}</span></td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-xs text-muted-foreground">Score = 70% completion rate + 30% on-time (not overdue) work.</p>
+              </CardContent>
+            </Card>
+          </div>
+        )
+      )}
+    </div>
+  );
+}
+
+function ScoreBadgeLg({ score }: { score: number }) {
+  const l = scoreLevel(score);
+  return <span className={cn('inline-block rounded-full px-3 py-1 text-xs font-semibold mt-1', l.soft)}>{l.label}</span>;
+}
+
+function Chip({ icon: Icon, tint, label, value }: { icon: any; tint: string; label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border bg-card/80 p-3 flex items-center gap-3">
+      <div className={cn('p-2 rounded-xl', tint)}><Icon className="w-4 h-4" /></div>
+      <div className="min-w-0"><p className="font-bold truncate leading-tight">{value}</p><p className="text-[11px] text-muted-foreground">{label}</p></div>
     </div>
   );
 }

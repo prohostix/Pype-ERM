@@ -17,8 +17,29 @@ export const getRiskMetrics = asyncHandler(async (req: AuthRequest, res: Respons
 });
 
 export const getEscalations = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const escalations = await prisma.escalation.findMany({ where: { organizationId: req.user.organizationId }, include: { employee: true, deptAdmin: true } });
-  res.json({ success: true, count: escalations.length, data: escalations });
+  const organizationId = req.user.organizationId;
+  const person = { select: { id: true, name: true, email: true, role: true } };
+  const [rows, overdue] = await Promise.all([
+    prisma.escalation.findMany({
+      where: { organizationId },
+      orderBy: { escalatedAt: 'desc' },
+      include: {
+        employee: person, deptAdmin: person, handler: { select: { id: true, name: true } }, resolver: { select: { id: true, name: true } },
+        task: { select: { id: true, title: true, description: true, deadline: true, priority: true, status: true } },
+      },
+    }),
+    // overdue work that is heading towards an escalation
+    prisma.task.findMany({
+      where: { organizationId, status: 'overdue' },
+      orderBy: { deadline: 'asc' },
+      take: 50,
+      select: { id: true, title: true, deadline: true, priority: true, gracePeriodEnd: true, escalationStatus: true, assignee: person },
+    }),
+  ]);
+
+  // `priority` is what the screens show: the escalation's impact, else the task's own priority
+  const data = rows.map((e) => ({ ...e, priority: e.impact || e.task?.priority || 'medium' }));
+  res.json({ success: true, count: data.length, data, watchlist: overdue });
 });
 
 // Handle an escalation. The screens send { action, resolution, newDeadline, reassignTo }
@@ -197,12 +218,57 @@ export const getPendingInvoicesList = asyncHandler(async (req: AuthRequest, res:
 
 export const getAnalytics = asyncHandler(async (req: AuthRequest, res: Response) => {
   const orgId = req.user.organizationId;
-  const [totalStudents, totalCenters, activePrograms] = await Promise.all([
+  const [totalStudents, totalCenters, activePrograms, tasks, departments, memberCounts] = await Promise.all([
     prisma.student.count({ where: { organizationId: orgId } }),
     prisma.studyCenter.count({ where: { organizationId: orgId } }),
-    prisma.program.count({ where: { organizationId: orgId, status: 'active' } })
+    prisma.program.count({ where: { organizationId: orgId, status: 'active' } }),
+    prisma.task.findMany({
+      where: { organizationId: orgId },
+      select: { status: true, assignedTo: true, assignee: { select: { id: true, name: true, email: true, role: true, departmentId: true, status: true } } }
+    }),
+    prisma.department.findMany({ where: { organizationId: orgId, status: 'active' }, select: { id: true, name: true, type: true } }),
+    prisma.user.groupBy({ by: ['departmentId'], where: { organizationId: orgId, status: { not: 'resigned' }, departmentId: { not: null } }, _count: { _all: true } }),
   ]);
-  res.json({ success: true, data: { totalStudents, totalCenters, activePrograms } });
+
+  // completion rate carries most of the weight; overdue work pulls the score down
+  const rates = (t: { total: number; completed: number; overdue: number }) => {
+    const completionRate = t.total ? Math.round((t.completed / t.total) * 100) : 0;
+    const overdueRate = t.total ? Math.round((t.overdue / t.total) * 100) : 0;
+    return { completionRate, overdueRate, score: t.total ? Math.max(0, Math.min(100, Math.round(completionRate * 0.7 + (100 - overdueRate) * 0.3))) : 0 };
+  };
+  const blank = () => ({ total: 0, completed: 0, overdue: 0, inProgress: 0 });
+  const bump = (t: ReturnType<typeof blank>, status: string) => {
+    t.total++;
+    if (status === 'completed') t.completed++;
+    else if (status === 'overdue') t.overdue++;
+    else if (status === 'in_progress') t.inProgress++;
+  };
+
+  const perEmployee = new Map<string, ReturnType<typeof blank> & { user: any }>();
+  const perDept = new Map<string, ReturnType<typeof blank>>();
+  for (const task of tasks) {
+    if (!task.assignee || task.assignee.status === 'resigned') continue;
+    const e = perEmployee.get(task.assignedTo) || { ...blank(), user: task.assignee };
+    bump(e, task.status); perEmployee.set(task.assignedTo, e);
+    const dId = task.assignee.departmentId;
+    if (dId) { const d = perDept.get(dId) || blank(); bump(d, task.status); perDept.set(dId, d); }
+  }
+
+  const employeePerformance = [...perEmployee.values()]
+    .map((e) => ({ userId: e.user.id, name: e.user.name, email: e.user.email, role: e.user.role, total: e.total, completed: e.completed, overdue: e.overdue, inProgress: e.inProgress, ...rates(e) }))
+    .sort((a, b) => b.score - a.score || b.completed - a.completed);
+
+  const members = new Map(memberCounts.map((m) => [m.departmentId, m._count._all]));
+  const departmentEfficiency = departments
+    .filter((d) => perDept.has(d.id))
+    .map((d) => {
+      const t = perDept.get(d.id)!;
+      const r = rates(t);
+      return { departmentId: d.id, name: d.name, type: d.type, memberCount: members.get(d.id) || 0, ...t, completionRate: r.completionRate, overdueRate: r.overdueRate, efficiency: r.score };
+    })
+    .sort((a, b) => b.efficiency - a.efficiency);
+
+  res.json({ success: true, data: { totalStudents, totalCenters, activePrograms, employeePerformance, departmentEfficiency } });
 });
 
 export const getDepartmentManagers = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -224,87 +290,174 @@ export const assignTask = asyncHandler(async (req: AuthRequest, res: Response) =
   res.status(201).json({ success: true, data: task });
 });
 
-// Org-wide KPI / KRA report. The panel reads each employee as
-// { name, department, kpis, kpiSummary, kras, kraSummary, ... }, so build that
-// shape here from the stored employee profiles (kpis / kras are JSON lists).
+// Org-wide KPI / KRA report for one month (?month=YYYY-MM, default this month).
+// Every active employee gets live KPIs worked out from real data:
+//  - sales targets (revenue = fees collected, other types = admissions) for anyone who has a Target,
+//  - tasks due in the month and how many were completed,
+//  - attendance for people who must punch in.
+// KPIs and KRAs HR typed into the employee profile are added on top, marked as manual.
 export const getKPIKRAReport = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const profiles = await prisma.employeeProfile.findMany({
-    where: { organizationId: req.user.organizationId, user: { status: { not: 'resigned' } } },
-    include: {
-      user: {
-        select: {
-          id: true, name: true, email: true, designation: true, role: true, status: true,
-          department: { select: { name: true } },
-        },
-      },
-    },
-  });
-
+  const organizationId = req.user.organizationId;
+  const now = new Date();
+  const m = /^(\d{4})-(\d{2})$/.exec(String(req.query.month || ''));
+  const year = m ? Number(m[1]) : now.getFullYear();
+  const monthIdx = m ? Number(m[2]) - 1 : now.getMonth();
+  const start = new Date(year, monthIdx, 1);
+  const end = new Date(year, monthIdx + 1, 1);
+  const isCurrent = now >= start && now < end;
+  const isPast = now >= end;
+  const daysInMonth = Math.round((end.getTime() - start.getTime()) / 86400000);
+  // how much of the month has gone, used to judge whether someone is on pace
+  const elapsed = isPast ? 1 : isCurrent ? Math.max(0.05, (now.getDate() - 0.5) / daysInMonth) : 0;
+  const monthLabel = start.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+  const inRange = (d: any) => { if (!d) return false; const t = new Date(d); return !isNaN(t.getTime()) && t >= start && t < end; };
   const num = (v: any) => (Number.isFinite(Number(v)) ? Number(v) : 0);
 
-  const data = profiles.map((p: any) => {
-    const kpis: any[] = (Array.isArray(p.kpis) ? p.kpis : []).filter((k: any) => k && typeof k === 'object');
-    const kras: any[] = (Array.isArray(p.kras) ? p.kras : []).filter((k: any) => k && typeof k === 'object');
+  type Status = 'on_track' | 'at_risk' | 'achieved' | 'missed';
+  const judge = (achieved: number, target: number): Status => {
+    if (target <= 0) return 'on_track';
+    if (achieved >= target) return 'achieved';
+    if (isPast) return 'missed';
+    if (!isCurrent) return 'on_track'; // a future month has nothing to judge yet
+    return achieved / target >= elapsed * 0.8 ? 'on_track' : 'at_risk';
+  };
 
-    const kpiList = kpis.map((k, i) => {
-      const target = num(k.target);
-      const achieved = num(k.achieved);
-      const status = ['on_track', 'at_risk', 'achieved', 'missed'].includes(k.status)
-        ? k.status
-        : (target > 0 && achieved >= target ? 'achieved' : 'on_track');
-      return {
-        id: String(k.id ?? `${p.id}-kpi-${i}`),
-        title: String(k.title ?? 'KPI'),
-        description: k.description,
-        target,
-        achieved,
-        unit: String(k.unit ?? ''),
-        period: String(k.period ?? ''),
-        status,
-      };
+  const users = await prisma.user.findMany({
+    where: { organizationId, status: { not: 'resigned' }, role: { notIn: ['student'] } },
+    select: {
+      id: true, name: true, email: true, designation: true, role: true, status: true, requiresAttendance: true,
+      department: { select: { name: true } }, branch: { select: { name: true } },
+      employeeProfileDetail: { select: { kpis: true, kras: true, overallRating: true, lastReviewDate: true, nextReviewDate: true, reviewRemarks: true } },
+    },
+    orderBy: { name: 'asc' },
+  });
+  const ids = users.map((u) => u.id);
+
+  const [targets, tasks, attendance] = await Promise.all([
+    prisma.target.findMany({ where: { organizationId, employeeId: { in: ids } } }),
+    prisma.task.findMany({ where: { organizationId, assignedTo: { in: ids }, deadline: { gte: start, lt: end } }, select: { assignedTo: true, status: true } }),
+    prisma.attendance.findMany({ where: { organizationId, employeeId: { in: ids }, date: { gte: start, lt: end } }, select: { employeeId: true, status: true } }),
+  ]);
+
+  // sales: admissions and collection per counselor, counted the way the sales dashboard counts them
+  const targetOwners = [...new Set(targets.map((t) => t.employeeId!).filter(Boolean))];
+  const admissions = new Map<string, number>();
+  const collection = new Map<string, number>();
+  if (targetOwners.length > 0) {
+    const students = await prisma.student.findMany({
+      where: { organizationId, OR: [{ enrolledBy: { in: targetOwners } }, { referredBy: { in: targetOwners } }] },
+      select: {
+        enrolledBy: true, referredBy: true, createdAt: true, admissionProgress: true,
+        enrollments: { select: { createdAt: true, initialPaymentAmount: true, admissionProgress: true, payment: { select: { amount: true, debitedAt: true } } } },
+      },
     });
-    const kraList = kras.map((k, i) => ({
-      id: String(k.id ?? `${p.id}-kra-${i}`),
-      area: String(k.area ?? 'KRA'),
-      description: k.description,
-      weightage: num(k.weightage),
-      rating: k.rating == null || k.rating === '' ? undefined : num(k.rating),
-      remarks: k.remarks,
+    for (const st of students) {
+      const owners = new Set([st.enrolledBy, st.referredBy].filter((x): x is string => !!x && targetOwners.includes(x)));
+      const ap: any = st.admissionProgress && typeof st.admissionProgress === 'object' ? st.admissionProgress : {};
+      let paid = 0;
+      if (st.enrollments.length > 0) {
+        for (const e of st.enrollments) {
+          const eap: any = e.admissionProgress && typeof e.admissionProgress === 'object' ? e.admissionProgress : {};
+          const date = e.payment?.debitedAt || eap.initialPaymentDate || ap.initialPaymentDate || e.createdAt || st.createdAt;
+          if (inRange(date)) paid += num(e.payment?.amount || e.initialPaymentAmount);
+        }
+      } else if (ap.initialPaymentAmount && inRange(ap.initialPaymentDate || st.createdAt)) {
+        paid += num(ap.initialPaymentAmount);
+      }
+      for (const o of owners) {
+        if (inRange(st.createdAt)) admissions.set(o, (admissions.get(o) || 0) + 1);
+        collection.set(o, (collection.get(o) || 0) + paid);
+      }
+    }
+  }
+
+  const taskMap = new Map<string, { total: number; done: number; overdue: number }>();
+  for (const t of tasks) {
+    const x = taskMap.get(t.assignedTo) || { total: 0, done: 0, overdue: 0 };
+    x.total++; if (t.status === 'completed') x.done++; else if (t.status === 'overdue') x.overdue++;
+    taskMap.set(t.assignedTo, x);
+  }
+  const attMap = new Map<string, { counted: number; present: number }>();
+  for (const a of attendance) {
+    if (a.status === 'leave') continue; // approved leave is not held against anyone
+    const x = attMap.get(a.employeeId) || { counted: 0, present: 0 };
+    x.counted++; x.present += a.status === 'absent' ? 0 : a.status === 'half_day' ? 0.5 : 1;
+    attMap.set(a.employeeId, x);
+  }
+
+  const data = users.map((u) => {
+    const kpis: any[] = [];
+
+    for (const t of targets.filter((x) => x.employeeId === u.id)) {
+      const isRevenue = t.type === 'revenue';
+      const achieved = isRevenue ? Math.round(collection.get(u.id) || 0) : admissions.get(u.id) || 0;
+      kpis.push({
+        id: `target-${t.id}`, source: 'auto', category: 'Sales target',
+        title: isRevenue ? 'Fee collection target' : 'Admissions target',
+        description: isRevenue ? 'Fees collected from students this counselor enrolled or referred' : 'Students enrolled or referred this month',
+        target: t.target, achieved, unit: isRevenue ? '₹' : 'students', period: monthLabel, status: judge(achieved, t.target),
+      });
+    }
+
+    const tk = taskMap.get(u.id);
+    if (tk && tk.total > 0) {
+      kpis.push({
+        id: `tasks-${u.id}`, source: 'auto', category: 'Tasks', title: 'Tasks completed',
+        description: tk.overdue ? `${tk.overdue} overdue` : 'Tasks due this month',
+        target: tk.total, achieved: tk.done, unit: 'tasks', period: monthLabel,
+        status: tk.done >= tk.total ? 'achieved' : tk.overdue > 0 ? (isPast ? 'missed' : 'at_risk') : judge(tk.done, tk.total),
+      });
+    }
+
+    const at = attMap.get(u.id);
+    if (u.requiresAttendance !== false && at && at.counted > 0) {
+      const pct = Math.round((at.present / at.counted) * 100);
+      kpis.push({
+        id: `att-${u.id}`, source: 'auto', category: 'Attendance', title: 'Attendance',
+        description: `${at.present} of ${at.counted} working days`,
+        target: 100, achieved: pct, unit: '%', period: monthLabel,
+        status: pct >= 95 ? 'achieved' : pct >= 85 ? 'on_track' : isPast ? 'missed' : 'at_risk',
+      });
+    }
+
+    const p: any = u.employeeProfileDetail;
+    (Array.isArray(p?.kpis) ? p.kpis : []).filter((k: any) => k && typeof k === 'object').forEach((k: any, i: number) => {
+      const target = num(k.target), achieved = num(k.achieved);
+      kpis.push({
+        id: String(k.id ?? `${u.id}-kpi-${i}`), source: 'manual', category: 'HR KPI', title: String(k.title ?? 'KPI'), description: k.description,
+        target, achieved, unit: String(k.unit ?? ''), period: String(k.period ?? ''),
+        status: ['on_track', 'at_risk', 'achieved', 'missed'].includes(k.status) ? k.status : (target > 0 && achieved >= target ? 'achieved' : 'on_track'),
+      });
+    });
+    const kras = (Array.isArray(p?.kras) ? p.kras : []).filter((k: any) => k && typeof k === 'object').map((k: any, i: number) => ({
+      id: String(k.id ?? `${u.id}-kra-${i}`), area: String(k.area ?? 'KRA'), description: k.description, weightage: num(k.weightage),
+      rating: k.rating == null || k.rating === '' ? undefined : num(k.rating), remarks: k.remarks,
     }));
 
-    const pcts = kpiList.map(k => (k.target > 0 ? Math.min(100, (k.achieved / k.target) * 100) : 0));
-    const rated = kraList.filter(k => k.rating !== undefined);
-
+    const pcts = kpis.map((k) => (k.target > 0 ? Math.min(100, (k.achieved / k.target) * 100) : 0));
+    const rated = kras.filter((k: any) => k.rating !== undefined);
     return {
-      userId: p.user?.id ?? p.userId,
-      name: p.user?.name ?? 'Employee',
-      email: p.user?.email ?? '',
-      designation: p.user?.designation ?? undefined,
-      role: p.user?.role ?? '',
-      department: p.user?.department?.name ?? '',
-      status: p.user?.status ?? '',
-      overallRating: p.overallRating ?? undefined,
-      lastReviewDate: p.lastReviewDate ?? undefined,
-      nextReviewDate: p.nextReviewDate ?? undefined,
-      reviewRemarks: p.reviewRemarks ?? undefined,
-      kpis: kpiList,
+      userId: u.id, name: u.name, email: u.email, designation: u.designation ?? undefined, role: u.role, status: u.status,
+      department: u.department?.name ?? '', branch: u.branch?.name ?? '',
+      overallRating: p?.overallRating ?? undefined, lastReviewDate: p?.lastReviewDate ?? undefined, nextReviewDate: p?.nextReviewDate ?? undefined, reviewRemarks: p?.reviewRemarks ?? undefined,
+      kpis,
       kpiSummary: {
-        total: kpiList.length,
-        achieved: kpiList.filter(k => k.status === 'achieved').length,
-        atRisk: kpiList.filter(k => k.status === 'at_risk').length,
-        missed: kpiList.filter(k => k.status === 'missed').length,
-        avgPct: pcts.length ? Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length) : 0,
+        total: kpis.length,
+        achieved: kpis.filter((k) => k.status === 'achieved').length,
+        atRisk: kpis.filter((k) => k.status === 'at_risk').length,
+        missed: kpis.filter((k) => k.status === 'missed').length,
+        avgPct: pcts.length ? Math.round(pcts.reduce((x, y) => x + y, 0) / pcts.length) : 0,
       },
-      kras: kraList,
+      kras,
       kraSummary: {
-        total: kraList.length,
-        avgRating: rated.length ? (rated.reduce((a, k) => a + (k.rating || 0), 0) / rated.length).toFixed(1) : null,
-        totalWeightage: kraList.reduce((a, k) => a + k.weightage, 0),
+        total: kras.length,
+        avgRating: rated.length ? (rated.reduce((x: number, k: any) => x + (k.rating || 0), 0) / rated.length).toFixed(1) : null,
+        totalWeightage: kras.reduce((x: number, k: any) => x + k.weightage, 0),
       },
     };
   });
 
-  res.json({ success: true, data });
+  res.json({ success: true, month: `${year}-${String(monthIdx + 1).padStart(2, '0')}`, monthLabel, data });
 });
 
 export const getCenterOnboardingOverview = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -408,4 +561,100 @@ export const getRevenueTrend = asyncHandler(async (req: AuthRequest, res: Respon
   }));
 
   res.json({ success: true, data: result });
+});
+
+
+// @desc    One-call data for the Executive Overview page: money, admissions, branch comparison and what needs attention
+// @route   GET /api/v1/ceo/overview
+export const getExecutiveOverview = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const organizationId = req.user.organizationId;
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const thirtyDaysAgo = new Date(startOfToday); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29);
+  const sum = (v: any) => Number(v?._sum?.amount || 0);
+
+  const [
+    paidThisMonth, paidLastMonth, paymentsLast30, monthPaymentsByStudent,
+    unpaidSchedules, expensesThisMonth, expensesLastMonth,
+    studentsTotal, studentsThisMonth, studentsLastMonth, studentsByStatus, studentsByBranch, newByBranch,
+    leadsThisMonth, leadsLastMonth,
+    branches, staffByBranch, staffTotal, presentToday,
+    pendingDeletes, activeEscalations, criticalEscalations, overdueTasks, pendingLeaves, pendingExpenses,
+  ] = await Promise.all([
+    prisma.paymentEntry.aggregate({ where: { organizationId, receivedAt: { gte: startOfMonth } }, _sum: { amount: true } }),
+    prisma.paymentEntry.aggregate({ where: { organizationId, receivedAt: { gte: startOfLastMonth, lt: startOfMonth } }, _sum: { amount: true } }),
+    prisma.paymentEntry.findMany({ where: { organizationId, receivedAt: { gte: thirtyDaysAgo } }, select: { amount: true, receivedAt: true } }),
+    prisma.paymentEntry.findMany({ where: { organizationId, receivedAt: { gte: startOfMonth } }, select: { amount: true, invoice: { select: { student: { select: { branchId: true } } } } } }),
+    prisma.paymentSchedule.findMany({ where: { student: { organizationId }, status: { not: 'paid' } }, select: { amount: true, dueDate: true, studentId: true } }),
+    prisma.expenseClaim.aggregate({ where: { organizationId, status: 'approved', submittedAt: { gte: startOfMonth } }, _sum: { amount: true } }),
+    prisma.expenseClaim.aggregate({ where: { organizationId, status: 'approved', submittedAt: { gte: startOfLastMonth, lt: startOfMonth } }, _sum: { amount: true } }),
+    prisma.student.count({ where: { organizationId } }),
+    prisma.student.count({ where: { organizationId, createdAt: { gte: startOfMonth } } }),
+    prisma.student.count({ where: { organizationId, createdAt: { gte: startOfLastMonth, lt: startOfMonth } } }),
+    prisma.student.groupBy({ by: ['status'], where: { organizationId }, _count: { _all: true } }),
+    prisma.student.groupBy({ by: ['branchId'], where: { organizationId }, _count: { _all: true } }),
+    prisma.student.groupBy({ by: ['branchId'], where: { organizationId, createdAt: { gte: startOfMonth } }, _count: { _all: true } }),
+    prisma.lead.count({ where: { organizationId, createdAt: { gte: startOfMonth } } }),
+    prisma.lead.count({ where: { organizationId, createdAt: { gte: startOfLastMonth, lt: startOfMonth } } }),
+    prisma.branch.findMany({ where: { organizationId }, select: { id: true, name: true } }),
+    prisma.user.groupBy({ by: ['branchId'], where: { organizationId, status: { notIn: ['resigned'] }, role: { notIn: ['student'] } }, _count: { _all: true } }),
+    prisma.user.count({ where: { organizationId, status: { notIn: ['resigned'] }, role: { notIn: ['student'] } } }),
+    prisma.attendance.count({ where: { organizationId, date: { gte: startOfToday }, status: { in: ['present', 'late', 'wfh', 'half_day'] } } }),
+    req.user.role === 'ceo' ? prisma.editDeleteRequest.count({ where: { organizationId, status: { in: ['pending_ceo', 'pending_manager'] } } }) : Promise.resolve(0),
+    prisma.escalation.count({ where: { organizationId, status: 'active' } }),
+    prisma.escalation.count({ where: { organizationId, status: 'active', impact: { in: ['high', 'critical'] } } }),
+    prisma.task.count({ where: { organizationId, status: 'overdue' } }),
+    prisma.leaveRequest.count({ where: { organizationId, status: { in: ['pending', 'dept_approved'] } } }),
+    prisma.expenseClaim.count({ where: { organizationId, status: 'pending' } }),
+  ]);
+
+  // daily collections for the last 30 days
+  const daily: Record<string, number> = {};
+  for (let i = 0; i < 30; i++) { const d = new Date(thirtyDaysAgo); d.setDate(d.getDate() + i); daily[d.toISOString().slice(0, 10)] = 0; }
+  paymentsLast30.forEach((p) => { const k = new Date(p.receivedAt).toISOString().slice(0, 10); if (k in daily) daily[k] += p.amount; });
+
+  // fees still due
+  const dueAmount = unpaidSchedules.reduce((t, x) => t + x.amount, 0);
+  const overdue = unpaidSchedules.filter((x) => new Date(x.dueDate).getTime() < startOfToday.getTime());
+  const overdueAmount = overdue.reduce((t, x) => t + x.amount, 0);
+  const overdueStudents = new Set(overdue.map((x) => x.studentId)).size;
+
+  // branch comparison
+  const collectedByBranch = new Map<string | null, number>();
+  monthPaymentsByStudent.forEach((p) => { const b = p.invoice?.student?.branchId ?? null; collectedByBranch.set(b, (collectedByBranch.get(b) || 0) + p.amount); });
+  const countMap = (rows: { branchId: string | null; _count: { _all: number } }[]) => new Map(rows.map((r) => [r.branchId, r._count._all]));
+  const studentsMap = countMap(studentsByBranch as any), newMap = countMap(newByBranch as any), staffMap = countMap(staffByBranch as any);
+  const branchRows = [...branches.map((b) => ({ id: b.id as string | null, name: b.name })), { id: null as string | null, name: 'No branch' }]
+    .map((b) => ({
+      id: b.id, name: b.name,
+      students: studentsMap.get(b.id) || 0,
+      newThisMonth: newMap.get(b.id) || 0,
+      collectedThisMonth: collectedByBranch.get(b.id) || 0,
+      staff: staffMap.get(b.id) || 0,
+    }))
+    .filter((b) => b.id !== null || b.students > 0 || b.collectedThisMonth > 0)
+    .sort((a, b) => b.collectedThisMonth - a.collectedThisMonth);
+
+  res.json({
+    success: true,
+    data: {
+      generatedAt: now.toISOString(),
+      collections: {
+        thisMonth: sum(paidThisMonth), lastMonth: sum(paidLastMonth),
+        trend: Object.entries(daily).map(([date, amount]) => ({ date, amount })),
+        dueAmount, overdueAmount, overdueStudents,
+        expensesThisMonth: sum(expensesThisMonth), expensesLastMonth: sum(expensesLastMonth),
+      },
+      admissions: {
+        totalStudents: studentsTotal, newThisMonth: studentsThisMonth, newLastMonth: studentsLastMonth,
+        leadsThisMonth, leadsLastMonth,
+        byStatus: studentsByStatus.map((r) => ({ status: r.status, count: r._count._all })).sort((a, b) => b.count - a.count),
+      },
+      branches: branchRows,
+      people: { staff: staffTotal, presentToday },
+      attention: { pendingDeletes, activeEscalations, criticalEscalations, overdueTasks, pendingLeaves, pendingExpenses, overdueFeeStudents: overdueStudents },
+    }
+  });
 });

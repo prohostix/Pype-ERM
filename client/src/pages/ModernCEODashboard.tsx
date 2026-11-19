@@ -2,55 +2,17 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import {
   ArrowUpRight,
-  ArrowDownRight,
   Target,
-  Zap,
-  Building2,
   AlertTriangle,
   CheckCircle,
-  DollarSign,
-  Users,
-  Clock,
   RefreshCw,
-  TrendingUp,
-  BookOpen,
-  UserCheck,
-  GraduationCap,
-  BarChart2,
-  Trash2,
 } from 'lucide-react';
-import {
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Cell
-} from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
-import { toast } from 'sonner';
 import { CEOTasksPanel } from '@/components/panels/CEOTasksPanel';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { InvoicesPanel } from '@/components/panels/InvoicesPanel';
@@ -58,6 +20,8 @@ import { LeadsPanel } from '@/components/panels/LeadsPanel';
 import { UsersPanel } from '@/components/panels/UsersPanel';
 import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
 import { PerformancePanel } from '@/components/panels/PerformancePanel';
+import { ExecutiveOverviewPanel } from '@/components/panels/ExecutiveOverviewPanel';
+import { EscalationsPanel } from '@/components/panels/EscalationsPanel';
 import { CEOKPIReportPanel } from '@/components/panels/CEOKPIReportPanel';
 import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
@@ -80,7 +44,6 @@ import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPan
 import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
 import { ExpensesPanel } from '@/components/panels/ExpensesPanel';
 import { FinanceEnrollmentsPanel } from '@/components/panels/FinanceEnrollmentsPanel';
-import { TasksPanel } from '@/components/panels/TasksPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { AssetManagementPanel } from '@/components/panels/AssetManagementPanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
@@ -176,17 +139,12 @@ function renderSharedPanel(tab: string) {
   }
 }
 
-const DEPT_COLORS: Record<string, string> = {
-  hr: 'hsl(var(--info))', finance: 'hsl(var(--success))',
-  operations: 'hsl(var(--primary))', sales: 'hsl(var(--warning))',
-};
 
 export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const { user } = useAuth();
-  const [metrics, setMetrics] = useState<any>({});
-  const [analytics, setAnalytics] = useState<any>({ employeePerformance: [], departmentEfficiency: [] });
   const [pendingDeletes, setPendingDeletes] = useState<number>(0);
   const [loadingMetrics, setLoadingMetrics] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
   const handleNavigate = (tab: string) => {
     setActiveTab(tab);
@@ -202,17 +160,9 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
   const fetchAll = async () => {
     setLoadingMetrics(true);
     try {
-      const [metricsRes, analyticsRes, deleteStatsRes] = await Promise.all([
-        api.get('/dashboard/metrics'),
-        api.get('/ceo/analytics').catch(() => ({ data: { data: { employeePerformance: [], departmentEfficiency: [] } } })),
-        api.get('/edit-delete/stats').catch(() => ({ data: { data: { pendingCeo: 0, pendingManager: 0 } } })),
-      ]);
-      setMetrics(metricsRes.data.data || {});
-      setAnalytics(analyticsRes.data.data || { employeePerformance: [], departmentEfficiency: [] });
+      const deleteStatsRes = await api.get('/edit-delete/stats').catch(() => ({ data: { data: { pendingCeo: 0, pendingManager: 0 } } }));
       const stats = deleteStatsRes.data?.data;
-      if (stats) {
-        setPendingDeletes((stats.pendingCeo || 0) + (stats.pendingManager || 0));
-      }
+      if (stats) setPendingDeletes((stats.pendingCeo || 0) + (stats.pendingManager || 0));
     } catch (e) {
       console.error('Failed to fetch CEO metrics:', e);
     } finally {
@@ -220,14 +170,6 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
     }
   };
 
-  const deptPerformanceData = (analytics.departmentEfficiency || [])
-    .filter(Boolean)
-    .slice(0, 6)
-    .map((d: any) => ({
-      name: d?.name || 'N/A',
-      score: d?.efficiency || 0,
-      color: DEPT_COLORS[d?.type] || 'hsl(var(--muted-foreground))',
-    }));
 
   // Branch Overview / Sales / Operations / Finance / Management / My Portal items
   // use the same panels as the Branch Manager dashboard.
@@ -245,7 +187,7 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
             <p className="text-muted-foreground mt-1">Real-time institutional performance and strategic metrics.</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={fetchAll} disabled={loadingMetrics}>
+            <Button variant="outline" onClick={() => { fetchAll(); setRefreshKey((k) => k + 1); }} disabled={loadingMetrics}>
               <RefreshCw className={cn('w-4 h-4 mr-2', loadingMetrics && 'animate-spin')} />
               Refresh
             </Button>
@@ -296,203 +238,7 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
         </div>
 
         <TabsContent value="overview" className="space-y-8">
-          {/* Pending Delete Approvals Alert Banner (CEO only) */}
-          {user?.role === 'ceo' && pendingDeletes > 0 && (
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-900 dark:text-amber-200">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-400">
-                  <Trash2 className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="font-semibold text-sm">Action Required: {pendingDeletes} Deletion Request{pendingDeletes > 1 ? 's' : ''} Pending</p>
-                  <p className="text-xs text-amber-700/80 dark:text-amber-300/80">Department managers or admins submitted record deletion requests requiring authorization.</p>
-                </div>
-              </div>
-              <Button size="sm" variant="destructive" className="bg-amber-600 hover:bg-amber-700 text-white shrink-0" onClick={() => handleNavigate('delete_approvals')}>
-                Review Delete Requests ({pendingDeletes})
-              </Button>
-            </div>
-          )}
-
-          {/* Hero Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <MetricCard
-              title="Total Revenue"
-              value={metrics.totalRevenue ? `₹${(metrics.totalRevenue / 1000).toFixed(1)}K` : '₹0'}
-              trend={metrics.totalRevenue ? 'Live data' : 'No data yet'}
-              trendType="up"
-              icon={<DollarSign className="w-5 h-5" />}
-              color="primary"
-              onClick={() => handleNavigate('invoices')}
-            />
-            <MetricCard
-              title="Active Students"
-              value={metrics.totalStudents?.toLocaleString() || '0'}
-              trend={metrics.totalStudents ? 'Live data' : 'No data yet'}
-              trendType="up"
-              icon={<GraduationCap className="w-5 h-5" />}
-              color="success"
-              onClick={() => handleNavigate('students')}
-            />
-            <MetricCard
-              title="Pending Tasks"
-              value={metrics.pendingTasks || 0}
-              trend={metrics.overdueTasks ? `${metrics.overdueTasks} overdue` : 'On track'}
-              trendType={metrics.overdueTasks > 0 ? 'down' : 'up'}
-              icon={<Zap className="w-5 h-5" />}
-              color="warning"
-              onClick={() => handleNavigate('tasks')}
-            />
-            <MetricCard
-              title="Active Escalations"
-              value={metrics.activeEscalations || 0}
-              trend={metrics.criticalEscalations ? `${metrics.criticalEscalations} critical` : 'None critical'}
-              trendType={metrics.criticalEscalations > 0 ? 'down' : 'up'}
-              icon={<AlertTriangle className="w-5 h-5" />}
-              color="info"
-              onClick={() => handleNavigate('escalations')}
-            />
-          </div>
-
-          {/* Secondary metrics row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: 'Total Employees', value: metrics.totalEmployees || 0, icon: <Users className="w-6 h-6" />, tab: 'users', color: 'text-indigo-500', bg: 'bg-indigo-500/10' },
-              { label: 'Active Leads', value: metrics.totalLeads || 0, icon: <TrendingUp className="w-6 h-6" />, tab: 'leads', color: 'text-pink-500', bg: 'bg-pink-500/10' },
-              { label: 'Departments', value: metrics.totalDepartments || 0, icon: <Building2 className="w-6 h-6" />, tab: 'departments', color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
-              { label: 'Programs', value: metrics.totalPrograms || 0, icon: <BookOpen className="w-6 h-6" />, tab: 'students', color: 'text-violet-500', bg: 'bg-violet-500/10' },
-            ].map(item => (
-              <Card key={item.label} className="group cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-300 border-border/40 bg-card/40 backdrop-blur-sm" onClick={() => handleNavigate(item.tab)}>
-                <CardContent className="p-5 flex items-center gap-4">
-                  <div className={cn("p-3 rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3", item.bg, item.color)}>
-                    {item.icon}
-                  </div>
-                  <div>
-                    <p className="text-2xl font-black">{item.value}</p>
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{item.label}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Departmental Performance Chart */}
-            <Card
-              className="lg:col-span-2 overflow-hidden border-none shadow-2xl bg-card/50 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors"
-              onClick={() => handleNavigate('performance')}
-            >
-              <CardHeader className="flex flex-row items-center justify-between pb-4">
-                <div>
-                  <CardTitle className="text-xl font-bold">Departmental Performance</CardTitle>
-                  <CardDescription>Efficiency scores by department — click to view full report</CardDescription>
-                </div>
-                <BarChart2 className="w-5 h-5 text-muted-foreground" />
-              </CardHeader>
-              <CardContent className="h-[300px] px-2">
-                {deptPerformanceData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={deptPerformanceData} layout="vertical" margin={{ left: 0, right: 40 }}>
-                      <XAxis type="number" hide domain={[0, 100]} />
-                      <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={90} tick={{ fill: 'hsl(var(--foreground))', fontSize: 12, fontWeight: 500 }} />
-                      <Tooltip cursor={{ fill: 'hsl(var(--muted))' }} contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '12px' }} formatter={(v: any) => [`${v}%`, 'Score']} />
-                      <Bar dataKey="score" radius={[0, 4, 4, 0]} barSize={18}>
-                        {deptPerformanceData.map((entry: any, index: number) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
-                    <BarChart2 className="w-10 h-10 opacity-20" />
-                    <p className="text-sm">No department data yet</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Right column snapshots */}
-            <div className="space-y-4">
-              <Card className="relative overflow-hidden group cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-500 bg-gradient-to-br from-primary/5 via-background to-background border-primary/20" onClick={() => handleNavigate('invoices')}>
-                <div className="absolute right-0 top-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
-                <CardContent className="p-5 relative z-10">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <div className="p-2 bg-primary/10 rounded-lg text-primary shadow-sm"><DollarSign className="w-4 h-4" /></div>
-                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Finance Snapshot</p>
-                    </div>
-                  </div>
-                  <p className="text-3xl font-black">₹{metrics.totalRevenue ? (metrics.totalRevenue / 1000).toFixed(1) + 'K' : '0'}</p>
-                  <p className="text-[10px] font-semibold text-muted-foreground mt-1 uppercase tracking-wider">Total revenue collected</p>
-                  <div className="mt-4 flex items-center gap-1.5 text-xs text-primary font-bold opacity-80 group-hover:opacity-100 transition-opacity">
-                    <span>View Invoices</span><ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="relative overflow-hidden group cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-500 bg-gradient-to-br from-green-500/5 via-background to-background border-green-500/20" onClick={() => handleNavigate('users')}>
-                <div className="absolute right-0 top-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
-                <CardContent className="p-5 relative z-10">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <div className="p-2 bg-green-500/10 rounded-lg text-green-500 shadow-sm"><UserCheck className="w-4 h-4" /></div>
-                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">People Snapshot</p>
-                    </div>
-                  </div>
-                  <p className="text-3xl font-black">{metrics.totalEmployees || 0}</p>
-                  <p className="text-[10px] font-semibold text-muted-foreground mt-1 uppercase tracking-wider">Active employees</p>
-                  <div className="mt-4 flex items-center gap-1.5 text-xs text-green-500 font-bold opacity-80 group-hover:opacity-100 transition-opacity">
-                    <span>View Users</span><ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="relative overflow-hidden group cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-500 bg-gradient-to-br from-yellow-500/5 via-background to-background border-yellow-500/20" onClick={() => handleNavigate('tasks')}>
-                <div className="absolute right-0 top-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
-                <CardContent className="p-5 relative z-10">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <div className="p-2 bg-yellow-500/10 rounded-lg text-yellow-500 shadow-sm"><Zap className="w-4 h-4" /></div>
-                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Tasks Snapshot</p>
-                    </div>
-                  </div>
-                  <p className="text-3xl font-black">{metrics.pendingTasks || 0}</p>
-                  <p className="text-[10px] font-semibold text-muted-foreground mt-1 uppercase tracking-wider">Pending tasks</p>
-                  <div className="mt-4 flex items-center gap-1.5 text-xs text-yellow-500 font-bold opacity-80 group-hover:opacity-100 transition-opacity">
-                    <span>View Tasks</span><ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Punch Widget + Quick Access */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Card className="bg-primary/5 border-primary/10 cursor-pointer hover:border-primary/40 transition-colors" onClick={() => handleNavigate('kpi-kra')}>
-                <CardContent className="pt-6">
-                  <div className="p-2 w-fit rounded-lg bg-primary/10 text-primary mb-4">
-                    <Target className="w-5 h-5" />
-                  </div>
-                  <h4 className="font-bold text-lg">KPI / KRA Report</h4>
-                  <p className="text-sm text-muted-foreground mt-1">View employee performance indicators and key result areas.</p>
-                  <Button variant="link" className="p-0 h-auto mt-4 text-primary">Open Report <ArrowUpRight className="ml-1 w-3 h-3" /></Button>
-                </CardContent>
-              </Card>
-              <Card className="bg-success/5 border-success/10 cursor-pointer hover:border-success/40 transition-colors" onClick={() => handleNavigate('performance')}>
-                <CardContent className="pt-6">
-                  <div className="p-2 w-fit rounded-lg bg-success/10 text-success mb-4">
-                    <TrendingUp className="w-5 h-5" />
-                  </div>
-                  <h4 className="font-bold text-lg">Performance</h4>
-                  <p className="text-sm text-muted-foreground mt-1">Departmental efficiency and org-wide performance analytics.</p>
-                  <Button variant="link" className="p-0 h-auto mt-4 text-success">View Analytics <ArrowUpRight className="ml-1 w-3 h-3" /></Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
+          <ExecutiveOverviewPanel onNavigate={handleNavigate} refreshKey={refreshKey} />
           {/* Live Escalations Preview */}
           <EscalationPreview onViewAll={() => handleNavigate('escalations')} />
         </TabsContent>
@@ -577,71 +323,20 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
   );
 }
 
-function MetricCard({ title, value, trend, trendType, icon, color, onClick }: any) {
-  const colorStyles: any = {
-    primary: "from-primary/20 to-transparent border-primary/20 text-primary group-hover:border-primary/50 group-hover:shadow-[0_0_20px_-5px_rgba(var(--primary),0.3)]",
-    success: "from-green-500/20 to-transparent border-green-500/20 text-green-500 group-hover:border-green-500/50 group-hover:shadow-[0_0_20px_-5px_rgba(34,197,94,0.3)]",
-    warning: "from-yellow-500/20 to-transparent border-yellow-500/20 text-yellow-500 group-hover:border-yellow-500/50 group-hover:shadow-[0_0_20px_-5px_rgba(234,179,8,0.3)]",
-    info: "from-blue-500/20 to-transparent border-blue-500/20 text-blue-500 group-hover:border-blue-500/50 group-hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.3)]",
-  };
-
-  const bgStyles: any = {
-    primary: "bg-primary/10",
-    success: "bg-green-500/10",
-    warning: "bg-yellow-500/10",
-    info: "bg-blue-500/10",
-  };
-
-  return (
-    <Card
-      className={cn(
-        "relative overflow-hidden group transition-all duration-500 bg-gradient-to-br bg-card/60 backdrop-blur-xl border",
-        colorStyles[color],
-        onClick && "cursor-pointer hover:-translate-y-1"
-      )}
-      onClick={onClick}
-    >
-      <div className="absolute -right-4 -top-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500 transform group-hover:scale-110 pointer-events-none">
-        <div className="w-24 h-24 [&>svg]:w-full [&>svg]:h-full">{icon}</div>
-      </div>
-      <CardContent className="p-6 relative z-10">
-        <div className="flex items-center justify-between mb-4">
-          <div className={cn("p-2.5 rounded-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-sm", bgStyles[color], colorStyles[color].split(' ')[3])}>
-            {icon}
-          </div>
-          <div className={cn(
-            "flex items-center text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm backdrop-blur-md border",
-            trendType === 'up' ? "bg-green-500/10 text-green-600 border-green-500/20" : "bg-red-500/10 text-red-600 border-red-500/20"
-          )}>
-            {trendType === 'up' ? <ArrowUpRight className="w-3 h-3 mr-1" /> : <ArrowDownRight className="w-3 h-3 mr-1" />}
-            {trend}
-          </div>
-        </div>
-        <div className="space-y-1">
-          <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{title}</p>
-          <p className="text-3xl font-black tracking-tight text-foreground">{value}</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-// ─── EscalationPreview ────────────────────────────────────────────────────────
-
 function EscalationPreview({ onViewAll }: { onViewAll: () => void }) {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     api.get('/ceo/escalations')
-      .then(r => setItems((r.data.data || []).filter((e: any) => e.status === 'pending').slice(0, 3)))
+      .then(r => setItems((r.data.data || []).filter((e: any) => e.status !== 'resolved').slice(0, 3)))
       .catch(() => { })
       .finally(() => setLoading(false));
   }, []);
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="rounded-3xl border-0 shadow-md ring-1 ring-border/60 py-6 gap-4">
+      <CardHeader className="px-7 flex flex-row items-center justify-between">
         <div>
           <CardTitle>Live Escalations</CardTitle>
           <CardDescription>Pending items requiring your attention</CardDescription>
@@ -650,7 +345,7 @@ function EscalationPreview({ onViewAll }: { onViewAll: () => void }) {
           View All <ArrowUpRight className="ml-1 w-3 h-3" />
         </Button>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="px-7 space-y-3">
         {loading ? (
           [1, 2, 3].map(i => <div key={i} className="h-14 bg-muted rounded-lg animate-pulse" />)
         ) : items.length === 0 ? (
@@ -661,14 +356,14 @@ function EscalationPreview({ onViewAll }: { onViewAll: () => void }) {
         ) : (
           items.map(esc => (
             <div key={esc.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer" onClick={onViewAll}>
-              <div className={cn("mt-0.5 p-1.5 rounded-md", esc.priority === 'critical' ? 'bg-red-500/10 text-red-500' : 'bg-warning/10 text-warning')}>
+              <div className={cn("mt-0.5 p-1.5 rounded-md", (esc.priority === 'critical' || esc.priority === 'high') ? 'bg-red-500/10 text-red-500' : 'bg-warning/10 text-warning')}>
                 <AlertTriangle className="w-3.5 h-3.5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{esc.taskId?.title || 'Task Escalation'}</p>
-                <p className="text-xs text-muted-foreground">{esc.employeeId?.name || 'Unknown'} · {timeAgo(esc.escalatedAt)}</p>
+                <p className="text-sm font-medium truncate">{esc.task?.title || esc.reason || 'Escalation'}</p>
+                <p className="text-xs text-muted-foreground">{esc.employee?.name || 'Unknown'} · {timeAgo(esc.escalatedAt)}</p>
               </div>
-              <Badge className={cn('text-[10px] uppercase font-bold shrink-0', esc.priority === 'critical' ? 'bg-red-500/10 text-red-500' : 'bg-warning/10 text-warning')}>
+              <Badge className={cn('text-[10px] uppercase font-bold shrink-0', (esc.priority === 'critical' || esc.priority === 'high') ? 'bg-red-500/10 text-red-500' : 'bg-warning/10 text-warning')}>
                 {esc.priority}
               </Badge>
             </div>
@@ -679,257 +374,10 @@ function EscalationPreview({ onViewAll }: { onViewAll: () => void }) {
   );
 }
 
-// ─── EscalationsPanel ────────────────────────────────────────────────────────
-
-interface Escalation {
-  id: string;
-  taskId?: { id: string; title: string; description: string; deadline: string; priority: string };
-  employeeId?: { id: string; name: string; email: string };
-  deptAdminId?: { id: string; name: string; email: string };
-  organizationId: string;
-  priority: string;
-  status: string;
-  escalatedAt: string;
-  resolution?: string;
-  resolvedAt?: string;
-  chain?: { level: string; action: string; timestamp: string }[];
-}
-
-const STATUS_COLOR: Record<string, string> = {
-  pending: 'bg-warning/10 text-warning',
-  resolved: 'bg-success/10 text-success',
-  reassigned: 'bg-info/10 text-info',
-  extended: 'bg-primary/10 text-primary',
-  justified: 'bg-muted text-muted-foreground',
-};
-
-const PRIORITY_COLOR: Record<string, string> = {
-  critical: 'bg-red-500/10 text-red-500',
-  high: 'bg-orange-500/10 text-orange-500',
-  medium: 'bg-yellow-500/10 text-yellow-500',
-  low: 'bg-blue-500/10 text-blue-500',
-};
-
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
   const hrs = Math.floor(diff / 3600000);
   if (hrs < 1) return 'just now';
   if (hrs < 24) return `${hrs}h ago`;
   return `${Math.floor(hrs / 24)}d ago`;
-}
-
-function EscalationsPanel() {
-  const [escalations, setEscalations] = useState<Escalation[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('all');
-  const [selected, setSelected] = useState<Escalation | null>(null);
-  const [actionDialog, setActionDialog] = useState(false);
-  const [actionData, setActionData] = useState({ action: '', resolution: '', newDeadline: '', reassignTo: '' });
-  const [submitting, setSubmitting] = useState(false);
-
-  const fetchEscalations = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get('/ceo/escalations');
-      setEscalations(res.data.data || []);
-    } catch (e: any) {
-      toast.error(e.response?.data?.message || 'Failed to load escalations');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => { fetchEscalations(); }, []);
-
-  const filtered = escalations.filter(e =>
-    activeTab === 'all' ? true : e.status === activeTab
-  );
-
-  const handleAction = async () => {
-    if (!selected || !actionData.action) return;
-    setSubmitting(true);
-    try {
-      await api.patch(`/ceo/escalations/${selected.id}`, actionData);
-      toast.success('Escalation handled successfully');
-      setActionDialog(false);
-      setSelected(null);
-      setActionData({ action: '', resolution: '', newDeadline: '', reassignTo: '' });
-      fetchEscalations();
-    } catch (e: any) {
-      toast.error(e.response?.data?.message || 'Failed to handle escalation');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const openAction = (esc: Escalation) => {
-    setSelected(esc);
-    setActionData({ action: '', resolution: '', newDeadline: '', reassignTo: '' });
-    setActionDialog(true);
-  };
-
-  const counts = {
-    all: escalations.length,
-    pending: escalations.filter(e => e.status === 'pending').length,
-    resolved: escalations.filter(e => e.status === 'resolved').length,
-  };
-
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Escalations</h2>
-          <p className="text-muted-foreground text-sm mt-1">Review and resolve escalated tasks from departments.</p>
-        </div>
-        <Button variant="outline" size="sm" onClick={fetchEscalations} disabled={loading}>
-          <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />
-          Refresh
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-4">
-        <Card>
-          <CardContent className="pt-6 flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-warning/10 text-warning"><AlertTriangle className="w-5 h-5" /></div>
-            <div>
-              <p className="text-2xl font-bold">{counts.pending}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Pending</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-success/10 text-success"><CheckCircle className="w-5 h-5" /></div>
-            <div>
-              <p className="text-2xl font-bold">{counts.resolved}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Resolved</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-primary/10 text-primary"><Clock className="w-5 h-5" /></div>
-            <div>
-              <p className="text-2xl font-bold">{counts.all}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Total</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <div className="relative w-full max-w-full">
-          <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
-            <TabsList className="flex w-max space-x-1.5 bg-transparent p-1 h-auto border-b border-border/30">
-              <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">All ({counts.all})</TabsTrigger>
-              <TabsTrigger value="pending" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Pending ({counts.pending})</TabsTrigger>
-              <TabsTrigger value="resolved" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Resolved ({counts.resolved})</TabsTrigger>
-            </TabsList>
-          </div>
-        </div>
-
-        <TabsContent value={activeTab} className="mt-4">
-          {loading ? (
-            <div className="space-y-3">
-              {[1, 2, 3].map(i => <div key={i} className="h-24 bg-muted rounded-xl animate-pulse" />)}
-            </div>
-          ) : filtered.length === 0 ? (
-            <Card>
-              <CardContent className="py-16 text-center text-muted-foreground">
-                <AlertTriangle className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                <p>No escalations found</p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-3">
-              {filtered.map(esc => (
-                <Card key={esc.id} className="hover:border-primary/30 transition-colors">
-                  <CardContent className="p-5">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap mb-2">
-                          <Badge className={cn('text-[10px] uppercase font-bold', STATUS_COLOR[esc.status] || 'bg-muted text-muted-foreground')}>
-                            {esc.status}
-                          </Badge>
-                          <Badge className={cn('text-[10px] uppercase font-bold', PRIORITY_COLOR[esc.priority] || 'bg-muted text-muted-foreground')}>
-                            {esc.priority}
-                          </Badge>
-                          <span className="text-[10px] text-muted-foreground">{timeAgo(esc.escalatedAt)}</span>
-                        </div>
-                        <h4 className="font-semibold text-sm">{esc.taskId?.title || 'Task Escalation'}</h4>
-                        {esc.taskId?.description && (
-                          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{esc.taskId.description}</p>
-                        )}
-                        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                          {esc.employeeId && <span>Employee: {esc.employeeId.name}</span>}
-                          {esc.deptAdminId && <span>Dept Admin: {esc.deptAdminId.name}</span>}
-                          {esc.taskId?.deadline && <span>Deadline: {new Date(esc.taskId.deadline).toLocaleDateString()}</span>}
-                        </div>
-                        {esc.resolution && (
-                          <p className="text-xs text-success mt-2">Resolution: {esc.resolution}</p>
-                        )}
-                      </div>
-                      {esc.status === 'pending' && (
-                        <Button size="sm" onClick={() => openAction(esc)}>Take Action</Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
-
-      <Dialog open={actionDialog} onOpenChange={setActionDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Handle Escalation</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 pt-2">
-            <div>
-              <Label>Task</Label>
-              <p className="text-sm text-muted-foreground mt-1">{selected?.taskId?.title || 'N/A'}</p>
-            </div>
-            <div className="space-y-2">
-              <Label>Action</Label>
-              <Select value={actionData.action} onValueChange={v => setActionData(d => ({ ...d, action: v }))}>
-                <SelectTrigger><SelectValue placeholder="Select action..." /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="resolve">Resolve</SelectItem>
-                  <SelectItem value="reassign">Reassign</SelectItem>
-                  <SelectItem value="extend">Extend Deadline</SelectItem>
-                  <SelectItem value="justify">Justify</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            {actionData.action === 'reassign' && (
-              <div className="space-y-2">
-                <Label>Reassign To (User ID)</Label>
-                <Input value={actionData.reassignTo} onChange={e => setActionData(d => ({ ...d, reassignTo: e.target.value }))} placeholder="User ID..." />
-              </div>
-            )}
-            {actionData.action === 'extend' && (
-              <div className="space-y-2">
-                <Label>New Deadline</Label>
-                <Input type="date" value={actionData.newDeadline} onChange={e => setActionData(d => ({ ...d, newDeadline: e.target.value }))} />
-              </div>
-            )}
-            {['resolve', 'justify'].includes(actionData.action) && (
-              <div className="space-y-2">
-                <Label>Resolution Notes</Label>
-                <Textarea value={actionData.resolution} onChange={e => setActionData(d => ({ ...d, resolution: e.target.value }))} placeholder="Describe the resolution..." rows={3} />
-              </div>
-            )}
-            <div className="flex gap-2 pt-2">
-              <Button className="flex-1" onClick={handleAction} disabled={!actionData.action || submitting}>
-                {submitting ? 'Submitting...' : 'Submit'}
-              </Button>
-              <Button variant="outline" onClick={() => setActionDialog(false)}>Cancel</Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
 }

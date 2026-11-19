@@ -1,3 +1,4 @@
+import { istDay } from './usageController.js';
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
@@ -1181,9 +1182,40 @@ export const getActivityReport = asyncHandler(async (req: AuthRequest, res: Resp
     }
   });
 
+  // Real platform usage (heartbeats) and ERM actions (audit log) for the chosen day, in Indian time
+  const dayKey = /^\d{4}-\d{2}-\d{2}$/.test(String(req.query.date || '')) ? String(req.query.date) : istDay(Date.now());
+  const dayStart = new Date(`${dayKey}T00:00:00+05:30`);
+  const dayEnd = new Date(dayStart.getTime() + 24 * 3600_000);
+  const userIds = users.map((u) => u.id);
+  const [usageRows, auditRows] = await Promise.all([
+    prisma.usageDay.findMany({ where: { organizationId: req.user.organizationId, date: dayKey, userId: { in: userIds } } }),
+    prisma.auditLog.groupBy({
+      by: ['actorId', 'module'],
+      where: { organizationId: req.user.organizationId, actorId: { in: userIds }, timestamp: { gte: dayStart, lt: dayEnd }, action: { in: ['create', 'update', 'delete'] } },
+      _count: { _all: true },
+    }),
+  ]);
+  const usageByUser = new Map(usageRows.map((r) => [r.userId, r]));
+  const ermByUser = new Map<string, Record<string, number>>();
+  for (const r of auditRows) {
+    if (!r.actorId) continue;
+    const m = ermByUser.get(r.actorId) || {};
+    m[r.module || 'other'] = (m[r.module || 'other'] || 0) + r._count._all;
+    ermByUser.set(r.actorId, m);
+  }
+
   const data = users.map(user => {
     const attendance = user.attendances[0] || null;
     const tasks = user.assignedTasks || [];
+    const u = usageByUser.get(user.id);
+    const erm = ermByUser.get(user.id) || {};
+    const usage = u ? {
+      tracked: true,
+      activeHours: u.activeSec / 3600, idleHours: u.idleSec / 3600, awayHours: u.awaySec / 3600,
+      leaves: u.leaves, firstSeen: u.firstSeen, lastSeen: u.lastSeen,
+      pages: Object.entries((u.pages as Record<string, number>) || {}).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([page, sec]) => ({ page, hours: sec / 3600 })),
+      segments: Array.isArray(u.segments) ? u.segments : [],
+    } : { tracked: false };
     
     return {
       userId: user.id,
@@ -1201,12 +1233,14 @@ export const getActivityReport = asyncHandler(async (req: AuthRequest, res: Resp
         lateMinutes: attendance.lateMinutes,
         workingHours: attendance.workingHours
       } : null,
-      productiveHours: attendance?.workingHours || 0,
+      // hours the person was actually working in the platform; null-ish when nothing was tracked that day
+      productiveHours: u ? u.activeSec / 3600 : 0,
       scheduledHours: 8,
-      timeWasted: 0,
+      timeWasted: u ? (u.idleSec + u.awaySec) / 3600 : null,
       breakMinutes: 60,
-      erpActions: 0,
-      ermActivity: {},
+      erpActions: Object.values(erm).reduce((x, y) => x + y, 0),
+      ermActivity: erm,
+      usage,
       tasks: {
         total: tasks.length,
         completedToday: tasks.filter((t: any) => t.status === 'completed').length,
@@ -1239,6 +1273,7 @@ export const getActivityReport = asyncHandler(async (req: AuthRequest, res: Resp
     if (emp.attendance?.status === 'absent') d.absent++;
     if (emp.attendance?.status === 'late') d.late++;
     d.totalTasksCompleted += emp.tasks.completedToday;
+    d.totalErmActions += emp.erpActions;
     d.avgProductiveHours += emp.productiveHours;
   });
 

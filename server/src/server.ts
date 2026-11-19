@@ -1,4 +1,5 @@
 import studentFilterRoutes from './routes/studentFilterRoutes.js';
+import usageRoutes from './routes/usageRoutes.js';
 import { activityLogger } from './middleware/activityLogger.js';
 import { flushActivityLog } from './utils/activityLog.js';
 import express, { Application } from 'express';
@@ -169,6 +170,8 @@ const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW || '15') * 60 * 1000,
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
   message: 'Too many requests from this IP, please try again later.',
+  // heartbeats come every 30s from every signed-in user; an office shares one IP, so they must not eat the shared quota
+  skip: (req) => req.originalUrl.includes('/usage/heartbeat'),
 });
 
 app.use('/api', limiter);
@@ -189,6 +192,7 @@ app.use(`/api/${API_VERSION}/users`, userRoutes);
 app.use(`/api/${API_VERSION}/tasks`, taskRoutes);
 app.use(`/api/${API_VERSION}/students`, studentRoutes);
 app.use(`/api/${API_VERSION}/student-filters`, studentFilterRoutes);
+app.use(`/api/${API_VERSION}/usage`, usageRoutes);
 app.use(`/api/${API_VERSION}/hr`, hrRoutes);
 app.use(`/api/${API_VERSION}/finance`, financeRoutes);
 app.use(`/api/${API_VERSION}/operations`, operationsRoutes);

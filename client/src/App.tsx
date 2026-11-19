@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useUsageHeartbeat } from '@/hooks/useUsageHeartbeat';
 import { useAuth } from '@/hooks/useAuth';
 import { Login } from '@/pages/Login';
 import { LandingPage } from '@/pages/LandingPage';
@@ -206,6 +207,9 @@ function App() {
     const params = new URLSearchParams(window.location.search);
     return params.get('table') || getDefaultTable(user?.role);
   });
+
+  // Platform usage: report whether this person is actively using the platform (staff only)
+  useUsageHeartbeat(!!user && !['student', 'center_student', 'faculty', 'teacher', 'center_teacher'].includes(user.role), activeTable);
   const [tableData, setTableData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   // For employee sub-dept managers: track their department type to show correct nav

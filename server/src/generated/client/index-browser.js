@@ -1695,6 +1695,23 @@ exports.Prisma.StudentFilterHistoryScalarFieldEnum = {
   changedAt: 'changedAt'
 };
 
+exports.Prisma.UsageDayScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  date: 'date',
+  activeSec: 'activeSec',
+  idleSec: 'idleSec',
+  awaySec: 'awaySec',
+  leaves: 'leaves',
+  firstSeen: 'firstSeen',
+  lastSeen: 'lastSeen',
+  lastState: 'lastState',
+  pages: 'pages',
+  segments: 'segments',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2034,7 +2051,8 @@ exports.Prisma.ModelName = {
   StudentFilterType: 'StudentFilterType',
   StudentFilterOption: 'StudentFilterOption',
   StudentFilterValue: 'StudentFilterValue',
-  StudentFilterHistory: 'StudentFilterHistory'
+  StudentFilterHistory: 'StudentFilterHistory',
+  UsageDay: 'UsageDay'
 };
 
 /**
