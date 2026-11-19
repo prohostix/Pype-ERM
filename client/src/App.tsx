@@ -105,6 +105,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   enrollments_finance: 'enrollments_finance',
   // Operations / shared
   students: 'students',
+  student_filters: 'student_filters',
   universities: 'universities',
   programs: 'programs',
   study_centers: 'centers',
@@ -471,6 +472,7 @@ function App() {
 
         { id: '__academics_section', label: 'Academics & Operations', isSection: true },
         { id: 'students', label: 'Students' },
+        { id: 'student_filters', label: 'Student Filters' },
         { id: 'admission_review', label: 'Admission Review' },
         { id: 'universities', label: 'Universities' },
         { id: 'programs', label: 'Programs' },

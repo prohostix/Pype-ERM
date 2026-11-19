@@ -1,4 +1,6 @@
+import studentFilterRoutes from './routes/studentFilterRoutes.js';
 import { activityLogger } from './middleware/activityLogger.js';
+import { flushActivityLog } from './utils/activityLog.js';
 import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -186,6 +188,7 @@ app.use(`/api/${API_VERSION}/departments`, departmentRoutes);
 app.use(`/api/${API_VERSION}/users`, userRoutes);
 app.use(`/api/${API_VERSION}/tasks`, taskRoutes);
 app.use(`/api/${API_VERSION}/students`, studentRoutes);
+app.use(`/api/${API_VERSION}/student-filters`, studentFilterRoutes);
 app.use(`/api/${API_VERSION}/hr`, hrRoutes);
 app.use(`/api/${API_VERSION}/finance`, financeRoutes);
 app.use(`/api/${API_VERSION}/operations`, operationsRoutes);
@@ -300,3 +303,11 @@ process.on('unhandledRejection', (err: Error) => {
 });
 
 export default app;
+
+// Write out any queued audit entries before the process stops
+for (const signal of ['SIGINT', 'SIGTERM'] as const) {
+  process.once(signal, () => {
+    flushActivityLog().finally(() => process.exit(0));
+    setTimeout(() => process.exit(0), 3000).unref();
+  });
+}

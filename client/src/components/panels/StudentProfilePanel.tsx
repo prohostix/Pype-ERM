@@ -35,7 +35,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
-import { StudentFeesTab, StudentCommunicationTab, StudentRemarksTab } from '@/components/panels/StudentProfileTabs';
+import { StudentFeesTab, StudentCommunicationTab, StudentRemarksTab, StudentCustomFilters } from '@/components/panels/StudentProfileTabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { format } from 'date-fns';
 import { useAuth } from '@/hooks/useAuth';
@@ -268,6 +268,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
 
                 {/* Personal Details Tab */}
                 <TabsContent value="personal" className="space-y-8 mt-0">
+                  <StudentCustomFilters studentId={student.id} />
                   <Section title="Identity">
                     <Field label="Date of Birth" value={fmt(student.dob)} />
                     <Field label="Gender" value={student.gender} capitalize />

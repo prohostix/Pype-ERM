@@ -36,12 +36,14 @@ export const activityLogger = async (req: Request, res: Response, next: NextFunc
 
     res.on('finish', () => {
       if (!(req as any).user) return; // rejected before auth
-      if (res.statusCode >= 500) return;
       const base = actionForMethod(req.method);
+      const isRead = req.method === 'GET';
+      const query = req.query && Object.keys(req.query).length ? { query: req.query } : undefined;
       logActivity(req, {
         action: res.statusCode < 400 ? base : `${base}_failed`,
         oldValue: res.statusCode < 400 ? before : undefined,
-        newValue: req.body && Object.keys(req.body).length ? req.body : undefined,
+        // reads record the filters used, writes record what was sent
+        newValue: isRead ? query : (req.body && Object.keys(req.body).length ? req.body : undefined),
         statusCode: res.statusCode,
       });
     });

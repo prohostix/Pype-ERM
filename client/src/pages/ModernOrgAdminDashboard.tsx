@@ -46,6 +46,7 @@ import { UsersPanel } from '@/components/panels/UsersPanel';
 import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
+import { StudentFiltersPanel } from '@/components/panels/StudentFiltersPanel';
 import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
 import { OpsProgramAllocationPanel } from '@/components/panels/OpsProgramAllocationPanel';
@@ -814,6 +815,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
 
         <TabsContent value="tasks"><TasksPanel /></TabsContent>
         <TabsContent value="students"><StudentsPanel /></TabsContent>
+        <TabsContent value="student_filters"><StudentFiltersPanel /></TabsContent>
         <TabsContent value="universities"><UniversitiesPanel /></TabsContent>
         <TabsContent value="programs"><ProgramsPanel /></TabsContent>
         <TabsContent value="program_allocations"><OpsProgramAllocationPanel /></TabsContent>

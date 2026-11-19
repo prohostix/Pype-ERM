@@ -26,6 +26,7 @@ interface MultiSelectFilterOption {
   label: string;
   count?: number;
   dotColor?: string;
+  dotHex?: string; // custom colour (hex) for a dot, when a Tailwind class isn't enough
   avatarText?: string;
 }
 
@@ -86,6 +87,7 @@ function MultiSelectFilter({
       return (
         <span className="font-medium text-slate-800 dark:text-slate-100 truncate flex items-center gap-1.5">
           {match?.dotColor && <span className={cn('w-2 h-2 rounded-full shrink-0', match.dotColor)} />}
+          {match?.dotHex && <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: match.dotHex }} />}
           {match?.avatarText && (
             <span className="w-4 h-4 rounded-full bg-blue-100 dark:bg-blue-900/40 text-[9px] font-bold text-blue-700 dark:text-blue-300 flex items-center justify-center shrink-0">
               {match.avatarText}
@@ -240,6 +242,7 @@ function MultiSelectFilter({
                       {opt.dotColor && (
                         <span className={cn("w-2 h-2 rounded-full shrink-0", opt.dotColor)} />
                       )}
+                      {opt.dotHex && <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: opt.dotHex }} />}
                       {opt.avatarText && (
                         <span className="w-4 h-4 rounded-full bg-blue-100 dark:bg-blue-900/40 text-[9px] font-bold text-blue-700 dark:text-blue-300 flex items-center justify-center shrink-0">
                           {opt.avatarText}
@@ -293,6 +296,7 @@ interface SavedStudentFilters {
   filterBranchIds?: string[];
   filterSalesUsers?: string[];
   filterSessionIds?: string[];
+  customFilters?: Record<string, string[]>;
   filterDatePreset?: string;
   filterStartDate?: string;
   filterEndDate?: string;
@@ -427,6 +431,22 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     return saved.filterEndDate || '';
   });
 
+  // Custom filters defined by the org admin (Student Filters). Selected option ids per filter; NOT_SET matches students with no value.
+  const NOT_SET = '__none__';
+  const [filterTypes, setFilterTypes] = useState<any[]>([]);
+  const [customFilters, setCustomFilters] = useState<Record<string, string[]>>(() => {
+    const saved = getSavedFilters(storageKey);
+    return saved.customFilters && typeof saved.customFilters === 'object' ? saved.customFilters : {};
+  });
+  useEffect(() => {
+    api.get('/student-filters').then((r) => setFilterTypes(r.data?.data || [])).catch(() => setFilterTypes([]));
+  }, []);
+  const setCustomFilter = (typeId: string, ids: string[]) => setCustomFilters((prev) => ({ ...prev, [typeId]: ids }));
+  // only filters that still exist and are on count; a stale saved id must not hide every student
+  const activeCustomFilters = filterTypes
+    .map((t) => ({ type: t, ids: (customFilters[t.id] || []).filter((id) => id === NOT_SET || t.options.some((o: any) => o.id === id)) }))
+    .filter((x) => x.ids.length > 0);
+
   // Save filters to localStorage whenever any filter changes
   useEffect(() => {
     const toSave: SavedStudentFilters = {
@@ -437,6 +457,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       filterBranchIds,
       filterSalesUsers,
       filterSessionIds,
+      customFilters,
       filterDatePreset,
       filterStartDate,
       filterEndDate,
@@ -456,6 +477,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     filterBranchIds,
     filterSalesUsers,
     filterSessionIds,
+    customFilters,
     filterDatePreset,
     filterStartDate,
     filterEndDate,
@@ -468,7 +490,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeFilter, filterStatuses, searchQuery, filterUniversityIds, filterSessionIds, filterBranchIds, filterSalesUsers, sortBy, filterStartDate, filterEndDate]);
+  }, [activeFilter, filterStatuses, searchQuery, filterUniversityIds, filterSessionIds, filterBranchIds, filterSalesUsers, customFilters, sortBy, filterStartDate, filterEndDate]);
 
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
@@ -502,6 +524,32 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const [bulkPaymentAmount, setBulkPaymentAmount] = useState('');
   const [bulkPaymentNote, setBulkPaymentNote] = useState('');
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
+  const [bulkFilterDialogOpen, setBulkFilterDialogOpen] = useState(false);
+  const [bulkFilterTypeId, setBulkFilterTypeId] = useState('');
+  const [bulkFilterOptionId, setBulkFilterOptionId] = useState(''); // '' = pick one, NOT_SET = clear
+  const [bulkFilterNote, setBulkFilterNote] = useState('');
+
+  const handleBulkSetFilter = async () => {
+    if (!bulkFilterTypeId || !bulkFilterOptionId) return;
+    setBulkActionLoading(true);
+    try {
+      const res = await api.post('/students/filters/bulk', {
+        studentIds: Array.from(selectedStudentIds),
+        typeId: bulkFilterTypeId,
+        optionId: bulkFilterOptionId === NOT_SET ? null : bulkFilterOptionId,
+        note: bulkFilterNote.trim() || undefined,
+      });
+      const { changed = 0, unchanged = 0, failed = 0 } = res.data?.data || {};
+      toast.success(`${changed} updated${unchanged ? `, ${unchanged} already had it` : ''}${failed ? `, ${failed} failed` : ''}`);
+      setBulkFilterDialogOpen(false);
+      setSelectedStudentIds(new Set());
+      fetchStudents();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update the filter');
+    } finally {
+      setBulkActionLoading(false);
+    }
+  };
 
   const isOrgAdmin = ['org_admin', 'superadmin'].includes(user?.role || '');
   // Custom column report: same roles the server allows (/student-reports)
@@ -780,6 +828,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     filterBranchIds.length > 0 ||
     filterSalesUsers.length > 0 ||
     filterSessionIds.length > 0 ||
+    activeCustomFilters.length > 0 ||
     filterStartDate !== '' ||
     filterEndDate !== '';
 
@@ -791,9 +840,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     if (filterBranchIds.length > 0) count += filterBranchIds.length;
     if (filterSalesUsers.length > 0) count += filterSalesUsers.length;
     if (filterSessionIds.length > 0) count += filterSessionIds.length;
+    activeCustomFilters.forEach((x) => { count += x.ids.length; });
     if (filterStartDate !== '' || filterEndDate !== '') count++;
     return count;
-  }, [searchQuery, filterStatuses, filterUniversityIds, filterBranchIds, filterSalesUsers, filterSessionIds, filterStartDate, filterEndDate]);
+  }, [searchQuery, filterStatuses, filterUniversityIds, filterBranchIds, filterSalesUsers, filterSessionIds, customFilters, filterTypes, filterStartDate, filterEndDate]);
 
   const handleResetFilters = () => {
     setSearchQuery('');
@@ -803,6 +853,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     setFilterBranchIds([]);
     setFilterSalesUsers([]);
     setFilterSessionIds([]);
+    setCustomFilters({});
     setFilterDatePreset('all');
     setFilterStartDate('');
     setFilterEndDate('');
@@ -2211,7 +2262,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           'Mother Name': s.motherName || '',
           'Address': s.address && s.address !== 'To be filled' ? s.address : '',
           'Pin Code': s.pinCode || '',
-          'Created At': formatDate(s.createdAt)
+          'Created At': formatDate(s.createdAt),
+          // one column per custom filter, after the standard columns
+          ...Object.fromEntries(filterTypes.map((t) => {
+            const optionId = (s.filterValues || []).find((v: any) => v.filterTypeId === t.id)?.optionId;
+            return [t.name, t.options.find((o: any) => o.id === optionId)?.label || ''];
+          }))
         };
       });
 
@@ -2768,6 +2824,22 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       });
   }, [sessions, students]);
 
+  const customFilterOptions = useMemo(() => {
+    const map: Record<string, { value: string; label: string; count: number; dotHex?: string }[]> = {};
+    filterTypes.forEach((t) => {
+      const counts = new Map<string, number>();
+      students.forEach((st: any) => {
+        const id = (st?.filterValues || []).find((v: any) => v.filterTypeId === t.id)?.optionId || NOT_SET;
+        counts.set(id, (counts.get(id) || 0) + 1);
+      });
+      map[t.id] = [
+        ...t.options.map((o: any) => ({ value: o.id, label: o.label, count: counts.get(o.id) || 0, dotHex: o.color || undefined })),
+        { value: NOT_SET, label: 'Not set', count: counts.get(NOT_SET) || 0 },
+      ];
+    });
+    return map;
+  }, [filterTypes, students]);
+
   const filteredStudents = students.filter(s => {
     if (!s) return false;
 
@@ -2836,6 +2908,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     if (filterSalesUsers.length > 0) {
       const suId = typeof s.enrolledBy === 'object' ? s.enrolledBy?.id : (s.enrolledBy || s.enrolledByUser?.id);
       if (!suId || !filterSalesUsers.includes(suId)) return false;
+    }
+
+    // Custom filters: any selected value within one filter, every filter must match
+    for (const { type, ids } of activeCustomFilters) {
+      const current = (s.filterValues || []).find((v: any) => v.filterTypeId === type.id)?.optionId || NOT_SET;
+      if (!ids.includes(current)) return false;
     }
 
     // Session Filter (multi-select)
@@ -4101,6 +4179,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 selected={filterSessionIds}
                 onChange={setFilterSessionIds}
               />
+
+              {/* Custom filters created by the organisation admin */}
+              {filterTypes.map((t) => (
+                <MultiSelectFilter
+                  key={t.id}
+                  label={t.name}
+                  icon={<Filter className="w-3 h-3 text-violet-500" />}
+                  placeholder={`All ${t.name}`}
+                  options={customFilterOptions[t.id] || []}
+                  selected={customFilters[t.id] || []}
+                  onChange={(ids) => setCustomFilter(t.id, ids)}
+                  triggerClassName="bg-violet-50/30 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/30 hover:bg-violet-50/50"
+                />
+              ))}
             </div>
 
             {/* Row 2: Admission Date Range & Sort Toolbar */}
@@ -4505,6 +4597,16 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                     <DollarSign className="w-4 h-4" />
                     <span className="hidden sm:inline">Add Fee</span>
                   </Button>
+                  {filterTypes.length > 0 && (
+                    <Button
+                      size="sm"
+                      className="bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 hover:text-violet-200 border-0 gap-2 h-8 rounded-full transition-colors"
+                      onClick={() => { setBulkFilterTypeId(filterTypes[0].id); setBulkFilterOptionId(''); setBulkFilterNote(''); setBulkFilterDialogOpen(true); }}
+                    >
+                      <Filter className="w-4 h-4" />
+                      <span className="hidden sm:inline">Set Filter</span>
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 border-0 gap-2 h-8 rounded-full transition-colors"
@@ -5258,6 +5360,47 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
               >
                 {bulkActionLoading ? <RefreshCw className="w-4 h-4 animate-spin mr-2" /> : null}
                 Apply to {selectedStudentIds.size} Student(s)
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Bulk Set Custom Filter Dialog */}
+      <Dialog open={bulkFilterDialogOpen} onOpenChange={setBulkFilterDialogOpen}>
+        <DialogContent className="max-w-md w-full rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><Filter className="w-5 h-5 text-violet-600" />Set filter value</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <p className="text-sm text-muted-foreground">
+              Applies to <span className="font-semibold text-slate-800 dark:text-slate-200">{selectedStudentIds.size}</span> selected student(s). Each change is saved in the student's history.
+            </p>
+            <div className="space-y-1.5">
+              <Label>Filter</Label>
+              <Select value={bulkFilterTypeId} onValueChange={(v) => { setBulkFilterTypeId(v); setBulkFilterOptionId(''); }}>
+                <SelectTrigger><SelectValue placeholder="Select filter" /></SelectTrigger>
+                <SelectContent>{filterTypes.map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Value</Label>
+              <Select value={bulkFilterOptionId} onValueChange={setBulkFilterOptionId}>
+                <SelectTrigger><SelectValue placeholder="Select value" /></SelectTrigger>
+                <SelectContent>
+                  {(filterTypes.find((t) => t.id === bulkFilterTypeId)?.options || []).map((o: any) => <SelectItem key={o.id} value={o.id}>{o.label}</SelectItem>)}
+                  <SelectItem value={NOT_SET}>Clear value (Not set)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Note (optional)</Label>
+              <Textarea value={bulkFilterNote} onChange={(e) => setBulkFilterNote(e.target.value)} rows={2} maxLength={300} placeholder="Why is this being changed?" />
+            </div>
+            <div className="flex gap-2 pt-2">
+              <Button variant="outline" className="flex-1" onClick={() => setBulkFilterDialogOpen(false)} disabled={bulkActionLoading}>Cancel</Button>
+              <Button className="flex-1" onClick={handleBulkSetFilter} disabled={bulkActionLoading || !bulkFilterTypeId || !bulkFilterOptionId}>
+                {bulkActionLoading ? <RefreshCw className="w-4 h-4 animate-spin mr-2" /> : null}Apply
               </Button>
             </div>
           </div>

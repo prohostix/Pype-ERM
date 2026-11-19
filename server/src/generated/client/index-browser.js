@@ -1650,6 +1650,51 @@ exports.Prisma.CountryScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.StudentFilterTypeScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  name: 'name',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentFilterOptionScalarFieldEnum = {
+  id: 'id',
+  filterTypeId: 'filterTypeId',
+  label: 'label',
+  color: 'color',
+  sortOrder: 'sortOrder',
+  isArchived: 'isArchived',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentFilterValueScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  filterTypeId: 'filterTypeId',
+  optionId: 'optionId',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentFilterHistoryScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  studentId: 'studentId',
+  filterTypeId: 'filterTypeId',
+  filterName: 'filterName',
+  fromLabel: 'fromLabel',
+  toLabel: 'toLabel',
+  note: 'note',
+  changedBy: 'changedBy',
+  changedByName: 'changedByName',
+  changedAt: 'changedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1985,7 +2030,11 @@ exports.Prisma.ModelName = {
   StudyAbroadApplication: 'StudyAbroadApplication',
   StudyAbroadProgramCommission: 'StudyAbroadProgramCommission',
   StudyAbroadPartnerPayout: 'StudyAbroadPartnerPayout',
-  Country: 'Country'
+  Country: 'Country',
+  StudentFilterType: 'StudentFilterType',
+  StudentFilterOption: 'StudentFilterOption',
+  StudentFilterValue: 'StudentFilterValue',
+  StudentFilterHistory: 'StudentFilterHistory'
 };
 
 /**

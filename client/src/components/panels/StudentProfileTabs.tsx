@@ -3,6 +3,8 @@ import { CreditCard, Mail, MessageSquare, Phone, StickyNote, Trash2, Send } from
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
@@ -268,6 +270,99 @@ export function StudentRemarksTab({ studentId }: { studentId: string }) {
             </div>
           )}
         </>
+      )}
+    </div>
+  );
+}
+
+
+// ── Custom filters + their change history ────────────────────────────────────────────
+const FILTER_EDITOR_ROLES = ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'];
+const NOT_SET = '__none__';
+const colorOf = (type: any, optionId: string): string | null => type.options.find((o: any) => o.id === optionId)?.color || null;
+
+export function StudentCustomFilters({ studentId }: { studentId: string }) {
+  const { user } = useAuth();
+  const canEdit = FILTER_EDITOR_ROLES.includes(user?.role || '');
+  const [types, setTypes] = useState<any[]>([]);
+  const [data, setData] = useState<{ values: any[]; history: any[] } | null>(null);
+  const [note, setNote] = useState('');
+  const [busy, setBusy] = useState<string | null>(null);
+
+  const load = async () => {
+    try {
+      const [t, d] = await Promise.all([api.get('/student-filters'), api.get(`/students/${studentId}/filters`)]);
+      setTypes(t.data?.data || []);
+      setData(d.data?.data || { values: [], history: [] });
+    } catch {
+      setData({ values: [], history: [] }); // not allowed to see them, or not set up
+    }
+  };
+  useEffect(() => { setData(null); load(); }, [studentId]);
+
+  const change = async (typeId: string, value: string) => {
+    setBusy(typeId);
+    try {
+      await api.put(`/students/${studentId}/filters/${typeId}`, { optionId: value === NOT_SET ? null : value, note: note.trim() || undefined });
+      setNote('');
+      await load();
+    } catch (e: any) {
+      toast.error(e.response?.data?.message || 'Failed to update');
+    } finally { setBusy(null); }
+  };
+
+  if (!data || (types.length === 0 && data.history.length === 0)) return null;
+  const current = (typeId: string) => data.values.find((v) => v.filterTypeId === typeId)?.optionId || NOT_SET;
+
+  return (
+    <div>
+      <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
+        Custom filters<span className="h-px flex-1 bg-border" />
+      </h3>
+      {types.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {types.map((t) => {
+            const value = current(t.id);
+            // an archived option can't be picked, but stays shown while the student has it
+            const options = t.options;
+            return (
+              <div key={t.id} className="rounded-xl border bg-muted/20 px-3.5 py-3">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-1.5">{t.name}</p>
+                <Select value={value} onValueChange={(v) => change(t.id, v)} disabled={!canEdit || busy === t.id}>
+                  <SelectTrigger className="h-8 bg-background" style={colorOf(t, value) ? { borderColor: colorOf(t, value)!, boxShadow: `inset 3px 0 0 ${colorOf(t, value)}` } : undefined}><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NOT_SET}>Not set</SelectItem>
+                    {options.map((o: any) => (
+                      <SelectItem key={o.id} value={o.id}>
+                        <span className="inline-flex items-center gap-2"><span className="w-2 h-2 rounded-full" style={{ backgroundColor: o.color || '#94a3b8' }} />{o.label}</span>
+                      </SelectItem>
+                    ))}
+                    {value !== NOT_SET && !options.some((o: any) => o.id === value) && <SelectItem value={value} disabled>Archived option</SelectItem>}
+                  </SelectContent>
+                </Select>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {canEdit && types.length > 0 && (
+        <Input className="mt-3" placeholder="Optional note saved with the next change" value={note} maxLength={300} onChange={(e) => setNote(e.target.value)} />
+      )}
+      {data.history.length > 0 && (
+        <div className="mt-4 space-y-2">
+          <p className="text-xs font-semibold text-muted-foreground">History</p>
+          {data.history.map((h) => (
+            <div key={h.id} className="flex gap-3 text-sm border-l-2 border-primary/30 pl-3 py-0.5">
+              <div className="min-w-0">
+                <p>
+                  <span className="font-medium">{h.filterName}</span>: <span className="text-muted-foreground">{h.fromLabel || 'Not set'}</span> → <span className="font-medium">{h.toLabel || 'Not set'}</span>
+                </p>
+                {h.note && <p className="text-xs text-muted-foreground">“{h.note}”</p>}
+                <p className="text-xs text-muted-foreground">{h.changedByName || 'Unknown'} · {fmtDate(h.changedAt, true)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

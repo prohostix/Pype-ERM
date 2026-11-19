@@ -30,6 +30,7 @@ import {
   addStudentRemark,
   deleteStudentRemark,
 } from '../controllers/studentController.js';
+import { bulkSetStudentFilterValue, setStudentFilterValue, getStudentFilterData } from '../controllers/studentFilterController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
 
@@ -49,6 +50,10 @@ router.post('/bulk-import', authorize('org_admin', 'superadmin', 'center_admin')
 router.post('/bulk-enrollment-update', authorize('org_admin', 'superadmin', 'ops_admin', 'employee'), bulkEnrollmentUpdate);
 router.post('/bulk-update-program', authorize('org_admin', 'superadmin'), bulkUpdateProgram);
 router.post('/bulk-record-payment', authorize('org_admin', 'superadmin'), bulkRecordPayment);
+const FILTER_EDITORS = ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'];
+router.post('/filters/bulk', authorize(...FILTER_EDITORS), bulkSetStudentFilterValue);
+router.get('/:id/filters', authorize(...FILTER_EDITORS, 'ceo', 'general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin'), getStudentFilterData);
+router.put('/:id/filters/:typeId', authorize(...FILTER_EDITORS), setStudentFilterValue);
 router.post('/:id/notify', authorize('org_admin', 'superadmin', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'employee'), notifyStudent);
 router.post('/:id/documents', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee'), upload.single('file'), uploadStudentDocument);
 router.put('/:id/documents/:docIndex/status', authorize('org_admin', 'superadmin', 'ops_admin', 'ops_sub_admin', 'employee'), updateDocumentStatus);

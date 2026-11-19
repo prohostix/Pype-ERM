@@ -483,6 +483,26 @@ export type StudyAbroadPartnerPayout = $Result.DefaultSelection<Prisma.$StudyAbr
  * 
  */
 export type Country = $Result.DefaultSelection<Prisma.$CountryPayload>
+/**
+ * Model StudentFilterType
+ * Admin-defined dropdown filter for the student directory (e.g. "Follow-up stage").
+ */
+export type StudentFilterType = $Result.DefaultSelection<Prisma.$StudentFilterTypePayload>
+/**
+ * Model StudentFilterOption
+ * 
+ */
+export type StudentFilterOption = $Result.DefaultSelection<Prisma.$StudentFilterOptionPayload>
+/**
+ * Model StudentFilterValue
+ * A student's current option for one filter (one row per student per filter).
+ */
+export type StudentFilterValue = $Result.DefaultSelection<Prisma.$StudentFilterValuePayload>
+/**
+ * Model StudentFilterHistory
+ * Every change of a student's filter value. Labels are copied as text so history survives renames.
+ */
+export type StudentFilterHistory = $Result.DefaultSelection<Prisma.$StudentFilterHistoryPayload>
 
 /**
  * Enums
@@ -1943,6 +1963,46 @@ export class PrismaClient<
     * ```
     */
   get country(): Prisma.CountryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.studentFilterType`: Exposes CRUD operations for the **StudentFilterType** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentFilterTypes
+    * const studentFilterTypes = await prisma.studentFilterType.findMany()
+    * ```
+    */
+  get studentFilterType(): Prisma.StudentFilterTypeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.studentFilterOption`: Exposes CRUD operations for the **StudentFilterOption** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentFilterOptions
+    * const studentFilterOptions = await prisma.studentFilterOption.findMany()
+    * ```
+    */
+  get studentFilterOption(): Prisma.StudentFilterOptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.studentFilterValue`: Exposes CRUD operations for the **StudentFilterValue** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentFilterValues
+    * const studentFilterValues = await prisma.studentFilterValue.findMany()
+    * ```
+    */
+  get studentFilterValue(): Prisma.StudentFilterValueDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.studentFilterHistory`: Exposes CRUD operations for the **StudentFilterHistory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentFilterHistories
+    * const studentFilterHistories = await prisma.studentFilterHistory.findMany()
+    * ```
+    */
+  get studentFilterHistory(): Prisma.StudentFilterHistoryDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2470,7 +2530,11 @@ export namespace Prisma {
     StudyAbroadApplication: 'StudyAbroadApplication',
     StudyAbroadProgramCommission: 'StudyAbroadProgramCommission',
     StudyAbroadPartnerPayout: 'StudyAbroadPartnerPayout',
-    Country: 'Country'
+    Country: 'Country',
+    StudentFilterType: 'StudentFilterType',
+    StudentFilterOption: 'StudentFilterOption',
+    StudentFilterValue: 'StudentFilterValue',
+    StudentFilterHistory: 'StudentFilterHistory'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2486,7 +2550,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadApplication" | "studyAbroadProgramCommission" | "studyAbroadPartnerPayout" | "country"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadApplication" | "studyAbroadProgramCommission" | "studyAbroadPartnerPayout" | "country" | "studentFilterType" | "studentFilterOption" | "studentFilterValue" | "studentFilterHistory"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -9446,6 +9510,302 @@ export namespace Prisma {
           }
         }
       }
+      StudentFilterType: {
+        payload: Prisma.$StudentFilterTypePayload<ExtArgs>
+        fields: Prisma.StudentFilterTypeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StudentFilterTypeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StudentFilterTypeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload>
+          }
+          findFirst: {
+            args: Prisma.StudentFilterTypeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StudentFilterTypeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload>
+          }
+          findMany: {
+            args: Prisma.StudentFilterTypeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload>[]
+          }
+          create: {
+            args: Prisma.StudentFilterTypeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload>
+          }
+          createMany: {
+            args: Prisma.StudentFilterTypeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StudentFilterTypeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload>[]
+          }
+          delete: {
+            args: Prisma.StudentFilterTypeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload>
+          }
+          update: {
+            args: Prisma.StudentFilterTypeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload>
+          }
+          deleteMany: {
+            args: Prisma.StudentFilterTypeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StudentFilterTypeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StudentFilterTypeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload>[]
+          }
+          upsert: {
+            args: Prisma.StudentFilterTypeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterTypePayload>
+          }
+          aggregate: {
+            args: Prisma.StudentFilterTypeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStudentFilterType>
+          }
+          groupBy: {
+            args: Prisma.StudentFilterTypeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StudentFilterTypeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StudentFilterTypeCountArgs<ExtArgs>
+            result: $Utils.Optional<StudentFilterTypeCountAggregateOutputType> | number
+          }
+        }
+      }
+      StudentFilterOption: {
+        payload: Prisma.$StudentFilterOptionPayload<ExtArgs>
+        fields: Prisma.StudentFilterOptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StudentFilterOptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StudentFilterOptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload>
+          }
+          findFirst: {
+            args: Prisma.StudentFilterOptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StudentFilterOptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload>
+          }
+          findMany: {
+            args: Prisma.StudentFilterOptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload>[]
+          }
+          create: {
+            args: Prisma.StudentFilterOptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload>
+          }
+          createMany: {
+            args: Prisma.StudentFilterOptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StudentFilterOptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload>[]
+          }
+          delete: {
+            args: Prisma.StudentFilterOptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload>
+          }
+          update: {
+            args: Prisma.StudentFilterOptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.StudentFilterOptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StudentFilterOptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StudentFilterOptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload>[]
+          }
+          upsert: {
+            args: Prisma.StudentFilterOptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterOptionPayload>
+          }
+          aggregate: {
+            args: Prisma.StudentFilterOptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStudentFilterOption>
+          }
+          groupBy: {
+            args: Prisma.StudentFilterOptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StudentFilterOptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StudentFilterOptionCountArgs<ExtArgs>
+            result: $Utils.Optional<StudentFilterOptionCountAggregateOutputType> | number
+          }
+        }
+      }
+      StudentFilterValue: {
+        payload: Prisma.$StudentFilterValuePayload<ExtArgs>
+        fields: Prisma.StudentFilterValueFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StudentFilterValueFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StudentFilterValueFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload>
+          }
+          findFirst: {
+            args: Prisma.StudentFilterValueFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StudentFilterValueFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload>
+          }
+          findMany: {
+            args: Prisma.StudentFilterValueFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload>[]
+          }
+          create: {
+            args: Prisma.StudentFilterValueCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload>
+          }
+          createMany: {
+            args: Prisma.StudentFilterValueCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StudentFilterValueCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload>[]
+          }
+          delete: {
+            args: Prisma.StudentFilterValueDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload>
+          }
+          update: {
+            args: Prisma.StudentFilterValueUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload>
+          }
+          deleteMany: {
+            args: Prisma.StudentFilterValueDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StudentFilterValueUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StudentFilterValueUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload>[]
+          }
+          upsert: {
+            args: Prisma.StudentFilterValueUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterValuePayload>
+          }
+          aggregate: {
+            args: Prisma.StudentFilterValueAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStudentFilterValue>
+          }
+          groupBy: {
+            args: Prisma.StudentFilterValueGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StudentFilterValueGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StudentFilterValueCountArgs<ExtArgs>
+            result: $Utils.Optional<StudentFilterValueCountAggregateOutputType> | number
+          }
+        }
+      }
+      StudentFilterHistory: {
+        payload: Prisma.$StudentFilterHistoryPayload<ExtArgs>
+        fields: Prisma.StudentFilterHistoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StudentFilterHistoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StudentFilterHistoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload>
+          }
+          findFirst: {
+            args: Prisma.StudentFilterHistoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StudentFilterHistoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload>
+          }
+          findMany: {
+            args: Prisma.StudentFilterHistoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload>[]
+          }
+          create: {
+            args: Prisma.StudentFilterHistoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload>
+          }
+          createMany: {
+            args: Prisma.StudentFilterHistoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StudentFilterHistoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload>[]
+          }
+          delete: {
+            args: Prisma.StudentFilterHistoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload>
+          }
+          update: {
+            args: Prisma.StudentFilterHistoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.StudentFilterHistoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StudentFilterHistoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StudentFilterHistoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.StudentFilterHistoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFilterHistoryPayload>
+          }
+          aggregate: {
+            args: Prisma.StudentFilterHistoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStudentFilterHistory>
+          }
+          groupBy: {
+            args: Prisma.StudentFilterHistoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StudentFilterHistoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StudentFilterHistoryCountArgs<ExtArgs>
+            result: $Utils.Optional<StudentFilterHistoryCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -9648,6 +10008,10 @@ export namespace Prisma {
     studyAbroadProgramCommission?: StudyAbroadProgramCommissionOmit
     studyAbroadPartnerPayout?: StudyAbroadPartnerPayoutOmit
     country?: CountryOmit
+    studentFilterType?: StudentFilterTypeOmit
+    studentFilterOption?: StudentFilterOptionOmit
+    studentFilterValue?: StudentFilterValueOmit
+    studentFilterHistory?: StudentFilterHistoryOmit
   }
 
   /* Types for Logging */
@@ -9809,6 +10173,7 @@ export namespace Prisma {
     lessonFacultyHistories: number
     batchLessonAssignments: number
     studentVideoLogs: number
+    studentFilterTypes: number
   }
 
   export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9893,6 +10258,7 @@ export namespace Prisma {
     lessonFacultyHistories?: boolean | OrganizationCountOutputTypeCountLessonFacultyHistoriesArgs
     batchLessonAssignments?: boolean | OrganizationCountOutputTypeCountBatchLessonAssignmentsArgs
     studentVideoLogs?: boolean | OrganizationCountOutputTypeCountStudentVideoLogsArgs
+    studentFilterTypes?: boolean | OrganizationCountOutputTypeCountStudentFilterTypesArgs
   }
 
   // Custom InputTypes
@@ -10471,6 +10837,13 @@ export namespace Prisma {
    */
   export type OrganizationCountOutputTypeCountStudentVideoLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentVideoLogWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountStudentFilterTypesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFilterTypeWhereInput
   }
 
 
@@ -11747,6 +12120,8 @@ export namespace Prisma {
     lessonDoubts: number
     lessonDoubtReplies: number
     lessonNotes: number
+    filterValues: number
+    filterHistory: number
   }
 
   export type StudentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11766,6 +12141,8 @@ export namespace Prisma {
     lessonDoubts?: boolean | StudentCountOutputTypeCountLessonDoubtsArgs
     lessonDoubtReplies?: boolean | StudentCountOutputTypeCountLessonDoubtRepliesArgs
     lessonNotes?: boolean | StudentCountOutputTypeCountLessonNotesArgs
+    filterValues?: boolean | StudentCountOutputTypeCountFilterValuesArgs
+    filterHistory?: boolean | StudentCountOutputTypeCountFilterHistoryArgs
   }
 
   // Custom InputTypes
@@ -11889,6 +12266,20 @@ export namespace Prisma {
    */
   export type StudentCountOutputTypeCountLessonNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LessonNoteWhereInput
+  }
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountFilterValuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFilterValueWhereInput
+  }
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountFilterHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFilterHistoryWhereInput
   }
 
 
@@ -12900,6 +13291,77 @@ export namespace Prisma {
 
 
   /**
+   * Count Type StudentFilterTypeCountOutputType
+   */
+
+  export type StudentFilterTypeCountOutputType = {
+    options: number
+    values: number
+  }
+
+  export type StudentFilterTypeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    options?: boolean | StudentFilterTypeCountOutputTypeCountOptionsArgs
+    values?: boolean | StudentFilterTypeCountOutputTypeCountValuesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * StudentFilterTypeCountOutputType without action
+   */
+  export type StudentFilterTypeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterTypeCountOutputType
+     */
+    select?: StudentFilterTypeCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * StudentFilterTypeCountOutputType without action
+   */
+  export type StudentFilterTypeCountOutputTypeCountOptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFilterOptionWhereInput
+  }
+
+  /**
+   * StudentFilterTypeCountOutputType without action
+   */
+  export type StudentFilterTypeCountOutputTypeCountValuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFilterValueWhereInput
+  }
+
+
+  /**
+   * Count Type StudentFilterOptionCountOutputType
+   */
+
+  export type StudentFilterOptionCountOutputType = {
+    values: number
+  }
+
+  export type StudentFilterOptionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    values?: boolean | StudentFilterOptionCountOutputTypeCountValuesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * StudentFilterOptionCountOutputType without action
+   */
+  export type StudentFilterOptionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOptionCountOutputType
+     */
+    select?: StudentFilterOptionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * StudentFilterOptionCountOutputType without action
+   */
+  export type StudentFilterOptionCountOutputTypeCountValuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFilterValueWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -13214,6 +13676,7 @@ export namespace Prisma {
     lessonFacultyHistories?: boolean | Organization$lessonFacultyHistoriesArgs<ExtArgs>
     batchLessonAssignments?: boolean | Organization$batchLessonAssignmentsArgs<ExtArgs>
     studentVideoLogs?: boolean | Organization$studentVideoLogsArgs<ExtArgs>
+    studentFilterTypes?: boolean | Organization$studentFilterTypesArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
 
@@ -13355,6 +13818,7 @@ export namespace Prisma {
     lessonFacultyHistories?: boolean | Organization$lessonFacultyHistoriesArgs<ExtArgs>
     batchLessonAssignments?: boolean | Organization$batchLessonAssignmentsArgs<ExtArgs>
     studentVideoLogs?: boolean | Organization$studentVideoLogsArgs<ExtArgs>
+    studentFilterTypes?: boolean | Organization$studentFilterTypesArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13450,6 +13914,7 @@ export namespace Prisma {
       lessonFacultyHistories: Prisma.$LessonFacultyHistoryPayload<ExtArgs>[]
       batchLessonAssignments: Prisma.$BatchLessonAssignmentPayload<ExtArgs>[]
       studentVideoLogs: Prisma.$StudentVideoLogPayload<ExtArgs>[]
+      studentFilterTypes: Prisma.$StudentFilterTypePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13943,6 +14408,7 @@ export namespace Prisma {
     lessonFacultyHistories<T extends Organization$lessonFacultyHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$lessonFacultyHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonFacultyHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batchLessonAssignments<T extends Organization$batchLessonAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$batchLessonAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchLessonAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     studentVideoLogs<T extends Organization$studentVideoLogsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$studentVideoLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentVideoLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    studentFilterTypes<T extends Organization$studentFilterTypesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$studentFilterTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16366,6 +16832,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudentVideoLogScalarFieldEnum | StudentVideoLogScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.studentFilterTypes
+   */
+  export type Organization$studentFilterTypesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+    where?: StudentFilterTypeWhereInput
+    orderBy?: StudentFilterTypeOrderByWithRelationInput | StudentFilterTypeOrderByWithRelationInput[]
+    cursor?: StudentFilterTypeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentFilterTypeScalarFieldEnum | StudentFilterTypeScalarFieldEnum[]
   }
 
   /**
@@ -32110,6 +32600,8 @@ export namespace Prisma {
     lessonDoubts?: boolean | Student$lessonDoubtsArgs<ExtArgs>
     lessonDoubtReplies?: boolean | Student$lessonDoubtRepliesArgs<ExtArgs>
     lessonNotes?: boolean | Student$lessonNotesArgs<ExtArgs>
+    filterValues?: boolean | Student$filterValuesArgs<ExtArgs>
+    filterHistory?: boolean | Student$filterHistoryArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
@@ -32326,6 +32818,8 @@ export namespace Prisma {
     lessonDoubts?: boolean | Student$lessonDoubtsArgs<ExtArgs>
     lessonDoubtReplies?: boolean | Student$lessonDoubtRepliesArgs<ExtArgs>
     lessonNotes?: boolean | Student$lessonNotesArgs<ExtArgs>
+    filterValues?: boolean | Student$filterValuesArgs<ExtArgs>
+    filterHistory?: boolean | Student$filterHistoryArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -32382,6 +32876,8 @@ export namespace Prisma {
       lessonDoubts: Prisma.$LessonDoubtPayload<ExtArgs>[]
       lessonDoubtReplies: Prisma.$LessonDoubtReplyPayload<ExtArgs>[]
       lessonNotes: Prisma.$LessonNotePayload<ExtArgs>[]
+      filterValues: Prisma.$StudentFilterValuePayload<ExtArgs>[]
+      filterHistory: Prisma.$StudentFilterHistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -32856,6 +33352,8 @@ export namespace Prisma {
     lessonDoubts<T extends Student$lessonDoubtsArgs<ExtArgs> = {}>(args?: Subset<T, Student$lessonDoubtsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonDoubtPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     lessonDoubtReplies<T extends Student$lessonDoubtRepliesArgs<ExtArgs> = {}>(args?: Subset<T, Student$lessonDoubtRepliesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonDoubtReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     lessonNotes<T extends Student$lessonNotesArgs<ExtArgs> = {}>(args?: Subset<T, Student$lessonNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    filterValues<T extends Student$filterValuesArgs<ExtArgs> = {}>(args?: Subset<T, Student$filterValuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    filterHistory<T extends Student$filterHistoryArgs<ExtArgs> = {}>(args?: Subset<T, Student$filterHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -33852,6 +34350,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LessonNoteScalarFieldEnum | LessonNoteScalarFieldEnum[]
+  }
+
+  /**
+   * Student.filterValues
+   */
+  export type Student$filterValuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    where?: StudentFilterValueWhereInput
+    orderBy?: StudentFilterValueOrderByWithRelationInput | StudentFilterValueOrderByWithRelationInput[]
+    cursor?: StudentFilterValueWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentFilterValueScalarFieldEnum | StudentFilterValueScalarFieldEnum[]
+  }
+
+  /**
+   * Student.filterHistory
+   */
+  export type Student$filterHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+    where?: StudentFilterHistoryWhereInput
+    orderBy?: StudentFilterHistoryOrderByWithRelationInput | StudentFilterHistoryOrderByWithRelationInput[]
+    cursor?: StudentFilterHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentFilterHistoryScalarFieldEnum | StudentFilterHistoryScalarFieldEnum[]
   }
 
   /**
@@ -136065,6 +136611,4599 @@ export namespace Prisma {
 
 
   /**
+   * Model StudentFilterType
+   */
+
+  export type AggregateStudentFilterType = {
+    _count: StudentFilterTypeCountAggregateOutputType | null
+    _avg: StudentFilterTypeAvgAggregateOutputType | null
+    _sum: StudentFilterTypeSumAggregateOutputType | null
+    _min: StudentFilterTypeMinAggregateOutputType | null
+    _max: StudentFilterTypeMaxAggregateOutputType | null
+  }
+
+  export type StudentFilterTypeAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type StudentFilterTypeSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type StudentFilterTypeMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    name: string | null
+    isActive: boolean | null
+    sortOrder: number | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StudentFilterTypeMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    name: string | null
+    isActive: boolean | null
+    sortOrder: number | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StudentFilterTypeCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    name: number
+    isActive: number
+    sortOrder: number
+    createdBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type StudentFilterTypeAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type StudentFilterTypeSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type StudentFilterTypeMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    name?: true
+    isActive?: true
+    sortOrder?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StudentFilterTypeMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    name?: true
+    isActive?: true
+    sortOrder?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StudentFilterTypeCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    name?: true
+    isActive?: true
+    sortOrder?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type StudentFilterTypeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentFilterType to aggregate.
+     */
+    where?: StudentFilterTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterTypes to fetch.
+     */
+    orderBy?: StudentFilterTypeOrderByWithRelationInput | StudentFilterTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StudentFilterTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StudentFilterTypes
+    **/
+    _count?: true | StudentFilterTypeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: StudentFilterTypeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StudentFilterTypeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StudentFilterTypeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StudentFilterTypeMaxAggregateInputType
+  }
+
+  export type GetStudentFilterTypeAggregateType<T extends StudentFilterTypeAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentFilterType]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentFilterType[P]>
+      : GetScalarType<T[P], AggregateStudentFilterType[P]>
+  }
+
+
+
+
+  export type StudentFilterTypeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFilterTypeWhereInput
+    orderBy?: StudentFilterTypeOrderByWithAggregationInput | StudentFilterTypeOrderByWithAggregationInput[]
+    by: StudentFilterTypeScalarFieldEnum[] | StudentFilterTypeScalarFieldEnum
+    having?: StudentFilterTypeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StudentFilterTypeCountAggregateInputType | true
+    _avg?: StudentFilterTypeAvgAggregateInputType
+    _sum?: StudentFilterTypeSumAggregateInputType
+    _min?: StudentFilterTypeMinAggregateInputType
+    _max?: StudentFilterTypeMaxAggregateInputType
+  }
+
+  export type StudentFilterTypeGroupByOutputType = {
+    id: string
+    organizationId: string
+    name: string
+    isActive: boolean
+    sortOrder: number
+    createdBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: StudentFilterTypeCountAggregateOutputType | null
+    _avg: StudentFilterTypeAvgAggregateOutputType | null
+    _sum: StudentFilterTypeSumAggregateOutputType | null
+    _min: StudentFilterTypeMinAggregateOutputType | null
+    _max: StudentFilterTypeMaxAggregateOutputType | null
+  }
+
+  type GetStudentFilterTypeGroupByPayload<T extends StudentFilterTypeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StudentFilterTypeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StudentFilterTypeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StudentFilterTypeGroupByOutputType[P]>
+            : GetScalarType<T[P], StudentFilterTypeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StudentFilterTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    name?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    options?: boolean | StudentFilterType$optionsArgs<ExtArgs>
+    values?: boolean | StudentFilterType$valuesArgs<ExtArgs>
+    _count?: boolean | StudentFilterTypeCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterType"]>
+
+  export type StudentFilterTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    name?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterType"]>
+
+  export type StudentFilterTypeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    name?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterType"]>
+
+  export type StudentFilterTypeSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    name?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type StudentFilterTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "name" | "isActive" | "sortOrder" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["studentFilterType"]>
+  export type StudentFilterTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    options?: boolean | StudentFilterType$optionsArgs<ExtArgs>
+    values?: boolean | StudentFilterType$valuesArgs<ExtArgs>
+    _count?: boolean | StudentFilterTypeCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type StudentFilterTypeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+  export type StudentFilterTypeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+
+  export type $StudentFilterTypePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StudentFilterType"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+      options: Prisma.$StudentFilterOptionPayload<ExtArgs>[]
+      values: Prisma.$StudentFilterValuePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      name: string
+      isActive: boolean
+      sortOrder: number
+      createdBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["studentFilterType"]>
+    composites: {}
+  }
+
+  type StudentFilterTypeGetPayload<S extends boolean | null | undefined | StudentFilterTypeDefaultArgs> = $Result.GetResult<Prisma.$StudentFilterTypePayload, S>
+
+  type StudentFilterTypeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StudentFilterTypeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StudentFilterTypeCountAggregateInputType | true
+    }
+
+  export interface StudentFilterTypeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentFilterType'], meta: { name: 'StudentFilterType' } }
+    /**
+     * Find zero or one StudentFilterType that matches the filter.
+     * @param {StudentFilterTypeFindUniqueArgs} args - Arguments to find a StudentFilterType
+     * @example
+     * // Get one StudentFilterType
+     * const studentFilterType = await prisma.studentFilterType.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StudentFilterTypeFindUniqueArgs>(args: SelectSubset<T, StudentFilterTypeFindUniqueArgs<ExtArgs>>): Prisma__StudentFilterTypeClient<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StudentFilterType that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StudentFilterTypeFindUniqueOrThrowArgs} args - Arguments to find a StudentFilterType
+     * @example
+     * // Get one StudentFilterType
+     * const studentFilterType = await prisma.studentFilterType.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StudentFilterTypeFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentFilterTypeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentFilterTypeClient<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentFilterType that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterTypeFindFirstArgs} args - Arguments to find a StudentFilterType
+     * @example
+     * // Get one StudentFilterType
+     * const studentFilterType = await prisma.studentFilterType.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StudentFilterTypeFindFirstArgs>(args?: SelectSubset<T, StudentFilterTypeFindFirstArgs<ExtArgs>>): Prisma__StudentFilterTypeClient<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentFilterType that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterTypeFindFirstOrThrowArgs} args - Arguments to find a StudentFilterType
+     * @example
+     * // Get one StudentFilterType
+     * const studentFilterType = await prisma.studentFilterType.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StudentFilterTypeFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentFilterTypeFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentFilterTypeClient<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StudentFilterTypes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterTypeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StudentFilterTypes
+     * const studentFilterTypes = await prisma.studentFilterType.findMany()
+     * 
+     * // Get first 10 StudentFilterTypes
+     * const studentFilterTypes = await prisma.studentFilterType.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const studentFilterTypeWithIdOnly = await prisma.studentFilterType.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StudentFilterTypeFindManyArgs>(args?: SelectSubset<T, StudentFilterTypeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StudentFilterType.
+     * @param {StudentFilterTypeCreateArgs} args - Arguments to create a StudentFilterType.
+     * @example
+     * // Create one StudentFilterType
+     * const StudentFilterType = await prisma.studentFilterType.create({
+     *   data: {
+     *     // ... data to create a StudentFilterType
+     *   }
+     * })
+     * 
+     */
+    create<T extends StudentFilterTypeCreateArgs>(args: SelectSubset<T, StudentFilterTypeCreateArgs<ExtArgs>>): Prisma__StudentFilterTypeClient<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StudentFilterTypes.
+     * @param {StudentFilterTypeCreateManyArgs} args - Arguments to create many StudentFilterTypes.
+     * @example
+     * // Create many StudentFilterTypes
+     * const studentFilterType = await prisma.studentFilterType.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StudentFilterTypeCreateManyArgs>(args?: SelectSubset<T, StudentFilterTypeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StudentFilterTypes and returns the data saved in the database.
+     * @param {StudentFilterTypeCreateManyAndReturnArgs} args - Arguments to create many StudentFilterTypes.
+     * @example
+     * // Create many StudentFilterTypes
+     * const studentFilterType = await prisma.studentFilterType.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StudentFilterTypes and only return the `id`
+     * const studentFilterTypeWithIdOnly = await prisma.studentFilterType.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StudentFilterTypeCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentFilterTypeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StudentFilterType.
+     * @param {StudentFilterTypeDeleteArgs} args - Arguments to delete one StudentFilterType.
+     * @example
+     * // Delete one StudentFilterType
+     * const StudentFilterType = await prisma.studentFilterType.delete({
+     *   where: {
+     *     // ... filter to delete one StudentFilterType
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StudentFilterTypeDeleteArgs>(args: SelectSubset<T, StudentFilterTypeDeleteArgs<ExtArgs>>): Prisma__StudentFilterTypeClient<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StudentFilterType.
+     * @param {StudentFilterTypeUpdateArgs} args - Arguments to update one StudentFilterType.
+     * @example
+     * // Update one StudentFilterType
+     * const studentFilterType = await prisma.studentFilterType.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StudentFilterTypeUpdateArgs>(args: SelectSubset<T, StudentFilterTypeUpdateArgs<ExtArgs>>): Prisma__StudentFilterTypeClient<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StudentFilterTypes.
+     * @param {StudentFilterTypeDeleteManyArgs} args - Arguments to filter StudentFilterTypes to delete.
+     * @example
+     * // Delete a few StudentFilterTypes
+     * const { count } = await prisma.studentFilterType.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StudentFilterTypeDeleteManyArgs>(args?: SelectSubset<T, StudentFilterTypeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentFilterTypes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterTypeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StudentFilterTypes
+     * const studentFilterType = await prisma.studentFilterType.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StudentFilterTypeUpdateManyArgs>(args: SelectSubset<T, StudentFilterTypeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentFilterTypes and returns the data updated in the database.
+     * @param {StudentFilterTypeUpdateManyAndReturnArgs} args - Arguments to update many StudentFilterTypes.
+     * @example
+     * // Update many StudentFilterTypes
+     * const studentFilterType = await prisma.studentFilterType.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StudentFilterTypes and only return the `id`
+     * const studentFilterTypeWithIdOnly = await prisma.studentFilterType.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StudentFilterTypeUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentFilterTypeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StudentFilterType.
+     * @param {StudentFilterTypeUpsertArgs} args - Arguments to update or create a StudentFilterType.
+     * @example
+     * // Update or create a StudentFilterType
+     * const studentFilterType = await prisma.studentFilterType.upsert({
+     *   create: {
+     *     // ... data to create a StudentFilterType
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StudentFilterType we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StudentFilterTypeUpsertArgs>(args: SelectSubset<T, StudentFilterTypeUpsertArgs<ExtArgs>>): Prisma__StudentFilterTypeClient<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StudentFilterTypes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterTypeCountArgs} args - Arguments to filter StudentFilterTypes to count.
+     * @example
+     * // Count the number of StudentFilterTypes
+     * const count = await prisma.studentFilterType.count({
+     *   where: {
+     *     // ... the filter for the StudentFilterTypes we want to count
+     *   }
+     * })
+    **/
+    count<T extends StudentFilterTypeCountArgs>(
+      args?: Subset<T, StudentFilterTypeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StudentFilterTypeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StudentFilterType.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterTypeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StudentFilterTypeAggregateArgs>(args: Subset<T, StudentFilterTypeAggregateArgs>): Prisma.PrismaPromise<GetStudentFilterTypeAggregateType<T>>
+
+    /**
+     * Group by StudentFilterType.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterTypeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StudentFilterTypeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentFilterTypeGroupByArgs['orderBy'] }
+        : { orderBy?: StudentFilterTypeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StudentFilterTypeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentFilterTypeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StudentFilterType model
+   */
+  readonly fields: StudentFilterTypeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StudentFilterType.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StudentFilterTypeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    options<T extends StudentFilterType$optionsArgs<ExtArgs> = {}>(args?: Subset<T, StudentFilterType$optionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    values<T extends StudentFilterType$valuesArgs<ExtArgs> = {}>(args?: Subset<T, StudentFilterType$valuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StudentFilterType model
+   */
+  interface StudentFilterTypeFieldRefs {
+    readonly id: FieldRef<"StudentFilterType", 'String'>
+    readonly organizationId: FieldRef<"StudentFilterType", 'String'>
+    readonly name: FieldRef<"StudentFilterType", 'String'>
+    readonly isActive: FieldRef<"StudentFilterType", 'Boolean'>
+    readonly sortOrder: FieldRef<"StudentFilterType", 'Int'>
+    readonly createdBy: FieldRef<"StudentFilterType", 'String'>
+    readonly createdAt: FieldRef<"StudentFilterType", 'DateTime'>
+    readonly updatedAt: FieldRef<"StudentFilterType", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StudentFilterType findUnique
+   */
+  export type StudentFilterTypeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterType to fetch.
+     */
+    where: StudentFilterTypeWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterType findUniqueOrThrow
+   */
+  export type StudentFilterTypeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterType to fetch.
+     */
+    where: StudentFilterTypeWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterType findFirst
+   */
+  export type StudentFilterTypeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterType to fetch.
+     */
+    where?: StudentFilterTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterTypes to fetch.
+     */
+    orderBy?: StudentFilterTypeOrderByWithRelationInput | StudentFilterTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentFilterTypes.
+     */
+    cursor?: StudentFilterTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterTypes.
+     */
+    distinct?: StudentFilterTypeScalarFieldEnum | StudentFilterTypeScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterType findFirstOrThrow
+   */
+  export type StudentFilterTypeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterType to fetch.
+     */
+    where?: StudentFilterTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterTypes to fetch.
+     */
+    orderBy?: StudentFilterTypeOrderByWithRelationInput | StudentFilterTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentFilterTypes.
+     */
+    cursor?: StudentFilterTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterTypes.
+     */
+    distinct?: StudentFilterTypeScalarFieldEnum | StudentFilterTypeScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterType findMany
+   */
+  export type StudentFilterTypeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterTypes to fetch.
+     */
+    where?: StudentFilterTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterTypes to fetch.
+     */
+    orderBy?: StudentFilterTypeOrderByWithRelationInput | StudentFilterTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StudentFilterTypes.
+     */
+    cursor?: StudentFilterTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterTypes.
+     */
+    distinct?: StudentFilterTypeScalarFieldEnum | StudentFilterTypeScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterType create
+   */
+  export type StudentFilterTypeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StudentFilterType.
+     */
+    data: XOR<StudentFilterTypeCreateInput, StudentFilterTypeUncheckedCreateInput>
+  }
+
+  /**
+   * StudentFilterType createMany
+   */
+  export type StudentFilterTypeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StudentFilterTypes.
+     */
+    data: StudentFilterTypeCreateManyInput | StudentFilterTypeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StudentFilterType createManyAndReturn
+   */
+  export type StudentFilterTypeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * The data used to create many StudentFilterTypes.
+     */
+    data: StudentFilterTypeCreateManyInput | StudentFilterTypeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentFilterType update
+   */
+  export type StudentFilterTypeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StudentFilterType.
+     */
+    data: XOR<StudentFilterTypeUpdateInput, StudentFilterTypeUncheckedUpdateInput>
+    /**
+     * Choose, which StudentFilterType to update.
+     */
+    where: StudentFilterTypeWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterType updateMany
+   */
+  export type StudentFilterTypeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StudentFilterTypes.
+     */
+    data: XOR<StudentFilterTypeUpdateManyMutationInput, StudentFilterTypeUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentFilterTypes to update
+     */
+    where?: StudentFilterTypeWhereInput
+    /**
+     * Limit how many StudentFilterTypes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentFilterType updateManyAndReturn
+   */
+  export type StudentFilterTypeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * The data used to update StudentFilterTypes.
+     */
+    data: XOR<StudentFilterTypeUpdateManyMutationInput, StudentFilterTypeUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentFilterTypes to update
+     */
+    where?: StudentFilterTypeWhereInput
+    /**
+     * Limit how many StudentFilterTypes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentFilterType upsert
+   */
+  export type StudentFilterTypeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StudentFilterType to update in case it exists.
+     */
+    where: StudentFilterTypeWhereUniqueInput
+    /**
+     * In case the StudentFilterType found by the `where` argument doesn't exist, create a new StudentFilterType with this data.
+     */
+    create: XOR<StudentFilterTypeCreateInput, StudentFilterTypeUncheckedCreateInput>
+    /**
+     * In case the StudentFilterType was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StudentFilterTypeUpdateInput, StudentFilterTypeUncheckedUpdateInput>
+  }
+
+  /**
+   * StudentFilterType delete
+   */
+  export type StudentFilterTypeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+    /**
+     * Filter which StudentFilterType to delete.
+     */
+    where: StudentFilterTypeWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterType deleteMany
+   */
+  export type StudentFilterTypeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentFilterTypes to delete
+     */
+    where?: StudentFilterTypeWhereInput
+    /**
+     * Limit how many StudentFilterTypes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentFilterType.options
+   */
+  export type StudentFilterType$optionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+    where?: StudentFilterOptionWhereInput
+    orderBy?: StudentFilterOptionOrderByWithRelationInput | StudentFilterOptionOrderByWithRelationInput[]
+    cursor?: StudentFilterOptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentFilterOptionScalarFieldEnum | StudentFilterOptionScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterType.values
+   */
+  export type StudentFilterType$valuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    where?: StudentFilterValueWhereInput
+    orderBy?: StudentFilterValueOrderByWithRelationInput | StudentFilterValueOrderByWithRelationInput[]
+    cursor?: StudentFilterValueWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentFilterValueScalarFieldEnum | StudentFilterValueScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterType without action
+   */
+  export type StudentFilterTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterType
+     */
+    select?: StudentFilterTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterType
+     */
+    omit?: StudentFilterTypeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterTypeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model StudentFilterOption
+   */
+
+  export type AggregateStudentFilterOption = {
+    _count: StudentFilterOptionCountAggregateOutputType | null
+    _avg: StudentFilterOptionAvgAggregateOutputType | null
+    _sum: StudentFilterOptionSumAggregateOutputType | null
+    _min: StudentFilterOptionMinAggregateOutputType | null
+    _max: StudentFilterOptionMaxAggregateOutputType | null
+  }
+
+  export type StudentFilterOptionAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type StudentFilterOptionSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type StudentFilterOptionMinAggregateOutputType = {
+    id: string | null
+    filterTypeId: string | null
+    label: string | null
+    color: string | null
+    sortOrder: number | null
+    isArchived: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StudentFilterOptionMaxAggregateOutputType = {
+    id: string | null
+    filterTypeId: string | null
+    label: string | null
+    color: string | null
+    sortOrder: number | null
+    isArchived: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StudentFilterOptionCountAggregateOutputType = {
+    id: number
+    filterTypeId: number
+    label: number
+    color: number
+    sortOrder: number
+    isArchived: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type StudentFilterOptionAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type StudentFilterOptionSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type StudentFilterOptionMinAggregateInputType = {
+    id?: true
+    filterTypeId?: true
+    label?: true
+    color?: true
+    sortOrder?: true
+    isArchived?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StudentFilterOptionMaxAggregateInputType = {
+    id?: true
+    filterTypeId?: true
+    label?: true
+    color?: true
+    sortOrder?: true
+    isArchived?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StudentFilterOptionCountAggregateInputType = {
+    id?: true
+    filterTypeId?: true
+    label?: true
+    color?: true
+    sortOrder?: true
+    isArchived?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type StudentFilterOptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentFilterOption to aggregate.
+     */
+    where?: StudentFilterOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterOptions to fetch.
+     */
+    orderBy?: StudentFilterOptionOrderByWithRelationInput | StudentFilterOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StudentFilterOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterOptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StudentFilterOptions
+    **/
+    _count?: true | StudentFilterOptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: StudentFilterOptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StudentFilterOptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StudentFilterOptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StudentFilterOptionMaxAggregateInputType
+  }
+
+  export type GetStudentFilterOptionAggregateType<T extends StudentFilterOptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentFilterOption]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentFilterOption[P]>
+      : GetScalarType<T[P], AggregateStudentFilterOption[P]>
+  }
+
+
+
+
+  export type StudentFilterOptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFilterOptionWhereInput
+    orderBy?: StudentFilterOptionOrderByWithAggregationInput | StudentFilterOptionOrderByWithAggregationInput[]
+    by: StudentFilterOptionScalarFieldEnum[] | StudentFilterOptionScalarFieldEnum
+    having?: StudentFilterOptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StudentFilterOptionCountAggregateInputType | true
+    _avg?: StudentFilterOptionAvgAggregateInputType
+    _sum?: StudentFilterOptionSumAggregateInputType
+    _min?: StudentFilterOptionMinAggregateInputType
+    _max?: StudentFilterOptionMaxAggregateInputType
+  }
+
+  export type StudentFilterOptionGroupByOutputType = {
+    id: string
+    filterTypeId: string
+    label: string
+    color: string | null
+    sortOrder: number
+    isArchived: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: StudentFilterOptionCountAggregateOutputType | null
+    _avg: StudentFilterOptionAvgAggregateOutputType | null
+    _sum: StudentFilterOptionSumAggregateOutputType | null
+    _min: StudentFilterOptionMinAggregateOutputType | null
+    _max: StudentFilterOptionMaxAggregateOutputType | null
+  }
+
+  type GetStudentFilterOptionGroupByPayload<T extends StudentFilterOptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StudentFilterOptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StudentFilterOptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StudentFilterOptionGroupByOutputType[P]>
+            : GetScalarType<T[P], StudentFilterOptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StudentFilterOptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    filterTypeId?: boolean
+    label?: boolean
+    color?: boolean
+    sortOrder?: boolean
+    isArchived?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+    values?: boolean | StudentFilterOption$valuesArgs<ExtArgs>
+    _count?: boolean | StudentFilterOptionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterOption"]>
+
+  export type StudentFilterOptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    filterTypeId?: boolean
+    label?: boolean
+    color?: boolean
+    sortOrder?: boolean
+    isArchived?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterOption"]>
+
+  export type StudentFilterOptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    filterTypeId?: boolean
+    label?: boolean
+    color?: boolean
+    sortOrder?: boolean
+    isArchived?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterOption"]>
+
+  export type StudentFilterOptionSelectScalar = {
+    id?: boolean
+    filterTypeId?: boolean
+    label?: boolean
+    color?: boolean
+    sortOrder?: boolean
+    isArchived?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type StudentFilterOptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filterTypeId" | "label" | "color" | "sortOrder" | "isArchived" | "createdAt" | "updatedAt", ExtArgs["result"]["studentFilterOption"]>
+  export type StudentFilterOptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+    values?: boolean | StudentFilterOption$valuesArgs<ExtArgs>
+    _count?: boolean | StudentFilterOptionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type StudentFilterOptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+  }
+  export type StudentFilterOptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $StudentFilterOptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StudentFilterOption"
+    objects: {
+      filterType: Prisma.$StudentFilterTypePayload<ExtArgs>
+      values: Prisma.$StudentFilterValuePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      filterTypeId: string
+      label: string
+      color: string | null
+      sortOrder: number
+      isArchived: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["studentFilterOption"]>
+    composites: {}
+  }
+
+  type StudentFilterOptionGetPayload<S extends boolean | null | undefined | StudentFilterOptionDefaultArgs> = $Result.GetResult<Prisma.$StudentFilterOptionPayload, S>
+
+  type StudentFilterOptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StudentFilterOptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StudentFilterOptionCountAggregateInputType | true
+    }
+
+  export interface StudentFilterOptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentFilterOption'], meta: { name: 'StudentFilterOption' } }
+    /**
+     * Find zero or one StudentFilterOption that matches the filter.
+     * @param {StudentFilterOptionFindUniqueArgs} args - Arguments to find a StudentFilterOption
+     * @example
+     * // Get one StudentFilterOption
+     * const studentFilterOption = await prisma.studentFilterOption.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StudentFilterOptionFindUniqueArgs>(args: SelectSubset<T, StudentFilterOptionFindUniqueArgs<ExtArgs>>): Prisma__StudentFilterOptionClient<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StudentFilterOption that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StudentFilterOptionFindUniqueOrThrowArgs} args - Arguments to find a StudentFilterOption
+     * @example
+     * // Get one StudentFilterOption
+     * const studentFilterOption = await prisma.studentFilterOption.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StudentFilterOptionFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentFilterOptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentFilterOptionClient<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentFilterOption that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterOptionFindFirstArgs} args - Arguments to find a StudentFilterOption
+     * @example
+     * // Get one StudentFilterOption
+     * const studentFilterOption = await prisma.studentFilterOption.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StudentFilterOptionFindFirstArgs>(args?: SelectSubset<T, StudentFilterOptionFindFirstArgs<ExtArgs>>): Prisma__StudentFilterOptionClient<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentFilterOption that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterOptionFindFirstOrThrowArgs} args - Arguments to find a StudentFilterOption
+     * @example
+     * // Get one StudentFilterOption
+     * const studentFilterOption = await prisma.studentFilterOption.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StudentFilterOptionFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentFilterOptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentFilterOptionClient<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StudentFilterOptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterOptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StudentFilterOptions
+     * const studentFilterOptions = await prisma.studentFilterOption.findMany()
+     * 
+     * // Get first 10 StudentFilterOptions
+     * const studentFilterOptions = await prisma.studentFilterOption.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const studentFilterOptionWithIdOnly = await prisma.studentFilterOption.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StudentFilterOptionFindManyArgs>(args?: SelectSubset<T, StudentFilterOptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StudentFilterOption.
+     * @param {StudentFilterOptionCreateArgs} args - Arguments to create a StudentFilterOption.
+     * @example
+     * // Create one StudentFilterOption
+     * const StudentFilterOption = await prisma.studentFilterOption.create({
+     *   data: {
+     *     // ... data to create a StudentFilterOption
+     *   }
+     * })
+     * 
+     */
+    create<T extends StudentFilterOptionCreateArgs>(args: SelectSubset<T, StudentFilterOptionCreateArgs<ExtArgs>>): Prisma__StudentFilterOptionClient<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StudentFilterOptions.
+     * @param {StudentFilterOptionCreateManyArgs} args - Arguments to create many StudentFilterOptions.
+     * @example
+     * // Create many StudentFilterOptions
+     * const studentFilterOption = await prisma.studentFilterOption.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StudentFilterOptionCreateManyArgs>(args?: SelectSubset<T, StudentFilterOptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StudentFilterOptions and returns the data saved in the database.
+     * @param {StudentFilterOptionCreateManyAndReturnArgs} args - Arguments to create many StudentFilterOptions.
+     * @example
+     * // Create many StudentFilterOptions
+     * const studentFilterOption = await prisma.studentFilterOption.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StudentFilterOptions and only return the `id`
+     * const studentFilterOptionWithIdOnly = await prisma.studentFilterOption.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StudentFilterOptionCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentFilterOptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StudentFilterOption.
+     * @param {StudentFilterOptionDeleteArgs} args - Arguments to delete one StudentFilterOption.
+     * @example
+     * // Delete one StudentFilterOption
+     * const StudentFilterOption = await prisma.studentFilterOption.delete({
+     *   where: {
+     *     // ... filter to delete one StudentFilterOption
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StudentFilterOptionDeleteArgs>(args: SelectSubset<T, StudentFilterOptionDeleteArgs<ExtArgs>>): Prisma__StudentFilterOptionClient<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StudentFilterOption.
+     * @param {StudentFilterOptionUpdateArgs} args - Arguments to update one StudentFilterOption.
+     * @example
+     * // Update one StudentFilterOption
+     * const studentFilterOption = await prisma.studentFilterOption.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StudentFilterOptionUpdateArgs>(args: SelectSubset<T, StudentFilterOptionUpdateArgs<ExtArgs>>): Prisma__StudentFilterOptionClient<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StudentFilterOptions.
+     * @param {StudentFilterOptionDeleteManyArgs} args - Arguments to filter StudentFilterOptions to delete.
+     * @example
+     * // Delete a few StudentFilterOptions
+     * const { count } = await prisma.studentFilterOption.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StudentFilterOptionDeleteManyArgs>(args?: SelectSubset<T, StudentFilterOptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentFilterOptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterOptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StudentFilterOptions
+     * const studentFilterOption = await prisma.studentFilterOption.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StudentFilterOptionUpdateManyArgs>(args: SelectSubset<T, StudentFilterOptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentFilterOptions and returns the data updated in the database.
+     * @param {StudentFilterOptionUpdateManyAndReturnArgs} args - Arguments to update many StudentFilterOptions.
+     * @example
+     * // Update many StudentFilterOptions
+     * const studentFilterOption = await prisma.studentFilterOption.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StudentFilterOptions and only return the `id`
+     * const studentFilterOptionWithIdOnly = await prisma.studentFilterOption.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StudentFilterOptionUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentFilterOptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StudentFilterOption.
+     * @param {StudentFilterOptionUpsertArgs} args - Arguments to update or create a StudentFilterOption.
+     * @example
+     * // Update or create a StudentFilterOption
+     * const studentFilterOption = await prisma.studentFilterOption.upsert({
+     *   create: {
+     *     // ... data to create a StudentFilterOption
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StudentFilterOption we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StudentFilterOptionUpsertArgs>(args: SelectSubset<T, StudentFilterOptionUpsertArgs<ExtArgs>>): Prisma__StudentFilterOptionClient<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StudentFilterOptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterOptionCountArgs} args - Arguments to filter StudentFilterOptions to count.
+     * @example
+     * // Count the number of StudentFilterOptions
+     * const count = await prisma.studentFilterOption.count({
+     *   where: {
+     *     // ... the filter for the StudentFilterOptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends StudentFilterOptionCountArgs>(
+      args?: Subset<T, StudentFilterOptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StudentFilterOptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StudentFilterOption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterOptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StudentFilterOptionAggregateArgs>(args: Subset<T, StudentFilterOptionAggregateArgs>): Prisma.PrismaPromise<GetStudentFilterOptionAggregateType<T>>
+
+    /**
+     * Group by StudentFilterOption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterOptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StudentFilterOptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentFilterOptionGroupByArgs['orderBy'] }
+        : { orderBy?: StudentFilterOptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StudentFilterOptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentFilterOptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StudentFilterOption model
+   */
+  readonly fields: StudentFilterOptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StudentFilterOption.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StudentFilterOptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    filterType<T extends StudentFilterTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentFilterTypeDefaultArgs<ExtArgs>>): Prisma__StudentFilterTypeClient<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    values<T extends StudentFilterOption$valuesArgs<ExtArgs> = {}>(args?: Subset<T, StudentFilterOption$valuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StudentFilterOption model
+   */
+  interface StudentFilterOptionFieldRefs {
+    readonly id: FieldRef<"StudentFilterOption", 'String'>
+    readonly filterTypeId: FieldRef<"StudentFilterOption", 'String'>
+    readonly label: FieldRef<"StudentFilterOption", 'String'>
+    readonly color: FieldRef<"StudentFilterOption", 'String'>
+    readonly sortOrder: FieldRef<"StudentFilterOption", 'Int'>
+    readonly isArchived: FieldRef<"StudentFilterOption", 'Boolean'>
+    readonly createdAt: FieldRef<"StudentFilterOption", 'DateTime'>
+    readonly updatedAt: FieldRef<"StudentFilterOption", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StudentFilterOption findUnique
+   */
+  export type StudentFilterOptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterOption to fetch.
+     */
+    where: StudentFilterOptionWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterOption findUniqueOrThrow
+   */
+  export type StudentFilterOptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterOption to fetch.
+     */
+    where: StudentFilterOptionWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterOption findFirst
+   */
+  export type StudentFilterOptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterOption to fetch.
+     */
+    where?: StudentFilterOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterOptions to fetch.
+     */
+    orderBy?: StudentFilterOptionOrderByWithRelationInput | StudentFilterOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentFilterOptions.
+     */
+    cursor?: StudentFilterOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterOptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterOptions.
+     */
+    distinct?: StudentFilterOptionScalarFieldEnum | StudentFilterOptionScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterOption findFirstOrThrow
+   */
+  export type StudentFilterOptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterOption to fetch.
+     */
+    where?: StudentFilterOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterOptions to fetch.
+     */
+    orderBy?: StudentFilterOptionOrderByWithRelationInput | StudentFilterOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentFilterOptions.
+     */
+    cursor?: StudentFilterOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterOptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterOptions.
+     */
+    distinct?: StudentFilterOptionScalarFieldEnum | StudentFilterOptionScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterOption findMany
+   */
+  export type StudentFilterOptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterOptions to fetch.
+     */
+    where?: StudentFilterOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterOptions to fetch.
+     */
+    orderBy?: StudentFilterOptionOrderByWithRelationInput | StudentFilterOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StudentFilterOptions.
+     */
+    cursor?: StudentFilterOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterOptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterOptions.
+     */
+    distinct?: StudentFilterOptionScalarFieldEnum | StudentFilterOptionScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterOption create
+   */
+  export type StudentFilterOptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StudentFilterOption.
+     */
+    data: XOR<StudentFilterOptionCreateInput, StudentFilterOptionUncheckedCreateInput>
+  }
+
+  /**
+   * StudentFilterOption createMany
+   */
+  export type StudentFilterOptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StudentFilterOptions.
+     */
+    data: StudentFilterOptionCreateManyInput | StudentFilterOptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StudentFilterOption createManyAndReturn
+   */
+  export type StudentFilterOptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many StudentFilterOptions.
+     */
+    data: StudentFilterOptionCreateManyInput | StudentFilterOptionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentFilterOption update
+   */
+  export type StudentFilterOptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StudentFilterOption.
+     */
+    data: XOR<StudentFilterOptionUpdateInput, StudentFilterOptionUncheckedUpdateInput>
+    /**
+     * Choose, which StudentFilterOption to update.
+     */
+    where: StudentFilterOptionWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterOption updateMany
+   */
+  export type StudentFilterOptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StudentFilterOptions.
+     */
+    data: XOR<StudentFilterOptionUpdateManyMutationInput, StudentFilterOptionUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentFilterOptions to update
+     */
+    where?: StudentFilterOptionWhereInput
+    /**
+     * Limit how many StudentFilterOptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentFilterOption updateManyAndReturn
+   */
+  export type StudentFilterOptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * The data used to update StudentFilterOptions.
+     */
+    data: XOR<StudentFilterOptionUpdateManyMutationInput, StudentFilterOptionUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentFilterOptions to update
+     */
+    where?: StudentFilterOptionWhereInput
+    /**
+     * Limit how many StudentFilterOptions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentFilterOption upsert
+   */
+  export type StudentFilterOptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StudentFilterOption to update in case it exists.
+     */
+    where: StudentFilterOptionWhereUniqueInput
+    /**
+     * In case the StudentFilterOption found by the `where` argument doesn't exist, create a new StudentFilterOption with this data.
+     */
+    create: XOR<StudentFilterOptionCreateInput, StudentFilterOptionUncheckedCreateInput>
+    /**
+     * In case the StudentFilterOption was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StudentFilterOptionUpdateInput, StudentFilterOptionUncheckedUpdateInput>
+  }
+
+  /**
+   * StudentFilterOption delete
+   */
+  export type StudentFilterOptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+    /**
+     * Filter which StudentFilterOption to delete.
+     */
+    where: StudentFilterOptionWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterOption deleteMany
+   */
+  export type StudentFilterOptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentFilterOptions to delete
+     */
+    where?: StudentFilterOptionWhereInput
+    /**
+     * Limit how many StudentFilterOptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentFilterOption.values
+   */
+  export type StudentFilterOption$valuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    where?: StudentFilterValueWhereInput
+    orderBy?: StudentFilterValueOrderByWithRelationInput | StudentFilterValueOrderByWithRelationInput[]
+    cursor?: StudentFilterValueWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentFilterValueScalarFieldEnum | StudentFilterValueScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterOption without action
+   */
+  export type StudentFilterOptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterOption
+     */
+    select?: StudentFilterOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterOption
+     */
+    omit?: StudentFilterOptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterOptionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model StudentFilterValue
+   */
+
+  export type AggregateStudentFilterValue = {
+    _count: StudentFilterValueCountAggregateOutputType | null
+    _min: StudentFilterValueMinAggregateOutputType | null
+    _max: StudentFilterValueMaxAggregateOutputType | null
+  }
+
+  export type StudentFilterValueMinAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    filterTypeId: string | null
+    optionId: string | null
+    updatedBy: string | null
+    updatedAt: Date | null
+  }
+
+  export type StudentFilterValueMaxAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    filterTypeId: string | null
+    optionId: string | null
+    updatedBy: string | null
+    updatedAt: Date | null
+  }
+
+  export type StudentFilterValueCountAggregateOutputType = {
+    id: number
+    studentId: number
+    filterTypeId: number
+    optionId: number
+    updatedBy: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type StudentFilterValueMinAggregateInputType = {
+    id?: true
+    studentId?: true
+    filterTypeId?: true
+    optionId?: true
+    updatedBy?: true
+    updatedAt?: true
+  }
+
+  export type StudentFilterValueMaxAggregateInputType = {
+    id?: true
+    studentId?: true
+    filterTypeId?: true
+    optionId?: true
+    updatedBy?: true
+    updatedAt?: true
+  }
+
+  export type StudentFilterValueCountAggregateInputType = {
+    id?: true
+    studentId?: true
+    filterTypeId?: true
+    optionId?: true
+    updatedBy?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type StudentFilterValueAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentFilterValue to aggregate.
+     */
+    where?: StudentFilterValueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterValues to fetch.
+     */
+    orderBy?: StudentFilterValueOrderByWithRelationInput | StudentFilterValueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StudentFilterValueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterValues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterValues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StudentFilterValues
+    **/
+    _count?: true | StudentFilterValueCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StudentFilterValueMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StudentFilterValueMaxAggregateInputType
+  }
+
+  export type GetStudentFilterValueAggregateType<T extends StudentFilterValueAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentFilterValue]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentFilterValue[P]>
+      : GetScalarType<T[P], AggregateStudentFilterValue[P]>
+  }
+
+
+
+
+  export type StudentFilterValueGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFilterValueWhereInput
+    orderBy?: StudentFilterValueOrderByWithAggregationInput | StudentFilterValueOrderByWithAggregationInput[]
+    by: StudentFilterValueScalarFieldEnum[] | StudentFilterValueScalarFieldEnum
+    having?: StudentFilterValueScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StudentFilterValueCountAggregateInputType | true
+    _min?: StudentFilterValueMinAggregateInputType
+    _max?: StudentFilterValueMaxAggregateInputType
+  }
+
+  export type StudentFilterValueGroupByOutputType = {
+    id: string
+    studentId: string
+    filterTypeId: string
+    optionId: string
+    updatedBy: string | null
+    updatedAt: Date
+    _count: StudentFilterValueCountAggregateOutputType | null
+    _min: StudentFilterValueMinAggregateOutputType | null
+    _max: StudentFilterValueMaxAggregateOutputType | null
+  }
+
+  type GetStudentFilterValueGroupByPayload<T extends StudentFilterValueGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StudentFilterValueGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StudentFilterValueGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StudentFilterValueGroupByOutputType[P]>
+            : GetScalarType<T[P], StudentFilterValueGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StudentFilterValueSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    filterTypeId?: boolean
+    optionId?: boolean
+    updatedBy?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+    option?: boolean | StudentFilterOptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterValue"]>
+
+  export type StudentFilterValueSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    filterTypeId?: boolean
+    optionId?: boolean
+    updatedBy?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+    option?: boolean | StudentFilterOptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterValue"]>
+
+  export type StudentFilterValueSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    filterTypeId?: boolean
+    optionId?: boolean
+    updatedBy?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+    option?: boolean | StudentFilterOptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterValue"]>
+
+  export type StudentFilterValueSelectScalar = {
+    id?: boolean
+    studentId?: boolean
+    filterTypeId?: boolean
+    optionId?: boolean
+    updatedBy?: boolean
+    updatedAt?: boolean
+  }
+
+  export type StudentFilterValueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "filterTypeId" | "optionId" | "updatedBy" | "updatedAt", ExtArgs["result"]["studentFilterValue"]>
+  export type StudentFilterValueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+    option?: boolean | StudentFilterOptionDefaultArgs<ExtArgs>
+  }
+  export type StudentFilterValueIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+    option?: boolean | StudentFilterOptionDefaultArgs<ExtArgs>
+  }
+  export type StudentFilterValueIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    filterType?: boolean | StudentFilterTypeDefaultArgs<ExtArgs>
+    option?: boolean | StudentFilterOptionDefaultArgs<ExtArgs>
+  }
+
+  export type $StudentFilterValuePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StudentFilterValue"
+    objects: {
+      student: Prisma.$StudentPayload<ExtArgs>
+      filterType: Prisma.$StudentFilterTypePayload<ExtArgs>
+      option: Prisma.$StudentFilterOptionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      studentId: string
+      filterTypeId: string
+      optionId: string
+      updatedBy: string | null
+      updatedAt: Date
+    }, ExtArgs["result"]["studentFilterValue"]>
+    composites: {}
+  }
+
+  type StudentFilterValueGetPayload<S extends boolean | null | undefined | StudentFilterValueDefaultArgs> = $Result.GetResult<Prisma.$StudentFilterValuePayload, S>
+
+  type StudentFilterValueCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StudentFilterValueFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StudentFilterValueCountAggregateInputType | true
+    }
+
+  export interface StudentFilterValueDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentFilterValue'], meta: { name: 'StudentFilterValue' } }
+    /**
+     * Find zero or one StudentFilterValue that matches the filter.
+     * @param {StudentFilterValueFindUniqueArgs} args - Arguments to find a StudentFilterValue
+     * @example
+     * // Get one StudentFilterValue
+     * const studentFilterValue = await prisma.studentFilterValue.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StudentFilterValueFindUniqueArgs>(args: SelectSubset<T, StudentFilterValueFindUniqueArgs<ExtArgs>>): Prisma__StudentFilterValueClient<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StudentFilterValue that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StudentFilterValueFindUniqueOrThrowArgs} args - Arguments to find a StudentFilterValue
+     * @example
+     * // Get one StudentFilterValue
+     * const studentFilterValue = await prisma.studentFilterValue.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StudentFilterValueFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentFilterValueFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentFilterValueClient<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentFilterValue that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterValueFindFirstArgs} args - Arguments to find a StudentFilterValue
+     * @example
+     * // Get one StudentFilterValue
+     * const studentFilterValue = await prisma.studentFilterValue.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StudentFilterValueFindFirstArgs>(args?: SelectSubset<T, StudentFilterValueFindFirstArgs<ExtArgs>>): Prisma__StudentFilterValueClient<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentFilterValue that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterValueFindFirstOrThrowArgs} args - Arguments to find a StudentFilterValue
+     * @example
+     * // Get one StudentFilterValue
+     * const studentFilterValue = await prisma.studentFilterValue.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StudentFilterValueFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentFilterValueFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentFilterValueClient<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StudentFilterValues that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterValueFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StudentFilterValues
+     * const studentFilterValues = await prisma.studentFilterValue.findMany()
+     * 
+     * // Get first 10 StudentFilterValues
+     * const studentFilterValues = await prisma.studentFilterValue.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const studentFilterValueWithIdOnly = await prisma.studentFilterValue.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StudentFilterValueFindManyArgs>(args?: SelectSubset<T, StudentFilterValueFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StudentFilterValue.
+     * @param {StudentFilterValueCreateArgs} args - Arguments to create a StudentFilterValue.
+     * @example
+     * // Create one StudentFilterValue
+     * const StudentFilterValue = await prisma.studentFilterValue.create({
+     *   data: {
+     *     // ... data to create a StudentFilterValue
+     *   }
+     * })
+     * 
+     */
+    create<T extends StudentFilterValueCreateArgs>(args: SelectSubset<T, StudentFilterValueCreateArgs<ExtArgs>>): Prisma__StudentFilterValueClient<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StudentFilterValues.
+     * @param {StudentFilterValueCreateManyArgs} args - Arguments to create many StudentFilterValues.
+     * @example
+     * // Create many StudentFilterValues
+     * const studentFilterValue = await prisma.studentFilterValue.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StudentFilterValueCreateManyArgs>(args?: SelectSubset<T, StudentFilterValueCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StudentFilterValues and returns the data saved in the database.
+     * @param {StudentFilterValueCreateManyAndReturnArgs} args - Arguments to create many StudentFilterValues.
+     * @example
+     * // Create many StudentFilterValues
+     * const studentFilterValue = await prisma.studentFilterValue.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StudentFilterValues and only return the `id`
+     * const studentFilterValueWithIdOnly = await prisma.studentFilterValue.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StudentFilterValueCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentFilterValueCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StudentFilterValue.
+     * @param {StudentFilterValueDeleteArgs} args - Arguments to delete one StudentFilterValue.
+     * @example
+     * // Delete one StudentFilterValue
+     * const StudentFilterValue = await prisma.studentFilterValue.delete({
+     *   where: {
+     *     // ... filter to delete one StudentFilterValue
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StudentFilterValueDeleteArgs>(args: SelectSubset<T, StudentFilterValueDeleteArgs<ExtArgs>>): Prisma__StudentFilterValueClient<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StudentFilterValue.
+     * @param {StudentFilterValueUpdateArgs} args - Arguments to update one StudentFilterValue.
+     * @example
+     * // Update one StudentFilterValue
+     * const studentFilterValue = await prisma.studentFilterValue.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StudentFilterValueUpdateArgs>(args: SelectSubset<T, StudentFilterValueUpdateArgs<ExtArgs>>): Prisma__StudentFilterValueClient<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StudentFilterValues.
+     * @param {StudentFilterValueDeleteManyArgs} args - Arguments to filter StudentFilterValues to delete.
+     * @example
+     * // Delete a few StudentFilterValues
+     * const { count } = await prisma.studentFilterValue.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StudentFilterValueDeleteManyArgs>(args?: SelectSubset<T, StudentFilterValueDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentFilterValues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterValueUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StudentFilterValues
+     * const studentFilterValue = await prisma.studentFilterValue.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StudentFilterValueUpdateManyArgs>(args: SelectSubset<T, StudentFilterValueUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentFilterValues and returns the data updated in the database.
+     * @param {StudentFilterValueUpdateManyAndReturnArgs} args - Arguments to update many StudentFilterValues.
+     * @example
+     * // Update many StudentFilterValues
+     * const studentFilterValue = await prisma.studentFilterValue.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StudentFilterValues and only return the `id`
+     * const studentFilterValueWithIdOnly = await prisma.studentFilterValue.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StudentFilterValueUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentFilterValueUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StudentFilterValue.
+     * @param {StudentFilterValueUpsertArgs} args - Arguments to update or create a StudentFilterValue.
+     * @example
+     * // Update or create a StudentFilterValue
+     * const studentFilterValue = await prisma.studentFilterValue.upsert({
+     *   create: {
+     *     // ... data to create a StudentFilterValue
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StudentFilterValue we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StudentFilterValueUpsertArgs>(args: SelectSubset<T, StudentFilterValueUpsertArgs<ExtArgs>>): Prisma__StudentFilterValueClient<$Result.GetResult<Prisma.$StudentFilterValuePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StudentFilterValues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterValueCountArgs} args - Arguments to filter StudentFilterValues to count.
+     * @example
+     * // Count the number of StudentFilterValues
+     * const count = await prisma.studentFilterValue.count({
+     *   where: {
+     *     // ... the filter for the StudentFilterValues we want to count
+     *   }
+     * })
+    **/
+    count<T extends StudentFilterValueCountArgs>(
+      args?: Subset<T, StudentFilterValueCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StudentFilterValueCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StudentFilterValue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterValueAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StudentFilterValueAggregateArgs>(args: Subset<T, StudentFilterValueAggregateArgs>): Prisma.PrismaPromise<GetStudentFilterValueAggregateType<T>>
+
+    /**
+     * Group by StudentFilterValue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterValueGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StudentFilterValueGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentFilterValueGroupByArgs['orderBy'] }
+        : { orderBy?: StudentFilterValueGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StudentFilterValueGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentFilterValueGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StudentFilterValue model
+   */
+  readonly fields: StudentFilterValueFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StudentFilterValue.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StudentFilterValueClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    filterType<T extends StudentFilterTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentFilterTypeDefaultArgs<ExtArgs>>): Prisma__StudentFilterTypeClient<$Result.GetResult<Prisma.$StudentFilterTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    option<T extends StudentFilterOptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentFilterOptionDefaultArgs<ExtArgs>>): Prisma__StudentFilterOptionClient<$Result.GetResult<Prisma.$StudentFilterOptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StudentFilterValue model
+   */
+  interface StudentFilterValueFieldRefs {
+    readonly id: FieldRef<"StudentFilterValue", 'String'>
+    readonly studentId: FieldRef<"StudentFilterValue", 'String'>
+    readonly filterTypeId: FieldRef<"StudentFilterValue", 'String'>
+    readonly optionId: FieldRef<"StudentFilterValue", 'String'>
+    readonly updatedBy: FieldRef<"StudentFilterValue", 'String'>
+    readonly updatedAt: FieldRef<"StudentFilterValue", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StudentFilterValue findUnique
+   */
+  export type StudentFilterValueFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterValue to fetch.
+     */
+    where: StudentFilterValueWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterValue findUniqueOrThrow
+   */
+  export type StudentFilterValueFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterValue to fetch.
+     */
+    where: StudentFilterValueWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterValue findFirst
+   */
+  export type StudentFilterValueFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterValue to fetch.
+     */
+    where?: StudentFilterValueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterValues to fetch.
+     */
+    orderBy?: StudentFilterValueOrderByWithRelationInput | StudentFilterValueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentFilterValues.
+     */
+    cursor?: StudentFilterValueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterValues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterValues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterValues.
+     */
+    distinct?: StudentFilterValueScalarFieldEnum | StudentFilterValueScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterValue findFirstOrThrow
+   */
+  export type StudentFilterValueFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterValue to fetch.
+     */
+    where?: StudentFilterValueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterValues to fetch.
+     */
+    orderBy?: StudentFilterValueOrderByWithRelationInput | StudentFilterValueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentFilterValues.
+     */
+    cursor?: StudentFilterValueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterValues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterValues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterValues.
+     */
+    distinct?: StudentFilterValueScalarFieldEnum | StudentFilterValueScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterValue findMany
+   */
+  export type StudentFilterValueFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterValues to fetch.
+     */
+    where?: StudentFilterValueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterValues to fetch.
+     */
+    orderBy?: StudentFilterValueOrderByWithRelationInput | StudentFilterValueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StudentFilterValues.
+     */
+    cursor?: StudentFilterValueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterValues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterValues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterValues.
+     */
+    distinct?: StudentFilterValueScalarFieldEnum | StudentFilterValueScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterValue create
+   */
+  export type StudentFilterValueCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StudentFilterValue.
+     */
+    data: XOR<StudentFilterValueCreateInput, StudentFilterValueUncheckedCreateInput>
+  }
+
+  /**
+   * StudentFilterValue createMany
+   */
+  export type StudentFilterValueCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StudentFilterValues.
+     */
+    data: StudentFilterValueCreateManyInput | StudentFilterValueCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StudentFilterValue createManyAndReturn
+   */
+  export type StudentFilterValueCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * The data used to create many StudentFilterValues.
+     */
+    data: StudentFilterValueCreateManyInput | StudentFilterValueCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentFilterValue update
+   */
+  export type StudentFilterValueUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StudentFilterValue.
+     */
+    data: XOR<StudentFilterValueUpdateInput, StudentFilterValueUncheckedUpdateInput>
+    /**
+     * Choose, which StudentFilterValue to update.
+     */
+    where: StudentFilterValueWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterValue updateMany
+   */
+  export type StudentFilterValueUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StudentFilterValues.
+     */
+    data: XOR<StudentFilterValueUpdateManyMutationInput, StudentFilterValueUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentFilterValues to update
+     */
+    where?: StudentFilterValueWhereInput
+    /**
+     * Limit how many StudentFilterValues to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentFilterValue updateManyAndReturn
+   */
+  export type StudentFilterValueUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * The data used to update StudentFilterValues.
+     */
+    data: XOR<StudentFilterValueUpdateManyMutationInput, StudentFilterValueUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentFilterValues to update
+     */
+    where?: StudentFilterValueWhereInput
+    /**
+     * Limit how many StudentFilterValues to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentFilterValue upsert
+   */
+  export type StudentFilterValueUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StudentFilterValue to update in case it exists.
+     */
+    where: StudentFilterValueWhereUniqueInput
+    /**
+     * In case the StudentFilterValue found by the `where` argument doesn't exist, create a new StudentFilterValue with this data.
+     */
+    create: XOR<StudentFilterValueCreateInput, StudentFilterValueUncheckedCreateInput>
+    /**
+     * In case the StudentFilterValue was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StudentFilterValueUpdateInput, StudentFilterValueUncheckedUpdateInput>
+  }
+
+  /**
+   * StudentFilterValue delete
+   */
+  export type StudentFilterValueDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+    /**
+     * Filter which StudentFilterValue to delete.
+     */
+    where: StudentFilterValueWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterValue deleteMany
+   */
+  export type StudentFilterValueDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentFilterValues to delete
+     */
+    where?: StudentFilterValueWhereInput
+    /**
+     * Limit how many StudentFilterValues to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentFilterValue without action
+   */
+  export type StudentFilterValueDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterValue
+     */
+    select?: StudentFilterValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterValue
+     */
+    omit?: StudentFilterValueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterValueInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model StudentFilterHistory
+   */
+
+  export type AggregateStudentFilterHistory = {
+    _count: StudentFilterHistoryCountAggregateOutputType | null
+    _min: StudentFilterHistoryMinAggregateOutputType | null
+    _max: StudentFilterHistoryMaxAggregateOutputType | null
+  }
+
+  export type StudentFilterHistoryMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    studentId: string | null
+    filterTypeId: string | null
+    filterName: string | null
+    fromLabel: string | null
+    toLabel: string | null
+    note: string | null
+    changedBy: string | null
+    changedByName: string | null
+    changedAt: Date | null
+  }
+
+  export type StudentFilterHistoryMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    studentId: string | null
+    filterTypeId: string | null
+    filterName: string | null
+    fromLabel: string | null
+    toLabel: string | null
+    note: string | null
+    changedBy: string | null
+    changedByName: string | null
+    changedAt: Date | null
+  }
+
+  export type StudentFilterHistoryCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    studentId: number
+    filterTypeId: number
+    filterName: number
+    fromLabel: number
+    toLabel: number
+    note: number
+    changedBy: number
+    changedByName: number
+    changedAt: number
+    _all: number
+  }
+
+
+  export type StudentFilterHistoryMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    studentId?: true
+    filterTypeId?: true
+    filterName?: true
+    fromLabel?: true
+    toLabel?: true
+    note?: true
+    changedBy?: true
+    changedByName?: true
+    changedAt?: true
+  }
+
+  export type StudentFilterHistoryMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    studentId?: true
+    filterTypeId?: true
+    filterName?: true
+    fromLabel?: true
+    toLabel?: true
+    note?: true
+    changedBy?: true
+    changedByName?: true
+    changedAt?: true
+  }
+
+  export type StudentFilterHistoryCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    studentId?: true
+    filterTypeId?: true
+    filterName?: true
+    fromLabel?: true
+    toLabel?: true
+    note?: true
+    changedBy?: true
+    changedByName?: true
+    changedAt?: true
+    _all?: true
+  }
+
+  export type StudentFilterHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentFilterHistory to aggregate.
+     */
+    where?: StudentFilterHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterHistories to fetch.
+     */
+    orderBy?: StudentFilterHistoryOrderByWithRelationInput | StudentFilterHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StudentFilterHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StudentFilterHistories
+    **/
+    _count?: true | StudentFilterHistoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StudentFilterHistoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StudentFilterHistoryMaxAggregateInputType
+  }
+
+  export type GetStudentFilterHistoryAggregateType<T extends StudentFilterHistoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentFilterHistory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentFilterHistory[P]>
+      : GetScalarType<T[P], AggregateStudentFilterHistory[P]>
+  }
+
+
+
+
+  export type StudentFilterHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFilterHistoryWhereInput
+    orderBy?: StudentFilterHistoryOrderByWithAggregationInput | StudentFilterHistoryOrderByWithAggregationInput[]
+    by: StudentFilterHistoryScalarFieldEnum[] | StudentFilterHistoryScalarFieldEnum
+    having?: StudentFilterHistoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StudentFilterHistoryCountAggregateInputType | true
+    _min?: StudentFilterHistoryMinAggregateInputType
+    _max?: StudentFilterHistoryMaxAggregateInputType
+  }
+
+  export type StudentFilterHistoryGroupByOutputType = {
+    id: string
+    organizationId: string
+    studentId: string
+    filterTypeId: string
+    filterName: string
+    fromLabel: string | null
+    toLabel: string | null
+    note: string | null
+    changedBy: string | null
+    changedByName: string | null
+    changedAt: Date
+    _count: StudentFilterHistoryCountAggregateOutputType | null
+    _min: StudentFilterHistoryMinAggregateOutputType | null
+    _max: StudentFilterHistoryMaxAggregateOutputType | null
+  }
+
+  type GetStudentFilterHistoryGroupByPayload<T extends StudentFilterHistoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StudentFilterHistoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StudentFilterHistoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StudentFilterHistoryGroupByOutputType[P]>
+            : GetScalarType<T[P], StudentFilterHistoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StudentFilterHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    filterTypeId?: boolean
+    filterName?: boolean
+    fromLabel?: boolean
+    toLabel?: boolean
+    note?: boolean
+    changedBy?: boolean
+    changedByName?: boolean
+    changedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterHistory"]>
+
+  export type StudentFilterHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    filterTypeId?: boolean
+    filterName?: boolean
+    fromLabel?: boolean
+    toLabel?: boolean
+    note?: boolean
+    changedBy?: boolean
+    changedByName?: boolean
+    changedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterHistory"]>
+
+  export type StudentFilterHistorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    filterTypeId?: boolean
+    filterName?: boolean
+    fromLabel?: boolean
+    toLabel?: boolean
+    note?: boolean
+    changedBy?: boolean
+    changedByName?: boolean
+    changedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFilterHistory"]>
+
+  export type StudentFilterHistorySelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    filterTypeId?: boolean
+    filterName?: boolean
+    fromLabel?: boolean
+    toLabel?: boolean
+    note?: boolean
+    changedBy?: boolean
+    changedByName?: boolean
+    changedAt?: boolean
+  }
+
+  export type StudentFilterHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "filterTypeId" | "filterName" | "fromLabel" | "toLabel" | "note" | "changedBy" | "changedByName" | "changedAt", ExtArgs["result"]["studentFilterHistory"]>
+  export type StudentFilterHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+  export type StudentFilterHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+  export type StudentFilterHistoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+
+  export type $StudentFilterHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StudentFilterHistory"
+    objects: {
+      student: Prisma.$StudentPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      studentId: string
+      filterTypeId: string
+      filterName: string
+      fromLabel: string | null
+      toLabel: string | null
+      note: string | null
+      changedBy: string | null
+      changedByName: string | null
+      changedAt: Date
+    }, ExtArgs["result"]["studentFilterHistory"]>
+    composites: {}
+  }
+
+  type StudentFilterHistoryGetPayload<S extends boolean | null | undefined | StudentFilterHistoryDefaultArgs> = $Result.GetResult<Prisma.$StudentFilterHistoryPayload, S>
+
+  type StudentFilterHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StudentFilterHistoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StudentFilterHistoryCountAggregateInputType | true
+    }
+
+  export interface StudentFilterHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentFilterHistory'], meta: { name: 'StudentFilterHistory' } }
+    /**
+     * Find zero or one StudentFilterHistory that matches the filter.
+     * @param {StudentFilterHistoryFindUniqueArgs} args - Arguments to find a StudentFilterHistory
+     * @example
+     * // Get one StudentFilterHistory
+     * const studentFilterHistory = await prisma.studentFilterHistory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StudentFilterHistoryFindUniqueArgs>(args: SelectSubset<T, StudentFilterHistoryFindUniqueArgs<ExtArgs>>): Prisma__StudentFilterHistoryClient<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StudentFilterHistory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StudentFilterHistoryFindUniqueOrThrowArgs} args - Arguments to find a StudentFilterHistory
+     * @example
+     * // Get one StudentFilterHistory
+     * const studentFilterHistory = await prisma.studentFilterHistory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StudentFilterHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentFilterHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentFilterHistoryClient<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentFilterHistory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterHistoryFindFirstArgs} args - Arguments to find a StudentFilterHistory
+     * @example
+     * // Get one StudentFilterHistory
+     * const studentFilterHistory = await prisma.studentFilterHistory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StudentFilterHistoryFindFirstArgs>(args?: SelectSubset<T, StudentFilterHistoryFindFirstArgs<ExtArgs>>): Prisma__StudentFilterHistoryClient<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentFilterHistory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterHistoryFindFirstOrThrowArgs} args - Arguments to find a StudentFilterHistory
+     * @example
+     * // Get one StudentFilterHistory
+     * const studentFilterHistory = await prisma.studentFilterHistory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StudentFilterHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentFilterHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentFilterHistoryClient<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StudentFilterHistories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StudentFilterHistories
+     * const studentFilterHistories = await prisma.studentFilterHistory.findMany()
+     * 
+     * // Get first 10 StudentFilterHistories
+     * const studentFilterHistories = await prisma.studentFilterHistory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const studentFilterHistoryWithIdOnly = await prisma.studentFilterHistory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StudentFilterHistoryFindManyArgs>(args?: SelectSubset<T, StudentFilterHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StudentFilterHistory.
+     * @param {StudentFilterHistoryCreateArgs} args - Arguments to create a StudentFilterHistory.
+     * @example
+     * // Create one StudentFilterHistory
+     * const StudentFilterHistory = await prisma.studentFilterHistory.create({
+     *   data: {
+     *     // ... data to create a StudentFilterHistory
+     *   }
+     * })
+     * 
+     */
+    create<T extends StudentFilterHistoryCreateArgs>(args: SelectSubset<T, StudentFilterHistoryCreateArgs<ExtArgs>>): Prisma__StudentFilterHistoryClient<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StudentFilterHistories.
+     * @param {StudentFilterHistoryCreateManyArgs} args - Arguments to create many StudentFilterHistories.
+     * @example
+     * // Create many StudentFilterHistories
+     * const studentFilterHistory = await prisma.studentFilterHistory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StudentFilterHistoryCreateManyArgs>(args?: SelectSubset<T, StudentFilterHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StudentFilterHistories and returns the data saved in the database.
+     * @param {StudentFilterHistoryCreateManyAndReturnArgs} args - Arguments to create many StudentFilterHistories.
+     * @example
+     * // Create many StudentFilterHistories
+     * const studentFilterHistory = await prisma.studentFilterHistory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StudentFilterHistories and only return the `id`
+     * const studentFilterHistoryWithIdOnly = await prisma.studentFilterHistory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StudentFilterHistoryCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentFilterHistoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StudentFilterHistory.
+     * @param {StudentFilterHistoryDeleteArgs} args - Arguments to delete one StudentFilterHistory.
+     * @example
+     * // Delete one StudentFilterHistory
+     * const StudentFilterHistory = await prisma.studentFilterHistory.delete({
+     *   where: {
+     *     // ... filter to delete one StudentFilterHistory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StudentFilterHistoryDeleteArgs>(args: SelectSubset<T, StudentFilterHistoryDeleteArgs<ExtArgs>>): Prisma__StudentFilterHistoryClient<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StudentFilterHistory.
+     * @param {StudentFilterHistoryUpdateArgs} args - Arguments to update one StudentFilterHistory.
+     * @example
+     * // Update one StudentFilterHistory
+     * const studentFilterHistory = await prisma.studentFilterHistory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StudentFilterHistoryUpdateArgs>(args: SelectSubset<T, StudentFilterHistoryUpdateArgs<ExtArgs>>): Prisma__StudentFilterHistoryClient<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StudentFilterHistories.
+     * @param {StudentFilterHistoryDeleteManyArgs} args - Arguments to filter StudentFilterHistories to delete.
+     * @example
+     * // Delete a few StudentFilterHistories
+     * const { count } = await prisma.studentFilterHistory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StudentFilterHistoryDeleteManyArgs>(args?: SelectSubset<T, StudentFilterHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentFilterHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterHistoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StudentFilterHistories
+     * const studentFilterHistory = await prisma.studentFilterHistory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StudentFilterHistoryUpdateManyArgs>(args: SelectSubset<T, StudentFilterHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentFilterHistories and returns the data updated in the database.
+     * @param {StudentFilterHistoryUpdateManyAndReturnArgs} args - Arguments to update many StudentFilterHistories.
+     * @example
+     * // Update many StudentFilterHistories
+     * const studentFilterHistory = await prisma.studentFilterHistory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StudentFilterHistories and only return the `id`
+     * const studentFilterHistoryWithIdOnly = await prisma.studentFilterHistory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StudentFilterHistoryUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentFilterHistoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StudentFilterHistory.
+     * @param {StudentFilterHistoryUpsertArgs} args - Arguments to update or create a StudentFilterHistory.
+     * @example
+     * // Update or create a StudentFilterHistory
+     * const studentFilterHistory = await prisma.studentFilterHistory.upsert({
+     *   create: {
+     *     // ... data to create a StudentFilterHistory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StudentFilterHistory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StudentFilterHistoryUpsertArgs>(args: SelectSubset<T, StudentFilterHistoryUpsertArgs<ExtArgs>>): Prisma__StudentFilterHistoryClient<$Result.GetResult<Prisma.$StudentFilterHistoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StudentFilterHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterHistoryCountArgs} args - Arguments to filter StudentFilterHistories to count.
+     * @example
+     * // Count the number of StudentFilterHistories
+     * const count = await prisma.studentFilterHistory.count({
+     *   where: {
+     *     // ... the filter for the StudentFilterHistories we want to count
+     *   }
+     * })
+    **/
+    count<T extends StudentFilterHistoryCountArgs>(
+      args?: Subset<T, StudentFilterHistoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StudentFilterHistoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StudentFilterHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StudentFilterHistoryAggregateArgs>(args: Subset<T, StudentFilterHistoryAggregateArgs>): Prisma.PrismaPromise<GetStudentFilterHistoryAggregateType<T>>
+
+    /**
+     * Group by StudentFilterHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFilterHistoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StudentFilterHistoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentFilterHistoryGroupByArgs['orderBy'] }
+        : { orderBy?: StudentFilterHistoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StudentFilterHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentFilterHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StudentFilterHistory model
+   */
+  readonly fields: StudentFilterHistoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StudentFilterHistory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StudentFilterHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StudentFilterHistory model
+   */
+  interface StudentFilterHistoryFieldRefs {
+    readonly id: FieldRef<"StudentFilterHistory", 'String'>
+    readonly organizationId: FieldRef<"StudentFilterHistory", 'String'>
+    readonly studentId: FieldRef<"StudentFilterHistory", 'String'>
+    readonly filterTypeId: FieldRef<"StudentFilterHistory", 'String'>
+    readonly filterName: FieldRef<"StudentFilterHistory", 'String'>
+    readonly fromLabel: FieldRef<"StudentFilterHistory", 'String'>
+    readonly toLabel: FieldRef<"StudentFilterHistory", 'String'>
+    readonly note: FieldRef<"StudentFilterHistory", 'String'>
+    readonly changedBy: FieldRef<"StudentFilterHistory", 'String'>
+    readonly changedByName: FieldRef<"StudentFilterHistory", 'String'>
+    readonly changedAt: FieldRef<"StudentFilterHistory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StudentFilterHistory findUnique
+   */
+  export type StudentFilterHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterHistory to fetch.
+     */
+    where: StudentFilterHistoryWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterHistory findUniqueOrThrow
+   */
+  export type StudentFilterHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterHistory to fetch.
+     */
+    where: StudentFilterHistoryWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterHistory findFirst
+   */
+  export type StudentFilterHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterHistory to fetch.
+     */
+    where?: StudentFilterHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterHistories to fetch.
+     */
+    orderBy?: StudentFilterHistoryOrderByWithRelationInput | StudentFilterHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentFilterHistories.
+     */
+    cursor?: StudentFilterHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterHistories.
+     */
+    distinct?: StudentFilterHistoryScalarFieldEnum | StudentFilterHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterHistory findFirstOrThrow
+   */
+  export type StudentFilterHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterHistory to fetch.
+     */
+    where?: StudentFilterHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterHistories to fetch.
+     */
+    orderBy?: StudentFilterHistoryOrderByWithRelationInput | StudentFilterHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentFilterHistories.
+     */
+    cursor?: StudentFilterHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterHistories.
+     */
+    distinct?: StudentFilterHistoryScalarFieldEnum | StudentFilterHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterHistory findMany
+   */
+  export type StudentFilterHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFilterHistories to fetch.
+     */
+    where?: StudentFilterHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFilterHistories to fetch.
+     */
+    orderBy?: StudentFilterHistoryOrderByWithRelationInput | StudentFilterHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StudentFilterHistories.
+     */
+    cursor?: StudentFilterHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFilterHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFilterHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFilterHistories.
+     */
+    distinct?: StudentFilterHistoryScalarFieldEnum | StudentFilterHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFilterHistory create
+   */
+  export type StudentFilterHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StudentFilterHistory.
+     */
+    data: XOR<StudentFilterHistoryCreateInput, StudentFilterHistoryUncheckedCreateInput>
+  }
+
+  /**
+   * StudentFilterHistory createMany
+   */
+  export type StudentFilterHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StudentFilterHistories.
+     */
+    data: StudentFilterHistoryCreateManyInput | StudentFilterHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StudentFilterHistory createManyAndReturn
+   */
+  export type StudentFilterHistoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many StudentFilterHistories.
+     */
+    data: StudentFilterHistoryCreateManyInput | StudentFilterHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentFilterHistory update
+   */
+  export type StudentFilterHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StudentFilterHistory.
+     */
+    data: XOR<StudentFilterHistoryUpdateInput, StudentFilterHistoryUncheckedUpdateInput>
+    /**
+     * Choose, which StudentFilterHistory to update.
+     */
+    where: StudentFilterHistoryWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterHistory updateMany
+   */
+  export type StudentFilterHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StudentFilterHistories.
+     */
+    data: XOR<StudentFilterHistoryUpdateManyMutationInput, StudentFilterHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentFilterHistories to update
+     */
+    where?: StudentFilterHistoryWhereInput
+    /**
+     * Limit how many StudentFilterHistories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentFilterHistory updateManyAndReturn
+   */
+  export type StudentFilterHistoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * The data used to update StudentFilterHistories.
+     */
+    data: XOR<StudentFilterHistoryUpdateManyMutationInput, StudentFilterHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentFilterHistories to update
+     */
+    where?: StudentFilterHistoryWhereInput
+    /**
+     * Limit how many StudentFilterHistories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentFilterHistory upsert
+   */
+  export type StudentFilterHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StudentFilterHistory to update in case it exists.
+     */
+    where: StudentFilterHistoryWhereUniqueInput
+    /**
+     * In case the StudentFilterHistory found by the `where` argument doesn't exist, create a new StudentFilterHistory with this data.
+     */
+    create: XOR<StudentFilterHistoryCreateInput, StudentFilterHistoryUncheckedCreateInput>
+    /**
+     * In case the StudentFilterHistory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StudentFilterHistoryUpdateInput, StudentFilterHistoryUncheckedUpdateInput>
+  }
+
+  /**
+   * StudentFilterHistory delete
+   */
+  export type StudentFilterHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+    /**
+     * Filter which StudentFilterHistory to delete.
+     */
+    where: StudentFilterHistoryWhereUniqueInput
+  }
+
+  /**
+   * StudentFilterHistory deleteMany
+   */
+  export type StudentFilterHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentFilterHistories to delete
+     */
+    where?: StudentFilterHistoryWhereInput
+    /**
+     * Limit how many StudentFilterHistories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentFilterHistory without action
+   */
+  export type StudentFilterHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFilterHistory
+     */
+    select?: StudentFilterHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFilterHistory
+     */
+    omit?: StudentFilterHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFilterHistoryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -137890,6 +143029,63 @@ export namespace Prisma {
   export type CountryScalarFieldEnum = (typeof CountryScalarFieldEnum)[keyof typeof CountryScalarFieldEnum]
 
 
+  export const StudentFilterTypeScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    name: 'name',
+    isActive: 'isActive',
+    sortOrder: 'sortOrder',
+    createdBy: 'createdBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type StudentFilterTypeScalarFieldEnum = (typeof StudentFilterTypeScalarFieldEnum)[keyof typeof StudentFilterTypeScalarFieldEnum]
+
+
+  export const StudentFilterOptionScalarFieldEnum: {
+    id: 'id',
+    filterTypeId: 'filterTypeId',
+    label: 'label',
+    color: 'color',
+    sortOrder: 'sortOrder',
+    isArchived: 'isArchived',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type StudentFilterOptionScalarFieldEnum = (typeof StudentFilterOptionScalarFieldEnum)[keyof typeof StudentFilterOptionScalarFieldEnum]
+
+
+  export const StudentFilterValueScalarFieldEnum: {
+    id: 'id',
+    studentId: 'studentId',
+    filterTypeId: 'filterTypeId',
+    optionId: 'optionId',
+    updatedBy: 'updatedBy',
+    updatedAt: 'updatedAt'
+  };
+
+  export type StudentFilterValueScalarFieldEnum = (typeof StudentFilterValueScalarFieldEnum)[keyof typeof StudentFilterValueScalarFieldEnum]
+
+
+  export const StudentFilterHistoryScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    studentId: 'studentId',
+    filterTypeId: 'filterTypeId',
+    filterName: 'filterName',
+    fromLabel: 'fromLabel',
+    toLabel: 'toLabel',
+    note: 'note',
+    changedBy: 'changedBy',
+    changedByName: 'changedByName',
+    changedAt: 'changedAt'
+  };
+
+  export type StudentFilterHistoryScalarFieldEnum = (typeof StudentFilterHistoryScalarFieldEnum)[keyof typeof StudentFilterHistoryScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -138488,6 +143684,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryListRelationFilter
     batchLessonAssignments?: BatchLessonAssignmentListRelationFilter
     studentVideoLogs?: StudentVideoLogListRelationFilter
+    studentFilterTypes?: StudentFilterTypeListRelationFilter
   }
 
   export type OrganizationOrderByWithRelationInput = {
@@ -138588,6 +143785,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryOrderByRelationAggregateInput
     batchLessonAssignments?: BatchLessonAssignmentOrderByRelationAggregateInput
     studentVideoLogs?: StudentVideoLogOrderByRelationAggregateInput
+    studentFilterTypes?: StudentFilterTypeOrderByRelationAggregateInput
   }
 
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -138691,6 +143889,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryListRelationFilter
     batchLessonAssignments?: BatchLessonAssignmentListRelationFilter
     studentVideoLogs?: StudentVideoLogListRelationFilter
+    studentFilterTypes?: StudentFilterTypeListRelationFilter
   }, "id" | "email" | "customLoginSlug">
 
   export type OrganizationOrderByWithAggregationInput = {
@@ -140316,6 +145515,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtListRelationFilter
     lessonDoubtReplies?: LessonDoubtReplyListRelationFilter
     lessonNotes?: LessonNoteListRelationFilter
+    filterValues?: StudentFilterValueListRelationFilter
+    filterHistory?: StudentFilterHistoryListRelationFilter
   }
 
   export type StudentOrderByWithRelationInput = {
@@ -140397,6 +145598,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtOrderByRelationAggregateInput
     lessonDoubtReplies?: LessonDoubtReplyOrderByRelationAggregateInput
     lessonNotes?: LessonNoteOrderByRelationAggregateInput
+    filterValues?: StudentFilterValueOrderByRelationAggregateInput
+    filterHistory?: StudentFilterHistoryOrderByRelationAggregateInput
   }
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
@@ -140481,6 +145684,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtListRelationFilter
     lessonDoubtReplies?: LessonDoubtReplyListRelationFilter
     lessonNotes?: LessonNoteListRelationFilter
+    filterValues?: StudentFilterValueListRelationFilter
+    filterHistory?: StudentFilterHistoryListRelationFilter
   }, "id" | "enrollmentNo" | "email">
 
   export type StudentOrderByWithAggregationInput = {
@@ -149005,6 +154210,311 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Country"> | Date | string
   }
 
+  export type StudentFilterTypeWhereInput = {
+    AND?: StudentFilterTypeWhereInput | StudentFilterTypeWhereInput[]
+    OR?: StudentFilterTypeWhereInput[]
+    NOT?: StudentFilterTypeWhereInput | StudentFilterTypeWhereInput[]
+    id?: StringFilter<"StudentFilterType"> | string
+    organizationId?: StringFilter<"StudentFilterType"> | string
+    name?: StringFilter<"StudentFilterType"> | string
+    isActive?: BoolFilter<"StudentFilterType"> | boolean
+    sortOrder?: IntFilter<"StudentFilterType"> | number
+    createdBy?: StringNullableFilter<"StudentFilterType"> | string | null
+    createdAt?: DateTimeFilter<"StudentFilterType"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentFilterType"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    options?: StudentFilterOptionListRelationFilter
+    values?: StudentFilterValueListRelationFilter
+  }
+
+  export type StudentFilterTypeOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+    options?: StudentFilterOptionOrderByRelationAggregateInput
+    values?: StudentFilterValueOrderByRelationAggregateInput
+  }
+
+  export type StudentFilterTypeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: StudentFilterTypeWhereInput | StudentFilterTypeWhereInput[]
+    OR?: StudentFilterTypeWhereInput[]
+    NOT?: StudentFilterTypeWhereInput | StudentFilterTypeWhereInput[]
+    organizationId?: StringFilter<"StudentFilterType"> | string
+    name?: StringFilter<"StudentFilterType"> | string
+    isActive?: BoolFilter<"StudentFilterType"> | boolean
+    sortOrder?: IntFilter<"StudentFilterType"> | number
+    createdBy?: StringNullableFilter<"StudentFilterType"> | string | null
+    createdAt?: DateTimeFilter<"StudentFilterType"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentFilterType"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    options?: StudentFilterOptionListRelationFilter
+    values?: StudentFilterValueListRelationFilter
+  }, "id">
+
+  export type StudentFilterTypeOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: StudentFilterTypeCountOrderByAggregateInput
+    _avg?: StudentFilterTypeAvgOrderByAggregateInput
+    _max?: StudentFilterTypeMaxOrderByAggregateInput
+    _min?: StudentFilterTypeMinOrderByAggregateInput
+    _sum?: StudentFilterTypeSumOrderByAggregateInput
+  }
+
+  export type StudentFilterTypeScalarWhereWithAggregatesInput = {
+    AND?: StudentFilterTypeScalarWhereWithAggregatesInput | StudentFilterTypeScalarWhereWithAggregatesInput[]
+    OR?: StudentFilterTypeScalarWhereWithAggregatesInput[]
+    NOT?: StudentFilterTypeScalarWhereWithAggregatesInput | StudentFilterTypeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StudentFilterType"> | string
+    organizationId?: StringWithAggregatesFilter<"StudentFilterType"> | string
+    name?: StringWithAggregatesFilter<"StudentFilterType"> | string
+    isActive?: BoolWithAggregatesFilter<"StudentFilterType"> | boolean
+    sortOrder?: IntWithAggregatesFilter<"StudentFilterType"> | number
+    createdBy?: StringNullableWithAggregatesFilter<"StudentFilterType"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"StudentFilterType"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StudentFilterType"> | Date | string
+  }
+
+  export type StudentFilterOptionWhereInput = {
+    AND?: StudentFilterOptionWhereInput | StudentFilterOptionWhereInput[]
+    OR?: StudentFilterOptionWhereInput[]
+    NOT?: StudentFilterOptionWhereInput | StudentFilterOptionWhereInput[]
+    id?: StringFilter<"StudentFilterOption"> | string
+    filterTypeId?: StringFilter<"StudentFilterOption"> | string
+    label?: StringFilter<"StudentFilterOption"> | string
+    color?: StringNullableFilter<"StudentFilterOption"> | string | null
+    sortOrder?: IntFilter<"StudentFilterOption"> | number
+    isArchived?: BoolFilter<"StudentFilterOption"> | boolean
+    createdAt?: DateTimeFilter<"StudentFilterOption"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentFilterOption"> | Date | string
+    filterType?: XOR<StudentFilterTypeScalarRelationFilter, StudentFilterTypeWhereInput>
+    values?: StudentFilterValueListRelationFilter
+  }
+
+  export type StudentFilterOptionOrderByWithRelationInput = {
+    id?: SortOrder
+    filterTypeId?: SortOrder
+    label?: SortOrder
+    color?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isArchived?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    filterType?: StudentFilterTypeOrderByWithRelationInput
+    values?: StudentFilterValueOrderByRelationAggregateInput
+  }
+
+  export type StudentFilterOptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: StudentFilterOptionWhereInput | StudentFilterOptionWhereInput[]
+    OR?: StudentFilterOptionWhereInput[]
+    NOT?: StudentFilterOptionWhereInput | StudentFilterOptionWhereInput[]
+    filterTypeId?: StringFilter<"StudentFilterOption"> | string
+    label?: StringFilter<"StudentFilterOption"> | string
+    color?: StringNullableFilter<"StudentFilterOption"> | string | null
+    sortOrder?: IntFilter<"StudentFilterOption"> | number
+    isArchived?: BoolFilter<"StudentFilterOption"> | boolean
+    createdAt?: DateTimeFilter<"StudentFilterOption"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentFilterOption"> | Date | string
+    filterType?: XOR<StudentFilterTypeScalarRelationFilter, StudentFilterTypeWhereInput>
+    values?: StudentFilterValueListRelationFilter
+  }, "id">
+
+  export type StudentFilterOptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    filterTypeId?: SortOrder
+    label?: SortOrder
+    color?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isArchived?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: StudentFilterOptionCountOrderByAggregateInput
+    _avg?: StudentFilterOptionAvgOrderByAggregateInput
+    _max?: StudentFilterOptionMaxOrderByAggregateInput
+    _min?: StudentFilterOptionMinOrderByAggregateInput
+    _sum?: StudentFilterOptionSumOrderByAggregateInput
+  }
+
+  export type StudentFilterOptionScalarWhereWithAggregatesInput = {
+    AND?: StudentFilterOptionScalarWhereWithAggregatesInput | StudentFilterOptionScalarWhereWithAggregatesInput[]
+    OR?: StudentFilterOptionScalarWhereWithAggregatesInput[]
+    NOT?: StudentFilterOptionScalarWhereWithAggregatesInput | StudentFilterOptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StudentFilterOption"> | string
+    filterTypeId?: StringWithAggregatesFilter<"StudentFilterOption"> | string
+    label?: StringWithAggregatesFilter<"StudentFilterOption"> | string
+    color?: StringNullableWithAggregatesFilter<"StudentFilterOption"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"StudentFilterOption"> | number
+    isArchived?: BoolWithAggregatesFilter<"StudentFilterOption"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"StudentFilterOption"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StudentFilterOption"> | Date | string
+  }
+
+  export type StudentFilterValueWhereInput = {
+    AND?: StudentFilterValueWhereInput | StudentFilterValueWhereInput[]
+    OR?: StudentFilterValueWhereInput[]
+    NOT?: StudentFilterValueWhereInput | StudentFilterValueWhereInput[]
+    id?: StringFilter<"StudentFilterValue"> | string
+    studentId?: StringFilter<"StudentFilterValue"> | string
+    filterTypeId?: StringFilter<"StudentFilterValue"> | string
+    optionId?: StringFilter<"StudentFilterValue"> | string
+    updatedBy?: StringNullableFilter<"StudentFilterValue"> | string | null
+    updatedAt?: DateTimeFilter<"StudentFilterValue"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    filterType?: XOR<StudentFilterTypeScalarRelationFilter, StudentFilterTypeWhereInput>
+    option?: XOR<StudentFilterOptionScalarRelationFilter, StudentFilterOptionWhereInput>
+  }
+
+  export type StudentFilterValueOrderByWithRelationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    filterTypeId?: SortOrder
+    optionId?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    student?: StudentOrderByWithRelationInput
+    filterType?: StudentFilterTypeOrderByWithRelationInput
+    option?: StudentFilterOptionOrderByWithRelationInput
+  }
+
+  export type StudentFilterValueWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    studentId_filterTypeId?: StudentFilterValueStudentIdFilterTypeIdCompoundUniqueInput
+    AND?: StudentFilterValueWhereInput | StudentFilterValueWhereInput[]
+    OR?: StudentFilterValueWhereInput[]
+    NOT?: StudentFilterValueWhereInput | StudentFilterValueWhereInput[]
+    studentId?: StringFilter<"StudentFilterValue"> | string
+    filterTypeId?: StringFilter<"StudentFilterValue"> | string
+    optionId?: StringFilter<"StudentFilterValue"> | string
+    updatedBy?: StringNullableFilter<"StudentFilterValue"> | string | null
+    updatedAt?: DateTimeFilter<"StudentFilterValue"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    filterType?: XOR<StudentFilterTypeScalarRelationFilter, StudentFilterTypeWhereInput>
+    option?: XOR<StudentFilterOptionScalarRelationFilter, StudentFilterOptionWhereInput>
+  }, "id" | "studentId_filterTypeId">
+
+  export type StudentFilterValueOrderByWithAggregationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    filterTypeId?: SortOrder
+    optionId?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: StudentFilterValueCountOrderByAggregateInput
+    _max?: StudentFilterValueMaxOrderByAggregateInput
+    _min?: StudentFilterValueMinOrderByAggregateInput
+  }
+
+  export type StudentFilterValueScalarWhereWithAggregatesInput = {
+    AND?: StudentFilterValueScalarWhereWithAggregatesInput | StudentFilterValueScalarWhereWithAggregatesInput[]
+    OR?: StudentFilterValueScalarWhereWithAggregatesInput[]
+    NOT?: StudentFilterValueScalarWhereWithAggregatesInput | StudentFilterValueScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StudentFilterValue"> | string
+    studentId?: StringWithAggregatesFilter<"StudentFilterValue"> | string
+    filterTypeId?: StringWithAggregatesFilter<"StudentFilterValue"> | string
+    optionId?: StringWithAggregatesFilter<"StudentFilterValue"> | string
+    updatedBy?: StringNullableWithAggregatesFilter<"StudentFilterValue"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"StudentFilterValue"> | Date | string
+  }
+
+  export type StudentFilterHistoryWhereInput = {
+    AND?: StudentFilterHistoryWhereInput | StudentFilterHistoryWhereInput[]
+    OR?: StudentFilterHistoryWhereInput[]
+    NOT?: StudentFilterHistoryWhereInput | StudentFilterHistoryWhereInput[]
+    id?: StringFilter<"StudentFilterHistory"> | string
+    organizationId?: StringFilter<"StudentFilterHistory"> | string
+    studentId?: StringFilter<"StudentFilterHistory"> | string
+    filterTypeId?: StringFilter<"StudentFilterHistory"> | string
+    filterName?: StringFilter<"StudentFilterHistory"> | string
+    fromLabel?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    toLabel?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    note?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    changedBy?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    changedByName?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    changedAt?: DateTimeFilter<"StudentFilterHistory"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+  }
+
+  export type StudentFilterHistoryOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    filterTypeId?: SortOrder
+    filterName?: SortOrder
+    fromLabel?: SortOrderInput | SortOrder
+    toLabel?: SortOrderInput | SortOrder
+    note?: SortOrderInput | SortOrder
+    changedBy?: SortOrderInput | SortOrder
+    changedByName?: SortOrderInput | SortOrder
+    changedAt?: SortOrder
+    student?: StudentOrderByWithRelationInput
+  }
+
+  export type StudentFilterHistoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: StudentFilterHistoryWhereInput | StudentFilterHistoryWhereInput[]
+    OR?: StudentFilterHistoryWhereInput[]
+    NOT?: StudentFilterHistoryWhereInput | StudentFilterHistoryWhereInput[]
+    organizationId?: StringFilter<"StudentFilterHistory"> | string
+    studentId?: StringFilter<"StudentFilterHistory"> | string
+    filterTypeId?: StringFilter<"StudentFilterHistory"> | string
+    filterName?: StringFilter<"StudentFilterHistory"> | string
+    fromLabel?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    toLabel?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    note?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    changedBy?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    changedByName?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    changedAt?: DateTimeFilter<"StudentFilterHistory"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+  }, "id">
+
+  export type StudentFilterHistoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    filterTypeId?: SortOrder
+    filterName?: SortOrder
+    fromLabel?: SortOrderInput | SortOrder
+    toLabel?: SortOrderInput | SortOrder
+    note?: SortOrderInput | SortOrder
+    changedBy?: SortOrderInput | SortOrder
+    changedByName?: SortOrderInput | SortOrder
+    changedAt?: SortOrder
+    _count?: StudentFilterHistoryCountOrderByAggregateInput
+    _max?: StudentFilterHistoryMaxOrderByAggregateInput
+    _min?: StudentFilterHistoryMinOrderByAggregateInput
+  }
+
+  export type StudentFilterHistoryScalarWhereWithAggregatesInput = {
+    AND?: StudentFilterHistoryScalarWhereWithAggregatesInput | StudentFilterHistoryScalarWhereWithAggregatesInput[]
+    OR?: StudentFilterHistoryScalarWhereWithAggregatesInput[]
+    NOT?: StudentFilterHistoryScalarWhereWithAggregatesInput | StudentFilterHistoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StudentFilterHistory"> | string
+    organizationId?: StringWithAggregatesFilter<"StudentFilterHistory"> | string
+    studentId?: StringWithAggregatesFilter<"StudentFilterHistory"> | string
+    filterTypeId?: StringWithAggregatesFilter<"StudentFilterHistory"> | string
+    filterName?: StringWithAggregatesFilter<"StudentFilterHistory"> | string
+    fromLabel?: StringNullableWithAggregatesFilter<"StudentFilterHistory"> | string | null
+    toLabel?: StringNullableWithAggregatesFilter<"StudentFilterHistory"> | string | null
+    note?: StringNullableWithAggregatesFilter<"StudentFilterHistory"> | string | null
+    changedBy?: StringNullableWithAggregatesFilter<"StudentFilterHistory"> | string | null
+    changedByName?: StringNullableWithAggregatesFilter<"StudentFilterHistory"> | string | null
+    changedAt?: DateTimeWithAggregatesFilter<"StudentFilterHistory"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -149102,6 +154612,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateInput = {
@@ -149201,6 +154712,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUpdateInput = {
@@ -149300,6 +154812,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateInput = {
@@ -149399,6 +154912,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateManyInput = {
@@ -151293,6 +156807,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateInput = {
@@ -151364,6 +156880,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUpdateInput = {
@@ -151435,6 +156953,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateInput = {
@@ -151506,6 +157026,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateManyInput = {
@@ -160619,6 +166141,327 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StudentFilterTypeCreateInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    sortOrder?: number
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutStudentFilterTypesInput
+    options?: StudentFilterOptionCreateNestedManyWithoutFilterTypeInput
+    values?: StudentFilterValueCreateNestedManyWithoutFilterTypeInput
+  }
+
+  export type StudentFilterTypeUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    name: string
+    isActive?: boolean
+    sortOrder?: number
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    options?: StudentFilterOptionUncheckedCreateNestedManyWithoutFilterTypeInput
+    values?: StudentFilterValueUncheckedCreateNestedManyWithoutFilterTypeInput
+  }
+
+  export type StudentFilterTypeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutStudentFilterTypesNestedInput
+    options?: StudentFilterOptionUpdateManyWithoutFilterTypeNestedInput
+    values?: StudentFilterValueUpdateManyWithoutFilterTypeNestedInput
+  }
+
+  export type StudentFilterTypeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    options?: StudentFilterOptionUncheckedUpdateManyWithoutFilterTypeNestedInput
+    values?: StudentFilterValueUncheckedUpdateManyWithoutFilterTypeNestedInput
+  }
+
+  export type StudentFilterTypeCreateManyInput = {
+    id?: string
+    organizationId: string
+    name: string
+    isActive?: boolean
+    sortOrder?: number
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterTypeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterTypeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterOptionCreateInput = {
+    id?: string
+    label: string
+    color?: string | null
+    sortOrder?: number
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    filterType: StudentFilterTypeCreateNestedOneWithoutOptionsInput
+    values?: StudentFilterValueCreateNestedManyWithoutOptionInput
+  }
+
+  export type StudentFilterOptionUncheckedCreateInput = {
+    id?: string
+    filterTypeId: string
+    label: string
+    color?: string | null
+    sortOrder?: number
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    values?: StudentFilterValueUncheckedCreateNestedManyWithoutOptionInput
+  }
+
+  export type StudentFilterOptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    filterType?: StudentFilterTypeUpdateOneRequiredWithoutOptionsNestedInput
+    values?: StudentFilterValueUpdateManyWithoutOptionNestedInput
+  }
+
+  export type StudentFilterOptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    values?: StudentFilterValueUncheckedUpdateManyWithoutOptionNestedInput
+  }
+
+  export type StudentFilterOptionCreateManyInput = {
+    id?: string
+    filterTypeId: string
+    label: string
+    color?: string | null
+    sortOrder?: number
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterOptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterOptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterValueCreateInput = {
+    id?: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutFilterValuesInput
+    filterType: StudentFilterTypeCreateNestedOneWithoutValuesInput
+    option: StudentFilterOptionCreateNestedOneWithoutValuesInput
+  }
+
+  export type StudentFilterValueUncheckedCreateInput = {
+    id?: string
+    studentId: string
+    filterTypeId: string
+    optionId: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterValueUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutFilterValuesNestedInput
+    filterType?: StudentFilterTypeUpdateOneRequiredWithoutValuesNestedInput
+    option?: StudentFilterOptionUpdateOneRequiredWithoutValuesNestedInput
+  }
+
+  export type StudentFilterValueUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    optionId?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterValueCreateManyInput = {
+    id?: string
+    studentId: string
+    filterTypeId: string
+    optionId: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterValueUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterValueUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    optionId?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterHistoryCreateInput = {
+    id?: string
+    organizationId: string
+    filterTypeId: string
+    filterName: string
+    fromLabel?: string | null
+    toLabel?: string | null
+    note?: string | null
+    changedBy?: string | null
+    changedByName?: string | null
+    changedAt?: Date | string
+    student: StudentCreateNestedOneWithoutFilterHistoryInput
+  }
+
+  export type StudentFilterHistoryUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    studentId: string
+    filterTypeId: string
+    filterName: string
+    fromLabel?: string | null
+    toLabel?: string | null
+    note?: string | null
+    changedBy?: string | null
+    changedByName?: string | null
+    changedAt?: Date | string
+  }
+
+  export type StudentFilterHistoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    filterName?: StringFieldUpdateOperationsInput | string
+    fromLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    toLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutFilterHistoryNestedInput
+  }
+
+  export type StudentFilterHistoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    filterName?: StringFieldUpdateOperationsInput | string
+    fromLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    toLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterHistoryCreateManyInput = {
+    id?: string
+    organizationId: string
+    studentId: string
+    filterTypeId: string
+    filterName: string
+    fromLabel?: string | null
+    toLabel?: string | null
+    note?: string | null
+    changedBy?: string | null
+    changedByName?: string | null
+    changedAt?: Date | string
+  }
+
+  export type StudentFilterHistoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    filterName?: StringFieldUpdateOperationsInput | string
+    fromLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    toLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterHistoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    filterName?: StringFieldUpdateOperationsInput | string
+    fromLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    toLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -161197,6 +167040,12 @@ export namespace Prisma {
     none?: StudentVideoLogWhereInput
   }
 
+  export type StudentFilterTypeListRelationFilter = {
+    every?: StudentFilterTypeWhereInput
+    some?: StudentFilterTypeWhereInput
+    none?: StudentFilterTypeWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -161523,6 +167372,10 @@ export namespace Prisma {
   }
 
   export type StudentVideoLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StudentFilterTypeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -162712,7 +168565,27 @@ export namespace Prisma {
     none?: StudentAssessmentAttemptWhereInput
   }
 
+  export type StudentFilterValueListRelationFilter = {
+    every?: StudentFilterValueWhereInput
+    some?: StudentFilterValueWhereInput
+    none?: StudentFilterValueWhereInput
+  }
+
+  export type StudentFilterHistoryListRelationFilter = {
+    every?: StudentFilterHistoryWhereInput
+    some?: StudentFilterHistoryWhereInput
+    none?: StudentFilterHistoryWhereInput
+  }
+
   export type StudentAssessmentAttemptOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StudentFilterValueOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StudentFilterHistoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -167504,6 +173377,182 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type StudentFilterOptionListRelationFilter = {
+    every?: StudentFilterOptionWhereInput
+    some?: StudentFilterOptionWhereInput
+    none?: StudentFilterOptionWhereInput
+  }
+
+  export type StudentFilterOptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StudentFilterTypeCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFilterTypeAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type StudentFilterTypeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFilterTypeMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFilterTypeSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type StudentFilterTypeScalarRelationFilter = {
+    is?: StudentFilterTypeWhereInput
+    isNot?: StudentFilterTypeWhereInput
+  }
+
+  export type StudentFilterOptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    filterTypeId?: SortOrder
+    label?: SortOrder
+    color?: SortOrder
+    sortOrder?: SortOrder
+    isArchived?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFilterOptionAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type StudentFilterOptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    filterTypeId?: SortOrder
+    label?: SortOrder
+    color?: SortOrder
+    sortOrder?: SortOrder
+    isArchived?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFilterOptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    filterTypeId?: SortOrder
+    label?: SortOrder
+    color?: SortOrder
+    sortOrder?: SortOrder
+    isArchived?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFilterOptionSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type StudentFilterOptionScalarRelationFilter = {
+    is?: StudentFilterOptionWhereInput
+    isNot?: StudentFilterOptionWhereInput
+  }
+
+  export type StudentFilterValueStudentIdFilterTypeIdCompoundUniqueInput = {
+    studentId: string
+    filterTypeId: string
+  }
+
+  export type StudentFilterValueCountOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    filterTypeId?: SortOrder
+    optionId?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFilterValueMaxOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    filterTypeId?: SortOrder
+    optionId?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFilterValueMinOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    filterTypeId?: SortOrder
+    optionId?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFilterHistoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    filterTypeId?: SortOrder
+    filterName?: SortOrder
+    fromLabel?: SortOrder
+    toLabel?: SortOrder
+    note?: SortOrder
+    changedBy?: SortOrder
+    changedByName?: SortOrder
+    changedAt?: SortOrder
+  }
+
+  export type StudentFilterHistoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    filterTypeId?: SortOrder
+    filterName?: SortOrder
+    fromLabel?: SortOrder
+    toLabel?: SortOrder
+    note?: SortOrder
+    changedBy?: SortOrder
+    changedByName?: SortOrder
+    changedAt?: SortOrder
+  }
+
+  export type StudentFilterHistoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    filterTypeId?: SortOrder
+    filterName?: SortOrder
+    fromLabel?: SortOrder
+    toLabel?: SortOrder
+    note?: SortOrder
+    changedBy?: SortOrder
+    changedByName?: SortOrder
+    changedAt?: SortOrder
+  }
+
   export type AcademicSessionCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AcademicSessionCreateWithoutOrganizationInput, AcademicSessionUncheckedCreateWithoutOrganizationInput> | AcademicSessionCreateWithoutOrganizationInput[] | AcademicSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AcademicSessionCreateOrConnectWithoutOrganizationInput | AcademicSessionCreateOrConnectWithoutOrganizationInput[]
@@ -168083,6 +174132,13 @@ export namespace Prisma {
     connect?: StudentVideoLogWhereUniqueInput | StudentVideoLogWhereUniqueInput[]
   }
 
+  export type StudentFilterTypeCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<StudentFilterTypeCreateWithoutOrganizationInput, StudentFilterTypeUncheckedCreateWithoutOrganizationInput> | StudentFilterTypeCreateWithoutOrganizationInput[] | StudentFilterTypeUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: StudentFilterTypeCreateOrConnectWithoutOrganizationInput | StudentFilterTypeCreateOrConnectWithoutOrganizationInput[]
+    createMany?: StudentFilterTypeCreateManyOrganizationInputEnvelope
+    connect?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
+  }
+
   export type AcademicSessionUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AcademicSessionCreateWithoutOrganizationInput, AcademicSessionUncheckedCreateWithoutOrganizationInput> | AcademicSessionCreateWithoutOrganizationInput[] | AcademicSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AcademicSessionCreateOrConnectWithoutOrganizationInput | AcademicSessionCreateOrConnectWithoutOrganizationInput[]
@@ -168654,6 +174710,13 @@ export namespace Prisma {
     connectOrCreate?: StudentVideoLogCreateOrConnectWithoutOrganizationInput | StudentVideoLogCreateOrConnectWithoutOrganizationInput[]
     createMany?: StudentVideoLogCreateManyOrganizationInputEnvelope
     connect?: StudentVideoLogWhereUniqueInput | StudentVideoLogWhereUniqueInput[]
+  }
+
+  export type StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<StudentFilterTypeCreateWithoutOrganizationInput, StudentFilterTypeUncheckedCreateWithoutOrganizationInput> | StudentFilterTypeCreateWithoutOrganizationInput[] | StudentFilterTypeUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: StudentFilterTypeCreateOrConnectWithoutOrganizationInput | StudentFilterTypeCreateOrConnectWithoutOrganizationInput[]
+    createMany?: StudentFilterTypeCreateManyOrganizationInputEnvelope
+    connect?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -169830,6 +175893,20 @@ export namespace Prisma {
     deleteMany?: StudentVideoLogScalarWhereInput | StudentVideoLogScalarWhereInput[]
   }
 
+  export type StudentFilterTypeUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<StudentFilterTypeCreateWithoutOrganizationInput, StudentFilterTypeUncheckedCreateWithoutOrganizationInput> | StudentFilterTypeCreateWithoutOrganizationInput[] | StudentFilterTypeUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: StudentFilterTypeCreateOrConnectWithoutOrganizationInput | StudentFilterTypeCreateOrConnectWithoutOrganizationInput[]
+    upsert?: StudentFilterTypeUpsertWithWhereUniqueWithoutOrganizationInput | StudentFilterTypeUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: StudentFilterTypeCreateManyOrganizationInputEnvelope
+    set?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
+    disconnect?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
+    delete?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
+    connect?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
+    update?: StudentFilterTypeUpdateWithWhereUniqueWithoutOrganizationInput | StudentFilterTypeUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: StudentFilterTypeUpdateManyWithWhereWithoutOrganizationInput | StudentFilterTypeUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: StudentFilterTypeScalarWhereInput | StudentFilterTypeScalarWhereInput[]
+  }
+
   export type AcademicSessionUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<AcademicSessionCreateWithoutOrganizationInput, AcademicSessionUncheckedCreateWithoutOrganizationInput> | AcademicSessionCreateWithoutOrganizationInput[] | AcademicSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AcademicSessionCreateOrConnectWithoutOrganizationInput | AcademicSessionCreateOrConnectWithoutOrganizationInput[]
@@ -170972,6 +177049,20 @@ export namespace Prisma {
     update?: StudentVideoLogUpdateWithWhereUniqueWithoutOrganizationInput | StudentVideoLogUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: StudentVideoLogUpdateManyWithWhereWithoutOrganizationInput | StudentVideoLogUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: StudentVideoLogScalarWhereInput | StudentVideoLogScalarWhereInput[]
+  }
+
+  export type StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<StudentFilterTypeCreateWithoutOrganizationInput, StudentFilterTypeUncheckedCreateWithoutOrganizationInput> | StudentFilterTypeCreateWithoutOrganizationInput[] | StudentFilterTypeUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: StudentFilterTypeCreateOrConnectWithoutOrganizationInput | StudentFilterTypeCreateOrConnectWithoutOrganizationInput[]
+    upsert?: StudentFilterTypeUpsertWithWhereUniqueWithoutOrganizationInput | StudentFilterTypeUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: StudentFilterTypeCreateManyOrganizationInputEnvelope
+    set?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
+    disconnect?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
+    delete?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
+    connect?: StudentFilterTypeWhereUniqueInput | StudentFilterTypeWhereUniqueInput[]
+    update?: StudentFilterTypeUpdateWithWhereUniqueWithoutOrganizationInput | StudentFilterTypeUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: StudentFilterTypeUpdateManyWithWhereWithoutOrganizationInput | StudentFilterTypeUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: StudentFilterTypeScalarWhereInput | StudentFilterTypeScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedManyWithoutLicenseInput = {
@@ -177061,6 +183152,20 @@ export namespace Prisma {
     connect?: LessonNoteWhereUniqueInput | LessonNoteWhereUniqueInput[]
   }
 
+  export type StudentFilterValueCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentFilterValueCreateWithoutStudentInput, StudentFilterValueUncheckedCreateWithoutStudentInput> | StudentFilterValueCreateWithoutStudentInput[] | StudentFilterValueUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutStudentInput | StudentFilterValueCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentFilterValueCreateManyStudentInputEnvelope
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+  }
+
+  export type StudentFilterHistoryCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentFilterHistoryCreateWithoutStudentInput, StudentFilterHistoryUncheckedCreateWithoutStudentInput> | StudentFilterHistoryCreateWithoutStudentInput[] | StudentFilterHistoryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFilterHistoryCreateOrConnectWithoutStudentInput | StudentFilterHistoryCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentFilterHistoryCreateManyStudentInputEnvelope
+    connect?: StudentFilterHistoryWhereUniqueInput | StudentFilterHistoryWhereUniqueInput[]
+  }
+
   export type StudentBatchTransferUncheckedCreateNestedManyWithoutStudentInput = {
     create?: XOR<StudentBatchTransferCreateWithoutStudentInput, StudentBatchTransferUncheckedCreateWithoutStudentInput> | StudentBatchTransferCreateWithoutStudentInput[] | StudentBatchTransferUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutStudentInput | StudentBatchTransferCreateOrConnectWithoutStudentInput[]
@@ -177171,6 +183276,20 @@ export namespace Prisma {
     connectOrCreate?: LessonNoteCreateOrConnectWithoutStudentInput | LessonNoteCreateOrConnectWithoutStudentInput[]
     createMany?: LessonNoteCreateManyStudentInputEnvelope
     connect?: LessonNoteWhereUniqueInput | LessonNoteWhereUniqueInput[]
+  }
+
+  export type StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentFilterValueCreateWithoutStudentInput, StudentFilterValueUncheckedCreateWithoutStudentInput> | StudentFilterValueCreateWithoutStudentInput[] | StudentFilterValueUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutStudentInput | StudentFilterValueCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentFilterValueCreateManyStudentInputEnvelope
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+  }
+
+  export type StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentFilterHistoryCreateWithoutStudentInput, StudentFilterHistoryUncheckedCreateWithoutStudentInput> | StudentFilterHistoryCreateWithoutStudentInput[] | StudentFilterHistoryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFilterHistoryCreateOrConnectWithoutStudentInput | StudentFilterHistoryCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentFilterHistoryCreateManyStudentInputEnvelope
+    connect?: StudentFilterHistoryWhereUniqueInput | StudentFilterHistoryWhereUniqueInput[]
   }
 
   export type StudentBatchTransferUpdateManyWithoutStudentNestedInput = {
@@ -177491,6 +183610,34 @@ export namespace Prisma {
     deleteMany?: LessonNoteScalarWhereInput | LessonNoteScalarWhereInput[]
   }
 
+  export type StudentFilterValueUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentFilterValueCreateWithoutStudentInput, StudentFilterValueUncheckedCreateWithoutStudentInput> | StudentFilterValueCreateWithoutStudentInput[] | StudentFilterValueUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutStudentInput | StudentFilterValueCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentFilterValueUpsertWithWhereUniqueWithoutStudentInput | StudentFilterValueUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentFilterValueCreateManyStudentInputEnvelope
+    set?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    disconnect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    delete?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    update?: StudentFilterValueUpdateWithWhereUniqueWithoutStudentInput | StudentFilterValueUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentFilterValueUpdateManyWithWhereWithoutStudentInput | StudentFilterValueUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentFilterValueScalarWhereInput | StudentFilterValueScalarWhereInput[]
+  }
+
+  export type StudentFilterHistoryUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentFilterHistoryCreateWithoutStudentInput, StudentFilterHistoryUncheckedCreateWithoutStudentInput> | StudentFilterHistoryCreateWithoutStudentInput[] | StudentFilterHistoryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFilterHistoryCreateOrConnectWithoutStudentInput | StudentFilterHistoryCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentFilterHistoryUpsertWithWhereUniqueWithoutStudentInput | StudentFilterHistoryUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentFilterHistoryCreateManyStudentInputEnvelope
+    set?: StudentFilterHistoryWhereUniqueInput | StudentFilterHistoryWhereUniqueInput[]
+    disconnect?: StudentFilterHistoryWhereUniqueInput | StudentFilterHistoryWhereUniqueInput[]
+    delete?: StudentFilterHistoryWhereUniqueInput | StudentFilterHistoryWhereUniqueInput[]
+    connect?: StudentFilterHistoryWhereUniqueInput | StudentFilterHistoryWhereUniqueInput[]
+    update?: StudentFilterHistoryUpdateWithWhereUniqueWithoutStudentInput | StudentFilterHistoryUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentFilterHistoryUpdateManyWithWhereWithoutStudentInput | StudentFilterHistoryUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentFilterHistoryScalarWhereInput | StudentFilterHistoryScalarWhereInput[]
+  }
+
   export type StudentBatchTransferUncheckedUpdateManyWithoutStudentNestedInput = {
     create?: XOR<StudentBatchTransferCreateWithoutStudentInput, StudentBatchTransferUncheckedCreateWithoutStudentInput> | StudentBatchTransferCreateWithoutStudentInput[] | StudentBatchTransferUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutStudentInput | StudentBatchTransferCreateOrConnectWithoutStudentInput[]
@@ -177713,6 +183860,34 @@ export namespace Prisma {
     update?: LessonNoteUpdateWithWhereUniqueWithoutStudentInput | LessonNoteUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: LessonNoteUpdateManyWithWhereWithoutStudentInput | LessonNoteUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: LessonNoteScalarWhereInput | LessonNoteScalarWhereInput[]
+  }
+
+  export type StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentFilterValueCreateWithoutStudentInput, StudentFilterValueUncheckedCreateWithoutStudentInput> | StudentFilterValueCreateWithoutStudentInput[] | StudentFilterValueUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutStudentInput | StudentFilterValueCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentFilterValueUpsertWithWhereUniqueWithoutStudentInput | StudentFilterValueUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentFilterValueCreateManyStudentInputEnvelope
+    set?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    disconnect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    delete?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    update?: StudentFilterValueUpdateWithWhereUniqueWithoutStudentInput | StudentFilterValueUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentFilterValueUpdateManyWithWhereWithoutStudentInput | StudentFilterValueUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentFilterValueScalarWhereInput | StudentFilterValueScalarWhereInput[]
+  }
+
+  export type StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentFilterHistoryCreateWithoutStudentInput, StudentFilterHistoryUncheckedCreateWithoutStudentInput> | StudentFilterHistoryCreateWithoutStudentInput[] | StudentFilterHistoryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFilterHistoryCreateOrConnectWithoutStudentInput | StudentFilterHistoryCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentFilterHistoryUpsertWithWhereUniqueWithoutStudentInput | StudentFilterHistoryUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentFilterHistoryCreateManyStudentInputEnvelope
+    set?: StudentFilterHistoryWhereUniqueInput | StudentFilterHistoryWhereUniqueInput[]
+    disconnect?: StudentFilterHistoryWhereUniqueInput | StudentFilterHistoryWhereUniqueInput[]
+    delete?: StudentFilterHistoryWhereUniqueInput | StudentFilterHistoryWhereUniqueInput[]
+    connect?: StudentFilterHistoryWhereUniqueInput | StudentFilterHistoryWhereUniqueInput[]
+    update?: StudentFilterHistoryUpdateWithWhereUniqueWithoutStudentInput | StudentFilterHistoryUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentFilterHistoryUpdateManyWithWhereWithoutStudentInput | StudentFilterHistoryUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentFilterHistoryScalarWhereInput | StudentFilterHistoryScalarWhereInput[]
   }
 
   export type StudyCenterCreateNestedOneWithoutInvoicesInput = {
@@ -184139,6 +190314,216 @@ export namespace Prisma {
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutCountriesInput, OrganizationUpdateWithoutCountriesInput>, OrganizationUncheckedUpdateWithoutCountriesInput>
   }
 
+  export type OrganizationCreateNestedOneWithoutStudentFilterTypesInput = {
+    create?: XOR<OrganizationCreateWithoutStudentFilterTypesInput, OrganizationUncheckedCreateWithoutStudentFilterTypesInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutStudentFilterTypesInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type StudentFilterOptionCreateNestedManyWithoutFilterTypeInput = {
+    create?: XOR<StudentFilterOptionCreateWithoutFilterTypeInput, StudentFilterOptionUncheckedCreateWithoutFilterTypeInput> | StudentFilterOptionCreateWithoutFilterTypeInput[] | StudentFilterOptionUncheckedCreateWithoutFilterTypeInput[]
+    connectOrCreate?: StudentFilterOptionCreateOrConnectWithoutFilterTypeInput | StudentFilterOptionCreateOrConnectWithoutFilterTypeInput[]
+    createMany?: StudentFilterOptionCreateManyFilterTypeInputEnvelope
+    connect?: StudentFilterOptionWhereUniqueInput | StudentFilterOptionWhereUniqueInput[]
+  }
+
+  export type StudentFilterValueCreateNestedManyWithoutFilterTypeInput = {
+    create?: XOR<StudentFilterValueCreateWithoutFilterTypeInput, StudentFilterValueUncheckedCreateWithoutFilterTypeInput> | StudentFilterValueCreateWithoutFilterTypeInput[] | StudentFilterValueUncheckedCreateWithoutFilterTypeInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutFilterTypeInput | StudentFilterValueCreateOrConnectWithoutFilterTypeInput[]
+    createMany?: StudentFilterValueCreateManyFilterTypeInputEnvelope
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+  }
+
+  export type StudentFilterOptionUncheckedCreateNestedManyWithoutFilterTypeInput = {
+    create?: XOR<StudentFilterOptionCreateWithoutFilterTypeInput, StudentFilterOptionUncheckedCreateWithoutFilterTypeInput> | StudentFilterOptionCreateWithoutFilterTypeInput[] | StudentFilterOptionUncheckedCreateWithoutFilterTypeInput[]
+    connectOrCreate?: StudentFilterOptionCreateOrConnectWithoutFilterTypeInput | StudentFilterOptionCreateOrConnectWithoutFilterTypeInput[]
+    createMany?: StudentFilterOptionCreateManyFilterTypeInputEnvelope
+    connect?: StudentFilterOptionWhereUniqueInput | StudentFilterOptionWhereUniqueInput[]
+  }
+
+  export type StudentFilterValueUncheckedCreateNestedManyWithoutFilterTypeInput = {
+    create?: XOR<StudentFilterValueCreateWithoutFilterTypeInput, StudentFilterValueUncheckedCreateWithoutFilterTypeInput> | StudentFilterValueCreateWithoutFilterTypeInput[] | StudentFilterValueUncheckedCreateWithoutFilterTypeInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutFilterTypeInput | StudentFilterValueCreateOrConnectWithoutFilterTypeInput[]
+    createMany?: StudentFilterValueCreateManyFilterTypeInputEnvelope
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutStudentFilterTypesNestedInput = {
+    create?: XOR<OrganizationCreateWithoutStudentFilterTypesInput, OrganizationUncheckedCreateWithoutStudentFilterTypesInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutStudentFilterTypesInput
+    upsert?: OrganizationUpsertWithoutStudentFilterTypesInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutStudentFilterTypesInput, OrganizationUpdateWithoutStudentFilterTypesInput>, OrganizationUncheckedUpdateWithoutStudentFilterTypesInput>
+  }
+
+  export type StudentFilterOptionUpdateManyWithoutFilterTypeNestedInput = {
+    create?: XOR<StudentFilterOptionCreateWithoutFilterTypeInput, StudentFilterOptionUncheckedCreateWithoutFilterTypeInput> | StudentFilterOptionCreateWithoutFilterTypeInput[] | StudentFilterOptionUncheckedCreateWithoutFilterTypeInput[]
+    connectOrCreate?: StudentFilterOptionCreateOrConnectWithoutFilterTypeInput | StudentFilterOptionCreateOrConnectWithoutFilterTypeInput[]
+    upsert?: StudentFilterOptionUpsertWithWhereUniqueWithoutFilterTypeInput | StudentFilterOptionUpsertWithWhereUniqueWithoutFilterTypeInput[]
+    createMany?: StudentFilterOptionCreateManyFilterTypeInputEnvelope
+    set?: StudentFilterOptionWhereUniqueInput | StudentFilterOptionWhereUniqueInput[]
+    disconnect?: StudentFilterOptionWhereUniqueInput | StudentFilterOptionWhereUniqueInput[]
+    delete?: StudentFilterOptionWhereUniqueInput | StudentFilterOptionWhereUniqueInput[]
+    connect?: StudentFilterOptionWhereUniqueInput | StudentFilterOptionWhereUniqueInput[]
+    update?: StudentFilterOptionUpdateWithWhereUniqueWithoutFilterTypeInput | StudentFilterOptionUpdateWithWhereUniqueWithoutFilterTypeInput[]
+    updateMany?: StudentFilterOptionUpdateManyWithWhereWithoutFilterTypeInput | StudentFilterOptionUpdateManyWithWhereWithoutFilterTypeInput[]
+    deleteMany?: StudentFilterOptionScalarWhereInput | StudentFilterOptionScalarWhereInput[]
+  }
+
+  export type StudentFilterValueUpdateManyWithoutFilterTypeNestedInput = {
+    create?: XOR<StudentFilterValueCreateWithoutFilterTypeInput, StudentFilterValueUncheckedCreateWithoutFilterTypeInput> | StudentFilterValueCreateWithoutFilterTypeInput[] | StudentFilterValueUncheckedCreateWithoutFilterTypeInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutFilterTypeInput | StudentFilterValueCreateOrConnectWithoutFilterTypeInput[]
+    upsert?: StudentFilterValueUpsertWithWhereUniqueWithoutFilterTypeInput | StudentFilterValueUpsertWithWhereUniqueWithoutFilterTypeInput[]
+    createMany?: StudentFilterValueCreateManyFilterTypeInputEnvelope
+    set?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    disconnect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    delete?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    update?: StudentFilterValueUpdateWithWhereUniqueWithoutFilterTypeInput | StudentFilterValueUpdateWithWhereUniqueWithoutFilterTypeInput[]
+    updateMany?: StudentFilterValueUpdateManyWithWhereWithoutFilterTypeInput | StudentFilterValueUpdateManyWithWhereWithoutFilterTypeInput[]
+    deleteMany?: StudentFilterValueScalarWhereInput | StudentFilterValueScalarWhereInput[]
+  }
+
+  export type StudentFilterOptionUncheckedUpdateManyWithoutFilterTypeNestedInput = {
+    create?: XOR<StudentFilterOptionCreateWithoutFilterTypeInput, StudentFilterOptionUncheckedCreateWithoutFilterTypeInput> | StudentFilterOptionCreateWithoutFilterTypeInput[] | StudentFilterOptionUncheckedCreateWithoutFilterTypeInput[]
+    connectOrCreate?: StudentFilterOptionCreateOrConnectWithoutFilterTypeInput | StudentFilterOptionCreateOrConnectWithoutFilterTypeInput[]
+    upsert?: StudentFilterOptionUpsertWithWhereUniqueWithoutFilterTypeInput | StudentFilterOptionUpsertWithWhereUniqueWithoutFilterTypeInput[]
+    createMany?: StudentFilterOptionCreateManyFilterTypeInputEnvelope
+    set?: StudentFilterOptionWhereUniqueInput | StudentFilterOptionWhereUniqueInput[]
+    disconnect?: StudentFilterOptionWhereUniqueInput | StudentFilterOptionWhereUniqueInput[]
+    delete?: StudentFilterOptionWhereUniqueInput | StudentFilterOptionWhereUniqueInput[]
+    connect?: StudentFilterOptionWhereUniqueInput | StudentFilterOptionWhereUniqueInput[]
+    update?: StudentFilterOptionUpdateWithWhereUniqueWithoutFilterTypeInput | StudentFilterOptionUpdateWithWhereUniqueWithoutFilterTypeInput[]
+    updateMany?: StudentFilterOptionUpdateManyWithWhereWithoutFilterTypeInput | StudentFilterOptionUpdateManyWithWhereWithoutFilterTypeInput[]
+    deleteMany?: StudentFilterOptionScalarWhereInput | StudentFilterOptionScalarWhereInput[]
+  }
+
+  export type StudentFilterValueUncheckedUpdateManyWithoutFilterTypeNestedInput = {
+    create?: XOR<StudentFilterValueCreateWithoutFilterTypeInput, StudentFilterValueUncheckedCreateWithoutFilterTypeInput> | StudentFilterValueCreateWithoutFilterTypeInput[] | StudentFilterValueUncheckedCreateWithoutFilterTypeInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutFilterTypeInput | StudentFilterValueCreateOrConnectWithoutFilterTypeInput[]
+    upsert?: StudentFilterValueUpsertWithWhereUniqueWithoutFilterTypeInput | StudentFilterValueUpsertWithWhereUniqueWithoutFilterTypeInput[]
+    createMany?: StudentFilterValueCreateManyFilterTypeInputEnvelope
+    set?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    disconnect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    delete?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    update?: StudentFilterValueUpdateWithWhereUniqueWithoutFilterTypeInput | StudentFilterValueUpdateWithWhereUniqueWithoutFilterTypeInput[]
+    updateMany?: StudentFilterValueUpdateManyWithWhereWithoutFilterTypeInput | StudentFilterValueUpdateManyWithWhereWithoutFilterTypeInput[]
+    deleteMany?: StudentFilterValueScalarWhereInput | StudentFilterValueScalarWhereInput[]
+  }
+
+  export type StudentFilterTypeCreateNestedOneWithoutOptionsInput = {
+    create?: XOR<StudentFilterTypeCreateWithoutOptionsInput, StudentFilterTypeUncheckedCreateWithoutOptionsInput>
+    connectOrCreate?: StudentFilterTypeCreateOrConnectWithoutOptionsInput
+    connect?: StudentFilterTypeWhereUniqueInput
+  }
+
+  export type StudentFilterValueCreateNestedManyWithoutOptionInput = {
+    create?: XOR<StudentFilterValueCreateWithoutOptionInput, StudentFilterValueUncheckedCreateWithoutOptionInput> | StudentFilterValueCreateWithoutOptionInput[] | StudentFilterValueUncheckedCreateWithoutOptionInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutOptionInput | StudentFilterValueCreateOrConnectWithoutOptionInput[]
+    createMany?: StudentFilterValueCreateManyOptionInputEnvelope
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+  }
+
+  export type StudentFilterValueUncheckedCreateNestedManyWithoutOptionInput = {
+    create?: XOR<StudentFilterValueCreateWithoutOptionInput, StudentFilterValueUncheckedCreateWithoutOptionInput> | StudentFilterValueCreateWithoutOptionInput[] | StudentFilterValueUncheckedCreateWithoutOptionInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutOptionInput | StudentFilterValueCreateOrConnectWithoutOptionInput[]
+    createMany?: StudentFilterValueCreateManyOptionInputEnvelope
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+  }
+
+  export type StudentFilterTypeUpdateOneRequiredWithoutOptionsNestedInput = {
+    create?: XOR<StudentFilterTypeCreateWithoutOptionsInput, StudentFilterTypeUncheckedCreateWithoutOptionsInput>
+    connectOrCreate?: StudentFilterTypeCreateOrConnectWithoutOptionsInput
+    upsert?: StudentFilterTypeUpsertWithoutOptionsInput
+    connect?: StudentFilterTypeWhereUniqueInput
+    update?: XOR<XOR<StudentFilterTypeUpdateToOneWithWhereWithoutOptionsInput, StudentFilterTypeUpdateWithoutOptionsInput>, StudentFilterTypeUncheckedUpdateWithoutOptionsInput>
+  }
+
+  export type StudentFilterValueUpdateManyWithoutOptionNestedInput = {
+    create?: XOR<StudentFilterValueCreateWithoutOptionInput, StudentFilterValueUncheckedCreateWithoutOptionInput> | StudentFilterValueCreateWithoutOptionInput[] | StudentFilterValueUncheckedCreateWithoutOptionInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutOptionInput | StudentFilterValueCreateOrConnectWithoutOptionInput[]
+    upsert?: StudentFilterValueUpsertWithWhereUniqueWithoutOptionInput | StudentFilterValueUpsertWithWhereUniqueWithoutOptionInput[]
+    createMany?: StudentFilterValueCreateManyOptionInputEnvelope
+    set?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    disconnect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    delete?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    update?: StudentFilterValueUpdateWithWhereUniqueWithoutOptionInput | StudentFilterValueUpdateWithWhereUniqueWithoutOptionInput[]
+    updateMany?: StudentFilterValueUpdateManyWithWhereWithoutOptionInput | StudentFilterValueUpdateManyWithWhereWithoutOptionInput[]
+    deleteMany?: StudentFilterValueScalarWhereInput | StudentFilterValueScalarWhereInput[]
+  }
+
+  export type StudentFilterValueUncheckedUpdateManyWithoutOptionNestedInput = {
+    create?: XOR<StudentFilterValueCreateWithoutOptionInput, StudentFilterValueUncheckedCreateWithoutOptionInput> | StudentFilterValueCreateWithoutOptionInput[] | StudentFilterValueUncheckedCreateWithoutOptionInput[]
+    connectOrCreate?: StudentFilterValueCreateOrConnectWithoutOptionInput | StudentFilterValueCreateOrConnectWithoutOptionInput[]
+    upsert?: StudentFilterValueUpsertWithWhereUniqueWithoutOptionInput | StudentFilterValueUpsertWithWhereUniqueWithoutOptionInput[]
+    createMany?: StudentFilterValueCreateManyOptionInputEnvelope
+    set?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    disconnect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    delete?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    connect?: StudentFilterValueWhereUniqueInput | StudentFilterValueWhereUniqueInput[]
+    update?: StudentFilterValueUpdateWithWhereUniqueWithoutOptionInput | StudentFilterValueUpdateWithWhereUniqueWithoutOptionInput[]
+    updateMany?: StudentFilterValueUpdateManyWithWhereWithoutOptionInput | StudentFilterValueUpdateManyWithWhereWithoutOptionInput[]
+    deleteMany?: StudentFilterValueScalarWhereInput | StudentFilterValueScalarWhereInput[]
+  }
+
+  export type StudentCreateNestedOneWithoutFilterValuesInput = {
+    create?: XOR<StudentCreateWithoutFilterValuesInput, StudentUncheckedCreateWithoutFilterValuesInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutFilterValuesInput
+    connect?: StudentWhereUniqueInput
+  }
+
+  export type StudentFilterTypeCreateNestedOneWithoutValuesInput = {
+    create?: XOR<StudentFilterTypeCreateWithoutValuesInput, StudentFilterTypeUncheckedCreateWithoutValuesInput>
+    connectOrCreate?: StudentFilterTypeCreateOrConnectWithoutValuesInput
+    connect?: StudentFilterTypeWhereUniqueInput
+  }
+
+  export type StudentFilterOptionCreateNestedOneWithoutValuesInput = {
+    create?: XOR<StudentFilterOptionCreateWithoutValuesInput, StudentFilterOptionUncheckedCreateWithoutValuesInput>
+    connectOrCreate?: StudentFilterOptionCreateOrConnectWithoutValuesInput
+    connect?: StudentFilterOptionWhereUniqueInput
+  }
+
+  export type StudentUpdateOneRequiredWithoutFilterValuesNestedInput = {
+    create?: XOR<StudentCreateWithoutFilterValuesInput, StudentUncheckedCreateWithoutFilterValuesInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutFilterValuesInput
+    upsert?: StudentUpsertWithoutFilterValuesInput
+    connect?: StudentWhereUniqueInput
+    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutFilterValuesInput, StudentUpdateWithoutFilterValuesInput>, StudentUncheckedUpdateWithoutFilterValuesInput>
+  }
+
+  export type StudentFilterTypeUpdateOneRequiredWithoutValuesNestedInput = {
+    create?: XOR<StudentFilterTypeCreateWithoutValuesInput, StudentFilterTypeUncheckedCreateWithoutValuesInput>
+    connectOrCreate?: StudentFilterTypeCreateOrConnectWithoutValuesInput
+    upsert?: StudentFilterTypeUpsertWithoutValuesInput
+    connect?: StudentFilterTypeWhereUniqueInput
+    update?: XOR<XOR<StudentFilterTypeUpdateToOneWithWhereWithoutValuesInput, StudentFilterTypeUpdateWithoutValuesInput>, StudentFilterTypeUncheckedUpdateWithoutValuesInput>
+  }
+
+  export type StudentFilterOptionUpdateOneRequiredWithoutValuesNestedInput = {
+    create?: XOR<StudentFilterOptionCreateWithoutValuesInput, StudentFilterOptionUncheckedCreateWithoutValuesInput>
+    connectOrCreate?: StudentFilterOptionCreateOrConnectWithoutValuesInput
+    upsert?: StudentFilterOptionUpsertWithoutValuesInput
+    connect?: StudentFilterOptionWhereUniqueInput
+    update?: XOR<XOR<StudentFilterOptionUpdateToOneWithWhereWithoutValuesInput, StudentFilterOptionUpdateWithoutValuesInput>, StudentFilterOptionUncheckedUpdateWithoutValuesInput>
+  }
+
+  export type StudentCreateNestedOneWithoutFilterHistoryInput = {
+    create?: XOR<StudentCreateWithoutFilterHistoryInput, StudentUncheckedCreateWithoutFilterHistoryInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutFilterHistoryInput
+    connect?: StudentWhereUniqueInput
+  }
+
+  export type StudentUpdateOneRequiredWithoutFilterHistoryNestedInput = {
+    create?: XOR<StudentCreateWithoutFilterHistoryInput, StudentUncheckedCreateWithoutFilterHistoryInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutFilterHistoryInput
+    upsert?: StudentUpsertWithoutFilterHistoryInput
+    connect?: StudentWhereUniqueInput
+    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutFilterHistoryInput, StudentUpdateWithoutFilterHistoryInput>, StudentUncheckedUpdateWithoutFilterHistoryInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -187316,6 +193701,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutOrganizationInput = {
@@ -187386,6 +193773,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutOrganizationInput = {
@@ -188723,6 +195112,40 @@ export namespace Prisma {
 
   export type StudentVideoLogCreateManyOrganizationInputEnvelope = {
     data: StudentVideoLogCreateManyOrganizationInput | StudentVideoLogCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentFilterTypeCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    sortOrder?: number
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    options?: StudentFilterOptionCreateNestedManyWithoutFilterTypeInput
+    values?: StudentFilterValueCreateNestedManyWithoutFilterTypeInput
+  }
+
+  export type StudentFilterTypeUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    sortOrder?: number
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    options?: StudentFilterOptionUncheckedCreateNestedManyWithoutFilterTypeInput
+    values?: StudentFilterValueUncheckedCreateNestedManyWithoutFilterTypeInput
+  }
+
+  export type StudentFilterTypeCreateOrConnectWithoutOrganizationInput = {
+    where: StudentFilterTypeWhereUniqueInput
+    create: XOR<StudentFilterTypeCreateWithoutOrganizationInput, StudentFilterTypeUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type StudentFilterTypeCreateManyOrganizationInputEnvelope = {
+    data: StudentFilterTypeCreateManyOrganizationInput | StudentFilterTypeCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -191708,6 +198131,36 @@ export namespace Prisma {
     organizationId?: StringFilter<"StudentVideoLog"> | string
   }
 
+  export type StudentFilterTypeUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: StudentFilterTypeWhereUniqueInput
+    update: XOR<StudentFilterTypeUpdateWithoutOrganizationInput, StudentFilterTypeUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<StudentFilterTypeCreateWithoutOrganizationInput, StudentFilterTypeUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type StudentFilterTypeUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: StudentFilterTypeWhereUniqueInput
+    data: XOR<StudentFilterTypeUpdateWithoutOrganizationInput, StudentFilterTypeUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type StudentFilterTypeUpdateManyWithWhereWithoutOrganizationInput = {
+    where: StudentFilterTypeScalarWhereInput
+    data: XOR<StudentFilterTypeUpdateManyMutationInput, StudentFilterTypeUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type StudentFilterTypeScalarWhereInput = {
+    AND?: StudentFilterTypeScalarWhereInput | StudentFilterTypeScalarWhereInput[]
+    OR?: StudentFilterTypeScalarWhereInput[]
+    NOT?: StudentFilterTypeScalarWhereInput | StudentFilterTypeScalarWhereInput[]
+    id?: StringFilter<"StudentFilterType"> | string
+    organizationId?: StringFilter<"StudentFilterType"> | string
+    name?: StringFilter<"StudentFilterType"> | string
+    isActive?: BoolFilter<"StudentFilterType"> | boolean
+    sortOrder?: IntFilter<"StudentFilterType"> | number
+    createdBy?: StringNullableFilter<"StudentFilterType"> | string | null
+    createdAt?: DateTimeFilter<"StudentFilterType"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentFilterType"> | Date | string
+  }
+
   export type OrganizationCreateWithoutLicenseInput = {
     id?: string
     name: string
@@ -191804,6 +198257,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLicenseInput = {
@@ -191902,6 +198356,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLicenseInput = {
@@ -192419,6 +198874,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDepartmentsInput = {
@@ -192517,6 +198973,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDepartmentsInput = {
@@ -193870,6 +200327,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDepartmentsInput = {
@@ -193968,6 +200426,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutChildDepartmentsInput = {
@@ -197537,6 +203996,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutUserInput = {
@@ -197607,6 +204068,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutUserInput = {
@@ -197682,6 +204145,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutEnrolledByUserInput = {
@@ -197752,6 +204217,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutEnrolledByUserInput = {
@@ -197832,6 +204299,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutReferrerInput = {
@@ -197902,6 +204371,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutReferrerInput = {
@@ -198730,6 +205201,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUsersInput = {
@@ -198828,6 +205300,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUsersInput = {
@@ -201161,6 +207634,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutUserInput = {
@@ -201231,6 +207706,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUpsertWithWhereUniqueWithoutEnrolledByUserInput = {
@@ -201650,6 +208127,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUsersInput = {
@@ -201748,6 +208226,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSubordinatesInput = {
@@ -202487,6 +208966,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeesInput = {
@@ -202585,6 +209065,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeesInput = {
@@ -202936,6 +209417,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
@@ -203034,6 +209516,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileInput = {
@@ -204195,6 +210678,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTasksInput = {
@@ -204293,6 +210777,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTasksInput = {
@@ -205215,6 +211700,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTasksInput = {
@@ -205313,6 +211799,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutAttendancesInput = {
@@ -205648,6 +212135,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAttendancesInput = {
@@ -205746,6 +212234,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAttendancesInput = {
@@ -206103,6 +212592,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAttendancesInput = {
@@ -206201,6 +212691,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AdmissionSessionCreateWithoutUniversityInput = {
@@ -206449,6 +212940,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutUniversityInput = {
@@ -206519,6 +213012,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutUniversityInput = {
@@ -206627,6 +213122,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversitiesInput = {
@@ -206725,6 +213221,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversitiesInput = {
@@ -207422,6 +213919,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversitiesInput = {
@@ -207520,6 +214018,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityAuthFeeUpsertWithWhereUniqueWithoutUniversityInput = {
@@ -207988,6 +214487,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramsInput = {
@@ -208086,6 +214586,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramsInput = {
@@ -208312,6 +214813,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutProgramInput = {
@@ -208382,6 +214885,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutProgramInput = {
@@ -208681,6 +215186,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramsInput = {
@@ -208779,6 +215285,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutProgramsInput = {
@@ -209382,6 +215889,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutCenterInput = {
@@ -209452,6 +215961,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutCenterInput = {
@@ -209797,6 +216308,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCentersInput = {
@@ -209895,6 +216407,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCentersInput = {
@@ -211364,6 +217877,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCentersInput = {
@@ -211462,6 +217976,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredStudyCentersInput = {
@@ -213280,6 +219795,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentsInput = {
@@ -213378,6 +219894,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentsInput = {
@@ -213998,6 +220515,68 @@ export namespace Prisma {
 
   export type LessonNoteCreateManyStudentInputEnvelope = {
     data: LessonNoteCreateManyStudentInput | LessonNoteCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentFilterValueCreateWithoutStudentInput = {
+    id?: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    filterType: StudentFilterTypeCreateNestedOneWithoutValuesInput
+    option: StudentFilterOptionCreateNestedOneWithoutValuesInput
+  }
+
+  export type StudentFilterValueUncheckedCreateWithoutStudentInput = {
+    id?: string
+    filterTypeId: string
+    optionId: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterValueCreateOrConnectWithoutStudentInput = {
+    where: StudentFilterValueWhereUniqueInput
+    create: XOR<StudentFilterValueCreateWithoutStudentInput, StudentFilterValueUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentFilterValueCreateManyStudentInputEnvelope = {
+    data: StudentFilterValueCreateManyStudentInput | StudentFilterValueCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentFilterHistoryCreateWithoutStudentInput = {
+    id?: string
+    organizationId: string
+    filterTypeId: string
+    filterName: string
+    fromLabel?: string | null
+    toLabel?: string | null
+    note?: string | null
+    changedBy?: string | null
+    changedByName?: string | null
+    changedAt?: Date | string
+  }
+
+  export type StudentFilterHistoryUncheckedCreateWithoutStudentInput = {
+    id?: string
+    organizationId: string
+    filterTypeId: string
+    filterName: string
+    fromLabel?: string | null
+    toLabel?: string | null
+    note?: string | null
+    changedBy?: string | null
+    changedByName?: string | null
+    changedAt?: Date | string
+  }
+
+  export type StudentFilterHistoryCreateOrConnectWithoutStudentInput = {
+    where: StudentFilterHistoryWhereUniqueInput
+    create: XOR<StudentFilterHistoryCreateWithoutStudentInput, StudentFilterHistoryUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentFilterHistoryCreateManyStudentInputEnvelope = {
+    data: StudentFilterHistoryCreateManyStudentInput | StudentFilterHistoryCreateManyStudentInput[]
     skipDuplicates?: boolean
   }
 
@@ -214935,6 +221514,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentsInput = {
@@ -215033,6 +221613,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutStudentsInput = {
@@ -215580,6 +222161,67 @@ export namespace Prisma {
     data: XOR<LessonNoteUpdateManyMutationInput, LessonNoteUncheckedUpdateManyWithoutStudentInput>
   }
 
+  export type StudentFilterValueUpsertWithWhereUniqueWithoutStudentInput = {
+    where: StudentFilterValueWhereUniqueInput
+    update: XOR<StudentFilterValueUpdateWithoutStudentInput, StudentFilterValueUncheckedUpdateWithoutStudentInput>
+    create: XOR<StudentFilterValueCreateWithoutStudentInput, StudentFilterValueUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentFilterValueUpdateWithWhereUniqueWithoutStudentInput = {
+    where: StudentFilterValueWhereUniqueInput
+    data: XOR<StudentFilterValueUpdateWithoutStudentInput, StudentFilterValueUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type StudentFilterValueUpdateManyWithWhereWithoutStudentInput = {
+    where: StudentFilterValueScalarWhereInput
+    data: XOR<StudentFilterValueUpdateManyMutationInput, StudentFilterValueUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type StudentFilterValueScalarWhereInput = {
+    AND?: StudentFilterValueScalarWhereInput | StudentFilterValueScalarWhereInput[]
+    OR?: StudentFilterValueScalarWhereInput[]
+    NOT?: StudentFilterValueScalarWhereInput | StudentFilterValueScalarWhereInput[]
+    id?: StringFilter<"StudentFilterValue"> | string
+    studentId?: StringFilter<"StudentFilterValue"> | string
+    filterTypeId?: StringFilter<"StudentFilterValue"> | string
+    optionId?: StringFilter<"StudentFilterValue"> | string
+    updatedBy?: StringNullableFilter<"StudentFilterValue"> | string | null
+    updatedAt?: DateTimeFilter<"StudentFilterValue"> | Date | string
+  }
+
+  export type StudentFilterHistoryUpsertWithWhereUniqueWithoutStudentInput = {
+    where: StudentFilterHistoryWhereUniqueInput
+    update: XOR<StudentFilterHistoryUpdateWithoutStudentInput, StudentFilterHistoryUncheckedUpdateWithoutStudentInput>
+    create: XOR<StudentFilterHistoryCreateWithoutStudentInput, StudentFilterHistoryUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentFilterHistoryUpdateWithWhereUniqueWithoutStudentInput = {
+    where: StudentFilterHistoryWhereUniqueInput
+    data: XOR<StudentFilterHistoryUpdateWithoutStudentInput, StudentFilterHistoryUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type StudentFilterHistoryUpdateManyWithWhereWithoutStudentInput = {
+    where: StudentFilterHistoryScalarWhereInput
+    data: XOR<StudentFilterHistoryUpdateManyMutationInput, StudentFilterHistoryUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type StudentFilterHistoryScalarWhereInput = {
+    AND?: StudentFilterHistoryScalarWhereInput | StudentFilterHistoryScalarWhereInput[]
+    OR?: StudentFilterHistoryScalarWhereInput[]
+    NOT?: StudentFilterHistoryScalarWhereInput | StudentFilterHistoryScalarWhereInput[]
+    id?: StringFilter<"StudentFilterHistory"> | string
+    organizationId?: StringFilter<"StudentFilterHistory"> | string
+    studentId?: StringFilter<"StudentFilterHistory"> | string
+    filterTypeId?: StringFilter<"StudentFilterHistory"> | string
+    filterName?: StringFilter<"StudentFilterHistory"> | string
+    fromLabel?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    toLabel?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    note?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    changedBy?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    changedByName?: StringNullableFilter<"StudentFilterHistory"> | string | null
+    changedAt?: DateTimeFilter<"StudentFilterHistory"> | Date | string
+  }
+
   export type StudyCenterCreateWithoutInvoicesInput = {
     id?: string
     name: string
@@ -215767,6 +222409,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInvoicesInput = {
@@ -215865,6 +222508,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInvoicesInput = {
@@ -215979,6 +222623,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutInvoicesInput = {
@@ -216049,6 +222695,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutInvoicesInput = {
@@ -216296,6 +222944,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
@@ -216394,6 +223043,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type PaymentScheduleUpsertWithoutInvoicesInput = {
@@ -216520,6 +223170,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutInvoicesInput = {
@@ -216590,6 +223242,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type PaymentEntryUpsertWithWhereUniqueWithoutInvoiceInput = {
@@ -216704,6 +223358,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeadsInput = {
@@ -216802,6 +223457,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeadsInput = {
@@ -217153,6 +223809,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeadsInput = {
@@ -217251,6 +223908,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredLeadsInput = {
@@ -217829,6 +224487,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutComplaintsInput = {
@@ -217927,6 +224586,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutComplaintsInput = {
@@ -218284,6 +224944,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutComplaintsInput = {
@@ -218382,6 +225043,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutNotificationsInput = {
@@ -218480,6 +225142,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutNotificationsInput = {
@@ -218578,6 +225241,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutNotificationsInput = {
@@ -218929,6 +225593,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
@@ -219027,6 +225692,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -219368,6 +226034,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuditLogsInput = {
@@ -219466,6 +226133,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuditLogsInput = {
@@ -219817,6 +226485,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuditLogsInput = {
@@ -219915,6 +226584,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutAuditLogsInput = {
@@ -220313,6 +226983,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAnnouncementsInput = {
@@ -220411,6 +227082,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAnnouncementsInput = {
@@ -220825,6 +227497,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAnnouncementsInput = {
@@ -220923,6 +227596,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutPostedAnnouncementsInput = {
@@ -221264,6 +227938,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHolidaysInput = {
@@ -221362,6 +228037,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHolidaysInput = {
@@ -221476,6 +228152,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
@@ -221574,6 +228251,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentCreateWithoutLeaveRequestsInput = {
@@ -222440,6 +229118,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveRequestsInput = {
@@ -222538,6 +229217,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveRequestsInput = {
@@ -223444,6 +230124,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -223542,6 +230223,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutSalaryApprovedInput = {
@@ -224114,6 +230796,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSalaryConfigsInput = {
@@ -224212,6 +230895,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSalaryConfigsInput = {
@@ -225049,6 +231733,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSalaryConfigsInput = {
@@ -225147,6 +231832,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSalaryConfigInput = {
@@ -226199,6 +232885,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollsInput = {
@@ -226297,6 +232984,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollsInput = {
@@ -227614,6 +234302,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollsInput = {
@@ -227712,6 +234401,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutProcessedPayrollsInput = {
@@ -228590,6 +235280,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBranchesInput = {
@@ -228688,6 +235379,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBranchesInput = {
@@ -228866,6 +235558,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutBranchInput = {
@@ -228936,6 +235630,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutBranchInput = {
@@ -229734,6 +236430,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBranchesInput = {
@@ -229832,6 +236529,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSalesBranchInput = {
@@ -230428,6 +237126,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSubDepartmentsInput = {
@@ -230526,6 +237225,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSubDepartmentsInput = {
@@ -231413,6 +238113,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSubDepartmentsInput = {
@@ -231511,6 +238212,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSubDepartmentsInput = {
@@ -231842,6 +238544,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDesignationsInput = {
@@ -231940,6 +238643,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDesignationsInput = {
@@ -232537,6 +239241,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDesignationsInput = {
@@ -232635,6 +239340,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DesignationUpsertWithoutChildDesignationsInput = {
@@ -233096,6 +239802,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutMeetingsInput = {
@@ -233194,6 +239901,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutMeetingsInput = {
@@ -233551,6 +240259,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutMeetingsInput = {
@@ -233649,6 +240358,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentCreateWithoutVacanciesInput = {
@@ -233804,6 +240514,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutVacanciesInput = {
@@ -233902,6 +240613,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutVacanciesInput = {
@@ -234079,6 +240791,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutVacanciesInput = {
@@ -234177,6 +240890,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutApprovedSessionsInput = {
@@ -234749,6 +241463,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionsInput = {
@@ -234847,6 +241562,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionsInput = {
@@ -235364,6 +242080,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutSessionInput = {
@@ -235434,6 +242152,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutSessionInput = {
@@ -236039,6 +242759,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionsInput = {
@@ -236137,6 +242858,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutAdmissionSessionsInput = {
@@ -237021,6 +243743,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEnrollmentsInput = {
@@ -237119,6 +243842,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEnrollmentsInput = {
@@ -237772,6 +244496,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutEnrollmentsInput = {
@@ -237842,6 +244568,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutEnrollmentsInput = {
@@ -238795,6 +245523,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEnrollmentsInput = {
@@ -238893,6 +245622,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutEnrollmentsInput = {
@@ -239576,6 +246306,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutEnrollmentsInput = {
@@ -239646,6 +246378,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudyCenterUpsertWithoutEnrollmentsInput = {
@@ -240589,6 +247323,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutExpenseClaimsInput = {
@@ -240687,6 +247422,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutExpenseClaimsInput = {
@@ -241287,6 +248023,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -241385,6 +248122,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type EnrollmentPaymentCreateWithoutWalletInput = {
@@ -241513,6 +248251,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCenterWalletsInput = {
@@ -241611,6 +248350,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCenterWalletsInput = {
@@ -241832,6 +248572,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCenterWalletsInput = {
@@ -241930,6 +248671,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletInput = {
@@ -242125,6 +248867,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutWalletTopUpsInput = {
@@ -242223,6 +248966,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutWalletTopUpsInput = {
@@ -242665,6 +249409,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutWalletTopUpsInput = {
@@ -242763,6 +249508,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletTopUpsInput = {
@@ -243244,6 +249990,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentsInput = {
@@ -243342,6 +250089,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentsInput = {
@@ -243742,6 +250490,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
@@ -243840,6 +250589,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReceivedPaymentsInput = {
@@ -244418,6 +251168,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutGstSettingsInput = {
@@ -244516,6 +251267,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutGstSettingsInput = {
@@ -244873,6 +251625,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutGstSettingsInput = {
@@ -244971,6 +251724,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutEmployeeProfilesInput = {
@@ -245069,6 +251823,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeeProfilesInput = {
@@ -245167,6 +251922,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeeProfilesInput = {
@@ -245518,6 +252274,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeeProfilesInput = {
@@ -245616,6 +252373,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileDetailInput = {
@@ -245957,6 +252715,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHrSettingsInput = {
@@ -246055,6 +252814,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHrSettingsInput = {
@@ -246169,6 +252929,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHrSettingsInput = {
@@ -246267,6 +253028,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutCeoPanelsInput = {
@@ -246365,6 +253127,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCeoPanelsInput = {
@@ -246463,6 +253226,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCeoPanelsInput = {
@@ -246814,6 +253578,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCeoPanelsInput = {
@@ -246912,6 +253677,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCeoPanelInput = {
@@ -247253,6 +254019,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCredentialRequestsInput = {
@@ -247351,6 +254118,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCredentialRequestsInput = {
@@ -247939,6 +254707,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCredentialRequestsInput = {
@@ -248037,6 +254806,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCredentialResponderInput = {
@@ -248621,6 +255391,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEditDeleteRequestsInput = {
@@ -248719,6 +255490,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEditDeleteRequestsInput = {
@@ -249362,6 +256134,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEditDeleteRequestsInput = {
@@ -249460,6 +256233,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteResponderInput = {
@@ -250816,6 +257590,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationsInput = {
@@ -250914,6 +257689,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationsInput = {
@@ -252071,6 +258847,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationsInput = {
@@ -252169,6 +258946,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutResolvedEscalationsInput = {
@@ -252630,6 +259408,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationLogsInput = {
@@ -252728,6 +259507,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationLogsInput = {
@@ -252895,6 +259675,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationLogsInput = {
@@ -252993,6 +259774,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutEnteredMarksInput = {
@@ -253328,6 +260110,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInternalMarksInput = {
@@ -253426,6 +260209,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInternalMarksInput = {
@@ -253501,6 +260285,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutInternalMarksInput = {
@@ -253571,6 +260357,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutInternalMarksInput = {
@@ -254019,6 +260807,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInternalMarksInput = {
@@ -254117,6 +260906,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutInternalMarksInput = {
@@ -254198,6 +260988,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutInternalMarksInput = {
@@ -254268,6 +261060,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudyCenterUpsertWithoutInternalMarksInput = {
@@ -254700,6 +261494,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -254798,6 +261593,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -255392,6 +262188,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -255490,6 +262287,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutLeaveAllocationsInput = {
@@ -256068,6 +262866,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollBatchesInput = {
@@ -256166,6 +262965,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollBatchesInput = {
@@ -256997,6 +263797,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollBatchesInput = {
@@ -257095,6 +263896,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutBatchRejectedInput = {
@@ -257916,6 +264718,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPollsInput = {
@@ -258014,6 +264817,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPollsInput = {
@@ -258371,6 +265175,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPollsInput = {
@@ -258469,6 +265274,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutProgramAllocationsInput = {
@@ -259132,6 +265938,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramAllocationsInput = {
@@ -259230,6 +266037,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramAllocationsInput = {
@@ -259980,6 +266788,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -260078,6 +266887,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutProgramAllocationsInput = {
@@ -260235,6 +267045,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReferralLinksInput = {
@@ -260333,6 +267144,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReferralLinksInput = {
@@ -260684,6 +267496,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReferralLinksInput = {
@@ -260782,6 +267595,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferralLinkInput = {
@@ -261123,6 +267937,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReregRulesInput = {
@@ -261221,6 +268036,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReregRulesInput = {
@@ -261388,6 +268204,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReregRulesInput = {
@@ -261486,6 +268303,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutReregRulesInput = {
@@ -261971,6 +268789,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionReqsInput = {
@@ -262069,6 +268888,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionReqsInput = {
@@ -262760,6 +269580,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionReqsInput = {
@@ -262858,6 +269679,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSessionRequestsInput = {
@@ -263248,6 +270070,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -263346,6 +270169,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -263752,6 +270576,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -263850,6 +270675,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutStudyCenterInvitesInput = {
@@ -264576,6 +271402,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTargetsInput = {
@@ -264674,6 +271501,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTargetsInput = {
@@ -265191,6 +272019,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTargetsInput = {
@@ -265289,6 +272118,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutConfiguredAuthFeesInput = {
@@ -265624,6 +272454,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuthFeesInput = {
@@ -265722,6 +272553,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuthFeesInput = {
@@ -266134,6 +272966,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuthFeesInput = {
@@ -266232,6 +273065,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutAuthFeesInput = {
@@ -266628,6 +273462,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutFeeStructuresInput = {
@@ -266726,6 +273561,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutFeeStructuresInput = {
@@ -267242,6 +274078,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutFeeStructuresInput = {
@@ -267340,6 +274177,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutFeeStructuresInput = {
@@ -267615,6 +274453,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCommissionsInput = {
@@ -267713,6 +274552,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCommissionsInput = {
@@ -267788,6 +274628,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutCommissionsInput = {
@@ -267858,6 +274700,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutCommissionsInput = {
@@ -268027,6 +274871,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCommissionsInput = {
@@ -268125,6 +274970,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutCommissionsInput = {
@@ -268206,6 +275052,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutCommissionsInput = {
@@ -268276,6 +275124,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UniversityUpsertWithoutCommissionsInput = {
@@ -269421,6 +276271,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutIncentiveStructuresInput = {
@@ -269519,6 +276370,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutIncentiveStructuresInput = {
@@ -270119,6 +276971,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutIncentiveStructuresInput = {
@@ -270217,6 +277070,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutProgramMaterialsInput = {
@@ -270315,6 +277169,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramMaterialsInput = {
@@ -270413,6 +277268,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramMaterialsInput = {
@@ -270817,6 +277673,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramMaterialsInput = {
@@ -270915,6 +277772,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutMaterialsInput = {
@@ -271405,6 +278263,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentSchedulesInput = {
@@ -271503,6 +278362,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentSchedulesInput = {
@@ -271578,6 +278438,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutPaymentSchedulesInput = {
@@ -271648,6 +278510,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutPaymentSchedulesInput = {
@@ -271794,6 +278658,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentSchedulesInput = {
@@ -271892,6 +278757,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutPaymentSchedulesInput = {
@@ -271973,6 +278839,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutPaymentSchedulesInput = {
@@ -272043,6 +278911,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutCreatedPaymentLinksInput = {
@@ -272378,6 +279248,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentLinksInput = {
@@ -272476,6 +279347,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentLinksInput = {
@@ -272590,6 +279462,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutPaymentLinksInput = {
@@ -272660,6 +279534,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutPaymentLinksInput = {
@@ -273017,6 +279893,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentLinksInput = {
@@ -273115,6 +279992,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type PaymentScheduleUpsertWithoutPaymentLinksInput = {
@@ -273241,6 +280119,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutPaymentLinksInput = {
@@ -273311,6 +280191,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type OrganizationCreateWithoutCollectionOverseersInput = {
@@ -273409,6 +280291,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCollectionOverseersInput = {
@@ -273507,6 +280390,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCollectionOverseersInput = {
@@ -273858,6 +280742,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -273956,6 +280841,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCollectionOverseersInput = {
@@ -274297,6 +281183,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversityPaymentsInput = {
@@ -274395,6 +281282,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversityPaymentsInput = {
@@ -274470,6 +281358,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutUniversityPaymentsInput = {
@@ -274540,6 +281430,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutUniversityPaymentsInput = {
@@ -274709,6 +281601,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversityPaymentsInput = {
@@ -274807,6 +281700,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutUniversityPaymentsInput = {
@@ -274888,6 +281782,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutUniversityPaymentsInput = {
@@ -274958,6 +281854,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UniversityUpsertWithoutUniversityPaymentsInput = {
@@ -275806,6 +282704,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutDocumentLogsInput = {
@@ -275876,6 +282776,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutDocumentLogsInput = {
@@ -276205,6 +283107,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutDocumentLogsInput = {
@@ -276275,6 +283179,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type OrganizationCreateWithoutBiometricDevicesInput = {
@@ -276373,6 +283279,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBiometricDevicesInput = {
@@ -276471,6 +283378,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBiometricDevicesInput = {
@@ -276634,6 +283542,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBiometricDevicesInput = {
@@ -276732,6 +283641,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type BranchUpsertWithoutBiometricDevicesInput = {
@@ -276885,6 +283795,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutExamRegistrationsInput = {
@@ -276983,6 +283894,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutExamRegistrationsInput = {
@@ -277058,6 +283970,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutExamRegistrationsInput = {
@@ -277128,6 +284042,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutExamRegistrationsInput = {
@@ -277242,6 +284158,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutExamRegistrationsInput = {
@@ -277340,6 +284257,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutExamRegistrationsInput = {
@@ -277421,6 +284339,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutExamRegistrationsInput = {
@@ -277491,6 +284411,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type OrganizationCreateWithoutCommunicationLogsInput = {
@@ -277589,6 +284511,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCommunicationLogsInput = {
@@ -277687,6 +284610,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCommunicationLogsInput = {
@@ -278038,6 +284962,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCommunicationLogsInput = {
@@ -278136,6 +285061,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCommunicationLogsInput = {
@@ -278957,6 +285883,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutFacultiesInput = {
@@ -279055,6 +285982,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutFacultiesInput = {
@@ -279623,6 +286551,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutFacultiesInput = {
@@ -279721,6 +286650,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicClassUpsertWithWhereUniqueWithoutInchargeInput = {
@@ -280011,6 +286941,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAcademicCentersInput = {
@@ -280109,6 +287040,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAcademicCentersInput = {
@@ -280267,6 +287199,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAcademicCentersInput = {
@@ -280365,6 +287298,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicClassUpsertWithWhereUniqueWithoutAcademicCenterInput = {
@@ -280597,6 +287531,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAcademicClassesInput = {
@@ -280695,6 +287630,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAcademicClassesInput = {
@@ -281083,6 +288019,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAcademicClassesInput = {
@@ -281181,6 +288118,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicSessionUpsertWithWhereUniqueWithoutAcademicClassInput = {
@@ -281382,6 +288320,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutClassTrialVideosInput = {
@@ -281480,6 +288419,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutClassTrialVideosInput = {
@@ -281639,6 +288579,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutClassTrialVideosInput = {
@@ -281737,6 +288678,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicClassCreateWithoutModulesInput = {
@@ -281874,6 +288816,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutClassModulesInput = {
@@ -281972,6 +288915,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutClassModulesInput = {
@@ -282265,6 +289209,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutClassModulesInput = {
@@ -282363,6 +289308,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicSessionUpsertWithWhereUniqueWithoutClassModuleInput = {
@@ -282540,6 +289486,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutClassSubModulesInput = {
@@ -282638,6 +289585,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutClassSubModulesInput = {
@@ -282841,6 +289789,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutClassSubModulesInput = {
@@ -282939,6 +289888,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ModuleLessonUpsertWithWhereUniqueWithoutClassSubModuleInput = {
@@ -283166,6 +290116,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutModuleLessonsInput = {
@@ -283264,6 +290215,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutModuleLessonsInput = {
@@ -283778,6 +290730,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutModuleLessonsInput = {
@@ -283876,6 +290829,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicSessionUpsertWithWhereUniqueWithoutModuleLessonInput = {
@@ -284382,6 +291336,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutAssessmentAttemptsInput = {
@@ -284452,6 +291408,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutAssessmentAttemptsInput = {
@@ -284571,6 +291529,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutAssessmentAttemptsInput = {
@@ -284641,6 +291601,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateWithoutVideoLogsInput = {
@@ -284711,6 +291673,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutVideoLogsInput = {
@@ -284781,6 +291745,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutVideoLogsInput = {
@@ -284931,6 +291897,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentVideoLogsInput = {
@@ -285029,6 +291996,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentVideoLogsInput = {
@@ -285115,6 +292083,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutVideoLogsInput = {
@@ -285185,6 +292155,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type ModuleLessonUpsertWithoutVideoLogsInput = {
@@ -285347,6 +292319,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentVideoLogsInput = {
@@ -285445,6 +292418,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ModuleLessonCreateWithoutDoubtsInput = {
@@ -285562,6 +292536,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutLessonDoubtsInput = {
@@ -285632,6 +292608,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutLessonDoubtsInput = {
@@ -285735,6 +292713,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLessonDoubtsInput = {
@@ -285833,6 +292812,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLessonDoubtsInput = {
@@ -286000,6 +292980,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutLessonDoubtsInput = {
@@ -286070,6 +293052,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type OrganizationUpsertWithoutLessonDoubtsInput = {
@@ -286179,6 +293163,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLessonDoubtsInput = {
@@ -286277,6 +293262,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type LessonDoubtReplyUpsertWithWhereUniqueWithoutDoubtInput = {
@@ -286390,6 +293376,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptCreateNestedManyWithoutStudentInput
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutLessonDoubtRepliesInput = {
@@ -286460,6 +293448,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutLessonDoubtRepliesInput = {
@@ -286618,6 +293608,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLessonDoubtRepliesInput = {
@@ -286716,6 +293707,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLessonDoubtRepliesInput = {
@@ -286835,6 +293827,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptUpdateManyWithoutStudentNestedInput
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutLessonDoubtRepliesInput = {
@@ -286905,6 +293899,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type FacultyUpsertWithoutLessonDoubtRepliesInput = {
@@ -287075,6 +294071,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLessonDoubtRepliesInput = {
@@ -287173,6 +294170,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ModuleLessonCreateWithoutNotesInput = {
@@ -287290,6 +294288,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptCreateNestedManyWithoutStudentInput
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutLessonNotesInput = {
@@ -287360,6 +294360,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutLessonNotesInput = {
@@ -287463,6 +294465,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLessonNotesInput = {
@@ -287561,6 +294564,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLessonNotesInput = {
@@ -287700,6 +294704,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptUpdateManyWithoutStudentNestedInput
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutLessonNotesInput = {
@@ -287770,6 +294776,8 @@ export namespace Prisma {
     assessmentAttempts?: StudentAssessmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type OrganizationUpsertWithoutLessonNotesInput = {
@@ -287879,6 +294887,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLessonNotesInput = {
@@ -287977,6 +294986,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ModuleLessonCreateWithoutFacultyHistoryInput = {
@@ -288287,6 +295297,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLessonFacultyHistoriesInput = {
@@ -288385,6 +295396,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLessonFacultyHistoriesInput = {
@@ -288735,6 +295747,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLessonFacultyHistoriesInput = {
@@ -288833,6 +295846,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ModuleLessonCreateWithoutMaterialsInput = {
@@ -289033,6 +296047,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutClassMaterialsInput = {
@@ -289131,6 +296146,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutClassMaterialsInput = {
@@ -289359,6 +296375,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutClassMaterialsInput = {
@@ -289457,6 +296474,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentBatchTransferCreateWithoutFromBatchInput = {
@@ -289662,6 +296680,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAcademicBatchesInput = {
@@ -289760,6 +296779,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAcademicBatchesInput = {
@@ -289885,6 +296905,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutAcademicBatchInput = {
@@ -289955,6 +296977,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutAcademicBatchInput = {
@@ -290179,6 +297203,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAcademicBatchesInput = {
@@ -290277,6 +297302,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicSessionUpsertWithWhereUniqueWithoutAcademicBatchInput = {
@@ -290395,6 +297421,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutStudentBatchTransfersInput = {
@@ -290465,6 +297493,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutStudentBatchTransfersInput = {
@@ -290960,6 +297990,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutStudentBatchTransfersInput = {
@@ -291030,6 +298062,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type AcademicBatchUpsertWithoutTransfersFromInput = {
@@ -291708,6 +298742,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBatchLessonAssignmentsInput = {
@@ -291806,6 +298841,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBatchLessonAssignmentsInput = {
@@ -292079,6 +299115,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBatchLessonAssignmentsInput = {
@@ -292177,6 +299214,7 @@ export namespace Prisma {
     moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicClassCreateWithoutAcademicSessionsInput = {
@@ -292541,6 +299579,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAcademicSessionsInput = {
@@ -292639,6 +299678,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAcademicSessionsInput = {
@@ -293089,6 +300129,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAcademicSessionsInput = {
@@ -293187,6 +300228,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentAcademicAttendanceUpsertWithWhereUniqueWithoutSessionInput = {
@@ -293318,6 +300360,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutAcademicAttendancesInput = {
@@ -293388,6 +300432,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
     lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutAcademicAttendancesInput = {
@@ -293491,6 +300537,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentAcademicAttendancesInput = {
@@ -293589,6 +300636,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentAcademicAttendancesInput = {
@@ -293726,6 +300774,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutAcademicAttendancesInput = {
@@ -293796,6 +300846,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type OrganizationUpsertWithoutStudentAcademicAttendancesInput = {
@@ -293905,6 +300957,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentAcademicAttendancesInput = {
@@ -294003,6 +301056,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutStudyAbroadPartnersInput = {
@@ -294101,6 +301155,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyAbroadPartnersInput = {
@@ -294199,6 +301254,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyAbroadPartnersInput = {
@@ -294881,6 +301937,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyAbroadPartnersInput = {
@@ -294979,6 +302036,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutStudyAbroadPartnersReferredInput = {
@@ -295595,6 +302653,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyAbroadApplicationsInput = {
@@ -295693,6 +302752,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyAbroadApplicationsInput = {
@@ -295888,6 +302948,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyAbroadApplicationsInput = {
@@ -295986,6 +303047,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyAbroadPartnerUpsertWithoutApplicationsInput = {
@@ -296153,6 +303215,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyAbroadProgramCommissionsInput = {
@@ -296251,6 +303314,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyAbroadProgramCommissionsInput = {
@@ -296365,6 +303429,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyAbroadProgramCommissionsInput = {
@@ -296463,6 +303528,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutStudyAbroadPayoutsInput = {
@@ -296561,6 +303627,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyAbroadPayoutsInput = {
@@ -296659,6 +303726,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyAbroadPayoutsInput = {
@@ -296875,6 +303943,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyAbroadPayoutsInput = {
@@ -296973,6 +304042,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyAbroadPartnerUpsertWithoutPayoutsInput = {
@@ -297185,6 +304255,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCountriesInput = {
@@ -297283,6 +304354,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
     studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCountriesInput = {
@@ -297397,6 +304469,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCountriesInput = {
@@ -297495,6 +304568,1361 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationCreateWithoutStudentFilterTypesInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.OrganizationStatus
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionCreateNestedManyWithoutOrganizationInput
+    studentAcademicAttendances?: StudentAcademicAttendanceCreateNestedManyWithoutOrganizationInput
+    academicCenters?: AcademicCenterCreateNestedManyWithoutOrganizationInput
+    academicClasses?: AcademicClassCreateNestedManyWithoutOrganizationInput
+    academicBatches?: AcademicBatchCreateNestedManyWithoutOrganizationInput
+    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+    branches?: BranchCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
+    leads?: LeadCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
+    license?: LicenseCreateNestedOneWithoutOrganizationsInput
+    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
+    studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
+    studyAbroadApplications?: StudyAbroadApplicationCreateNestedManyWithoutOrganizationInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutCreateNestedManyWithoutOrganizationInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionCreateNestedManyWithoutOrganizationInput
+    countries?: CountryCreateNestedManyWithoutOrganizationInput
+    polls?: PollCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
+    students?: StudentCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
+    targets?: TargetCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
+    faculties?: FacultyCreateNestedManyWithoutOrganizationInput
+    classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classTrialVideos?: ClassTrialVideoCreateNestedManyWithoutOrganizationInput
+    lessonDoubts?: LessonDoubtCreateNestedManyWithoutOrganizationInput
+    lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutOrganizationInput
+    lessonNotes?: LessonNoteCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
+    classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
+    moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
+    lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
+    batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
+    studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutStudentFilterTypesInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.OrganizationStatus
+    licenseId?: string | null
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    academicCenters?: AcademicCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    academicClasses?: AcademicClassUncheckedCreateNestedManyWithoutOrganizationInput
+    academicBatches?: AcademicBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadApplications?: StudyAbroadApplicationUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
+    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
+    classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classTrialVideos?: ClassTrialVideoUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+    studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutStudentFilterTypesInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutStudentFilterTypesInput, OrganizationUncheckedCreateWithoutStudentFilterTypesInput>
+  }
+
+  export type StudentFilterOptionCreateWithoutFilterTypeInput = {
+    id?: string
+    label: string
+    color?: string | null
+    sortOrder?: number
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    values?: StudentFilterValueCreateNestedManyWithoutOptionInput
+  }
+
+  export type StudentFilterOptionUncheckedCreateWithoutFilterTypeInput = {
+    id?: string
+    label: string
+    color?: string | null
+    sortOrder?: number
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    values?: StudentFilterValueUncheckedCreateNestedManyWithoutOptionInput
+  }
+
+  export type StudentFilterOptionCreateOrConnectWithoutFilterTypeInput = {
+    where: StudentFilterOptionWhereUniqueInput
+    create: XOR<StudentFilterOptionCreateWithoutFilterTypeInput, StudentFilterOptionUncheckedCreateWithoutFilterTypeInput>
+  }
+
+  export type StudentFilterOptionCreateManyFilterTypeInputEnvelope = {
+    data: StudentFilterOptionCreateManyFilterTypeInput | StudentFilterOptionCreateManyFilterTypeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentFilterValueCreateWithoutFilterTypeInput = {
+    id?: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutFilterValuesInput
+    option: StudentFilterOptionCreateNestedOneWithoutValuesInput
+  }
+
+  export type StudentFilterValueUncheckedCreateWithoutFilterTypeInput = {
+    id?: string
+    studentId: string
+    optionId: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterValueCreateOrConnectWithoutFilterTypeInput = {
+    where: StudentFilterValueWhereUniqueInput
+    create: XOR<StudentFilterValueCreateWithoutFilterTypeInput, StudentFilterValueUncheckedCreateWithoutFilterTypeInput>
+  }
+
+  export type StudentFilterValueCreateManyFilterTypeInputEnvelope = {
+    data: StudentFilterValueCreateManyFilterTypeInput | StudentFilterValueCreateManyFilterTypeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrganizationUpsertWithoutStudentFilterTypesInput = {
+    update: XOR<OrganizationUpdateWithoutStudentFilterTypesInput, OrganizationUncheckedUpdateWithoutStudentFilterTypesInput>
+    create: XOR<OrganizationCreateWithoutStudentFilterTypesInput, OrganizationUncheckedCreateWithoutStudentFilterTypesInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutStudentFilterTypesInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutStudentFilterTypesInput, OrganizationUncheckedUpdateWithoutStudentFilterTypesInput>
+  }
+
+  export type OrganizationUpdateWithoutStudentFilterTypesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUpdateManyWithoutOrganizationNestedInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUpdateManyWithoutOrganizationNestedInput
+    academicCenters?: AcademicCenterUpdateManyWithoutOrganizationNestedInput
+    academicClasses?: AcademicClassUpdateManyWithoutOrganizationNestedInput
+    academicBatches?: AcademicBatchUpdateManyWithoutOrganizationNestedInput
+    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
+    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
+    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
+    studyAbroadApplications?: StudyAbroadApplicationUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUpdateManyWithoutOrganizationNestedInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUpdateManyWithoutOrganizationNestedInput
+    countries?: CountryUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
+    faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
+    classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classTrialVideos?: ClassTrialVideoUpdateManyWithoutOrganizationNestedInput
+    lessonDoubts?: LessonDoubtUpdateManyWithoutOrganizationNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutOrganizationNestedInput
+    lessonNotes?: LessonNoteUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
+    classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
+    moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
+    lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
+    studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutStudentFilterTypesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicCenters?: AcademicCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicClasses?: AcademicClassUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicBatches?: AcademicBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadApplications?: StudyAbroadApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
+    classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classTrialVideos?: ClassTrialVideoUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonNotes?: LessonNoteUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type StudentFilterOptionUpsertWithWhereUniqueWithoutFilterTypeInput = {
+    where: StudentFilterOptionWhereUniqueInput
+    update: XOR<StudentFilterOptionUpdateWithoutFilterTypeInput, StudentFilterOptionUncheckedUpdateWithoutFilterTypeInput>
+    create: XOR<StudentFilterOptionCreateWithoutFilterTypeInput, StudentFilterOptionUncheckedCreateWithoutFilterTypeInput>
+  }
+
+  export type StudentFilterOptionUpdateWithWhereUniqueWithoutFilterTypeInput = {
+    where: StudentFilterOptionWhereUniqueInput
+    data: XOR<StudentFilterOptionUpdateWithoutFilterTypeInput, StudentFilterOptionUncheckedUpdateWithoutFilterTypeInput>
+  }
+
+  export type StudentFilterOptionUpdateManyWithWhereWithoutFilterTypeInput = {
+    where: StudentFilterOptionScalarWhereInput
+    data: XOR<StudentFilterOptionUpdateManyMutationInput, StudentFilterOptionUncheckedUpdateManyWithoutFilterTypeInput>
+  }
+
+  export type StudentFilterOptionScalarWhereInput = {
+    AND?: StudentFilterOptionScalarWhereInput | StudentFilterOptionScalarWhereInput[]
+    OR?: StudentFilterOptionScalarWhereInput[]
+    NOT?: StudentFilterOptionScalarWhereInput | StudentFilterOptionScalarWhereInput[]
+    id?: StringFilter<"StudentFilterOption"> | string
+    filterTypeId?: StringFilter<"StudentFilterOption"> | string
+    label?: StringFilter<"StudentFilterOption"> | string
+    color?: StringNullableFilter<"StudentFilterOption"> | string | null
+    sortOrder?: IntFilter<"StudentFilterOption"> | number
+    isArchived?: BoolFilter<"StudentFilterOption"> | boolean
+    createdAt?: DateTimeFilter<"StudentFilterOption"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentFilterOption"> | Date | string
+  }
+
+  export type StudentFilterValueUpsertWithWhereUniqueWithoutFilterTypeInput = {
+    where: StudentFilterValueWhereUniqueInput
+    update: XOR<StudentFilterValueUpdateWithoutFilterTypeInput, StudentFilterValueUncheckedUpdateWithoutFilterTypeInput>
+    create: XOR<StudentFilterValueCreateWithoutFilterTypeInput, StudentFilterValueUncheckedCreateWithoutFilterTypeInput>
+  }
+
+  export type StudentFilterValueUpdateWithWhereUniqueWithoutFilterTypeInput = {
+    where: StudentFilterValueWhereUniqueInput
+    data: XOR<StudentFilterValueUpdateWithoutFilterTypeInput, StudentFilterValueUncheckedUpdateWithoutFilterTypeInput>
+  }
+
+  export type StudentFilterValueUpdateManyWithWhereWithoutFilterTypeInput = {
+    where: StudentFilterValueScalarWhereInput
+    data: XOR<StudentFilterValueUpdateManyMutationInput, StudentFilterValueUncheckedUpdateManyWithoutFilterTypeInput>
+  }
+
+  export type StudentFilterTypeCreateWithoutOptionsInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    sortOrder?: number
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutStudentFilterTypesInput
+    values?: StudentFilterValueCreateNestedManyWithoutFilterTypeInput
+  }
+
+  export type StudentFilterTypeUncheckedCreateWithoutOptionsInput = {
+    id?: string
+    organizationId: string
+    name: string
+    isActive?: boolean
+    sortOrder?: number
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    values?: StudentFilterValueUncheckedCreateNestedManyWithoutFilterTypeInput
+  }
+
+  export type StudentFilterTypeCreateOrConnectWithoutOptionsInput = {
+    where: StudentFilterTypeWhereUniqueInput
+    create: XOR<StudentFilterTypeCreateWithoutOptionsInput, StudentFilterTypeUncheckedCreateWithoutOptionsInput>
+  }
+
+  export type StudentFilterValueCreateWithoutOptionInput = {
+    id?: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutFilterValuesInput
+    filterType: StudentFilterTypeCreateNestedOneWithoutValuesInput
+  }
+
+  export type StudentFilterValueUncheckedCreateWithoutOptionInput = {
+    id?: string
+    studentId: string
+    filterTypeId: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterValueCreateOrConnectWithoutOptionInput = {
+    where: StudentFilterValueWhereUniqueInput
+    create: XOR<StudentFilterValueCreateWithoutOptionInput, StudentFilterValueUncheckedCreateWithoutOptionInput>
+  }
+
+  export type StudentFilterValueCreateManyOptionInputEnvelope = {
+    data: StudentFilterValueCreateManyOptionInput | StudentFilterValueCreateManyOptionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentFilterTypeUpsertWithoutOptionsInput = {
+    update: XOR<StudentFilterTypeUpdateWithoutOptionsInput, StudentFilterTypeUncheckedUpdateWithoutOptionsInput>
+    create: XOR<StudentFilterTypeCreateWithoutOptionsInput, StudentFilterTypeUncheckedCreateWithoutOptionsInput>
+    where?: StudentFilterTypeWhereInput
+  }
+
+  export type StudentFilterTypeUpdateToOneWithWhereWithoutOptionsInput = {
+    where?: StudentFilterTypeWhereInput
+    data: XOR<StudentFilterTypeUpdateWithoutOptionsInput, StudentFilterTypeUncheckedUpdateWithoutOptionsInput>
+  }
+
+  export type StudentFilterTypeUpdateWithoutOptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutStudentFilterTypesNestedInput
+    values?: StudentFilterValueUpdateManyWithoutFilterTypeNestedInput
+  }
+
+  export type StudentFilterTypeUncheckedUpdateWithoutOptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    values?: StudentFilterValueUncheckedUpdateManyWithoutFilterTypeNestedInput
+  }
+
+  export type StudentFilterValueUpsertWithWhereUniqueWithoutOptionInput = {
+    where: StudentFilterValueWhereUniqueInput
+    update: XOR<StudentFilterValueUpdateWithoutOptionInput, StudentFilterValueUncheckedUpdateWithoutOptionInput>
+    create: XOR<StudentFilterValueCreateWithoutOptionInput, StudentFilterValueUncheckedCreateWithoutOptionInput>
+  }
+
+  export type StudentFilterValueUpdateWithWhereUniqueWithoutOptionInput = {
+    where: StudentFilterValueWhereUniqueInput
+    data: XOR<StudentFilterValueUpdateWithoutOptionInput, StudentFilterValueUncheckedUpdateWithoutOptionInput>
+  }
+
+  export type StudentFilterValueUpdateManyWithWhereWithoutOptionInput = {
+    where: StudentFilterValueScalarWhereInput
+    data: XOR<StudentFilterValueUpdateManyMutationInput, StudentFilterValueUncheckedUpdateManyWithoutOptionInput>
+  }
+
+  export type StudentCreateWithoutFilterValuesInput = {
+    id?: string
+    enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
+    name: string
+    phone: string
+    address: string
+    specialisation?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: string | null
+    dob?: Date | string | null
+    fatherName?: string | null
+    pinCode?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: Date | string | null
+    admissionNo?: string | null
+    caste?: string | null
+    fatherPhone?: string | null
+    motherName?: string | null
+    motherPhone?: string | null
+    photo?: string | null
+    religion?: string | null
+    gender?: string | null
+    category?: string | null
+    maritalStatus?: string | null
+    employmentStatus?: string | null
+    guardianName?: string | null
+    familyPhone?: string | null
+    source?: string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: number
+    discountReason?: string | null
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutStudentInput
+    academicBatch?: AcademicBatchCreateNestedOneWithoutStudentsInput
+    academicAttendances?: StudentAcademicAttendanceCreateNestedManyWithoutStudentInput
+    documentLogs?: DocumentLogCreateNestedManyWithoutStudentInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
+    videoLogs?: StudentVideoLogCreateNestedManyWithoutStudentInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentProfileInput
+    enrolledByUser?: UserCreateNestedOneWithoutEnrolledStudentsInput
+    organization: OrganizationCreateNestedOneWithoutStudentsInput
+    program: ProgramCreateNestedOneWithoutStudentsInput
+    referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
+    assessmentAttempts?: StudentAssessmentAttemptCreateNestedManyWithoutStudentInput
+    lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
+    lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
+    lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutFilterValuesInput = {
+    id?: string
+    centerId?: string | null
+    organizationId: string
+    enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
+    name: string
+    email: string
+    phone: string
+    address: string
+    programId: string
+    specialisation?: string | null
+    sessionId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    academicBatchId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredBy?: string | null
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: string | null
+    dob?: Date | string | null
+    fatherName?: string | null
+    pinCode?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: Date | string | null
+    admissionNo?: string | null
+    branchId?: string | null
+    caste?: string | null
+    fatherPhone?: string | null
+    motherName?: string | null
+    motherPhone?: string | null
+    photo?: string | null
+    religion?: string | null
+    gender?: string | null
+    category?: string | null
+    maritalStatus?: string | null
+    employmentStatus?: string | null
+    guardianName?: string | null
+    familyPhone?: string | null
+    universityId?: string | null
+    enrolledBy?: string | null
+    source?: string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: number
+    discountReason?: string | null
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutStudentInput
+    academicAttendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutStudentInput
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutStudentInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
+    videoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutStudentInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
+    assessmentAttempts?: StudentAssessmentAttemptUncheckedCreateNestedManyWithoutStudentInput
+    lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
+    lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterHistory?: StudentFilterHistoryUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutFilterValuesInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutFilterValuesInput, StudentUncheckedCreateWithoutFilterValuesInput>
+  }
+
+  export type StudentFilterTypeCreateWithoutValuesInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    sortOrder?: number
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutStudentFilterTypesInput
+    options?: StudentFilterOptionCreateNestedManyWithoutFilterTypeInput
+  }
+
+  export type StudentFilterTypeUncheckedCreateWithoutValuesInput = {
+    id?: string
+    organizationId: string
+    name: string
+    isActive?: boolean
+    sortOrder?: number
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    options?: StudentFilterOptionUncheckedCreateNestedManyWithoutFilterTypeInput
+  }
+
+  export type StudentFilterTypeCreateOrConnectWithoutValuesInput = {
+    where: StudentFilterTypeWhereUniqueInput
+    create: XOR<StudentFilterTypeCreateWithoutValuesInput, StudentFilterTypeUncheckedCreateWithoutValuesInput>
+  }
+
+  export type StudentFilterOptionCreateWithoutValuesInput = {
+    id?: string
+    label: string
+    color?: string | null
+    sortOrder?: number
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    filterType: StudentFilterTypeCreateNestedOneWithoutOptionsInput
+  }
+
+  export type StudentFilterOptionUncheckedCreateWithoutValuesInput = {
+    id?: string
+    filterTypeId: string
+    label: string
+    color?: string | null
+    sortOrder?: number
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterOptionCreateOrConnectWithoutValuesInput = {
+    where: StudentFilterOptionWhereUniqueInput
+    create: XOR<StudentFilterOptionCreateWithoutValuesInput, StudentFilterOptionUncheckedCreateWithoutValuesInput>
+  }
+
+  export type StudentUpsertWithoutFilterValuesInput = {
+    update: XOR<StudentUpdateWithoutFilterValuesInput, StudentUncheckedUpdateWithoutFilterValuesInput>
+    create: XOR<StudentCreateWithoutFilterValuesInput, StudentUncheckedCreateWithoutFilterValuesInput>
+    where?: StudentWhereInput
+  }
+
+  export type StudentUpdateToOneWithWhereWithoutFilterValuesInput = {
+    where?: StudentWhereInput
+    data: XOR<StudentUpdateWithoutFilterValuesInput, StudentUncheckedUpdateWithoutFilterValuesInput>
+  }
+
+  export type StudentUpdateWithoutFilterValuesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    specialisation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: FloatFieldUpdateOperationsInput | number
+    discountReason?: NullableStringFieldUpdateOperationsInput | string | null
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutStudentNestedInput
+    academicBatch?: AcademicBatchUpdateOneWithoutStudentsNestedInput
+    academicAttendances?: StudentAcademicAttendanceUpdateManyWithoutStudentNestedInput
+    documentLogs?: DocumentLogUpdateManyWithoutStudentNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
+    videoLogs?: StudentVideoLogUpdateManyWithoutStudentNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
+    enrolledByUser?: UserUpdateOneWithoutEnrolledStudentsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
+    program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
+    referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
+    assessmentAttempts?: StudentAssessmentAttemptUpdateManyWithoutStudentNestedInput
+    lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
+    lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutFilterValuesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    specialisation?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    academicBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: FloatFieldUpdateOperationsInput | number
+    discountReason?: NullableStringFieldUpdateOperationsInput | string | null
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutStudentNestedInput
+    academicAttendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutStudentNestedInput
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutStudentNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
+    videoLogs?: StudentVideoLogUncheckedUpdateManyWithoutStudentNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+    assessmentAttempts?: StudentAssessmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
+    lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
+    lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentFilterTypeUpsertWithoutValuesInput = {
+    update: XOR<StudentFilterTypeUpdateWithoutValuesInput, StudentFilterTypeUncheckedUpdateWithoutValuesInput>
+    create: XOR<StudentFilterTypeCreateWithoutValuesInput, StudentFilterTypeUncheckedCreateWithoutValuesInput>
+    where?: StudentFilterTypeWhereInput
+  }
+
+  export type StudentFilterTypeUpdateToOneWithWhereWithoutValuesInput = {
+    where?: StudentFilterTypeWhereInput
+    data: XOR<StudentFilterTypeUpdateWithoutValuesInput, StudentFilterTypeUncheckedUpdateWithoutValuesInput>
+  }
+
+  export type StudentFilterTypeUpdateWithoutValuesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutStudentFilterTypesNestedInput
+    options?: StudentFilterOptionUpdateManyWithoutFilterTypeNestedInput
+  }
+
+  export type StudentFilterTypeUncheckedUpdateWithoutValuesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    options?: StudentFilterOptionUncheckedUpdateManyWithoutFilterTypeNestedInput
+  }
+
+  export type StudentFilterOptionUpsertWithoutValuesInput = {
+    update: XOR<StudentFilterOptionUpdateWithoutValuesInput, StudentFilterOptionUncheckedUpdateWithoutValuesInput>
+    create: XOR<StudentFilterOptionCreateWithoutValuesInput, StudentFilterOptionUncheckedCreateWithoutValuesInput>
+    where?: StudentFilterOptionWhereInput
+  }
+
+  export type StudentFilterOptionUpdateToOneWithWhereWithoutValuesInput = {
+    where?: StudentFilterOptionWhereInput
+    data: XOR<StudentFilterOptionUpdateWithoutValuesInput, StudentFilterOptionUncheckedUpdateWithoutValuesInput>
+  }
+
+  export type StudentFilterOptionUpdateWithoutValuesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    filterType?: StudentFilterTypeUpdateOneRequiredWithoutOptionsNestedInput
+  }
+
+  export type StudentFilterOptionUncheckedUpdateWithoutValuesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentCreateWithoutFilterHistoryInput = {
+    id?: string
+    enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
+    name: string
+    phone: string
+    address: string
+    specialisation?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: string | null
+    dob?: Date | string | null
+    fatherName?: string | null
+    pinCode?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: Date | string | null
+    admissionNo?: string | null
+    caste?: string | null
+    fatherPhone?: string | null
+    motherName?: string | null
+    motherPhone?: string | null
+    photo?: string | null
+    religion?: string | null
+    gender?: string | null
+    category?: string | null
+    maritalStatus?: string | null
+    employmentStatus?: string | null
+    guardianName?: string | null
+    familyPhone?: string | null
+    source?: string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: number
+    discountReason?: string | null
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutStudentInput
+    academicBatch?: AcademicBatchCreateNestedOneWithoutStudentsInput
+    academicAttendances?: StudentAcademicAttendanceCreateNestedManyWithoutStudentInput
+    documentLogs?: DocumentLogCreateNestedManyWithoutStudentInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
+    videoLogs?: StudentVideoLogCreateNestedManyWithoutStudentInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentProfileInput
+    enrolledByUser?: UserCreateNestedOneWithoutEnrolledStudentsInput
+    organization: OrganizationCreateNestedOneWithoutStudentsInput
+    program: ProgramCreateNestedOneWithoutStudentsInput
+    referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
+    assessmentAttempts?: StudentAssessmentAttemptCreateNestedManyWithoutStudentInput
+    lessonDoubts?: LessonDoubtCreateNestedManyWithoutStudentInput
+    lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutStudentInput
+    lessonNotes?: LessonNoteCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutFilterHistoryInput = {
+    id?: string
+    centerId?: string | null
+    organizationId: string
+    enrollmentNo?: string | null
+    videoBlocked?: boolean
+    videoBlockReason?: string | null
+    videoBlockedAt?: Date | string | null
+    videoBlockedBy?: string | null
+    name: string
+    email: string
+    phone: string
+    address: string
+    programId: string
+    specialisation?: string | null
+    sessionId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    academicBatchId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredBy?: string | null
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: string | null
+    dob?: Date | string | null
+    fatherName?: string | null
+    pinCode?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: Date | string | null
+    admissionNo?: string | null
+    branchId?: string | null
+    caste?: string | null
+    fatherPhone?: string | null
+    motherName?: string | null
+    motherPhone?: string | null
+    photo?: string | null
+    religion?: string | null
+    gender?: string | null
+    category?: string | null
+    maritalStatus?: string | null
+    employmentStatus?: string | null
+    guardianName?: string | null
+    familyPhone?: string | null
+    universityId?: string | null
+    enrolledBy?: string | null
+    source?: string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: number
+    discountReason?: string | null
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutStudentInput
+    academicAttendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutStudentInput
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutStudentInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
+    videoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutStudentInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
+    assessmentAttempts?: StudentAssessmentAttemptUncheckedCreateNestedManyWithoutStudentInput
+    lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutStudentInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutStudentInput
+    lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutStudentInput
+    filterValues?: StudentFilterValueUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutFilterHistoryInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutFilterHistoryInput, StudentUncheckedCreateWithoutFilterHistoryInput>
+  }
+
+  export type StudentUpsertWithoutFilterHistoryInput = {
+    update: XOR<StudentUpdateWithoutFilterHistoryInput, StudentUncheckedUpdateWithoutFilterHistoryInput>
+    create: XOR<StudentCreateWithoutFilterHistoryInput, StudentUncheckedCreateWithoutFilterHistoryInput>
+    where?: StudentWhereInput
+  }
+
+  export type StudentUpdateToOneWithWhereWithoutFilterHistoryInput = {
+    where?: StudentWhereInput
+    data: XOR<StudentUpdateWithoutFilterHistoryInput, StudentUncheckedUpdateWithoutFilterHistoryInput>
+  }
+
+  export type StudentUpdateWithoutFilterHistoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    specialisation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: FloatFieldUpdateOperationsInput | number
+    discountReason?: NullableStringFieldUpdateOperationsInput | string | null
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutStudentNestedInput
+    academicBatch?: AcademicBatchUpdateOneWithoutStudentsNestedInput
+    academicAttendances?: StudentAcademicAttendanceUpdateManyWithoutStudentNestedInput
+    documentLogs?: DocumentLogUpdateManyWithoutStudentNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
+    videoLogs?: StudentVideoLogUpdateManyWithoutStudentNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
+    enrolledByUser?: UserUpdateOneWithoutEnrolledStudentsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
+    program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
+    referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
+    assessmentAttempts?: StudentAssessmentAttemptUpdateManyWithoutStudentNestedInput
+    lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
+    lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutFilterHistoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlocked?: BoolFieldUpdateOperationsInput | boolean
+    videoBlockReason?: NullableStringFieldUpdateOperationsInput | string | null
+    videoBlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    videoBlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    specialisation?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    academicBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: FloatFieldUpdateOperationsInput | number
+    discountReason?: NullableStringFieldUpdateOperationsInput | string | null
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutStudentNestedInput
+    academicAttendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutStudentNestedInput
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutStudentNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
+    videoLogs?: StudentVideoLogUncheckedUpdateManyWithoutStudentNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+    assessmentAttempts?: StudentAssessmentAttemptUncheckedUpdateManyWithoutStudentNestedInput
+    lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
+    lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type AcademicSessionCreateManyOrganizationInput = {
@@ -298779,6 +307207,16 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+  }
+
+  export type StudentFilterTypeCreateManyOrganizationInput = {
+    id?: string
+    name: string
+    isActive?: boolean
+    sortOrder?: number
+    createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AcademicSessionUpdateWithoutOrganizationInput = {
@@ -301500,6 +309938,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutOrganizationInput = {
@@ -301570,6 +310010,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutOrganizationInput = {
@@ -303055,6 +311497,40 @@ export namespace Prisma {
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
   }
 
+  export type StudentFilterTypeUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    options?: StudentFilterOptionUpdateManyWithoutFilterTypeNestedInput
+    values?: StudentFilterValueUpdateManyWithoutFilterTypeNestedInput
+  }
+
+  export type StudentFilterTypeUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    options?: StudentFilterOptionUncheckedUpdateManyWithoutFilterTypeNestedInput
+    values?: StudentFilterValueUncheckedUpdateManyWithoutFilterTypeNestedInput
+  }
+
+  export type StudentFilterTypeUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganizationCreateManyLicenseInput = {
     id?: string
     name: string
@@ -303167,6 +311643,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLicenseInput = {
@@ -303265,6 +311742,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
     studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateManyWithoutLicenseInput = {
@@ -309788,6 +318266,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutEnrolledByUserInput = {
@@ -309858,6 +318338,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutEnrolledByUserInput = {
@@ -309982,6 +318464,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutReferrerInput = {
@@ -310052,6 +318536,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutReferrerInput = {
@@ -311973,6 +320459,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutUniversityInput = {
@@ -312043,6 +320531,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutUniversityInput = {
@@ -313389,6 +321879,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutProgramInput = {
@@ -313459,6 +321951,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutProgramInput = {
@@ -314466,6 +322960,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutCenterInput = {
@@ -314536,6 +323032,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutCenterInput = {
@@ -315380,6 +323878,27 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type StudentFilterValueCreateManyStudentInput = {
+    id?: string
+    filterTypeId: string
+    optionId: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterHistoryCreateManyStudentInput = {
+    id?: string
+    organizationId: string
+    filterTypeId: string
+    filterName: string
+    fromLabel?: string | null
+    toLabel?: string | null
+    note?: string | null
+    changedBy?: string | null
+    changedByName?: string | null
+    changedAt?: Date | string
+  }
+
   export type StudentBatchTransferUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -316149,6 +324668,69 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StudentFilterValueUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    filterType?: StudentFilterTypeUpdateOneRequiredWithoutValuesNestedInput
+    option?: StudentFilterOptionUpdateOneRequiredWithoutValuesNestedInput
+  }
+
+  export type StudentFilterValueUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    optionId?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterValueUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    optionId?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterHistoryUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    filterName?: StringFieldUpdateOperationsInput | string
+    fromLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    toLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterHistoryUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    filterName?: StringFieldUpdateOperationsInput | string
+    fromLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    toLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterHistoryUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    filterName?: StringFieldUpdateOperationsInput | string
+    fromLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    toLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    changedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    changedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    changedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PaymentEntryCreateManyInvoiceInput = {
     id?: string
     organizationId: string
@@ -316451,6 +325033,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutBranchInput = {
@@ -316521,6 +325105,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutBranchInput = {
@@ -318501,6 +327087,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutSessionInput = {
@@ -318571,6 +327159,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutSessionInput = {
@@ -320820,6 +329410,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutAcademicBatchInput = {
@@ -320890,6 +329482,8 @@ export namespace Prisma {
     lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutStudentNestedInput
     lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutStudentNestedInput
     lessonNotes?: LessonNoteUncheckedUpdateManyWithoutStudentNestedInput
+    filterValues?: StudentFilterValueUncheckedUpdateManyWithoutStudentNestedInput
+    filterHistory?: StudentFilterHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutAcademicBatchInput = {
@@ -321213,6 +329807,112 @@ export namespace Prisma {
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
     paidBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterOptionCreateManyFilterTypeInput = {
+    id?: string
+    label: string
+    color?: string | null
+    sortOrder?: number
+    isArchived?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterValueCreateManyFilterTypeInput = {
+    id?: string
+    studentId: string
+    optionId: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterOptionUpdateWithoutFilterTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    values?: StudentFilterValueUpdateManyWithoutOptionNestedInput
+  }
+
+  export type StudentFilterOptionUncheckedUpdateWithoutFilterTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    values?: StudentFilterValueUncheckedUpdateManyWithoutOptionNestedInput
+  }
+
+  export type StudentFilterOptionUncheckedUpdateManyWithoutFilterTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isArchived?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterValueUpdateWithoutFilterTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutFilterValuesNestedInput
+    option?: StudentFilterOptionUpdateOneRequiredWithoutValuesNestedInput
+  }
+
+  export type StudentFilterValueUncheckedUpdateWithoutFilterTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    optionId?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterValueUncheckedUpdateManyWithoutFilterTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    optionId?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterValueCreateManyOptionInput = {
+    id?: string
+    studentId: string
+    filterTypeId: string
+    updatedBy?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type StudentFilterValueUpdateWithoutOptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutFilterValuesNestedInput
+    filterType?: StudentFilterTypeUpdateOneRequiredWithoutValuesNestedInput
+  }
+
+  export type StudentFilterValueUncheckedUpdateWithoutOptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFilterValueUncheckedUpdateManyWithoutOptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    filterTypeId?: StringFieldUpdateOperationsInput | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

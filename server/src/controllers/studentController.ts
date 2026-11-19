@@ -144,7 +144,8 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
       session: true,
       branch: true,
       paymentSchedules: { orderBy: { dueDate: 'asc' } },
-      invoices: { include: { payments: true } }
+      invoices: { include: { payments: true } },
+      filterValues: { select: { filterTypeId: true, optionId: true } }
     },
     orderBy: { createdAt: 'desc' }
   });

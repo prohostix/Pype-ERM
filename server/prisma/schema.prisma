@@ -108,6 +108,7 @@ model Organization {
   studentVideoLogs           StudentVideoLog[]
 
   @@index([status])
+  studentFilterTypes    StudentFilterType[]
 }
 
 model License {
@@ -556,6 +557,8 @@ model Student {
   lessonDoubts          LessonDoubt[]
   lessonDoubtReplies    LessonDoubtReply[]
   lessonNotes           LessonNote[]
+  filterValues          StudentFilterValue[]
+  filterHistory         StudentFilterHistory[]
 
   @@index([organizationId, status])
   @@index([centerId])
@@ -2588,4 +2591,76 @@ model Country {
 
   @@unique([organizationId, name])
   @@index([organizationId])
+}
+
+
+/// Admin-defined dropdown filter for the student directory (e.g. "Follow-up stage").
+model StudentFilterType {
+  id             String   @id @default(uuid())
+  organizationId String
+  name           String
+  isActive       Boolean  @default(true)
+  sortOrder      Int      @default(0)
+  createdBy      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  options      StudentFilterOption[]
+  values       StudentFilterValue[]
+
+  @@index([organizationId, sortOrder])
+}
+
+model StudentFilterOption {
+  id           String   @id @default(uuid())
+  filterTypeId String
+  label        String
+  color        String?
+  sortOrder    Int      @default(0)
+  isArchived   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  filterType StudentFilterType    @relation(fields: [filterTypeId], references: [id], onDelete: Cascade)
+  values     StudentFilterValue[]
+
+  @@index([filterTypeId, sortOrder])
+}
+
+/// A student's current option for one filter (one row per student per filter).
+model StudentFilterValue {
+  id           String   @id @default(uuid())
+  studentId    String
+  filterTypeId String
+  optionId     String
+  updatedBy    String?
+  updatedAt    DateTime @updatedAt
+
+  student    Student             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  filterType StudentFilterType   @relation(fields: [filterTypeId], references: [id], onDelete: Restrict)
+  option     StudentFilterOption @relation(fields: [optionId], references: [id], onDelete: Restrict)
+
+  @@unique([studentId, filterTypeId])
+  @@index([filterTypeId, optionId])
+}
+
+/// Every change of a student's filter value. Labels are copied as text so history survives renames.
+model StudentFilterHistory {
+  id             String   @id @default(uuid())
+  organizationId String
+  studentId      String
+  filterTypeId   String
+  filterName     String
+  fromLabel      String?
+  toLabel        String?
+  note           String?
+  changedBy      String?
+  changedByName  String?
+  changedAt      DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, changedAt(sort: Desc)])
+  @@index([organizationId, filterTypeId])
 }
