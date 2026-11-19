@@ -2,7 +2,7 @@ import express from 'express';
 import { protect, authorize } from '../middleware/auth.js';
 import { getMyClasses, getClassBatches, getMyBatches, getMyStudents, getModulesForClass, createModule, updateModule, deleteModule, createSubModule, updateSubModule, deleteSubModule, createLesson, updateLesson, deleteLesson, assignTeacherToLesson, getLessonHistory,
   getBatchSessions,
-  uploadMaterial, deleteMaterial, getOrganizationFaculty, getMyAssignedLessons, startSession, getActiveSessions, getSessionStudents, submitSessionAttendance, endSession,
+  uploadMaterial, updateMaterial, deleteMaterial, getOrganizationFaculty, getMyAssignedLessons, startSession, getActiveSessions, getSessionStudents, submitSessionAttendance, endSession,
   punchInSession, punchOutSession, getFacultyAttendancesByClass, approveFacultyPunch, getClassReviews, getVideoAnalytics, getLessonAssessment, upsertLessonAssessment, deleteLessonAssessment } from '../controllers/facultyPortalController.js';
 import { getTrialVideos, createTrialVideo, updateTrialVideo, deleteTrialVideo, getClassDoubts, answerDoubt, deleteDoubt, getClassProgress } from '../controllers/facultyPortalController.js';
 import { upload } from '../middleware/upload.js';
@@ -83,6 +83,7 @@ router.route('/lessons/:lessonId/materials')
   .post(upload.single('file'), uploadMaterial);
 
 router.route('/materials/:materialId')
+  .put(upload.single('file'), updateMaterial)
   .delete(deleteMaterial);
 
 // Live Class Sessions

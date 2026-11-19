@@ -84,6 +84,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
   const [materialForm, setMaterialForm] = useState({ title: '', description: '' });
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [editingMaterial, setEditingMaterial] = useState<any | null>(null); // set while editing an existing material
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const materialExt = (uploadFile?.name.split('.').pop() || '').toLowerCase();
@@ -352,6 +353,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   // --- MATERIAL ACTIONS ---
   const handleMaterialSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (editingMaterial) return handleMaterialEdit();
     if (!uploadFile || !activeLessonId) return toast.error('Please select a file');
 
     let fileToUpload = uploadFile;
@@ -395,6 +397,47 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
       } else {
         toast.error(err.response?.data?.message || 'Upload failed');
       }
+    } finally {
+      setUploading(false);
+      setCompressing(false);
+    }
+  };
+
+  const openEditMaterial = (mat: any) => {
+    setEditingMaterial(mat);
+    setMaterialForm({ title: mat.title || '', description: mat.description || '' });
+    setUploadFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    setMaterialDialogOpen(true);
+  };
+
+  const handleMaterialEdit = async () => {
+    if (!editingMaterial) return;
+    let fileToUpload = uploadFile;
+    if (fileToUpload && isMaterialImage && fileToUpload.size > MAX_MATERIAL_BYTES) {
+      setCompressing(true);
+      try { fileToUpload = await shrinkImage(fileToUpload, MAX_MATERIAL_BYTES); }
+      catch (err) { console.warn('Image shrink fallback:', err); }
+      finally { setCompressing(false); }
+    }
+    if (fileToUpload && fileToUpload.size > MAX_MATERIAL_BYTES) {
+      return toast.error(`File is too large (${(fileToUpload.size / (1024 * 1024)).toFixed(2)} MB). Maximum allowed size is 5 MB.`);
+    }
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('title', materialForm.title);
+      fd.append('description', materialForm.description);
+      if (fileToUpload) fd.append('file', fileToUpload);
+      await api.put(`/faculty-portal/materials/${editingMaterial.id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+      toast.success('Material updated');
+      setMaterialDialogOpen(false);
+      setEditingMaterial(null);
+      setUploadFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      fetchModules();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update the material');
     } finally {
       setUploading(false);
       setCompressing(false);
@@ -685,6 +728,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
           )}
           <Button variant="ghost" size="sm" onClick={() => { 
             setActiveLessonId(lesson.id); 
+            setEditingMaterial(null);
             setMaterialForm({ title: '', description: '' }); 
             setUploadFile(null); 
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -722,6 +766,9 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
                 <div className="flex items-center gap-1">
                   <Button variant="ghost" size="icon" onClick={() => handleDownload(mat.fileUrl, mat.fileName)} className="h-7 w-7 text-indigo-600">
                     <Download className="w-3.5 h-3.5" />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => openEditMaterial(mat)} className="h-7 w-7 text-slate-600" title="Edit material">
+                    <Edit className="w-3.5 h-3.5" />
                   </Button>
                   <Button variant="ghost" size="icon" onClick={() => handleDeleteMaterial(mat.id)} className="h-7 w-7 text-red-500 hover:bg-red-50">
                     <Trash2 className="w-3.5 h-3.5" />
@@ -1160,7 +1207,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Upload className="w-5 h-5 text-indigo-600" />
-              Upload Lesson Material
+              {editingMaterial ? 'Edit Lesson Material' : 'Upload Lesson Material'}
             </DialogTitle>
           </DialogHeader>
 
@@ -1205,12 +1252,15 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
                 <Label>File Attachment</Label>
                 <span className="text-[11px] font-medium text-slate-500">Max: 5 MB</span>
               </div>
+              {editingMaterial && (
+                <p className="text-xs text-muted-foreground">Current file: <span className="font-medium text-foreground">{editingMaterial.fileName}</span>. Choose a new file only if you want to replace it.</p>
+              )}
               <Input 
                 type="file" 
                 ref={fileInputRef} 
                 accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp"
                 onChange={e => setUploadFile(e.target.files?.[0] || null)} 
-                required 
+                required={!editingMaterial} 
               />
               <p className="text-[11px] text-muted-foreground">
                 Supported: PDF, Word (DOC/DOCX), Excel, CSV, Images (JPG, PNG, WebP)
@@ -1270,7 +1320,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
               {uploading || compressing ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  {compressing ? 'Optimizing Image...' : 'Uploading File...'}
+                  {compressing ? 'Optimizing Image...' : editingMaterial ? 'Saving...' : 'Uploading File...'}
                 </>
               ) : isMaterialOverSize && !isMaterialImage ? (
                 <>
@@ -1280,7 +1330,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
               ) : (
                 <>
                   <Upload className="w-4 h-4 mr-2" />
-                  Upload File
+                  {editingMaterial ? 'Save Changes' : 'Upload File'}
                 </>
               )}
             </Button>

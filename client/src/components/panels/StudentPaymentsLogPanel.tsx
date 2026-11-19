@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Search, ChevronDown, ChevronRight, Plus } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ChevronDown, Download, IndianRupee, Plus, Receipt, Search, Users, Wallet, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,8 @@ export function StudentPaymentsLogPanel() {
   const [branchFilter, setBranchFilter] = useState('all');
   const [sortOption, setSortOption] = useState('recent');
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const [statusTab, setStatusTab] = useState<'all' | 'pending' | 'completed' | 'overdue'>('all');
+  const [page, setPage] = useState(1);
 
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [extraFeeDialogOpen, setExtraFeeDialogOpen] = useState(false);
@@ -92,231 +94,256 @@ export function StudentPaymentsLogPanel() {
   const programs = Array.from(new Set(logs.map(l => l.programName).filter(Boolean)));
   const branches = Array.from(new Set(logs.map(l => l.branchName).filter(Boolean)));
 
-  const filteredLogs = logs.filter((log: any) => {
-    const matchesSearch = log.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          log.enrollmentNo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          log.programName?.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesUniversity = universityFilter === 'all' || log.universityName === universityFilter;
-    const matchesProgram = programFilter === 'all' || log.programName === programFilter;
-    const matchesBranch = branchFilter === 'all' || log.branchName === branchFilter;
+  const isOverdue = (log: any) =>
+    log.status !== 'Completed' && (log.breakdown || []).some((b: any) => b.balance > 0 && b.dueDate && new Date(b.dueDate).getTime() < Date.now());
 
-    return matchesSearch && matchesUniversity && matchesProgram && matchesBranch;
-  }).sort((a, b) => {
-    switch (sortOption) {
-      case 'name-asc': return (a.name || '').localeCompare(b.name || '');
-      case 'name-desc': return (b.name || '').localeCompare(a.name || '');
-      case 'balance-desc': return (b.balance || 0) - (a.balance || 0);
-      case 'balance-asc': return (a.balance || 0) - (b.balance || 0);
-      case 'recent': default: return 0;
-    }
+  // everything except the status tab, so the tab counts stay meaningful
+  const baseFiltered = logs.filter((log: any) => {
+    const q = searchQuery.toLowerCase();
+    const matchesSearch = !q || log.name?.toLowerCase().includes(q) || log.enrollmentNo?.toLowerCase().includes(q) || log.programName?.toLowerCase().includes(q);
+    return matchesSearch
+      && (universityFilter === 'all' || log.universityName === universityFilter)
+      && (programFilter === 'all' || log.programName === programFilter)
+      && (branchFilter === 'all' || log.branchName === branchFilter);
   });
+
+  const tabCounts = {
+    all: baseFiltered.length,
+    pending: baseFiltered.filter((l) => l.status !== 'Completed').length,
+    completed: baseFiltered.filter((l) => l.status === 'Completed').length,
+    overdue: baseFiltered.filter(isOverdue).length,
+  };
+
+  const filteredLogs = baseFiltered
+    .filter((l) => statusTab === 'all' || (statusTab === 'completed' ? l.status === 'Completed' : statusTab === 'pending' ? l.status !== 'Completed' : isOverdue(l)))
+    .sort((a, b) => {
+      switch (sortOption) {
+        case 'name-asc': return (a.name || '').localeCompare(b.name || '');
+        case 'name-desc': return (b.name || '').localeCompare(a.name || '');
+        case 'balance-desc': return (b.balance || 0) - (a.balance || 0);
+        case 'balance-asc': return (a.balance || 0) - (b.balance || 0);
+        case 'recent': default: return 0;
+      }
+    });
+
+  const totals = filteredLogs.reduce((t, l) => ({
+    fee: t.fee + (l.totalFee || 0), paid: t.paid + (l.totalPaid || 0), balance: t.balance + (l.balance || 0),
+    owing: t.owing + ((l.balance || 0) > 0 ? 1 : 0),
+  }), { fee: 0, paid: 0, balance: 0, owing: 0 });
+  const collectedPct = totals.fee > 0 ? Math.min(100, Math.round((totals.paid / totals.fee) * 100)) : 0;
+
+  const PAGE_SIZE = 25;
+  const pageCount = Math.max(1, Math.ceil(filteredLogs.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const pageRows = filteredLogs.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  useEffect(() => { setPage(1); }, [searchQuery, universityFilter, programFilter, branchFilter, sortOption, statusTab]);
+
+  const hasFilters = !!searchQuery || universityFilter !== 'all' || programFilter !== 'all' || branchFilter !== 'all' || statusTab !== 'all';
+  const clearFilters = () => { setSearchQuery(''); setUniversityFilter('all'); setProgramFilter('all'); setBranchFilter('all'); setStatusTab('all'); };
+
+  const inr = (n: number) => `₹${(n || 0).toLocaleString('en-IN')}`;
+  const initials = (name: string) => (name || '?').split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+  const pctOf = (paid: number, total: number) => (total > 0 ? Math.min(100, Math.round((paid / total) * 100)) : 0);
+
+  const exportCsv = () => {
+    const esc = (v: any) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+    const header = ['Student', 'Enrollment No', 'University', 'Program', 'Branch', 'Total Fee', 'Received', 'Balance', 'Status'];
+    const lines = filteredLogs.map((l) => [l.name, l.enrollmentNo, l.universityName, l.programName, l.branchName, l.totalFee, l.totalPaid, l.balance, l.status].map(esc).join(','));
+    const blob = new Blob([[header.map(esc).join(','), ...lines].join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `student-payments-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const tabs: { id: typeof statusTab; label: string }[] = [
+    { id: 'all', label: 'All' }, { id: 'pending', label: 'Pending' }, { id: 'overdue', label: 'Overdue' }, { id: 'completed', label: 'Completed' },
+  ];
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto p-4 md:p-6 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">Student Payments Log</h2>
-          <p className="text-muted-foreground text-sm mt-1">
-            Track student payments against their program structure.
-          </p>
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"><Wallet className="w-5 h-5" /></div>
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">Student Payments Log</h2>
+            <p className="text-muted-foreground text-sm">Every student's total fee, what has been received and what is still due.</p>
+          </div>
+        </div>
+        <Button variant="outline" onClick={exportCsv} disabled={filteredLogs.length === 0}><Download className="w-4 h-4 mr-1.5" />Export CSV</Button>
+      </div>
+
+      {/* Summary */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <SummaryTile icon={IndianRupee} label="Total fee" value={inr(totals.fee)} sub={`${filteredLogs.length} student${filteredLogs.length === 1 ? '' : 's'}`} tone="slate" />
+        <SummaryTile icon={CheckCircle2} label="Received" value={inr(totals.paid)} sub={`${collectedPct}% collected`} tone="emerald" />
+        <SummaryTile icon={AlertTriangle} label="Balance due" value={inr(totals.balance)} sub={`${totals.owing} student${totals.owing === 1 ? '' : 's'} owe fees`} tone="amber" />
+        <div className="rounded-2xl border bg-card p-4 flex flex-col justify-center">
+          <p className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">Collection progress</p>
+          <p className="text-2xl font-bold mt-1">{collectedPct}%</p>
+          <div className="h-2 rounded-full bg-muted mt-2 overflow-hidden"><div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${collectedPct}%` }} /></div>
         </div>
       </div>
 
-      <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
-        <CardHeader className="flex flex-col gap-4">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div>
-              <CardTitle className="text-base">Payment Logs Directory</CardTitle>
-              <CardDescription>View comprehensive status of student fee completion</CardDescription>
-            </div>
-            <div className="relative w-full md:w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by name, enrollment, program..."
-                className="pl-9 h-9"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
+      {/* Toolbar */}
+      <div className="rounded-2xl border bg-card p-4 space-y-3">
+        <div className="flex flex-col lg:flex-row gap-3 lg:items-center">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input placeholder="Search by name, enrollment no. or program" className="pl-9 h-9" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
           </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Select value={universityFilter} onValueChange={setUniversityFilter}>
-              <SelectTrigger className="w-[180px] h-8 text-xs">
-                <SelectValue placeholder="University" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Universities</SelectItem>
-                {universities.map(u => <SelectItem key={u} value={u as string}>{u as string}</SelectItem>)}
-              </SelectContent>
-            </Select>
-
-            <Select value={programFilter} onValueChange={setProgramFilter}>
-              <SelectTrigger className="w-[180px] h-8 text-xs">
-                <SelectValue placeholder="Program" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Programs</SelectItem>
-                {programs.map(p => <SelectItem key={p} value={p as string}>{p as string}</SelectItem>)}
-              </SelectContent>
-            </Select>
-
-            <Select value={branchFilter} onValueChange={setBranchFilter}>
-              <SelectTrigger className="w-[180px] h-8 text-xs">
-                <SelectValue placeholder="Branch" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Branches</SelectItem>
-                {branches.map(b => <SelectItem key={b} value={b as string}>{b as string}</SelectItem>)}
-              </SelectContent>
-            </Select>
-
+          <div className="flex flex-wrap gap-2">
+            <FilterSelect value={universityFilter} onChange={setUniversityFilter} all="All universities" items={universities as string[]} />
+            <FilterSelect value={programFilter} onChange={setProgramFilter} all="All programs" items={programs as string[]} />
+            <FilterSelect value={branchFilter} onChange={setBranchFilter} all="All branches" items={branches as string[]} />
             <Select value={sortOption} onValueChange={setSortOption}>
-              <SelectTrigger className="w-[180px] h-8 text-xs ml-auto">
-                <SelectValue placeholder="Sort By" />
-              </SelectTrigger>
+              <SelectTrigger className="w-[170px] h-9 text-xs"><SelectValue placeholder="Sort by" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="recent">Recently Added</SelectItem>
+                <SelectItem value="recent">Recently added</SelectItem>
                 <SelectItem value="name-asc">Name (A-Z)</SelectItem>
                 <SelectItem value="name-desc">Name (Z-A)</SelectItem>
-                <SelectItem value="balance-desc">Balance (High to Low)</SelectItem>
-                <SelectItem value="balance-asc">Balance (Low to High)</SelectItem>
+                <SelectItem value="balance-desc">Balance (high to low)</SelectItem>
+                <SelectItem value="balance-asc">Balance (low to high)</SelectItem>
               </SelectContent>
             </Select>
           </div>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="flex justify-center p-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-            </div>
-          ) : filteredLogs.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No payment records found.</div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-sm">
-                <thead>
-                  <tr className="border-b border-border text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    <th className="pb-3 pr-4">Student Details</th>
-                    <th className="pb-3 px-4">Program</th>
-                    <th className="pb-3 px-4 text-right">Total Fee</th>
-                    <th className="pb-3 px-4 text-right">Amount Received</th>
-                    <th className="pb-3 px-4 text-right">Balance</th>
-                    <th className="pb-3 pl-4">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/60">
-                  {filteredLogs.map((log: any) => (
-                    <React.Fragment key={log.studentId}>
-                      <tr className="hover:bg-background/20 cursor-pointer" onClick={() => toggleRow(log.studentId)}>
-                        <td className="py-3 px-4 pl-0">
-                          <div className="flex items-center gap-2">
-                            {expandedRows[log.studentId] ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
-                            <div>
-                              <span className="font-bold text-foreground block">{log.name}</span>
-                              <span className="text-[10px] text-muted-foreground">{log.enrollmentNo || 'No Enrollment No.'}</span>
+        </div>
+        <div className="flex flex-wrap items-center gap-2 pt-1">
+          {tabs.map((t) => (
+            <button key={t.id} onClick={() => setStatusTab(t.id)}
+              className={cn('inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium border transition',
+                statusTab === t.id ? 'bg-primary text-primary-foreground border-primary shadow-sm' : 'bg-background text-muted-foreground hover:text-foreground hover:border-primary/40')}>
+              {t.label}
+              <span className={cn('text-[11px] rounded-full px-1.5 tabular-nums', statusTab === t.id ? 'bg-white/20' : 'bg-muted')}>{tabCounts[t.id]}</span>
+            </button>
+          ))}
+          {hasFilters && (
+            <button onClick={clearFilters} className="ml-auto text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1"><X className="w-3.5 h-3.5" />Clear filters</button>
+          )}
+        </div>
+      </div>
+
+      {/* List */}
+      {loading ? (
+        <div className="space-y-3">{[0, 1, 2, 3].map((i) => <div key={i} className="h-24 rounded-2xl bg-muted/50 animate-pulse" />)}</div>
+      ) : filteredLogs.length === 0 ? (
+        <div className="rounded-2xl border border-dashed p-12 text-center">
+          <Users className="w-10 h-10 mx-auto text-muted-foreground/60" />
+          <p className="font-semibold mt-3">No payment records found</p>
+          <p className="text-sm text-muted-foreground mt-1">{hasFilters ? 'Try changing or clearing the filters.' : 'Records appear here once students have fees.'}</p>
+          {hasFilters && <Button variant="outline" className="mt-4" onClick={clearFilters}>Clear filters</Button>}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {pageRows.map((log: any) => {
+            const open = !!expandedRows[log.studentId];
+            const pct = pctOf(log.totalPaid, log.totalFee);
+            const done = log.status === 'Completed';
+            const overdue = isOverdue(log);
+            return (
+              <div key={log.studentId} className={cn('rounded-2xl border bg-card transition overflow-hidden', open && 'shadow-md border-primary/30')}>
+                <button className="w-full text-left p-4 sm:p-5 grid grid-cols-[auto_1fr_auto] lg:grid-cols-[minmax(220px,1.3fr)_minmax(160px,1fr)_minmax(180px,1.2fr)_auto_auto] gap-x-4 gap-y-3 items-center" onClick={() => toggleRow(log.studentId)}>
+                  {/* Student */}
+                  <div className="flex items-center gap-3 min-w-0 col-span-2 lg:col-span-1">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold text-sm flex items-center justify-center shrink-0">{initials(log.name)}</div>
+                    <div className="min-w-0">
+                      <p className="font-semibold truncate">{log.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{log.enrollmentNo || 'No enrollment no.'}</p>
+                    </div>
+                  </div>
+                  {/* Status (mobile position) */}
+                  <div className="lg:hidden justify-self-end"><StatusChip done={done} overdue={overdue} /></div>
+                  {/* Program */}
+                  <div className="min-w-0 col-span-3 lg:col-span-1 text-sm">
+                    <p className="truncate font-medium">{log.programName || '-'}</p>
+                    <p className="text-xs text-muted-foreground truncate">{[log.universityName, log.branchName].filter(Boolean).join(' · ') || '-'}</p>
+                    {log.paymentPlan && log.paymentPlan !== 'N/A' && <span className="inline-block text-[10px] bg-secondary/60 rounded px-1.5 py-0.5 mt-1 capitalize">{String(log.paymentPlan).replace('_', ' ')} plan</span>}
+                  </div>
+                  {/* Money */}
+                  <div className="col-span-3 lg:col-span-1">
+                    <div className="flex items-baseline justify-between text-sm">
+                      <span className="font-semibold text-emerald-600">{inr(log.totalPaid)}</span>
+                      <span className="text-xs text-muted-foreground">of {inr(log.totalFee)}</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-muted mt-1.5 overflow-hidden"><div className={cn('h-full rounded-full transition-all', done ? 'bg-emerald-500' : overdue ? 'bg-red-500' : 'bg-amber-500')} style={{ width: `${pct}%` }} /></div>
+                    {log.discountAmount > 0 && <p className="text-[10px] text-green-600 mt-1" title={log.discountReason}>₹{log.discountAmount.toLocaleString('en-IN')} discount applied</p>}
+                  </div>
+                  {/* Balance */}
+                  <div className="hidden lg:block text-right min-w-[96px]">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Balance</p>
+                    <p className={cn('text-lg font-bold', (log.balance || 0) > 0 ? 'text-amber-600' : 'text-emerald-600')}>{inr(log.balance)}</p>
+                  </div>
+                  <div className="hidden lg:flex items-center gap-2 justify-end">
+                    <StatusChip done={done} overdue={overdue} />
+                    <ChevronDown className={cn('w-4 h-4 text-muted-foreground transition-transform', open && 'rotate-180')} />
+                  </div>
+                  {/* Balance on mobile */}
+                  <div className="lg:hidden col-span-3 flex items-center justify-between text-sm border-t pt-2">
+                    <span className="text-muted-foreground">Balance</span>
+                    <span className={cn('font-bold', (log.balance || 0) > 0 ? 'text-amber-600' : 'text-emerald-600')}>{inr(log.balance)}</span>
+                  </div>
+                </button>
+
+                {open && (
+                  <div className="border-t bg-muted/20 p-4 sm:p-5">
+                    <div className="flex flex-wrap justify-between items-center gap-2 mb-4">
+                      <h4 className="font-semibold text-sm flex items-center gap-2"><Receipt className="w-4 h-4 text-muted-foreground" />Fee breakdown</h4>
+                      <Button variant="outline" size="sm" onClick={() => { setSelectedStudentId(log.studentId); setExtraFeeDialogOpen(true); }}>
+                        <Plus className="w-4 h-4 mr-1" />Add extra fee
+                      </Button>
+                    </div>
+                    {log.breakdown && log.breakdown.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                        {log.breakdown.map((b: any, i: number) => {
+                          const bp = pctOf(b.paid, b.totalFee);
+                          const late = b.balance > 0 && b.dueDate && new Date(b.dueDate).getTime() < Date.now();
+                          return (
+                            <div key={i} className="bg-background rounded-xl border p-4 flex flex-col gap-2">
+                              <div className="flex justify-between items-center gap-2">
+                                <span className="text-sm font-semibold truncate">{b.year}</span>
+                                {b.dueDate && (
+                                  <span className={cn('text-[10px] px-2 py-0.5 rounded-full shrink-0', late ? 'bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-300' : 'bg-muted text-muted-foreground')}>
+                                    {late ? 'Overdue · ' : 'Due '}{new Date(b.dueDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="h-1.5 rounded-full bg-muted overflow-hidden"><div className={cn('h-full rounded-full', b.balance > 0 ? (late ? 'bg-red-500' : 'bg-amber-500') : 'bg-emerald-500')} style={{ width: `${bp}%` }} /></div>
+                              <div className="grid grid-cols-3 text-center text-xs pt-1">
+                                <div><p className="text-muted-foreground">Total</p><p className="font-semibold text-sm">{inr(b.totalFee)}</p></div>
+                                <div><p className="text-muted-foreground">Received</p><p className="font-semibold text-sm text-emerald-600">{inr(b.paid)}</p></div>
+                                <div><p className="text-muted-foreground">Balance</p><p className="font-semibold text-sm text-amber-600">{inr(b.balance)}</p></div>
+                              </div>
+                              {b.balance > 0 && (
+                                <Button variant="outline" size="sm" className="w-full text-xs h-8 mt-1" onClick={() => { setSelectedStudentId(log.studentId); setSelectedScheduleId(b.scheduleId || null); setPaymentDialogOpen(true); }}>
+                                  <Plus className="w-3 h-3 mr-1" />Record receipt
+                                </Button>
+                              )}
                             </div>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-muted-foreground">
-                          <div className="flex flex-col">
-                            <span>{log.programName}</span>
-                            {log.paymentPlan && log.paymentPlan !== 'N/A' && (
-                              <span className="text-[10px] bg-secondary/50 text-secondary-foreground w-fit px-1.5 py-0.5 rounded mt-1 capitalize">
-                                {log.paymentPlan.replace('_', ' ')} Plan
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right font-medium text-foreground">
-                          ₹{log.totalFee?.toLocaleString('en-IN') || 0}
-                          {log.discountAmount > 0 && (
-                            <div className="text-[10px] text-green-600 mt-0.5" title={log.discountReason}>
-                              (-₹{log.discountAmount.toLocaleString('en-IN')} off)
-                            </div>
-                          )}
-                        </td>
-                        <td className="py-3 px-4 text-right font-medium text-emerald-600">
-                          ₹{log.totalPaid?.toLocaleString('en-IN') || 0}
-                        </td>
-                        <td className="py-3 px-4 text-right font-semibold text-amber-600">
-                          ₹{log.balance?.toLocaleString('en-IN') || 0}
-                        </td>
-                        <td className="py-3 pl-4">
-                          {log.status === 'Completed' ? (
-                            <Badge className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-none">
-                              Completed
-                            </Badge>
-                          ) : (
-                            <Badge variant="secondary" className="bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 border-none">
-                              Pending
-                            </Badge>
-                          )}
-                        </td>
-                      </tr>
-                      {expandedRows[log.studentId] && log.breakdown && log.breakdown.length > 0 && (
-                        <tr className="bg-muted/20">
-                          <td colSpan={6} className="p-4 border-l-2 border-primary">
-                            <div className="flex justify-between items-center mb-4">
-                              <h4 className="font-semibold text-foreground text-sm">Fee Breakdown</h4>
-                              <Button variant="outline" size="sm" onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedStudentId(log.studentId);
-                                setExtraFeeDialogOpen(true);
-                              }}>
-                                <Plus className="w-4 h-4 mr-1" /> Add Extra Fee
-                              </Button>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                              {log.breakdown.map((b: any, i: number) => (
-                                <div key={i} className="bg-background rounded-md border border-border p-3 flex flex-col gap-1 shadow-sm">
-                                  <div className="flex justify-between items-center mb-1">
-                                    <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{b.year}</span>
-                                    {b.dueDate && (
-                                      <span className="text-[10px] bg-muted px-2 py-0.5 rounded text-muted-foreground">
-                                        Due: {new Date(b.dueDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="flex justify-between items-center text-sm mt-1">
-                                    <span className="text-muted-foreground">Total:</span>
-                                    <span className="font-semibold text-foreground">₹{b.totalFee?.toLocaleString('en-IN') || 0}</span>
-                                  </div>
-                                  <div className="flex justify-between items-center text-sm">
-                                    <span className="text-muted-foreground">Received:</span>
-                                    <span className="font-medium text-emerald-600">₹{b.paid?.toLocaleString('en-IN') || 0}</span>
-                                  </div>
-                                  <div className="flex justify-between items-center text-sm border-t border-border mt-1 pt-1">
-                                    <span className="text-muted-foreground">Balance:</span>
-                                    <span className="font-semibold text-amber-600">₹{b.balance?.toLocaleString('en-IN') || 0}</span>
-                                  </div>
-                                  {b.balance > 0 && (
-                                    <div className="mt-3 pt-3 border-t border-border flex justify-end">
-                                      <Button variant="outline" size="sm" className="w-full text-xs h-8" onClick={(e) => {
-                                        e.stopPropagation();
-                                        setSelectedStudentId(log.studentId);
-                                        setSelectedScheduleId(b.scheduleId || null);
-                                        setPaymentDialogOpen(true);
-                                      }}>
-                                        <Plus className="w-3 h-3 mr-1" />
-                                        Record Receipt
-                                      </Button>
-                                    </div>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </tbody>
-              </table>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">No fee breakdown is available for this student yet.</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {pageCount > 1 && (
+            <div className="flex items-center justify-between pt-2">
+              <p className="text-sm text-muted-foreground">Showing {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filteredLogs.length)} of {filteredLogs.length}</p>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm" disabled={currentPage <= 1} onClick={() => setPage(currentPage - 1)}>Previous</Button>
+                <span className="text-sm tabular-nums">{currentPage} / {pageCount}</span>
+                <Button variant="outline" size="sm" disabled={currentPage >= pageCount} onClick={() => setPage(currentPage + 1)}>Next</Button>
+              </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      )}
 
       <Dialog open={paymentDialogOpen} onOpenChange={(open) => { setPaymentDialogOpen(open); if (!open) setFormData({ amount: '', method: 'Bank Transfer', referenceNo: '', date: new Date().toISOString().split('T')[0], notes: '' }); }}>
         <DialogContent>
@@ -392,5 +419,41 @@ export function StudentPaymentsLogPanel() {
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+function SummaryTile({ icon: Icon, label, value, sub, tone }: { icon: any; label: string; value: string; sub: string; tone: 'slate' | 'emerald' | 'amber' }) {
+  const tones = {
+    slate: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300',
+    emerald: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+    amber: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+  };
+  return (
+    <div className="rounded-2xl border bg-card p-4 flex items-center gap-3">
+      <div className={cn('p-2.5 rounded-xl shrink-0', tones[tone])}><Icon className="w-4 h-4" /></div>
+      <div className="min-w-0">
+        <p className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">{label}</p>
+        <p className="text-xl font-bold leading-tight truncate">{value}</p>
+        <p className="text-[11px] text-muted-foreground truncate">{sub}</p>
+      </div>
+    </div>
+  );
+}
+
+function StatusChip({ done, overdue }: { done: boolean; overdue: boolean }) {
+  if (done) return <Badge className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-none">Completed</Badge>;
+  if (overdue) return <Badge className="bg-red-500/10 text-red-600 hover:bg-red-500/20 border-none">Overdue</Badge>;
+  return <Badge className="bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 border-none">Pending</Badge>;
+}
+
+function FilterSelect({ value, onChange, all, items }: { value: string; onChange: (v: string) => void; all: string; items: string[] }) {
+  return (
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger className="w-[170px] h-9 text-xs"><SelectValue placeholder={all} /></SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">{all}</SelectItem>
+        {items.map((i) => <SelectItem key={i} value={i}>{i}</SelectItem>)}
+      </SelectContent>
+    </Select>
   );
 }

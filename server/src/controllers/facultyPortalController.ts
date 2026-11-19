@@ -526,6 +526,33 @@ export const uploadMaterial = asyncHandler(async (req: AuthRequest, res: Respons
   res.status(201).json({ success: true, data: mat });
 });
 
+export const updateMaterial = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { materialId } = req.params;
+  const mat = await prisma.classMaterial.findUnique({ where: { id: materialId }, include: { moduleLesson: { include: { classModule: { include: { academicClass: true } } } } } });
+  if (!mat || !isIncharge(mat.moduleLesson.classModule.academicClass, req.user.id)) return res.status(404).json({ success: false, message: 'Material not found or unauthorized' });
+
+  const data: any = {};
+  if (req.body.title !== undefined) {
+    const title = String(req.body.title).trim();
+    if (!title) return res.status(400).json({ success: false, message: 'Title is required' });
+    data.title = title.slice(0, 200);
+  }
+  if (req.body.description !== undefined) {
+    const description = String(req.body.description).trim();
+    data.description = description ? description.slice(0, 2000) : null;
+  }
+  // A new file replaces the old one; without a file the existing one is kept
+  if (req.file) {
+    data.fileUrl = (req.file as any).location || req.file.path;
+    data.fileName = req.file.originalname;
+  }
+  if (Object.keys(data).length === 0) return res.status(400).json({ success: false, message: 'Nothing to update' });
+
+  const updated = await prisma.classMaterial.update({ where: { id: materialId }, data });
+  res.status(200).json({ success: true, data: updated });
+});
+
 export const deleteMaterial = asyncHandler(async (req: AuthRequest, res: Response) => {
   if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
   const { materialId } = req.params;
