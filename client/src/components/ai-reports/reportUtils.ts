@@ -79,12 +79,58 @@ function shortMoney(n: number, money: boolean): string {
   return (money ? CS() : '') + nf.format(Math.round(n));
 }
 
+
+/**
+ * "Who is absent / present today": staff attendance lists are read out by name (up to 5, then
+ * the count of the rest). Other per-person lists stay on screen only.
+ */
+const ATTENDANCE_WORDS: Record<string, { en: string; ml: string }> = {
+  absent: { en: 'absent', ml: 'ഹാജരല്ലാത്തവർ' },
+  present: { en: 'present', ml: 'ഹാജരായവർ' },
+  late: { en: 'late', ml: 'വൈകി വന്നവർ' },
+  leave: { en: 'on leave', ml: 'അവധിയിലുള്ളവർ' },
+  wfh: { en: 'working from home', ml: 'വർക്ക് ഫ്രം ഹോം' },
+  half_day: { en: 'on a half day', ml: 'ഹാഫ് ഡേ' },
+};
+function attendanceNames(result: Result, lang: Lang): { text: string; speech: string } | null {
+  const { spec, rows, columns } = result;
+  if (spec.dataset !== 'staff_day_status' || spec.mode !== 'list' || !columns.some((c) => c.key === 'employee')) return null;
+  const MAX = 5;
+  const names = rows.map((r) => String(r.employee ?? '').trim()).filter(Boolean);
+  const status = spec.filters.find((f) => f.field === 'status');
+  const first = (status?.values?.[0] || status?.value || '').toLowerCase();
+  const word = ATTENDANCE_WORDS[first] || null;
+  const dateF = spec.filters.find((f) => f.field === 'date' && f.op === 'eq');
+  const today = new Date(Date.now() + 330 * 60_000).toISOString().slice(0, 10);
+  const when = lang === 'ml' ? (!dateF || dateF.value === today ? 'ഇന്ന്' : '') : (!dateF || dateF.value === today ? ' today' : '');
+  if (rows.length === 0 && word) {
+    const t = lang === 'ml' ? `${when} ${word.ml} ആരുമില്ല.`.trim() : `Nobody is ${word.en}${when}.`;
+    return { text: t, speech: t };
+  }
+  if (names.length === 0) return null;
+  const shown = names.slice(0, MAX);
+  const rest = names.length - shown.length;
+  if (lang === 'ml') {
+    const list = shown.join(', ');
+    const tail = rest > 0 ? `, കൂടാതെ ${rest} പേർ കൂടി` : '';
+    const head = `${when} ${word ? word.ml : 'ഹാജർ നില'}: ${names.length} പേർ`.trim();
+    return { text: `${head} — ${list}${tail}.`, speech: `${head}. ${list}${tail}.` };
+  }
+  const list = shown.length > 1 ? `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}` : shown[0];
+  const tail = rest > 0 ? `, and ${rest} more` : '';
+  const head = `${names.length} ${names.length === 1 ? 'person is' : 'people are'} ${word ? word.en : 'listed'}${when}`;
+  const body = rest > 0 ? `${shown.join(', ')}${tail}` : list;
+  return { text: `${head}: ${body}.`, speech: `${head}. ${body}.` };
+}
+
 /**
  * A one-to-two sentence summary of the result: `text` for the chat bubble,
  * `speech` for text-to-speech. Built from the numbers, no extra AI call.
  */
 function summarizeEn(result: Result): { text: string; speech: string } {
   const { spec, columns, rows, meta } = result;
+  const names = attendanceNames(result, 'en');
+  if (names) return names;
   if (rows.length === 0) {
     const t = 'No data matches this report. Try widening the date range or removing a filter.';
     return { text: t, speech: t };
@@ -182,6 +228,8 @@ const mlOf = (spoken: string) => (spoken.endsWith(' രൂപ') ? `${spoken}യ�
 
 function summarizeMl(result: Result): { text: string; speech: string } {
   const { spec, columns, rows, meta } = result;
+  const names = attendanceNames(result, 'ml');
+  if (names) return names;
   if (rows.length === 0) {
     const t = 'ഈ റിപ്പോർട്ടിന് ഡാറ്റ ഒന്നും ലഭ്യമല്ല. തീയതി പരിധി കൂട്ടുകയോ ഒരു ഫിൽട്ടർ നീക്കം ചെയ്യുകയോ ചെയ്യൂ.';
     return { text: t, speech: t };

@@ -17,6 +17,7 @@ import {
   enrollmentScope, staffScope, studentScope,
 } from './access.js';
 import { staffDayRows } from './attendanceDay.js';
+import { studentFeeRows } from './studentFees.js';
 
 export type FieldType = 'number' | 'string' | 'date' | 'enum' | 'boolean';
 
@@ -323,6 +324,33 @@ export const DATASETS: Record<string, DatasetDef> = {
     scope: studentScope,
   },
 
+  student_fees: {
+    label: 'Student fee status',
+    description: 'One row per student with total fee, fee paid, balance, overdue amount and days overdue, and a fee status (Paid, Partially paid, Unpaid, Overdue, Fee not set up). Use for: "who has overdue fees", "students with pending fees", "total fee / paid / balance by branch, university or program", "fee dues by university". Overdue = an installment, or an invoice, past its due date and unpaid. "Fee not set up" means the fee structure could not be matched, so no total is shown for that student. The figures are as of today.',
+    model: 'student',
+    panels: [...ALL, 'finance', 'ops', 'collections', 'branch'],
+    defaultDateField: 'admissionDate',
+    maxDays: 3650,
+    fields: {
+      name:           { label: 'Student', type: 'string', path: ['name'] },
+      enrollmentNo:   { label: 'Enrollment no.', type: 'string', path: ['enrollmentNo'] },
+      status:         { label: 'Student status', type: 'string', path: ['status'], groupable: true, hints: ['pending', 'active', 'provisional', 'document_review', 'completed', 'dropped'] },
+      program:        { label: 'Program', type: 'string', path: ['program'], groupable: true },
+      university:     { label: 'University', type: 'string', path: ['university'], groupable: true },
+      universityCode: { label: 'University code', type: 'string', path: ['universityCode'], groupable: true },
+      branch:         { label: 'Branch', type: 'string', path: ['branch'], groupable: true },
+      admissionDate:  { label: 'Admission date', type: 'date', path: ['admissionDate'] },
+      feeStatus:      { label: 'Fee status', type: 'enum', path: ['feeStatus'], values: ['Paid', 'Partially paid', 'Unpaid', 'Overdue', 'Fee not set up'], groupable: true },
+      totalFee:       { label: 'Total fee', type: 'number', path: ['totalFee'], aggregatable: true },
+      paidFee:        { label: 'Fee paid', type: 'number', path: ['paidFee'], aggregatable: true },
+      balanceFee:     { label: 'Balance', type: 'number', path: ['balanceFee'], aggregatable: true },
+      overdueAmount:  { label: 'Overdue amount', type: 'number', path: ['overdueAmount'], aggregatable: true },
+      overdueDays:    { label: 'Days overdue', type: 'number', path: ['overdueDays'], aggregatable: true },
+    },
+    scope: (c) => (isFinance(c) || COLLECTIONS_ROLES.includes(c.role) || c.isBranchManager || ['ops_admin', 'ops_sub_admin'].includes(c.role) ? studentScope(c) : null),
+    virtual: (c, range, scope) => studentFeeRows(c, range, scope),
+  },
+
   student_attendance: {
     label: 'Class attendance (students)',
     description: 'Student attendance in live academic class sessions, by class, batch and faculty.',
@@ -614,13 +642,13 @@ export const STUDENT_COLUMN_GROUPS: { label: string; fields: string[] }[] = [
 ];
 
 export const SUGGESTIONS: Record<string, string[]> = {
-  org_admin: ['Who is absent today?', 'Attendance per employee this month (present, absent, leave, late)', 'Enrollments by status this month', 'Fee collection by branch this year', 'Monthly enrollment payments this financial year', 'Employees by department', 'Pending fee dues by study center', 'Leave requests by status this month'],
-  ceo: ['Who is absent today?', 'Attendance % by department this month', 'Monthly enrollment payments this financial year', 'Enrollments by university this year', 'Fee collection by branch this quarter', 'Overdue fee dues by branch', 'Top 10 programs by enrollments this year', 'Employees by department'],
-  finance: ['Fee collection by study center for the last 3 months', 'Monthly enrollment payments this year as a line chart', 'Overdue fee dues by study center', 'Pending wallet top-ups by study center', 'Expense claims by category this quarter', 'Top 10 programs by fee collected this year'],
+  org_admin: ['Students with overdue fees by university', 'Fee balance by branch', 'Who is absent today?', 'Attendance per employee this month (present, absent, leave, late)', 'Enrollments by status this month', 'Fee collection by branch this year', 'Monthly enrollment payments this financial year', 'Employees by department', 'Pending fee dues by study center', 'Leave requests by status this month'],
+  ceo: ['Students with overdue fees by university', 'Fee balance by branch', 'Who is absent today?', 'Attendance % by department this month', 'Monthly enrollment payments this financial year', 'Enrollments by university this year', 'Fee collection by branch this quarter', 'Overdue fee dues by branch', 'Top 10 programs by enrollments this year', 'Employees by department'],
+  finance: ['List students with overdue fees', 'Fee status by university', 'Fee collection by study center for the last 3 months', 'Monthly enrollment payments this year as a line chart', 'Overdue fee dues by study center', 'Pending wallet top-ups by study center', 'Expense claims by category this quarter', 'Top 10 programs by fee collected this year'],
   ops: ['Enrollments by status this month', 'Enrollments by university this year', 'Students by program', 'Pending document reviews by study center', 'Class attendance by batch this month', 'Monthly enrollments this year'],
   hr: ['Employees by department', 'Leave requests by type this month', 'Late arrivals by department this month', 'Attendance status today', 'Payroll net salary by month this year', 'Open complaints by category'],
   sales: ['My enrollments by status this month', 'Enrollments by sales person this month', 'Leads by status', 'Lead conversion by source this year', 'Target vs achieved by employee', 'Monthly enrollments this year'],
-  collections: ['Overdue fee dues by branch', 'Fees due this month by study center', 'Collected vs pending fees this month', 'Students by status', 'Monthly fee collection this year', 'Target vs achieved'],
+  collections: ['List students with overdue fees', 'Overdue fee dues by branch', 'Fees due this month by study center', 'Collected vs pending fees this month', 'Students by status', 'Monthly fee collection this year', 'Target vs achieved'],
   center: ['My enrollments by status this month', 'Fee collection this year by month', 'Students by program', 'Pending fee dues', 'Wallet top-ups this year', 'Class attendance this month'],
   branch: ['Enrollments by sales person this month', 'Staff attendance today', 'Leave requests this month', 'Overdue fee dues', 'Students by program', 'Tasks by status'],
   employee: ['My attendance this month', 'My leave requests this year', 'My tasks by status', 'My payslips this year', 'My expense claims', 'My target vs achieved'],

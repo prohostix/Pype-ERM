@@ -151,8 +151,15 @@ export function AIReportBuilder({ panel }: { panel: string }) {
         patch(pendingId, { pending: false, text: data.clarify, speech: data.clarify });
         return data.clarify;
       }
+      // Multi-step answer: one written answer plus every report the AI ran
+      if (Array.isArray(data.results)) {
+        const [first, ...others] = data.results as Result[];
+        patch(pendingId, { pending: false, text: data.answer, speech: data.answer, result: first });
+        if (others.length) setMessages((l) => [...l, ...others.map((r) => ({ id: nextId++, role: 'assistant' as const, text: '', result: r }))]);
+        return data.answer as string;
+      }
       const s = summarize(data, langRef.current);
-      const answer: string | undefined = data.answer; // Grok talk-back (when configured)
+      const answer: string | undefined = data.answer; // talk-back answer (Grok or Gemini)
       patch(pendingId, { pending: false, text: answer ?? s.text, speech: answer ?? s.speech, result: data });
       return answer ?? s.speech;
     } catch (e) {

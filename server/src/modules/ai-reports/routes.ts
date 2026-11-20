@@ -17,11 +17,12 @@ import { protect, AuthRequest } from '../../middleware/auth.js';
 import prisma from '../../lib/prisma.js';
 import { SUGGESTIONS, datasetsFor, describeDatasets } from './datasets.js';
 import { ReportError, runSpec, validateSpec } from './compiler.js';
-import { generateAnswer, generateReportSpec, parseLanguage, talkBackEnabled } from './provider.js';
+import { generateAnswer, generateReportSpec, liveVoiceEnabled, parseLanguage } from './provider.js';
 import { aiPayload, voiceSession } from './voice.js';
 import { mintVoiceToken } from './grok.js';
 import { synthesize, ttsLanguages } from './tts.js';
 import { AccessError, accessLabel, buildContext } from './access.js';
+import { runAgent } from './agent.js';
 
 const router = express.Router();
 router.use(protect);
@@ -114,7 +115,7 @@ router.get('/catalog', async (req: AuthRequest, res: Response) => {
       })),
       suggestions: Object.keys(allowed).length ? SUGGESTIONS[panel] ?? [] : [],
       /** Live voice + spoken answers need Grok (report totals never go to Gemini) */
-      liveVoice: talkBackEnabled(),
+      liveVoice: liveVoiceEnabled(),
       /** Languages the server can speak (sent to Gemini TTS: the sentence only) */
       serverVoice: ttsLanguages(),
     },
@@ -151,7 +152,28 @@ router.post('/generate', generateLimiter, async (req: AuthRequest, res: Response
     }
     const aiMs = Date.now() - started;
 
-    // Text-only answer (question about the report, unsupported data, small talk): don't run anything
+    // Not about the ERM: refuse with a fixed message, never a free-text answer
+    if (raw?.intent === 'off_topic') {
+      audit(req, 'AI_REPORT_OFF_TOPIC', { panel, prompt, ms: Date.now() - started });
+      const labels = Object.values(allowed).map((d) => d.label.toLowerCase()).slice(0, 6).join(', ');
+      res.json({ success: true, data: { clarify: language === 'ml'
+        ? `ഇത് ERM ഡാറ്റയെക്കുറിച്ചുള്ള ചോദ്യമല്ല, അതിനാൽ എനിക്ക് മറുപടി നൽകാൻ കഴിയില്ല. ${labels} എന്നിവയെക്കുറിച്ച് ചോദിക്കൂ.`
+        : `I can only help with your ERM data, so I can't answer that. Try asking about ${labels}.` } });
+      return;
+    }
+
+    // Several reports / comparison / one named person: the multi-step agent
+    if (raw?.intent === 'multi') {
+      const out = await runAgent({
+        prompt, ctx, allowed, catalog: describeDatasets(allowed), previousSpec, language,
+        accessLabelFor: (ds) => accessLabel(ctx, ds.scope(ctx)),
+      });
+      audit(req, 'AI_REPORT_MULTI', { panel, prompt, reports: out.results.length, totalsSentToAI: true, ms: Date.now() - started });
+      res.json({ success: true, data: { answer: out.answer, results: out.results } });
+      return;
+    }
+
+    // Text-only answer (question about the report, unsupported data): don't run anything
     if (raw?.intent !== 'report') {
       const reply = String(raw?.reply || raw?.clarify || '').trim()
         || `I can build reports on ${Object.values(allowed).map((d) => d.label.toLowerCase()).join(', ')}. What would you like to see?`;
@@ -193,7 +215,7 @@ router.post('/run', async (req: AuthRequest, res: Response) => {
 router.post('/voice/session', voiceSessionLimiter, async (req: AuthRequest, res: Response) => {
   const panel = panelOf(req.body?.panel);
   try {
-    if (!talkBackEnabled()) throw new ReportError(503, 'Live voice needs Grok to be configured (XAI_API_KEY).');
+    if (!liveVoiceEnabled()) throw new ReportError(503, 'Live voice needs Grok to be configured (XAI_API_KEY).');
     const ctx = await buildContext(req.user);
     const allowed = datasetsFor(panel, ctx);
     if (Object.keys(allowed).length === 0) throw new ReportError(403, 'AI reports are not available for your role in this panel');

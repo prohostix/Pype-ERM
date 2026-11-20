@@ -5,8 +5,9 @@
  * only gets the dataset descriptions and the question, never database rows.
  *
  * Provider is picked with AI_PROVIDER: "grok" (xAI) or "gemini".
- * Talk-back answers (generateAnswer) need report totals, so they run on Grok only —
- * report results are never sent to Gemini.
+ * Talk-back answers (generateAnswer) need report totals: they run on Grok when it is the
+ * provider, otherwise on Gemini (totals only, never database rows; staff attendance lists
+ * include the names to be read out). Live voice needs Grok.
  */
 import type { GoogleGenAI } from '@google/genai';
 import { AGGS, CHARTS, INTERVALS, OPS, ReportError } from './compiler.js';
@@ -60,6 +61,7 @@ export const SPEC_RULES = `- Pick the single dataset that best answers the quest
 - metrics: {agg:"count"} counts records; sum/avg/min/max need a field marked sum/avg.
 - Conditional counts: {agg:"count_if", field, values} counts records whose field is one of values; {agg:"percent_if", field, values} gives that as a % of all records in the group. Use several of them side by side, e.g. attendance per employee: count_if present ["true"] (present days), count_if status ["absent"], count_if status ["leave"], count_if isLate ["true"], percent_if present ["true"] (attendance %, of working days), avg workingHours.
 - Staff attendance: for today, "who is absent/present", absent lists, or per-employee/department present-absent counts use staff_day_status (it includes people who have not punched in). For one person, filter employee with "contains". "Today" = filter date eq today; for lists of who is absent use mode "list" with columns employee, employeeCode, department, branch, status, checkIn.
+- Student fees: for overdue fees, pending fees, fee balance, total fee vs paid, or fee status per student/branch/university/program use student_fees. "Overdue" = feeStatus eq "Overdue". For a list of overdue students use mode "list" with columns name, enrollmentNo, university, branch, balanceFee, overdueAmount, overdueDays, sorted by overdueAmount desc. Totals: sum totalFee, paidFee, balanceFee, overdueAmount. Students whose fee could not be matched have feeStatus "Fee not set up" and no total; mention them when relevant.
 - groupBy: only fields marked groupable. For trends over time use timeBucket {field: <date field>, interval} instead of grouping by a date. At most 2 groupings in total, counting the time bucket.
 - filters: whenever the message mentions a time period (today, this week, this month, last 3 months, this year, this financial year, since March…), you MUST add a date filter for it — never drop it. Always write dates as absolute YYYY-MM-DD values, worked out from today. "Last 3 months" = gte the date 3 months before today. "This month" = gte the 1st of this month. "This year" = gte 1 January. Use the dataset's default date field unless the question names another date.
 - Use "in" with "values" for several values. For fields with listed values or known values, use exactly those spellings.
@@ -72,10 +74,12 @@ export function systemPrompt(req: SpecRequest): string {
   return `You turn questions from staff of an education ERP into report specs. The question may be in English or Malayalam.${languageRule(req.language, '"reply" and "title"')}
 ${promptContext(req)}First decide "intent":
 - "report" when the message asks for data you can build from these datasets (including follow-ups that change the previous report).
-- "reply" for everything else, with a short, friendly answer in "reply" (1-3 sentences, plain text):
+- "off_topic" when the message is NOT about this organisation's ERM data or the current report: general knowledge, coding, maths, news, weather, jokes, opinions, health or legal advice, translations, writing help, other companies, or anything you could answer without these datasets. Do not answer it, do not explain, fill "reply" with nothing. Only the ERM data and the report on screen are in scope. Never treat an off-topic message as a greeting.
+- "multi" when answering needs MORE THAN ONE report, or comparing/combining/calculating across data (e.g. "compare overdue fees with admissions", "which university has the most overdue fees and what share of the total is that", "how many students are active and how many have overdue fees, what percent is that", any question that asks for two different measures, a ratio, a percentage of something else, or "X vs Y" across different datasets), or details about ONE named student or employee (fees, attendance, status). Fill nothing else.
+- "reply" only for ERM-related text answers, with a short answer in "reply" (1-3 sentences, plain text):
   • questions ABOUT the current report ("which branch is this?", "what dates does this cover?", "what does count mean?") → answer from the previous report's dataset, filters and grouping. Reports cover the data this user can access (see "Data access") unless a filter narrows them; say so when relevant.
   • data the datasets don't have (e.g. a field that isn't listed) → say it isn't available and suggest the closest report you CAN build.
-  • greetings, thanks, off-topic or unclear messages → reply briefly and say what you can report on.
+  • a plain greeting or thanks, or an unclear ERM question → reply briefly and say what you can report on.
   Never invent numbers in a reply. When intent is "reply", fill the other required fields with anything; they are ignored.
 
 How to build the spec (intent "report"):
@@ -87,7 +91,7 @@ export function responseSchema(datasetKeys: string[]) {
   return {
     type: 'object',
     properties: {
-      intent: str('"report" to build a report, "reply" to answer in text only', { enum: ['report', 'reply'] }),
+      intent: str('"report" to build one report, "multi" for comparisons / several reports / one named person, "reply" for an ERM-related text answer, "off_topic" for anything not about this ERM data', { enum: ['report', 'reply', 'off_topic', 'multi'] }),
       reply: str('Text answer to the user when intent is "reply"'),
       title: str('Report title'),
       dataset: str('Dataset key', { enum: datasetKeys }),
@@ -260,8 +264,61 @@ export function generateReportSpec(req: SpecRequest): Promise<any> {
   return getGenerator()(req);
 }
 
-/** True when the AI may talk about report numbers (Grok only — never Gemini) */
-export const talkBackEnabled = () => aiProvider() === 'grok' && grokConfigured();
+/** Gemini client + model list for the multi-step agent (agent.ts) */
+export async function geminiForAgent() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new ReportError(503, 'AI reports are not configured (GEMINI_API_KEY missing)');
+  if (!genai) genai = await import('@google/genai');
+  const { GoogleGenAI, ThinkingLevel, ApiError } = genai;
+  gemini ??= new GoogleGenAI({
+    apiKey,
+    apiVersion: process.env.GEMINI_API_VERSION || 'v1beta',
+    httpOptions: { retryOptions: { attempts: 1 } },
+  });
+  return { gemini, ThinkingLevel, ApiError, models: geminiModels() };
+}
+
+/** Live voice (realtime speech) is Grok only */
+export const liveVoiceEnabled = () => aiProvider() === 'grok' && grokConfigured();
+
+/**
+ * True when the AI may talk about report numbers: Grok, or Gemini when it is the provider.
+ * With Gemini, report totals (never database rows) are sent to write the spoken answer.
+ */
+export const talkBackEnabled = () => liveVoiceEnabled() || (aiProvider() === 'gemini' && !!process.env.GEMINI_API_KEY);
+
+/** Plain-text Gemini call for talk-back answers (the report spec path above uses JSON output) */
+async function geminiText(system: string, user: string): Promise<string | null> {
+  if (!genai) genai = await import('@google/genai');
+  const { GoogleGenAI, ThinkingLevel } = genai;
+  gemini ??= new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+    apiVersion: process.env.GEMINI_API_VERSION || 'v1beta',
+    httpOptions: { retryOptions: { attempts: 1 } },
+  });
+  for (const model of geminiModels()) {
+    for (const level of model.startsWith('gemini-2.') ? [null] : [ThinkingLevel.MINIMAL, ThinkingLevel.LOW]) {
+      try {
+        const res = await gemini.models.generateContent({
+          model,
+          contents: user,
+          config: {
+            abortSignal: AbortSignal.timeout(MODEL_TIMEOUT_MS),
+            systemInstruction: system,
+            maxOutputTokens: 300,
+            thinkingConfig: level ? { thinkingLevel: level } : { thinkingBudget: 0 },
+          },
+        });
+        const text = (res.text || '').trim();
+        if (text) return text;
+      } catch (err: any) {
+        if (err?.status === 400 && /thinking level/i.test(String(err?.message))) continue;
+        break; // next model
+      }
+    }
+  }
+  return null;
+}
 
 /**
  * Conversational answer about a report, from its totals (see aiPayload in voice.ts).
@@ -271,17 +328,14 @@ export const talkBackEnabled = () => aiProvider() === 'grok' && grokConfigured()
 export async function generateAnswer(question: string, title: string, totals: unknown, scopeLabel?: string, language?: Language): Promise<string | null> {
   if (!talkBackEnabled()) return null;
   try {
-    return await grokChat([
-      {
-        role: 'system',
-        content: `You are a friendly analyst for an education ERP, talking to a staff member. Today is ${todayLocal()}. Amounts are in the organisation's own currency: say plain numbers without assuming a currency symbol, and use lakh/crore only if the user does.
+    const system = `You are a friendly analyst for an education ERP, talking to a staff member. Today is ${todayLocal()}. Amounts are in the organisation's own currency: say plain numbers without assuming a currency symbol, and use lakh/crore only if the user does.
 ${scopeLabel ? `The data covers what this user can see: ${scopeLabel}.
-` : ''}Answer their question in 1-3 short sentences using ONLY the report totals provided. Lead with the key number or insight, then one useful observation (top/bottom item, trend, share). Never invent numbers or names; if the totals can't answer it, say so. When the report includes employee names (staff attendance), say them in your answer, up to about 5, then mention how many more there are and that the full list is on screen. Plain text, no markdown, no lists.${languageRule(language, 'your answer')}`,
-      },
-      { role: 'user', content: `Question: ${question}
+` : ''}Answer their question in 1-3 short sentences using ONLY the report totals provided. Lead with the key number or insight, then one useful observation (top/bottom item, trend, share). Never invent numbers or names; if the totals can't answer it, say so. When the report includes employee names (staff attendance), say them in your answer, up to about 5, then mention how many more there are and that the full list is on screen. Plain text, no markdown, no lists.${languageRule(language, 'your answer')}`;
+    const user = `Question: ${question}
 Report: ${title}
-Totals (JSON): ${JSON.stringify(totals)}` },
-    ], { maxTokens: 300 });
+Totals (JSON): ${JSON.stringify(totals)}`;
+    if (liveVoiceEnabled()) return await grokChat([{ role: 'system', content: system }, { role: 'user', content: user }], { maxTokens: 300 });
+    return await geminiText(system, user);
   } catch (err) {
     console.error('[ai-reports] talk-back failed', err instanceof Error ? err.message : err);
     return null;
