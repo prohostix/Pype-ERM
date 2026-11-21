@@ -9,6 +9,7 @@ import { enqueueNotification } from '../utils/notificationQueue.js';
 import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
 
 import { findCurrency, getOrgCurrencyCode } from '../utils/currency.js';
+import { loadGapStatuses } from '../utils/videoGap.js';
 const SALES_ROLES = ['sales_admin', 'sales_sub_admin', 'sales', 'employee', 'student'];
 
 export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -1727,6 +1728,90 @@ export const setStudentVideoBlock = asyncHandler(async (req: AuthRequest, res: R
   }).catch((e) => console.error('[students] video block audit error', e));
 
   res.json({ success: true, data: updated, message: blocked ? 'Video access blocked' : 'Video access restored' });
+});
+
+
+// Name of each video lesson, for the unlock-gap screens
+function lessonTitles(classes: any[]): Map<string, string> {
+  const titles = new Map<string, string>();
+  for (const cls of classes) for (const mod of cls.modules || []) {
+    for (const l of mod.lessons || []) titles.set(l.id, l.title);
+    for (const sub of mod.subModules || []) for (const l of sub.lessons || []) titles.set(l.id, l.title);
+  }
+  return titles;
+}
+
+async function getStudentGapView(student: any) {
+  const org = await prisma.organization.findUnique({ where: { id: student.organizationId }, select: { metadata: true } });
+  const config = (org?.metadata as any)?.programAccessConfigs?.[student.programId];
+  const gap = await loadGapStatuses(student, config);
+  if (!gap) return { enabled: false as const };
+  const titles = lessonTitles(gap.classes);
+  // The next video the student is held back from: the first locked one in course order.
+  const nextId = gap.ids.find((id) => gap.statuses.get(id)?.locked);
+  const st: any = nextId ? gap.statuses.get(nextId) : null;
+  return {
+    enabled: true as const,
+    gapDays: gap.gapDays,
+    nextLocked: nextId && st ? {
+      lessonId: nextId,
+      title: titles.get(nextId) || 'Next video',
+      reason: st.reason as 'previous_incomplete' | 'waiting',
+      unlockAt: st.unlockAt as Date | null,
+      previousTitle: titles.get(st.previousLessonId) || ''
+    } : null
+  };
+}
+
+// GET /students/:id/video-unlock  (org admin only): is the student waiting on the unlock gap?
+export const getStudentVideoUnlock = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await prisma.student.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId },
+    select: { id: true, organizationId: true, programId: true, academicBatchId: true }
+  });
+  if (!student) { res.status(404).json({ success: false, message: 'Student not found' }); return; }
+  res.json({ success: true, data: await getStudentGapView(student) });
+});
+
+// PUT /students/:id/video-unlock  { lessonId? }  (org admin only)
+// Skips the unlock-gap wait for one video: the one given, or else the student's next locked one.
+export const unlockStudentNextVideo = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await prisma.student.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId },
+    select: { id: true, name: true, organizationId: true, programId: true, academicBatchId: true }
+  });
+  if (!student) { res.status(404).json({ success: false, message: 'Student not found' }); return; }
+
+  const view = await getStudentGapView(student);
+  if (!view.enabled) { res.status(400).json({ success: false, message: 'The unlock gap is not turned on for this student\'s program.' }); return; }
+  const target = view.nextLocked;
+  const lessonId = typeof req.body?.lessonId === 'string' && req.body.lessonId ? req.body.lessonId : target?.lessonId;
+  if (!lessonId || (req.body?.lessonId && target?.lessonId !== lessonId)) {
+    res.status(400).json({ success: false, message: target ? 'Only the student\'s next locked video can be unlocked.' : 'No video is waiting for this student.' });
+    return;
+  }
+
+  const now = new Date();
+  await prisma.studentVideoLog.upsert({
+    where: { studentId_moduleLessonId: { studentId: student.id, moduleLessonId: lessonId } },
+    update: { unlockedAt: now, unlockedBy: req.user.id },
+    create: { studentId: student.id, moduleLessonId: lessonId, organizationId: student.organizationId, watchDuration: 0, viewCount: 0, unlockedAt: now, unlockedBy: req.user.id }
+  });
+
+  prisma.auditLog.create({
+    data: {
+      organizationId: req.user.organizationId,
+      userId: req.user.id,
+      action: 'STUDENT_VIDEO_UNLOCKED',
+      entityType: 'student',
+      entityId: student.id,
+      oldValue: { lessonId, waitingUntil: target?.unlockAt || null },
+      newValue: { lessonId, unlockedAt: now.toISOString() },
+      ipAddress: req.ip || '0.0.0.0',
+    },
+  }).catch((e) => console.error('[students] video unlock audit error', e));
+
+  res.json({ success: true, data: await getStudentGapView(student), message: `Unlocked "${target?.title || 'the video'}" for ${student.name}` });
 });
 
 

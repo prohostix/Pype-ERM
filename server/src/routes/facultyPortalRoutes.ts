@@ -5,6 +5,7 @@ import { getMyClasses, getClassBatches, getMyBatches, getMyStudents, getModulesF
   uploadMaterial, updateMaterial, deleteMaterial, getOrganizationFaculty, getMyAssignedLessons, startSession, getActiveSessions, getSessionStudents, submitSessionAttendance, endSession,
   punchInSession, punchOutSession, getFacultyAttendancesByClass, approveFacultyPunch, getClassReviews, getVideoAnalytics, getLessonAssessment, upsertLessonAssessment, deleteLessonAssessment } from '../controllers/facultyPortalController.js';
 import { getTrialVideos, createTrialVideo, updateTrialVideo, deleteTrialVideo, getClassDoubts, answerDoubt, deleteDoubt, getClassProgress } from '../controllers/facultyPortalController.js';
+import { getMyClassMeetings, createClassMeeting, updateClassMeeting } from '../controllers/classMeetingController.js';
 import { upload } from '../middleware/upload.js';
 
 const router = express.Router();
@@ -16,6 +17,8 @@ router.route('/classes').get(getMyClasses);
 router.route('/batches/:batchId/students').get(getMyStudents);
 router.route('/batches/:batchId/sessions').get(getBatchSessions);
 router.route('/organization/faculty').get(getOrganizationFaculty);
+router.route('/meetings').get(getMyClassMeetings).post(createClassMeeting);
+router.route('/meetings/:id').put(updateClassMeeting);
 router.route('/my-assignments').get(getMyAssignedLessons);
 
 // Doubts & Progress

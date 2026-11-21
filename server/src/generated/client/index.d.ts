@@ -139,6 +139,11 @@ export type Designation = $Result.DefaultSelection<Prisma.$DesignationPayload>
  */
 export type Meeting = $Result.DefaultSelection<Prisma.$MeetingPayload>
 /**
+ * Model ClassMeeting
+ * 
+ */
+export type ClassMeeting = $Result.DefaultSelection<Prisma.$ClassMeetingPayload>
+/**
  * Model Vacancy
  * 
  */
@@ -1278,6 +1283,16 @@ export class PrismaClient<
     * ```
     */
   get meeting(): Prisma.MeetingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.classMeeting`: Exposes CRUD operations for the **ClassMeeting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ClassMeetings
+    * const classMeetings = await prisma.classMeeting.findMany()
+    * ```
+    */
+  get classMeeting(): Prisma.ClassMeetingDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.vacancy`: Exposes CRUD operations for the **Vacancy** model.
@@ -2477,6 +2492,7 @@ export namespace Prisma {
     SubDepartment: 'SubDepartment',
     Designation: 'Designation',
     Meeting: 'Meeting',
+    ClassMeeting: 'ClassMeeting',
     Vacancy: 'Vacancy',
     AdmissionSession: 'AdmissionSession',
     Enrollment: 'Enrollment',
@@ -2566,7 +2582,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadApplication" | "studyAbroadProgramCommission" | "studyAbroadPartnerPayout" | "country" | "studentFilterType" | "studentFilterOption" | "studentFilterValue" | "studentFilterHistory" | "usageDay"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "classMeeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadApplication" | "studyAbroadProgramCommission" | "studyAbroadPartnerPayout" | "country" | "studentFilterType" | "studentFilterOption" | "studentFilterValue" | "studentFilterHistory" | "usageDay"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4417,6 +4433,80 @@ export namespace Prisma {
           count: {
             args: Prisma.MeetingCountArgs<ExtArgs>
             result: $Utils.Optional<MeetingCountAggregateOutputType> | number
+          }
+        }
+      }
+      ClassMeeting: {
+        payload: Prisma.$ClassMeetingPayload<ExtArgs>
+        fields: Prisma.ClassMeetingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ClassMeetingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ClassMeetingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload>
+          }
+          findFirst: {
+            args: Prisma.ClassMeetingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ClassMeetingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload>
+          }
+          findMany: {
+            args: Prisma.ClassMeetingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload>[]
+          }
+          create: {
+            args: Prisma.ClassMeetingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload>
+          }
+          createMany: {
+            args: Prisma.ClassMeetingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ClassMeetingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload>[]
+          }
+          delete: {
+            args: Prisma.ClassMeetingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload>
+          }
+          update: {
+            args: Prisma.ClassMeetingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload>
+          }
+          deleteMany: {
+            args: Prisma.ClassMeetingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ClassMeetingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ClassMeetingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload>[]
+          }
+          upsert: {
+            args: Prisma.ClassMeetingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ClassMeetingPayload>
+          }
+          aggregate: {
+            args: Prisma.ClassMeetingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClassMeeting>
+          }
+          groupBy: {
+            args: Prisma.ClassMeetingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClassMeetingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ClassMeetingCountArgs<ExtArgs>
+            result: $Utils.Optional<ClassMeetingCountAggregateOutputType> | number
           }
         }
       }
@@ -10029,6 +10119,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentOmit
     designation?: DesignationOmit
     meeting?: MeetingOmit
+    classMeeting?: ClassMeetingOmit
     vacancy?: VacancyOmit
     admissionSession?: AdmissionSessionOmit
     enrollment?: EnrollmentOmit
@@ -10216,6 +10307,7 @@ export namespace Prisma {
     leaveAllocations: number
     leaveRequests: number
     meetings: number
+    classMeetings: number
     notifications: number
     payments: number
     paymentLinks: number
@@ -10302,6 +10394,7 @@ export namespace Prisma {
     leaveAllocations?: boolean | OrganizationCountOutputTypeCountLeaveAllocationsArgs
     leaveRequests?: boolean | OrganizationCountOutputTypeCountLeaveRequestsArgs
     meetings?: boolean | OrganizationCountOutputTypeCountMeetingsArgs
+    classMeetings?: boolean | OrganizationCountOutputTypeCountClassMeetingsArgs
     notifications?: boolean | OrganizationCountOutputTypeCountNotificationsArgs
     payments?: boolean | OrganizationCountOutputTypeCountPaymentsArgs
     paymentLinks?: boolean | OrganizationCountOutputTypeCountPaymentLinksArgs
@@ -10594,6 +10687,13 @@ export namespace Prisma {
    */
   export type OrganizationCountOutputTypeCountMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MeetingWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountClassMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassMeetingWhereInput
   }
 
   /**
@@ -13736,6 +13836,7 @@ export namespace Prisma {
     leaveAllocations?: boolean | Organization$leaveAllocationsArgs<ExtArgs>
     leaveRequests?: boolean | Organization$leaveRequestsArgs<ExtArgs>
     meetings?: boolean | Organization$meetingsArgs<ExtArgs>
+    classMeetings?: boolean | Organization$classMeetingsArgs<ExtArgs>
     notifications?: boolean | Organization$notificationsArgs<ExtArgs>
     license?: boolean | Organization$licenseArgs<ExtArgs>
     payments?: boolean | Organization$paymentsArgs<ExtArgs>
@@ -13879,6 +13980,7 @@ export namespace Prisma {
     leaveAllocations?: boolean | Organization$leaveAllocationsArgs<ExtArgs>
     leaveRequests?: boolean | Organization$leaveRequestsArgs<ExtArgs>
     meetings?: boolean | Organization$meetingsArgs<ExtArgs>
+    classMeetings?: boolean | Organization$classMeetingsArgs<ExtArgs>
     notifications?: boolean | Organization$notificationsArgs<ExtArgs>
     license?: boolean | Organization$licenseArgs<ExtArgs>
     payments?: boolean | Organization$paymentsArgs<ExtArgs>
@@ -13976,6 +14078,7 @@ export namespace Prisma {
       leaveAllocations: Prisma.$LeaveAllocationPayload<ExtArgs>[]
       leaveRequests: Prisma.$LeaveRequestPayload<ExtArgs>[]
       meetings: Prisma.$MeetingPayload<ExtArgs>[]
+      classMeetings: Prisma.$ClassMeetingPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       license: Prisma.$LicensePayload<ExtArgs> | null
       payments: Prisma.$PaymentEntryPayload<ExtArgs>[]
@@ -14471,6 +14574,7 @@ export namespace Prisma {
     leaveAllocations<T extends Organization$leaveAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$leaveAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     leaveRequests<T extends Organization$leaveRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$leaveRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     meetings<T extends Organization$meetingsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$meetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    classMeetings<T extends Organization$classMeetingsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$classMeetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends Organization$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     license<T extends Organization$licenseArgs<ExtArgs> = {}>(args?: Subset<T, Organization$licenseArgs<ExtArgs>>): Prisma__LicenseClient<$Result.GetResult<Prisma.$LicensePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     payments<T extends Organization$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -15774,6 +15878,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.classMeetings
+   */
+  export type Organization$classMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
+    where?: ClassMeetingWhereInput
+    orderBy?: ClassMeetingOrderByWithRelationInput | ClassMeetingOrderByWithRelationInput[]
+    cursor?: ClassMeetingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClassMeetingScalarFieldEnum | ClassMeetingScalarFieldEnum[]
   }
 
   /**
@@ -52612,6 +52740,1216 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: MeetingInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ClassMeeting
+   */
+
+  export type AggregateClassMeeting = {
+    _count: ClassMeetingCountAggregateOutputType | null
+    _avg: ClassMeetingAvgAggregateOutputType | null
+    _sum: ClassMeetingSumAggregateOutputType | null
+    _min: ClassMeetingMinAggregateOutputType | null
+    _max: ClassMeetingMaxAggregateOutputType | null
+  }
+
+  export type ClassMeetingAvgAggregateOutputType = {
+    durationMinutes: number | null
+  }
+
+  export type ClassMeetingSumAggregateOutputType = {
+    durationMinutes: number | null
+  }
+
+  export type ClassMeetingMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    title: string | null
+    description: string | null
+    startsAt: Date | null
+    durationMinutes: number | null
+    meetingUrl: string | null
+    createdById: string | null
+    createdByName: string | null
+    status: string | null
+    cancelReason: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClassMeetingMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    title: string | null
+    description: string | null
+    startsAt: Date | null
+    durationMinutes: number | null
+    meetingUrl: string | null
+    createdById: string | null
+    createdByName: string | null
+    status: string | null
+    cancelReason: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ClassMeetingCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    title: number
+    description: number
+    startsAt: number
+    durationMinutes: number
+    meetingUrl: number
+    classIds: number
+    createdById: number
+    createdByName: number
+    status: number
+    cancelReason: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ClassMeetingAvgAggregateInputType = {
+    durationMinutes?: true
+  }
+
+  export type ClassMeetingSumAggregateInputType = {
+    durationMinutes?: true
+  }
+
+  export type ClassMeetingMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    title?: true
+    description?: true
+    startsAt?: true
+    durationMinutes?: true
+    meetingUrl?: true
+    createdById?: true
+    createdByName?: true
+    status?: true
+    cancelReason?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClassMeetingMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    title?: true
+    description?: true
+    startsAt?: true
+    durationMinutes?: true
+    meetingUrl?: true
+    createdById?: true
+    createdByName?: true
+    status?: true
+    cancelReason?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ClassMeetingCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    title?: true
+    description?: true
+    startsAt?: true
+    durationMinutes?: true
+    meetingUrl?: true
+    classIds?: true
+    createdById?: true
+    createdByName?: true
+    status?: true
+    cancelReason?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ClassMeetingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClassMeeting to aggregate.
+     */
+    where?: ClassMeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassMeetings to fetch.
+     */
+    orderBy?: ClassMeetingOrderByWithRelationInput | ClassMeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ClassMeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassMeetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassMeetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ClassMeetings
+    **/
+    _count?: true | ClassMeetingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClassMeetingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClassMeetingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClassMeetingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClassMeetingMaxAggregateInputType
+  }
+
+  export type GetClassMeetingAggregateType<T extends ClassMeetingAggregateArgs> = {
+        [P in keyof T & keyof AggregateClassMeeting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClassMeeting[P]>
+      : GetScalarType<T[P], AggregateClassMeeting[P]>
+  }
+
+
+
+
+  export type ClassMeetingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassMeetingWhereInput
+    orderBy?: ClassMeetingOrderByWithAggregationInput | ClassMeetingOrderByWithAggregationInput[]
+    by: ClassMeetingScalarFieldEnum[] | ClassMeetingScalarFieldEnum
+    having?: ClassMeetingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClassMeetingCountAggregateInputType | true
+    _avg?: ClassMeetingAvgAggregateInputType
+    _sum?: ClassMeetingSumAggregateInputType
+    _min?: ClassMeetingMinAggregateInputType
+    _max?: ClassMeetingMaxAggregateInputType
+  }
+
+  export type ClassMeetingGroupByOutputType = {
+    id: string
+    organizationId: string
+    title: string
+    description: string | null
+    startsAt: Date
+    durationMinutes: number
+    meetingUrl: string
+    classIds: string[]
+    createdById: string
+    createdByName: string
+    status: string
+    cancelReason: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ClassMeetingCountAggregateOutputType | null
+    _avg: ClassMeetingAvgAggregateOutputType | null
+    _sum: ClassMeetingSumAggregateOutputType | null
+    _min: ClassMeetingMinAggregateOutputType | null
+    _max: ClassMeetingMaxAggregateOutputType | null
+  }
+
+  type GetClassMeetingGroupByPayload<T extends ClassMeetingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClassMeetingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClassMeetingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClassMeetingGroupByOutputType[P]>
+            : GetScalarType<T[P], ClassMeetingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ClassMeetingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    title?: boolean
+    description?: boolean
+    startsAt?: boolean
+    durationMinutes?: boolean
+    meetingUrl?: boolean
+    classIds?: boolean
+    createdById?: boolean
+    createdByName?: boolean
+    status?: boolean
+    cancelReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["classMeeting"]>
+
+  export type ClassMeetingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    title?: boolean
+    description?: boolean
+    startsAt?: boolean
+    durationMinutes?: boolean
+    meetingUrl?: boolean
+    classIds?: boolean
+    createdById?: boolean
+    createdByName?: boolean
+    status?: boolean
+    cancelReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["classMeeting"]>
+
+  export type ClassMeetingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    title?: boolean
+    description?: boolean
+    startsAt?: boolean
+    durationMinutes?: boolean
+    meetingUrl?: boolean
+    classIds?: boolean
+    createdById?: boolean
+    createdByName?: boolean
+    status?: boolean
+    cancelReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["classMeeting"]>
+
+  export type ClassMeetingSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    title?: boolean
+    description?: boolean
+    startsAt?: boolean
+    durationMinutes?: boolean
+    meetingUrl?: boolean
+    classIds?: boolean
+    createdById?: boolean
+    createdByName?: boolean
+    status?: boolean
+    cancelReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ClassMeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "title" | "description" | "startsAt" | "durationMinutes" | "meetingUrl" | "classIds" | "createdById" | "createdByName" | "status" | "cancelReason" | "createdAt" | "updatedAt", ExtArgs["result"]["classMeeting"]>
+  export type ClassMeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+  export type ClassMeetingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+  export type ClassMeetingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+
+  export type $ClassMeetingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ClassMeeting"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      title: string
+      description: string | null
+      startsAt: Date
+      durationMinutes: number
+      meetingUrl: string
+      classIds: string[]
+      createdById: string
+      createdByName: string
+      status: string
+      cancelReason: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["classMeeting"]>
+    composites: {}
+  }
+
+  type ClassMeetingGetPayload<S extends boolean | null | undefined | ClassMeetingDefaultArgs> = $Result.GetResult<Prisma.$ClassMeetingPayload, S>
+
+  type ClassMeetingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ClassMeetingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClassMeetingCountAggregateInputType | true
+    }
+
+  export interface ClassMeetingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClassMeeting'], meta: { name: 'ClassMeeting' } }
+    /**
+     * Find zero or one ClassMeeting that matches the filter.
+     * @param {ClassMeetingFindUniqueArgs} args - Arguments to find a ClassMeeting
+     * @example
+     * // Get one ClassMeeting
+     * const classMeeting = await prisma.classMeeting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ClassMeetingFindUniqueArgs>(args: SelectSubset<T, ClassMeetingFindUniqueArgs<ExtArgs>>): Prisma__ClassMeetingClient<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ClassMeeting that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ClassMeetingFindUniqueOrThrowArgs} args - Arguments to find a ClassMeeting
+     * @example
+     * // Get one ClassMeeting
+     * const classMeeting = await prisma.classMeeting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ClassMeetingFindUniqueOrThrowArgs>(args: SelectSubset<T, ClassMeetingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClassMeetingClient<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClassMeeting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassMeetingFindFirstArgs} args - Arguments to find a ClassMeeting
+     * @example
+     * // Get one ClassMeeting
+     * const classMeeting = await prisma.classMeeting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ClassMeetingFindFirstArgs>(args?: SelectSubset<T, ClassMeetingFindFirstArgs<ExtArgs>>): Prisma__ClassMeetingClient<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ClassMeeting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassMeetingFindFirstOrThrowArgs} args - Arguments to find a ClassMeeting
+     * @example
+     * // Get one ClassMeeting
+     * const classMeeting = await prisma.classMeeting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ClassMeetingFindFirstOrThrowArgs>(args?: SelectSubset<T, ClassMeetingFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClassMeetingClient<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ClassMeetings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassMeetingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ClassMeetings
+     * const classMeetings = await prisma.classMeeting.findMany()
+     * 
+     * // Get first 10 ClassMeetings
+     * const classMeetings = await prisma.classMeeting.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const classMeetingWithIdOnly = await prisma.classMeeting.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ClassMeetingFindManyArgs>(args?: SelectSubset<T, ClassMeetingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ClassMeeting.
+     * @param {ClassMeetingCreateArgs} args - Arguments to create a ClassMeeting.
+     * @example
+     * // Create one ClassMeeting
+     * const ClassMeeting = await prisma.classMeeting.create({
+     *   data: {
+     *     // ... data to create a ClassMeeting
+     *   }
+     * })
+     * 
+     */
+    create<T extends ClassMeetingCreateArgs>(args: SelectSubset<T, ClassMeetingCreateArgs<ExtArgs>>): Prisma__ClassMeetingClient<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ClassMeetings.
+     * @param {ClassMeetingCreateManyArgs} args - Arguments to create many ClassMeetings.
+     * @example
+     * // Create many ClassMeetings
+     * const classMeeting = await prisma.classMeeting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ClassMeetingCreateManyArgs>(args?: SelectSubset<T, ClassMeetingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ClassMeetings and returns the data saved in the database.
+     * @param {ClassMeetingCreateManyAndReturnArgs} args - Arguments to create many ClassMeetings.
+     * @example
+     * // Create many ClassMeetings
+     * const classMeeting = await prisma.classMeeting.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ClassMeetings and only return the `id`
+     * const classMeetingWithIdOnly = await prisma.classMeeting.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ClassMeetingCreateManyAndReturnArgs>(args?: SelectSubset<T, ClassMeetingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ClassMeeting.
+     * @param {ClassMeetingDeleteArgs} args - Arguments to delete one ClassMeeting.
+     * @example
+     * // Delete one ClassMeeting
+     * const ClassMeeting = await prisma.classMeeting.delete({
+     *   where: {
+     *     // ... filter to delete one ClassMeeting
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ClassMeetingDeleteArgs>(args: SelectSubset<T, ClassMeetingDeleteArgs<ExtArgs>>): Prisma__ClassMeetingClient<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ClassMeeting.
+     * @param {ClassMeetingUpdateArgs} args - Arguments to update one ClassMeeting.
+     * @example
+     * // Update one ClassMeeting
+     * const classMeeting = await prisma.classMeeting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ClassMeetingUpdateArgs>(args: SelectSubset<T, ClassMeetingUpdateArgs<ExtArgs>>): Prisma__ClassMeetingClient<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ClassMeetings.
+     * @param {ClassMeetingDeleteManyArgs} args - Arguments to filter ClassMeetings to delete.
+     * @example
+     * // Delete a few ClassMeetings
+     * const { count } = await prisma.classMeeting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ClassMeetingDeleteManyArgs>(args?: SelectSubset<T, ClassMeetingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClassMeetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassMeetingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ClassMeetings
+     * const classMeeting = await prisma.classMeeting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ClassMeetingUpdateManyArgs>(args: SelectSubset<T, ClassMeetingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ClassMeetings and returns the data updated in the database.
+     * @param {ClassMeetingUpdateManyAndReturnArgs} args - Arguments to update many ClassMeetings.
+     * @example
+     * // Update many ClassMeetings
+     * const classMeeting = await prisma.classMeeting.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ClassMeetings and only return the `id`
+     * const classMeetingWithIdOnly = await prisma.classMeeting.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ClassMeetingUpdateManyAndReturnArgs>(args: SelectSubset<T, ClassMeetingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ClassMeeting.
+     * @param {ClassMeetingUpsertArgs} args - Arguments to update or create a ClassMeeting.
+     * @example
+     * // Update or create a ClassMeeting
+     * const classMeeting = await prisma.classMeeting.upsert({
+     *   create: {
+     *     // ... data to create a ClassMeeting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ClassMeeting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ClassMeetingUpsertArgs>(args: SelectSubset<T, ClassMeetingUpsertArgs<ExtArgs>>): Prisma__ClassMeetingClient<$Result.GetResult<Prisma.$ClassMeetingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ClassMeetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassMeetingCountArgs} args - Arguments to filter ClassMeetings to count.
+     * @example
+     * // Count the number of ClassMeetings
+     * const count = await prisma.classMeeting.count({
+     *   where: {
+     *     // ... the filter for the ClassMeetings we want to count
+     *   }
+     * })
+    **/
+    count<T extends ClassMeetingCountArgs>(
+      args?: Subset<T, ClassMeetingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClassMeetingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ClassMeeting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassMeetingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClassMeetingAggregateArgs>(args: Subset<T, ClassMeetingAggregateArgs>): Prisma.PrismaPromise<GetClassMeetingAggregateType<T>>
+
+    /**
+     * Group by ClassMeeting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClassMeetingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ClassMeetingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClassMeetingGroupByArgs['orderBy'] }
+        : { orderBy?: ClassMeetingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ClassMeetingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClassMeetingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ClassMeeting model
+   */
+  readonly fields: ClassMeetingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ClassMeeting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ClassMeetingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ClassMeeting model
+   */
+  interface ClassMeetingFieldRefs {
+    readonly id: FieldRef<"ClassMeeting", 'String'>
+    readonly organizationId: FieldRef<"ClassMeeting", 'String'>
+    readonly title: FieldRef<"ClassMeeting", 'String'>
+    readonly description: FieldRef<"ClassMeeting", 'String'>
+    readonly startsAt: FieldRef<"ClassMeeting", 'DateTime'>
+    readonly durationMinutes: FieldRef<"ClassMeeting", 'Int'>
+    readonly meetingUrl: FieldRef<"ClassMeeting", 'String'>
+    readonly classIds: FieldRef<"ClassMeeting", 'String[]'>
+    readonly createdById: FieldRef<"ClassMeeting", 'String'>
+    readonly createdByName: FieldRef<"ClassMeeting", 'String'>
+    readonly status: FieldRef<"ClassMeeting", 'String'>
+    readonly cancelReason: FieldRef<"ClassMeeting", 'String'>
+    readonly createdAt: FieldRef<"ClassMeeting", 'DateTime'>
+    readonly updatedAt: FieldRef<"ClassMeeting", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ClassMeeting findUnique
+   */
+  export type ClassMeetingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassMeeting to fetch.
+     */
+    where: ClassMeetingWhereUniqueInput
+  }
+
+  /**
+   * ClassMeeting findUniqueOrThrow
+   */
+  export type ClassMeetingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassMeeting to fetch.
+     */
+    where: ClassMeetingWhereUniqueInput
+  }
+
+  /**
+   * ClassMeeting findFirst
+   */
+  export type ClassMeetingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassMeeting to fetch.
+     */
+    where?: ClassMeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassMeetings to fetch.
+     */
+    orderBy?: ClassMeetingOrderByWithRelationInput | ClassMeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClassMeetings.
+     */
+    cursor?: ClassMeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassMeetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassMeetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClassMeetings.
+     */
+    distinct?: ClassMeetingScalarFieldEnum | ClassMeetingScalarFieldEnum[]
+  }
+
+  /**
+   * ClassMeeting findFirstOrThrow
+   */
+  export type ClassMeetingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassMeeting to fetch.
+     */
+    where?: ClassMeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassMeetings to fetch.
+     */
+    orderBy?: ClassMeetingOrderByWithRelationInput | ClassMeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ClassMeetings.
+     */
+    cursor?: ClassMeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassMeetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassMeetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClassMeetings.
+     */
+    distinct?: ClassMeetingScalarFieldEnum | ClassMeetingScalarFieldEnum[]
+  }
+
+  /**
+   * ClassMeeting findMany
+   */
+  export type ClassMeetingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which ClassMeetings to fetch.
+     */
+    where?: ClassMeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ClassMeetings to fetch.
+     */
+    orderBy?: ClassMeetingOrderByWithRelationInput | ClassMeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ClassMeetings.
+     */
+    cursor?: ClassMeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ClassMeetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ClassMeetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ClassMeetings.
+     */
+    distinct?: ClassMeetingScalarFieldEnum | ClassMeetingScalarFieldEnum[]
+  }
+
+  /**
+   * ClassMeeting create
+   */
+  export type ClassMeetingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ClassMeeting.
+     */
+    data: XOR<ClassMeetingCreateInput, ClassMeetingUncheckedCreateInput>
+  }
+
+  /**
+   * ClassMeeting createMany
+   */
+  export type ClassMeetingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ClassMeetings.
+     */
+    data: ClassMeetingCreateManyInput | ClassMeetingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ClassMeeting createManyAndReturn
+   */
+  export type ClassMeetingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * The data used to create many ClassMeetings.
+     */
+    data: ClassMeetingCreateManyInput | ClassMeetingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClassMeeting update
+   */
+  export type ClassMeetingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ClassMeeting.
+     */
+    data: XOR<ClassMeetingUpdateInput, ClassMeetingUncheckedUpdateInput>
+    /**
+     * Choose, which ClassMeeting to update.
+     */
+    where: ClassMeetingWhereUniqueInput
+  }
+
+  /**
+   * ClassMeeting updateMany
+   */
+  export type ClassMeetingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ClassMeetings.
+     */
+    data: XOR<ClassMeetingUpdateManyMutationInput, ClassMeetingUncheckedUpdateManyInput>
+    /**
+     * Filter which ClassMeetings to update
+     */
+    where?: ClassMeetingWhereInput
+    /**
+     * Limit how many ClassMeetings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClassMeeting updateManyAndReturn
+   */
+  export type ClassMeetingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * The data used to update ClassMeetings.
+     */
+    data: XOR<ClassMeetingUpdateManyMutationInput, ClassMeetingUncheckedUpdateManyInput>
+    /**
+     * Filter which ClassMeetings to update
+     */
+    where?: ClassMeetingWhereInput
+    /**
+     * Limit how many ClassMeetings to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ClassMeeting upsert
+   */
+  export type ClassMeetingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ClassMeeting to update in case it exists.
+     */
+    where: ClassMeetingWhereUniqueInput
+    /**
+     * In case the ClassMeeting found by the `where` argument doesn't exist, create a new ClassMeeting with this data.
+     */
+    create: XOR<ClassMeetingCreateInput, ClassMeetingUncheckedCreateInput>
+    /**
+     * In case the ClassMeeting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ClassMeetingUpdateInput, ClassMeetingUncheckedUpdateInput>
+  }
+
+  /**
+   * ClassMeeting delete
+   */
+  export type ClassMeetingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
+    /**
+     * Filter which ClassMeeting to delete.
+     */
+    where: ClassMeetingWhereUniqueInput
+  }
+
+  /**
+   * ClassMeeting deleteMany
+   */
+  export type ClassMeetingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ClassMeetings to delete
+     */
+    where?: ClassMeetingWhereInput
+    /**
+     * Limit how many ClassMeetings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ClassMeeting without action
+   */
+  export type ClassMeetingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassMeeting
+     */
+    select?: ClassMeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassMeeting
+     */
+    omit?: ClassMeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassMeetingInclude<ExtArgs> | null
   }
 
 
@@ -117679,6 +119017,9 @@ export namespace Prisma {
     maxPosition: number | null
     videoDuration: number | null
     isCompleted: boolean | null
+    completedAt: Date | null
+    unlockedAt: Date | null
+    unlockedBy: string | null
     organizationId: string | null
   }
 
@@ -117693,6 +119034,9 @@ export namespace Prisma {
     maxPosition: number | null
     videoDuration: number | null
     isCompleted: boolean | null
+    completedAt: Date | null
+    unlockedAt: Date | null
+    unlockedBy: string | null
     organizationId: string | null
   }
 
@@ -117707,6 +119051,9 @@ export namespace Prisma {
     maxPosition: number
     videoDuration: number
     isCompleted: number
+    completedAt: number
+    unlockedAt: number
+    unlockedBy: number
     organizationId: number
     _all: number
   }
@@ -117739,6 +119086,9 @@ export namespace Prisma {
     maxPosition?: true
     videoDuration?: true
     isCompleted?: true
+    completedAt?: true
+    unlockedAt?: true
+    unlockedBy?: true
     organizationId?: true
   }
 
@@ -117753,6 +119103,9 @@ export namespace Prisma {
     maxPosition?: true
     videoDuration?: true
     isCompleted?: true
+    completedAt?: true
+    unlockedAt?: true
+    unlockedBy?: true
     organizationId?: true
   }
 
@@ -117767,6 +119120,9 @@ export namespace Prisma {
     maxPosition?: true
     videoDuration?: true
     isCompleted?: true
+    completedAt?: true
+    unlockedAt?: true
+    unlockedBy?: true
     organizationId?: true
     _all?: true
   }
@@ -117868,6 +119224,9 @@ export namespace Prisma {
     maxPosition: number
     videoDuration: number
     isCompleted: boolean
+    completedAt: Date | null
+    unlockedAt: Date | null
+    unlockedBy: string | null
     organizationId: string
     _count: StudentVideoLogCountAggregateOutputType | null
     _avg: StudentVideoLogAvgAggregateOutputType | null
@@ -117901,6 +119260,9 @@ export namespace Prisma {
     maxPosition?: boolean
     videoDuration?: boolean
     isCompleted?: boolean
+    completedAt?: boolean
+    unlockedAt?: boolean
+    unlockedBy?: boolean
     organizationId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     moduleLesson?: boolean | ModuleLessonDefaultArgs<ExtArgs>
@@ -117918,6 +119280,9 @@ export namespace Prisma {
     maxPosition?: boolean
     videoDuration?: boolean
     isCompleted?: boolean
+    completedAt?: boolean
+    unlockedAt?: boolean
+    unlockedBy?: boolean
     organizationId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     moduleLesson?: boolean | ModuleLessonDefaultArgs<ExtArgs>
@@ -117935,6 +119300,9 @@ export namespace Prisma {
     maxPosition?: boolean
     videoDuration?: boolean
     isCompleted?: boolean
+    completedAt?: boolean
+    unlockedAt?: boolean
+    unlockedBy?: boolean
     organizationId?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     moduleLesson?: boolean | ModuleLessonDefaultArgs<ExtArgs>
@@ -117952,10 +119320,13 @@ export namespace Prisma {
     maxPosition?: boolean
     videoDuration?: boolean
     isCompleted?: boolean
+    completedAt?: boolean
+    unlockedAt?: boolean
+    unlockedBy?: boolean
     organizationId?: boolean
   }
 
-  export type StudentVideoLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "moduleLessonId" | "watchDuration" | "viewCount" | "lastWatchedAt" | "lastPosition" | "maxPosition" | "videoDuration" | "isCompleted" | "organizationId", ExtArgs["result"]["studentVideoLog"]>
+  export type StudentVideoLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "moduleLessonId" | "watchDuration" | "viewCount" | "lastWatchedAt" | "lastPosition" | "maxPosition" | "videoDuration" | "isCompleted" | "completedAt" | "unlockedAt" | "unlockedBy" | "organizationId", ExtArgs["result"]["studentVideoLog"]>
   export type StudentVideoLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     moduleLesson?: boolean | ModuleLessonDefaultArgs<ExtArgs>
@@ -117990,6 +119361,9 @@ export namespace Prisma {
       maxPosition: number
       videoDuration: number
       isCompleted: boolean
+      completedAt: Date | null
+      unlockedAt: Date | null
+      unlockedBy: string | null
       organizationId: string
     }, ExtArgs["result"]["studentVideoLog"]>
     composites: {}
@@ -118427,6 +119801,9 @@ export namespace Prisma {
     readonly maxPosition: FieldRef<"StudentVideoLog", 'Int'>
     readonly videoDuration: FieldRef<"StudentVideoLog", 'Int'>
     readonly isCompleted: FieldRef<"StudentVideoLog", 'Boolean'>
+    readonly completedAt: FieldRef<"StudentVideoLog", 'DateTime'>
+    readonly unlockedAt: FieldRef<"StudentVideoLog", 'DateTime'>
+    readonly unlockedBy: FieldRef<"StudentVideoLog", 'String'>
     readonly organizationId: FieldRef<"StudentVideoLog", 'String'>
   }
     
@@ -143189,6 +144566,26 @@ export namespace Prisma {
   export type MeetingScalarFieldEnum = (typeof MeetingScalarFieldEnum)[keyof typeof MeetingScalarFieldEnum]
 
 
+  export const ClassMeetingScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    title: 'title',
+    description: 'description',
+    startsAt: 'startsAt',
+    durationMinutes: 'durationMinutes',
+    meetingUrl: 'meetingUrl',
+    classIds: 'classIds',
+    createdById: 'createdById',
+    createdByName: 'createdByName',
+    status: 'status',
+    cancelReason: 'cancelReason',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ClassMeetingScalarFieldEnum = (typeof ClassMeetingScalarFieldEnum)[keyof typeof ClassMeetingScalarFieldEnum]
+
+
   export const VacancyScalarFieldEnum: {
     id: 'id',
     organizationId: 'organizationId',
@@ -144167,6 +145564,9 @@ export namespace Prisma {
     maxPosition: 'maxPosition',
     videoDuration: 'videoDuration',
     isCompleted: 'isCompleted',
+    completedAt: 'completedAt',
+    unlockedAt: 'unlockedAt',
+    unlockedBy: 'unlockedBy',
     organizationId: 'organizationId'
   };
 
@@ -145046,6 +146446,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationListRelationFilter
     leaveRequests?: LeaveRequestListRelationFilter
     meetings?: MeetingListRelationFilter
+    classMeetings?: ClassMeetingListRelationFilter
     notifications?: NotificationListRelationFilter
     license?: XOR<LicenseNullableScalarRelationFilter, LicenseWhereInput> | null
     payments?: PaymentEntryListRelationFilter
@@ -145148,6 +146549,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationOrderByRelationAggregateInput
     leaveRequests?: LeaveRequestOrderByRelationAggregateInput
     meetings?: MeetingOrderByRelationAggregateInput
+    classMeetings?: ClassMeetingOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     license?: LicenseOrderByWithRelationInput
     payments?: PaymentEntryOrderByRelationAggregateInput
@@ -145253,6 +146655,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationListRelationFilter
     leaveRequests?: LeaveRequestListRelationFilter
     meetings?: MeetingListRelationFilter
+    classMeetings?: ClassMeetingListRelationFilter
     notifications?: NotificationListRelationFilter
     license?: XOR<LicenseNullableScalarRelationFilter, LicenseWhereInput> | null
     payments?: PaymentEntryListRelationFilter
@@ -148848,6 +150251,108 @@ export namespace Prisma {
     followUps?: JsonWithAggregatesFilter<"Meeting">
     createdAt?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
+  }
+
+  export type ClassMeetingWhereInput = {
+    AND?: ClassMeetingWhereInput | ClassMeetingWhereInput[]
+    OR?: ClassMeetingWhereInput[]
+    NOT?: ClassMeetingWhereInput | ClassMeetingWhereInput[]
+    id?: StringFilter<"ClassMeeting"> | string
+    organizationId?: StringFilter<"ClassMeeting"> | string
+    title?: StringFilter<"ClassMeeting"> | string
+    description?: StringNullableFilter<"ClassMeeting"> | string | null
+    startsAt?: DateTimeFilter<"ClassMeeting"> | Date | string
+    durationMinutes?: IntFilter<"ClassMeeting"> | number
+    meetingUrl?: StringFilter<"ClassMeeting"> | string
+    classIds?: StringNullableListFilter<"ClassMeeting">
+    createdById?: StringFilter<"ClassMeeting"> | string
+    createdByName?: StringFilter<"ClassMeeting"> | string
+    status?: StringFilter<"ClassMeeting"> | string
+    cancelReason?: StringNullableFilter<"ClassMeeting"> | string | null
+    createdAt?: DateTimeFilter<"ClassMeeting"> | Date | string
+    updatedAt?: DateTimeFilter<"ClassMeeting"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+  }
+
+  export type ClassMeetingOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    startsAt?: SortOrder
+    durationMinutes?: SortOrder
+    meetingUrl?: SortOrder
+    classIds?: SortOrder
+    createdById?: SortOrder
+    createdByName?: SortOrder
+    status?: SortOrder
+    cancelReason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+  }
+
+  export type ClassMeetingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ClassMeetingWhereInput | ClassMeetingWhereInput[]
+    OR?: ClassMeetingWhereInput[]
+    NOT?: ClassMeetingWhereInput | ClassMeetingWhereInput[]
+    organizationId?: StringFilter<"ClassMeeting"> | string
+    title?: StringFilter<"ClassMeeting"> | string
+    description?: StringNullableFilter<"ClassMeeting"> | string | null
+    startsAt?: DateTimeFilter<"ClassMeeting"> | Date | string
+    durationMinutes?: IntFilter<"ClassMeeting"> | number
+    meetingUrl?: StringFilter<"ClassMeeting"> | string
+    classIds?: StringNullableListFilter<"ClassMeeting">
+    createdById?: StringFilter<"ClassMeeting"> | string
+    createdByName?: StringFilter<"ClassMeeting"> | string
+    status?: StringFilter<"ClassMeeting"> | string
+    cancelReason?: StringNullableFilter<"ClassMeeting"> | string | null
+    createdAt?: DateTimeFilter<"ClassMeeting"> | Date | string
+    updatedAt?: DateTimeFilter<"ClassMeeting"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+  }, "id">
+
+  export type ClassMeetingOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    startsAt?: SortOrder
+    durationMinutes?: SortOrder
+    meetingUrl?: SortOrder
+    classIds?: SortOrder
+    createdById?: SortOrder
+    createdByName?: SortOrder
+    status?: SortOrder
+    cancelReason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ClassMeetingCountOrderByAggregateInput
+    _avg?: ClassMeetingAvgOrderByAggregateInput
+    _max?: ClassMeetingMaxOrderByAggregateInput
+    _min?: ClassMeetingMinOrderByAggregateInput
+    _sum?: ClassMeetingSumOrderByAggregateInput
+  }
+
+  export type ClassMeetingScalarWhereWithAggregatesInput = {
+    AND?: ClassMeetingScalarWhereWithAggregatesInput | ClassMeetingScalarWhereWithAggregatesInput[]
+    OR?: ClassMeetingScalarWhereWithAggregatesInput[]
+    NOT?: ClassMeetingScalarWhereWithAggregatesInput | ClassMeetingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ClassMeeting"> | string
+    organizationId?: StringWithAggregatesFilter<"ClassMeeting"> | string
+    title?: StringWithAggregatesFilter<"ClassMeeting"> | string
+    description?: StringNullableWithAggregatesFilter<"ClassMeeting"> | string | null
+    startsAt?: DateTimeWithAggregatesFilter<"ClassMeeting"> | Date | string
+    durationMinutes?: IntWithAggregatesFilter<"ClassMeeting"> | number
+    meetingUrl?: StringWithAggregatesFilter<"ClassMeeting"> | string
+    classIds?: StringNullableListFilter<"ClassMeeting">
+    createdById?: StringWithAggregatesFilter<"ClassMeeting"> | string
+    createdByName?: StringWithAggregatesFilter<"ClassMeeting"> | string
+    status?: StringWithAggregatesFilter<"ClassMeeting"> | string
+    cancelReason?: StringNullableWithAggregatesFilter<"ClassMeeting"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ClassMeeting"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ClassMeeting"> | Date | string
   }
 
   export type VacancyWhereInput = {
@@ -154160,6 +155665,9 @@ export namespace Prisma {
     maxPosition?: IntFilter<"StudentVideoLog"> | number
     videoDuration?: IntFilter<"StudentVideoLog"> | number
     isCompleted?: BoolFilter<"StudentVideoLog"> | boolean
+    completedAt?: DateTimeNullableFilter<"StudentVideoLog"> | Date | string | null
+    unlockedAt?: DateTimeNullableFilter<"StudentVideoLog"> | Date | string | null
+    unlockedBy?: StringNullableFilter<"StudentVideoLog"> | string | null
     organizationId?: StringFilter<"StudentVideoLog"> | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     moduleLesson?: XOR<ModuleLessonScalarRelationFilter, ModuleLessonWhereInput>
@@ -154177,6 +155685,9 @@ export namespace Prisma {
     maxPosition?: SortOrder
     videoDuration?: SortOrder
     isCompleted?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    unlockedAt?: SortOrderInput | SortOrder
+    unlockedBy?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     student?: StudentOrderByWithRelationInput
     moduleLesson?: ModuleLessonOrderByWithRelationInput
@@ -154198,6 +155709,9 @@ export namespace Prisma {
     maxPosition?: IntFilter<"StudentVideoLog"> | number
     videoDuration?: IntFilter<"StudentVideoLog"> | number
     isCompleted?: BoolFilter<"StudentVideoLog"> | boolean
+    completedAt?: DateTimeNullableFilter<"StudentVideoLog"> | Date | string | null
+    unlockedAt?: DateTimeNullableFilter<"StudentVideoLog"> | Date | string | null
+    unlockedBy?: StringNullableFilter<"StudentVideoLog"> | string | null
     organizationId?: StringFilter<"StudentVideoLog"> | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     moduleLesson?: XOR<ModuleLessonScalarRelationFilter, ModuleLessonWhereInput>
@@ -154215,6 +155729,9 @@ export namespace Prisma {
     maxPosition?: SortOrder
     videoDuration?: SortOrder
     isCompleted?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    unlockedAt?: SortOrderInput | SortOrder
+    unlockedBy?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     _count?: StudentVideoLogCountOrderByAggregateInput
     _avg?: StudentVideoLogAvgOrderByAggregateInput
@@ -154237,6 +155754,9 @@ export namespace Prisma {
     maxPosition?: IntWithAggregatesFilter<"StudentVideoLog"> | number
     videoDuration?: IntWithAggregatesFilter<"StudentVideoLog"> | number
     isCompleted?: BoolWithAggregatesFilter<"StudentVideoLog"> | boolean
+    completedAt?: DateTimeNullableWithAggregatesFilter<"StudentVideoLog"> | Date | string | null
+    unlockedAt?: DateTimeNullableWithAggregatesFilter<"StudentVideoLog"> | Date | string | null
+    unlockedBy?: StringNullableWithAggregatesFilter<"StudentVideoLog"> | string | null
     organizationId?: StringWithAggregatesFilter<"StudentVideoLog"> | string
   }
 
@@ -156086,6 +157606,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -156188,6 +157709,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -156288,6 +157810,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -156390,6 +157913,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -160498,6 +162022,124 @@ export namespace Prisma {
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
     rescheduleHistory?: JsonNullValueInput | InputJsonValue
     followUps?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassMeetingCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startsAt: Date | string
+    durationMinutes?: number
+    meetingUrl: string
+    classIds?: ClassMeetingCreateclassIdsInput | string[]
+    createdById: string
+    createdByName: string
+    status?: string
+    cancelReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutClassMeetingsInput
+  }
+
+  export type ClassMeetingUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    title: string
+    description?: string | null
+    startsAt: Date | string
+    durationMinutes?: number
+    meetingUrl: string
+    classIds?: ClassMeetingCreateclassIdsInput | string[]
+    createdById: string
+    createdByName: string
+    status?: string
+    cancelReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClassMeetingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    meetingUrl?: StringFieldUpdateOperationsInput | string
+    classIds?: ClassMeetingUpdateclassIdsInput | string[]
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutClassMeetingsNestedInput
+  }
+
+  export type ClassMeetingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    meetingUrl?: StringFieldUpdateOperationsInput | string
+    classIds?: ClassMeetingUpdateclassIdsInput | string[]
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassMeetingCreateManyInput = {
+    id?: string
+    organizationId: string
+    title: string
+    description?: string | null
+    startsAt: Date | string
+    durationMinutes?: number
+    meetingUrl: string
+    classIds?: ClassMeetingCreateclassIdsInput | string[]
+    createdById: string
+    createdByName: string
+    status?: string
+    cancelReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClassMeetingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    meetingUrl?: StringFieldUpdateOperationsInput | string
+    classIds?: ClassMeetingUpdateclassIdsInput | string[]
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassMeetingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    meetingUrl?: StringFieldUpdateOperationsInput | string
+    classIds?: ClassMeetingUpdateclassIdsInput | string[]
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -166182,6 +167824,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
     student: StudentCreateNestedOneWithoutVideoLogsInput
     moduleLesson: ModuleLessonCreateNestedOneWithoutVideoLogsInput
     organization: OrganizationCreateNestedOneWithoutStudentVideoLogsInput
@@ -166198,6 +167843,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
     organizationId: string
   }
 
@@ -166210,6 +167858,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutVideoLogsNestedInput
     moduleLesson?: ModuleLessonUpdateOneRequiredWithoutVideoLogsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentVideoLogsNestedInput
@@ -166226,6 +167877,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -166240,6 +167894,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
     organizationId: string
   }
 
@@ -166252,6 +167909,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentVideoLogUncheckedUpdateManyInput = {
@@ -166265,6 +167925,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -168395,6 +170058,12 @@ export namespace Prisma {
     none?: MeetingWhereInput
   }
 
+  export type ClassMeetingListRelationFilter = {
+    every?: ClassMeetingWhereInput
+    some?: ClassMeetingWhereInput
+    none?: ClassMeetingWhereInput
+  }
+
   export type NotificationListRelationFilter = {
     every?: NotificationWhereInput
     some?: NotificationWhereInput
@@ -168834,6 +170503,10 @@ export namespace Prisma {
   }
 
   export type MeetingOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClassMeetingOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -171410,6 +173083,63 @@ export namespace Prisma {
 
   export type MeetingSumOrderByAggregateInput = {
     duration?: SortOrder
+  }
+
+  export type ClassMeetingCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    startsAt?: SortOrder
+    durationMinutes?: SortOrder
+    meetingUrl?: SortOrder
+    classIds?: SortOrder
+    createdById?: SortOrder
+    createdByName?: SortOrder
+    status?: SortOrder
+    cancelReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClassMeetingAvgOrderByAggregateInput = {
+    durationMinutes?: SortOrder
+  }
+
+  export type ClassMeetingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    startsAt?: SortOrder
+    durationMinutes?: SortOrder
+    meetingUrl?: SortOrder
+    createdById?: SortOrder
+    createdByName?: SortOrder
+    status?: SortOrder
+    cancelReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClassMeetingMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    startsAt?: SortOrder
+    durationMinutes?: SortOrder
+    meetingUrl?: SortOrder
+    createdById?: SortOrder
+    createdByName?: SortOrder
+    status?: SortOrder
+    cancelReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ClassMeetingSumOrderByAggregateInput = {
+    durationMinutes?: SortOrder
   }
 
   export type VacancyCountOrderByAggregateInput = {
@@ -174259,6 +175989,9 @@ export namespace Prisma {
     maxPosition?: SortOrder
     videoDuration?: SortOrder
     isCompleted?: SortOrder
+    completedAt?: SortOrder
+    unlockedAt?: SortOrder
+    unlockedBy?: SortOrder
     organizationId?: SortOrder
   }
 
@@ -174281,6 +176014,9 @@ export namespace Prisma {
     maxPosition?: SortOrder
     videoDuration?: SortOrder
     isCompleted?: SortOrder
+    completedAt?: SortOrder
+    unlockedAt?: SortOrder
+    unlockedBy?: SortOrder
     organizationId?: SortOrder
   }
 
@@ -174295,6 +176031,9 @@ export namespace Prisma {
     maxPosition?: SortOrder
     videoDuration?: SortOrder
     isCompleted?: SortOrder
+    completedAt?: SortOrder
+    unlockedAt?: SortOrder
+    unlockedBy?: SortOrder
     organizationId?: SortOrder
   }
 
@@ -175514,6 +177253,13 @@ export namespace Prisma {
     connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
   }
 
+  export type ClassMeetingCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<ClassMeetingCreateWithoutOrganizationInput, ClassMeetingUncheckedCreateWithoutOrganizationInput> | ClassMeetingCreateWithoutOrganizationInput[] | ClassMeetingUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ClassMeetingCreateOrConnectWithoutOrganizationInput | ClassMeetingCreateOrConnectWithoutOrganizationInput[]
+    createMany?: ClassMeetingCreateManyOrganizationInputEnvelope
+    connect?: ClassMeetingWhereUniqueInput | ClassMeetingWhereUniqueInput[]
+  }
+
   export type NotificationCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<NotificationCreateWithoutOrganizationInput, NotificationUncheckedCreateWithoutOrganizationInput> | NotificationCreateWithoutOrganizationInput[] | NotificationUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutOrganizationInput | NotificationCreateOrConnectWithoutOrganizationInput[]
@@ -176105,6 +177851,13 @@ export namespace Prisma {
     connectOrCreate?: MeetingCreateOrConnectWithoutOrganizationInput | MeetingCreateOrConnectWithoutOrganizationInput[]
     createMany?: MeetingCreateManyOrganizationInputEnvelope
     connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+  }
+
+  export type ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<ClassMeetingCreateWithoutOrganizationInput, ClassMeetingUncheckedCreateWithoutOrganizationInput> | ClassMeetingCreateWithoutOrganizationInput[] | ClassMeetingUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ClassMeetingCreateOrConnectWithoutOrganizationInput | ClassMeetingCreateOrConnectWithoutOrganizationInput[]
+    createMany?: ClassMeetingCreateManyOrganizationInputEnvelope
+    connect?: ClassMeetingWhereUniqueInput | ClassMeetingWhereUniqueInput[]
   }
 
   export type NotificationUncheckedCreateNestedManyWithoutOrganizationInput = {
@@ -176947,6 +178700,20 @@ export namespace Prisma {
     update?: MeetingUpdateWithWhereUniqueWithoutOrganizationInput | MeetingUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: MeetingUpdateManyWithWhereWithoutOrganizationInput | MeetingUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+  }
+
+  export type ClassMeetingUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<ClassMeetingCreateWithoutOrganizationInput, ClassMeetingUncheckedCreateWithoutOrganizationInput> | ClassMeetingCreateWithoutOrganizationInput[] | ClassMeetingUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ClassMeetingCreateOrConnectWithoutOrganizationInput | ClassMeetingCreateOrConnectWithoutOrganizationInput[]
+    upsert?: ClassMeetingUpsertWithWhereUniqueWithoutOrganizationInput | ClassMeetingUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: ClassMeetingCreateManyOrganizationInputEnvelope
+    set?: ClassMeetingWhereUniqueInput | ClassMeetingWhereUniqueInput[]
+    disconnect?: ClassMeetingWhereUniqueInput | ClassMeetingWhereUniqueInput[]
+    delete?: ClassMeetingWhereUniqueInput | ClassMeetingWhereUniqueInput[]
+    connect?: ClassMeetingWhereUniqueInput | ClassMeetingWhereUniqueInput[]
+    update?: ClassMeetingUpdateWithWhereUniqueWithoutOrganizationInput | ClassMeetingUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: ClassMeetingUpdateManyWithWhereWithoutOrganizationInput | ClassMeetingUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: ClassMeetingScalarWhereInput | ClassMeetingScalarWhereInput[]
   }
 
   export type NotificationUpdateManyWithoutOrganizationNestedInput = {
@@ -178129,6 +179896,20 @@ export namespace Prisma {
     update?: MeetingUpdateWithWhereUniqueWithoutOrganizationInput | MeetingUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: MeetingUpdateManyWithWhereWithoutOrganizationInput | MeetingUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+  }
+
+  export type ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<ClassMeetingCreateWithoutOrganizationInput, ClassMeetingUncheckedCreateWithoutOrganizationInput> | ClassMeetingCreateWithoutOrganizationInput[] | ClassMeetingUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ClassMeetingCreateOrConnectWithoutOrganizationInput | ClassMeetingCreateOrConnectWithoutOrganizationInput[]
+    upsert?: ClassMeetingUpsertWithWhereUniqueWithoutOrganizationInput | ClassMeetingUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: ClassMeetingCreateManyOrganizationInputEnvelope
+    set?: ClassMeetingWhereUniqueInput | ClassMeetingWhereUniqueInput[]
+    disconnect?: ClassMeetingWhereUniqueInput | ClassMeetingWhereUniqueInput[]
+    delete?: ClassMeetingWhereUniqueInput | ClassMeetingWhereUniqueInput[]
+    connect?: ClassMeetingWhereUniqueInput | ClassMeetingWhereUniqueInput[]
+    update?: ClassMeetingUpdateWithWhereUniqueWithoutOrganizationInput | ClassMeetingUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: ClassMeetingUpdateManyWithWhereWithoutOrganizationInput | ClassMeetingUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: ClassMeetingScalarWhereInput | ClassMeetingScalarWhereInput[]
   }
 
   export type NotificationUncheckedUpdateManyWithoutOrganizationNestedInput = {
@@ -187030,6 +188811,29 @@ export namespace Prisma {
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutMeetingsInput, OrganizationUpdateWithoutMeetingsInput>, OrganizationUncheckedUpdateWithoutMeetingsInput>
   }
 
+  export type ClassMeetingCreateclassIdsInput = {
+    set: string[]
+  }
+
+  export type OrganizationCreateNestedOneWithoutClassMeetingsInput = {
+    create?: XOR<OrganizationCreateWithoutClassMeetingsInput, OrganizationUncheckedCreateWithoutClassMeetingsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutClassMeetingsInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type ClassMeetingUpdateclassIdsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutClassMeetingsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutClassMeetingsInput, OrganizationUncheckedCreateWithoutClassMeetingsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutClassMeetingsInput
+    upsert?: OrganizationUpsertWithoutClassMeetingsInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutClassMeetingsInput, OrganizationUpdateWithoutClassMeetingsInput>, OrganizationUncheckedUpdateWithoutClassMeetingsInput>
+  }
+
   export type DepartmentCreateNestedOneWithoutVacanciesInput = {
     create?: XOR<DepartmentCreateWithoutVacanciesInput, DepartmentUncheckedCreateWithoutVacanciesInput>
     connectOrCreate?: DepartmentCreateOrConnectWithoutVacanciesInput
@@ -194664,6 +196468,48 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ClassMeetingCreateWithoutOrganizationInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startsAt: Date | string
+    durationMinutes?: number
+    meetingUrl: string
+    classIds?: ClassMeetingCreateclassIdsInput | string[]
+    createdById: string
+    createdByName: string
+    status?: string
+    cancelReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClassMeetingUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startsAt: Date | string
+    durationMinutes?: number
+    meetingUrl: string
+    classIds?: ClassMeetingCreateclassIdsInput | string[]
+    createdById: string
+    createdByName: string
+    status?: string
+    cancelReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClassMeetingCreateOrConnectWithoutOrganizationInput = {
+    where: ClassMeetingWhereUniqueInput
+    create: XOR<ClassMeetingCreateWithoutOrganizationInput, ClassMeetingUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type ClassMeetingCreateManyOrganizationInputEnvelope = {
+    data: ClassMeetingCreateManyOrganizationInput | ClassMeetingCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type NotificationCreateWithoutOrganizationInput = {
     id?: string
     title: string
@@ -196926,6 +198772,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
     student: StudentCreateNestedOneWithoutVideoLogsInput
     moduleLesson: ModuleLessonCreateNestedOneWithoutVideoLogsInput
   }
@@ -196941,6 +198790,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
   }
 
   export type StudentVideoLogCreateOrConnectWithoutOrganizationInput = {
@@ -198296,6 +200148,42 @@ export namespace Prisma {
     followUps?: JsonFilter<"Meeting">
     createdAt?: DateTimeFilter<"Meeting"> | Date | string
     updatedAt?: DateTimeFilter<"Meeting"> | Date | string
+  }
+
+  export type ClassMeetingUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: ClassMeetingWhereUniqueInput
+    update: XOR<ClassMeetingUpdateWithoutOrganizationInput, ClassMeetingUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<ClassMeetingCreateWithoutOrganizationInput, ClassMeetingUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type ClassMeetingUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: ClassMeetingWhereUniqueInput
+    data: XOR<ClassMeetingUpdateWithoutOrganizationInput, ClassMeetingUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type ClassMeetingUpdateManyWithWhereWithoutOrganizationInput = {
+    where: ClassMeetingScalarWhereInput
+    data: XOR<ClassMeetingUpdateManyMutationInput, ClassMeetingUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type ClassMeetingScalarWhereInput = {
+    AND?: ClassMeetingScalarWhereInput | ClassMeetingScalarWhereInput[]
+    OR?: ClassMeetingScalarWhereInput[]
+    NOT?: ClassMeetingScalarWhereInput | ClassMeetingScalarWhereInput[]
+    id?: StringFilter<"ClassMeeting"> | string
+    organizationId?: StringFilter<"ClassMeeting"> | string
+    title?: StringFilter<"ClassMeeting"> | string
+    description?: StringNullableFilter<"ClassMeeting"> | string | null
+    startsAt?: DateTimeFilter<"ClassMeeting"> | Date | string
+    durationMinutes?: IntFilter<"ClassMeeting"> | number
+    meetingUrl?: StringFilter<"ClassMeeting"> | string
+    classIds?: StringNullableListFilter<"ClassMeeting">
+    createdById?: StringFilter<"ClassMeeting"> | string
+    createdByName?: StringFilter<"ClassMeeting"> | string
+    status?: StringFilter<"ClassMeeting"> | string
+    cancelReason?: StringNullableFilter<"ClassMeeting"> | string | null
+    createdAt?: DateTimeFilter<"ClassMeeting"> | Date | string
+    updatedAt?: DateTimeFilter<"ClassMeeting"> | Date | string
   }
 
   export type NotificationUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -200008,6 +201896,9 @@ export namespace Prisma {
     maxPosition?: IntFilter<"StudentVideoLog"> | number
     videoDuration?: IntFilter<"StudentVideoLog"> | number
     isCompleted?: BoolFilter<"StudentVideoLog"> | boolean
+    completedAt?: DateTimeNullableFilter<"StudentVideoLog"> | Date | string | null
+    unlockedAt?: DateTimeNullableFilter<"StudentVideoLog"> | Date | string | null
+    unlockedBy?: StringNullableFilter<"StudentVideoLog"> | string | null
     organizationId?: StringFilter<"StudentVideoLog"> | string
   }
 
@@ -200125,6 +202016,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
@@ -200225,6 +202117,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -200745,6 +202638,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -200846,6 +202740,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -202206,6 +204101,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -202307,6 +204203,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -207083,6 +208980,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -207184,6 +209082,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -210057,6 +211956,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -210158,6 +212058,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -210915,6 +212816,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -211016,6 +212918,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -211370,6 +213273,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -211471,6 +213375,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -212642,6 +214547,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -212743,6 +214649,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -213672,6 +215579,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -213773,6 +215681,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -214110,6 +216019,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -214211,6 +216121,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -214571,6 +216482,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -214672,6 +216584,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -215104,6 +217017,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -215205,6 +217119,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -215905,6 +217820,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -216006,6 +217922,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -216475,6 +218392,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -216576,6 +218494,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -217176,6 +219095,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -217277,6 +219197,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -218302,6 +220223,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -218403,6 +220325,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -219881,6 +221804,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -219982,6 +221906,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -221116,6 +223041,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
     moduleLesson: ModuleLessonCreateNestedOneWithoutVideoLogsInput
     organization: OrganizationCreateNestedOneWithoutStudentVideoLogsInput
   }
@@ -221130,6 +223058,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
     organizationId: string
   }
 
@@ -221809,6 +223740,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -221910,6 +223842,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -223536,6 +225469,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -223637,6 +225571,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -224434,6 +226369,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -224535,6 +226471,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -224971,6 +226908,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -225072,6 +227010,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -225387,6 +227326,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -225488,6 +227428,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -225842,6 +227783,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -225943,6 +227885,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -226526,6 +228469,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -226627,6 +228571,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -226987,6 +228932,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -227088,6 +229034,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -227188,6 +229135,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
@@ -227289,6 +229237,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
@@ -227643,6 +229592,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
@@ -227744,6 +229694,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -228087,6 +230038,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -228188,6 +230140,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -228542,6 +230495,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -228643,6 +230597,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -229044,6 +230999,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -229145,6 +231101,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -229562,6 +231519,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -229663,6 +231621,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -230007,6 +231966,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -230108,6 +232068,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -230223,6 +232184,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -230324,6 +232286,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -231197,6 +233160,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutOrganizationInput
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -231298,6 +233262,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -232211,6 +234176,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutOrganizationNestedInput
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -232312,6 +234278,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -232890,6 +234857,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -232991,6 +234959,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -233835,6 +235804,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -233936,6 +235906,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -234997,6 +236968,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -235098,6 +237070,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -236426,6 +238399,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -236527,6 +238501,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -237411,6 +239386,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -237512,6 +239488,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -238567,6 +240544,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -238668,6 +240646,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -239268,6 +241247,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -239369,6 +241349,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -240261,6 +242242,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -240362,6 +242344,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -240693,6 +242676,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -240794,6 +242778,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -241394,6 +243379,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -241495,6 +243481,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -241959,6 +243946,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutOrganizationInput
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -242060,6 +244048,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -242420,6 +244409,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutOrganizationNestedInput
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -242521,6 +244511,427 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadApplications?: StudyAbroadApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
+    classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classTrialVideos?: ClassTrialVideoUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonNotes?: LessonNoteUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationCreateWithoutClassMeetingsInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.OrganizationStatus
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionCreateNestedManyWithoutOrganizationInput
+    studentAcademicAttendances?: StudentAcademicAttendanceCreateNestedManyWithoutOrganizationInput
+    academicCenters?: AcademicCenterCreateNestedManyWithoutOrganizationInput
+    academicClasses?: AcademicClassCreateNestedManyWithoutOrganizationInput
+    academicBatches?: AcademicBatchCreateNestedManyWithoutOrganizationInput
+    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+    branches?: BranchCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
+    leads?: LeadCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
+    license?: LicenseCreateNestedOneWithoutOrganizationsInput
+    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
+    studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
+    studyAbroadApplications?: StudyAbroadApplicationCreateNestedManyWithoutOrganizationInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutCreateNestedManyWithoutOrganizationInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionCreateNestedManyWithoutOrganizationInput
+    countries?: CountryCreateNestedManyWithoutOrganizationInput
+    polls?: PollCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
+    students?: StudentCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
+    targets?: TargetCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
+    faculties?: FacultyCreateNestedManyWithoutOrganizationInput
+    classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classTrialVideos?: ClassTrialVideoCreateNestedManyWithoutOrganizationInput
+    lessonDoubts?: LessonDoubtCreateNestedManyWithoutOrganizationInput
+    lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutOrganizationInput
+    lessonNotes?: LessonNoteCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
+    classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
+    moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
+    lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
+    batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
+    studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutClassMeetingsInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.OrganizationStatus
+    licenseId?: string | null
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    academicCenters?: AcademicCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    academicClasses?: AcademicClassUncheckedCreateNestedManyWithoutOrganizationInput
+    academicBatches?: AcademicBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadApplications?: StudyAbroadApplicationUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
+    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
+    classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classTrialVideos?: ClassTrialVideoUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+    studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutClassMeetingsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutClassMeetingsInput, OrganizationUncheckedCreateWithoutClassMeetingsInput>
+  }
+
+  export type OrganizationUpsertWithoutClassMeetingsInput = {
+    update: XOR<OrganizationUpdateWithoutClassMeetingsInput, OrganizationUncheckedUpdateWithoutClassMeetingsInput>
+    create: XOR<OrganizationCreateWithoutClassMeetingsInput, OrganizationUncheckedCreateWithoutClassMeetingsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutClassMeetingsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutClassMeetingsInput, OrganizationUncheckedUpdateWithoutClassMeetingsInput>
+  }
+
+  export type OrganizationUpdateWithoutClassMeetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUpdateManyWithoutOrganizationNestedInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUpdateManyWithoutOrganizationNestedInput
+    academicCenters?: AcademicCenterUpdateManyWithoutOrganizationNestedInput
+    academicClasses?: AcademicClassUpdateManyWithoutOrganizationNestedInput
+    academicBatches?: AcademicBatchUpdateManyWithoutOrganizationNestedInput
+    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
+    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
+    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
+    studyAbroadApplications?: StudyAbroadApplicationUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUpdateManyWithoutOrganizationNestedInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUpdateManyWithoutOrganizationNestedInput
+    countries?: CountryUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
+    faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
+    classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classTrialVideos?: ClassTrialVideoUpdateManyWithoutOrganizationNestedInput
+    lessonDoubts?: LessonDoubtUpdateManyWithoutOrganizationNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutOrganizationNestedInput
+    lessonNotes?: LessonNoteUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
+    classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
+    moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
+    lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
+    studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutClassMeetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicCenters?: AcademicCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicClasses?: AcademicClassUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicBatches?: AcademicBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -242678,6 +245089,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -242779,6 +245191,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -242957,6 +245370,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -243058,6 +245472,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -243634,6 +246049,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -243735,6 +246151,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -244936,6 +247353,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -245037,6 +247455,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -245926,6 +248345,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -246027,6 +248447,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -247718,6 +250139,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -247819,6 +250241,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -249530,6 +251953,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -249631,6 +252055,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -250236,6 +252661,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -250337,6 +252763,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -250467,6 +252894,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -250568,6 +252996,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -250790,6 +253219,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -250891,6 +253321,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -251087,6 +253518,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -251188,6 +253620,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -251633,6 +254066,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -251734,6 +254168,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -252218,6 +254653,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
@@ -252319,6 +254755,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
@@ -252722,6 +255159,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
@@ -252823,6 +255261,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -253405,6 +255844,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -253506,6 +255946,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -253866,6 +256307,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -253967,6 +256409,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -254066,6 +256509,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -254167,6 +256611,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -254521,6 +256966,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -254622,6 +257068,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -254966,6 +257413,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -255067,6 +257515,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -255182,6 +257631,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -255283,6 +257733,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -255382,6 +257833,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -255483,6 +257935,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -255837,6 +258290,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -255938,6 +258392,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -256282,6 +258737,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -256383,6 +258839,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -256976,6 +259433,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -257077,6 +259535,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -257666,6 +260125,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -257767,6 +260227,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -258415,6 +260876,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -258516,6 +260978,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -259883,6 +262346,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -259984,6 +262448,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -261150,6 +263615,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -261251,6 +263717,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -261715,6 +264182,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -261816,6 +264284,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -261984,6 +264453,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -262085,6 +264555,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -262423,6 +264894,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -262524,6 +264996,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -263124,6 +265597,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -263225,6 +265699,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -263815,6 +266290,7 @@ export namespace Prisma {
     leads?: LeadCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -263916,6 +266392,7 @@ export namespace Prisma {
     leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -264515,6 +266992,7 @@ export namespace Prisma {
     leads?: LeadUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -264616,6 +267094,7 @@ export namespace Prisma {
     leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -265200,6 +267679,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -265301,6 +267781,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -266139,6 +268620,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -266240,6 +268722,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -267068,6 +269551,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -267169,6 +269653,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -267529,6 +270014,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -267630,6 +270116,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -268298,6 +270785,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -268399,6 +270887,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -269154,6 +271643,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -269255,6 +271745,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -269413,6 +271904,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -269514,6 +272006,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -269868,6 +272361,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -269969,6 +272463,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -270313,6 +272808,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -270414,6 +272910,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -270582,6 +273079,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -270683,6 +273181,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -271171,6 +273670,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -271272,6 +273772,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -271968,6 +274469,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -272069,6 +274571,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -272462,6 +274965,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -272563,6 +275067,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -272972,6 +275477,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -273073,6 +275579,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -273804,6 +276311,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -273905,6 +276413,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -274425,6 +276934,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -274526,6 +277036,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -274864,6 +277375,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -274965,6 +277477,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -275380,6 +277893,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -275481,6 +277995,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -275879,6 +278394,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -275980,6 +278496,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -276499,6 +279016,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -276600,6 +279118,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -276877,6 +279396,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -276978,6 +279498,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -277297,6 +279818,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -277398,6 +279920,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -278702,6 +281225,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -278803,6 +281327,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -279408,6 +281933,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -279509,6 +282035,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -279609,6 +282136,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -279710,6 +282238,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -280117,6 +282646,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -280218,6 +282748,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -280711,6 +283242,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -280812,6 +283344,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -281108,6 +283641,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -281209,6 +283743,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -281702,6 +284237,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -281803,6 +284339,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
@@ -282351,6 +284888,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -282452,6 +284990,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -282750,6 +285289,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -282851,6 +285391,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -283205,6 +285746,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -283306,6 +285848,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -283651,6 +286194,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -283752,6 +286296,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -284071,6 +286616,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -284172,6 +286718,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -285759,6 +288306,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -285860,6 +288408,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -286024,6 +288573,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -286125,6 +288675,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -286279,6 +288830,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -286380,6 +288932,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -286644,6 +289197,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -286745,6 +289299,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -286999,6 +289554,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -287100,6 +289656,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -287454,6 +290011,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -287555,6 +290113,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -288383,6 +290942,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -288484,6 +291044,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -289053,6 +291614,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -289154,6 +291716,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -289444,6 +292007,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -289545,6 +292109,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -289704,6 +292269,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -289805,6 +292371,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -290038,6 +292605,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -290139,6 +292707,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -290528,6 +293097,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -290629,6 +293199,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -290832,6 +293403,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -290933,6 +293505,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -291093,6 +293666,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -291194,6 +293768,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -291332,6 +293907,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -291433,6 +294009,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -291727,6 +294304,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -291828,6 +294406,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -292006,6 +294585,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -292107,6 +294687,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -292311,6 +294892,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -292412,6 +294994,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -292640,6 +295223,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -292741,6 +295325,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -292950,6 +295535,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
     student: StudentCreateNestedOneWithoutVideoLogsInput
     organization: OrganizationCreateNestedOneWithoutStudentVideoLogsInput
   }
@@ -292964,6 +295552,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
     organizationId: string
   }
 
@@ -293256,6 +295847,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -293357,6 +295949,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -294425,6 +297018,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -294526,6 +297120,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -294849,6 +297444,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -294950,6 +297546,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -295245,6 +297842,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -295346,6 +297944,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -295697,6 +298296,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -295798,6 +298398,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -296144,6 +298745,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -296245,6 +298847,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -296609,6 +299212,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -296710,6 +299314,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -297005,6 +299610,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -297106,6 +299712,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -297429,6 +300036,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -297530,6 +300138,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -297841,6 +300450,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -297942,6 +300552,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -298293,6 +300904,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -298394,6 +301006,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -298595,6 +301208,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -298696,6 +301310,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -298925,6 +301540,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -299026,6 +301642,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -299231,6 +301848,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -299332,6 +301950,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -299756,6 +302375,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -299857,6 +302477,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -301302,6 +303923,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -301403,6 +304025,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -301677,6 +304300,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -301778,6 +304402,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -302142,6 +304767,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -302243,6 +304869,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -302694,6 +305321,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -302795,6 +305423,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -303104,6 +305733,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -303205,6 +305835,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -303526,6 +306157,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -303627,6 +306259,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -303727,6 +306360,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -303828,6 +306462,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -304515,6 +307150,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -304616,6 +307252,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -305237,6 +307874,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -305338,6 +307976,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -305534,6 +308173,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -305635,6 +308275,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -305803,6 +308444,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -305904,6 +308546,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -306019,6 +308662,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -306120,6 +308764,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -306219,6 +308864,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -306320,6 +308966,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -306537,6 +309184,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -306638,6 +309286,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -306851,6 +309500,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -306952,6 +309602,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -307067,6 +309718,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -307168,6 +309820,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -307267,6 +309920,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -307368,6 +310022,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -307541,6 +310196,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -307642,6 +310298,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -308625,6 +311282,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationCreateNestedManyWithoutOrganizationInput
     license?: LicenseCreateNestedOneWithoutOrganizationsInput
     payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
@@ -308726,6 +311384,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
     payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
@@ -309080,6 +311739,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     license?: LicenseUpdateOneWithoutOrganizationsNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
@@ -309181,6 +311841,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -310051,6 +312712,22 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ClassMeetingCreateManyOrganizationInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startsAt: Date | string
+    durationMinutes?: number
+    meetingUrl: string
+    classIds?: ClassMeetingCreateclassIdsInput | string[]
+    createdById: string
+    createdByName: string
+    status?: string
+    cancelReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type NotificationCreateManyOrganizationInput = {
     id?: string
     userId: string
@@ -310759,6 +313436,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
   }
 
   export type StudentFilterTypeCreateManyOrganizationInput = {
@@ -312581,6 +315261,54 @@ export namespace Prisma {
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
     rescheduleHistory?: JsonNullValueInput | InputJsonValue
     followUps?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassMeetingUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    meetingUrl?: StringFieldUpdateOperationsInput | string
+    classIds?: ClassMeetingUpdateclassIdsInput | string[]
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassMeetingUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    meetingUrl?: StringFieldUpdateOperationsInput | string
+    classIds?: ClassMeetingUpdateclassIdsInput | string[]
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ClassMeetingUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    durationMinutes?: IntFieldUpdateOperationsInput | number
+    meetingUrl?: StringFieldUpdateOperationsInput | string
+    classIds?: ClassMeetingUpdateclassIdsInput | string[]
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -315037,6 +317765,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutVideoLogsNestedInput
     moduleLesson?: ModuleLessonUpdateOneRequiredWithoutVideoLogsNestedInput
   }
@@ -315052,6 +317783,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentVideoLogUncheckedUpdateManyWithoutOrganizationInput = {
@@ -315065,6 +317799,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentFilterTypeUpdateWithoutOrganizationInput = {
@@ -315213,6 +317950,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
@@ -315313,6 +318051,7 @@ export namespace Prisma {
     leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
     payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -327495,6 +330234,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
     organizationId: string
   }
 
@@ -328108,6 +330850,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     moduleLesson?: ModuleLessonUpdateOneRequiredWithoutVideoLogsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentVideoLogsNestedInput
   }
@@ -328122,6 +330867,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -328135,6 +330883,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -332414,6 +335165,9 @@ export namespace Prisma {
     maxPosition?: number
     videoDuration?: number
     isCompleted?: boolean
+    completedAt?: Date | string | null
+    unlockedAt?: Date | string | null
+    unlockedBy?: string | null
     organizationId: string
   }
 
@@ -332601,6 +335355,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     student?: StudentUpdateOneRequiredWithoutVideoLogsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentVideoLogsNestedInput
   }
@@ -332615,6 +335372,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -332628,6 +335388,9 @@ export namespace Prisma {
     maxPosition?: IntFieldUpdateOperationsInput | number
     videoDuration?: IntFieldUpdateOperationsInput | number
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unlockedBy?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
   }
 

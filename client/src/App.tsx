@@ -47,6 +47,7 @@ const STUDENT_NAV_ITEMS: TableItem[] = [
   { id: 'overview', label: 'Overview' },
   { id: 'materials', label: 'Classes & E-Books' },
   { id: 'fees', label: 'Fee details' },
+  { id: 'meetings', label: 'Meetings' },
   { id: 'notifications', label: 'Notifications' },
   { id: 'terms', label: 'Terms & Conditions' },
   { id: 'help', label: 'Help & Support' },
@@ -574,6 +575,7 @@ function App() {
         { id: 'dashboard', label: 'Overview' },
         { id: 'assignments', label: 'My Schedule' },
         { id: 'classes', label: 'My Classes' },
+        { id: 'class-meetings', label: 'Student Meetings' },
       ];
     }
 

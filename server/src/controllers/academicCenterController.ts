@@ -24,6 +24,8 @@ export interface AcademicCenterAccessConfig {
 export interface ProgramAccessConfig {
   dailyClassLimitEnabled: boolean;
   dailyClassLimit: number;
+  unlockGapEnabled: boolean;
+  unlockGapDays: number;
   feeLocking: {
     enabled: boolean;
     minPaidPercentage: number;
@@ -36,6 +38,8 @@ export interface ProgramAccessConfig {
 export const DEFAULT_PROGRAM_ACCESS_CONFIG: ProgramAccessConfig = {
   dailyClassLimitEnabled: false,
   dailyClassLimit: 2,
+  unlockGapEnabled: false,
+  unlockGapDays: 1,
   feeLocking: {
     enabled: false,
     minPaidPercentage: 50,
@@ -67,6 +71,8 @@ function sanitizeProgramAccessConfig(config: any): ProgramAccessConfig {
   return {
     dailyClassLimitEnabled: config?.dailyClassLimitEnabled === true,
     dailyClassLimit: clampInt(config?.dailyClassLimit, 1, 50, defaults.dailyClassLimit),
+    unlockGapEnabled: config?.unlockGapEnabled === true,
+    unlockGapDays: clampInt(config?.unlockGapDays, 1, 365, defaults.unlockGapDays),
     feeLocking: {
       enabled: fee?.enabled === true,
       minPaidPercentage: clampInt(fee?.minPaidPercentage, 1, 100, defaults.feeLocking.minPaidPercentage),

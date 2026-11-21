@@ -77,6 +77,24 @@ interface StudentPortalProps {
   initialTab?: string;
 }
 
+// Small picture for a lesson in the side list: the video's thumbnail, or a plain icon without one.
+function LessonThumb({ lesson, dim }: { lesson: any; dim?: boolean }) {
+  const [failed, setFailed] = useState(false);
+  if (!lesson.hasVideo) return null;
+  return (
+    <div className={cn("relative shrink-0 w-14 h-8 rounded-md overflow-hidden bg-muted border border-border/40 flex items-center justify-center", dim && "opacity-60")}>
+      {lesson.thumbnailUrl && !failed ? (
+        <img src={lesson.thumbnailUrl} alt="" loading="lazy" onError={() => setFailed(true)} className="w-full h-full object-cover" />
+      ) : (
+        <Video className="w-3.5 h-3.5 text-muted-foreground/60" />
+      )}
+      {lesson.isCompleted && (
+        <span className="absolute bottom-0 right-0 bg-emerald-500 text-white rounded-tl-md p-0.5"><CheckCircle className="w-2.5 h-2.5" /></span>
+      )}
+    </div>
+  );
+}
+
 const getCleanVideoUrl = (url: string | undefined) => {
   if (!url) return '';
   let clean = url;
@@ -153,6 +171,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
   const [isNotStudent, setIsNotStudent] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [classMeetings, setClassMeetings] = useState<any[]>([]);
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [materials, setMaterials] = useState<any[]>([]);
   const [classes, setClasses] = useState<any[]>([]);
@@ -507,13 +526,14 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
       }
 
       // 2. Fetch student portal data in parallel
-      const [notifRes, matRes, feeRes, invRes, classesRes, trialRes] = await Promise.all([
+      const [notifRes, matRes, feeRes, invRes, classesRes, trialRes, meetingsRes] = await Promise.all([
         api.get('/student-portal/notifications').catch(() => ({ data: { data: { notifications: [], announcements: [] } } })),
         api.get('/student-portal/materials').catch(() => ({ data: { data: [] } })),
         api.get('/student-portal/fees').catch(() => ({ data: { data: { schedules: [], feeStructures: [] } } })),
         api.get('/student-portal/invoices').catch(() => ({ data: { data: [] } })),
         api.get('/student-portal/classes').catch(() => ({ data: { data: [] } })),
         api.get('/student-portal/trial-videos').catch(() => ({ data: { data: [] } })),
+        api.get('/student-portal/meetings').catch(() => ({ data: { data: [] } })),
       ]);
 
       setNotifications(notifRes.data.data?.notifications || []);
@@ -523,6 +543,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
       setFeeStructures(feeRes.data.data?.feeStructures || []);
       setInvoices(invRes.data.data || []);
       setTrialVideos(trialRes.data.data || []);
+      setClassMeetings(meetingsRes.data.data || []);
 
       let fetchedClasses = classesRes.data.data || [];
 
@@ -899,6 +920,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
     { id: 'materials', label: 'Classes & E-Books', icon: <BookOpen className="w-4 h-4" />, count: materials.length },
     { id: 'fees', label: 'Fee & Invoices', icon: <CreditCard className="w-4 h-4" />, count: pendingPaymentsCount },
     { id: 'notifications', label: 'Notifications', icon: <Bell className="w-4 h-4" />, count: notifications.length + announcements.length },
+    { id: 'meetings', label: 'Meetings', icon: <Video className="w-4 h-4" />, count: classMeetings.filter((m: any) => m.status !== 'cancelled' && new Date(m.startsAt).getTime() + (m.durationMinutes || 60) * 60000 >= Date.now()).length },
     // Refer Admission disabled
     { id: 'terms', label: 'Terms & Conditions', icon: <ShieldCheck className="w-4 h-4" /> },
     { id: 'help', label: 'Help & Support', icon: <MessageSquare className="w-4 h-4" /> },
@@ -1360,6 +1382,57 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
             </div>
           </div>
         )}
+
+        {/* MEETINGS: set up by the principal for the student's classes */}
+        {activeTab === 'meetings' && (() => {
+          const nowMs = Date.now();
+          const endOf = (m: any) => new Date(m.startsAt).getTime() + (m.durationMinutes || 60) * 60000;
+          const upcomingMeetings = classMeetings.filter((m: any) => m.status !== 'cancelled' && endOf(m) >= nowMs);
+          const pastMeetings = classMeetings.filter((m: any) => !(m.status !== 'cancelled' && endOf(m) >= nowMs)).sort((a: any, b: any) => +new Date(b.startsAt) - +new Date(a.startsAt));
+          const when = (iso: string) => new Date(iso).toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true });
+          const card = (m: any, past: boolean) => {
+            const start = new Date(m.startsAt).getTime();
+            const live = !past && nowMs >= start - 15 * 60000;
+            return (
+              <div key={m.id} className={cn("rounded-2xl border bg-card p-5 flex flex-col sm:flex-row sm:items-center gap-4", (past || m.status === 'cancelled') && "opacity-70")}>
+                <div className="flex-1 min-w-0 space-y-1.5">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-semibold text-foreground">{m.title}</h3>
+                    {m.status === 'cancelled' && <Badge variant="destructive">Cancelled</Badge>}
+                    {live && <Badge className="bg-emerald-500/15 text-emerald-600 border-emerald-500/30">Starting soon</Badge>}
+                  </div>
+                  <p className="text-sm text-muted-foreground flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {when(m.startsAt)} · {m.durationMinutes} min</p>
+                  <p className="text-xs text-muted-foreground">Hosted by {m.createdByName}</p>
+                  {m.description && <p className="text-sm text-muted-foreground whitespace-pre-line">{m.description}</p>}
+                  {m.status === 'cancelled' && m.cancelReason && <p className="text-xs text-destructive">Reason: {m.cancelReason}</p>}
+                </div>
+                {m.meetingUrl && m.status !== 'cancelled' && !past && (
+                  <Button asChild className={cn(live ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "")} variant={live ? "default" : "outline"}>
+                    <a href={m.meetingUrl} target="_blank" rel="noopener noreferrer"><Video className="w-4 h-4 mr-2" /> Join meeting</a>
+                  </Button>
+                )}
+              </div>
+            );
+          };
+          return (
+            <div className="space-y-8 animate-in fade-in duration-500 max-w-4xl mx-auto">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3"><Video className="w-7 h-7 text-primary" /> Meetings</h1>
+                <p className="text-muted-foreground mt-1">Meetings scheduled by your principal for your classes.</p>
+              </div>
+              <section className="space-y-3">
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Upcoming</h2>
+                {upcomingMeetings.length ? upcomingMeetings.map((m: any) => card(m, false)) : <p className="text-sm text-muted-foreground">No upcoming meetings.</p>}
+              </section>
+              {pastMeetings.length > 0 && (
+                <section className="space-y-3">
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Past and cancelled (last 30 days)</h2>
+                  {pastMeetings.map((m: any) => card(m, true))}
+                </section>
+              )}
+            </div>
+          );
+        })()}
 
         {/* NOTIFICATIONS & ANNOUNCEMENTS */}
         {activeTab === 'notifications' && (
@@ -1908,13 +1981,13 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                             <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 mb-3 shadow-sm">
                               <Clock className="w-6 h-6" />
                             </div>
-                            <span className="text-[10px] uppercase tracking-widest font-bold text-amber-500 mb-1">Daily Limit Reached</span>
-                            <h3 className="text-lg sm:text-2xl font-bold text-foreground mb-1.5">Daily Viewing Quota Reached</h3>
+                            <span className="text-[10px] uppercase tracking-widest font-bold text-amber-500 mb-1">{selectedCurriculumLesson.lesson.isGapLocked ? 'Unlocks Soon' : 'Daily Limit Reached'}</span>
+                            <h3 className="text-lg sm:text-2xl font-bold text-foreground mb-1.5">{selectedCurriculumLesson.lesson.isGapLocked ? 'Next Video Not Open Yet' : 'Daily Viewing Quota Reached'}</h3>
                             <p className="text-muted-foreground text-xs sm:text-sm max-w-md mb-3 leading-relaxed">
                               {selectedCurriculumLesson.lesson.lockMessage || 'You have reached your daily quota of classes for today. Additional lessons unlock tomorrow.'}
                             </p>
                             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[11px] font-medium border border-amber-500/20">
-                              <Clock className="w-3 h-3" /> Resets daily at 12:00 AM midnight
+                              <Clock className="w-3 h-3" /> {selectedCurriculumLesson.lesson.isGapLocked ? (selectedCurriculumLesson.lesson.unlockAt ? `Opens ${new Date(selectedCurriculumLesson.lesson.unlockAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short' })}, 12:00 AM` : 'Opens after the previous video') : 'Resets daily at 12:00 AM midnight'}
                             </div>
                           </div>
                         ) : selectedCurriculumLesson.lesson.videoUrl ? (
@@ -2042,7 +2115,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                               )}
                               {selectedCurriculumLesson.lesson.isDailyLimitLocked && (
                                 <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                                  <Clock className="w-3 h-3" /> Daily Limit Reached
+                                  <Clock className="w-3 h-3" /> {selectedCurriculumLesson.lesson.isGapLocked ? 'Opens later' : 'Daily Limit Reached'}
                                 </span>
                               )}
                               {selectedCurriculumLesson.lesson.videoUrl && !selectedCurriculumLesson.lesson.isFeeLocked && !selectedCurriculumLesson.lesson.isDailyLimitLocked && (
@@ -2630,7 +2703,9 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                                     <div className="absolute -left-[7px] top-1/2 -translate-y-1/2 w-1 h-4 rounded-full bg-primary"></div>
                                                   )}
                                                   <div className="flex items-start justify-between w-full gap-1.5">
+                                                    <LessonThumb lesson={lesson} dim={isSequentialLocked || isFeeLocked || isDailyLimitLocked} />
                                                     <span className={cn(
+                                                      "flex-1 min-w-0",
                                                       "line-clamp-2 leading-snug text-xs",
                                                       isSelected ? "text-primary font-bold" : isSequentialLocked ? "text-muted-foreground/40" : "text-foreground/80"
                                                     )}>
@@ -2645,7 +2720,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                                       </span>
                                                     ) : isDailyLimitLocked ? (
                                                       <span className="text-[9px] px-1 py-0 border border-amber-300 dark:border-amber-800 bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0 font-medium rounded">
-                                                        Quota
+                                                        {lesson.isGapLocked ? 'Wait' : 'Quota'}
                                                       </span>
                                                     ) : isLocked ? (
                                                       <Lock className="w-2.5 h-2.5 flex-shrink-0 mt-0.5 text-muted-foreground/40" />
@@ -2704,8 +2779,10 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                                           {isSelected && (
                                                             <div className="absolute -left-[7px] top-1/2 -translate-y-1/2 w-1 h-3 rounded-full bg-primary"></div>
                                                           )}
-                                                          <div className="flex items-start justify-between w-full gap-1">
+                                                          <div className="flex items-start justify-between w-full gap-1.5">
+                                                            <LessonThumb lesson={lesson} dim={isSequentialLocked} />
                                                             <span className={cn(
+                                                              "flex-1 min-w-0",
                                                               "line-clamp-2 leading-snug text-xs",
                                                               isSelected ? "text-primary font-bold" : isSequentialLocked ? "text-muted-foreground/40" : "text-foreground/80"
                                                             )}>

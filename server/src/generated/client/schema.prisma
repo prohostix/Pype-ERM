@@ -57,6 +57,7 @@ model Organization {
   leaveAllocations              LeaveAllocation[]
   leaveRequests                 LeaveRequest[]
   meetings                      Meeting[]
+  classMeetings                 ClassMeeting[]
   notifications                 Notification[]
   license                       License?                       @relation(fields: [licenseId], references: [id])
   payments                      PaymentEntry[]
@@ -924,6 +925,28 @@ model Meeting {
 
   @@index([organizationId, date])
   @@index([hostId])
+}
+
+// Meeting a principal (faculty in charge) sets up for the students of one or more classes
+model ClassMeeting {
+  id              String       @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title           String
+  description     String?
+  startsAt        DateTime
+  durationMinutes Int          @default(60)
+  meetingUrl      String
+  classIds        String[]     @default([])
+  createdById     String // Faculty id
+  createdByName   String
+  status          String       @default("scheduled") // scheduled | cancelled
+  cancelReason    String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([organizationId, startsAt])
+  @@index([createdById])
 }
 
 model Vacancy {
@@ -2231,6 +2254,9 @@ model StudentVideoLog {
   maxPosition    Int          @default(0) // seconds, furthest point reached without skipping
   videoDuration  Int          @default(0) // seconds, 0 on logs from before this was tracked
   isCompleted    Boolean      @default(false)
+  completedAt    DateTime? // first time the video reached completion; rewatching never changes it
+  unlockedAt     DateTime? // admin override: the unlock-gap wait is skipped for this video
+  unlockedBy     String?
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 

@@ -11,8 +11,10 @@ import {
   getStartOfIstDay,
   getWatchedPercent,
   isVideoLogWatched,
-  rankVideoLessons
+  rankVideoLessons,
+  youtubeThumbnail,
 } from '../utils/videoAccess.js';
+import { getOnlineClassesForRanking, loadGapStatuses, gapMessage, getUnlockGapDays, computeGapStatuses, orderedVideoIds } from '../utils/videoGap.js';
 
 // Helper: get the Student record linked to the logged-in user (via email or direct ID)
 async function getLinkedStudent(userId: string) {
@@ -150,38 +152,6 @@ function getDailyLimitMessage(limit: number, watchedCount: number) {
   return `Daily viewing limit of ${limit} classes reached for today (${watchedCount}/${limit} watched). New classes unlock tomorrow at 12:00 AM.`;
 }
 
-// The student's online classes with just enough structure to number their videos in course order
-async function getOnlineClassesForRanking(student: any) {
-  const batches = await prisma.academicBatch.findMany({
-    where: {
-      OR: [
-        { students: { some: { id: student.id } } },
-        student.academicBatchId ? { id: student.academicBatchId } : {}
-      ].filter(condition => Object.keys(condition).length > 0)
-    },
-    select: { academicClassId: true, academicClass: { select: { academicCenter: { select: { type: true } } } } }
-  });
-  const onlineBatchClassIds = batches.filter(b => b.academicClass?.academicCenter?.type === 'online').map(b => b.academicClassId);
-  const lessonSelect = { select: { id: true, videoUrl: true, classSubModuleId: true }, orderBy: { order: 'asc' as const } };
-  return prisma.academicClass.findMany({
-    where: {
-      organizationId: student.organizationId,
-      academicCenter: { type: 'online' },
-      OR: [{ programIds: { has: student.programId || '' } }, { id: { in: onlineBatchClassIds } }]
-    },
-    orderBy: { createdAt: 'asc' },
-    select: {
-      modules: {
-        orderBy: { order: 'asc' },
-        select: {
-          lessons: lessonSelect,
-          subModules: { orderBy: { order: 'asc' }, select: { lessons: lessonSelect } }
-        }
-      }
-    }
-  });
-}
-
 // Helper: check access to a lesson before recording a view or watch time.
 // Fee and quota rules apply only to online-center lessons of the student's program.
 async function checkLessonAccessForStudent(student: any, moduleLessonId: string) {
@@ -229,6 +199,13 @@ async function checkLessonAccessForStudent(student: any, moduleLessonId: string)
     if ((rank.get(moduleLessonId) ?? Infinity) >= feeStatus.videoQuota) {
       return { allowed: false, status: 403, reason: 'fee_overdue', message: feeStatus.message };
     }
+  }
+
+  // The gap is checked before the daily limit so the student sees the date it actually opens.
+  const gap = await loadGapStatuses(student, activeConfig);
+  const gapStatus = gap?.statuses.get(moduleLessonId);
+  if (gap && gapStatus?.locked) {
+    return { allowed: false, status: 403, reason: 'unlock_gap', message: gapMessage(gapStatus, gap.gapDays) };
   }
 
   const dailyLimit = getDailyLimit(activeConfig);
@@ -389,6 +366,8 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
     feeStatus.videoQuota !== null && (videoRank.get(lessonId) ?? Infinity) >= feeStatus.videoQuota;
   const dailyLimit = getDailyLimit(programAccessConfig);
   const isDailyLimitReached = dailyLimit !== null && watchedCountToday >= dailyLimit;
+  const gapDays = getUnlockGapDays(programAccessConfig);
+  const gapStatuses = gapDays === null ? null : computeGapStatuses(orderedVideoIds(onlineClasses), new Map(allVideoLogs.map(l => [l.moduleLessonId, l])), gapDays);
 
   // Format Offline Classes
   const offlineResultData = batches.filter(b => b.academicClass && !isOnlineBatch(b)).map(batch => {
@@ -410,6 +389,7 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
         materials: isCompleted ? lesson.materials : [],
         videoUrl: lesson.videoUrl || null,
         hasVideo: !!lesson.videoUrl,
+        thumbnailUrl: youtubeThumbnail(lesson.videoUrl),
         resumePosition: getResumePosition(allVideoLogs.find(l => l.moduleLessonId === lesson.id))
       };
     };
@@ -451,6 +431,8 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
 
       let isFeeLocked = false;
       let isDailyLimitLocked = false;
+      let isGapLocked = false;
+      let unlockAt: Date | null = null;
       let lockReason: string | null = null;
       let lockMessage: string | null = null;
 
@@ -462,6 +444,15 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
         isFeeLocked = true;
         lockReason = 'fee_overdue';
         lockMessage = feeStatus.message;
+      } else if (lesson.videoUrl && gapDays !== null && gapStatuses?.get(lesson.id)?.locked) {
+        // The gap is checked before the daily limit: when both hold, its unlock date is the one that matters.
+        // Shown like the daily limit on screen: the lesson is closed for now, and the video link is withheld.
+        const gs: any = gapStatuses!.get(lesson.id);
+        isDailyLimitLocked = true;
+        isGapLocked = true;
+        unlockAt = gs.unlockAt;
+        lockReason = 'unlock_gap';
+        lockMessage = gapMessage(gs, gapDays);
       } else if (lesson.videoUrl && dailyLimit !== null && isDailyLimitReached && !watchedToday) {
         isDailyLimitLocked = true;
         lockReason = 'daily_limit';
@@ -489,11 +480,15 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
         // A locked lesson must not reveal its video link.
         videoUrl: isFeeLocked || isDailyLimitLocked ? null : lesson.videoUrl || null,
         hasVideo: !!lesson.videoUrl,
+        // Shown even while the lesson is locked; it is only a picture, the video link stays hidden.
+        thumbnailUrl: youtubeThumbnail(lesson.videoUrl),
         watchedToday,
         watchedPercent: getWatchedPercent(log),
         resumePosition: getResumePosition(log),
         isFeeLocked,
         isDailyLimitLocked,
+        isGapLocked,
+        unlockAt,
         lockReason,
         lockMessage,
         dailyLimit,
@@ -827,6 +822,8 @@ export const videoHeartbeat = asyncHandler(async (req: AuthRequest, res: Respons
         where: { id: existingLog.id },
         data: {
           ...progress,
+          // The unlock-gap countdown starts at the first completion; rewatching never moves it.
+          ...(progress.isCompleted && !existingLog.completedAt ? { completedAt: existingLog.isCompleted ? existingLog.lastWatchedAt : new Date() } : {}),
           watchDuration: { increment: playedSeconds },
           lastWatchedAt: new Date()
         }
@@ -838,7 +835,8 @@ export const videoHeartbeat = asyncHandler(async (req: AuthRequest, res: Respons
           moduleLessonId,
           organizationId: req.user.organizationId,
           watchDuration: playedSeconds,
-          viewCount: 1
+          viewCount: 1,
+          ...(progress.isCompleted ? { completedAt: new Date() } : {})
         }
       });
 

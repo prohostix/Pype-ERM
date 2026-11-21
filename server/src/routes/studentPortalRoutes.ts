@@ -1,4 +1,5 @@
 import express from 'express';
+import { getStudentMeetings } from '../controllers/classMeetingController.js';
 import {
   getStudentProfile,
   getStudentNotifications,
@@ -34,6 +35,7 @@ router.get('/config', getPortalConfig);
 router.get('/notifications', getStudentNotifications);
 router.get('/materials', getStudentMaterials);
 router.get('/classes', getStudentClasses);
+router.get('/meetings', getStudentMeetings);
 router.get('/trial-videos', getStudentTrialVideos);
 router.get('/lessons/:lessonId/doubts', getLessonDoubts);
 router.post('/lessons/:lessonId/doubts', createLessonDoubt);

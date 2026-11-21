@@ -297,6 +297,7 @@ const navItems: NavItem[] = [
     children: [
       { id: 'dashboard', label: 'Overview', icon: LayoutDashboard, roles: ['faculty'] },
       { id: 'classes', label: 'My Classes', icon: BookOpen, roles: ['faculty'] },
+      { id: 'class-meetings', label: 'Student Meetings', icon: Video, roles: ['faculty'] },
     ],
   },
   {

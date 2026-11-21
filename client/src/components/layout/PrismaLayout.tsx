@@ -168,7 +168,8 @@ export function PrismaLayout({
       case 'calendar':
       case 'sessions':
       case 'admission_sessions': return <Calendar className={iconClass} />;
-      case 'meetings': return <Video className={iconClass} />;
+      case 'meetings':
+      case 'class-meetings': return <Video className={iconClass} />;
       case 'holidays':
       case 'leaves':
       case 'leave_requests':

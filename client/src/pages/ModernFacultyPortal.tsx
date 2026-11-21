@@ -7,7 +7,8 @@ import {
   ExternalLink,
   BookMarked,
   Clock,
-  PlayCircle
+  PlayCircle,
+  Video
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,7 @@ import { FacultyAssignmentsPanel } from '../components/panels/FacultyAssignments
 import { ActiveSessionsPanel } from '../components/panels/ActiveSessionsPanel';
 import { AttendanceManager } from '../components/panels/AttendanceManager';
 import { toast } from 'sonner';
+import { ClassMeetingsPanel } from '../components/panels/ClassMeetingsPanel';
 import { useAuth } from '@/hooks/useAuth';
 import { io, Socket } from 'socket.io-client';
 import { useRef } from 'react';
@@ -103,6 +105,7 @@ export function ModernFacultyPortal({ initialTab, onNavigate }: FacultyPortalPro
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'assignments', label: 'My Schedule', icon: Clock },
     { id: 'classes', label: 'My Classes', icon: BookOpen },
+    { id: 'class-meetings', label: 'Student Meetings', icon: Video },
   ];
 
   const handleTabChange = (tabId: string) => {
@@ -271,6 +274,12 @@ export function ModernFacultyPortal({ initialTab, onNavigate }: FacultyPortalPro
                     </div>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {activeTab === 'class-meetings' && (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <ClassMeetingsPanel />
               </div>
             )}
 

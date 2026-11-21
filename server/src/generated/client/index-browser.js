@@ -626,6 +626,23 @@ exports.Prisma.MeetingScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ClassMeetingScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  title: 'title',
+  description: 'description',
+  startsAt: 'startsAt',
+  durationMinutes: 'durationMinutes',
+  meetingUrl: 'meetingUrl',
+  classIds: 'classIds',
+  createdById: 'createdById',
+  createdByName: 'createdByName',
+  status: 'status',
+  cancelReason: 'cancelReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.VacancyScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -1445,6 +1462,9 @@ exports.Prisma.StudentVideoLogScalarFieldEnum = {
   maxPosition: 'maxPosition',
   videoDuration: 'videoDuration',
   isCompleted: 'isCompleted',
+  completedAt: 'completedAt',
+  unlockedAt: 'unlockedAt',
+  unlockedBy: 'unlockedBy',
   organizationId: 'organizationId'
 };
 
@@ -1979,6 +1999,7 @@ exports.Prisma.ModelName = {
   SubDepartment: 'SubDepartment',
   Designation: 'Designation',
   Meeting: 'Meeting',
+  ClassMeeting: 'ClassMeeting',
   Vacancy: 'Vacancy',
   AdmissionSession: 'AdmissionSession',
   Enrollment: 'Enrollment',

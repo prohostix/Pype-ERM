@@ -51,6 +51,9 @@ import { CS } from '@/lib/currency';
 export interface ProgramAccessConfig {
   dailyClassLimitEnabled: boolean;
   dailyClassLimit: number;
+  /** Next video opens this many days after the previous one was completed. */
+  unlockGapEnabled?: boolean;
+  unlockGapDays?: number;
   feeLocking: {
     enabled: boolean;
     lockPolicy?: string;
@@ -64,6 +67,8 @@ export interface ProgramAccessConfig {
 export const DEFAULT_PROGRAM_CONFIG: ProgramAccessConfig = {
   dailyClassLimitEnabled: false,
   dailyClassLimit: 2,
+  unlockGapEnabled: false,
+  unlockGapDays: 1,
   feeLocking: {
     enabled: false,
     lockPolicy: 'min_percentage',
@@ -892,6 +897,55 @@ export function AcademicCentersPanel() {
                         <div className="text-xs text-muted-foreground bg-background/60 p-3 rounded-lg border border-border/40">
                           <span className="font-semibold text-foreground">Rule:</span> A student in this program can watch up to <span className="font-bold text-indigo-600 dark:text-indigo-400">{activeSelectedConfig.dailyClassLimit}</span> different lessons/day, including lessons they rewatch. Unlocks reset at 12:00 AM IST.
                         </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Unlock gap: the next video opens N days after the previous one is completed */}
+                  <div className="p-5 rounded-xl border border-border/60 bg-muted/20 space-y-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-violet-600" />
+                          <h4 className="text-sm font-semibold">Next Video Unlock Gap</h4>
+                        </div>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          Open each video a set number of days after the student completed the previous one, for <span className="font-semibold text-foreground">{activeSelectedProgram.name}</span>.
+                        </p>
+                      </div>
+                      <Switch
+                        checked={!!activeSelectedConfig.unlockGapEnabled}
+                        onCheckedChange={(checked) => updateProgramConfig(activeSelectedProgram.id, { unlockGapEnabled: checked })}
+                      />
+                    </div>
+
+                    {activeSelectedConfig.unlockGapEnabled && (
+                      <div className="pt-3 border-t border-border/50 space-y-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                          <div className="space-y-1.5">
+                            <Label className="text-xs font-medium">Days between videos</Label>
+                            <Input
+                              type="number"
+                              min={1}
+                              max={365}
+                              value={activeSelectedConfig.unlockGapDays ?? 1}
+                              onChange={(e) => {
+                                const val = parseInt(e.target.value) || 1;
+                                updateProgramConfig(activeSelectedProgram.id, { unlockGapDays: Math.min(365, Math.max(1, val)) });
+                              }}
+                              className="bg-background h-9 text-sm"
+                            />
+                          </div>
+                          <div className="text-xs text-muted-foreground bg-background/60 p-3 rounded-lg border border-border/40">
+                            <span className="font-semibold text-foreground">Rule:</span> a video opens at 12:00 AM IST, <span className="font-bold text-violet-600 dark:text-violet-400">{activeSelectedConfig.unlockGapDays ?? 1}</span> day(s) after the day the previous video was completed. Videos must be taken in course order.
+                          </div>
+                        </div>
+                        <p className="text-xs text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 leading-relaxed">
+                          Applies to every student in this program straight away. Videos a student has already started or completed stay open; only videos they have not started wait for the gap.
+                          {activeSelectedConfig.dailyClassLimitEnabled && (activeSelectedConfig.unlockGapDays ?? 1) >= 1 && activeSelectedConfig.dailyClassLimit > 1
+                            ? ' The daily limit is higher than one class a day, but the gap allows only one new video per gap, so the gap decides.' : ''}
+                          {' '}Use "Unlock Next Video" in Student Portal Management to skip the wait for one student.
+                        </p>
                       </div>
                     )}
                   </div>

@@ -25,6 +25,8 @@ import {
   updatePhotoStatus,
   checkStudentUniqueness,
   setStudentVideoBlock,
+  getStudentVideoUnlock,
+  unlockStudentNextVideo,
   getStudentCommunications,
   getStudentRemarks,
   addStudentRemark,
@@ -64,6 +66,8 @@ router.route('/:id').get(getStudent).put(authorize('org_admin', 'superadmin', 'c
 router.put('/:id/progress/:stepId', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), upload.single('proof'), updateAdmissionProgress);
 router.put('/:id/academic-progress', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudentAcademicProgress);
 router.put('/:id/video-block', authorize('org_admin', 'superadmin'), setStudentVideoBlock);
+router.get('/:id/video-unlock', authorize('org_admin', 'superadmin'), getStudentVideoUnlock);
+router.put('/:id/video-unlock', authorize('org_admin', 'superadmin'), unlockStudentNextVideo);
 router.put('/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), approveStudent);
 router.get('/:id/enrollments', getStudentEnrollments);
 const REMARK_ROLES = ['org_admin', 'superadmin', 'ceo', 'general_manager', 'branch_manager', 'center_admin', 'sales_admin', 'sales_sub_admin', 'ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'employee'];

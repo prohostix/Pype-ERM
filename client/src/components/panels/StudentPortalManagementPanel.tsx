@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { RefreshCw, MonitorSmartphone, Shield, UserX, Lock, VideoOff, Video } from 'lucide-react';
+import { RefreshCw, MonitorSmartphone, Shield, UserX, Lock, VideoOff, Video, Unlock } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -18,6 +18,10 @@ export function StudentPortalManagementPanel() {
   const canBlockVideos = ['org_admin', 'superadmin'].includes(user?.role || '');
   const [blockTarget, setBlockTarget] = useState<any>(null);
   const [blockReason, setBlockReason] = useState('');
+  // Unlock-gap override: skip the wait for a student's next video
+  const [unlockTarget, setUnlockTarget] = useState<any>(null);
+  const [unlockInfo, setUnlockInfo] = useState<any>(null);
+  const [unlockLoading, setUnlockLoading] = useState(false);
   const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -90,6 +94,35 @@ export function StudentPortalManagementPanel() {
       fetchStudents();
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to update video access');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const openUnlock = async (student: any) => {
+    setUnlockTarget(student);
+    setUnlockInfo(null);
+    setUnlockLoading(true);
+    try {
+      const res = await api.get(`/students/${student.id}/video-unlock`);
+      setUnlockInfo(res.data?.data || null);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to load unlock status');
+      setUnlockTarget(null);
+    } finally {
+      setUnlockLoading(false);
+    }
+  };
+
+  const handleUnlockNext = async () => {
+    if (!unlockTarget || !unlockInfo?.nextLocked) return;
+    setIsSaving(true);
+    try {
+      const res = await api.put(`/students/${unlockTarget.id}/video-unlock`, { lessonId: unlockInfo.nextLocked.lessonId });
+      toast.success(res.data?.message || 'Video unlocked');
+      setUnlockTarget(null);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to unlock video');
     } finally {
       setIsSaving(false);
     }
@@ -208,6 +241,12 @@ export function StudentPortalManagementPanel() {
                             {student.videoBlocked ? 'Unblock Videos' : 'Block Videos'}
                           </Button>
                         )}
+                        {canBlockVideos && (
+                          <Button size="sm" variant="outline" onClick={() => openUnlock(student)} title="Skip the unlock-gap wait for the student's next video">
+                            <Unlock className="w-4 h-4 mr-2" />
+                            Unlock Next Video
+                          </Button>
+                        )}
                         <Button size="sm" variant={student.credentials ? "outline" : "default"} onClick={() => openManageDialog(student)}>
                           <Shield className="w-4 h-4 mr-2" />
                           Manage Access
@@ -281,6 +320,39 @@ export function StudentPortalManagementPanel() {
               <Button onClick={() => handleVideoBlock(false)} disabled={isSaving}>{isSaving ? 'Saving...' : 'Unblock Videos'}</Button>
             ) : (
               <Button variant="destructive" onClick={() => handleVideoBlock(true)} disabled={isSaving}>{isSaving ? 'Saving...' : 'Block Videos'}</Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!unlockTarget} onOpenChange={(o) => { if (!o) setUnlockTarget(null); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Unlock next video: {unlockTarget?.name}</DialogTitle>
+            <DialogDescription>Skips the unlock-gap wait for this student only. Other rules (fee lock, daily limit, admin block) still apply.</DialogDescription>
+          </DialogHeader>
+          <div className="py-2 text-sm space-y-2">
+            {unlockLoading ? (
+              <p className="text-muted-foreground">Checking…</p>
+            ) : !unlockInfo?.enabled ? (
+              <p className="text-muted-foreground">The unlock gap is not turned on for this student's program.</p>
+            ) : !unlockInfo.nextLocked ? (
+              <p className="text-muted-foreground">No video is waiting. Every video is open for this student.</p>
+            ) : (
+              <>
+                <p><span className="font-medium">{unlockInfo.nextLocked.title}</span> is the next locked video.</p>
+                {unlockInfo.nextLocked.reason === 'waiting' ? (
+                  <p className="text-muted-foreground">It opens on {new Date(unlockInfo.nextLocked.unlockAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' })} ({unlockInfo.gapDays}-day gap after completing the previous video).</p>
+                ) : (
+                  <p className="text-amber-600">The student has not completed "{unlockInfo.nextLocked.previousTitle || 'the previous video'}" yet. Unlocking opens this video anyway.</p>
+                )}
+              </>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUnlockTarget(null)} disabled={isSaving}>Close</Button>
+            {unlockInfo?.nextLocked && (
+              <Button onClick={handleUnlockNext} disabled={isSaving}>{isSaving ? 'Unlocking...' : 'Unlock now'}</Button>
             )}
           </DialogFooter>
         </DialogContent>

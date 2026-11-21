@@ -223,3 +223,16 @@ export function computeVideoProgress(
     isCompleted: !!existing?.isCompleted || !!update.markCompleted || reachedCompletion
   };
 }
+
+/**
+ * Thumbnail image for a YouTube video link (plain link, youtu.be, embed, shorts, or pasted iframe code).
+ * Returns null for anything else, so the page can show a plain icon.
+ */
+export function youtubeThumbnail(rawUrl?: string | null): string | null {
+  if (!rawUrl) return null;
+  let url = rawUrl.trim();
+  const iframeSrc = url.match(/src=["']([^"']+)["']/i);
+  if (iframeSrc) url = iframeSrc[1];
+  const m = url.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/|v\/))([A-Za-z0-9_-]{11})/);
+  return m ? `https://img.youtube.com/vi/${m[1]}/mqdefault.jpg` : null;
+}
