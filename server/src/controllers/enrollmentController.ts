@@ -349,7 +349,7 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     fatherName, fatherPhone, motherName, motherPhone,
     religion, caste, altPhone, pinCode, photo, documents,
     gender, category, maritalStatus, employmentStatus,
-    guardianName, familyPhone, specialisation,
+    guardianName, familyPhone, specialisation, sessionId: requestedSessionId,
     ...updateData
   } = req.body;
 
@@ -395,6 +395,32 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     });
   }
 
+  // The session picked by Sales on this form. Before, it was read from the request but never saved,
+  // so the enrollment and student stayed without a session and Operations rejected them as incomplete.
+  let sessionId: string | null = enrollment.sessionId;
+  if (typeof requestedSessionId === 'string' && requestedSessionId.trim() && requestedSessionId !== enrollment.sessionId) {
+    const session = await prisma.admissionSession.findFirst({
+      where: { id: requestedSessionId.trim(), organizationId: enrollment.organizationId },
+      select: { id: true },
+    });
+    if (!session) {
+      res.status(400).json({ success: false, message: 'The selected admission session was not found. Please pick the session again.' });
+      return;
+    }
+    if (enrollment.studentId) {
+      // One enrollment per student, program and session
+      const clash = await prisma.enrollment.findFirst({
+        where: { studentId: enrollment.studentId, programId: enrollment.programId, sessionId: session.id, id: { not: enrollment.id } },
+        select: { id: true },
+      });
+      if (clash) {
+        res.status(409).json({ success: false, message: 'This student already has an enrollment for this program and session.' });
+        return;
+      }
+    }
+    sessionId = session.id;
+  }
+
   const studentData: any = {
     name: name || enrollment.studentName,
     email: email || enrollment.studentEmail,
@@ -420,7 +446,7 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     specialisation: specialisation || null,
     status: 'document_review',
     programId: enrollment.programId,
-    sessionId: enrollment.sessionId,
+    sessionId,
     universityId: enrollment.program?.universityId || null,
     centerId: enrollment.studyCenterId,
     branchId: req.user.branchId || null,
@@ -594,6 +620,24 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
         ? (student.documents as any[]).map((d: any) => ({ ...d, status: d?.status === 'rejected' ? 'pending' : (d?.status || 'pending') }))
         : [],
       photo: student.photo,
+      sessionId,
+      // Operations reads these from the enrollment, so keep them in step with the student
+      altPhone: student.altPhone,
+      dob: student.dob,
+      fatherName: student.fatherName,
+      fatherPhone: student.fatherPhone,
+      motherName: student.motherName,
+      motherPhone: student.motherPhone,
+      guardianName: student.guardianName,
+      familyPhone: student.familyPhone,
+      religion: student.religion,
+      caste: student.caste,
+      pinCode: student.pinCode,
+      gender: student.gender,
+      category: student.category,
+      maritalStatus: student.maritalStatus,
+      employmentStatus: student.employmentStatus,
+      ...(student.specialisation ? { specialisation: student.specialisation } : {}),
       ...(req.body.receiptUrl ? { receiptUrl: String(req.body.receiptUrl).trim() } : {}),
       ...(req.body.initialPaymentAmount ? { initialPaymentAmount: Number(req.body.initialPaymentAmount) } : {}),
       ...(isFinanceRejection ? { financeRemarks: null, receiptVerified: false, departmentRemarks: null } : {}),

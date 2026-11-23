@@ -19,7 +19,9 @@ interface StatusHistoryEntry {
   actorId: string;
   actorName?: string;
   actorRole?: string;
-  timestamp: string;
+  /** older entries use timestamp, newer ones changedAt */
+  timestamp?: string;
+  changedAt?: string;
   note?: string;
   remarks?: string;
 }
@@ -545,7 +547,7 @@ export function SalesStudentPipelinePanel() {
                                   </span>
                                 )}
                                 <span className="text-xs text-muted-foreground ml-auto">
-                                  {new Date(h.timestamp).toLocaleString()}
+                                  {(() => { const d = new Date(h.changedAt || h.timestamp || ''); return isNaN(+d) ? '—' : d.toLocaleString(); })()}
                                 </span>
                               </div>
                               {h.note && <p className="text-xs text-muted-foreground mt-0.5">{h.note}</p>}
