@@ -167,18 +167,20 @@ export function ComplaintsPanel() {
                   </Select>
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Status</Label>
-                <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                  <SelectTrigger className="rounded-xl h-11 shadow-sm"><SelectValue /></SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    <SelectItem value="open">Open</SelectItem>
-                    <SelectItem value="in_progress">In Progress</SelectItem>
-                    <SelectItem value="resolved">Resolved</SelectItem>
-                    <SelectItem value="closed">Closed</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              {editingId && (
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Status</Label>
+                  <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
+                    <SelectTrigger className="rounded-xl h-11 shadow-sm"><SelectValue /></SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      <SelectItem value="open">Open</SelectItem>
+                      <SelectItem value="in_progress">In Progress</SelectItem>
+                      <SelectItem value="resolved">Resolved</SelectItem>
+                      <SelectItem value="closed">Closed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
               <div className="pt-4 flex justify-end gap-2">
                 <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setDialogOpen(false)}>Cancel</Button>
                 <Button type="submit" className="rounded-xl px-6 shadow-md">Submit Complaint</Button>
@@ -241,10 +243,10 @@ export function ComplaintsPanel() {
                               {new Date(c.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </span>
                           )}
-                          {c.employeeId?.name && (
+                          {c.user?.name && (
                             <span className="bg-background px-2.5 py-1 rounded-md border border-border/50 shadow-sm flex items-center">
                               <span className="uppercase tracking-widest font-bold opacity-70 mr-1.5">By</span>
-                              <span className="text-foreground">{c.employeeId.name}</span>
+                              <span className="text-foreground">{c.user.name}</span>
                             </span>
                           )}
                         </div>

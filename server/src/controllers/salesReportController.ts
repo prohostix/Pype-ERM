@@ -178,6 +178,120 @@ export const getTeamReport = asyncHandler(async (req: AuthRequest, res: Response
   res.json({ success: true, data: performanceData });
 });
 
+// ─── Team Report: one member's students and payments ────────────────────────
+// Same rules as getTeamReport (same attribution, month range and branch limit) so the numbers
+// here always add up to the member's row in the report.
+export const getTeamMemberStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const memberId = req.params.memberId;
+  // Ignore the counselor filter here: the member is picked by the URL, but must still be in this user's scope
+  const userWhere = await buildHierarchyClause({ ...req, user: req.user, query: {} } as AuthRequest);
+  const member = await prisma.user.findFirst({
+    where: { AND: [userWhere, { id: memberId }] },
+    select: { id: true, name: true, designation: true },
+  });
+  if (!member) {
+    res.status(404).json({ success: false, message: 'Team member not found in your team' });
+    return;
+  }
+
+  const range = getMonthRange(req);
+  const branchId = branchLimitOf(req);
+  const studentBase: any = {
+    OR: [{ referredBy: member.id }, { enrolledBy: member.id }],
+    ...(branchId ? { branchId } : {}),
+  };
+  const LIMIT = 1000;
+
+  const [enrolled, enrolledCount, payments, targets] = await Promise.all([
+    prisma.student.findMany({
+      where: { ...studentBase, ...(range ? { joinDate: range } : {}) },
+      select: { id: true },
+      orderBy: { joinDate: 'desc' },
+      take: LIMIT,
+    }),
+    prisma.student.count({ where: { ...studentBase, ...(range ? { joinDate: range } : {}) } }),
+    prisma.paymentEntry.findMany({
+      where: {
+        ...(range ? { receivedAt: range } : {}),
+        invoice: { student: studentBase },
+      },
+      select: {
+        id: true, amount: true, receivedAt: true, method: true, referenceNo: true,
+        invoice: { select: { invoiceNo: true, studentId: true } },
+      },
+      orderBy: { receivedAt: 'desc' },
+    }),
+    prisma.target.findMany({ where: { employeeId: member.id } }),
+  ]);
+  const targetTotal = targets.reduce((a, t) => a + t.target, 0);
+
+  // Group payments by student (payments can belong to students who joined before the selected month)
+  const byStudent = new Map<string, any[]>();
+  for (const p of payments) {
+    const sid = p.invoice?.studentId;
+    if (!sid) continue;
+    if (!byStudent.has(sid)) byStudent.set(sid, []);
+    byStudent.get(sid)!.push({
+      id: p.id, amount: p.amount, receivedAt: p.receivedAt, method: p.method,
+      referenceNo: p.referenceNo, invoiceNo: p.invoice?.invoiceNo ?? null,
+    });
+  }
+
+  const enrolledIds = new Set(enrolled.map((s) => s.id));
+  const allIds = [...new Set([...enrolledIds, ...byStudent.keys()])];
+
+  const students = allIds.length
+    ? await prisma.student.findMany({
+        where: { id: { in: allIds }, ...(branchId ? { branchId } : {}) },
+        select: {
+          id: true, name: true, enrollmentNo: true, phone: true, email: true, status: true,
+          joinDate: true, specialisation: true, referredBy: true, enrolledBy: true,
+          program: { select: { name: true } },
+        },
+      })
+    : [];
+
+  const rows = students.map((s) => {
+    const pays = byStudent.get(s.id) || [];
+    return {
+      id: s.id,
+      name: s.name,
+      enrollmentNo: s.enrollmentNo,
+      phone: s.phone,
+      email: s.email,
+      status: s.status,
+      joinDate: s.joinDate,
+      program: s.program?.name ?? null,
+      specialisation: s.specialisation,
+      // Why this student counts for the member
+      credit: s.enrolledBy === member.id && s.referredBy === member.id ? 'both'
+        : s.enrolledBy === member.id ? 'enrolled' : 'referred',
+      joinedInPeriod: enrolledIds.has(s.id),
+      revenue: pays.reduce((a, p) => a + p.amount, 0),
+      paymentCount: pays.length,
+      lastPaymentAt: pays[0]?.receivedAt ?? null,
+      payments: pays,
+    };
+  }).sort((a, b) => b.revenue - a.revenue || +new Date(b.joinDate) - +new Date(a.joinDate));
+
+  res.json({
+    success: true,
+    data: {
+      member: {
+        ...member,
+        targetTotal,
+        targetProgress: targetTotal > 0 ? Math.round((enrolledCount / targetTotal) * 100) : 0,
+      },
+      students: rows,
+      totals: {
+        enrollments: enrolledCount,
+        revenue: payments.reduce((a, p) => a + p.amount, 0),
+      },
+      truncated: enrolledCount > LIMIT,
+    },
+  });
+});
+
 // ─── Counselor Report ────────────────────────────────────────────────────────
 export const getCounselorReport = asyncHandler(async (req: AuthRequest, res: Response) => {
   const userWhere = await buildHierarchyClause(req);

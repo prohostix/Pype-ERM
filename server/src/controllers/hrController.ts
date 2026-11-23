@@ -687,7 +687,11 @@ export const getVacancyStats = asyncHandler(async (req: AuthRequest, res: Respon
 
 // --- Complaints ---
 export const getComplaints = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const complaints = await prisma.complaint.findMany({ where: { organizationId: req.user.organizationId } });
+  const complaints = await prisma.complaint.findMany({
+    where: { organizationId: req.user.organizationId },
+    include: { user: { select: { id: true, name: true } } },
+    orderBy: { submittedAt: 'desc' },
+  });
   res.json({ success: true, data: complaints });
 });
 export const getComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -697,24 +701,72 @@ export const getComplaint = asyncHandler(async (req: AuthRequest, res: Response)
   if (!complaint) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
   res.json({ success: true, data: complaint });
 });
+const COMPLAINT_STATUSES = ['open', 'in_progress', 'resolved', 'closed'];
+const COMPLAINT_PRIORITIES = ['low', 'medium', 'high'];
+const COMPLAINT_CATEGORIES = ['general', 'harassment', 'discrimination', 'workplace', 'management', 'other'];
+
 export const createComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const subject = typeof req.body.subject === 'string' ? req.body.subject.trim() : '';
+  const description = typeof req.body.description === 'string' ? req.body.description.trim() : '';
+  const category = req.body.category ?? 'general';
+  const priority = req.body.priority ?? 'medium';
+  if (!subject || !description) {
+    res.status(400).json({ success: false, message: 'Subject and description are required' });
+    return;
+  }
+  if (!COMPLAINT_CATEGORIES.includes(category)) {
+    res.status(400).json({ success: false, message: 'Invalid complaint category' });
+    return;
+  }
+  if (!COMPLAINT_PRIORITIES.includes(priority)) {
+    res.status(400).json({ success: false, message: 'Invalid complaint priority' });
+    return;
+  }
+  // Only these fields come from the client: the filer, organization and status are set here
   const complaint = await prisma.complaint.create({
-    data: { ...req.body, organizationId: req.user.organizationId, userId: req.user.id }
+    data: {
+      subject: subject.slice(0, 200),
+      description,
+      category,
+      priority,
+      status: 'open',
+      organizationId: req.user.organizationId,
+      employeeId: req.user.id,
+    },
+    include: { user: { select: { id: true, name: true } } },
   });
   res.status(201).json({ success: true, data: complaint });
 });
 export const updateComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
   const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
-  const { title, description, category, priority, status } = req.body;
+  const { subject, description, category, priority, status } = req.body;
   const updateData: any = {};
-  if (title !== undefined) updateData.title = title;
-  if (description !== undefined) updateData.description = description;
-  if (category !== undefined) updateData.category = category;
-  if (priority !== undefined) updateData.priority = priority;
-  if (status !== undefined) updateData.status = status;
-  
-  const complaint = await prisma.complaint.update({ where: { id: req.params.id }, data: updateData });
+  if (subject !== undefined) {
+    if (typeof subject !== 'string' || !subject.trim()) { res.status(400).json({ success: false, message: 'Subject cannot be empty' }); return; }
+    updateData.subject = subject.trim().slice(0, 200);
+  }
+  if (description !== undefined) {
+    if (typeof description !== 'string' || !description.trim()) { res.status(400).json({ success: false, message: 'Description cannot be empty' }); return; }
+    updateData.description = description.trim();
+  }
+  if (category !== undefined) {
+    if (!COMPLAINT_CATEGORIES.includes(category)) { res.status(400).json({ success: false, message: 'Invalid complaint category' }); return; }
+    updateData.category = category;
+  }
+  if (priority !== undefined) {
+    if (!COMPLAINT_PRIORITIES.includes(priority)) { res.status(400).json({ success: false, message: 'Invalid complaint priority' }); return; }
+    updateData.priority = priority;
+  }
+  if (status !== undefined) {
+    if (!COMPLAINT_STATUSES.includes(status)) { res.status(400).json({ success: false, message: 'Invalid complaint status' }); return; }
+    updateData.status = status;
+    // Keep the resolved date in step with the status
+    if (status === 'resolved' || status === 'closed') { if (!exists.resolvedAt) updateData.resolvedAt = new Date(); }
+    else updateData.resolvedAt = null;
+  }
+
+  const complaint = await prisma.complaint.update({ where: { id: req.params.id }, data: updateData, include: { user: { select: { id: true, name: true } } } });
   res.json({ success: true, data: complaint });
 });
 export const deleteComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -726,7 +778,7 @@ export const deleteComplaint = asyncHandler(async (req: AuthRequest, res: Respon
 export const resolveComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
   const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
-  const complaint = await prisma.complaint.update({ where: { id: req.params.id }, data: { status: 'resolved' } });
+  const complaint = await prisma.complaint.update({ where: { id: req.params.id }, data: { status: 'resolved', resolvedAt: exists.resolvedAt ?? new Date() } });
   res.json({ success: true, data: complaint });
 });
 

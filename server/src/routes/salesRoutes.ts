@@ -35,6 +35,7 @@ import {
 } from '../controllers/salesEnrollmentController.js';
 import {
   getTeamReport,
+  getTeamMemberStudents,
   getReportMembers,
   getCounselorReport,
   getAdmissionReport,
@@ -90,6 +91,7 @@ router.put('/student-applications/:id/sales-admin-reject', authorize('sales_admi
 // Sales Reports
 router.get('/reports/members', getReportMembers);
 router.get('/reports/team', getTeamReport);
+router.get('/reports/team/:memberId/students', getTeamMemberStudents);
 router.get('/reports/counselor', getCounselorReport);
 router.get('/reports/admissions', getAdmissionReport);
 router.get('/reports/conversions', getConversionReport);

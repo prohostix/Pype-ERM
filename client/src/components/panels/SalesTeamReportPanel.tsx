@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Users, TrendingUp, Target, IndianRupee, BarChart, UserX } from 'lucide-react';
+import { Users, TrendingUp, Target, IndianRupee, BarChart, UserX, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { SalesTeamMemberPage } from './SalesTeamMemberPage';
 import { SalesReportFilters, DEFAULT_REPORT_FILTER, reportParams, type ReportFilter } from './SalesReportFilters';
 import { ReportHeader, KpiTile, SectionCard, Avatar, ProgressBar, EmptyState, LoadingRows, monthLabel, inr } from './SalesReportKit';
 
@@ -9,6 +10,9 @@ export function SalesTeamReportPanel() {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<ReportFilter>(DEFAULT_REPORT_FILTER);
+
+  // Clicking a member opens their own page; Back returns here with the same filters
+  const [selected, setSelected] = useState<any>(null);
 
   useEffect(() => {
     fetchData();
@@ -34,6 +38,10 @@ export function SalesTeamReportPanel() {
   const topRevenue = ranked[0]?.revenue || 0;
   const month = monthLabel(filter.month);
 
+  if (selected) {
+    return <SalesTeamMemberPage member={selected} filter={filter} onBack={() => setSelected(null)} />;
+  }
+
   return (
     <div className="space-y-6">
       <ReportHeader
@@ -53,7 +61,7 @@ export function SalesTeamReportPanel() {
         <KpiTile icon={IndianRupee} label="Revenue" value={inr(totalRevenue)} hint={month ?? 'all time'} tone="info" loading={loading && !data.length} />
       </div>
 
-      <SectionCard icon={BarChart} title="Team member breakdown" right={<span className="text-xs text-muted-foreground">Ranked by revenue</span>}>
+      <SectionCard icon={BarChart} title="Team member breakdown" right={<span className="text-xs text-muted-foreground">Ranked by revenue · click a member for details</span>}>
         {loading && !data.length ? (
           <LoadingRows />
         ) : data.length === 0 ? (
@@ -68,16 +76,23 @@ export function SalesTeamReportPanel() {
                   <th className="px-4 py-3 text-center font-semibold">Target</th>
                   <th className="px-4 py-3 text-left font-semibold w-48">Progress</th>
                   <th className="px-5 py-3 text-right font-semibold">Revenue</th>
+                  <th className="w-8" />
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/50">
                 {ranked.map((member, idx) => (
-                  <tr key={member.id} className="hover:bg-muted/30 transition-colors">
+                  <tr
+                    key={member.id}
+                    className="hover:bg-muted/30 transition-colors cursor-pointer"
+                    onClick={() => setSelected(member)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') setSelected(member); }}
+                    tabIndex={0}
+                  >
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
                         <Avatar name={member.name} />
                         <div className="min-w-0">
-                          <p className="font-semibold truncate">{member.name}</p>
+                          <p className="font-semibold truncate text-primary">{member.name}</p>
                           <p className="text-xs text-muted-foreground truncate">{member.designation}</p>
                         </div>
                         {idx === 0 && member.revenue > 0 && (
@@ -97,6 +112,7 @@ export function SalesTeamReportPanel() {
                       <p className="font-semibold tabular-nums">{inr(member.revenue)}</p>
                       <ProgressBar value={topRevenue > 0 ? (member.revenue / topRevenue) * 100 : 0} tone="info" className="mt-1 ml-auto w-24 h-1" />
                     </td>
+                    <td className="pr-4 text-muted-foreground"><ChevronRight className="w-4 h-4" /></td>
                   </tr>
                 ))}
               </tbody>

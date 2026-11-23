@@ -57,8 +57,13 @@ export const errorHandler = (
 
   // Prisma unique constraint violation
   if ((err as any).code === 'P2002') {
-    const target = (err as any).meta?.target;
-    const field = Array.isArray(target) ? target.join(', ') : 'field';
+    const meta = (err as any).meta || {};
+    // With the pg driver adapter, Prisma leaves meta.target empty and puts the column(s) under
+    // driverAdapterError.cause.constraint. Without this the message just said "this field".
+    const constraint = meta.driverAdapterError?.cause?.constraint;
+    const target = meta.target ?? constraint?.fields ?? constraint?.index;
+    const field = Array.isArray(target) ? target.join(', ') : (typeof target === 'string' ? target : 'field');
+    console.error('[P2002] unique constraint violated:', { model: meta.modelName, target, meta });
     const message = `An account with this ${field} already exists.`;
     error = { name: 'PrismaUniqueError', message, statusCode: 400 } as ErrorResponse;
   }
