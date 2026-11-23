@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
+import { pickFeeStructure } from '../utils/feeStructurePick.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { sendEmail } from '../utils/emailService.js';
@@ -788,6 +789,7 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       name: true,
       enrollmentNo: true,
       sessionId: true,
+      universityId: true,
       specialisation: true,
       joinDate: true,
       program: {
@@ -881,19 +883,8 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
     let totalFee = scheduledFee;
     let breakdown: any[] = [];
     
-    let feeSt: any = undefined;
-    
-    if (student.program?.feeStructures?.length) {
-       feeSt = student.program.feeStructures.find((fs: any) => fs.sessionId === student.sessionId && fs.specialisation === student.specialisation);
-       if (!feeSt) feeSt = student.program.feeStructures.find((fs: any) => fs.sessionId === student.sessionId && !fs.specialisation);
-       if (!feeSt) feeSt = student.program.feeStructures[0];
-    }
-    
-    if (!feeSt && student.university?.feeStructures?.length) {
-       feeSt = student.university.feeStructures.find((fs: any) => fs.sessionId === student.sessionId && fs.specialisation === student.specialisation);
-       if (!feeSt) feeSt = student.university.feeStructures.find((fs: any) => fs.sessionId === student.sessionId && !fs.specialisation);
-       if (!feeSt) feeSt = student.university.feeStructures[0];
-    }
+    // Program structures narrowed by university, session and specialisation (see pickFeeStructure)
+    const feeSt: any = pickFeeStructure(student) || undefined;
     
     if (feeSt) {
       let baseTotal = (feeSt.registrationFee || 0) + (feeSt.tuitionFee || 0) + (feeSt.examFee || 0);

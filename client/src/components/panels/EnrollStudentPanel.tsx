@@ -704,6 +704,7 @@ export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnroll
       return !(form as any)[stateKey]?.trim();
     });
 
+    // Required whenever the program has specialisations
     if (selectedProgram.specialisations && selectedProgram.specialisations.length > 0) {
       if (!form.specialisation?.trim()) {
         missing.push('specialisation');

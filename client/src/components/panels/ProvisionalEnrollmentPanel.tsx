@@ -38,6 +38,7 @@ export function ProvisionalEnrollmentPanel() {
     studentPhone: '', 
     universityId: 'all',
     programId: '',
+    specialisation: '',
     sessionId: '',
     initialPaymentAmount: ''
   });
@@ -229,6 +230,11 @@ export function ProvisionalEnrollmentPanel() {
     }
 
 
+    if (selectedProgram?.specialisations?.length > 0 && !form.specialisation) {
+      toast.error('Please select a specialisation');
+      return;
+    }
+
     if (!receiptFile) {
       toast.error('Please upload a payment receipt');
       return;
@@ -259,6 +265,7 @@ export function ProvisionalEnrollmentPanel() {
       // 1. Create Provisional Enrollment
       const res = await api.post('/enrollment/enroll', {
         ...form,
+        specialisation: form.specialisation || undefined,
         sessionId: form.sessionId || undefined,
         initialPaymentAmount: Number(form.initialPaymentAmount),
         initialPaymentDate: new Date().toISOString(),
@@ -283,6 +290,7 @@ export function ProvisionalEnrollmentPanel() {
         studentPhone: '', 
         universityId: 'all', 
         programId: '', 
+        specialisation: '', 
         sessionId: '', 
         initialPaymentAmount: '' 
       });
@@ -317,7 +325,7 @@ export function ProvisionalEnrollmentPanel() {
             </Label>
             <Select 
               value={form.universityId} 
-              onValueChange={v => setForm(f => ({ ...f, universityId: v, programId: '', sessionId: '' }))}
+              onValueChange={v => setForm(f => ({ ...f, universityId: v, programId: '', specialisation: '', sessionId: '' }))}
             >
               <SelectTrigger><SelectValue placeholder="All Universities" /></SelectTrigger>
               <SelectContent>
@@ -342,6 +350,7 @@ export function ProvisionalEnrollmentPanel() {
                 setForm(f => ({ 
                   ...f, 
                   programId: v,
+                  specialisation: '', // the list of specialisations belongs to the program
                   universityId: (f.universityId === 'all' && p?.university?.id) ? p.university.id : f.universityId,
                 }));
               }}
@@ -356,6 +365,27 @@ export function ProvisionalEnrollmentPanel() {
               </SelectContent>
             </Select>
           </div>
+
+          {/* Specialisation (required when the program has any): only the selected program's own specialisations */}
+          {selectedProgram?.specialisations && selectedProgram.specialisations.length > 0 && (
+            <div className="space-y-1">
+              <Label className="flex items-center gap-1.5 font-medium">
+                <Sparkles className="w-4 h-4 text-muted-foreground" />
+                Specialisation <span className="text-destructive">*</span>
+              </Label>
+              <Select
+                value={form.specialisation}
+                onValueChange={v => setForm(f => ({ ...f, specialisation: v }))}
+              >
+                <SelectTrigger><SelectValue placeholder="Select a specialisation" /></SelectTrigger>
+                <SelectContent>
+                  {selectedProgram.specialisations.map((spec: string) => (
+                    <SelectItem key={spec} value={spec}>{spec}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           {/* University Sessions Selection (Optional) */}
           <div className="space-y-1">
