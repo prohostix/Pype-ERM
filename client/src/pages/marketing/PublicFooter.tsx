@@ -5,11 +5,11 @@ const LINK = 'inline-flex items-center hover:text-white transition-colors';
 const COLUMNS = [
   {
     title: 'Product',
-    links: [['/features', 'Features'], ['/#preview', 'How it works'], ['/#pricing', 'Pricing'], ['/download', 'Android app']],
+    links: [['/#valuable-features', 'Features'], ['/#benefits', 'Benefits'], ['/#pricing', 'Pricing'], ['/download', 'Android app']],
   },
   {
     title: 'Company',
-    links: [['/why-choose-us', 'Why Choose Us'], ['/partner-with-us', 'Partner With Us'], ['/privacy-policy', 'Privacy Policy']],
+    links: [['/partner-with-us', 'Partner With Us'], ['/privacy-policy', 'Privacy Policy']],
   },
 ];
 
@@ -19,8 +19,10 @@ const COLUMNS = [
  */
 export function PublicFooter({ onBookDemo }: { onBookDemo?: () => void }) {
   return (
-    <footer className="bg-[#091f14] text-slate-300 rounded-t-[2.5rem]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <footer className="relative overflow-hidden bg-[#091f14] text-slate-300 rounded-t-[2.5rem]">
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(50% 70% at 50% 0%, rgba(84,185,71,.45), transparent 70%), radial-gradient(35% 50% at 100% 100%, rgba(138,228,126,.22), transparent 70%)' }} />
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5">

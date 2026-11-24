@@ -261,3 +261,29 @@ body[data-scroll-locked] {
     transition: none !important;
   }
 }
+
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.65; }
+  50% { opacity: 1; }
+}
+.glow-pulse { animation: glow-pulse 6s ease-in-out infinite; }
+
+/* Things inside a revealing card build up once it scrolls into view */
+.bar-grow, .accent-grow, .msg-in {
+  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0ms), opacity 0.6s ease-out var(--d, 0ms);
+}
+.bar-grow { transform-origin: bottom; }
+.accent-grow { transform-origin: top; }
+.reveal-ready [data-reveal]:not(.is-in) .bar-grow { transform: scaleY(0); }
+.reveal-ready [data-reveal]:not(.is-in) .accent-grow { transform: scaleY(0); }
+.reveal-ready [data-reveal]:not(.is-in) .msg-in { opacity: 0; transform: translateY(10px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-pulse { animation: none; }
+  .bar-grow, .accent-grow, .msg-in { transition: none; }
+}
+
+.draw-line { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1.4s ease-out 0.3s; }
+.reveal-ready [data-reveal]:not(.is-in) .draw-line { stroke-dashoffset: 1; }
+@media (prefers-reduced-motion: reduce) { .draw-line { transition: none; } }

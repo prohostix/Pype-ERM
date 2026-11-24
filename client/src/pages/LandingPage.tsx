@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, BookOpen, CalendarCheck, GraduationCap, IndianRupee, Menu, ShieldCheck, Users, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,9 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { LandingSections } from './LandingSections';
-import { LandingTour } from './LandingTour';
 import { PublicFooter } from './marketing/PublicFooter';
-import { CardRibbon } from './marketing/CardRibbon';
 import { reveal, useScrollEffects } from './marketing/scrollEffects';
 
 export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
@@ -43,11 +41,11 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-[#54b947] selection:text-white">
+    <div style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }} className="min-h-screen bg-white text-slate-900 selection:bg-[#54b947] selection:text-white">
     <div className="w-full overflow-x-clip relative flex flex-col">
 
       {/* Navbar */}
-      <header className="sticky top-0 z-50 w-full bg-white/85 backdrop-blur-xl">
+      <header className="absolute top-0 z-50 w-full bg-transparent">
         <div className="px-4 sm:px-8 h-16 md:h-[72px] grid grid-cols-[auto_1fr_auto] items-center gap-4">
           <div
             className="flex items-center gap-2.5 md:gap-3.5 cursor-pointer"
@@ -61,8 +59,8 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
           </div>
 
           <nav className="hidden md:flex items-center justify-center gap-1 lg:gap-3" aria-label="Main">
-            {[['/', 'Home'], ['/features', 'Features'], ['#preview', 'How it works'], ['#pricing', 'Pricing'], ['/why-choose-us', 'Why Choose Us'], ['/partner-with-us', 'Partner With Us']].map(([h, l]) => (
-              <a key={h} href={h} className={`inline-flex items-center h-10 px-3 text-sm font-semibold transition-colors ${h === '/' ? 'text-[#256c1d]' : 'text-slate-600 hover:text-slate-900'}`}>{l}</a>
+            {[['#valuable-features', 'Features'], ['#benefits', 'Benefits'], ['#pricing', 'Pricing'], ['/partner-with-us', 'Partner With Us']].map(([h, l]) => (
+              <a key={h} href={h} className={`inline-flex items-center h-10 px-3 text-sm font-medium transition-colors ${'text-slate-600 hover:text-slate-900'}`}>{l}</a>
             ))}
           </nav>
 
@@ -71,10 +69,10 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
               Log in
             </Button>
             <Button
-              className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs sm:text-sm px-3 sm:px-5 rounded-full h-10 gap-1.5"
+              className="bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 shadow-[0_6px_20px_-8px_rgba(16,24,40,0.2)] font-medium text-xs sm:text-sm px-3 sm:px-5 rounded-full h-10 gap-1.5"
               onClick={() => setOpenModal(true)}
             >
-              Book a Demo <ArrowRight className="hidden sm:block w-3.5 h-3.5" />
+              Book a Demo <ArrowUpRight className="hidden sm:block w-3.5 h-3.5" />
             </Button>
             <button
               type="button"
@@ -88,8 +86,8 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
           </div>
         </div>
         {mobileMenuOpen && (
-          <nav className="md:hidden border-t border-slate-100 bg-white px-4 py-3 flex flex-col gap-1" aria-label="Mobile">
-            {[['/', 'Home'], ['/features', 'Features'], ['#preview', 'How it works'], ['#pricing', 'Pricing'], ['/why-choose-us', 'Why Choose Us'], ['/partner-with-us', 'Partner With Us']].map(([h, l]) => (
+          <nav className="md:hidden border-t border-slate-100 bg-white/95 backdrop-blur px-4 py-3 flex flex-col gap-1" aria-label="Mobile">
+            {[['#valuable-features', 'Features'], ['#benefits', 'Benefits'], ['#pricing', 'Pricing'], ['/partner-with-us', 'Partner With Us']].map(([h, l]) => (
               <a key={h} href={h} onClick={() => setMobileMenuOpen(false)} className="px-3 py-2.5 rounded-2xl text-slate-700 font-semibold hover:bg-slate-100 text-sm">{l}</a>
             ))}
             <a href="/login" className="sm:hidden px-3 py-2.5 rounded-2xl text-slate-700 font-semibold hover:bg-slate-100 text-sm">Log in</a>
@@ -98,76 +96,88 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
       </header>
 
       {/* Hero Section */}
-      <section className="relative z-10 px-4 sm:px-8 pt-8 sm:pt-10 pb-8 sm:pb-10 text-center flex flex-col items-center overflow-hidden">
-        {/* Brand ribbon from the login page, kept subtle */}
-        <svg data-parallax="0.15" aria-hidden="true" className="absolute inset-0 -z-10 w-full h-full pointer-events-none opacity-[0.28]" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="lpRibbon1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#54b947" /><stop offset="50%" stopColor="#8ae47e" /><stop offset="100%" stopColor="#2c7722" />
-            </linearGradient>
-            <linearGradient id="lpRibbon2" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#67cf57" stopOpacity="0.85" /><stop offset="100%" stopColor="#1a4f15" stopOpacity="0.9" />
-            </linearGradient>
-          </defs>
-          <path d="M -100 800 C 300 900, 500 100, 1000 300 C 1300 400, 1200 900, 1600 700" fill="none" stroke="url(#lpRibbon1)" strokeWidth="140" strokeLinecap="round" />
-          <path d="M 1200 -200 C 1100 200, 1400 600, 900 800 C 400 1000, 200 300, -200 200" fill="none" stroke="url(#lpRibbon2)" strokeWidth="110" strokeLinecap="round" />
-        </svg>
-        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-b from-white/70 via-white/40 to-white" />
+      <section className="relative z-10 px-4 sm:px-8 pt-28 sm:pt-32 pb-20 sm:pb-28 min-h-[760px] text-center flex flex-col items-center overflow-hidden">
+        {/* Green light rays covering the whole first section, fading smoothly into the page below */}
+        <div aria-hidden="true" className="absolute inset-0 -z-10 pointer-events-none"
+          style={{ background: 'repeating-linear-gradient(100deg, rgba(84,185,71,.5) 0px, rgba(138,228,126,.22) 45px, rgba(255,255,255,0) 100px), linear-gradient(to bottom, rgba(84,185,71,.4), rgba(84,185,71,.08))', WebkitMaskImage: 'linear-gradient(to right, #000 0%, rgba(0,0,0,.35) 32%, rgba(0,0,0,.35) 68%, #000 100%)', maskImage: 'linear-gradient(to right, #000 0%, rgba(0,0,0,.35) 32%, rgba(0,0,0,.35) 68%, #000 100%)' }} />
+        <div aria-hidden="true" className="absolute inset-0 -z-10 pointer-events-none"
+          style={{ background: 'radial-gradient(55% 45% at 50% 35%, rgba(255,255,255,.85), transparent 75%)' }} />
+        <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-3/5 -z-10 pointer-events-none bg-gradient-to-b from-transparent via-white/70 to-white" />
 
-
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-900 mb-5 leading-[1.1] max-w-4xl">
-          {['One', 'app', 'to'].map((word, i) => (
-            <span key={word} className="hero-word" style={{ animationDelay: `${i * 110}ms` }}>{word}{' '}</span>
-          ))}
-          <br />
-          {['replace', 'them', 'all.'].map((word, i) => (
-            <span key={word} className="hero-word" style={{ animationDelay: `${(i + 3) * 110}ms` }}>
-              <span className="gradient-text inline-block">{word}</span>{' '}
-            </span>
-          ))}
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[88px] font-semibold tracking-tight text-slate-900 mb-6 mt-6 leading-[1.05] max-w-5xl relative z-10">
+          <span className="hero-word block" style={{ animationDelay: '0ms' }}>One app to</span>
+          <span className="hero-word block" style={{ animationDelay: '140ms' }}>
+            <span className="bg-gradient-to-r from-[#256c1d] via-[#54b947] to-[#2c7722] bg-clip-text text-transparent pb-[0.08em] inline-block">replace them all.</span>
+          </span>
         </h1>
 
-        <p {...reveal(1)} className="text-slate-600 text-base sm:text-lg max-w-2xl mb-8 leading-relaxed">
-          Stop using different software for students, attendance and finance. PYPE ERM brings them into one system for your whole institution, built by Prohostix.
+        <p {...reveal(1)} className="text-slate-500 text-sm sm:text-base max-w-md mb-6 leading-relaxed">
+          One Platform to Run Your Entire Institution. With Smart Workflows.
         </p>
 
-        <div {...reveal(2)} className="flex flex-col sm:flex-row gap-3 mb-8 w-full sm:w-auto">
+        <ul {...reveal(1)} className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8 text-sm text-slate-600">
+          {['Role-based access', 'UPI-ready fee collection', 'Guided setup & training'].map(t => (
+            <li key={t} className="inline-flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-[#e7f6e3] text-[#256c1d] flex items-center justify-center"><Check className="w-3 h-3" /></span>{t}
+            </li>
+          ))}
+        </ul>
+
+        <div {...reveal(2)} className="flex flex-col sm:flex-row gap-3 mb-10 w-full sm:w-auto justify-center">
+          <a href="#valuable-features" className="group inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-7 h-12 rounded-full transition-all hover:-translate-y-0.5 hover:shadow-lg">
+            Explore PYPE ERM <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </a>
           <Button
-            className="bg-[#256c1d] hover:bg-[#1a5323] text-white text-base font-semibold px-7 h-12 rounded-full transition-colors"
+            variant="outline"
+            className="bg-white border-slate-200 text-slate-800 hover:bg-slate-50 text-sm font-semibold px-7 h-12 rounded-full group transition-all hover:-translate-y-0.5 hover:shadow-lg"
             onClick={() => setOpenModal(true)}
           >
-            Book a Free Demo <ArrowRight className="w-4 h-4 ml-2" />
+            Book a Free Demo <ArrowRight className="w-4 h-4 ml-2 -rotate-45 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Button>
-          <a
-            href="/features"
-            className="inline-flex items-center justify-center bg-white border border-slate-300 text-slate-800 hover:bg-slate-50 text-base font-semibold px-7 h-12 rounded-full transition-colors"
-          >
-            Explore Features
-          </a>
         </div>
 
-        {/* Interactive Software Pages Showcase */}
-        <div id="preview" {...reveal(3, 'zoom')} className="relative w-full max-w-6xl mx-auto scroll-mt-24">
-          <LandingTour />
-        </div>
+        <p {...reveal(2)} className="text-xs text-slate-500 mb-5">Everything your institution needs, in one login</p>
+        <ul {...reveal(2)} className="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-10 max-w-3xl">
+          {([[GraduationCap, 'Admissions'], [IndianRupee, 'Fees'], [CalendarCheck, 'Attendance'], [BookOpen, 'Academics'], [Users, 'HR & Payroll'], [ShieldCheck, 'Compliance']] as const).map(([Icon, c]) => (
+            <li key={c} className="inline-flex items-center gap-2 text-lg font-semibold text-slate-300"><Icon className="w-5 h-5" />{c}</li>
+          ))}
+        </ul>
+
       </section>
 
       <LandingSections onRequestDemo={() => setOpenModal(true)} />
 
       {/* Closing call to action */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        <div {...reveal(0, 'zoom')} className="relative overflow-hidden max-w-6xl mx-auto rounded-[2.5rem] bg-[#091f14] px-6 py-12 sm:py-16 text-center">
-        <CardRibbon />
-        <div className="relative">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4">Move your institution to one system.</h2>
-        <p className="text-base sm:text-lg text-emerald-50 mb-8 max-w-2xl mx-auto">Tell us which software you use today, and we will show you how it works in PYPE ERM.</p>
-        <Button
-          className="bg-white hover:bg-emerald-50 text-[#256c1d] text-base font-semibold px-7 h-12 rounded-full"
-          onClick={() => setOpenModal(true)}
-        >
-          Book a Free Demo
-        </Button>
-        </div>
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div {...reveal(0, 'zoom')} className="relative overflow-hidden max-w-6xl mx-auto rounded-[2.5rem] bg-[#091f14] px-6 py-16 sm:py-24 text-center">
+          <div aria-hidden="true" className="glow-pulse absolute inset-0 pointer-events-none"
+            style={{ background: 'radial-gradient(50% 70% at 50% 0%, rgba(84,185,71,.45), transparent 70%), radial-gradient(35% 50% at 100% 100%, rgba(138,228,126,.22), transparent 70%)' }} />
+          <div className="relative">
+            <h2 className="text-3xl sm:text-5xl font-medium tracking-tight text-white mb-5 leading-[1.1] max-w-3xl mx-auto">
+              Move your institution to <span className="text-[#8ae47e]">one system.</span>
+            </h2>
+            <p className="text-base sm:text-lg text-emerald-50/80 mb-8 max-w-xl mx-auto">
+              Tell us which software you use today, and we will show you how it works in PYPE ERM.
+            </p>
+            <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-9 text-sm text-emerald-50/90">
+              {['Guided setup & data migration', 'Training for your staff', 'Support after launch'].map(t => (
+                <li key={t} className="inline-flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-[#54b947]/25 text-[#8ae47e] flex items-center justify-center"><Check className="w-3 h-3" /></span>{t}
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button
+                className="bg-white hover:bg-emerald-50 text-[#256c1d] text-sm font-semibold px-8 h-12 rounded-full gap-2"
+                onClick={() => setOpenModal(true)}
+              >
+                Book a Free Demo <ArrowUpRight className="w-4 h-4" />
+              </Button>
+              <a href="#valuable-features" className="inline-flex items-center justify-center rounded-full border border-white/25 text-white hover:bg-white/10 text-sm font-semibold px-8 h-12 transition-colors">
+                Explore Features
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 

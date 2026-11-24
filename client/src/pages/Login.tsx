@@ -2,66 +2,38 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Eye, EyeOff, ShieldAlert, AlertCircle, ArrowLeft, IndianRupee, MapPin, CheckCheck } from 'lucide-react';
+import { Eye, EyeOff, ShieldAlert, AlertCircle, ArrowLeft } from 'lucide-react';
 import { RobotVerification } from '@/components/auth/RobotVerification';
 
-const BrandRibbon = () => (
-  <svg 
-    className="absolute inset-0 w-full h-full object-cover pointer-events-none -z-10" 
-    viewBox="0 0 1440 900" 
-    preserveAspectRatio="xMidYMid slice" 
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#54b947" /> 
-        <stop offset="50%" stopColor="#8ae47e" /> 
-        <stop offset="100%" stopColor="#2c7722" /> 
-      </linearGradient>
-      <linearGradient id="ribbonGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#67cf57" stopOpacity="0.85" />
-        <stop offset="100%" stopColor="#1a4f15" stopOpacity="0.9" />
-      </linearGradient>
-      
-      {/* Soft white fade, matching the landing page hero */}
-      <linearGradient id="ribbonFade" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.7" />
-        <stop offset="50%" stopColor="#ffffff" stopOpacity="0.4" />
-        <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
-      </linearGradient>
-    </defs>
+/** A decorative circle that drifts with the cursor (via --mx/--my on the card) and can be dragged; it eases back when released. */
+function DragCircle({ className, style, depth }: { className: string; style?: React.CSSProperties; depth: number }) {
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+  const start = useRef<{ px: number; py: number } | null>(null);
 
-    <rect width="100%" height="100%" fill="#ffffff" />
-
-    <g opacity="0.28">
-      {/* The ribbon stroke 1 */}
-      <path
-        d="M -100 800 C 300 900, 500 100, 1000 300 C 1300 400, 1200 900, 1600 700"
-        fill="none"
-        stroke="url(#ribbonGrad)"
-        strokeWidth="140"
-        strokeLinecap="round"
-      />
-
-      {/* The ribbon stroke 2 crossing */}
-      <path
-        d="M 1200 -200 C 1100 200, 1400 600, 900 800 C 400 1000, 200 300, -200 200"
-        fill="none"
-        stroke="url(#ribbonGrad2)"
-        strokeWidth="110"
-        strokeLinecap="round"
-      />
-    </g>
-
-    <rect width="100%" height="100%" fill="url(#ribbonFade)" />
-  </svg>
-);
-
-const LOGIN_POINTS = [
-  { icon: IndianRupee, text: 'Fee schedules, payment links and reminders' },
-  { icon: MapPin, text: 'Selfie and location attendance on the mobile app' },
-  { icon: CheckCheck, text: 'Tasks, leave and enrollment approvals' },
-];
+  return (
+    <div
+      aria-hidden="true"
+      className={`${className} cursor-grab active:cursor-grabbing touch-none select-none`}
+      style={{
+        ...style,
+        transform: `translate3d(calc(var(--mx, 0) * ${depth}px + ${pos.x}px), calc(var(--my, 0) * ${depth}px + ${pos.y}px), 0)`,
+        transition: dragging ? 'none' : 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
+      }}
+      onPointerDown={(e) => {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        start.current = { px: e.clientX - pos.x, py: e.clientY - pos.y };
+        setDragging(true);
+      }}
+      onPointerMove={(e) => {
+        if (!start.current) return;
+        setPos({ x: e.clientX - start.current.px, y: e.clientY - start.current.py });
+      }}
+      onPointerUp={() => { start.current = null; setDragging(false); setPos({ x: 0, y: 0 }); }}
+      onPointerCancel={() => { start.current = null; setDragging(false); setPos({ x: 0, y: 0 }); }}
+    />
+  );
+}
 
 export function Login() {
   const { login } = useAuth();
@@ -77,6 +49,21 @@ export function Login() {
   const [honeypot, setHoneypot] = useState('');
   const [lockoutSeconds, setLockoutSeconds] = useState(0);
   const formMountTime = useRef<number>(Date.now());
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // The circles on the left card drift towards the cursor, each at its own depth.
+  const moveCircles = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const el = panelRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', String((e.clientX - r.left) / r.width - 0.5));
+    el.style.setProperty('--my', String((e.clientY - r.top) / r.height - 0.5));
+  };
+  const resetCircles = () => {
+    panelRef.current?.style.setProperty('--mx', '0');
+    panelRef.current?.style.setProperty('--my', '0');
+  };
 
   // Handle Lockout countdown timer
   useEffect(() => {
@@ -141,202 +128,108 @@ export function Login() {
     setIsLoading(false);
   };
 
+  const inputCls = 'h-13 min-h-[52px] rounded-xl border-slate-200 bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 transition-all text-base px-4';
+
   return (
-    <div className="min-h-[100dvh] relative flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 font-sans text-slate-900 overflow-x-hidden overflow-y-auto">
-      
-      <BrandRibbon />
+    <div style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }} className="min-h-[100dvh] bg-white text-slate-900">
+      <div className="relative w-full min-h-[100dvh] bg-white flex flex-col md:flex-row p-2 sm:p-3">
 
-      {/* Back to home navigation */}
-      <a
-        href="/"
-        className="absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-10 z-20 inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white/80 backdrop-blur-md border border-white/60 shadow-sm text-sm font-semibold text-slate-700 hover:text-[#256c1d] hover:bg-white transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" /> Back to Home
-      </a>
+        {/* Left: brand panel */}
+        <div ref={panelRef} onMouseMove={moveCircles} onMouseLeave={resetCircles} className="hidden md:flex md:w-[46%] relative overflow-hidden rounded-2xl flex-col justify-between p-7"
+          style={{ background: 'linear-gradient(160deg, #f4faf2 0%, #e6f4e2 55%, #f7fbf6 100%)' }}>
+          <div aria-hidden="true" className="absolute -top-24 -left-10 w-[110%] h-[260px] rounded-full bg-white/70 blur-2xl" />
+          <DragCircle depth={90} className="absolute right-[-60px] top-[210px] w-[200px] h-[200px] rounded-full" style={{ background: 'radial-gradient(circle at 35% 30%, #8ae47e, #54b947 70%)', opacity: 0.85 }} />
+          <DragCircle depth={-130} className="absolute left-[-44px] top-[330px] w-[90px] h-[90px] rounded-full" style={{ background: 'radial-gradient(circle at 35% 30%, #8ae47e, #54b947 70%)', opacity: 0.8 }} />
+          <DragCircle depth={-50} className="absolute right-[-120px] top-[270px] w-[330px] h-[330px] rounded-full border border-white/70 bg-white/30 backdrop-blur-sm" />
 
-      {/* Mobile Brand Header (Natural flow above the card on small screens) */}
-      <a href="/" aria-label="PYPE ERM home" className="flex md:hidden items-center justify-center gap-2.5 mb-4 mt-10 select-none z-10">
-        <div className="flex items-center justify-center">
-          <img src="/erm-logo-green.png" alt="Pype ERM" className="h-12 w-auto drop-shadow-sm" />
-        </div>
-        <div className="flex items-baseline gap-1 whitespace-nowrap select-none mt-0.5">
-          <span className="text-2xl font-bold tracking-tight text-slate-500">pype</span>
-          <span className="text-xl font-black tracking-wider text-slate-900">ERM</span>
-        </div>
-      </a>
+          <a href="/" aria-label="PYPE ERM home" className="relative z-10 inline-flex items-center gap-2.5 w-fit">
+            <img src="/erm-logo-green.png" alt="PYPE ERM" className="h-14 w-auto" />
+            <span className="flex items-baseline gap-1 leading-none">
+              <span className="text-3xl font-bold tracking-tight text-slate-500">pype</span>
+              <span className="text-2xl font-black tracking-wider text-slate-900">ERM</span>
+            </span>
+          </a>
 
-      {/* Desktop Top Left Logo Area (Pinned to top-left on desktop screens) */}
-      <a href="/" aria-label="PYPE ERM home" className="hidden md:flex absolute top-6 left-6 sm:top-8 sm:left-10 items-center gap-3.5 z-20">
-        <div className="flex items-center justify-center">
-          <img src="/erm-logo-green.png" alt="Pype ERM" className="h-16 lg:h-20 w-auto drop-shadow-sm" />
-        </div>
-        <div className="flex items-baseline gap-1.5 whitespace-nowrap select-none mt-1">
-          <span className="text-2xl sm:text-[28px] font-bold tracking-tight text-slate-500">pype</span>
-          <span className="text-[18px] sm:text-[21px] font-black tracking-wider text-slate-900">ERM</span>
-        </div>
-      </a>
-
-      {/* Main Glassmorphism Card (Wide, 2 columns on desktop, clean single-column on mobile) */}
-      <div className="w-full max-w-[1000px] min-h-0 md:min-h-[600px] bg-white/70 backdrop-blur-3xl rounded-3xl md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] border border-white/60 overflow-hidden relative z-10 flex flex-col md:flex-row my-auto">
-        
-        {/* Left Column: Form */}
-        <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-14 flex flex-col justify-center relative">
-          <div className="mb-6 sm:mb-8">
-            <h1 className="text-[30px] sm:text-[32px] font-bold tracking-tight text-slate-900 mb-2">Sign in to your account</h1>
-            <p className="text-slate-500 text-[14px] sm:text-[15px]">Welcome back! Login with your credentials</p>
+          <div className="relative z-10">
+            <h2 className="text-4xl lg:text-[44px] font-medium tracking-tight text-[#0b2e18] mb-3 leading-[1.1]">Welcome back. Everything is right where you left it.</h2>
+            <p className="text-base lg:text-lg leading-relaxed text-slate-600 max-w-md">Sign in to pick up your admissions, fees, attendance and approvals.</p>
           </div>
+        </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Honeypot field (hidden off-screen for bot trapping) */}
-            <div className="opacity-0 absolute -z-50 pointer-events-none h-0 w-0 overflow-hidden" aria-hidden="true">
-              <label htmlFor="website_url_hp">Security Field</label>
-              <input
-                id="website_url_hp"
-                type="text"
-                name="website_url_hp"
-                value={honeypot}
-                onChange={(e) => setHoneypot(e.target.value)}
-                tabIndex={-1}
-                autoComplete="off"
-              />
+        {/* Right: form */}
+        <div className="flex-1 flex flex-col items-center justify-center px-5 sm:px-10 py-12 relative">
+          <a href="/" className="absolute top-3 right-3 sm:top-4 sm:right-4 inline-flex items-center gap-2 h-10 px-4 rounded-full border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to Home
+          </a>
+
+          <div className="w-full max-w-[440px]">
+            <div className="flex flex-col items-center text-center mb-8">
+              <img src="/erm-logo-green.png" alt="PYPE ERM" className="h-20 w-auto mb-4" />
+              <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-slate-900">Welcome to PYPE ERM</h1>
+              <p className="text-slate-500 text-base mt-2">Sign in with your credentials to continue</p>
             </div>
 
-            <div className="space-y-1.5">
-              <Input
-                id="email"
-                type="email"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-12 rounded-2xl border-white/60 bg-white/80 focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all text-base px-5"
-                required
-                disabled={lockoutSeconds > 0 || isLoading}
-              />
-            </div>
-
-            <div className="space-y-1.5 relative">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="h-12 rounded-2xl border-white/60 bg-white/80 focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-all pr-12 text-base px-5"
-                required
-                disabled={lockoutSeconds > 0 || isLoading}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                tabIndex={-1}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
-              >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-              </button>
-            </div>
-
-            {/* "I'm not a robot" Bot-Prevention Checkbox Section */}
-            <RobotVerification
-              isVerified={isRobotVerified}
-              onVerify={(verified) => {
-                setIsRobotVerified(verified);
-                if (verified) {
-                  setRobotError(false);
-                  setError('');
-                } else {
-                  setRobotError(true);
-                  setError('Verification failed. Please try again.');
-                }
-              }}
-              disabled={lockoutSeconds > 0 || isLoading}
-              hasError={robotError}
-            />
-
-            {error && (
-              <div className="p-3 bg-red-50/95 border border-red-200/80 text-red-600 text-sm rounded-xl font-medium flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-1 duration-200">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span>{error}</span>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="opacity-0 absolute -z-50 pointer-events-none h-0 w-0 overflow-hidden" aria-hidden="true">
+                <label htmlFor="website_url_hp">Security Field</label>
+                <input id="website_url_hp" type="text" name="website_url_hp" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} tabIndex={-1} autoComplete="off" />
               </div>
-            )}
 
-            {lockoutSeconds > 0 && (
-              <div className="p-3 bg-amber-50/95 border border-amber-200 text-amber-800 text-xs rounded-xl font-medium flex items-center justify-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                <span>Security cooldown active. Please wait {lockoutSeconds} seconds.</span>
+              <div className="space-y-1.5">
+                <label htmlFor="email" className="text-sm font-semibold text-slate-700">Email</label>
+                <Input id="email" type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputCls} required disabled={lockoutSeconds > 0 || isLoading} />
               </div>
-            )}
 
-            <div className="pt-1.5">
+              <div className="space-y-1.5">
+                <label htmlFor="password" className="text-sm font-semibold text-slate-700">Password</label>
+                <div className="relative">
+                  <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} className={`${inputCls} pr-11`} required disabled={lockoutSeconds > 0 || isLoading} />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} tabIndex={-1} aria-label={showPassword ? 'Hide password' : 'Show password'} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none">
+                    {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
+                  </button>
+                </div>
+              </div>
+
+              <RobotVerification
+                isVerified={isRobotVerified}
+                onVerify={(verified) => {
+                  setIsRobotVerified(verified);
+                  if (verified) { setRobotError(false); setError(''); }
+                  else { setRobotError(true); setError('Verification failed. Please try again.'); }
+                }}
+                disabled={lockoutSeconds > 0 || isLoading}
+                hasError={robotError}
+              />
+
+              {error && (
+                <div className="p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl font-medium flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" /><span>{error}</span>
+                </div>
+              )}
+
+              {lockoutSeconds > 0 && (
+                <div className="p-3 bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-xl font-medium flex items-center justify-center gap-2">
+                  <ShieldAlert className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                  <span>Security cooldown active. Please wait {lockoutSeconds} seconds.</span>
+                </div>
+              )}
+
               <Button
                 type="submit"
-                className="w-full h-12 bg-slate-900 hover:bg-[#439c36] text-white rounded-full text-[15px] font-semibold shadow-lg hover:shadow-[#54b947]/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group w-full h-[52px] rounded-xl text-base font-semibold text-white bg-gradient-to-b from-[#2b3a2f] to-[#0b140e] hover:from-[#256c1d] hover:to-[#14401a] shadow-md transition-all transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isLoading || lockoutSeconds > 0}
               >
-                {isLoading ? (
-                  'Signing in...'
-                ) : lockoutSeconds > 0 ? (
-                  `Cooldown (${lockoutSeconds}s)`
-                ) : (
-                  'Sign in to account'
-                )}
+                {isLoading ? 'Signing in...' : lockoutSeconds > 0 ? `Cooldown (${lockoutSeconds}s)` : 'Sign in to account'}
               </Button>
-            </div>
-          </form>
-        </div>
+            </form>
 
-        {/* Right Column: Text & Graphic */}
-        <div className="hidden md:flex w-1/2 p-12 flex-col justify-end text-white relative overflow-hidden bg-[#091f14]">
-          {/* Abstract Fluid Background matching green branding */}
-          <svg className="absolute inset-0 w-full h-full object-cover z-0" viewBox="0 0 400 600" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="waveBase" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#103822" />
-                <stop offset="100%" stopColor="#05150c" />
-              </linearGradient>
-              <linearGradient id="waveTop" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#54b947" />
-                <stop offset="50%" stopColor="#2e8229" />
-                <stop offset="100%" stopColor="#124317" />
-              </linearGradient>
-              <linearGradient id="waveBottom" x1="100%" y1="100%" x2="0%" y2="0%">
-                <stop offset="0%" stopColor="#54b947" />
-                <stop offset="100%" stopColor="#1a5323" />
-              </linearGradient>
-              <filter id="blurShadow">
-                <feDropShadow dx="10" dy="10" stdDeviation="20" floodColor="#000" floodOpacity="0.5"/>
-              </filter>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#waveBase)" />
-
-            <path d="M0,0 L220,0 C280,250 150,350 0,550 Z" fill="url(#waveTop)" filter="url(#blurShadow)" />
-            <path d="M400,600 L100,600 C250,450 400,300 400,100 Z" fill="url(#waveBottom)" filter="url(#blurShadow)" />
-
-            <circle cx="50" cy="150" r="120" fill="#54b947" filter="blur(80px)" opacity="0.35" />
-            <circle cx="350" cy="450" r="150" fill="#8ae47e" filter="blur(80px)" opacity="0.25" />
-          </svg>
-          {/* Keeps the text readable where the bright ribbon passes behind it */}
-          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-3/5 z-0 bg-gradient-to-t from-[#05150c]/90 via-[#05150c]/70 to-transparent" />
-
-          {/* Top Right Logo matching prohostix.png */}
-          <div className="absolute top-10 right-10 z-20 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-white/40">
-            <img src="/prohostix.png" alt="ProHostix" className="w-12 h-12 object-contain" />
-          </div>
-          
-          <div className="relative z-10 w-full pb-2">
-            <h2 className="text-[30px] lg:text-[34px] font-bold tracking-tight leading-[1.15] mb-3 [text-wrap:balance]">Your whole institution. One sign-in.</h2>
-            <p className="text-[15px] leading-relaxed text-white/80 mb-7">Admissions, finance, HR and academics, connected in one place.</p>
-            <ul className="space-y-3 border-t border-white/15 pt-6">
-              {LOGIN_POINTS.map(({ icon: Icon, text }) => (
-                <li key={text} className="flex items-start gap-3 text-sm text-white/90">
-                  <Icon className="w-4 h-4 mt-0.5 shrink-0 text-[#8ae47e]" /> {text}
-                </li>
-              ))}
-            </ul>
+            <p className="text-center text-sm text-slate-500 mt-7 leading-relaxed">
+              Your data is protected and access is limited to your role.<br />
+              <a href="/privacy-policy" className="text-[#256c1d] font-medium hover:underline">Privacy details</a>
+            </p>
           </div>
         </div>
-
       </div>
-
     </div>
   );
 }

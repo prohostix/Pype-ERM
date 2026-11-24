@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import { ArrowUpRight, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,18 +11,16 @@ import { PublicFooter } from './PublicFooter';
 import { reveal, useScrollEffects } from './scrollEffects';
 
 export const NAV_LINKS = [
-  { href: '/', label: 'Home' },
-  { href: '/features', label: 'Features' },
-  { href: '/#preview', label: 'How it works' },
+  { href: '/#valuable-features', label: 'Features' },
+  { href: '/#benefits', label: 'Benefits' },
   { href: '/#pricing', label: 'Pricing' },
-  { href: '/why-choose-us', label: 'Why Choose Us' },
   { href: '/partner-with-us', label: 'Partner With Us' },
 ];
 
 
 export const SectionHeading = ({ title, sub }: { title: string; sub?: string }) => (
   <div {...reveal()} className="max-w-3xl mb-6 sm:mb-8">
-    <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-4">{title}</h2>
+    <h2 className="text-3xl sm:text-4xl font-medium text-slate-900 tracking-tight mb-4">{title}</h2>
     {sub && <p className="text-slate-600 text-base sm:text-lg">{sub}</p>}
   </div>
 );
@@ -30,29 +28,37 @@ export const SectionHeading = ({ title, sub }: { title: string; sub?: string }) 
 export const PageHero = ({ title, accent, sub, children }: {
   title: string; accent: string; sub: string; children?: ReactNode;
 }) => (
-  <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 sm:pt-12 pb-8 text-center">
-    <h1 {...reveal()} className="text-4xl sm:text-5xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1] [text-wrap:balance]">
-      {title}{' '}
-      <span className="text-[#256c1d]">{accent}</span>
-    </h1>
-    <p {...reveal(1)} className="text-slate-600 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed mb-8">{sub}</p>
-    <div {...reveal(2)}>{children}</div>
+  <section className="relative overflow-hidden px-4 sm:px-6 pt-32 sm:pt-36 pb-12 text-center">
+    <div aria-hidden="true" className="absolute inset-x-0 top-0 -z-10 h-[300px] pointer-events-none"
+      style={{ background: 'repeating-linear-gradient(100deg, rgba(84,185,71,.55) 0px, rgba(138,228,126,.25) 40px, rgba(255,255,255,0) 90px), linear-gradient(to bottom, rgba(84,185,71,.45), transparent)', WebkitMaskImage: 'linear-gradient(to right, #000 0%, transparent 28%, transparent 72%, #000 100%)', maskImage: 'linear-gradient(to right, #000 0%, transparent 28%, transparent 72%, #000 100%)' }} />
+    <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-white/60 to-white" />
+    <div className="max-w-4xl mx-auto flex flex-col items-center">
+      <h1 {...reveal()} className="text-4xl sm:text-5xl md:text-[56px] font-medium tracking-tight text-slate-900 mb-5 leading-[1.15] [text-wrap:balance]">
+        {title} <span className="text-[#256c1d]">{accent}</span>
+      </h1>
+      <p {...reveal(1)} className="text-slate-500 text-sm sm:text-base max-w-xl leading-relaxed mb-8">{sub}</p>
+      <div {...reveal(2)}>{children}</div>
+    </div>
   </section>
 );
 
 /** Closing call to action used at the end of the inner pages. */
 export const CtaBand = ({ title, sub, label, onClick }: { title: string; sub: string; label: string; onClick: () => void }) => (
-  <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-    <div {...reveal(0, 'zoom')} className="max-w-6xl mx-auto rounded-[2.5rem] bg-emerald-50 px-6 py-10 sm:py-12 text-center">
-    <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 mb-4">{title}</h2>
-    <p className="text-base sm:text-lg text-slate-600 mb-8 max-w-2xl mx-auto">{sub}</p>
-    <button
-      type="button"
-      onClick={onClick}
-      className="inline-flex items-center gap-2 bg-[#256c1d] hover:bg-[#1a5323] text-white font-semibold px-7 h-12 rounded-full transition-colors"
-    >
-      {label} <ArrowRight className="w-4 h-4" />
-    </button>
+  <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div {...reveal(0, 'zoom')} className="relative overflow-hidden max-w-6xl mx-auto rounded-[2.5rem] bg-[#091f14] px-6 py-16 sm:py-24 text-center">
+      <div aria-hidden="true" className="glow-pulse absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(50% 70% at 50% 0%, rgba(84,185,71,.45), transparent 70%), radial-gradient(35% 50% at 100% 100%, rgba(138,228,126,.22), transparent 70%)' }} />
+      <div className="relative">
+        <h2 className="text-3xl sm:text-5xl font-medium tracking-tight text-white mb-4 leading-[1.1]">{title}</h2>
+        <p className="text-base sm:text-lg text-emerald-50/80 mb-8 max-w-xl mx-auto">{sub}</p>
+        <button
+          type="button"
+          onClick={onClick}
+          className="inline-flex items-center gap-2 bg-white hover:bg-emerald-50 text-[#256c1d] text-sm font-semibold px-8 h-12 rounded-full transition-colors"
+        >
+          {label} <ArrowUpRight className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   </section>
 );
@@ -95,8 +101,8 @@ export function MarketingShell({ children }: Props) {
   const isTel = topic === 'Partnership';
 
   return (
-    <div className="min-h-screen flex flex-col text-slate-900 font-sans bg-white selection:bg-[#54b947] selection:text-white">
-      <header className="sticky top-0 z-50 w-full bg-white/85 backdrop-blur-xl border-b border-slate-100">
+    <div style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }} className="min-h-screen flex flex-col text-slate-900 bg-white selection:bg-[#54b947] selection:text-white">
+      <header className="absolute top-0 z-50 w-full bg-transparent">
         <div className="px-4 sm:px-8 h-16 md:h-[72px] grid grid-cols-[auto_1fr_auto] items-center gap-4">
           <a href="/" className="flex items-center gap-2.5 md:gap-3.5">
             <img src="/erm-logo-green.png" alt="PYPE ERM Logo" className="block h-10 md:h-12 w-auto" />
@@ -111,7 +117,7 @@ export function MarketingShell({ children }: Props) {
                 key={l.href}
                 href={l.href}
                 aria-current={path === l.href ? 'page' : undefined}
-                className={`inline-flex items-center h-10 px-3 text-sm font-semibold transition-colors ${path === l.href ? 'text-[#256c1d]' : 'text-slate-600 hover:text-slate-900'}`}
+                className={`inline-flex items-center h-10 px-3 text-sm font-medium transition-colors ${path === l.href ? 'text-[#256c1d]' : 'text-slate-600 hover:text-slate-900'}`}
               >
                 {l.label}
               </a>
@@ -122,10 +128,10 @@ export function MarketingShell({ children }: Props) {
               Log in
             </Button>
             <Button
-              className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs sm:text-sm px-3 sm:px-5 rounded-full h-10 gap-1.5"
+              className="bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 shadow-[0_6px_20px_-8px_rgba(16,24,40,0.2)] font-medium text-xs sm:text-sm px-3 sm:px-5 rounded-full h-10 gap-1.5"
               onClick={() => openInquiry()}
             >
-              Book a Demo <ArrowRight className="hidden sm:block w-3.5 h-3.5" />
+              Book a Demo <ArrowUpRight className="hidden sm:block w-3.5 h-3.5" />
             </Button>
             <button
               type="button"
@@ -139,7 +145,7 @@ export function MarketingShell({ children }: Props) {
           </div>
         </div>
         {mobileOpen && (
-          <nav className="md:hidden border-t border-slate-100 bg-white px-4 py-3 flex flex-col gap-1" aria-label="Mobile">
+          <nav className="md:hidden border-t border-slate-100 bg-white/95 backdrop-blur px-4 py-3 flex flex-col gap-1" aria-label="Mobile">
             {NAV_LINKS.map(l => (
               <a key={l.href} href={l.href} className="px-3 py-2.5 rounded-2xl text-slate-700 font-semibold hover:bg-slate-100 text-sm">{l.label}</a>
             ))}

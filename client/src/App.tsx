@@ -3,8 +3,6 @@ import { useUsageHeartbeat } from '@/hooks/useUsageHeartbeat';
 import { useAuth } from '@/hooks/useAuth';
 import { Login } from '@/pages/Login';
 import { LandingPage } from '@/pages/LandingPage';
-import { FeaturesPage } from '@/pages/marketing/FeaturesPage';
-import { WhyChooseUsPage } from '@/pages/marketing/WhyChooseUsPage';
 import { PartnerWithUsPage } from '@/pages/marketing/PartnerWithUsPage';
 import { CustomOrgLogin } from '@/pages/CustomOrgLogin';
 import { Dashboard } from '@/pages/Dashboard';
@@ -14,7 +12,6 @@ import PublicRegisterPage from '@/pages/PublicRegisterPage';
 import StudentApplicationPage from '@/pages/StudentApplicationPage';
 import { ApkDownloadRedirect, apkPlatformForPath } from '@/pages/ApkDownloadRedirect';
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
-import { PublicFooter } from '@/pages/marketing/PublicFooter';
 import { getOpsNavItems } from '@/pages/ModernOpsDashboard';
 import { getHRNavItems } from '@/pages/ModernHRDashboard';
 import { getFinanceNavItems } from '@/pages/ModernFinanceDashboard';
@@ -395,8 +392,6 @@ function App() {
   }
 
   // Public marketing pages
-  if (window.location.pathname === '/features') return <FeaturesPage />;
-  if (window.location.pathname === '/why-choose-us') return <WhyChooseUsPage />;
   if (window.location.pathname === '/partner-with-us') return <PartnerWithUsPage />;
 
   // Public privacy policy (linked from the Google Play listing)
@@ -1098,7 +1093,7 @@ function App() {
       return <CustomOrgLogin />;
     }
     if (window.location.pathname === '/login') {
-      return <><Login /><PublicFooter /></>;
+      return <Login />;
     }
     return <LandingPage onGoToLogin={() => window.location.pathname = '/login'} />;
   }
