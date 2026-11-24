@@ -183,93 +183,61 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
 
       <PublicFooter onBookDemo={() => setOpenModal(true)} />
 
-      {/* Manage Organisation Form Modal */}
+      {/* Book a demo modal */}
       <Dialog open={openModal} onOpenChange={setOpenModal}>
-        <DialogContent className="w-[95vw] sm:max-w-md bg-white border-slate-200 rounded-3xl p-5 sm:p-8 max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="mb-4 sm:mb-6">
-            <DialogTitle className="text-2xl font-bold text-slate-900 text-left">Book a Free Demo</DialogTitle>
-            <DialogDescription className="text-slate-500 font-medium text-left mt-1 sm:mt-2 text-xs sm:text-sm">
-              Share your details and our team will contact you to arrange a demo for your institution.
-            </DialogDescription>
-          </DialogHeader>
-
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-            <div className="space-y-1 sm:space-y-1.5">
-              <Label htmlFor="orgName" className="text-slate-700 font-bold text-xs sm:text-sm">Organisation Name</Label>
-              <Input 
-                id="orgName"
-                value={formData.orgName}
-                onChange={e => setFormData(prev => ({ ...prev, orgName: e.target.value }))}
-                className="h-11 sm:h-12 rounded-2xl bg-slate-50 border-slate-200 focus:bg-white focus:border-[#54b947] focus:ring-[#54b947] text-sm"
-                required
-              />
+        <DialogContent style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }} className="w-[95vw] sm:max-w-[860px] p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] overflow-y-auto">
+          <div className="grid md:grid-cols-[0.8fr_1.2fr]">
+            {/* Intro panel */}
+            <div className="relative overflow-hidden bg-[#091f14] text-white p-7 sm:p-9 flex flex-col justify-between gap-8">
+              <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
+                style={{ background: 'radial-gradient(70% 60% at 50% 0%, rgba(84,185,71,.45), transparent 70%), radial-gradient(50% 45% at 100% 100%, rgba(138,228,126,.22), transparent 70%)' }} />
+              <img src="/erm-logo-green.png" alt="PYPE ERM" className="relative h-12 w-auto self-start" />
+              <DialogHeader className="relative space-y-3 text-left">
+                <DialogTitle className="text-3xl sm:text-4xl font-semibold tracking-tight leading-[1.1] text-white text-left">
+                  Book a <span className="text-[#8ae47e]">Free Demo</span>
+                </DialogTitle>
+                <DialogDescription className="text-sm sm:text-base leading-relaxed text-emerald-50/80 text-left">
+                  Share your details and our team will contact you to arrange a demo for your institution.
+                </DialogDescription>
+              </DialogHeader>
             </div>
 
-            <div className="space-y-1 sm:space-y-1.5">
-              <Label htmlFor="adminName" className="text-slate-700 font-bold text-xs sm:text-sm">Your Name</Label>
-              <Input 
-                id="adminName"
-                value={formData.adminName}
-                onChange={e => setFormData(prev => ({ ...prev, adminName: e.target.value }))}
-                className="h-11 sm:h-12 rounded-2xl bg-slate-50 border-slate-200 focus:bg-white focus:border-[#54b947] focus:ring-[#54b947] text-sm"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              <div className="space-y-1 sm:space-y-1.5">
-                <Label htmlFor="email" className="text-slate-700 font-bold text-xs sm:text-sm">Email Address</Label>
-                <Input 
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="h-11 sm:h-12 rounded-2xl bg-slate-50 border-slate-200 focus:bg-white focus:border-[#54b947] focus:ring-[#54b947] text-sm"
-                  required
-                />
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="p-6 sm:p-9 space-y-4">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="orgName" className="text-slate-700 font-semibold text-sm">Organisation name</Label>
+                  <Input id="orgName" value={formData.orgName} onChange={e => setFormData(prev => ({ ...prev, orgName: e.target.value }))} className="h-12 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 transition-all" required />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="adminName" className="text-slate-700 font-semibold text-sm">Your name</Label>
+                  <Input id="adminName" value={formData.adminName} onChange={e => setFormData(prev => ({ ...prev, adminName: e.target.value }))} className="h-12 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 transition-all" required />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="email" className="text-slate-700 font-semibold text-sm">Email address</Label>
+                  <Input id="email" type="email" value={formData.email} onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))} className="h-12 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 transition-all" required />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="phone" className="text-slate-700 font-semibold text-sm">Phone number</Label>
+                  <Input id="phone" placeholder="e.g. +91 9876543210" value={formData.phone} onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))} className="h-12 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 transition-all" required />
+                </div>
               </div>
-              <div className="space-y-1 sm:space-y-1.5">
-                <Label htmlFor="phone" className="text-slate-700 font-bold text-xs sm:text-sm">Phone Number</Label>
-                <Input 
-                  id="phone"
-                  placeholder="e.g. +91 9876543210"
-                  value={formData.phone}
-                  onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  className="h-11 sm:h-12 rounded-2xl bg-slate-50 border-slate-200 focus:bg-white focus:border-[#54b947] focus:ring-[#54b947] text-sm"
-                  required
-                />
+
+              <div className="space-y-1.5">
+                <Label htmlFor="message" className="text-slate-700 font-semibold text-sm">Additional message <span className="font-normal text-slate-400">(optional)</span></Label>
+                <Textarea id="message" placeholder="Describe your requirements..." value={formData.message} onChange={e => setFormData(prev => ({ ...prev, message: e.target.value }))} className="rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 min-h-[110px] resize-none text-sm px-4 py-3 transition-all" />
               </div>
-            </div>
 
-            <div className="space-y-1 sm:space-y-1.5">
-              <Label htmlFor="message" className="text-slate-700 font-bold text-xs sm:text-sm">Additional Message (Optional)</Label>
-              <Textarea 
-                id="message"
-                placeholder="Describe your requirements..."
-                value={formData.message}
-                onChange={e => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                className="rounded-2xl bg-slate-50 border-slate-200 focus:bg-white focus:border-[#54b947] focus:ring-[#54b947] min-h-[80px] sm:min-h-[100px] resize-none text-sm"
-              />
-            </div>
-
-            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2.5 sm:gap-3 pt-3 sm:pt-4">
-              <Button 
-                type="button"
-                variant="ghost" 
-                onClick={() => setOpenModal(false)}
-                className="text-slate-500 hover:text-slate-700 font-semibold h-11 sm:h-12 rounded-full text-sm"
-              >
-                Cancel
-              </Button>
-              <Button 
-                type="submit"
-                disabled={submitting}
-                className="bg-[#256c1d] hover:bg-[#1a5323] text-white font-semibold h-11 sm:h-12 px-6 sm:px-8 rounded-full transition-colors text-sm"
-              >
-                {submitting ? 'Submitting...' : 'Submit Request'}
-              </Button>
-            </div>
-          </form>
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-2">
+                <Button type="button" variant="ghost" onClick={() => setOpenModal(false)} className="h-12 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={submitting} className="group h-12 rounded-full px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold gap-2 transition-all">
+                  {submitting ? 'Submitting...' : <>Submit Request <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></>}
+                </Button>
+              </div>
+            </form>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
