@@ -2,6 +2,10 @@ import { Response } from 'express';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { AuthRequest } from '../middleware/auth.js';
+import { enrollmentBranchWhere, type PageRequest } from '../access/pageGuard.js';
+
+/** Someone given a report sees their own branch, or every branch if they have none */
+const givenBranch = (req: PageRequest): string | null => (req.ownBranchOnly ? req.user.branchId || null : null);
 
 const tally = (items: string[]) => {
   const m: Record<string, number> = {};
@@ -26,7 +30,7 @@ const lastSixMonths = () => {
 };
 
 // ─── Admission Report ────────────────────────────────────────────────────────
-export const getAdmissionReport = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getAdmissionReport = asyncHandler(async (req: PageRequest, res: Response) => {
   const { month, year } = req.query;
   const organizationId = req.user.organizationId;
   
@@ -43,6 +47,8 @@ export const getAdmissionReport = asyncHandler(async (req: AuthRequest, res: Res
       { referredBy: { in: assignedIds } }
     ];
   }
+
+  if (givenBranch(req)) studentWhere.branchId = givenBranch(req);
 
   if (month && year) {
     const startDate = new Date(Number(year), Number(month) - 1, 1);
@@ -128,7 +134,7 @@ export const getAdmissionReport = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 // ─── Enrollment Report ───────────────────────────────────────────────────────
-export const getEnrollmentReport = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getEnrollmentReport = asyncHandler(async (req: PageRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   
   let enrollmentWhere: any = { organizationId };
@@ -142,6 +148,8 @@ export const getEnrollmentReport = asyncHandler(async (req: AuthRequest, res: Re
       { salesUserId: { in: assignedIds } }
     ];
   }
+
+  if (givenBranch(req)) enrollmentWhere.AND = [enrollmentBranchWhere(givenBranch(req))];
 
   const enrollments = await prisma.enrollment.findMany({
     where: enrollmentWhere,
@@ -216,7 +224,7 @@ export const getEnrollmentReport = asyncHandler(async (req: AuthRequest, res: Re
 });
 
 // ─── University Report ───────────────────────────────────────────────────────
-export const getUniversityReport = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getUniversityReport = asyncHandler(async (req: PageRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   
   let studentsWhere: any = {};
@@ -231,6 +239,8 @@ export const getUniversityReport = asyncHandler(async (req: AuthRequest, res: Re
       { referredBy: { in: assignedIds } }
     ];
   }
+
+  if (givenBranch(req)) studentsWhere.branchId = givenBranch(req);
 
   const universities = await prisma.university.findMany({
     where: { organizationId },
@@ -276,7 +286,7 @@ export const getUniversityReport = asyncHandler(async (req: AuthRequest, res: Re
 });
 
 // ─── Re-registration Report ──────────────────────────────────────────────────
-export const getReRegistrationReport = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getReRegistrationReport = asyncHandler(async (req: PageRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   
   let studentWhere: any = { organizationId };
@@ -292,6 +302,8 @@ export const getReRegistrationReport = asyncHandler(async (req: AuthRequest, res
       { referredBy: { in: assignedIds } }
     ];
   }
+
+  if (givenBranch(req)) studentWhere.branchId = givenBranch(req);
 
   const students = await prisma.student.findMany({
     where: studentWhere,

@@ -25,6 +25,12 @@ export const mayOn = (user: { access?: UserAccess } | null | undefined, page: st
 export const canDo = (user: { access?: UserAccess } | null | undefined, page: string, action: AccessAction): boolean =>
   mayOn(user, page, action, true);
 
+/** The page was added by an Org Admin: the role does not include it. */
+export const isGiven = (user: { access?: UserAccess } | null | undefined, page: string): boolean => {
+  const feature = user?.access?.[page];
+  return Boolean(feature?.view?.allowed && !feature.view.byDefault && Object.values(feature).some((a) => a?.override === 'allow'));
+};
+
 /** An Org Admin has blocked this page for the user. */
 export const isBlocked = (user: { access?: UserAccess } | null | undefined, page: string): boolean =>
   user?.access?.[page]?.view?.override === 'deny';

@@ -10,6 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { mayOn } from '@/lib/access';
+import { useAuth } from '@/hooks/useAuth';
 
 import { CS } from '@/lib/currency';
 interface Payroll {
@@ -36,6 +38,10 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export function PayrollPanel() {
+  const { user } = useAuth();
+  const mayCreate = mayOn(user, 'payroll', 'create', true);
+  const mayEdit = mayOn(user, 'payroll', 'edit', true);
+  const mayApprove = mayOn(user, 'payroll', 'approve', true);
   const [payrolls, setPayrolls] = useState<Payroll[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
@@ -68,7 +74,7 @@ export function PayrollPanel() {
   const fetchPayrolls = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/payroll');
+      const res = await api.get('/payroll', { params: { team: 1 } });
       setPayrolls(res.data.data || []);
     } catch { toast.error('Failed to fetch payrolls'); }
     finally { setLoading(false); }
@@ -160,14 +166,16 @@ export function PayrollPanel() {
           <Button variant="outline" onClick={fetchPayrolls} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className="w-4 h-4 mr-1" /> Refresh
           </Button>
-          {confirmedPayrolls.length > 0 && (
+          {mayApprove && confirmedPayrolls.length > 0 && (
             <Button variant="outline" onClick={() => setTransferOpen(true)} className="h-11 px-5 rounded-full bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]">
               <Send className="w-4 h-4 mr-1" /> Submit to Finance ({confirmedPayrolls.length})
             </Button>
           )}
-          <Button onClick={() => setGenerateOpen(true)} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-            <Play className="w-4 h-4 mr-1" /> Generate Payroll
-          </Button>
+          {mayCreate && (
+            <Button onClick={() => setGenerateOpen(true)} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+              <Play className="w-4 h-4 mr-1" /> Generate Payroll
+            </Button>
+          )}
         </div>
       </div>
 
@@ -202,7 +210,7 @@ export function PayrollPanel() {
                         {/* Top: employee + status + actions */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                           <div className="flex items-center gap-3 min-w-0">
-                            {p.status === 'confirmed' && (
+                            {mayApprove && p.status === 'confirmed' && (
                               <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(p.id)} className="w-4 h-4 shrink-0 accent-[#54b947]" />
                             )}
                             <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center font-semibold shrink-0">
@@ -219,12 +227,12 @@ export function PayrollPanel() {
                             </div>
                           </div>
                           <div className="flex gap-2 shrink-0">
-                            {(p.status === 'draft' || p.status === 'processed') && (
+                            {mayEdit && (p.status === 'draft' || p.status === 'processed') && (
                               <Button size="sm" variant="outline" className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => openEdit(p)} title="Edit">
                                 <Edit className="w-4 h-4" />
                               </Button>
                             )}
-                            {(p.status === 'draft' || p.status === 'processed') && (
+                            {mayApprove && (p.status === 'draft' || p.status === 'processed') && (
                               <Button size="sm" className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => handleConfirm(p.id)}>
                                 Confirm
                               </Button>

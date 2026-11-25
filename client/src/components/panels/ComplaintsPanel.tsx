@@ -11,8 +11,13 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { confirmDialog } from '@/lib/confirm';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function ComplaintsPanel() {
+  const { user } = useAuth();
+  const mayDelete = mayOn(user, 'complaints', 'delete', true);
+  const mayEdit = mayOn(user, 'complaints', 'edit', true);
   const [complaints, setComplaints] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -254,18 +259,22 @@ export function ComplaintsPanel() {
                       </div>
                       
                       <div className="flex sm:flex-col items-center justify-end gap-2 shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
-                        {c.status !== 'resolved' && c.status !== 'closed' && (
-                          <Button variant="outline" size="sm" className="h-10 w-full sm:w-auto rounded-full border-[#cfe9c9] bg-white hover:bg-[#eaf6e6] gap-1.5 px-4 text-[#256c1d] font-semibold" onClick={() => handleResolve(cid)}>
-                            Resolve
-                          </Button>
+                        {mayEdit && c.status !== 'resolved' && c.status !== 'closed' && (
+                            <Button variant="outline" size="sm" className="h-10 w-full sm:w-auto rounded-full border-[#cfe9c9] bg-white hover:bg-[#eaf6e6] gap-1.5 px-4 text-[#256c1d] font-semibold" onClick={() => handleResolve(cid)}>
+                              Resolve
+                            </Button>
                         )}
                         <div className="flex gap-2 w-full sm:w-auto">
-                          <Button variant="outline" size="sm" className="h-10 flex-1 sm:flex-none rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6] gap-1.5 px-4" onClick={() => handleEdit(c)}>
-                            <Edit className="w-3.5 h-3.5 text-muted-foreground" /> Edit
-                          </Button>
-                          <Button variant="outline" size="sm" className="h-10 flex-1 sm:flex-none rounded-full border-red-200 bg-white hover:bg-red-50 text-red-600 gap-1.5 px-4" onClick={() => handleDelete(cid)}>
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
+                          {mayEdit && (
+                            <Button variant="outline" size="sm" className="h-10 flex-1 sm:flex-none rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6] gap-1.5 px-4" onClick={() => handleEdit(c)}>
+                              <Edit className="w-3.5 h-3.5 text-muted-foreground" /> Edit
+                            </Button>
+                          )}
+                          {mayDelete && (
+                            <Button variant="outline" size="sm" className="h-10 flex-1 sm:flex-none rounded-full border-red-200 bg-white hover:bg-red-50 text-red-600 gap-1.5 px-4" onClick={() => handleDelete(cid)}>
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </div>

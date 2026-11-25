@@ -147,7 +147,7 @@ export const listMyInvites = asyncHandler(async (req: PageRequest, res: Response
   if (req.ownBranchOnly) {
     delete where.referredBy;
     where.organizationId = req.user.organizationId;
-    where.referrer = { branchId: req.user.branchId };
+    if (req.user.branchId) where.referrer = { branchId: req.user.branchId };
   }
   const invites = await prisma.studyCenterInvite.findMany({
     where,

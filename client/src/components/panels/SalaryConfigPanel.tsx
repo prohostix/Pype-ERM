@@ -11,6 +11,8 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
+import { mayOn } from '@/lib/access';
+import { useAuth } from '@/hooks/useAuth';
 
 import { CS } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
@@ -61,6 +63,9 @@ const EMPTY_CONFIG = {
 };
 
 export function SalaryConfigPanel() {
+  const { user: me } = useAuth();
+  const mayEdit = mayOn(me, 'salary_config', 'edit', true);
+  const mayDelete = mayOn(me, 'salary_config', 'delete', true);
   const [configs, setConfigs] = useState<SalaryConfig[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -236,9 +241,11 @@ export function SalaryConfigPanel() {
           <Button variant="outline" onClick={fetchAll} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className="w-4 h-4 mr-2" /> Refresh
           </Button>
-          <Button onClick={() => openEdit()} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-            <Plus className="w-4 h-4 mr-2" /> Add Config
-          </Button>
+          {mayEdit && (
+            <Button onClick={() => openEdit()} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+              <Plus className="w-4 h-4 mr-2" /> Add Config
+            </Button>
+          )}
         </div>
       </div>
 
@@ -256,14 +263,16 @@ export function SalaryConfigPanel() {
             </div>
 
             <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
-              <Button 
-                onClick={handleSaveCycle} 
-                disabled={cycleSaving}
-                className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
-              >
-                <Save className="w-4 h-4 mr-1.5" />
-                {cycleSaving ? 'Saving...' : 'Save Salary Dates'}
-              </Button>
+              {mayEdit && (
+                <Button 
+                  onClick={handleSaveCycle} 
+                  disabled={cycleSaving}
+                  className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
+                >
+                  <Save className="w-4 h-4 mr-1.5" />
+                  {cycleSaving ? 'Saving...' : 'Save Salary Dates'}
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -523,12 +532,16 @@ export function SalaryConfigPanel() {
                       </div>
                     </div>
                     <div className="flex gap-2 shrink-0">
-                      <Button size="sm" variant="outline" className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => openEdit(config)}>
-                        <Edit className="w-3.5 h-3.5" />
-                      </Button>
-                      <Button size="sm" variant="ghost" className="h-10 w-10 p-0 rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(uid)}>
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </Button>
+                      {mayEdit && (
+                        <Button size="sm" variant="outline" className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => openEdit(config)}>
+                          <Edit className="w-3.5 h-3.5" />
+                        </Button>
+                      )}
+                      {mayDelete && (
+                        <Button size="sm" variant="ghost" className="h-10 w-10 p-0 rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(uid)}>
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>

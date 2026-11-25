@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import prisma from '../lib/prisma.js';
+import { checkBlocked } from '../access/blockCheck.js';
 import { ACCOUNT_DISABLED_MESSAGE, isAccountDisabled } from '../utils/userGuards.js';
 
 export interface AuthRequest extends Request {
@@ -71,6 +72,15 @@ export const protect = async (
 
       if (isAccountDisabled(user.status)) {
         res.status(401).json({ success: false, code: 'ACCOUNT_DISABLED', message: ACCOUNT_DISABLED_MESSAGE });
+        return;
+      }
+
+      const permission = await checkBlocked(user, req.method, req.originalUrl, req.body);
+      if (permission !== 'ok') {
+        res.status(permission === 'blocked' ? 403 : 503).json({
+          success: false,
+          message: permission === 'blocked' ? 'Your Org Admin has blocked this for you' : 'Could not check your permissions. Please try again.',
+        });
         return;
       }
 

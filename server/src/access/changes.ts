@@ -18,7 +18,7 @@ export const changeError = (actorId: string, target: AccessUser, changes: unknow
     const key = `${change.featureKey}.${change.action}`;
     if (seen.has(key)) return 'The same action appears twice';
     seen.add(key);
-    if (change.effect === 'allow' && !target.branchId) return 'Assign this user to a branch before allowing access';
+    if (change.effect === 'allow' && feature.blockOnly) return `${feature.label} can only be blocked for now`;
   }
   return null;
 };

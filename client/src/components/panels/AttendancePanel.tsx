@@ -13,6 +13,7 @@ import { AttendanceCalendar } from '@/components/attendance/AttendanceCalendar';
 import { toast } from 'sonner';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { confirmDialog } from '@/lib/confirm';
+import { isGiven, mayOn } from '@/lib/access';
 
 interface AttendancePanelProps {
   isMyPortal?: boolean;
@@ -21,8 +22,13 @@ interface AttendancePanelProps {
 
 export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: AttendancePanelProps) {
   const { user } = useAuth();
-  const isHR = !isMyPortal && (user?.role === 'hr_admin' || user?.role === 'hr_sub_admin');
-  const canViewAll = !isMyPortal && ['hr_admin', 'hr_sub_admin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager', 'center_admin'].includes(user?.role || '');
+  const hrRole = user?.role === 'hr_admin' || user?.role === 'hr_sub_admin';
+  // Added by an Org Admin: sees the team, with only the actions they were allowed
+  const given = !isMyPortal && isGiven(user, 'team_attendance');
+  const mayCreate = !isMyPortal && mayOn(user, 'team_attendance', 'create', hrRole);
+  const mayEdit = !isMyPortal && mayOn(user, 'team_attendance', 'edit', hrRole);
+  const mayDelete = !isMyPortal && mayOn(user, 'team_attendance', 'delete', hrRole);
+  const canViewAll = given || !isMyPortal && ['hr_admin', 'hr_sub_admin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager', 'center_admin'].includes(user?.role || '');
   const [attendance, setAttendance] = useState<any[]>([]);
   const [calendarAttendance, setCalendarAttendance] = useState<any[]>([]);
   const [holidays, setHolidays] = useState<any[]>([]);
@@ -460,13 +466,15 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
             </DialogContent>
           </Dialog>
 
-          {isHR && (
+          {(mayCreate || mayEdit) && (
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-              <DialogTrigger asChild>
-                <Button className="rounded-full h-11 px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-                  <Plus className="w-4 h-4 mr-2" /> Mark Attendance
-                </Button>
-              </DialogTrigger>
+              {mayCreate && (
+                <DialogTrigger asChild>
+                  <Button className="rounded-full h-11 px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                    <Plus className="w-4 h-4 mr-2" /> Mark Attendance
+                  </Button>
+                </DialogTrigger>
+              )}
               <DialogContent className="max-w-md wizard-form border-0 rounded-[2rem] overflow-hidden p-0 bg-white max-h-[90vh] flex flex-col" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
                 <div className="bg-[#f4f6f3] p-6 border-b border-slate-100 flex items-center gap-3 shrink-0">
                   <div className="w-11 h-11 bg-white rounded-2xl text-[#256c1d] flex items-center justify-center">
@@ -567,7 +575,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
           holidays={holidays}
           onRefresh={() => fetchCalendarAttendance(activeEmployeeId)}
           onToggleView={() => setViewMode('list')}
-          isHR={isHR}
+          isHR={mayEdit}
         />
       ) : (
         <Card className="rounded-3xl bg-white border border-slate-100 shadow-none overflow-hidden py-0 gap-0">
@@ -800,12 +808,14 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                         )}
                       </div>
                       
-                      {isHR && (
+                      {(mayEdit || mayDelete) && (
                         <div className="flex items-center justify-end gap-2 shrink-0">
-                          <Button variant="outline" size="sm" className="h-9 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6] gap-1.5 px-4" onClick={() => handleEdit(record)}>
-                            <Edit className="w-3.5 h-3.5 text-muted-foreground" /> Edit
-                          </Button>
-                          {recId && !isMockRecordId(recId) && (
+                          {mayEdit && (
+                            <Button variant="outline" size="sm" className="h-9 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6] gap-1.5 px-4" onClick={() => handleEdit(record)}>
+                              <Edit className="w-3.5 h-3.5 text-muted-foreground" /> Edit
+                            </Button>
+                          )}
+                          {mayDelete && recId && !isMockRecordId(recId) && (
                             <Button variant="outline" size="sm" className="h-9 rounded-full border-red-200 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 gap-1.5 px-4" onClick={() => handleDelete(recId)}>
                               <Trash2 className="w-3.5 h-3.5" /> Delete
                             </Button>

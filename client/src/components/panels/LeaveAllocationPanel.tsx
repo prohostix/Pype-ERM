@@ -11,6 +11,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 
 interface LeaveAllocation {
   id?: string;
@@ -46,6 +47,9 @@ export function LeaveAllocationPanel() {
   const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
   // HR tied to a branch only ever initializes (and sees) their own branch's employees.
   const { user: me } = useAuth();
+  const mayCreate = mayOn(me, 'leave_allocation', 'create', true);
+  const mayEdit = mayOn(me, 'leave_allocation', 'edit', true);
+  const mayDelete = mayOn(me, 'leave_allocation', 'delete', true);
   const myBranchId = (me as any)?.branchId as string | undefined;
   const myBranchName = (me as any)?.branch?.name as string | undefined;
   const [editingUserId, setEditingUserId] = useState('');
@@ -181,12 +185,16 @@ export function LeaveAllocationPanel() {
           <Button variant="outline" onClick={fetchAll} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className="w-4 h-4 mr-2" /> Refresh
           </Button>
-          <Button variant="outline" onClick={() => setBulkDialogOpen(true)} className="h-11 px-5 rounded-full bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]">
-            <Zap className="w-4 h-4 mr-2" /> Bulk Init
-          </Button>
-          <Button onClick={() => openEdit()} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-            <Plus className="w-4 h-4 mr-2" /> Add
-          </Button>
+          {mayCreate && (
+            <Button variant="outline" onClick={() => setBulkDialogOpen(true)} className="h-11 px-5 rounded-full bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]">
+              <Zap className="w-4 h-4 mr-2" /> Bulk Init
+            </Button>
+          )}
+          {mayEdit && (
+            <Button onClick={() => openEdit()} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+              <Plus className="w-4 h-4 mr-2" /> Add
+            </Button>
+          )}
         </div>
       </div>
 
@@ -258,18 +266,22 @@ export function LeaveAllocationPanel() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <Button size="sm" variant="outline" className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => openEdit(alloc)} title="Edit Allocation">
-                        <Edit className="w-3.5 h-3.5" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-10 w-10 p-0 rounded-full bg-white text-red-500 hover:text-red-600 hover:bg-red-50 border-red-200"
-                        onClick={() => handleDelete(uid, user?.name || 'Employee')}
-                        title="Delete Allocation"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </Button>
+                      {mayEdit && (
+                        <Button size="sm" variant="outline" className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => openEdit(alloc)} title="Edit Allocation">
+                          <Edit className="w-3.5 h-3.5" />
+                        </Button>
+                      )}
+                      {mayDelete && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-10 w-10 p-0 rounded-full bg-white text-red-500 hover:text-red-600 hover:bg-red-50 border-red-200"
+                          onClick={() => handleDelete(uid, user?.name || 'Employee')}
+                          title="Delete Allocation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>

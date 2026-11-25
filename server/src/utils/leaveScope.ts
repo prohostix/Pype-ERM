@@ -20,7 +20,10 @@ export const leaveVisibilityWhere = (req: AuthRequest): any => {
   const { role, id: userId, organizationId, departmentId, branchId } = req.user;
   const where: any = { organizationId };
 
-  if (GLOBAL_ADMIN_ROLES.includes(role)) {
+  // Someone given Leave Approvals sees their own branch, or every branch if they have none
+  if ((req as AuthRequest & { ownBranchOnly?: boolean }).ownBranchOnly) {
+    where.user = { role: { not: 'center_admin' }, ...(branchId && { branchId }) };
+  } else if (GLOBAL_ADMIN_ROLES.includes(role)) {
     // sees every request in the organization
   } else if (HR_ROLES.includes(role)) {
     if (branchId) {

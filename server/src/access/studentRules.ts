@@ -1,6 +1,7 @@
 /** How an Org Admin's settings apply to the Students page. Pure, so it can be tested without a database. */
 import { Action } from './catalog.js';
 import { Access } from './resolve.js';
+import { BranchId, inOwnBranch } from './branchScope.js';
 import { decidePageAction, isGrantedPage } from './pageRules.js';
 
 export const isGrantedStudentUser = (access: Access): boolean => isGrantedPage(access, 'students');
@@ -38,4 +39,4 @@ export const restrictStudent = (student: any, options: { hideFees: boolean; hide
 
 export const restrictEnrollment = (enrollment: any) => withoutEnrollmentFees(enrollment);
 
-export const studentBranchWhere = (branchId: string) => ({ OR: [{ branchId }, { enrolledByUser: { branchId } }] });
+export const studentBranchWhere = (branchId: BranchId) => inOwnBranch(branchId, (id) => ({ OR: [{ branchId: id }, { enrolledByUser: { branchId: id } }] }));

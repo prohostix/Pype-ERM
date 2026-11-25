@@ -7,6 +7,8 @@ import { Label } from '../ui/label';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { confirmDialog } from '@/lib/confirm';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 interface Device {
   id: string;
@@ -19,6 +21,9 @@ interface Device {
 }
 
 export function BiometricDevicesPanel() {
+  const { user } = useAuth();
+  const mayDelete = mayOn(user, 'biometric_devices', 'delete', true);
+  const mayEdit = mayOn(user, 'biometric_devices', 'edit', true);
   const [devices, setDevices] = useState<Device[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -102,12 +107,14 @@ export function BiometricDevicesPanel() {
             Refresh
           </Button>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={() => handleOpenDialog()} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Device
-              </Button>
-            </DialogTrigger>
+            {mayOn(user, 'biometric_devices', 'create', true) && (
+              <DialogTrigger asChild>
+                <Button onClick={() => handleOpenDialog()} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Device
+                </Button>
+              </DialogTrigger>
+            )}
             <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
               <DialogHeader>
                 <DialogTitle className="text-xl font-semibold tracking-tight">{editingDevice ? 'Edit Device' : 'Add New Device'}</DialogTitle>
@@ -188,12 +195,16 @@ export function BiometricDevicesPanel() {
                     <span className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize ${device.status === 'active' ? 'bg-[#dff3da] text-[#256c1d]' : 'bg-slate-200/70 text-slate-600'}`}>
                       {device.status}
                     </span>
-                    <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleOpenDialog(device)}>
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(device.id)}>
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    {mayEdit && (
+                      <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleOpenDialog(device)}>
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                    )}
+                    {mayDelete && (
+                      <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(device.id)}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}

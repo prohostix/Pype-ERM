@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { AssetStatus, AssetType } from '../generated/client';
+import type { PageRequest } from '../access/pageGuard.js';
 
 
 // Assets belong to a user, so an asset is visible to the caller only when its
@@ -9,7 +10,8 @@ import { AssetStatus, AssetType } from '../generated/client';
 const assetScope = (req: AuthRequest): any => {
   if (req.user.role === 'superadmin') return {};
   const user: any = { organizationId: req.user.organizationId };
-  if (req.user.role === 'branch_manager' && req.user.branchId) user.branchId = req.user.branchId;
+  const limited = req.user.role === 'branch_manager' || (req as PageRequest).ownBranchOnly;
+  if (limited && req.user.branchId) user.branchId = req.user.branchId;
   return { user };
 };
 

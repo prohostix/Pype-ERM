@@ -12,6 +12,8 @@ import { toast } from 'sonner';
 import api from '@/lib/api';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -224,6 +226,8 @@ function LocationCard({ loc, index, onChange, onRemove, onSetDefault, onSave, sa
 // ─── Main Panel ───────────────────────────────────────────────────────────────
 
 export function HRSettingsPanel() {
+  const { user } = useAuth();
+  const mayEdit = mayOn(user, 'attendance_settings', 'edit', true);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [settings, setSettings] = useState<any>(DEFAULT_SETTINGS);
@@ -335,10 +339,12 @@ export function HRSettingsPanel() {
           <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Attendance Settings</h2>
           <p className="text-muted-foreground text-sm mt-1.5">Configure office hours, locations, and biometric integration</p>
         </div>
-        <Button onClick={handleSave} disabled={saving} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-          {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-          Save Settings
-        </Button>
+        {mayEdit && (
+          <Button onClick={handleSave} disabled={saving} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+            {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+            Save Settings
+          </Button>
+        )}
       </div>
 
       <Tabs defaultValue="hours">

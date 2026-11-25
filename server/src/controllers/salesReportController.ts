@@ -2,6 +2,7 @@ import { Response } from 'express';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { AuthRequest } from '../middleware/auth.js';
+import type { PageRequest } from '../access/pageGuard.js';
 
 const GLOBAL_ROLES = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'];
 
@@ -58,8 +59,8 @@ const getSubordinateIds = async (req: AuthRequest): Promise<string[]> => {
 const buildHierarchyClause = async (req: AuthRequest) => {
   const whereClause: any = { organizationId: req.user.organizationId };
 
-  if (GLOBAL_ROLES.includes(req.user.role)) {
-    // See all users
+  if (GLOBAL_ROLES.includes(req.user.role) || (req as PageRequest).ownBranchOnly) {
+    // See all users: someone given a report covers their branch, applied below
   } else if (req.user.role === 'center_admin') {
     whereClause.OR = [];
     if (req.user.branchId) whereClause.OR.push({ branchId: req.user.branchId });

@@ -11,8 +11,14 @@ import { toast } from 'sonner';
 import { UserFormDialog } from '@/components/panels/UserFormDialog';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { confirmDialog } from '@/lib/confirm';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function VacanciesPanel() {
+  const { user } = useAuth();
+  const mayDelete = mayOn(user, 'vacancies', 'delete', true);
+  const mayCreate = mayOn(user, 'vacancies', 'create', true);
+  const mayEdit = mayOn(user, 'vacancies', 'edit', true);
   const [vacancies, setVacancies] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -139,11 +145,13 @@ export function VacanciesPanel() {
           <p className="text-muted-foreground text-sm mt-1.5">Manage job openings and recruitment</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button className="rounded-full h-11 px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-              <Plus className="w-4 h-4 mr-2" /> Post Vacancy
-            </Button>
-          </DialogTrigger>
+          {mayCreate && (
+            <DialogTrigger asChild>
+              <Button className="rounded-full h-11 px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                <Plus className="w-4 h-4 mr-2" /> Post Vacancy
+              </Button>
+            </DialogTrigger>
+          )}
           <DialogContent className="wizard-form max-w-2xl border-0 rounded-[2rem] overflow-hidden p-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
             <div className="bg-[#f4f6f3] p-6 border-b border-slate-100 flex items-center gap-3">
               <div>
@@ -276,17 +284,23 @@ export function VacanciesPanel() {
                         >
                           Hire
                         </Button>
-                        <Button variant="outline" size="sm" className="h-10 rounded-full border-[#cfe9c9] bg-white text-[#256c1d] hover:bg-[#eaf6e6] font-semibold gap-1.5 px-5" onClick={() => handleClose(vid)}>
-                          Close
-                        </Button>
+                        {mayEdit && (
+                          <Button variant="outline" size="sm" className="h-10 rounded-full border-[#cfe9c9] bg-white text-[#256c1d] hover:bg-[#eaf6e6] font-semibold gap-1.5 px-5" onClick={() => handleClose(vid)}>
+                            Close
+                          </Button>
+                        )}
                       </>
                     )}
-                    <Button variant="outline" size="sm" className="h-10 w-10 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6] p-0" onClick={() => handleEdit(vacancy)}>
-                      <Edit className="w-3.5 h-3.5 text-muted-foreground" />
-                    </Button>
-                    <Button variant="outline" size="sm" className="h-10 w-10 rounded-full border-red-200 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 p-0" onClick={() => handleDelete(vid)}>
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </Button>
+                    {mayEdit && (
+                      <Button variant="outline" size="sm" className="h-10 w-10 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6] p-0" onClick={() => handleEdit(vacancy)}>
+                        <Edit className="w-3.5 h-3.5 text-muted-foreground" />
+                      </Button>
+                    )}
+                    {mayDelete && (
+                      <Button variant="outline" size="sm" className="h-10 w-10 rounded-full border-red-200 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 p-0" onClick={() => handleDelete(vid)}>
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                    )}
                   </div>
                 </div>
                 );

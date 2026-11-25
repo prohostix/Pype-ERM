@@ -11,6 +11,7 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import csv from 'csv-parser';
 import { Readable } from 'stream';
 import dotenv from 'dotenv';
+import { refuseOwnRecord, type PageRequest } from '../access/pageGuard.js';
 
 dotenv.config();
 
@@ -636,7 +637,10 @@ export const getAttendancesData = async (req: AuthRequest, forceStatus?: string)
   
   const userFilters: any = { role: { not: 'student' }, requiresAttendance: true };
 
-  if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin', 'general_manager'].includes(req.user.role)) {
+  if ((req as PageRequest).ownBranchOnly) {
+    // Someone given this page sees their own branch, or every branch if they have none
+    if (req.user.branchId) userFilters.branchId = req.user.branchId;
+  } else if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin', 'general_manager'].includes(req.user.role)) {
     // See all users — limited to their branch when HR is assigned one (or a global admin picks one)
     const scopedBranchId = getScopedBranchId(req);
     if (scopedBranchId) userFilters.branchId = scopedBranchId;
@@ -917,7 +921,7 @@ export const getAttendanceById = asyncHandler(async (req: AuthRequest, res: Resp
   res.json({ success: true, data: attendance });
 });
 
-export const createAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const createAttendance = asyncHandler(async (req: PageRequest, res: Response) => {
   const orgId = req.user.organizationId || req.body.organizationId;
   if (!orgId) {
     res.status(400).json({ success: false, message: 'Organization ID is required.' });
@@ -930,6 +934,7 @@ export const createAttendance = asyncHandler(async (req: AuthRequest, res: Respo
     return;
   }
   delete data.branchId;
+  if (refuseOwnRecord(req, res, data.employeeId, 'attendance')) return;
   if (req.user.organizationId && !(await isUserInScope(req, data.employeeId))) {
     res.status(403).json({ success: false, message: 'You can only mark attendance for employees in your branch.' });
     return;
@@ -1030,12 +1035,13 @@ export const createAttendance = asyncHandler(async (req: AuthRequest, res: Respo
 });
 export const markAttendance = createAttendance;
 
-export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateAttendance = asyncHandler(async (req: PageRequest, res: Response) => {
   const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id } });
   if (!attendance || attendance.organizationId !== req.user.organizationId || !(await isUserInScope(req, attendance.employeeId))) {
     res.status(404).json({ success: false, message: 'Attendance record not found' });
     return;
   }
+  if (refuseOwnRecord(req, res, attendance.employeeId, 'attendance')) return;
   const { checkIn, checkOut, status, isLate, lateMinutes, isEarlyExit, earlyExitMinutes, workingHours, remarks } = req.body;
   const updateData: any = {};
   if (checkIn !== undefined) updateData.checkIn = checkIn ? new Date(checkIn) : null;
@@ -1077,12 +1083,13 @@ export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Respo
   res.json({ success: true, data: updatedAttendance });
 });
 
-export const deleteAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const deleteAttendance = asyncHandler(async (req: PageRequest, res: Response) => {
   const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id } });
   if (!attendance || attendance.organizationId !== req.user.organizationId || !(await isUserInScope(req, attendance.employeeId))) {
     res.status(404).json({ success: false, message: 'Attendance record not found' });
     return;
   }
+  if (refuseOwnRecord(req, res, attendance.employeeId, 'attendance')) return;
   await prisma.attendance.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
@@ -1107,7 +1114,8 @@ export const createOrUpdateHRSettings = asyncHandler(async (req: AuthRequest, re
     res.status(400).json({ success: false, message: 'Organization ID is required.' });
     return;
   }
-  const { requireLocationForCheckIn, ...rest } = req.body;
+  // The record's owner is never taken from the request
+  const { requireLocationForCheckIn, id: _id, organizationId: _organizationId, ...rest } = req.body;
   const updateData: any = { ...rest };
   if (requireLocationForCheckIn !== undefined) {
     updateData.requireLocation = requireLocationForCheckIn;
@@ -1128,7 +1136,7 @@ export const biometricSync = asyncHandler(async (req: AuthRequest, res: Response
   res.json({ success: true, message: 'Biometric sync triggered' });
 });
 
-export const getActivityReport = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getActivityReport = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
   
   const userFilters: any = { 
@@ -1137,7 +1145,10 @@ export const getActivityReport = asyncHandler(async (req: AuthRequest, res: Resp
     status: { not: 'resigned' }
   };
 
-  if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin', 'general_manager'].includes(req.user.role)) {
+  if (req.ownBranchOnly) {
+    // Someone given this report sees their own branch, or every branch if they have none
+    if (req.user.branchId) userFilters.branchId = req.user.branchId;
+  } else if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin', 'general_manager'].includes(req.user.role)) {
     // See all users — limited to their branch when HR is assigned one (or a global admin picks one)
     const scopedBranchId = getScopedBranchId(req);
     if (scopedBranchId) userFilters.branchId = scopedBranchId;
@@ -1418,14 +1429,14 @@ export const getMyAttendanceSummary = asyncHandler(async (req: AuthRequest, res:
   res.json({ success: true, data: {} });
 });
 
-export const getAttendanceByUserId = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getAttendanceByUserId = asyncHandler(async (req: PageRequest, res: Response) => {
   const { userId } = req.params;
   
   // Authorization check
   const isSelf = req.user.id === userId;
   const isPrivileged = ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager', 'center_admin'].includes(req.user.role);
   
-  if (!isSelf && (!isPrivileged || !(await isUserInScope(req, userId)))) {
+  if (!isSelf && (!(isPrivileged || req.ownBranchOnly) || !(await isUserInScope(req, userId)))) {
     res.status(403).json({ success: false, message: "Not authorized to view this user's attendance" });
     return;
   }

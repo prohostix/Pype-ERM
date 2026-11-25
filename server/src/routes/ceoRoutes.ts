@@ -21,6 +21,7 @@ import {
   getExecutiveOverview,
 } from '../controllers/ceoController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { pageAction } from '../access/pageGuard.js';
 
 const router = express.Router();
 
@@ -31,7 +32,7 @@ router.use(protect);
 router.get('/overview', authorize('ceo', 'general_manager'), getExecutiveOverview);
 router.get('/metrics/performance', authorize('ceo', 'general_manager'), getPerformanceMetrics);
 router.get('/metrics/risk', authorize('ceo', 'general_manager'), getRiskMetrics);
-router.get('/analytics', authorize('ceo', 'general_manager'), getAnalytics);
+router.get('/analytics', pageAction('performance', 'view', ['ceo', 'general_manager']), getAnalytics);
 router.get('/sales-counts', authorize('ceo', 'general_manager'), getSalesCounts);
 router.get('/overall-sales-counts', authorize('ceo', 'general_manager'), getOverallSalesCounts);
 router.get('/revenue-trend', authorize('ceo', 'general_manager'), getRevenueTrend);
@@ -54,7 +55,7 @@ router.get('/managers', authorize('ceo', 'general_manager'), getDepartmentManage
 router.post('/tasks', authorize('ceo', 'general_manager'), assignTask);
 
 // KPI / KRA org-wide report
-router.get('/kpi-kra-report', authorize('ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'org_admin', 'superadmin'), getKPIKRAReport);
+router.get('/kpi-kra-report', pageAction('kpi_report', 'view', ['ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'org_admin', 'superadmin']), getKPIKRAReport);
 
 // Activity logs for ceo/org_admin
 router.get('/activity-logs', authorize('ceo', 'general_manager', 'org_admin'), getActivityLogs);

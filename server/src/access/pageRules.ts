@@ -27,3 +27,15 @@ export const decidePageAction = (access: Access, pageKey: string, action: Action
   // null: the route accepted any signed-in user
   return { allowed: legacyRoles === null || legacyRoles.includes(role), ownBranchOnly: false };
 };
+
+/**
+ * The same question for a request that several pages share. The limits of given access apply when
+ * the permission comes from a setting and the role has none of these pages itself.
+ */
+export const decideAnyPage = (access: Access, pageKeys: string[], action: Action, role: string, legacyRoles: string[] | null): { allowed: boolean; ownBranchOnly: boolean } => {
+  const allowed = pageKeys.map((key) => decidePageAction(access, key, action, role, legacyRoles)).filter((d) => d.allowed);
+  return {
+    allowed: allowed.length > 0,
+    ownBranchOnly: allowed.some((d) => d.ownBranchOnly) && !pageKeys.some((key) => access[key]?.[action]?.byDefault),
+  };
+};

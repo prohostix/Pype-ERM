@@ -88,7 +88,7 @@ import {
 import { protect, authorize, type AuthRequest } from '../middleware/auth.js';
 import { requireAccess, requireAccessOrPaymentsSummary } from '../access/guard.js';
 import {
-  pageAction, expenseInBranch, paymentInBranch, enrollmentInBranch, linkInBranch, ownedBy, partnerInBranch, targetInBranch, topUpInBranch,
+  pageAction, anyPageAction, expenseInBranch, paymentInBranch, enrollmentInBranch, linkInBranch, ownedBy, partnerInBranch, targetInBranch, topUpInBranch,
 } from '../access/pageGuard.js';
 
 const router = express.Router();
@@ -179,23 +179,23 @@ router.post('/enrollments/:id/provisional-verify', pageAction('provisional_verif
 router.post('/enrollments/:id/provisional-reject', pageAction('provisional_verifications', 'approve', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inOrganization: ownedBy('enrollment'), inBranch: enrollmentInBranch }), rejectProvisionalReceipt);
 
 // Reports
-router.get('/reports/income-expenditure', authorize('finance_admin', 'finance_sub_admin'), getIncomeExpenditureReport);
-router.get('/reports/collections', getCollectionReport);
+router.get('/reports/income-expenditure', anyPageAction(['income_expense', 'profit_loss'], 'view', ['finance_admin', 'finance_sub_admin']), getIncomeExpenditureReport);
+router.get('/reports/collections', pageAction('collection_report', 'view', null), getCollectionReport);
 
 // Sales users (for target assignment)
 router.get('/sales-users', authorize('finance_admin', 'finance_sub_admin'), getFinanceSalesUsers);
 
 // Salary Config Approval
-router.get('/salary-configs', authorize('finance_admin', 'finance_sub_admin'), getFinanceSalaryConfigs);
-router.put('/salary-configs/:id/approve', authorize('finance_admin', 'finance_sub_admin'), approveSalaryConfig);
+router.get('/salary-configs', pageAction('salary_approval', 'view', ['finance_admin', 'finance_sub_admin']), getFinanceSalaryConfigs);
+router.put('/salary-configs/:id/approve', pageAction('salary_approval', 'approve', ['finance_admin', 'finance_sub_admin']), approveSalaryConfig);
 
 // Payroll Batches (from HR)
-router.get('/payroll-batches', authorize('finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin'), getPayrollBatches);
-router.get('/payroll-batches/:id', authorize('finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin'), getPayrollBatch);
-router.post('/payroll-batches/:id/approve', authorize('finance_admin', 'finance_sub_admin'), financeApprovePayrollBatch);
-router.post('/payroll-batches/:id/reject', authorize('finance_admin', 'finance_sub_admin'), financeRejectPayrollBatch);
-router.put('/payroll-batches/:id/payment-in-progress', authorize('finance_admin', 'finance_sub_admin'), markBatchPaymentInProgress);
-router.put('/payroll-batches/:id/complete-payment', authorize('finance_admin', 'finance_sub_admin'), completeBatchPayment);
+router.get('/payroll-batches', pageAction('payroll_batches', 'view', ['finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin']), getPayrollBatches);
+router.get('/payroll-batches/:id', pageAction('payroll_batches', 'view', ['finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin']), getPayrollBatch);
+router.post('/payroll-batches/:id/approve', pageAction('payroll_batches', 'approve', ['finance_admin', 'finance_sub_admin']), financeApprovePayrollBatch);
+router.post('/payroll-batches/:id/reject', pageAction('payroll_batches', 'approve', ['finance_admin', 'finance_sub_admin']), financeRejectPayrollBatch);
+router.put('/payroll-batches/:id/payment-in-progress', pageAction('payroll_batches', 'edit', ['finance_admin', 'finance_sub_admin']), markBatchPaymentInProgress);
+router.put('/payroll-batches/:id/complete-payment', pageAction('payroll_batches', 'edit', ['finance_admin', 'finance_sub_admin']), completeBatchPayment);
 
 // Payment Reminders
 router.get('/reminders/schedules', getOverdueSchedules);

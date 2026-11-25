@@ -208,7 +208,10 @@ export const getPayments = asyncHandler(async (req: PageRequest, res: Response) 
   }
 
   // Someone given this page sees only their branch
-  if (req.ownBranchOnly) where.invoice = invoiceBranchWhere(req.user, true);
+  if (req.ownBranchOnly) {
+    const branchInvoices = invoiceBranchWhere(req.user, true);
+    if (branchInvoices) where.invoice = branchInvoices;
+  }
 
   const payments = await prisma.paymentEntry.findMany({
     where,
@@ -654,7 +657,7 @@ export const approveExpense = asyncHandler(async (req: PageRequest, res: Respons
 import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
 import { invoiceScope, type AccessRequest } from '../access/guard.js';
 import { can } from '../access/resolve.js';
-import { partnerBranchWhere, withoutPasswords, type PageRequest } from '../access/pageGuard.js';
+import { enrollmentBranchWhere, partnerBranchWhere, withoutPasswords, type PageRequest } from '../access/pageGuard.js';
 import { invoiceBranchWhere } from '../access/invoiceRules.js';
 import { studentBranchWhere } from '../access/studentRules.js';
 
@@ -683,7 +686,7 @@ export const getTarget = asyncHandler(async (req: AuthRequest, res: Response) =>
 export const createTarget = asyncHandler(async (req: PageRequest, res: Response) => {
   const target = await prisma.target.create({
     // A user given this page creates targets for their own branch
-    data: { ...req.body, ...(req.ownBranchOnly && { branchId: req.user.branchId }), organizationId: req.user.organizationId }
+    data: { ...req.body, ...(req.ownBranchOnly && req.user.branchId && { branchId: req.user.branchId }), organizationId: req.user.organizationId }
   });
   await handleTargetRollup(target.id, req.user.organizationId);
   await syncParentTargets(req.user.organizationId);
@@ -701,7 +704,7 @@ export const updateTarget = asyncHandler(async (req: AuthRequest, res: Response)
   if (targetAmount !== undefined) updateData.targetAmount = Number(targetAmount);
   if (period !== undefined) updateData.period = period;
   if (employeeId !== undefined) updateData.employeeId = employeeId;
-  if (branchId !== undefined && !(req as PageRequest).ownBranchOnly) updateData.branchId = branchId || null;
+  if (branchId !== undefined && !((req as PageRequest).ownBranchOnly && req.user.branchId)) updateData.branchId = branchId || null;
   const target = await prisma.target.update({ where: { id: req.params.id }, data: updateData });
   await handleTargetRollup(target.id, req.user.organizationId);
   await syncParentTargets(req.user.organizationId);
@@ -1006,7 +1009,7 @@ export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
 });
 
 // Reports
-export const getIncomeExpenditureReport = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getIncomeExpenditureReport = asyncHandler(async (req: PageRequest, res: Response) => {
   const { from, to } = req.query;
   const organizationId = req.user.organizationId;
   
@@ -1014,12 +1017,18 @@ export const getIncomeExpenditureReport = asyncHandler(async (req: AuthRequest, 
   const toDate = to ? new Date(to as string) : new Date();
   toDate.setHours(23, 59, 59, 999);
 
+  // Someone given the report sees their own branch, or every branch if they have none
+  const branch = req.ownBranchOnly ? req.user.branchId || null : null;
+  const invoiceScoped = branch ? invoiceBranchWhere(req.user, true) : null;
+  const staffScoped = branch ? { user: { branchId: branch } } : {};
+
   // 1. Get Invoices (billed amount)
   const invoices = await prisma.invoice.findMany({
     where: {
       organizationId,
       createdAt: { gte: fromDate, lte: toDate },
-      status: { not: 'cancelled' }
+      status: { not: 'cancelled' },
+      ...(invoiceScoped && { AND: [invoiceScoped] })
     }
   });
 
@@ -1027,14 +1036,15 @@ export const getIncomeExpenditureReport = asyncHandler(async (req: AuthRequest, 
   const payments = await prisma.paymentEntry.findMany({
     where: {
       organizationId,
-      receivedAt: { gte: fromDate, lte: toDate }
+      receivedAt: { gte: fromDate, lte: toDate },
+      ...(invoiceScoped && { invoice: invoiceScoped })
     }
   });
 
   // 3. Get Enrollment Payments
   const enrollments = await prisma.enrollmentPayment.findMany({
     where: {
-      enrollment: { organizationId },
+      enrollment: { organizationId, ...enrollmentBranchWhere(branch) },
       debitedAt: { gte: fromDate, lte: toDate }
     },
     include: { enrollment: true }
@@ -1045,6 +1055,7 @@ export const getIncomeExpenditureReport = asyncHandler(async (req: AuthRequest, 
     where: {
       organizationId,
       status: { in: ['approved', 'reimbursed'] },
+      ...staffScoped,
       createdAt: { gte: fromDate, lte: toDate }
     }
   });
@@ -1054,6 +1065,7 @@ export const getIncomeExpenditureReport = asyncHandler(async (req: AuthRequest, 
     where: {
       organizationId,
       status: { in: ['paid', 'transferred_to_finance'] },
+      ...staffScoped,
       updatedAt: { gte: fromDate, lte: toDate }
     }
   });
@@ -1321,7 +1333,7 @@ export const recordUniversityPayment = asyncHandler(async (req: PageRequest, res
 });
 
 // Collection Report
-export const getCollectionReport = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getCollectionReport = asyncHandler(async (req: PageRequest, res: Response) => {
   const { organizationId } = req.user;
   const { startDate, endDate, receivedBy } = req.query;
 
@@ -1338,6 +1350,11 @@ export const getCollectionReport = asyncHandler(async (req: AuthRequest, res: Re
         { studentId: null, centerId: null }
       ]
     };
+  }
+
+  if (req.ownBranchOnly) {
+    const branchInvoices = invoiceBranchWhere(req.user, true);
+    if (branchInvoices) where.invoice = branchInvoices;
   }
 
   if (startDate && endDate) {

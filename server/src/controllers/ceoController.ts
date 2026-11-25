@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { partnerBranchWhere, type PageRequest } from '../access/pageGuard.js';
 
 export const getPerformanceMetrics = asyncHandler(async (req: AuthRequest, res: Response) => {
   const [total, completed] = await Promise.all([
@@ -216,18 +217,21 @@ export const getPendingInvoicesList = asyncHandler(async (req: AuthRequest, res:
   });
 });
 
-export const getAnalytics = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getAnalytics = asyncHandler(async (req: PageRequest, res: Response) => {
   const orgId = req.user.organizationId;
+  // Someone given this page sees their own branch, or every branch if they have none
+  const branch = req.ownBranchOnly ? req.user.branchId || null : null;
+  const inBranch = branch ? { branchId: branch } : {};
   const [totalStudents, totalCenters, activePrograms, tasks, departments, memberCounts] = await Promise.all([
-    prisma.student.count({ where: { organizationId: orgId } }),
-    prisma.studyCenter.count({ where: { organizationId: orgId } }),
+    prisma.student.count({ where: { organizationId: orgId, ...inBranch } }),
+    prisma.studyCenter.count({ where: { organizationId: orgId, ...partnerBranchWhere(branch) } }),
     prisma.program.count({ where: { organizationId: orgId, status: 'active' } }),
     prisma.task.findMany({
-      where: { organizationId: orgId },
+      where: { organizationId: orgId, ...(branch && { assignee: { branchId: branch } }) },
       select: { status: true, assignedTo: true, assignee: { select: { id: true, name: true, email: true, role: true, departmentId: true, status: true } } }
     }),
     prisma.department.findMany({ where: { organizationId: orgId, status: 'active' }, select: { id: true, name: true, type: true } }),
-    prisma.user.groupBy({ by: ['departmentId'], where: { organizationId: orgId, status: { not: 'resigned' }, departmentId: { not: null } }, _count: { _all: true } }),
+    prisma.user.groupBy({ by: ['departmentId'], where: { organizationId: orgId, status: { not: 'resigned' }, departmentId: { not: null }, ...inBranch }, _count: { _all: true } }),
   ]);
 
   // completion rate carries most of the weight; overdue work pulls the score down
@@ -296,7 +300,7 @@ export const assignTask = asyncHandler(async (req: AuthRequest, res: Response) =
 //  - tasks due in the month and how many were completed,
 //  - attendance for people who must punch in.
 // KPIs and KRAs HR typed into the employee profile are added on top, marked as manual.
-export const getKPIKRAReport = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getKPIKRAReport = asyncHandler(async (req: PageRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   const now = new Date();
   const m = /^(\d{4})-(\d{2})$/.exec(String(req.query.month || ''));
@@ -323,7 +327,10 @@ export const getKPIKRAReport = asyncHandler(async (req: AuthRequest, res: Respon
   };
 
   const users = await prisma.user.findMany({
-    where: { organizationId, status: { not: 'resigned' }, role: { notIn: ['student'] } },
+    where: {
+      organizationId, status: { not: 'resigned' }, role: { notIn: ['student'] },
+      ...(req.ownBranchOnly && req.user.branchId && { branchId: req.user.branchId }),
+    },
     select: {
       id: true, name: true, email: true, designation: true, role: true, status: true, requiresAttendance: true,
       department: { select: { name: true } }, branch: { select: { name: true } },

@@ -3,9 +3,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { can, resolveAccess, type Override } from '../src/access/resolve.js';
 import { FEATURES } from '../src/access/catalog.js';
-import { decidePageAction } from '../src/access/pageRules.js';
+import { isBlockedRequest, rulesFor } from '../src/access/blockCheck.js';
+import { decideAnyPage, decidePageAction } from '../src/access/pageRules.js';
 import { decideStudentAction, hidesStudentFees, isGrantedStudentUser, restrictStudent } from '../src/access/studentRules.js';
 import { changeError, needsRow } from '../src/access/changes.js';
+import { payrollTeamAccess } from '../src/access/payrollGuard.js';
+import { leaveVisibilityWhere } from '../src/utils/leaveScope.js';
+import { studentBranchWhere } from '../src/access/studentRules.js';
+import { partnerBranchWhere, enrollmentBranchWhere } from '../src/access/pageGuard.js';
 import { hasPaymentsScreen, invoiceBranchWhere, isGrantedReader } from '../src/access/invoiceRules.js';
 
 const hr = { id: 'u', role: 'employee', status: 'active', organizationId: 'o', branchId: 'b', departmentId: 'd', departmentType: 'hr' };
@@ -77,8 +82,8 @@ test('overrides stop applying after a role or department change', () => {
   assert.deepEqual(allowed({ ...hr, departmentId: null }, [row('view')]), []);
 });
 
-test('allowing needs a branch, blocking does not', () => {
-  assert.deepEqual(allowed({ ...hr, branchId: null }, [row('view')]), []);
+test('someone without a branch can be allowed and blocked', () => {
+  assert.deepEqual(allowed({ ...hr, branchId: null }, [row('view')]), ['view']);
   assert.deepEqual(allowed({ ...finance, branchId: null }, [financeRow('view')]), []);
 });
 
@@ -122,6 +127,14 @@ test('a granted reader is told apart from a default one', () => {
   assert.equal(isGrantedReader(resolveAccess(finance, [])), false);
 });
 
+test('branch limits cover the whole organization when there is no branch', () => {
+  for (const where of [studentBranchWhere, partnerBranchWhere, enrollmentBranchWhere]) {
+    assert.deepEqual(where(null), {});
+    assert.deepEqual(where(undefined), {});
+    assert.ok(JSON.stringify(where('b')).includes('"branchId":"b"'));
+  }
+});
+
 test('branch limits on invoices', () => {
   assert.equal(invoiceBranchWhere({ role: 'org_admin', branchId: 'b' }, false), null);
   assert.equal(invoiceBranchWhere({ role: 'finance_admin', branchId: null }, false), null);
@@ -135,10 +148,11 @@ test('what an Org Admin may save', () => {
   const change = (effect = 'allow', action = 'view') => [{ featureKey: 'invoices', action, effect }];
   assert.equal(changeError('admin', hr, change()), null);
   assert.ok(changeError('u', hr, change()), 'not your own');
-  for (const role of ['superadmin', 'org_admin', 'ceo', 'student', 'faculty', 'center_admin']) {
+  assert.equal(changeError('admin', { ...hr, role: 'ceo' }, change()), null, 'the CEO can be set');
+  for (const role of ['superadmin', 'org_admin', 'student', 'faculty', 'center_admin']) {
     assert.ok(changeError('admin', { ...hr, role }, change()), role);
   }
-  assert.ok(changeError('admin', { ...hr, branchId: null }, change()), 'allow needs a branch');
+  assert.equal(changeError('admin', { ...hr, branchId: null }, change()), null, 'no branch means every branch');
   assert.equal(changeError('admin', { ...hr, branchId: null }, change('deny')), null);
   assert.ok(changeError('admin', hr, []));
   assert.ok(changeError('admin', hr, change('maybe')));
@@ -271,4 +285,78 @@ test('remaining finance pages default to finance roles', () => {
   assert.deepEqual(of({ role: 'finance_sub_admin' }, 'sales_targets'), ['view', 'create', 'edit', 'delete']);
   assert.deepEqual(of({ role: 'collections_admin' }, 'collections'), ['view', 'edit', 'send']);
   for (const key of ['pending_payments', 'provisional_verifications', 'wallet_topups', 'payment_gateway', 'university_fee', 'collections']) assert.deepEqual(allowed(hr, [], key), [], key);
+});
+
+test('block-only pages can be blocked but not given', () => {
+  const change = (effect: string) => [{ featureKey: 'users', action: 'create', effect }];
+  assert.ok(changeError('admin', hr, change('allow')));
+  assert.equal(changeError('admin', hr, change('deny')), null);
+  assert.equal(needsRow(hr, change('deny')[0] as any), true);
+  const forced = resolveAccess(hr, [row('create', 'allow', { featureKey: 'users' })]);
+  assert.equal(forced.users.create!.override, undefined, 'a stored allow is ignored');
+});
+
+test('an HR Admin can be given the finance side of payroll', () => {
+  const hrAdmin = { ...hr, role: 'hr_admin' };
+  for (const [featureKey, action] of [['salary_approval', 'approve'], ['payroll_batches', 'approve'], ['payroll_batches', 'edit'], ['payroll_history', 'view']]) {
+    assert.equal(changeError('admin', hrAdmin, [{ featureKey, action, effect: 'allow' }]), null, `${featureKey}.${action}`);
+    assert.equal(needsRow(hrAdmin, { featureKey, action, effect: 'allow' } as any), true, `${featureKey}.${action}`);
+  }
+  const access = resolveAccess(hrAdmin, [row('approve', 'allow', { featureKey: 'salary_approval', roleAtGrant: 'hr_admin' })]);
+  assert.deepEqual(decidePageAction(access, 'salary_approval', 'approve', 'hr_admin', ['finance_admin']), { allowed: true, ownBranchOnly: true });
+  // Without a setting the old role list still decides
+  assert.equal(decidePageAction(resolveAccess(hrAdmin, []), 'salary_approval', 'approve', 'hr_admin', ['finance_admin']).allowed, false);
+  assert.equal(decidePageAction(resolveAccess(hrAdmin, []), 'payroll', 'edit', 'hr_admin', ['hr_admin']).allowed, true);
+});
+
+test('seeing other people\'s payroll has to be given', () => {
+  assert.equal(payrollTeamAccess(resolveAccess(hr, [])), undefined);
+  assert.equal(payrollTeamAccess(resolveAccess(hr, [row('view', 'allow', { featureKey: 'payroll' })])), 'given');
+  const both = ['payroll', 'payroll_history'].map((featureKey) => row('view', 'deny', { featureKey }));
+  assert.equal(payrollTeamAccess(resolveAccess(hr, both)), 'blocked');
+});
+
+test('a given report is limited to the settings, a role keeps its own', () => {
+  const both = ['income_expense', 'profit_loss'];
+  const readers = ['finance_admin'];
+  const given = resolveAccess(hr, [row('view', 'allow', { featureKey: 'income_expense' })]);
+  assert.deepEqual(decideAnyPage(given, both, 'view', 'employee', readers), { allowed: true, ownBranchOnly: true });
+  assert.equal(decideAnyPage(resolveAccess(hr, []), both, 'view', 'employee', readers).allowed, false);
+  const admin = { ...finance, role: 'finance_admin' };
+  const oneBlocked = resolveAccess(admin, [row('view', 'deny', { featureKey: 'income_expense', userId: admin.id, roleAtGrant: admin.role, departmentIdAtGrant: admin.departmentId })]);
+  assert.deepEqual(decideAnyPage(oneBlocked, both, 'view', 'finance_admin', readers), { allowed: true, ownBranchOnly: false });
+  // Sales reports were open to any signed-in user, who saw only their own team; that stays
+  const sales = ['sales_team_report', 'conversion_report'];
+  assert.deepEqual(decideAnyPage(resolveAccess(hr, []), sales, 'view', 'employee', null), { allowed: true, ownBranchOnly: false });
+  assert.equal(decideAnyPage(resolveAccess(hr, [row('view', 'allow', { featureKey: 'conversion_report' })]), sales, 'view', 'employee', null).ownBranchOnly, true);
+});
+
+test('leave requests of a given approver stay in their branch', () => {
+  const given = { user: { ...hr, id: 'u', role: 'employee', branchId: 'b' }, ownBranchOnly: true };
+  assert.deepEqual(leaveVisibilityWhere(given as any), { organizationId: 'o', user: { role: { not: 'center_admin' }, branchId: 'b' } });
+  assert.deepEqual(leaveVisibilityWhere({ ...given, user: { ...given.user, branchId: null } } as any), { organizationId: 'o', user: { role: { not: 'center_admin' } } });
+  assert.ok(JSON.stringify(leaveVisibilityWhere({ user: given.user } as any)).includes('"employeeId":"u"'));
+});
+
+test('requests are matched to the page they belong to', () => {
+  assert.deepEqual(rulesFor('POST', '/api/v1/hr/vacancies'), [{ pageKey: 'vacancies', action: 'create' }]);
+  assert.deepEqual(rulesFor('PUT', '/API/V1/HR/Vacancies/abc/Close/?x=1'), [{ pageKey: 'vacancies', action: 'edit' }]);
+  assert.deepEqual(rulesFor('HEAD', '/api/biometric-devices'), [{ pageKey: 'biometric_devices', action: 'view' }]);
+  assert.deepEqual(rulesFor('GET', '/api/v1/payroll/batches').map((r) => r.pageKey), ['payroll_batches']);
+  assert.deepEqual(rulesFor('POST', '/api/v1/documents', { type: 'dispatched' }).map((r) => r.pageKey), ['document_dispatch']);
+  // Personal requests are never part of a blockable page
+  for (const [method, url] of [['POST', '/api/v1/hr/leaves'], ['POST', '/api/v1/attendance/punch-in'], ['PUT', '/api/v1/tasks/a/complete'],
+    ['GET', '/api/v1/payroll'], ['GET', '/api/v1/hr/holidays'], ['GET', '/api/v1/users'], ['POST', '/api/v1/hr/polls/a/vote'], ['GET', '/api/v1/auth/me']]) {
+    assert.deepEqual(rulesFor(method, url), [], `${method} ${url}`);
+  }
+});
+
+test('only a blocked user is refused', () => {
+  const rules = rulesFor('DELETE', '/api/v1/hr/vacancies/abc');
+  assert.equal(isBlockedRequest(resolveAccess(hr, []), rules), false);
+  assert.equal(isBlockedRequest(resolveAccess(hr, [row('delete', 'deny', { featureKey: 'vacancies' })]), rules), true);
+  assert.equal(isBlockedRequest(resolveAccess(hr, [row('view', 'deny', { featureKey: 'vacancies' })]), rules), true);
+  assert.equal(isBlockedRequest(resolveAccess(hr, [row('create', 'deny', { featureKey: 'vacancies' })]), rules), false);
+  const shared = rulesFor('GET', '/api/v1/finance/reports/income-expenditure');
+  assert.equal(isBlockedRequest(resolveAccess(hr, [row('view', 'deny', { featureKey: 'profit_loss' })]), shared), false);
 });

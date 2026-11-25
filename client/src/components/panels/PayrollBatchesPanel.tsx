@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { mayOn } from '@/lib/access';
 import { useAuth } from '@/hooks/useAuth';
 
 import { CS } from '@/lib/currency';
@@ -34,6 +35,8 @@ interface PayrollBatch {
 export function PayrollBatchesPanel() {
   const { user } = useAuth();
   const isFinance = ['finance_admin', 'finance_sub_admin'].includes(user?.role || '');
+  const mayApprove = mayOn(user, 'payroll_batches', 'approve', isFinance);
+  const mayPay = mayOn(user, 'payroll_batches', 'edit', isFinance);
   const [batches, setBatches] = useState<PayrollBatch[]>([]);
   const [loading, setLoading] = useState(false);
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
@@ -203,7 +206,7 @@ export function PayrollBatchesPanel() {
                           )}
                         </div>
                         <div className="flex gap-2 flex-wrap">
-                          {isFinance && batch.status === 'pending_finance_approval' && (
+                          {mayApprove && batch.status === 'pending_finance_approval' && (
                             <>
                               <Button
                                 size="sm"
@@ -226,7 +229,7 @@ export function PayrollBatchesPanel() {
                               </Button>
                             </>
                           )}
-                          {isFinance && batch.status === 'approved_by_finance' && (
+                          {mayPay && batch.status === 'approved_by_finance' && (
                             <Button
                               size="sm"
                               variant="outline"
@@ -236,7 +239,7 @@ export function PayrollBatchesPanel() {
                               Start Payment
                             </Button>
                           )}
-                          {isFinance && batch.status === 'payment_in_progress' && (
+                          {mayPay && batch.status === 'payment_in_progress' && (
                             <Button
                               size="sm"
                               className="h-9 rounded-full px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"

@@ -26,8 +26,9 @@ export const studentContext = async (req: StudentRequest, res: Response, next: N
     req.access = access;
     // Given the Students page, or given Student Portal Management without having a student list by role
     const portalOnly = isGrantedPage(access, 'student_portal_management') && !access.students.view?.byDefault;
-    if (isGrantedStudentUser(access) || portalOnly) {
-      // The resolver only allows access to users who have a branch
+    const reportOnly = isGrantedPage(access, 'student_report') && !access.students.view?.byDefault;
+    if (isGrantedStudentUser(access) || portalOnly || reportOnly) {
+      // Without a branch the limit is the whole organization
       req.studentLimits = {
         branchId: req.user.branchId,
         hideFees: !access.invoices?.view?.allowed,
@@ -74,7 +75,7 @@ export const studentAction = (action: Action, legacyRoles: string[]) =>
           return;
         }
         // Whatever they create or change stays in their branch
-        if (req.body && typeof req.body === 'object') {
+        if (branchId && req.body && typeof req.body === 'object') {
           if (action === 'create' || action === 'import' || req.body.branchId !== undefined) req.body.branchId = branchId;
         }
       }

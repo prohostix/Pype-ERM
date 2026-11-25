@@ -15,13 +15,15 @@ First case: an HR employee gets to **view** **Invoices** and **Bill & Receipts**
 
 ## 1. Rules already decided
 
+Where a later section says "own branch", a user without a branch gets all branches of their organization.
+
 | Rule | Behaviour |
 |---|---|
 | Who assigns | Org Admin only |
 | Direction | Add and remove |
 | Granularity | Each action on a page is set separately |
 | Delete and approve | May be allowed to non-finance users, with a warning before saving |
-| Data a granted user sees | Own branch only |
+| Data a granted user sees | Own branch; every branch of their organization if they have none (decided 25 Nov 2026) |
 | Role change | Overrides stop applying |
 | Expiry | Not in the first release |
 
@@ -135,7 +137,7 @@ Schema change: the local `.env` is production and `deploy.sh` runs `prisma db pu
 | Target is superadmin, Org Admin or CEO | Block |
 | Target is student, faculty or partner login | Block |
 | Target in another organization | 404 |
-| Target has no branch | Refuse: "own branch" cannot be applied. Assign a branch first |
+| Target has no branch | Allowed after a warning: the data covers every branch in the organization |
 | Organization plan lacks the feature | Cannot be granted |
 | Grant equals the role default | Store nothing |
 | Two admins edit the same user | Reject the stale save |
@@ -149,7 +151,7 @@ Schema change: the local `.env` is production and `deploy.sh` runs `prisma db pu
 | Department changes (HR to Sales) | The role stays Employee, so also revoke on department change |
 | Added to or removed from a sub-department | Default screens change; overrides stay on top |
 | Branch changes | Data follows the new branch |
-| Branch removed | Grant stops returning data |
+| Branch removed | Grant widens to every branch in the organization |
 | Becomes branch manager | Branch menu applies; overrides add to it |
 | Inactive or resigned | No access; not restored automatically |
 | On leave | Access kept |
@@ -225,7 +227,7 @@ Schema change: the local `.env` is production and `deploy.sh` runs `prisma db pu
 | Download allowed | Receipt opens |
 | Back to Default | Next request 403 |
 | Department changed | Override ignored |
-| No branch | Grant refused |
+| No branch | Grant covers every branch in the organization |
 | Finance admin, no override | Unchanged |
 | Finance admin with View blocked | Menu gone; API 403; student profile still works |
 | Finance admin with Delete blocked | Other actions work; delete 403 |
@@ -304,3 +306,50 @@ Pending Payments, Provisional Verifications, Finance Enrollments, Wallet Top-up,
 - Users given a page see their branch only. A partner belongs to a branch when its referrer or a student does.
 - Only an Org Admin setting hides a menu or button; a role default of "no" alone does not (collections overseers keep their page).
 - Fixed: partner finance verification, wallet top-up decisions, finance enrollment decisions, receipt verification, payment links, installment updates and university payments now check the organization; a rejected wallet top-up must be pending.
+
+### Remaining pages: block only (66 pages)
+
+Listed in `server/src/access/blockPages.ts` with the requests each one refuses. `protect` checks them, so no route changed and users without a setting are unaffected.
+
+- Allow is not offered: giving these pages to another role needs per-page data limits.
+- Requests shared with personal screens (own leave, punch in, own tasks, own pay slips, shared lists) are never refused. For pages built only on those, blocking View hides the menu and screen only.
+- Buttons on these pages are not hidden; a blocked action is refused with a message.
+
+## Payroll group (connected 25 Nov 2026)
+
+Staff roles and the CEO accept Allow. Superadmin, Org Admin, students, faculty and partner logins stay locked. Remaining block-only groups are being connected one at a time.
+
+| Rule | Behaviour |
+|---|---|
+| Data for users given a page | Own branch; every branch of the organization if they have none |
+| Own pay | Someone acting on given access cannot create, edit, delete or approve their own payroll or salary |
+| Edit without Approve | Cannot change a payroll record's status; new records are drafts |
+| Salary change made with given access | Goes back to pending approval |
+| Salary cycle | Organization-wide, so a given user with a branch cannot change it |
+| General Manager's salary | Not visible to a given user who has a branch |
+| Mark a payroll as paid | Follows Payroll Batches → Edit |
+| Confirm, process, transfer | Follow Payroll → Approve |
+| My Pay Slips | Stays personal for users given Payroll |
+
+
+## Reports group (connected 25 Nov 2026)
+
+| Rule | Behaviour |
+|---|---|
+| Data for users given a report | Own branch; every branch of the organization if they have none |
+| Sales reports | A given user sees the whole branch, not only a reporting line |
+| Student Report | Opens the student list with the same limits as the Students page: no passwords, fees only with invoice access, and student details can be read |
+| Income & Expense, Profit & Loss | Share one request; either page allows it |
+| University Report | Program and session counts are organization-wide; student counts follow the branch |
+
+## People (HR), day-to-day pages (connected 25 Nov 2026)
+
+Employees, Branch Hierarchy, Team Attendance, Attendance Settings, Biometric Devices, Leave Approvals, Leave Allocation, Holidays, Vacancies, Complaints, Assets.
+
+| Rule | Behaviour |
+|---|---|
+| Data for users given a page | Own branch; every branch of the organization if they have none |
+| Own records | Someone acting on given access cannot change or approve their own attendance, leave, leave allocation or complaint |
+| Leave approval given | Gives the final decision; the General Manager's leave stays with the CEO and Org Admin |
+| Organization-wide settings | Holidays, Vacancies and Attendance Settings have no branch, so a given user changes them for everyone |
+| General Manager | Not visible to a given user who has a branch |

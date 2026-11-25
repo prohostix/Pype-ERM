@@ -11,12 +11,16 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 
 export function HolidaysPanel() {
   const { user } = useAuth();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const canManage = ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'].includes(user?.role || '');
+  const byRole = ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'].includes(user?.role || '');
+  const mayCreate = mayOn(user, 'holidays', 'create', byRole);
+  const mayEdit = mayOn(user, 'holidays', 'edit', byRole);
+  const mayDelete = mayOn(user, 'holidays', 'delete', byRole);
   const [holidays, setHolidays] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -97,7 +101,7 @@ export function HolidaysPanel() {
           <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Holiday Calendar</h2>
           <p className="text-muted-foreground text-sm mt-1.5">Company holidays and observances</p>
         </div>
-        {canManage && (
+        {mayCreate && (
           <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
             <DialogTrigger asChild>
               <Button className="rounded-full h-11 px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
@@ -201,14 +205,18 @@ export function HolidaysPanel() {
                       <Badge className={`border-none rounded-full px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${typeColors[h.type] || 'bg-slate-200/70 text-slate-600'}`}>
                         {h.type}
                       </Badge>
-                      {canManage && (
+                      {(mayEdit || mayDelete) && (
                         <div className="flex items-center gap-1">
-                          <Button variant="outline" size="sm" className="h-9 w-9 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6] p-0" onClick={() => handleEdit(h)}>
-                            <Edit className="w-3.5 h-3.5 text-muted-foreground" />
-                          </Button>
-                          <Button variant="outline" size="sm" className="h-9 w-9 rounded-full border-red-200 bg-white hover:bg-red-50 text-red-600 p-0" onClick={() => handleDelete(hid)}>
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
+                          {mayEdit && (
+                            <Button variant="outline" size="sm" className="h-9 w-9 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6] p-0" onClick={() => handleEdit(h)}>
+                              <Edit className="w-3.5 h-3.5 text-muted-foreground" />
+                            </Button>
+                          )}
+                          {mayDelete && (
+                            <Button variant="outline" size="sm" className="h-9 w-9 rounded-full border-red-200 bg-white hover:bg-red-50 text-red-600 p-0" onClick={() => handleDelete(hid)}>
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </Button>
+                          )}
                         </div>
                       )}
                     </div>

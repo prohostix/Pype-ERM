@@ -4,9 +4,10 @@ import { sendPushNotification } from '../services/notification.service.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { leaveVisibilityWhere, hrAdminsFor, executivesFor, isGeneralManagerLeaveLocked } from '../utils/leaveScope.js';
+import { refuseOwnRecord, type PageRequest } from '../access/pageGuard.js';
 
 // --- Leave Requests ---
-export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getLeaveRequests = asyncHandler(async (req: PageRequest, res: Response) => {
   const { role } = req.user;
 
   // Visibility rules live in utils/leaveScope.ts (HR only receives their own branch's requests).
@@ -14,7 +15,7 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
 
   const isHR = ['hr_admin', 'hr_sub_admin'].includes(role);
   const isGlobalAdmin = ['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(role);
-  const isBranchManager = role === 'branch_manager';
+  const isBranchManager = role === 'branch_manager' || Boolean(req.ownBranchOnly);
 
   if (req.query.status) {
     if (req.query.status === 'pending' && (isHR || isGlobalAdmin || isBranchManager)) {
@@ -345,18 +346,19 @@ export const deleteLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
   res.json({ success: true, data: {} });
 });
 
-export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const deptApproveLeave = asyncHandler(async (req: PageRequest, res: Response) => {
   if (await isGeneralManagerLeaveLocked(req, req.params.id)) {
     res.status(403).json({ success: false, message: "Only the CEO can decide the General Manager's leave requests." });
     return;
   }
   const { action, remarks } = req.body;
   // Only requests the caller can see (their own organization, branch or department).
-  const visible = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, ...leaveVisibilityWhere(req) }, select: { id: true } });
+  const visible = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, ...leaveVisibilityWhere(req) }, select: { id: true, employeeId: true } });
   if (!visible) {
     res.status(404).json({ success: false, message: 'Leave request not found' });
     return;
   }
+  if (refuseOwnRecord(req, res, visible.employeeId, 'leave')) return;
   const leave = await prisma.leaveRequest.update({
     where: { id: req.params.id },
     data: { 
@@ -395,7 +397,7 @@ export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Respo
   res.json({ success: true, data: leave });
 });
 
-export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const hrApproveLeave = asyncHandler(async (req: PageRequest, res: Response) => {
   if (await isGeneralManagerLeaveLocked(req, req.params.id)) {
     res.status(403).json({ success: false, message: "Only the CEO can decide the General Manager's leave requests." });
     return;
@@ -403,6 +405,7 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
   const { action, remarks } = req.body;
   const currentLeave = await prisma.leaveRequest.findUnique({ where: { id: req.params.id } });
   if (!currentLeave) return res.status(404).json({ success: false, message: 'Not found' });
+  if (refuseOwnRecord(req, res, currentLeave.employeeId, 'leave')) return;
 
   // A branch manager can only decide leaves of employees in their own branch.
   if (req.user.role === 'branch_manager') {
@@ -686,17 +689,23 @@ export const getVacancyStats = asyncHandler(async (req: AuthRequest, res: Respon
 });
 
 // --- Complaints ---
-export const getComplaints = asyncHandler(async (req: AuthRequest, res: Response) => {
+/** Someone given this page works with complaints from their own branch */
+const complaintScope = (req: PageRequest) => ({
+  organizationId: req.user.organizationId,
+  ...(req.ownBranchOnly && req.user.branchId && { user: { branchId: req.user.branchId } }),
+});
+
+export const getComplaints = asyncHandler(async (req: PageRequest, res: Response) => {
   const complaints = await prisma.complaint.findMany({
-    where: { organizationId: req.user.organizationId },
+    where: complaintScope(req),
     include: { user: { select: { id: true, name: true } } },
     orderBy: { submittedAt: 'desc' },
   });
   res.json({ success: true, data: complaints });
 });
-export const getComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getComplaint = asyncHandler(async (req: PageRequest, res: Response) => {
   const complaint = await prisma.complaint.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId }
+    where: { id: req.params.id, ...complaintScope(req) }
   });
   if (!complaint) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
   res.json({ success: true, data: complaint });
@@ -737,9 +746,10 @@ export const createComplaint = asyncHandler(async (req: AuthRequest, res: Respon
   });
   res.status(201).json({ success: true, data: complaint });
 });
-export const updateComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+export const updateComplaint = asyncHandler(async (req: PageRequest, res: Response) => {
+  const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, ...complaintScope(req) } });
   if (!exists) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
+  if (refuseOwnRecord(req, res, exists.employeeId, 'complaint')) return;
   const { subject, description, category, priority, status } = req.body;
   const updateData: any = {};
   if (subject !== undefined) {
@@ -769,15 +779,17 @@ export const updateComplaint = asyncHandler(async (req: AuthRequest, res: Respon
   const complaint = await prisma.complaint.update({ where: { id: req.params.id }, data: updateData, include: { user: { select: { id: true, name: true } } } });
   res.json({ success: true, data: complaint });
 });
-export const deleteComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+export const deleteComplaint = asyncHandler(async (req: PageRequest, res: Response) => {
+  const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, ...complaintScope(req) } });
   if (!exists) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
+  if (refuseOwnRecord(req, res, exists.employeeId, 'complaint')) return;
   await prisma.complaint.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
-export const resolveComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+export const resolveComplaint = asyncHandler(async (req: PageRequest, res: Response) => {
+  const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, ...complaintScope(req) } });
   if (!exists) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
+  if (refuseOwnRecord(req, res, exists.employeeId, 'complaint')) return;
   const complaint = await prisma.complaint.update({ where: { id: req.params.id }, data: { status: 'resolved', resolvedAt: exists.resolvedAt ?? new Date() } });
   res.json({ success: true, data: complaint });
 });

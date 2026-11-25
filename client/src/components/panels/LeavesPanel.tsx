@@ -26,6 +26,7 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
+import { isGiven, mayOn } from '@/lib/access';
 
 interface LeaveRequest {
   id: string;
@@ -91,7 +92,10 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
   const isBranchManager = Boolean((user as any)?.isBranchManager);
   const isDeptManager = DEPT_MANAGER_ROLES.includes(role) || isBranchManager;
   const isHR = role === 'hr_admin' || role === 'hr_sub_admin';
-  const isEmployee = !isDeptManager && !isHR && role !== 'superadmin' && role !== 'org_admin' && role !== 'ceo' && role !== 'general_manager' && role !== 'branch_manager';
+  // Added by an Org Admin: sees the team's requests and, if allowed, gives the final decision
+  const given = !isMyPortal && isGiven(user, 'leave_requests');
+  const mayApprove = mayOn(user, 'leave_requests', 'approve', true);
+  const isEmployee = !given && !isDeptManager && !isHR && role !== 'superadmin' && role !== 'org_admin' && role !== 'ceo' && role !== 'general_manager' && role !== 'branch_manager';
 
   const currentMonthStr = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
   const [selectedMonth, setSelectedMonth] = useState(currentMonthStr);
@@ -393,9 +397,9 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                 const isGmLeave = (leave as any).user?.role === 'general_manager';
                 const canDecideGm = ['ceo', 'org_admin', 'superadmin'].includes(role);
                 const blockedGm = isGmLeave && !canDecideGm;
-                const canDeptAct = !isOwner && !blockedGm && ((isDeptManager && leave.status === 'pending') || (isHR && leave.status === 'pending'));
-                const canHRAct = !isOwner && !blockedGm && ((isHR && leave.status === 'dept_approved') || (isExecutive && (leave.status === 'pending' || leave.status === 'dept_approved')));
-                const canWithdrawAct = !isOwner && !blockedGm && leave.status === 'withdraw_pending' && (isHR || isExecutive);
+                const canDeptAct = mayApprove && !isOwner && !blockedGm && ((isDeptManager && leave.status === 'pending') || (isHR && leave.status === 'pending'));
+                const canHRAct = mayApprove && !isOwner && !blockedGm && ((given && (leave.status === 'pending' || leave.status === 'dept_approved')) || (isHR && leave.status === 'dept_approved') || (isExecutive && (leave.status === 'pending' || leave.status === 'dept_approved')));
+                const canWithdrawAct = mayApprove && !isOwner && !blockedGm && leave.status === 'withdraw_pending' && (given || isHR || isExecutive);
 
                 return (
                   <Card key={leave.id} className="rounded-3xl bg-white border border-slate-100 hover:border-[#8ae47e] shadow-none py-0 transition-colors group overflow-hidden">

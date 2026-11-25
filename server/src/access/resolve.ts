@@ -27,7 +27,7 @@ export interface ActionAccess {
 export type Access = Record<string, Partial<Record<Action, ActionAccess>>>;
 
 /** Accounts whose access cannot be changed by an override. */
-const FIXED_ROLES = ['superadmin', 'org_admin', 'ceo', 'student', 'faculty', 'center_admin', 'study_abroad_admin'];
+const FIXED_ROLES = ['superadmin', 'org_admin', 'student', 'faculty', 'center_admin', 'study_abroad_admin'];
 
 export const acceptsOverrides = (user: Pick<AccessUser, 'role'>): boolean => !FIXED_ROLES.includes(user.role);
 
@@ -37,8 +37,8 @@ const applies = (override: Override, user: AccessUser, feature: Feature): boolea
   if (override.roleAtGrant !== user.role || (override.departmentIdAtGrant || null) !== (user.departmentId || null)) return false;
   if (!(feature.actions as string[]).includes(override.action)) return false;
   if (override.effect === 'deny') return true;
-  // Granted data is limited to the user's own branch, so there must be one
-  return override.effect === 'allow' && Boolean(user.branchId);
+  if (feature.blockOnly) return false;
+  return override.effect === 'allow';
 };
 
 const resolveFeature = (user: AccessUser, rows: Override[], feature: Feature): Partial<Record<Action, ActionAccess>> => {

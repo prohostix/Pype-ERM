@@ -77,12 +77,14 @@ import {
 } from '../controllers/salaryController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
+import { pageAction, givenContext } from '../access/pageGuard.js';
+
 const router = express.Router();
 
 router.use(protect);
 
 // Leave Requests
-router.route('/leaves').get(getLeaveRequests).post(createLeaveRequest);
+router.route('/leaves').get(givenContext('leave_requests'), getLeaveRequests).post(createLeaveRequest);
 router.route('/leaves/stats').get(authorize('hr_admin', 'hr_sub_admin', 'dept_admin'), getLeaveStats);
 router.get('/leaves/balance', getMyLeaveBalance);
 router.get('/leaves/my', getMyLeaves);
@@ -91,68 +93,68 @@ router.route('/leaves/:id')
   .put(updateLeaveRequest)
   .delete(deleteLeaveRequest);
 router.patch('/leaves/:id/withdraw', withdrawLeaveRequest);
-router.put('/leaves/:id/approve', authorize('hr_admin', 'hr_sub_admin', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), hrApproveLeave);
-router.patch('/leaves/:id/dept-approve', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin', 'hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), deptApproveLeave);
-router.patch('/leaves/:id/hr-approve', authorize('hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), hrApproveLeave);
+router.put('/leaves/:id/approve', pageAction('leave_requests', 'approve', ['hr_admin', 'hr_sub_admin', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager']), hrApproveLeave);
+router.patch('/leaves/:id/dept-approve', pageAction('leave_requests', 'approve', ['ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin', 'hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager']), deptApproveLeave);
+router.patch('/leaves/:id/hr-approve', pageAction('leave_requests', 'approve', ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager']), hrApproveLeave);
 
 // Attendance
 router.get('/attendance/my', getMyAttendance);
 router.get('/attendance/my-summary', getMyAttendanceSummary);
-router.get('/attendance/activity-report', authorize('hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'org_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager'), getActivityReport);
-router.route('/attendance').get(authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager'), getAttendances).post(authorize('hr_admin', 'hr_sub_admin'), markAttendance);
+router.get('/attendance/activity-report', pageAction('activity_report', 'view', ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'org_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager']), getActivityReport);
+router.route('/attendance').get(pageAction('team_attendance', 'view', ['hr_admin', 'hr_sub_admin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager']), getAttendances).post(pageAction('team_attendance', 'create', ['hr_admin', 'hr_sub_admin']), markAttendance);
 router.route('/attendance/:id')
   .get(getAttendanceById)
-  .put(authorize('hr_admin', 'hr_sub_admin'), updateAttendance)
-  .delete(authorize('hr_admin', 'hr_sub_admin'), deleteAttendance);
+  .put(pageAction('team_attendance', 'edit', ['hr_admin', 'hr_sub_admin']), updateAttendance)
+  .delete(pageAction('team_attendance', 'delete', ['hr_admin', 'hr_sub_admin']), deleteAttendance);
 
 // Vacancies
-router.route('/vacancies').get(getVacancies).post(authorize('hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), createVacancy);
-router.route('/vacancies/stats').get(authorize('hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), getVacancyStats);
+router.route('/vacancies').get(getVacancies).post(pageAction('vacancies', 'create', ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager']), createVacancy);
+router.route('/vacancies/stats').get(pageAction('vacancies', 'view', ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager']), getVacancyStats);
 router.route('/vacancies/:id')
   .get(getVacancy)
-  .put(authorize('hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), updateVacancy)
-  .delete(authorize('hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), deleteVacancy);
-router.put('/vacancies/:id/close', authorize('hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), closeVacancy);
-router.get('/vacancies/:id/validate', authorize('hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), validateVacancyForHiring);
-router.patch('/vacancies/:id/fill', authorize('hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), fillVacancyPosition);
+  .put(pageAction('vacancies', 'edit', ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager']), updateVacancy)
+  .delete(pageAction('vacancies', 'delete', ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager']), deleteVacancy);
+router.put('/vacancies/:id/close', pageAction('vacancies', 'edit', ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager']), closeVacancy);
+router.get('/vacancies/:id/validate', pageAction('vacancies', 'view', ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager']), validateVacancyForHiring);
+router.patch('/vacancies/:id/fill', pageAction('vacancies', 'edit', ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager']), fillVacancyPosition);
 
 // Complaints
-router.route('/complaints').get(getComplaints).post(createComplaint);
+router.route('/complaints').get(givenContext('complaints'), getComplaints).post(createComplaint);
 router.route('/complaints/:id')
-  .get(getComplaint)
-  .put(authorize('hr_admin', 'hr_sub_admin'), updateComplaint)
-  .delete(authorize('hr_admin', 'hr_sub_admin'), deleteComplaint);
-router.put('/complaints/:id/resolve', authorize('hr_admin', 'hr_sub_admin'), resolveComplaint);
+  .get(givenContext('complaints'), getComplaint)
+  .put(pageAction('complaints', 'edit', ['hr_admin', 'hr_sub_admin']), updateComplaint)
+  .delete(pageAction('complaints', 'delete', ['hr_admin', 'hr_sub_admin']), deleteComplaint);
+router.put('/complaints/:id/resolve', pageAction('complaints', 'edit', ['hr_admin', 'hr_sub_admin']), resolveComplaint);
 
 // Holidays
-router.route('/holidays').get(getHolidays).post(authorize('hr_admin', 'hr_sub_admin'), createHoliday);
+router.route('/holidays').get(getHolidays).post(pageAction('holidays', 'create', ['hr_admin', 'hr_sub_admin']), createHoliday);
 router.route('/holidays/:id')
   .get(getHoliday)
-  .put(authorize('hr_admin', 'hr_sub_admin'), updateHoliday)
-  .delete(authorize('hr_admin', 'hr_sub_admin'), deleteHoliday);
+  .put(pageAction('holidays', 'edit', ['hr_admin', 'hr_sub_admin']), updateHoliday)
+  .delete(pageAction('holidays', 'delete', ['hr_admin', 'hr_sub_admin']), deleteHoliday);
 
 // Salary Configuration (per employee)
-router.get('/salary-configs', authorize('hr_admin', 'hr_sub_admin'), getSalaryConfigs);
+router.get('/salary-configs', pageAction('salary_config', 'view', ['hr_admin', 'hr_sub_admin']), getSalaryConfigs);
 router.route('/salary-configs/:userId')
-  .get(authorize('hr_admin', 'hr_sub_admin'), getSalaryConfig)
-  .put(authorize('hr_admin', 'hr_sub_admin'), upsertSalaryConfig)
-  .delete(authorize('hr_admin', 'hr_sub_admin'), deleteSalaryConfig);
+  .get(pageAction('salary_config', 'view', ['hr_admin', 'hr_sub_admin']), getSalaryConfig)
+  .put(pageAction('salary_config', 'edit', ['hr_admin', 'hr_sub_admin']), upsertSalaryConfig)
+  .delete(pageAction('salary_config', 'delete', ['hr_admin', 'hr_sub_admin']), deleteSalaryConfig);
 
 // Salary Cycle / Period (Organization-wide Date From to Date To)
 router.route('/salary-cycle')
-  .get(authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), getSalaryCycle)
-  .put(authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), updateSalaryCycle);
+  .get(pageAction('salary_config', 'view', ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin']), getSalaryCycle)
+  .put(pageAction('salary_config', 'edit', ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin']), updateSalaryCycle);
 
 // Leave Allocations
-router.get('/leave-allocations', authorize('hr_admin', 'hr_sub_admin'), getLeaveAllocations);
-router.post('/leave-allocations/bulk-init', authorize('hr_admin', 'hr_sub_admin'), bulkInitLeaveAllocations);
+router.get('/leave-allocations', pageAction('leave_allocation', 'view', ['hr_admin', 'hr_sub_admin']), getLeaveAllocations);
+router.post('/leave-allocations/bulk-init', pageAction('leave_allocation', 'create', ['hr_admin', 'hr_sub_admin']), bulkInitLeaveAllocations);
 router.route('/leave-allocations/:userId')
-  .get(authorize('hr_admin', 'hr_sub_admin'), getLeaveAllocation)
-  .put(authorize('hr_admin', 'hr_sub_admin'), upsertLeaveAllocation)
-  .delete(authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), deleteLeaveAllocation);
+  .get(pageAction('leave_allocation', 'view', ['hr_admin', 'hr_sub_admin']), getLeaveAllocation)
+  .put(pageAction('leave_allocation', 'edit', ['hr_admin', 'hr_sub_admin']), upsertLeaveAllocation)
+  .delete(pageAction('leave_allocation', 'delete', ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin']), deleteLeaveAllocation);
 
 // Smart Payroll Generation (uses salary configs + late deductions)
-router.post('/payroll/generate-smart', authorize('hr_admin', 'hr_sub_admin'), generateSmartPayroll);
+router.post('/payroll/generate-smart', pageAction('payroll', 'create', ['hr_admin', 'hr_sub_admin']), generateSmartPayroll);
 
 // Employee Profiles (KPI / KRA / Salary details / Work Location)
 router.get('/employee-profiles/:userId', authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), getEmployeeProfile);

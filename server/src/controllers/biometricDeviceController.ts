@@ -1,11 +1,18 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma.js';
+import type { PageRequest } from '../access/pageGuard.js';
+
+/** Someone given this page manages the devices of their own branch */
+const givenBranch = (req: Request): string | undefined => {
+  const { ownBranchOnly, user } = req as PageRequest;
+  return (ownBranchOnly && user.branchId) || undefined;
+};
 
 export const getDevices = async (req: Request, res: Response) => {
   try {
     const { organizationId } = (req as any).user!;
     const devices = await prisma.biometricDevice.findMany({
-      where: { organizationId },
+      where: { organizationId, branchId: givenBranch(req) },
       include: { branch: true }
     });
     res.json(devices);
@@ -19,7 +26,7 @@ export const getDevice = async (req: Request, res: Response) => {
     const { organizationId } = (req as any).user!;
     const { id } = req.params;
     const device = await prisma.biometricDevice.findFirst({
-      where: { id, organizationId },
+      where: { id, organizationId, branchId: givenBranch(req) },
       include: { branch: true }
     });
     if (!device) return res.status(404).json({ error: 'Device not found' });
@@ -46,7 +53,7 @@ export const createDevice = async (req: Request, res: Response) => {
         name,
         serialNumber,
         ipAddress,
-        branchId,
+        branchId: givenBranch(req) || branchId,
         status: 'active'
       }
     });
@@ -63,13 +70,13 @@ export const updateDevice = async (req: Request, res: Response) => {
     const { name, serialNumber, ipAddress, branchId, status } = req.body;
 
     const device = await prisma.biometricDevice.findFirst({
-      where: { id, organizationId }
+      where: { id, organizationId, branchId: givenBranch(req) }
     });
     if (!device) return res.status(404).json({ error: 'Device not found' });
 
     const updated = await prisma.biometricDevice.update({
       where: { id },
-      data: { name, serialNumber, ipAddress, branchId, status }
+      data: { name, serialNumber, ipAddress, branchId: givenBranch(req) || branchId, status }
     });
     res.json(updated);
   } catch (error: any) {
@@ -83,7 +90,7 @@ export const deleteDevice = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const device = await prisma.biometricDevice.findFirst({
-      where: { id, organizationId }
+      where: { id, organizationId, branchId: givenBranch(req) }
     });
     if (!device) return res.status(404).json({ error: 'Device not found' });
 

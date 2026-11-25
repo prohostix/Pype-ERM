@@ -135,7 +135,7 @@ import {
 } from '../controllers/opsReportController.js';
 import { pageAction } from '../access/pageGuard.js';
 
-router.get('/reports/admissions', authorize('ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'), getAdmissionReport);
-router.get('/reports/enrollments', authorize('ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'), getEnrollmentReport);
-router.get('/reports/universities', authorize('ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'), getUniversityReport);
-router.get('/reports/reregistrations', authorize('ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'), getReRegistrationReport);
+router.get('/reports/admissions', pageAction('admission_report', 'view', ['ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin']), getAdmissionReport);
+router.get('/reports/enrollments', pageAction('enrollment_report', 'view', ['ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin']), getEnrollmentReport);
+router.get('/reports/universities', pageAction('university_report', 'view', ['ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin']), getUniversityReport);
+router.get('/reports/reregistrations', pageAction('rereg_report', 'view', ['ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin']), getReRegistrationReport);

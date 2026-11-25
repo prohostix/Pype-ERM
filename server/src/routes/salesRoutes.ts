@@ -42,7 +42,7 @@ import {
   getConversionReport
 } from '../controllers/salesReportController.js';
 import { protect, authorize } from '../middleware/auth.js';
-import { pageAction, enrollmentInBranch, inviteInBranch } from '../access/pageGuard.js';
+import { pageAction, anyPageAction, enrollmentInBranch, inviteInBranch } from '../access/pageGuard.js';
 
 const router = express.Router();
 
@@ -92,11 +92,11 @@ router.put('/student-applications/:id/sales-admin-approve', pageAction('admissio
 router.put('/student-applications/:id/sales-admin-reject', pageAction('admission_approval', 'approve', ['sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'], { inBranch: enrollmentInBranch }), rejectBySalesAdmin);
 
 // Sales Reports
-router.get('/reports/members', getReportMembers);
-router.get('/reports/team', getTeamReport);
-router.get('/reports/team/:memberId/students', getTeamMemberStudents);
+router.get('/reports/members', anyPageAction(['sales_team_report', 'sales_admission_report', 'conversion_report'], 'view', null), getReportMembers);
+router.get('/reports/team', pageAction('sales_team_report', 'view', null), getTeamReport);
+router.get('/reports/team/:memberId/students', pageAction('sales_team_report', 'view', null), getTeamMemberStudents);
 router.get('/reports/counselor', getCounselorReport);
-router.get('/reports/admissions', getAdmissionReport);
-router.get('/reports/conversions', getConversionReport);
+router.get('/reports/admissions', pageAction('sales_admission_report', 'view', null), getAdmissionReport);
+router.get('/reports/conversions', pageAction('conversion_report', 'view', null), getConversionReport);
 
 export default router;

@@ -31,7 +31,7 @@ const GLOBAL_ROLES = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
  */
 export const invoiceBranchWhere = (user: { role: string; branchId?: string | null }, granted: boolean) => {
   if (GLOBAL_ROLES.includes(user.role)) return null;
-  // A granted user always has a branch (the resolver requires it)
+  // Without a branch the limit is the whole organization, which callers always apply
   if (!user.branchId) return null;
   const branchId = user.branchId;
   return {

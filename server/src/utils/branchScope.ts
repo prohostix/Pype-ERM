@@ -34,7 +34,9 @@ export const branchUserFilter = (req: AuthRequest, opts: { includeGeneralManager
 };
 
 /** True when this user is locked to their own branch (as opposed to a global role narrowing by choice) */
-const isBranchLocked = (req: AuthRequest): boolean => !GLOBAL_ROLES.includes(req.user.role) && !!req.user.branchId;
+// Someone only given a page by an Org Admin stays strictly inside their branch
+const isBranchLocked = (req: AuthRequest & { ownBranchOnly?: boolean }): boolean =>
+  !req.ownBranchOnly && !GLOBAL_ROLES.includes(req.user.role) && !!req.user.branchId;
 
 /**
  * True when `userId` is in the requester's organization and branch scope.

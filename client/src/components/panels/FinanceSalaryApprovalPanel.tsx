@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
+import { mayOn } from '@/lib/access';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 
 import { CS } from '@/lib/currency';
@@ -42,6 +44,8 @@ const TABS = [
 ];
 
 export function FinanceSalaryApprovalPanel() {
+  const { user } = useAuth();
+  const mayApprove = mayOn(user, 'salary_approval', 'approve', true);
   const [configs, setConfigs] = useState<SalaryConfig[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(false);
@@ -233,7 +237,7 @@ export function FinanceSalaryApprovalPanel() {
                       <Button variant="ghost" className="h-10 rounded-full px-4 text-[#256c1d] hover:bg-[#eaf6e6] font-semibold" onClick={() => setDetailConfig(config)}>
                         Details
                       </Button>
-                      {config.approvalStatus === 'pending_approval' && (
+                      {mayApprove && config.approvalStatus === 'pending_approval' && (
                         <>
                           <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => handleApprove(config.id)}>
                             Approve

@@ -4,8 +4,9 @@ import prisma from '../lib/prisma.js';
 import { Action } from './catalog.js';
 import { loadAccess } from './load.js';
 import { AccessRequest } from './guard.js';
-import { decidePageAction, isGrantedPage } from './pageRules.js';
+import { decideAnyPage, decidePageAction, isGrantedPage } from './pageRules.js';
 import { invoiceBranchWhere } from './invoiceRules.js';
+import { BranchId, inOwnBranch } from './branchScope.js';
 
 export interface PageRequest extends AccessRequest {
   /** Set when the caller has this permission only because an Org Admin allowed it. */
@@ -60,24 +61,77 @@ export const pageAction = (pageKey: string, action: Action, legacyRoles: string[
     }
   };
 
+/**
+ * For reads that everyone may make about themselves: notes whether the caller was given the page,
+ * so the controller can widen what they see. Refuses nothing.
+ */
+export const givenContext = (pageKey: string) =>
+  async (req: PageRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const managed = await prisma.branch.findFirst({ where: { branchManagerId: req.user.id }, select: { id: true } });
+      const access = await loadAccess(req.user, Boolean(managed));
+      if (!access) {
+        res.status(503).json({ success: false, message: 'Could not check your permissions. Please try again.' });
+        return;
+      }
+      req.access = access;
+      req.ownBranchOnly = isGrantedPage(access, pageKey);
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+
+/** Someone acting only because an Org Admin allowed it may not act on their own record. */
+export const refuseOwnRecord = (req: PageRequest, res: Response, userId: string | null | undefined, what: string): boolean => {
+  if (!req.ownBranchOnly || userId !== req.user.id) return false;
+  res.status(403).json({ success: false, message: `You cannot change or approve your own ${what}` });
+  return true;
+};
+
+/** For a request several pages share: any one of them is enough. */
+export const anyPageAction = (pageKeys: string[], action: Action, legacyRoles: string[] | null) =>
+  async (req: PageRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const managed = await prisma.branch.findFirst({ where: { branchManagerId: req.user.id }, select: { id: true } });
+      const access = await loadAccess(req.user, Boolean(managed));
+      if (!access) {
+        res.status(503).json({ success: false, message: 'Could not check your permissions. Please try again.' });
+        return;
+      }
+      const decision = decideAnyPage(access, pageKeys, action, req.user.role, legacyRoles);
+      if (!decision.allowed) {
+        res.status(403).json({ success: false, message: 'You do not have permission to do this' });
+        return;
+      }
+      req.access = access;
+      req.ownBranchOnly = decision.ownBranchOnly;
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+
 /** Study partner invite links made by someone in the branch. */
 export const inviteInBranch = async (req: PageRequest, branchId: string): Promise<boolean> =>
   Boolean(await prisma.studyCenterInvite.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId, referrer: { branchId } },
+    where: { id: req.params.id, organizationId: req.user.organizationId, ...inOwnBranch(branchId, (id) => ({ referrer: { branchId: id } })) },
     select: { id: true },
   }));
 
 export const expenseInBranch = async (req: PageRequest, branchId: string): Promise<boolean> =>
   Boolean(await prisma.expenseClaim.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId, user: { branchId } },
+    where: { id: req.params.id, organizationId: req.user.organizationId, ...inOwnBranch(branchId, (id) => ({ user: { branchId: id } })) },
     select: { id: true },
   }));
 
-export const paymentInBranch = async (req: PageRequest, branchId: string): Promise<boolean> =>
-  Boolean(await prisma.paymentEntry.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId, invoice: invoiceBranchWhere({ role: req.user.role, branchId }, true)! },
+export const paymentInBranch = async (req: PageRequest, branchId: string): Promise<boolean> => {
+  const invoice = invoiceBranchWhere({ role: req.user.role, branchId }, true);
+  return Boolean(await prisma.paymentEntry.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId, ...(invoice && { invoice }) },
     select: { id: true },
   }));
+};
 
 type Model = 'studyCenter' | 'walletTopUp' | 'enrollment' | 'paymentLink' | 'paymentSchedule' | 'target';
 
@@ -86,10 +140,13 @@ export const ownedBy = (model: Model) => async (req: PageRequest): Promise<boole
   Boolean(await (prisma[model] as any).findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId }, select: { id: true } }));
 
 /** A partner belongs to a branch when its referrer or one of its students does. */
-export const partnerBranchWhere = (branchId: string) => ({ OR: [{ referrer: { branchId } }, { students: { some: { branchId } } }] });
+export const partnerBranchWhere = (branchId: BranchId) => inOwnBranch(branchId, (id) => ({ OR: [{ referrer: { branchId: id } }, { students: { some: { branchId: id } } }] }));
 
 const recordInBranch = (model: Model, where: (branchId: string) => object) => async (req: PageRequest, branchId: string): Promise<boolean> =>
-  Boolean(await (prisma[model] as any).findFirst({ where: { id: req.params.id, ...where(branchId) }, select: { id: true } }));
+  Boolean(await (prisma[model] as any).findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId, ...inOwnBranch(branchId, where) },
+    select: { id: true },
+  }));
 
 export const partnerInBranch = recordInBranch('studyCenter', partnerBranchWhere);
 export const topUpInBranch = recordInBranch('walletTopUp', (branchId) => ({ studyCenter: partnerBranchWhere(branchId) }));
@@ -106,7 +163,7 @@ export const withoutPasswords = <T extends { student?: any; credentials?: unknow
   });
 
 /** Applications of a branch: the student or the sales person belongs to it. */
-export const enrollmentBranchWhere = (branchId: string) => ({ OR: [{ student: { branchId } }, { salesUser: { branchId } }] });
+export const enrollmentBranchWhere = (branchId: BranchId) => inOwnBranch(branchId, (id) => ({ OR: [{ student: { branchId: id } }, { salesUser: { branchId: id } }] }));
 
 export const enrollmentInBranch = async (req: PageRequest, branchId: string): Promise<boolean> =>
   Boolean(await prisma.enrollment.findFirst({

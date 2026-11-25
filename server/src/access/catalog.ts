@@ -4,6 +4,7 @@
  * on the server routes.
  */
 import { canWriteInvoices } from '../utils/userGuards.js';
+import { BLOCK_PAGES } from './blockPages.js';
 
 /** `view` opens the page; every other action needs it. */
 export type Action = 'view' | 'create' | 'edit' | 'delete' | 'approve' | 'download' | 'import' | 'send';
@@ -30,6 +31,8 @@ export interface Feature {
   actions: Action[];
   /** Organization plan feature it depends on, if any. */
   orgFeature?: string;
+  /** Can be blocked for a user but not given: the role alone decides who has it. */
+  blockOnly?: boolean;
   defaultActions: (user: AccessUser) => Action[];
 }
 
@@ -76,7 +79,7 @@ const financePage = (key: string, label: string, writes: Action[], alsoScreens: 
   },
 });
 
-export const FEATURES: Feature[] = [
+const GRANTABLE: Feature[] = [
   {
     key: 'students',
     label: 'Students',
@@ -252,4 +255,63 @@ export const FEATURES: Feature[] = [
     actions: ['view', 'download'],
     defaultActions: (user) => (['org_admin', 'finance'].includes(screensOf(user)) ? ['view', 'download'] : []),
   },
+];
+
+const HR_ADMINS = ['hr_admin', 'hr_sub_admin'];
+const FINANCE_ADMINS = ['finance_admin', 'finance_sub_admin'];
+const OPERATIONS = ['ops_admin', 'ops_sub_admin'];
+const EXECUTIVES = ['ceo', 'general_manager'];
+/** These actions for these roles, nothing for anyone else. A Superadmin has everything. */
+const forRoles = (...grants: [roles: string[], actions: Action[]][]) => (user: AccessUser): Action[] =>
+  user.role === 'superadmin'
+    ? ['view', 'create', 'edit', 'delete', 'approve']
+    : grants.find(([roles]) => roles.includes(user.role))?.[1] || [];
+
+/**
+ * Pages listed in blockPages.ts whose requests are now checked one by one, so they can be given as
+ * well as blocked. The value is what each role has without any setting.
+ */
+const CONNECTED: Record<string, (user: AccessUser) => Action[]> = {
+  // Finance confirms nothing by role, so approval can be given to them
+  payroll: forRoles([HR_ADMINS, ['view', 'create', 'edit', 'delete', 'approve']], [FINANCE_ADMINS, ['view', 'create', 'edit', 'delete']]),
+  payroll_batches: forRoles([FINANCE_ADMINS, ['view', 'edit', 'approve']], [HR_ADMINS, ['view']]),
+  payroll_history: forRoles([FINANCE_ADMINS, ['view']]),
+  salary_config: forRoles([HR_ADMINS, ['view', 'edit', 'delete']]),
+  salary_approval: forRoles([FINANCE_ADMINS, ['view', 'approve']]),
+  student_report: forRoles([OPERATIONS, ['view']]),
+  admission_report: forRoles([OPERATIONS, ['view']]),
+  enrollment_report: forRoles([OPERATIONS, ['view']]),
+  university_report: forRoles([OPERATIONS, ['view']]),
+  rereg_report: forRoles([OPERATIONS, ['view']]),
+  income_expense: forRoles([FINANCE_ADMINS, ['view']]),
+  profit_loss: forRoles([FINANCE_ADMINS, ['view']]),
+  collection_report: forRoles([[...FINANCE_ADMINS, 'finance'], ['view']]),
+  sales_team_report: (user) => (isSales(user) || user.role === 'superadmin' ? ['view'] : []),
+  sales_admission_report: (user) => (isSales(user) || user.role === 'superadmin' ? ['view'] : []),
+  conversion_report: (user) => (isSales(user) || user.role === 'superadmin' ? ['view'] : []),
+  performance: forRoles([EXECUTIVES, ['view']]),
+  kpi_report: forRoles([EXECUTIVES, ['view']]),
+  activity_report: forRoles([EXECUTIVES, ['view']]),
+  employees: forRoles([HR_ADMINS, ['view']]),
+  branch_hierarchy: forRoles([[...EXECUTIVES, 'branch_manager'], ['view']]),
+  team_attendance: forRoles([HR_ADMINS, ['view', 'create', 'edit', 'delete']], [[...EXECUTIVES, 'branch_manager'], ['view']]),
+  attendance_settings: forRoles([HR_ADMINS, ['view', 'edit']]),
+  biometric_devices: forRoles([HR_ADMINS, ['view', 'create', 'edit', 'delete']]),
+  leave_requests: forRoles([[...HR_ADMINS, ...EXECUTIVES, 'branch_manager', 'ops_admin', ...FINANCE_ADMINS, 'sales_admin', 'sales_sub_admin'], ['view', 'approve']]),
+  leave_allocation: forRoles([HR_ADMINS, ['view', 'create', 'edit', 'delete']]),
+  holidays: forRoles([HR_ADMINS, ['view', 'create', 'edit', 'delete']], [['branch_manager'], ['view']]),
+  vacancies: forRoles([[...HR_ADMINS, ...EXECUTIVES], ['view', 'create', 'edit', 'delete']]),
+  complaints: forRoles([HR_ADMINS, ['view', 'edit', 'delete']]),
+  assets: forRoles([[...HR_ADMINS, ...EXECUTIVES, 'branch_manager'], ['view', 'create', 'edit', 'delete']]),
+};
+
+export const FEATURES: Feature[] = [
+  ...GRANTABLE,
+  ...BLOCK_PAGES.map(({ key, label, group, actions }): Feature => (CONNECTED[key]
+    ? { key, label, group, actions, defaultActions: (user) => CONNECTED[key](user).filter((a) => actions.includes(a)) }
+    : {
+      key, label, group, actions, blockOnly: true,
+      // "Whatever the role gives": the only thing a setting can do is take it away
+      defaultActions: () => actions,
+    })),
 ];

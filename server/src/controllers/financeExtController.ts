@@ -709,7 +709,7 @@ export const generatePaymentLink = asyncHandler(async (req: PageRequest, res: Re
     where: {
       id: studentId,
       ...(req.user.role !== 'superadmin' && { organizationId: req.user.organizationId }),
-      ...(req.ownBranchOnly && { branchId: req.user.branchId })
+      ...(req.ownBranchOnly && req.user.branchId && { branchId: req.user.branchId })
     }
   });
   if (!student) { res.status(404).json({ success: false, message: 'Student not found' }); return; }
@@ -746,7 +746,7 @@ export const generatePaymentLink = asyncHandler(async (req: PageRequest, res: Re
 
 export const getPaymentLinks = asyncHandler(async (req: PageRequest, res: Response) => {
   const links = await prisma.paymentLink.findMany({
-    where: { organizationId: req.user.organizationId, ...(req.ownBranchOnly && { student: { branchId: req.user.branchId } }) },
+    where: { organizationId: req.user.organizationId, ...(req.ownBranchOnly && req.user.branchId && { student: { branchId: req.user.branchId } }) },
     include: {
       student: { select: { name: true, email: true, enrollmentNo: true } },
       schedule: { select: { title: true, dueDate: true } }
@@ -1118,7 +1118,7 @@ export const addExtraFee = asyncHandler(async (req: PageRequest, res: Response) 
 
   try {
     const student = await prisma.student.findFirst({
-      where: { id: studentId, organizationId, ...(req.ownBranchOnly && { branchId: req.user.branchId }) }
+      where: { id: studentId, organizationId, ...(req.ownBranchOnly && req.user.branchId && { branchId: req.user.branchId }) }
     });
 
     if (!student) {

@@ -3,6 +3,9 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { getPayrollBranchId, payrollScopeWhere } from '../utils/payrollScope.js';
+import { can } from '../access/resolve.js';
+import type { PageRequest } from '../access/pageGuard.js';
+import type { PayrollRequest } from '../access/payrollGuard.js';
 
 // Finds a payroll only if it belongs to the requester's organization and branch scope
 const findScopedPayroll = (req: AuthRequest, id: string) =>
@@ -15,6 +18,13 @@ const PAYROLL_STAFF_ROLES = [
   'superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager',
 ];
 const isPayrollStaff = (req: AuthRequest) => PAYROLL_STAFF_ROLES.includes(req.user.role);
+
+/** Someone acting only because an Org Admin allowed it may not act on their own pay. */
+const refuseOwnPay = (req: PageRequest, res: Response, employeeIds: (string | undefined)[]): boolean => {
+  if (!req.ownBranchOnly || !employeeIds.includes(req.user.id)) return false;
+  res.status(403).json({ success: false, message: 'You cannot change or approve your own pay' });
+  return true;
+};
 
 const NET_INCLUDE = { user: { select: { name: true, employeeProfile: { select: { employeeId: true } } } } };
 
@@ -43,7 +53,7 @@ const batchViewFor = async (req: AuthRequest, batch: any) => {
  * organization; a branch-restricted user may act only on batches made up entirely of their own
  * branch's payroll, since an action moves every payroll in the batch.
  */
-const loadBatchForAction = async (req: AuthRequest, res: Response, id: string) => {
+const loadBatchForAction = async (req: PageRequest, res: Response, id: string) => {
   const batch = await prisma.payrollBatch.findFirst({ where: { id, organizationId: req.user.organizationId } });
   if (!batch) {
     res.status(404).json({ success: false, message: 'Payroll batch not found' });
@@ -63,15 +73,22 @@ const loadBatchForAction = async (req: AuthRequest, res: Response, id: string) =
       return null;
     }
   }
+  if (req.ownBranchOnly && await prisma.payroll.count({ where: { id: { in: batch.payrollIds }, employeeId: req.user.id } })) {
+    refuseOwnPay(req, res, [req.user.id]);
+    return null;
+  }
   return batch;
 };
 
-export const getPayrolls = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getPayrolls = asyncHandler(async (req: PayrollRequest, res: Response) => {
   const where: any = payrollScopeWhere(req);
   if (['hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
     where.user = { ...(where.user || {}), role: { not: 'center_admin' } };
   }
-  if (!isPayrollStaff(req)) {
+  // Given access applies to the team screens; "My Pay Slips" asks for neither and stays personal
+  const team = req.payrollTeam !== 'blocked'
+    && (isPayrollStaff(req) || (req.payrollTeam === 'given' && Boolean(req.query.team || req.query.employeeId)));
+  if (!team) {
     // Employees (and other non-payroll roles) only ever see their own payslips.
     where.employeeId = req.user.id;
   } else if (req.query.employeeId) {
@@ -85,9 +102,10 @@ export const getPayrolls = asyncHandler(async (req: AuthRequest, res: Response) 
   res.status(200).json({ success: true, count: payrolls.length, data: payrolls });
 });
 
-export const getPayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getPayroll = asyncHandler(async (req: PayrollRequest, res: Response) => {
+  const team = req.payrollTeam !== 'blocked' && (isPayrollStaff(req) || req.payrollTeam === 'given');
   const payroll = await prisma.payroll.findFirst({
-    where: { ...payrollScopeWhere(req), id: req.params.id, ...(isPayrollStaff(req) ? {} : { employeeId: req.user.id }) },
+    where: { ...payrollScopeWhere(req), id: req.params.id, ...(team ? {} : { employeeId: req.user.id }) },
     include: { user: { select: { id: true, name: true, email: true, designation: true, branchId: true } } }
   });
   if (!payroll) {
@@ -97,7 +115,7 @@ export const getPayroll = asyncHandler(async (req: AuthRequest, res: Response) =
   res.json({ success: true, data: payroll });
 });
 
-export const createPayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const createPayroll = asyncHandler(async (req: PageRequest, res: Response) => {
   const { branchId: _branchId, ...data } = req.body;
   const branchId = getPayrollBranchId(req);
   const employee = data.employeeId
@@ -118,17 +136,28 @@ export const createPayroll = asyncHandler(async (req: AuthRequest, res: Response
     res.status(400).json({ success: false, message: 'Cannot generate payroll for a resigned employee' });
     return;
   }
+  if (refuseOwnPay(req, res, [data.employeeId])) return;
+  // Without approval rights a new record can only be a draft
+  if (req.ownBranchOnly && !can(req.access!, 'payroll', 'approve')) {
+    for (const field of ['processedBy', 'processedAt', 'financeApprovedBy', 'financeApprovedAt', 'paymentDate', 'paymentMethod']) delete data[field];
+    data.status = 'draft';
+  }
   const payroll = await prisma.payroll.create({ data: { ...data, organizationId: req.user.organizationId } });
   res.status(201).json({ success: true, data: payroll });
 });
 
-export const updatePayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updatePayroll = asyncHandler(async (req: PageRequest, res: Response) => {
   const exists = await findScopedPayroll(req, req.params.id);
   if (!exists) {
     res.status(404).json({ success: false, message: 'Payroll not found' });
     return;
   }
+  if (refuseOwnPay(req, res, [exists.employeeId])) return;
   const { basicSalary, allowances, deductions, netSalary, status, remarks } = req.body;
+  if (req.ownBranchOnly && status !== undefined && status !== exists.status && !can(req.access!, 'payroll', 'approve')) {
+    res.status(403).json({ success: false, message: 'Only an approver can change the status of a payroll record' });
+    return;
+  }
   const updateData: any = {};
   if (basicSalary !== undefined) updateData.basicSalary = Number(basicSalary);
   if (allowances !== undefined) updateData.allowances = allowances;
@@ -141,21 +170,24 @@ export const updatePayroll = asyncHandler(async (req: AuthRequest, res: Response
   res.json({ success: true, data: payroll });
 });
 
-export const deletePayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const deletePayroll = asyncHandler(async (req: PageRequest, res: Response) => {
   const payroll = await findScopedPayroll(req, req.params.id);
   if (!payroll) {
     res.status(404).json({ success: false, message: 'Payroll record not found' });
     return;
   }
+  if (refuseOwnPay(req, res, [payroll.employeeId])) return;
   await prisma.payroll.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
 
-export const processPayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
-  if (!(await findScopedPayroll(req, req.params.id))) {
+export const processPayroll = asyncHandler(async (req: PageRequest, res: Response) => {
+  const found = await findScopedPayroll(req, req.params.id);
+  if (!found) {
     res.status(404).json({ success: false, message: 'Payroll record not found' });
     return;
   }
+  if (refuseOwnPay(req, res, [found.employeeId])) return;
   const payroll = await prisma.payroll.update({
     where: { id: req.params.id },
     data: { status: 'processed', processedBy: req.user.id, processedAt: new Date() }
@@ -163,11 +195,13 @@ export const processPayroll = asyncHandler(async (req: AuthRequest, res: Respons
   res.status(200).json({ success: true, data: payroll });
 });
 
-export const confirmPayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
-  if (!(await findScopedPayroll(req, req.params.id))) {
+export const confirmPayroll = asyncHandler(async (req: PageRequest, res: Response) => {
+  const found = await findScopedPayroll(req, req.params.id);
+  if (!found) {
     res.status(404).json({ success: false, message: 'Payroll record not found' });
     return;
   }
+  if (refuseOwnPay(req, res, [found.employeeId])) return;
   const payroll = await prisma.payroll.update({
     where: { id: req.params.id },
     data: { status: 'confirmed', financeApprovedAt: new Date() }
@@ -175,11 +209,13 @@ export const confirmPayroll = asyncHandler(async (req: AuthRequest, res: Respons
   res.status(200).json({ success: true, data: payroll });
 });
 
-export const markPayrollPaid = asyncHandler(async (req: AuthRequest, res: Response) => {
-  if (!(await findScopedPayroll(req, req.params.id))) {
+export const markPayrollPaid = asyncHandler(async (req: PageRequest, res: Response) => {
+  const found = await findScopedPayroll(req, req.params.id);
+  if (!found) {
     res.status(404).json({ success: false, message: 'Payroll record not found' });
     return;
   }
+  if (refuseOwnPay(req, res, [found.employeeId])) return;
   const payroll = await prisma.payroll.update({
     where: { id: req.params.id },
     data: { status: 'paid', paymentDate: new Date() }
@@ -191,7 +227,7 @@ export const generateMonthlyPayroll = asyncHandler(async (req: AuthRequest, res:
   res.json({ success: true, message: 'Monthly payroll generation logic not implemented' });
 });
 
-export const transferToFinance = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const transferToFinance = asyncHandler(async (req: PageRequest, res: Response) => {
   const { payrollIds, month, remarks } = req.body;
   if (!Array.isArray(payrollIds) || payrollIds.length === 0) {
     res.status(400).json({ success: false, message: 'payrollIds is required' });
@@ -202,6 +238,7 @@ export const transferToFinance = asyncHandler(async (req: AuthRequest, res: Resp
     res.status(403).json({ success: false, message: 'Some payroll records are outside your branch or organization' });
     return;
   }
+  if (refuseOwnPay(req, res, payrolls.map(p => p.employeeId))) return;
   const totalAmount = payrolls.reduce((sum, p) => sum + p.netSalary, 0);
 
   const batch = await prisma.payrollBatch.create({
@@ -255,7 +292,7 @@ export const getPayrollBatch = asyncHandler(async (req: AuthRequest, res: Respon
 const batchPayrollsWhere = (req: AuthRequest, batch: { payrollIds: string[] }) =>
   ({ organizationId: req.user.organizationId, id: { in: batch.payrollIds } });
 
-export const financeApprovePayrollBatch = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const financeApprovePayrollBatch = asyncHandler(async (req: PageRequest, res: Response) => {
   const found = await loadBatchForAction(req, res, req.params.id);
   if (!found) return;
   const batch = await prisma.payrollBatch.update({
@@ -269,7 +306,7 @@ export const financeApprovePayrollBatch = asyncHandler(async (req: AuthRequest, 
   res.status(200).json({ success: true, data: batch });
 });
 
-export const financeRejectPayrollBatch = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const financeRejectPayrollBatch = asyncHandler(async (req: PageRequest, res: Response) => {
   const found = await loadBatchForAction(req, res, req.params.id);
   if (!found) return;
   const batch = await prisma.payrollBatch.update({
@@ -283,7 +320,7 @@ export const financeRejectPayrollBatch = asyncHandler(async (req: AuthRequest, r
   res.status(200).json({ success: true, data: batch });
 });
 
-export const markBatchPaymentInProgress = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const markBatchPaymentInProgress = asyncHandler(async (req: PageRequest, res: Response) => {
   const found = await loadBatchForAction(req, res, req.params.id);
   if (!found) return;
   const batch = await prisma.payrollBatch.update({
@@ -293,7 +330,7 @@ export const markBatchPaymentInProgress = asyncHandler(async (req: AuthRequest, 
   res.status(200).json({ success: true, data: batch });
 });
 
-export const completeBatchPayment = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const completeBatchPayment = asyncHandler(async (req: PageRequest, res: Response) => {
   const found = await loadBatchForAction(req, res, req.params.id);
   if (!found) return;
   const batch = await prisma.payrollBatch.update({

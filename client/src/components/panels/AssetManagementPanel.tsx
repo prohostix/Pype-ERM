@@ -23,6 +23,8 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { confirmDialog } from '@/lib/confirm';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 interface User {
   id: string;
@@ -51,6 +53,10 @@ interface Asset {
 }
 
 export function AssetManagementPanel() {
+  const { user } = useAuth();
+  const mayCreate = mayOn(user, 'assets', 'create', true);
+  const mayDelete = mayOn(user, 'assets', 'delete', true);
+  const mayEdit = mayOn(user, 'assets', 'edit', true);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [employees, setEmployees] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -269,10 +275,12 @@ export function AssetManagementPanel() {
               <Button variant="outline" onClick={() => setSelectedEmployeeId(null)} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
                 Clear
               </Button>
-              <Button onClick={() => handleOpenDialog()} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-                <Plus className="w-4 h-4 mr-2" />
-                Allot Asset(s)
-              </Button>
+              {mayCreate && (
+                <Button onClick={() => handleOpenDialog()} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Allot Asset(s)
+                </Button>
+              )}
             </div>
           )}
         </div>
@@ -320,12 +328,16 @@ export function AssetManagementPanel() {
                       )}>
                         {asset.status.toLowerCase()}
                       </span>
-                      <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleOpenDialog(asset)}>
-                        <Edit2 className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(asset.id)} className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      {mayEdit && (
+                        <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleOpenDialog(asset)}>
+                          <Edit2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                      {mayDelete && (
+                        <Button variant="ghost" size="sm" onClick={() => handleDelete(asset.id)} className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                 ))}

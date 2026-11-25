@@ -50,7 +50,7 @@ export const createEnrollment = asyncHandler(async (req: PageRequest, res: Respo
   // Someone given this page may only enrol existing students of their branch
   if (req.ownBranchOnly) {
     const named = rest.studentId || studentId;
-    if (named && !(await prisma.student.findFirst({ where: { id: named, organizationId: req.user.organizationId, branchId: req.user.branchId }, select: { id: true } }))) {
+    if (named && !(await prisma.student.findFirst({ where: { id: named, organizationId: req.user.organizationId, ...(req.user.branchId && { branchId: req.user.branchId }) }, select: { id: true } }))) {
       res.status(404).json({ success: false, message: 'Student not found' });
       return;
     }
