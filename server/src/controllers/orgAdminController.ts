@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { appointmentError, userInReach, type PageRequest } from '../access/pageGuard.js';
 
 // CEO Panels
 export const createCeoPanel = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -9,7 +10,7 @@ export const createCeoPanel = asyncHandler(async (req: AuthRequest, res: Respons
   res.status(201).json({ success: true, data: ceoPanel });
 });
 export const getCeoPanels = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const ceoPanels = await prisma.ceoPanel.findMany({ where: { organizationId: req.user.organizationId }, include: { user: true } });
+  const ceoPanels = await prisma.ceoPanel.findMany({ where: { organizationId: req.user.organizationId }, include: { user: { select: { id: true, name: true, email: true, role: true } } } });
   res.json({ success: true, count: ceoPanels.length, data: ceoPanels });
 });
 export const getCeoPanel = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -66,16 +67,27 @@ export const getOrgHierarchy = asyncHandler(async (req: AuthRequest, res: Respon
   ]);
   res.json({ success: true, data: { departments, users } });
 });
-export const assignHierarchy = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const assignHierarchy = asyncHandler(async (req: PageRequest, res: Response) => {
   const { userId, reportingToId } = req.body;
-  const user = await prisma.user.update({ where: { id: userId }, data: { reportingTo: reportingToId } });
+  if (!(await userInReach(req, userId)) || (reportingToId && !(await userInReach(req, reportingToId)))) {
+    res.status(404).json({ success: false, message: 'That person was not found' });
+    return;
+  }
+  const user = await prisma.user.update({
+    where: { id: userId }, data: { reportingTo: reportingToId },
+    select: { id: true, name: true, email: true, role: true, reportingTo: true }
+  });
   res.json({ success: true, data: user });
 });
 
 // Designations
-export const getDesignations = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getDesignations = asyncHandler(async (req: PageRequest, res: Response) => {
   const designations = await prisma.designation.findMany({
-    where: { organizationId: req.user.organizationId },
+    where: {
+      organizationId: req.user.organizationId,
+      // Someone given the page sees their branch's positions and those of no branch
+      ...(req.ownBranchOnly && req.user.branchId && { OR: [{ branchId: null }, { branchId: req.user.branchId }] }),
+    },
     include: {
       department: true,
       subDepartment: true,
@@ -132,8 +144,8 @@ export const getDesignations = asyncHandler(async (req: AuthRequest, res: Respon
 
   res.json({ success: true, count: mapped.length, data: mapped });
 });
-export const createDesignation = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { allowedDeptIds, allowedBranchIds, ...rest } = req.body;
+export const createDesignation = asyncHandler(async (req: PageRequest, res: Response) => {
+  const { allowedDeptIds, allowedBranchIds, id: _id, organizationId: _organizationId, ...rest } = req.body;
   const designation = await prisma.designation.create({
     data: {
       ...rest,
@@ -177,17 +189,32 @@ export const deleteDesignation = asyncHandler(async (req: AuthRequest, res: Resp
   await prisma.designation.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
-export const assignUserToDesignation = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const assignUserToDesignation = asyncHandler(async (req: PageRequest, res: Response) => {
+  const refusal = await appointmentError(req, req.body.userId);
+  if (refusal) {
+    res.status(403).json({ success: false, message: refusal });
+    return;
+  }
   const user = await prisma.user.update({
     where: { id: req.body.userId },
-    data: { designations: { connect: { id: req.params.id } } }
+    data: { designations: { connect: { id: req.params.id } } },
+    // Never the whole account, which holds the password hash
+    select: { id: true, name: true, email: true, role: true, designation: true }
   });
   res.json({ success: true, data: user });
 });
-export const unassignUserFromDesignation = asyncHandler(async (req: AuthRequest, res: Response) => {
+
+export const unassignUserFromDesignation = asyncHandler(async (req: PageRequest, res: Response) => {
+  const refusal = await appointmentError(req, req.body.userId);
+  if (refusal) {
+    res.status(403).json({ success: false, message: refusal });
+    return;
+  }
   const user = await prisma.user.update({
     where: { id: req.body.userId },
-    data: { designations: { disconnect: { id: req.params.id } } }
+    data: { designations: { disconnect: { id: req.params.id } } },
+    // Never the whole account, which holds the password hash
+    select: { id: true, name: true, email: true, role: true, designation: true }
   });
   res.json({ success: true, data: user });
 });

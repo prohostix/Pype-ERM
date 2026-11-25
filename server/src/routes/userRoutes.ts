@@ -12,15 +12,18 @@ import {
   updateSalesAssignment, updateOpsAssignment,
 } from '../controllers/userController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { pageAction } from '../access/pageGuard.js';
 
 const router = express.Router();
 
 router.use(protect);
 
+const USER_ADMINS = ['superadmin', 'org_admin', 'hr_admin', 'hr_sub_admin'];
+
 router
   .route('/')
   .get(getUsers)
-  .post(authorize('superadmin', 'org_admin', 'hr_admin', 'hr_sub_admin'), createUser);
+  .post(pageAction('users', 'create', USER_ADMINS), createUser);
 
 router.get('/stats/departments', getUserDepartmentCounts);
 
@@ -31,8 +34,8 @@ router
 router
   .route('/:id')
   .get(getUser)
-  .put(authorize('superadmin', 'org_admin', 'hr_admin', 'hr_sub_admin'), updateUser)
-  .delete(authorize('superadmin', 'org_admin', 'hr_admin', 'hr_sub_admin'), guardUserDelete, deleteUser);
+  .put(pageAction('users', 'edit', USER_ADMINS), updateUser)
+  .delete(pageAction('users', 'delete', USER_ADMINS), guardUserDelete, deleteUser);
 
 router
   .route('/:id/permissions')

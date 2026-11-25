@@ -253,6 +253,15 @@ function UserAccess({ userId, onBack, onDirty, onSaved, onFailed }: UserAccessPr
       message: `${detail.user.name} has no branch, so the pages you allow show data from every branch in your organization.`,
       confirmText: 'Allow', tone: 'danger',
     }))) return;
+    // These pages control accounts and who is in charge, so they can lead to wider access
+    const structure = [...new Set(changes
+      .filter((c) => c.effect === 'allow' && c.action !== 'view' && ['users', 'departments', 'branches', 'org_chart', 'managers'].includes(c.featureKey))
+      .map((c) => detail.features.find((p) => p.key === c.featureKey)?.label))];
+    if (structure.length > 0 && !(await confirmDialog({
+      title: 'Allow account and structure changes?',
+      message: `${detail.user.name} will be able to change ${structure.join(', ')}. This affects who can do what, so give it only to someone you trust.`,
+      confirmText: 'Allow', tone: 'danger',
+    }))) return;
     setSaving(true);
     try {
       await api.put(`/access/users/${userId}`, { changes, reason, version: detail.version });

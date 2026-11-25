@@ -1,3 +1,4 @@
+import { hidePasswordHashes } from '../src/utils/hidePasswordHashes.js';
 // Run: npx tsx --test tests/userGuards.test.ts
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -80,4 +81,11 @@ test('only users whose screens offer it may write invoices', () => {
   assert.equal(canWriteInvoices({ role: 'employee', subDepartmentId: 's' }, { ...no, departmentType: 'finance' }), true);
   assert.equal(canWriteInvoices({ role: 'employee', subDepartmentId: 's' }, { ...no, departmentType: 'hr' }), false);
   assert.equal(canWriteInvoices({ role: 'employee' }, { ...no, departmentType: 'finance' }), false);
+});
+
+test('responses never carry a password hash', () => {
+  const hash = '$2a$12$abcdefghijklmnopqrstuv1234567890ABCDEFGHIJKLMNOPQRSTU';
+  const out = JSON.stringify({ data: [{ user: { name: 'a', password: hash } }], credentials: { password: 'portal-pass' } }, hidePasswordHashes);
+  assert.ok(!out.includes('$2a$'));
+  assert.ok(out.includes('portal-pass'), 'other password values are untouched');
 });

@@ -2,17 +2,18 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import { asyncHandler, resolveOrgId } from '../utils/asyncHandler.js';
 import prisma from '../lib/prisma.js';
+import { appointmentError, type PageRequest } from '../access/pageGuard.js';
 
 // @desc    Create sub-department
 // @route   POST /api/ops/sub-departments
 // @access  Private (Ops Admin, Org Admin, Superadmin)
-export const createSubDepartment = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const createSubDepartment = asyncHandler(async (req: PageRequest, res: Response) => {
   const { name, parentDeptId, features, assignedUniversities, assignedPrograms, assignedCenters } =
     req.body;
 
   // Verify parent department exists
   const parentDept = await prisma.department.findUnique({ where: { id: parentDeptId } });
-  if (!parentDept) {
+  if (!parentDept || (req.user.role !== 'superadmin' && parentDept.organizationId !== resolveOrgId(req.user.organizationId))) {
     res.status(404);
     throw new Error('Parent department not found');
   }
@@ -135,7 +136,7 @@ export const getSubDepartment = asyncHandler(async (req: AuthRequest, res: Respo
 // @desc    Update sub-department
 // @route   PATCH /api/ops/sub-departments/:id
 // @access  Private (Ops Admin, Org Admin, Superadmin)
-export const updateSubDepartment = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateSubDepartment = asyncHandler(async (req: PageRequest, res: Response) => {
   const { features, assignedUniversities, assignedPrograms, assignedCenters, status, managerId } = req.body;
 
   const subDepartment = await prisma.subDepartment.findUnique({ where: { id: req.params.id } });
@@ -149,6 +150,19 @@ export const updateSubDepartment = asyncHandler(async (req: AuthRequest, res: Re
   if (req.user.role !== 'superadmin' && subDepartment.organizationId !== resolveOrgId(req.user.organizationId)) {
     res.status(403);
     throw new Error('Not authorized to update this sub-department');
+  }
+
+  // Someone given Managers only changes who is in charge
+  if (req.ownBranchOnly && [features, assignedUniversities, assignedPrograms, assignedCenters, status].some((value) => value !== undefined)) {
+    res.status(403).json({ success: false, message: 'You can only change the manager' });
+    return;
+  }
+  if (managerId) {
+    const refusal = await appointmentError(req, managerId);
+    if (refusal) {
+      res.status(403).json({ success: false, message: refusal });
+      return;
+    }
   }
 
   const data: any = {};

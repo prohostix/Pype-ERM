@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Plus, RefreshCw, UserPlus, Trash2, Edit2, Users, ChevronDown, ChevronUp, Layers, Building2, MapPin } from 'lucide-react';
 import api from '@/lib/api';
 import { confirmDialog } from '@/lib/confirm';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Dept { id: string; name: string; type: string; }
@@ -51,6 +53,10 @@ export function OrgNode({
   onAssign?: (n: DesignationNode) => void; onUnassign?: (n: DesignationNode, userId: string) => void;
   onAddChild?: (parent: DesignationNode) => void; depth?: number; isReadOnly?: boolean;
 }) {
+  const { user } = useAuth();
+  const mayCreate = mayOn(user, 'org_chart', 'create', true);
+  const mayEdit = mayOn(user, 'org_chart', 'edit', true);
+  const mayDelete = mayOn(user, 'org_chart', 'delete', true);
   const [expanded, setExpanded] = useState(true);
   const children = allNodes.filter(n => {
     const pid = typeof n.parentDesignationId === 'object' ? (n.parentDesignationId as any)?.id : n.parentDesignationId;
@@ -132,7 +138,7 @@ export function OrgNode({
                     {u.name.charAt(0)}
                   </div>
                   <span className="text-xs text-foreground/80 truncate flex-1">{u.name}</span>
-                  {!isReadOnly && (
+                  {!isReadOnly && mayEdit && (
                     <button onClick={() => onUnassign?.(node, u.id)}
                       className="text-slate-400 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-opacity">
                       <Trash2 className="h-3 w-3" />
@@ -141,14 +147,14 @@ export function OrgNode({
                 </div>
               ))}
 
-              {vacant > 0 && !isReadOnly && (
+              {vacant > 0 && !isReadOnly && mayEdit && (
                 <button onClick={() => onAssign?.(node)}
                   className="w-full flex items-center justify-center gap-1.5 text-xs border border-dashed border-slate-300 rounded-full py-1.5 text-slate-500 hover:text-[#256c1d] hover:border-[#54b947] hover:bg-[#eaf6e6] transition-colors">
                   <UserPlus className="h-3 w-3" />
                   {vacant} vacant {vacant === 1 ? 'slot' : 'slots'}
                 </button>
               )}
-              {vacant > 0 && isReadOnly && (
+              {vacant > 0 && (isReadOnly || !mayEdit) && (
                 <div className="w-full flex items-center justify-center gap-1.5 text-xs border border-dashed border-slate-300 rounded-full py-1.5 text-slate-500">
                   <UserPlus className="h-3 w-3" />
                   {vacant} vacant {vacant === 1 ? 'slot' : 'slots'}
@@ -159,18 +165,24 @@ export function OrgNode({
 
           {!isReadOnly && (
             <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button onClick={() => onEdit?.(node)}
-                className="w-7 h-7 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center hover:bg-[#eaf6e6]" title="Edit">
-                <Edit2 className="h-3 w-3 text-[#256c1d]" />
-              </button>
-              <button onClick={() => onAddChild?.(node)}
-                className="w-7 h-7 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center hover:bg-[#eaf6e6]" title="Add position below">
-                <Plus className="h-3 w-3 text-[#256c1d]" />
-              </button>
-              <button onClick={() => onDelete?.(node)}
-                className="w-7 h-7 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center hover:bg-rose-50" title="Delete">
-                <Trash2 className="h-3 w-3 text-rose-500" />
-              </button>
+              {mayEdit && (
+                <button onClick={() => onEdit?.(node)}
+                  className="w-7 h-7 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center hover:bg-[#eaf6e6]" title="Edit">
+                  <Edit2 className="h-3 w-3 text-[#256c1d]" />
+                </button>
+              )}
+              {mayCreate && (
+                <button onClick={() => onAddChild?.(node)}
+                  className="w-7 h-7 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center hover:bg-[#eaf6e6]" title="Add position below">
+                  <Plus className="h-3 w-3 text-[#256c1d]" />
+                </button>
+              )}
+              {mayDelete && (
+                <button onClick={() => onDelete?.(node)}
+                  className="w-7 h-7 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center hover:bg-rose-50" title="Delete">
+                  <Trash2 className="h-3 w-3 text-rose-500" />
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -246,6 +258,8 @@ function BranchSection({
   onAssign: (n: DesignationNode) => void; onUnassign: (n: DesignationNode, userId: string) => void;
   onAddChild: (parent: DesignationNode) => void; onAddBranchPosition: (branch: Branch) => void;
 }) {
+  const { user: viewer } = useAuth();
+  const mayAdd = mayOn(viewer, 'org_chart', 'create', true);
   const [expanded, setExpanded] = useState(false);
 
   // Designation nodes scoped to this branch whose parent is outside the branch (or has no parent)
@@ -309,10 +323,12 @@ function BranchSection({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button size="sm" variant="outline" className="text-xs h-9 px-4 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
-            onClick={() => onAddBranchPosition(branch)}>
-            <Plus className="h-3 w-3 mr-1" /> Add Position
-          </Button>
+          {mayAdd && (
+            <Button size="sm" variant="outline" className="text-xs h-9 px-4 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
+              onClick={() => onAddBranchPosition(branch)}>
+              <Plus className="h-3 w-3 mr-1" /> Add Position
+            </Button>
+          )}
           <button onClick={() => setExpanded(!expanded)} className="h-9 w-9 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-foreground">
             {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </button>
@@ -387,10 +403,12 @@ function BranchSection({
               <div className="text-center py-8 text-sm text-muted-foreground border border-dashed border-slate-300 rounded-2xl mt-4 w-full bg-white/60">
                 No positions defined for this branch yet.
                 <br />
-                <button onClick={() => onAddBranchPosition(branch)}
-                  className="text-[#256c1d] hover:underline text-xs mt-1 inline-flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> Add first position
-                </button>
+                {mayAdd && (
+                  <button onClick={() => onAddBranchPosition(branch)}
+                    className="text-[#256c1d] hover:underline text-xs mt-1 inline-flex items-center gap-1">
+                    <Plus className="h-3 w-3" /> Add first position
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -402,6 +420,8 @@ function BranchSection({
 
 // ─── Main Panel ───────────────────────────────────────────────────────────────
 export function OrgHierarchyPanel() {
+  const { user: viewer } = useAuth();
+  const mayAdd = mayOn(viewer, 'org_chart', 'create', true);
   const [nodes, setNodes] = useState<DesignationNode[]>([]);
   const [allUsers, setAllUsers] = useState<OrgUser[]>([]);
   const [allDepts, setAllDepts] = useState<Dept[]>([]);
@@ -615,15 +635,19 @@ export function OrgHierarchyPanel() {
           </p>
         </div>
         <div className="grid grid-cols-2 sm:flex sm:flex-row gap-2.5 shrink-0">
-          <Button variant="outline" onClick={() => setSubDeptDialog(true)} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50">
-            <Layers className="h-4 w-4" /> Sub-Dept
-          </Button>
+          {mayAdd && (
+            <Button variant="outline" onClick={() => setSubDeptDialog(true)} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50">
+              <Layers className="h-4 w-4" /> Sub-Dept
+            </Button>
+          )}
           <Button variant="outline" onClick={fetchAll} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50">
             <RefreshCw className="h-4 w-4" /> Refresh
           </Button>
-          <Button onClick={() => openCreate()} className="col-span-2 sm:col-span-1 h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
-            <Plus className="h-4 w-4" /> Add Position
-          </Button>
+          {mayAdd && (
+            <Button onClick={() => openCreate()} className="col-span-2 sm:col-span-1 h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
+              <Plus className="h-4 w-4" /> Add Position
+            </Button>
+          )}
         </div>
       </div>
 
@@ -667,9 +691,11 @@ export function OrgHierarchyPanel() {
             Start by adding the top-level position (e.g. "CEO"), then add positions below it.
             Create branches in the Branches tab to add branch-specific hierarchies.
           </p>
-          <Button onClick={() => openCreate()}>
-            <Plus className="h-4 w-4 mr-2" /> Add First Position
-          </Button>
+          {mayAdd && (
+            <Button onClick={() => openCreate()}>
+              <Plus className="h-4 w-4 mr-2" /> Add First Position
+            </Button>
+          )}
         </div>
       )}
 

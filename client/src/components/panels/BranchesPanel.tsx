@@ -10,6 +10,8 @@ import { Plus, RefreshCw, Edit2, Trash2, UserPlus, MapPin, Building2, TrendingUp
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { confirmDialog } from '@/lib/confirm';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 interface Dept { id: string; name: string; type: string; }
 
@@ -37,6 +39,10 @@ const DEPT_TYPE_COLORS: Record<string, string> = {
 };
 
 export function BranchesPanel() {
+  const { user } = useAuth();
+  const mayCreate = mayOn(user, 'branches', 'create', true);
+  const mayEdit = mayOn(user, 'branches', 'edit', true);
+  const mayDelete = mayOn(user, 'branches', 'delete', true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -241,10 +247,12 @@ export function BranchesPanel() {
             <RefreshCw className="w-4 h-4" />
             Refresh
           </Button>
-          <Button onClick={() => setBranchDialog(true)} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
-            <Plus className="w-4 h-4" />
-            New Branch
-          </Button>
+          {mayCreate && (
+            <Button onClick={() => setBranchDialog(true)} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
+              <Plus className="w-4 h-4" />
+              New Branch
+            </Button>
+          )}
         </div>
       </div>
 
@@ -312,7 +320,7 @@ export function BranchesPanel() {
           </div>
           <p className="text-foreground font-medium mb-1">No branches yet</p>
           <p className="text-sm text-muted-foreground mb-6">Create your first branch to start organising departments.</p>
-          <Button onClick={openCreate} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="h-4 w-4 mr-2" /> Create First Branch</Button>
+          {mayCreate && <Button onClick={openCreate} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="h-4 w-4 mr-2" /> Create First Branch</Button>}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 sm:gap-6 items-stretch">
@@ -340,12 +348,16 @@ export function BranchesPanel() {
                   </div>
                 </div>
                 <div className="flex gap-1.5 shrink-0">
-                  <button onClick={() => openEdit(b)} title="Edit branch" className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center hover:bg-[#eaf6e6] text-[#256c1d] transition-colors">
-                    <Edit2 className="h-3.5 w-3.5" />
-                  </button>
-                  <button onClick={() => handleDelete(b)} title="Delete branch" className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center hover:bg-rose-50 text-rose-500 transition-colors">
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
+                  {mayEdit && (
+                    <button onClick={() => openEdit(b)} title="Edit branch" className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center hover:bg-[#eaf6e6] text-[#256c1d] transition-colors">
+                      <Edit2 className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                  {mayDelete && (
+                    <button onClick={() => handleDelete(b)} title="Delete branch" className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center hover:bg-rose-50 text-rose-500 transition-colors">
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -358,9 +370,11 @@ export function BranchesPanel() {
               <div className="rounded-2xl bg-[#f4f6f3] p-4 min-h-[112px]">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-medium text-muted-foreground">Branch manager</span>
-                  <button onClick={() => openAssignManager(b)} className="text-xs font-semibold text-[#256c1d] hover:underline flex items-center gap-1">
-                    <UserPlus className="h-3 w-3" />{b.branchManagerId ? 'Change' : 'Assign'}
-                  </button>
+                  {mayEdit && (
+                    <button onClick={() => openAssignManager(b)} className="text-xs font-semibold text-[#256c1d] hover:underline flex items-center gap-1">
+                      <UserPlus className="h-3 w-3" />{b.branchManagerId ? 'Change' : 'Assign'}
+                    </button>
+                  )}
                 </div>
                 {b.branchManagerId ? (
                   <div className="flex items-center gap-3 mt-3">
@@ -381,9 +395,11 @@ export function BranchesPanel() {
               <div className="space-y-3 flex-1">
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-medium text-muted-foreground">Departments</p>
-                  <button onClick={() => openManageDepts(b)} className="text-xs font-semibold text-[#256c1d] hover:underline flex items-center gap-1">
-                    <Layers className="h-3 w-3" /> Manage
-                  </button>
+                  {mayEdit && (
+                    <button onClick={() => openManageDepts(b)} className="text-xs font-semibold text-[#256c1d] hover:underline flex items-center gap-1">
+                      <Layers className="h-3 w-3" /> Manage
+                    </button>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5">
@@ -424,10 +440,12 @@ export function BranchesPanel() {
                 )}
               </div>
 
-              <button onClick={() => toggleStatus(b)}
-                className="mt-auto w-full text-xs font-medium text-slate-600 hover:text-foreground bg-white border border-slate-200 hover:bg-[#f4f6f3] rounded-full py-2.5 transition-colors">
-                {b.status === 'active' ? 'Deactivate branch' : 'Activate branch'}
-              </button>
+              {mayEdit && (
+                <button onClick={() => toggleStatus(b)}
+                  className="mt-auto w-full text-xs font-medium text-slate-600 hover:text-foreground bg-white border border-slate-200 hover:bg-[#f4f6f3] rounded-full py-2.5 transition-colors">
+                  {b.status === 'active' ? 'Deactivate branch' : 'Activate branch'}
+                </button>
+              )}
             </div>
           ))}
         </div>

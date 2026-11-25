@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { isGiven } from '@/lib/access';
 
 export interface StaffUser {
   phone?: string;
@@ -100,6 +101,10 @@ interface UserFormDialogProps {
 export function UserFormDialog({ open, onClose, onSaved, editingUser = null, defaultDepartmentId = '', title, description }: UserFormDialogProps) {
   const { user: currentUser } = useAuth();
   const isOrgAdmin = ['org_admin', 'superadmin', 'ceo'].includes(currentUser?.role || '');
+  // Added by an Org Admin: ordinary staff of their own branch and department only (the server enforces this)
+  const given = isGiven(currentUser, 'users');
+  const givenRoles = ['employee', ...(['sales', 'finance', 'collections'].includes(currentUser?.role || '') ? [currentUser!.role] : [])];
+  const own = (value: any) => (typeof value === 'object' ? value?.id : value) || '';
   const [formData, setFormData] = useState(() => initialForm(editingUser, defaultDepartmentId));
   const [users, setUsers] = useState<StaffUser[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -284,19 +289,21 @@ export function UserFormDialog({ open, onClose, onSaved, editingUser = null, def
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="employee">Employee / Staff</SelectItem>
-                <SelectItem value="hr_admin">HR Admin</SelectItem>
-                <SelectItem value="hr_sub_admin">HR Sub Admin</SelectItem>
-                <SelectItem value="finance_admin">Finance Admin</SelectItem>
-                <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
-                <SelectItem value="ops_admin">Operations Admin</SelectItem>
-                <SelectItem value="ops_sub_admin">Ops Sub Admin</SelectItem>
-                <SelectItem value="sales_admin">Sales Admin</SelectItem>
-                <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
-                <SelectItem value="collections_admin">Collections Admin</SelectItem>
-                {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
-                <SelectItem value="general_manager">General Manager</SelectItem>
-                <SelectItem value="branch_manager">Branch Manager</SelectItem>
+                {given ? givenRoles.map((r) => <SelectItem key={r} value={r}>{r.replace(/\b\w/, (c) => c.toUpperCase())}</SelectItem>) : (<>
+                  <SelectItem value="employee">Employee / Staff</SelectItem>
+                  <SelectItem value="hr_admin">HR Admin</SelectItem>
+                  <SelectItem value="hr_sub_admin">HR Sub Admin</SelectItem>
+                  <SelectItem value="finance_admin">Finance Admin</SelectItem>
+                  <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
+                  <SelectItem value="ops_admin">Operations Admin</SelectItem>
+                  <SelectItem value="ops_sub_admin">Ops Sub Admin</SelectItem>
+                  <SelectItem value="sales_admin">Sales Admin</SelectItem>
+                  <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
+                  <SelectItem value="collections_admin">Collections Admin</SelectItem>
+                  {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
+                  <SelectItem value="general_manager">General Manager</SelectItem>
+                  <SelectItem value="branch_manager">Branch Manager</SelectItem>
+                </>)}
               </SelectContent>
             </Select>
           </div>
@@ -322,7 +329,7 @@ export function UserFormDialog({ open, onClose, onSaved, editingUser = null, def
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">No Department</SelectItem>
-                {departments.map((dept) => (
+                {departments.filter((d) => !given || d.id === own(currentUser?.departmentId)).map((dept) => (
                   <SelectItem key={dept.id || dept.id} value={(dept.id || dept.id)!}>
                     {dept.name}
                   </SelectItem>
@@ -343,7 +350,7 @@ export function UserFormDialog({ open, onClose, onSaved, editingUser = null, def
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">Main Office / No Branch</SelectItem>
-                {branches.map((branch: any) => (
+                {branches.filter((b: any) => !given || !own((currentUser as any)?.branchId) || b.id === own((currentUser as any)?.branchId)).map((branch: any) => (
                   <SelectItem key={branch.id} value={branch.id}>
                     {branch.name}
                   </SelectItem>
@@ -352,7 +359,7 @@ export function UserFormDialog({ open, onClose, onSaved, editingUser = null, def
             </Select>
           </div>
           {/* Additional departments — for branch managers etc. */}
-          <div>
+          <div hidden={given}>
             <Label>Additional Departments <span className="text-xs text-muted-foreground font-normal">(for branch managers with multi-dept access)</span></Label>
             <div className="mt-2 border rounded-lg p-3 space-y-2 max-h-36 overflow-y-auto bg-muted/30">
               {departments
@@ -381,7 +388,7 @@ export function UserFormDialog({ open, onClose, onSaved, editingUser = null, def
               {departments.length === 0 && <p className="text-xs text-muted-foreground">No departments available</p>}
             </div>
           </div>
-          {formData.departmentId && subDepartments.length > 0 && (
+          {!given && formData.departmentId && subDepartments.length > 0 && (
             <div>
               <Label htmlFor="subDepartment">Sub-Department</Label>
               <Select
@@ -402,7 +409,7 @@ export function UserFormDialog({ open, onClose, onSaved, editingUser = null, def
               </Select>
             </div>
           )}
-          <div>
+          <div hidden={given}>
             <Label htmlFor="reportingTo">Reports To</Label>
             <Select
               value={formData.reportingTo}

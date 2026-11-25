@@ -89,6 +89,23 @@ export const refuseOwnRecord = (req: PageRequest, res: Response, userId: string 
   return true;
 };
 
+/** The account belongs to the organization, and to the branch of someone acting on given access. */
+export const userInReach = async (req: PageRequest, userId: unknown): Promise<boolean> =>
+  typeof userId === 'string' && Boolean(await prisma.user.findFirst({
+    where: {
+      id: userId,
+      ...(req.user.role !== 'superadmin' && { organizationId: req.user.organizationId }),
+      ...(req.ownBranchOnly && req.user.branchId && { branchId: req.user.branchId }),
+    },
+    select: { id: true },
+  }));
+
+/** Why this person may not be put in charge of something by this request; null when they may. */
+export const appointmentError = async (req: PageRequest, userId: unknown): Promise<string | null> => {
+  if (req.ownBranchOnly && userId === req.user.id) return 'You cannot appoint yourself';
+  return (await userInReach(req, userId)) ? null : 'That person was not found';
+};
+
 /** For a request several pages share: any one of them is enough. */
 export const anyPageAction = (pageKeys: string[], action: Action, legacyRoles: string[] | null) =>
   async (req: PageRequest, res: Response, next: NextFunction): Promise<void> => {
@@ -133,7 +150,7 @@ export const paymentInBranch = async (req: PageRequest, branchId: string): Promi
   }));
 };
 
-type Model = 'studyCenter' | 'walletTopUp' | 'enrollment' | 'paymentLink' | 'paymentSchedule' | 'target';
+type Model = 'studyCenter' | 'walletTopUp' | 'enrollment' | 'paymentLink' | 'paymentSchedule' | 'target' | 'branch' | 'department' | 'designation';
 
 /** The record named in the URL belongs to the caller's organization. */
 export const ownedBy = (model: Model) => async (req: PageRequest): Promise<boolean> =>

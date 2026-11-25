@@ -19,6 +19,8 @@ import {
 } from '@/components/ui/select';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 interface User {
   id: string;
@@ -56,6 +58,8 @@ const DEPT_TYPE_COLORS: Record<string, string> = {
 };
 
 export function ManagerAssignmentPanel() {
+  const { user } = useAuth();
+  const mayEdit = mayOn(user, 'managers', 'edit', true);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -243,15 +247,17 @@ export function ManagerAssignmentPanel() {
                     </div>
                   </div>
 
-                  <Button
-                    variant={managerName ? 'outline' : 'default'}
-                    className={managerName
-                      ? 'h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold'
-                      : 'h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold'}
-                    onClick={() => openAssignDialog('department', dept.id, dept.name, dept.managerId)}
-                  >
-                    {managerName ? 'Change' : 'Assign'}
-                  </Button>
+                  {mayEdit && (
+                    <Button
+                      variant={managerName ? 'outline' : 'default'}
+                      className={managerName
+                        ? 'h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold'
+                        : 'h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold'}
+                      onClick={() => openAssignDialog('department', dept.id, dept.name, dept.managerId)}
+                    >
+                      {managerName ? 'Change' : 'Assign'}
+                    </Button>
+                  )}
                 </div>
 
                 {/* Sub-departments */}
@@ -282,15 +288,17 @@ export function ManagerAssignmentPanel() {
                             </div>
                           </div>
 
-                          <Button
-                            variant={subManagerName ? 'outline' : 'default'}
-                            className={subManagerName
-                              ? 'h-9 rounded-full px-4 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold'
-                              : 'h-9 rounded-full px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold'}
-                            onClick={() => openAssignDialog('subdepartment', sub.id, sub.name, sub.managerId)}
-                          >
-                            {subManagerName ? 'Change' : 'Assign'}
-                          </Button>
+                          {mayEdit && (
+                            <Button
+                              variant={subManagerName ? 'outline' : 'default'}
+                              className={subManagerName
+                                ? 'h-9 rounded-full px-4 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold'
+                                : 'h-9 rounded-full px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold'}
+                              onClick={() => openAssignDialog('subdepartment', sub.id, sub.name, sub.managerId)}
+                            >
+                              {subManagerName ? 'Change' : 'Assign'}
+                            </Button>
+                          )}
                         </div>
                       );
                     })}

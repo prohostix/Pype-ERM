@@ -8,6 +8,7 @@ import {
   getMySubDepartment,
 } from '../controllers/subDepartmentController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { pageAction } from '../access/pageGuard.js';
 
 const router = express.Router();
 
@@ -21,8 +22,8 @@ router.get('/', getSubDepartments);
 router.get('/:id', getSubDepartment);
 
 // Only admins can create/update/delete
-router.post('/', authorize('ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'), createSubDepartment);
-router.patch('/:id', authorize('ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin', 'hr_admin', 'hr_sub_admin'), updateSubDepartment);
+router.post('/', pageAction('org_chart', 'create', ['ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin']), createSubDepartment);
+router.patch('/:id', pageAction('managers', 'edit', ['ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin', 'hr_admin', 'hr_sub_admin']), updateSubDepartment);
 router.delete('/:id', authorize('ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'), deleteSubDepartment);
 
 export default router;

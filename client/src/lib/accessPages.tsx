@@ -59,6 +59,11 @@ import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { VacanciesPanel } from '@/components/panels/VacanciesPanel';
 import { ComplaintsPanel } from '@/components/panels/ComplaintsPanel';
 import { AssetManagementPanel } from '@/components/panels/AssetManagementPanel';
+import { HRUsersPanel } from '@/components/panels/HRUsersPanel';
+import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
+import { BranchesPanel } from '@/components/panels/BranchesPanel';
+import { OrgHierarchyPanel } from '@/components/panels/OrgHierarchyPanel';
+import { ManagerAssignmentPanel } from '@/components/panels/ManagerAssignmentPanel';
 
 interface AccessPage { key: string; label: string; menuIds: string[]; render?: () => ReactElement; exceptRoles?: string[]; onlyRoles?: string[] }
 
@@ -118,6 +123,11 @@ const PAGES: AccessPage[] = [
   { key: 'vacancies', label: 'Vacancies', menuIds: ['vacancies'], render: () => <VacanciesPanel /> },
   { key: 'complaints', label: 'Complaints', menuIds: ['complaints', 'support_requests'], render: () => <ComplaintsPanel /> },
   { key: 'assets', label: 'Assets', menuIds: ['assets'], render: () => <AssetManagementPanel /> },
+  { key: 'users', label: 'Users', menuIds: ['users'], render: () => <HRUsersPanel /> },
+  { key: 'departments', label: 'Departments', menuIds: ['departments'], render: () => <DepartmentsPanel /> },
+  { key: 'branches', label: 'Branches', menuIds: ['branches'], render: () => <BranchesPanel /> },
+  { key: 'org_chart', label: 'Org Chart', menuIds: ['org-chart'], render: () => <OrgHierarchyPanel /> },
+  { key: 'managers', label: 'Managers', menuIds: ['managers'], render: () => <ManagerAssignmentPanel /> },
 ];
 
 const ALL_PAGES: AccessPage[] = [...PAGES, ...BLOCK_ONLY_PAGES];

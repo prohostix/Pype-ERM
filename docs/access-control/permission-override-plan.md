@@ -353,3 +353,19 @@ Employees, Branch Hierarchy, Team Attendance, Attendance Settings, Biometric Dev
 | Leave approval given | Gives the final decision; the General Manager's leave stays with the CEO and Org Admin |
 | Organization-wide settings | Holidays, Vacancies and Attendance Settings have no branch, so a given user changes them for everyone |
 | General Manager | Not visible to a given user who has a branch |
+
+## Accounts and structure (connected 25 Nov 2026)
+
+Users, Departments, Branches, Org Chart, Managers.
+
+| Rule for someone acting on given access | Behaviour |
+|---|---|
+| Accounts they may manage | Employees (and their own role if it is Sales, Finance or Collections), in their branch, in their department or none |
+| Accounts they may not touch | Their own, admins and managers, anyone with a sub-department or with pages an Org Admin allowed |
+| Fields they may not set | Sub-department, extra departments, reporting manager, study center |
+| Departments | Cannot change a department's type or manager, or change or delete their own department |
+| Branches | With a branch of their own: only that branch, and no deleting |
+| Appointments | Cannot appoint themselves; the person must be in reach |
+| Remaining risk | Branches or Managers lets them make someone else a manager, which gives that person more screens. Saving such access asks the Org Admin to confirm |
+
+Also fixed for everyone: department, branch and position requests did not check the organization, and some responses included password hashes. All responses now drop password hashes.

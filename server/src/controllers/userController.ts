@@ -3,8 +3,9 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
-import { isHrRole, manageableRoles, userChangeError } from '../utils/userGuards.js';
+import { isHrRole, manageableRoles, userChangeError, givenRoles, givenUserError } from '../utils/userGuards.js';
 import { revokeOverrides } from '../access/load.js';
+import type { PageRequest } from '../access/pageGuard.js';
 
 // Safe user select — never expose password hash
 const USER_SELECT = {
@@ -157,7 +158,7 @@ export const getUser = asyncHandler(async (req: AuthRequest, res: Response) => {
   res.status(200).json({ success: true, data: user });
 });
 
-export const createUser = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const createUser = asyncHandler(async (req: PageRequest, res: Response) => {
   const {
     email, name, phone, role, designation, reportingTo,
     departmentId, subDepartmentId, branchId, studyCenterId,
@@ -170,7 +171,7 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
 
   // Role restriction — callers can only create roles they're permitted to
   const callerRole = req.user.role as string;
-  const allowed = CREATABLE_ROLES[callerRole] || [];
+  const allowed = req.ownBranchOnly ? givenRoles(callerRole) : CREATABLE_ROLES[callerRole] || [];
   if (role && !allowed.includes(role)) {
     res.status(403).json({ success: false, message: `You cannot create a user with role '${role}'` });
     return;
@@ -198,6 +199,17 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
         return;
       }
       finalBranchId = req.user.branchId;
+    }
+  }
+
+  if (req.ownBranchOnly) {
+    finalBranchId = branchId || req.user.branchId;
+    const denied = givenUserError(req.user, null, {
+      role: finalRole, branchId: finalBranchId, departmentId, subDepartmentId, reportingTo, studyCenterId, additionalDepartmentIds,
+    });
+    if (denied) {
+      res.status(403).json({ success: false, message: denied });
+      return;
     }
   }
 
@@ -233,7 +245,7 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
   res.status(201).json({ success: true, data: user });
 });
 
-export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateUser = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = { id: req.params.id };
   if (req.user.role !== 'superadmin') where.organizationId = req.user.organizationId;
 
@@ -259,7 +271,7 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   // Role restriction on update
   if (role && role !== userExists.role) {
     const callerRole = req.user.role as string;
-    const allowed = CREATABLE_ROLES[callerRole] || [];
+    const allowed = req.ownBranchOnly ? givenRoles(callerRole) : CREATABLE_ROLES[callerRole] || [];
     if (!allowed.includes(role)) {
       res.status(403).json({ success: false, message: `You cannot assign role '${role}'` });
       return;
@@ -304,7 +316,9 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   if (allowAnywherePunchIn !== undefined) updateData.allowAnywherePunchIn = allowAnywherePunchIn;
   if (requiresAttendance !== undefined) updateData.requiresAttendance = requiresAttendance;
 
-  const denied = userChangeError(req.user, userExists, CREATABLE_ROLES[req.user.role] || [], updateData);
+  const denied = req.ownBranchOnly
+    ? givenUserError(req.user, await givenTarget(userExists), updateData)
+    : userChangeError(req.user, userExists, CREATABLE_ROLES[req.user.role] || [], updateData);
   if (denied) {
     res.status(403).json({ success: false, message: denied });
     return;
@@ -324,20 +338,33 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   res.status(200).json({ success: true, data: user });
 });
 
+/** The account with what decides whether someone on given access may touch it */
+const givenTarget = async (user: any) => {
+  const [branch, department, subDepartment, grants] = await Promise.all([
+    prisma.branch.count({ where: { branchManagerId: user.id } }),
+    prisma.department.count({ where: { OR: [{ managerId: user.id }, { assistantManagers: { some: { id: user.id } } }] } }),
+    prisma.subDepartment.count({ where: { managerId: user.id } }),
+    prisma.userAccessOverride.count({ where: { userId: user.id, effect: 'allow', revokedAt: null } }),
+  ]);
+  return { ...user, isManager: branch + department + subDepartment > 0, hasGivenAccess: grants > 0 };
+};
+
 /**
  * Runs before the delete handler. The handler itself is only reached after delete approval,
  * so a request the caller may not make has to be refused here.
  */
-export const guardUserDelete = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+export const guardUserDelete = async (req: PageRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const where: any = { id: req.params.id };
     if (req.user.role !== 'superadmin') where.organizationId = req.user.organizationId;
-    const target = await prisma.user.findFirst({ where, select: { id: true, role: true, branchId: true } });
+    const target = await prisma.user.findFirst({ where, select: { id: true, role: true, branchId: true, departmentId: true, subDepartmentId: true } });
     if (!target) {
       res.status(404).json({ success: false, message: 'User not found' });
       return;
     }
-    const denied = userChangeError(req.user, target, CREATABLE_ROLES[req.user.role] || []);
+    const denied = req.ownBranchOnly
+      ? givenUserError(req.user, await givenTarget(target))
+      : userChangeError(req.user, target, CREATABLE_ROLES[req.user.role] || []);
     if (denied) {
       res.status(403).json({ success: false, message: denied });
       return;

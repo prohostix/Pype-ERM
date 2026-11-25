@@ -303,6 +303,11 @@ const CONNECTED: Record<string, (user: AccessUser) => Action[]> = {
   vacancies: forRoles([[...HR_ADMINS, ...EXECUTIVES], ['view', 'create', 'edit', 'delete']]),
   complaints: forRoles([HR_ADMINS, ['view', 'edit', 'delete']]),
   assets: forRoles([[...HR_ADMINS, ...EXECUTIVES, 'branch_manager'], ['view', 'create', 'edit', 'delete']]),
+  users: forRoles([HR_ADMINS, ['view', 'create', 'edit', 'delete']]),
+  departments: forRoles([EXECUTIVES, ['view']]),
+  branches: forRoles(),
+  org_chart: forRoles([[...HR_ADMINS, ...EXECUTIVES], ['view', 'create', 'edit', 'delete']]),
+  managers: forRoles([HR_ADMINS, ['view', 'edit', 'delete']]),
 };
 
 export const FEATURES: Feature[] = [

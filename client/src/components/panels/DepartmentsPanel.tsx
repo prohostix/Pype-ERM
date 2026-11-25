@@ -43,6 +43,8 @@ import {
 } from '@/components/ui/select';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export interface Department {
   id: string;
@@ -142,6 +144,10 @@ export const DEPT_TYPE_META: Record<string, { label: string; icon: any; badgeCla
 };
 
 export function DepartmentsPanel() {
+  const { user } = useAuth();
+  const mayCreate = mayOn(user, 'departments', 'create', true);
+  const mayEdit = mayOn(user, 'departments', 'edit', true);
+  const mayDelete = mayOn(user, 'departments', 'delete', true);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -460,23 +466,27 @@ export function DepartmentsPanel() {
         </CardContent>
 
         <div className="px-6 pb-6 flex items-center justify-between gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleEdit(dept)}
-            className="flex-1 h-10 rounded-full text-xs font-semibold bg-white border-slate-200 hover:bg-[#eaf6e6] hover:text-[#256c1d]"
-          >
-            <Edit className="w-3.5 h-3.5 mr-1.5" />
-            Edit
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleDelete(dept)}
-            className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 text-rose-500 hover:bg-rose-50 hover:text-rose-600"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-          </Button>
+          {mayEdit && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleEdit(dept)}
+              className="flex-1 h-10 rounded-full text-xs font-semibold bg-white border-slate-200 hover:bg-[#eaf6e6] hover:text-[#256c1d]"
+            >
+              <Edit className="w-3.5 h-3.5 mr-1.5" />
+              Edit
+            </Button>
+          )}
+          {mayDelete && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleDelete(dept)}
+              className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 text-rose-500 hover:bg-rose-50 hover:text-rose-600"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </Button>
+          )}
         </div>
       </Card>
     );
@@ -498,13 +508,15 @@ export function DepartmentsPanel() {
           </p>
         </div>
 
-        <Button
-          onClick={handleCreate}
-          className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Create Department</span>
-        </Button>
+        {mayCreate && (
+          <Button
+            onClick={handleCreate}
+            className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Create Department</span>
+          </Button>
+        )}
       </div>
 
       {/* KPI Metric Strip */}

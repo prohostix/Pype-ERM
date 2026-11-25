@@ -2,6 +2,21 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { appointmentError, type PageRequest } from '../access/pageGuard.js';
+
+/** Someone given Branches who has a branch of their own may only change that one */
+const refuseOtherBranch = (req: PageRequest, res: Response, branchId?: string): boolean => {
+  if (!req.ownBranchOnly || !req.user.branchId || branchId === req.user.branchId) return false;
+  res.status(403).json({ success: false, message: 'You can only change your own branch' });
+  return true;
+};
+
+/** The departments named, limited to the organization and reduced to what is stored */
+const departmentList = async (organizationId: string, ids: any[]) => {
+  const wanted = ids.map((d) => (typeof d === 'string' ? d : d?.id)).filter((id) => typeof id === 'string');
+  const found = await prisma.department.findMany({ where: { id: { in: wanted }, organizationId } });
+  return found.map((d) => ({ id: d.id, name: d.name, type: d.type }));
+};
 
 export const getBranches = asyncHandler(async (req: AuthRequest, res: Response) => {
   const branches = await prisma.branch.findMany({
@@ -29,7 +44,8 @@ export const getBranch = asyncHandler(async (req: AuthRequest, res: Response) =>
   const branch: any = await prisma.branch.findUnique({
     where: { id: req.params.id },
     include: {
-      branchManager: true,
+      // Never the whole account, which holds the password hash
+      branchManager: { select: { id: true, name: true, email: true, role: true, designation: true } },
       salesDept: true,
       operationsDept: true
     }
@@ -41,8 +57,17 @@ export const getBranch = asyncHandler(async (req: AuthRequest, res: Response) =>
   res.json({ success: true, data: { ...branch, additionalDeptIds: branch.additionalDeptIds || [], branchManagerId: branch.branchManagerId } });
 });
 
-export const createBranch = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const createBranch = asyncHandler(async (req: PageRequest, res: Response) => {
   const { name, code, address, city, branchManagerId } = req.body;
+
+  if (refuseOtherBranch(req, res)) return;
+  if (branchManagerId) {
+    const refusal = await appointmentError(req, branchManagerId);
+    if (refusal) {
+      res.status(403).json({ success: false, message: refusal });
+      return;
+    }
+  }
 
   // 1. Create the branch
   const branch = await prisma.branch.create({
@@ -108,8 +133,9 @@ export const createBranch = asyncHandler(async (req: AuthRequest, res: Response)
   res.status(201).json({ success: true, data: updated });
 });
 
-export const updateBranch = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateBranch = asyncHandler(async (req: PageRequest, res: Response) => {
   const { name, code, address, city, contact, status } = req.body;
+  if (refuseOtherBranch(req, res, req.params.id)) return;
   const branch = await prisma.branch.update({
     where: { id: req.params.id },
     data: { name, code, address, city, contact, status }
@@ -117,26 +143,28 @@ export const updateBranch = asyncHandler(async (req: AuthRequest, res: Response)
   res.json({ success: true, data: branch });
 });
 
-export const deleteBranch = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const deleteBranch = asyncHandler(async (req: PageRequest, res: Response) => {
+  // Nobody deletes the branch they belong to on given access
+  if (req.ownBranchOnly && req.user.branchId) {
+    res.status(403).json({ success: false, message: 'A branch user cannot delete branches' });
+    return;
+  }
   await prisma.branch.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
 
-export const assignBranchManager = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const assignBranchManager = asyncHandler(async (req: PageRequest, res: Response) => {
   const { userId, additionalDeptIds } = req.body;
   
-  let additionalDeptObjects: any[] = [];
-  if (Array.isArray(additionalDeptIds) && additionalDeptIds.length > 0) {
-    const isStrings = typeof additionalDeptIds[0] === 'string';
-    if (isStrings) {
-      const depts = await prisma.department.findMany({
-        where: { id: { in: additionalDeptIds } }
-      });
-      additionalDeptObjects = depts.map(d => ({ id: d.id, name: d.name, type: d.type }));
-    } else {
-      additionalDeptObjects = additionalDeptIds;
+  if (refuseOtherBranch(req, res, req.params.id)) return;
+  if (userId) {
+    const refusal = await appointmentError(req, userId);
+    if (refusal) {
+      res.status(403).json({ success: false, message: refusal });
+      return;
     }
   }
+  const additionalDeptObjects = Array.isArray(additionalDeptIds) ? await departmentList(req.user.organizationId, additionalDeptIds) : [];
 
   const branch: any = await prisma.branch.update({
     where: { id: req.params.id },
@@ -176,21 +204,11 @@ export const assignBranchManager = asyncHandler(async (req: AuthRequest, res: Re
   res.json({ success: true, data: { ...branch, additionalDeptIds: branch.additionalDeptIds || [], branchManagerId: branch.branchManagerId } });
 });
 
-export const updateBranchDepartments = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateBranchDepartments = asyncHandler(async (req: PageRequest, res: Response) => {
   const { additionalDeptIds } = req.body;
   
-  let additionalDeptObjects: any[] = [];
-  if (Array.isArray(additionalDeptIds) && additionalDeptIds.length > 0) {
-    const isStrings = typeof additionalDeptIds[0] === 'string';
-    if (isStrings) {
-      const depts = await prisma.department.findMany({
-        where: { id: { in: additionalDeptIds } }
-      });
-      additionalDeptObjects = depts.map(d => ({ id: d.id, name: d.name, type: d.type }));
-    } else {
-      additionalDeptObjects = additionalDeptIds;
-    }
-  }
+  if (refuseOtherBranch(req, res, req.params.id)) return;
+  const additionalDeptObjects = Array.isArray(additionalDeptIds) ? await departmentList(req.user.organizationId, additionalDeptIds) : [];
 
   const branch: any = await prisma.branch.update({
     where: { id: req.params.id },

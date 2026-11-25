@@ -9,6 +9,7 @@ import { decideStudentAction, hidesStudentFees, isGrantedStudentUser, restrictSt
 import { changeError, needsRow } from '../src/access/changes.js';
 import { payrollTeamAccess } from '../src/access/payrollGuard.js';
 import { leaveVisibilityWhere } from '../src/utils/leaveScope.js';
+import { givenUserError } from '../src/utils/userGuards.js';
 import { studentBranchWhere } from '../src/access/studentRules.js';
 import { partnerBranchWhere, enrollmentBranchWhere } from '../src/access/pageGuard.js';
 import { hasPaymentsScreen, invoiceBranchWhere, isGrantedReader } from '../src/access/invoiceRules.js';
@@ -288,12 +289,12 @@ test('remaining finance pages default to finance roles', () => {
 });
 
 test('block-only pages can be blocked but not given', () => {
-  const change = (effect: string) => [{ featureKey: 'users', action: 'create', effect }];
+  const change = (effect: string) => [{ featureKey: 'universities', action: 'create', effect }];
   assert.ok(changeError('admin', hr, change('allow')));
   assert.equal(changeError('admin', hr, change('deny')), null);
   assert.equal(needsRow(hr, change('deny')[0] as any), true);
-  const forced = resolveAccess(hr, [row('create', 'allow', { featureKey: 'users' })]);
-  assert.equal(forced.users.create!.override, undefined, 'a stored allow is ignored');
+  const forced = resolveAccess(hr, [row('create', 'allow', { featureKey: 'universities' })]);
+  assert.equal(forced.universities.create!.override, undefined, 'a stored allow is ignored');
 });
 
 test('an HR Admin can be given the finance side of payroll', () => {
@@ -336,6 +337,24 @@ test('leave requests of a given approver stay in their branch', () => {
   assert.deepEqual(leaveVisibilityWhere(given as any), { organizationId: 'o', user: { role: { not: 'center_admin' }, branchId: 'b' } });
   assert.deepEqual(leaveVisibilityWhere({ ...given, user: { ...given.user, branchId: null } } as any), { organizationId: 'o', user: { role: { not: 'center_admin' } } });
   assert.ok(JSON.stringify(leaveVisibilityWhere({ user: given.user } as any)).includes('"employeeId":"u"'));
+});
+
+test('given account management cannot be used to gain more access', () => {
+  const actor = { id: 'me', role: 'employee', branchId: 'b', departmentId: 'd' };
+  const target = { id: 't', role: 'employee', branchId: 'b', departmentId: 'd' };
+  assert.equal(givenUserError(actor, target, { role: 'employee', branchId: 'b', departmentId: 'd', additionalDepartmentIds: [] }), null);
+  assert.equal(givenUserError(actor, null, { role: 'employee', branchId: 'b' }), null);
+  assert.equal(givenUserError(actor, target), null, 'may delete ordinary staff');
+  for (const [name, other] of Object.entries({
+    self: { ...target, id: 'me' }, admin: { ...target, role: 'hr_admin' }, finance: { ...target, role: 'finance' },
+    branch: { ...target, branchId: 'x' }, noBranch: { ...target, branchId: null }, department: { ...target, departmentId: 'x' },
+    sub: { ...target, subDepartmentId: 's' }, manager: { ...target, isManager: true }, given: { ...target, hasGivenAccess: true },
+  })) assert.ok(givenUserError(actor, other), name);
+  for (const change of [{ role: 'org_admin' }, { role: 'finance' }, { branchId: 'x' }, { branchId: null }, { departmentId: 'x' }, { subDepartmentId: 's' },
+    { reportingTo: 'r' }, { studyCenterId: 'c' }, { additionalDepartmentIds: ['x'] }]) {
+    assert.ok(givenUserError(actor, target, change), JSON.stringify(change));
+    assert.ok(givenUserError(actor, null, { role: 'employee', branchId: 'b', ...change }), `create ${JSON.stringify(change)}`);
+  }
 });
 
 test('requests are matched to the page they belong to', () => {

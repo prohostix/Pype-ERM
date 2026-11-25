@@ -77,8 +77,11 @@ import academicBatchRoutes from './routes/academicBatchRoutes.js';
 import aiReportRoutes from './modules/ai-reports/routes.js';
 import studentReportRoutes from './modules/student-reports/routes.js';
 import studyAbroadRoutes from './modules/study-abroad-partners/routes.js';
+import { hidePasswordHashes } from './utils/hidePasswordHashes.js';
 
 const app: Application = express();
+// No response may carry a password hash
+app.set('json replacer', hidePasswordHashes);
 
 // Trust reverse proxy (Nginx) headers for rate limiting
 app.set('trust proxy', 1);

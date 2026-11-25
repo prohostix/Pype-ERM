@@ -2,11 +2,6 @@
 export interface BlockedPageMenu { key: string; label: string; menuIds: string[]; exceptRoles?: string[]; onlyRoles?: string[] }
 
 export const BLOCK_ONLY_PAGES: BlockedPageMenu[] = [
-  { key: 'users', label: 'Users', menuIds: ['users'] },
-  { key: 'departments', label: 'Departments', menuIds: ['departments'] },
-  { key: 'branches', label: 'Branches', menuIds: ['branches'] },
-  { key: 'org_chart', label: 'Org Chart', menuIds: ['org-chart'] },
-  { key: 'managers', label: 'Managers', menuIds: ['managers'] },
   { key: 'universities', label: 'Universities', menuIds: ['universities', 'university_details', 'university_details_res'] },
   { key: 'programs', label: 'Programs', menuIds: ['programs', 'course_details', 'course_details_res'] },
   { key: 'program_allocation', label: 'Program Allocation', menuIds: ['program_allocations'] },

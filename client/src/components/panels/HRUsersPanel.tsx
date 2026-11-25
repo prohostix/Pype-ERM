@@ -31,6 +31,7 @@ import {
   type DesignationOption,
 } from '@/components/panels/UserFormDialog';
 import { confirmDialog } from '@/lib/confirm';
+import { isGiven, mayOn } from '@/lib/access';
 
 export function HRUsersPanel() {
   const [users, setUsers] = useState<User[]>([]);
@@ -38,6 +39,12 @@ export function HRUsersPanel() {
   const [subDepartments, setSubDepartments] = useState<SubDepartment[]>([]);
   const [designations, setDesignations] = useState<DesignationOption[]>([]);
   const { user: currentUser } = useAuth();
+  // Added by an Org Admin: may only manage ordinary staff, so role and department moves are not offered
+  const given = isGiven(currentUser, 'users');
+  const mayCreate = mayOn(currentUser, 'users', 'create', true);
+  const mayEdit = mayOn(currentUser, 'users', 'edit', true);
+  const mayDelete = mayOn(currentUser, 'users', 'delete', true);
+  const mayAppoint = !given || mayOn(currentUser, 'branches', 'edit', false);
   const isOrgAdmin = currentUser?.role === 'org_admin' || currentUser?.role === 'superadmin' || currentUser?.role === 'ceo';
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -370,13 +377,15 @@ export function HRUsersPanel() {
               </Select>
             </div>
           )}
-          <Button
-            onClick={() => { setEditingUser(null); setDialogOpen(true); }}
-            className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Employee User
-          </Button>
+          {mayCreate && (
+            <Button
+              onClick={() => { setEditingUser(null); setDialogOpen(true); }}
+              className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Employee User
+            </Button>
+          )}
         </div>
       </div>
 
@@ -456,34 +465,40 @@ export function HRUsersPanel() {
                       )}
                     </div>
                     <div className="flex items-center gap-1.5 flex-wrap xl:justify-end pt-3 xl:pt-0 border-t border-slate-200/70 xl:border-none">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
-                        onClick={() => openTransferDialog(user)}
-                        title="Transfer Employee"
-                      >
-                        <ArrowRightLeft className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
-                        onClick={() => openPromotionDialog(user, 'promotion')}
-                        title="Promote Employee"
-                      >
-                        <TrendingUp className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
-                        onClick={() => openPromotionDialog(user, 'demotion')}
-                        title="Demote Employee"
-                      >
-                        <TrendingDown className="w-4 h-4" />
-                      </Button>
-                      {branches.length > 0 && user.status !== 'resigned' && (
+                      {!given && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
+                          onClick={() => openTransferDialog(user)}
+                          title="Transfer Employee"
+                        >
+                          <ArrowRightLeft className="w-4 h-4" />
+                        </Button>
+                      )}
+                      {!given && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
+                          onClick={() => openPromotionDialog(user, 'promotion')}
+                          title="Promote Employee"
+                        >
+                          <TrendingUp className="w-4 h-4" />
+                        </Button>
+                      )}
+                      {!given && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
+                          onClick={() => openPromotionDialog(user, 'demotion')}
+                          title="Demote Employee"
+                        >
+                          <TrendingDown className="w-4 h-4" />
+                        </Button>
+                      )}
+                      {mayAppoint && branches.length > 0 && user.status !== 'resigned' && (
                         <Button
                           variant="outline"
                           size="sm"
@@ -494,51 +509,61 @@ export function HRUsersPanel() {
                           <Building2 className="w-4 h-4" />
                         </Button>
                       )}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
-                        onClick={() => openPasswordDialog(userId)}
-                        title="Change Password"
-                      >
-                        <Key className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
-                        onClick={() => openEditDialog(user)}
-                        title="Edit User"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleToggleStatus(user)}
-                        title={user.status === 'active' ? 'Suspend User' : 'Activate User'}
-                        className={`h-10 w-10 p-0 rounded-full bg-white ${user.status === 'active' ? 'text-amber-600 border-amber-200 hover:bg-amber-50' : 'text-[#256c1d] border-[#cfe9c9] hover:bg-[#eaf6e6]'}`}
-                      >
-                        {user.status === 'active' ? <Ban className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleResign(user)}
-                        title={user.status === 'resigned' ? 'Re-activate Employee' : 'Resign Employee'}
-                        className={`h-10 w-10 p-0 rounded-full bg-white ${user.status === 'resigned' ? 'text-sky-600 border-sky-200 hover:bg-sky-50' : 'text-red-600 border-red-200 hover:bg-red-50'}`}
-                      >
-                        {user.status === 'resigned' ? <UserCheck className="w-4 h-4" /> : <UserMinus className="w-4 h-4" />}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-10 w-10 p-0 rounded-full bg-white text-red-600 border-red-200 hover:bg-red-50"
-                        onClick={() => handleDelete(userId)}
-                        title="Delete User"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      {mayEdit && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
+                          onClick={() => openPasswordDialog(userId)}
+                          title="Change Password"
+                        >
+                          <Key className="w-4 h-4" />
+                        </Button>
+                      )}
+                      {mayEdit && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
+                          onClick={() => openEditDialog(user)}
+                          title="Edit User"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      )}
+                      {mayEdit && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleToggleStatus(user)}
+                          title={user.status === 'active' ? 'Suspend User' : 'Activate User'}
+                          className={`h-10 w-10 p-0 rounded-full bg-white ${user.status === 'active' ? 'text-amber-600 border-amber-200 hover:bg-amber-50' : 'text-[#256c1d] border-[#cfe9c9] hover:bg-[#eaf6e6]'}`}
+                        >
+                          {user.status === 'active' ? <Ban className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+                        </Button>
+                      )}
+                      {mayEdit && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleResign(user)}
+                          title={user.status === 'resigned' ? 'Re-activate Employee' : 'Resign Employee'}
+                          className={`h-10 w-10 p-0 rounded-full bg-white ${user.status === 'resigned' ? 'text-sky-600 border-sky-200 hover:bg-sky-50' : 'text-red-600 border-red-200 hover:bg-red-50'}`}
+                        >
+                          {user.status === 'resigned' ? <UserCheck className="w-4 h-4" /> : <UserMinus className="w-4 h-4" />}
+                        </Button>
+                      )}
+                      {mayDelete && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-10 w-10 p-0 rounded-full bg-white text-red-600 border-red-200 hover:bg-red-50"
+                          onClick={() => handleDelete(userId)}
+                          title="Delete User"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                 );

@@ -97,8 +97,8 @@ Also not listed: dashboards and overview pages, AI Reports, "coming soon" screen
 
 | Page | Actions found | Panels that have it | Access Control |
 |---|---|---|---|
-| Users (Org Admin) | view, create, edit, delete | CEO / General Manager, Org Admin | Block only |
-| Users (HR) | view, create, edit, delete | HR | Block only |
+| Users (Org Admin) | view, create, edit, delete | CEO / General Manager, Org Admin | Connected |
+| Users (HR) | view, create, edit, delete | HR | Connected |
 | Employees | view | HR, Org Admin | Connected |
 | Attendance | view, create, edit, delete, download | Branch Manager, CEO / General Manager, Collections, Employee, Finance, HR, Operations, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
 | Attendance Settings | view, create | HR | Connected |
@@ -109,11 +109,11 @@ Also not listed: dashboards and overview pages, AI Reports, "coming soon" screen
 | Vacancies | view, create, edit, delete | HR | Connected |
 | Complaints | view, create, edit, delete | HR, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
 | Assets | view, create, edit, delete | CEO / General Manager, HR | Connected |
-| Departments | view, create, edit, delete | CEO / General Manager, Org Admin | Block only |
-| Branches | view, create, edit, delete | Org Admin | Block only |
-| Organization Hierarchy / Org Chart | view, create, edit, delete | HR, Org Admin | Block only |
+| Departments | view, create, edit, delete | CEO / General Manager, Org Admin | Connected |
+| Branches | view, create, edit, delete | Org Admin | Connected |
+| Organization Hierarchy / Org Chart | view, create, edit, delete | HR, Org Admin | Connected |
 | Branch Hierarchy | view | Branch Manager, CEO / General Manager | Connected |
-| Managers | view, edit, delete | HR | Block only |
+| Managers | view, edit, delete | HR | Connected |
 
 ## 9. Sales and tasks
 
