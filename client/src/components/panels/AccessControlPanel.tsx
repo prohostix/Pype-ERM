@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowLeft, History, Search, ShieldCheck, TriangleAlert, UserRound } from 'lucide-react';
+import { ArrowLeft, ChevronDown, History, Search, ShieldCheck, TriangleAlert, UserRound } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,7 +24,16 @@ const SETTINGS: { id: Setting; label: string; active: string }[] = [
   { id: 'allow', label: 'Allow', active: 'bg-[#8ae47e] text-[#0b1d14]' },
   { id: 'deny', label: 'Block', active: 'bg-rose-600 text-white' },
 ];
-const CHANGED = 'Changed';
+const CHANGED = 'Changed from role';
+
+/** How much of a page a person has, in one word */
+type Level = 'role' | 'view' | 'full' | 'block' | 'custom';
+const LEVELS: { id: Exclude<Level, 'custom'>; label: string; hint: string; active: string }[] = [
+  { id: 'role', label: 'Role', hint: 'Whatever their role gives', active: 'bg-[#0b1d14] text-white' },
+  { id: 'view', label: 'View only', hint: 'Can look, cannot change anything', active: 'bg-[#cfe9c9] text-[#0b1d14]' },
+  { id: 'full', label: 'Full', hint: 'Can do everything on this page', active: 'bg-[#8ae47e] text-[#0b1d14]' },
+  { id: 'block', label: 'Block', hint: 'Cannot open this page', active: 'bg-rose-600 text-white' },
+];
 
 const title = (value: string) => value.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 const errorText = (e: any, fallback: string) => e.response?.data?.message || fallback;
@@ -196,13 +205,20 @@ function UserAccess({ userId, onBack, onDirty, onSaved, onFailed }: UserAccessPr
   const [historyPage, setHistoryPage] = useState(1);
   const [historySize, setHistorySize] = useState(10);
   const [version, setVersion] = useState(0);
-  const [group, setGroup] = useState('Students and admissions');
+  const [group, setGroup] = useState(CHANGED);
+  const [open, setOpen] = useState<Set<string>>(new Set());
   const [find, setFind] = useState('');
 
   useEffect(() => {
     let outdated = false;
     api.get(`/access/users/${userId}`)
-      .then((res) => { if (!outdated) { setDetail(res.data.data); setEdits({}); } })
+      .then((res) => {
+        if (outdated) return;
+        setDetail(res.data.data);
+        setEdits({});
+        const custom = (res.data.data.features as PageRow[]).some((f) => f.actions.some((a) => a.override));
+        setGroup(custom ? CHANGED : res.data.data.features[0]?.group || '');
+      })
       .catch((e) => { if (!outdated) { toast.error(errorText(e, 'Failed to load access')); onFailed(); } });
     return () => { outdated = true; };
   }, [userId, version]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -225,14 +241,31 @@ function UserAccess({ userId, onBack, onDirty, onSaved, onFailed }: UserAccessPr
   const dirty = changes.length > 0;
   useEffect(() => { onDirty(dirty); }, [dirty]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /** Settings as they would be after saving */
-  const countOf = (effect: Setting) => pages.reduce((n, p) => n + p.actions.filter((a) => settingOf(p)(a.action) === effect).length, 0);
   const isCustom = (p: PageRow) => p.actions.some((a) => a.override || settingOf(p)(a.action) !== 'default');
   const customPages = pages.filter(isCustom);
   const groups = [...new Set(pages.map((p) => p.group))];
   // Searching looks through every group
   const query = find.trim().toLowerCase();
   const shown = pages.filter((p) => (query ? p.label.toLowerCase().includes(query) : group === CHANGED ? isCustom(p) : p.group === group));
+
+  const levelOf = (page: PageRow): Level => {
+    const s = settingOf(page);
+    const acts = page.actions.map((a) => a.action);
+    if (acts.every((a) => s(a) === 'default')) return 'role';
+    if (s('view') === 'deny') return 'block';
+    if (acts.every((a) => s(a) === 'allow')) return 'full';
+    if (acts.length > 1 && s('view') === 'allow' && acts.every((a) => a === 'view' || s(a) === 'deny')) return 'view';
+    return 'custom';
+  };
+  const setLevel = (page: PageRow, level: Exclude<Level, 'custom'>) => {
+    const acts = page.actions.map((a) => a.action);
+    const value = (a: AccessAction): Setting =>
+      level === 'role' ? 'default' : level === 'block' ? 'deny' : level === 'full' ? 'allow' : a === 'view' ? 'allow' : 'deny';
+    setEdits((current) => ({ ...current, ...Object.fromEntries(acts.map((a) => [`${page.key}.${a}`, value(a)])) }));
+  };
+  const setGroupToRole = (names: PageRow[]) => names.forEach((p) => setLevel(p, 'role'));
+  const toggleOpen = (key: string) => setOpen((o) => { const n = new Set(o); if (n.has(key)) n.delete(key); else n.add(key); return n; });
+  const blockedPages = pages.filter((p) => levelOf(p) === 'block').length;
 
   const setMany = (page: PageRow, actions: AccessAction[], value: Setting) =>
     setEdits((current) => ({ ...current, ...Object.fromEntries(actions.map((a) => [`${page.key}.${a}`, value])) }));
@@ -299,8 +332,6 @@ function UserAccess({ userId, onBack, onDirty, onSaved, onFailed }: UserAccessPr
     );
   }
 
-  const blocked = countOf('deny');
-  const allowed = countOf('allow');
 
   return (
     <div className="space-y-4 min-w-0">
@@ -319,12 +350,12 @@ function UserAccess({ userId, onBack, onDirty, onSaved, onFailed }: UserAccessPr
             </div>
           </div>
           <div className="flex gap-2">
-            <div className="rounded-2xl bg-[#eaf6e6] px-4 py-2 text-center min-w-[5rem]">
-              <p className="text-lg font-semibold tabular-nums text-[#256c1d]">{allowed}</p>
-              <p className="text-[11px] font-medium text-slate-600">Allowed</p>
+            <div className="rounded-2xl bg-amber-50 px-4 py-2 text-center min-w-[5.5rem]">
+              <p className="text-lg font-semibold tabular-nums text-amber-700">{customPages.length}</p>
+              <p className="text-[11px] font-medium text-slate-600">Changed</p>
             </div>
-            <div className="rounded-2xl bg-rose-50 px-4 py-2 text-center min-w-[5rem]">
-              <p className="text-lg font-semibold tabular-nums text-rose-600">{blocked}</p>
+            <div className="rounded-2xl bg-rose-50 px-4 py-2 text-center min-w-[5.5rem]">
+              <p className="text-lg font-semibold tabular-nums text-rose-600">{blockedPages}</p>
               <p className="text-[11px] font-medium text-slate-600">Blocked</p>
             </div>
           </div>
@@ -359,11 +390,11 @@ function UserAccess({ userId, onBack, onDirty, onSaved, onFailed }: UserAccessPr
           <section className="rounded-3xl bg-white border border-slate-100 p-4 space-y-3">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-              <Input value={find} onChange={(e) => setFind(e.target.value)} placeholder={`Search all ${pages.length} pages`} aria-label="Search pages"
+              <Input value={find} onChange={(e) => setFind(e.target.value)} placeholder={`Find a page among ${pages.length}`} aria-label="Search pages"
                 className="pl-11 h-11 rounded-full bg-[#f4f6f3] border-transparent" />
             </div>
-            <div className="flex flex-wrap gap-2">
-              {[...groups, CHANGED].map((g) => {
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Areas">
+              {[CHANGED, ...groups].map((g) => {
                 const active = !query && group === g;
                 const count = g === CHANGED ? customPages.length : customPages.filter((p) => p.group === g).length;
                 return (
@@ -371,85 +402,109 @@ function UserAccess({ userId, onBack, onDirty, onSaved, onFailed }: UserAccessPr
                     className={cn('inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition-colors',
                       active ? 'bg-[#0b1d14] border-[#0b1d14] text-white' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]')}>
                     {g}
-                    {count > 0 && <span className="rounded-full bg-amber-100 text-amber-700 px-1.5 text-[11px] font-bold tabular-nums">{count}</span>}
+                    {count > 0 && <span className={cn('rounded-full px-1.5 text-[11px] font-bold tabular-nums', active ? 'bg-white/20 text-white' : 'bg-amber-100 text-amber-700')}>{count}</span>}
                   </button>
                 );
               })}
             </div>
+            <p className="text-xs text-muted-foreground">
+              Each page has one level. <b>Role</b> keeps what their role gives. Open a page to set single actions.
+            </p>
           </section>
 
           {shown.length === 0 ? (
             <p className="rounded-3xl bg-white border border-slate-100 py-12 text-center text-sm text-muted-foreground">
-              {query ? 'No page matches your search.' : 'Nothing has been changed for this person.'}
+              {query ? 'No page matches your search.' : 'Nothing is changed for this person. Pick an area above to give or block pages.'}
             </p>
           ) : (
-            <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4 items-start">
-              {shown.map((page) => {
-                const result = preview(page, settingOf(page));
-                const all = page.actions.map((a) => a.action);
-                const blockedButAllowed = settingOf(page)('view') === 'deny' && all.some((a) => settingOf(page)(a) === 'allow');
-                const allRole = all.every((a) => settingOf(page)(a) === 'default');
-                return (
-                  <section key={page.key} className={cn('rounded-3xl bg-white border overflow-hidden', isCustom(page) ? 'border-amber-200' : 'border-slate-100')}>
-                    <div className="flex flex-wrap items-center justify-between gap-2 px-5 py-4 border-b border-slate-100">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h4 className="font-semibold tracking-tight">{page.label}</h4>
-                        {query && <span className="text-xs text-muted-foreground">{page.group}</span>}
-                        {page.fullAccess && (
-                          <span title="Allowing any action gives everything on this page, for the whole organization."
-                            className="rounded-full bg-[#eaf6e6] text-[#256c1d] px-2.5 py-0.5 text-[11px] font-semibold">Full access</span>
-                        )}
-                        {page.blockOnly && (
-                          <span title="This page can be taken away. Who has it is still decided by role."
-                            className="rounded-full bg-slate-100 text-slate-600 px-2.5 py-0.5 text-[11px] font-semibold">Block only</span>
-                        )}
-                      </div>
-                      <button type="button" onClick={() => setMany(page, all, allRole ? 'deny' : 'default')}
-                        className="text-xs font-semibold text-slate-500 hover:text-slate-900">
-                        {allRole ? 'Block all' : 'Reset to role'}
-                      </button>
+            [...new Set(shown.map((p) => p.group))].map((g) => {
+              const inGroup = shown.filter((p) => p.group === g);
+              const changedHere = inGroup.filter(isCustom).length;
+              return (
+                <section key={g} className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+                  <div className="flex items-center justify-between gap-3 px-5 py-3.5 bg-[#f4f6f3]">
+                    <h4 className="font-semibold tracking-tight">{g}</h4>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-muted-foreground">{inGroup.length} {inGroup.length === 1 ? 'page' : 'pages'}{changedHere > 0 && ` · ${changedHere} changed`}</span>
+                      {changedHere > 0 && (
+                        <button type="button" onClick={() => setGroupToRole(inGroup)} className="text-xs font-semibold text-slate-500 hover:text-slate-900">Reset to role</button>
+                      )}
                     </div>
-                    {blockedButAllowed && <p className="bg-amber-50 text-amber-800 text-xs px-5 py-2">View is blocked, so nothing else on this page will work.</p>}
-                    <ul className="divide-y divide-slate-100">
-                      {page.actions.map((a) => {
-                        const can = result.has(a.action);
-                        const changed = settingOf(page)(a.action) !== saved(page, a.action);
-                        return (
-                          <li key={a.action} className="flex items-center justify-between gap-3 px-5 py-3">
-                            <div className="flex items-center gap-3 min-w-0">
-                              <span aria-hidden className={cn('h-2.5 w-2.5 shrink-0 rounded-full', can ? 'bg-[#54b947]' : 'bg-slate-300')} />
-                              <div className="min-w-0">
-                                <p className="text-sm font-semibold capitalize text-slate-800">
-                                  {a.action}{changed && <span className="ml-2 text-[11px] font-semibold text-amber-600 normal-case">Unsaved</span>}
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                  {page.blockOnly
-                                    ? (can ? 'Follows their role' : 'Blocked')
-                                    : `${can ? 'Can' : 'Cannot'} · role gives ${a.byDefault ? 'yes' : 'no'}`}
-                                </p>
-                              </div>
+                  </div>
+                  <ul className="divide-y divide-slate-100">
+                    {inGroup.map((page) => {
+                      const level = levelOf(page);
+                      const result = preview(page, settingOf(page));
+                      const expanded = open.has(page.key);
+                      const unsaved = page.actions.some((a) => settingOf(page)(a.action) !== saved(page, a.action));
+                      const options = LEVELS.filter((l) => (page.blockOnly ? l.id === 'role' || l.id === 'block' : page.actions.length > 1 || l.id !== 'view'))
+                        .map((l) => (page.actions.length === 1 && l.id === 'full' ? { ...l, label: 'Allow' } : l));
+                      const can = page.actions.filter((a) => result.has(a.action)).map((a) => a.action);
+                      return (
+                        <li key={page.key} className={cn(level !== 'role' && 'bg-amber-50/40')}>
+                          <div className="flex flex-col lg:flex-row lg:items-center gap-3 px-5 py-3">
+                            <button type="button" onClick={() => toggleOpen(page.key)} aria-expanded={expanded} disabled={page.blockOnly}
+                              className="flex items-center gap-3 min-w-0 flex-1 text-left disabled:cursor-default">
+                              <span aria-hidden className={cn('h-2.5 w-2.5 shrink-0 rounded-full', can.length ? 'bg-[#54b947]' : 'bg-slate-300')} />
+                              <span className="min-w-0">
+                                <span className="flex flex-wrap items-center gap-2">
+                                  <span className="font-semibold text-sm text-slate-900">{page.label}</span>
+                                  {page.fullAccess && <span title="Allowing any action gives everything on this page, for the whole organization." className="rounded-full bg-[#eaf6e6] text-[#256c1d] px-2 py-0.5 text-[10px] font-semibold">Full access</span>}
+                                  {page.blockOnly && <span title="This page can be taken away. Who has it is still decided by role." className="rounded-full bg-slate-100 text-slate-600 px-2 py-0.5 text-[10px] font-semibold">Block only</span>}
+                                  {level === 'custom' && <span className="rounded-full bg-amber-100 text-amber-700 px-2 py-0.5 text-[10px] font-semibold">Custom</span>}
+                                  {unsaved && <span className="text-[10px] font-semibold text-amber-600">Unsaved</span>}
+                                </span>
+                                <span className="block text-xs text-muted-foreground mt-0.5 capitalize">
+                                  {can.length ? can.join(', ') : 'No access'}
+                                </span>
+                              </span>
+                              {!page.blockOnly && <ChevronDown className={cn('w-4 h-4 shrink-0 text-slate-400 transition-transform', expanded && 'rotate-180')} />}
+                            </button>
+                            <div className="flex shrink-0 gap-0.5 bg-[#f4f6f3] p-1 rounded-full self-start lg:self-auto" role="group" aria-label={`${page.label} access`}>
+                              {options.map((l) => (
+                                <button key={l.id} type="button" title={l.hint} aria-pressed={level === l.id} onClick={() => setLevel(page, l.id)}
+                                  className={cn('rounded-full px-3 py-1.5 text-xs font-semibold transition-colors', level === l.id ? l.active : 'text-slate-600 hover:bg-white')}>
+                                  {l.label}
+                                </button>
+                              ))}
                             </div>
-                            <div className="flex shrink-0 gap-0.5 bg-[#f4f6f3] p-1 rounded-full" role="group" aria-label={`${page.label}: ${a.action}`}>
-                              {SETTINGS.filter((option) => !page.blockOnly || option.id !== 'allow').map((option) => {
-                                const active = settingOf(page)(a.action) === option.id;
+                          </div>
+                          {expanded && !page.blockOnly && (
+                            <ul className="mx-5 mb-3 rounded-2xl bg-white border border-slate-100 divide-y divide-slate-100">
+                              {page.actions.map((a) => {
+                                const on = result.has(a.action);
+                                const changed = settingOf(page)(a.action) !== saved(page, a.action);
                                 return (
-                                  <button key={option.id} type="button" aria-pressed={active}
-                                    onClick={() => setMany(page, [a.action], option.id)}
-                                    className={cn('rounded-full px-3 py-1.5 text-xs font-semibold transition-colors',
-                                      active ? option.active : 'text-slate-600 hover:bg-white')}>
-                                    {option.label}
-                                  </button>
+                                  <li key={a.action} className="flex items-center justify-between gap-3 px-4 py-2.5">
+                                    <div className="min-w-0">
+                                      <p className="text-sm font-semibold capitalize text-slate-800">
+                                        {a.action}{changed && <span className="ml-2 text-[10px] font-semibold text-amber-600 normal-case">Unsaved</span>}
+                                      </p>
+                                      <p className="text-xs text-muted-foreground">{on ? 'Can' : 'Cannot'} · role gives {a.byDefault ? 'yes' : 'no'}</p>
+                                    </div>
+                                    <div className="flex shrink-0 gap-0.5 bg-[#f4f6f3] p-1 rounded-full" role="group" aria-label={`${page.label}: ${a.action}`}>
+                                      {SETTINGS.map((option) => {
+                                        const active = settingOf(page)(a.action) === option.id;
+                                        return (
+                                          <button key={option.id} type="button" aria-pressed={active} onClick={() => setMany(page, [a.action], option.id)}
+                                            className={cn('rounded-full px-3 py-1 text-xs font-semibold transition-colors', active ? option.active : 'text-slate-600 hover:bg-white')}>
+                                            {option.label}
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  </li>
                                 );
                               })}
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </section>
-                );
-              })}
-            </div>
+                            </ul>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
+              );
+            })
           )}
         </>
       ) : (
