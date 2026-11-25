@@ -43,6 +43,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // An Org Admin can change someone's access while they are signed in: pick it up when they come back
+  useEffect(() => {
+    let last = Date.now();
+    const refreshAccess = () => {
+      if (!localStorage.getItem('token') || Date.now() - last < 30000) return;
+      last = Date.now();
+      api.get('/auth/me')
+        .then((response) => {
+          const access = response.data?.data?.access;
+          if (!access) return;
+          // Only replace the user when something changed, so open screens are not reloaded for nothing
+          setUser((current) => (current && JSON.stringify(current.access) !== JSON.stringify(access) ? { ...current, access } : current));
+        })
+        .catch(() => { /* the next request will report a problem */ });
+    };
+    window.addEventListener('focus', refreshAccess);
+    return () => window.removeEventListener('focus', refreshAccess);
+  }, []);
+
   const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     try {
       const response = await api.post('/auth/login', { email, password });

@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { can, resolveAccess, type Override } from '../src/access/resolve.js';
 import { FEATURES } from '../src/access/catalog.js';
+import { changeError, needsRow } from '../src/access/changes.js';
 import { hasPaymentsScreen, invoiceBranchWhere, isGrantedReader } from '../src/access/invoiceRules.js';
 
 const hr = { id: 'u', role: 'employee', status: 'active', organizationId: 'o', branchId: 'b', departmentId: 'd', departmentType: 'hr' };
@@ -126,4 +127,29 @@ test('branch limits on invoices', () => {
   assert.ok(own.includes('"studentId":null'));
   assert.ok(!own.includes('"not":null'), 'other branches\' partners must not be listed');
   assert.ok(!JSON.stringify(invoiceBranchWhere({ role: 'employee', branchId: 'b' }, true)).includes('"studentId":null'));
+});
+
+test('what an Org Admin may save', () => {
+  const change = (effect = 'allow', action = 'view') => [{ featureKey: 'invoices', action, effect }];
+  assert.equal(changeError('admin', hr, change()), null);
+  assert.ok(changeError('u', hr, change()), 'not your own');
+  for (const role of ['superadmin', 'org_admin', 'ceo', 'student', 'faculty', 'center_admin']) {
+    assert.ok(changeError('admin', { ...hr, role }, change()), role);
+  }
+  assert.ok(changeError('admin', { ...hr, branchId: null }, change()), 'allow needs a branch');
+  assert.equal(changeError('admin', { ...hr, branchId: null }, change('deny')), null);
+  assert.ok(changeError('admin', hr, []));
+  assert.ok(changeError('admin', hr, change('maybe')));
+  assert.ok(changeError('admin', hr, change('allow', 'fly')));
+  assert.ok(changeError('admin', hr, [...change(), ...change('deny')]));
+});
+
+test('settings equal to the default are not stored, except blocking view', () => {
+  const c = (effect: any, action = 'delete') => ({ featureKey: 'invoices', action, effect });
+  assert.equal(needsRow(hr, c('allow')), true);
+  assert.equal(needsRow(hr, c('deny')), false);
+  assert.equal(needsRow(hr, c('deny', 'view')), true);
+  assert.equal(needsRow(finance, c('allow')), false);
+  assert.equal(needsRow(finance, c('deny')), true);
+  assert.equal(needsRow(finance, c('default')), false);
 });

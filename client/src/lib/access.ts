@@ -3,7 +3,7 @@
 
 export type AccessAction = 'view' | 'create' | 'edit' | 'delete' | 'approve' | 'download';
 
-export type UserAccess = Record<string, Partial<Record<AccessAction, { allowed: boolean }>>>;
+export type UserAccess = Record<string, Partial<Record<AccessAction, { allowed: boolean; byDefault: boolean }>>>;
 
 /** When no access information is available the screen is left as it is; the server still checks. */
 export const canDo = (user: { access?: UserAccess } | null | undefined, page: string, action: AccessAction): boolean => {

@@ -33,6 +33,7 @@ import licenseRoutes from './routes/licenseRoutes.js';
 import departmentRoutes from './routes/departmentRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
+import accessRoutes from './routes/accessRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import hrRoutes from './routes/hrRoutes.js';
 import financeRoutes from './routes/financeRoutes.js';
@@ -185,6 +186,7 @@ const API_VERSION = process.env.API_VERSION || 'v1';
 
 // Mount routes
 app.use(`/api/${API_VERSION}/auth`, authRoutes);
+app.use(`/api/${API_VERSION}/access`, accessRoutes);
 app.use(`/api/${API_VERSION}/organizations`, organizationRoutes);
 app.use(`/api/${API_VERSION}/licenses`, licenseRoutes);
 app.use(`/api/${API_VERSION}/departments`, departmentRoutes);

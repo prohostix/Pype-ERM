@@ -30,6 +30,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 
+import { AccessControlPanel } from '@/components/panels/AccessControlPanel';
 import { UsersPanel } from '@/components/panels/UsersPanel';
 import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
@@ -670,6 +671,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
 
         {/* Other Panel Tabs */}
         <TabsContent value="users"><UsersPanel /></TabsContent>
+        <TabsContent value="access_control"><AccessControlPanel /></TabsContent>
         <TabsContent value="hierarchy"><OrgHierarchyPanel /></TabsContent>
         <TabsContent value="branches"><BranchesPanel /></TabsContent>
         <TabsContent value="departments"><DepartmentsPanel /></TabsContent>

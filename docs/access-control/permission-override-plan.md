@@ -1,6 +1,7 @@
 # Per-user permission override: plan and edge cases
 
-Date: 2026-11-25. Status: steps 0 to 3 coded, except invoice pagination. Table not created, nothing deployed.
+Date: 2026-11-25. Status: steps 0 to 4 coded, except invoice pagination. Table not created, nothing deployed.
+Live database compared read only on 2026-11-25: the only difference from the schema file is the new table.
 
 Step 3 notes:
 - Payments users (including Sales) get a short invoice list: number, amounts, status, student and partner name.
@@ -8,7 +9,7 @@ Step 3 notes:
 - A partner belongs to a branch when its referrer or one of its students does. This now applies to all branch users.
 - Student and faculty logins are refused on all finance requests.
 - Editing cannot approve an invoice without the approve action. Changing amounts of an already approved invoice is still allowed with edit.
-- Menus do not change yet; granted pages appear in step 4.
+- Step 4: Access Control page (Org Admin menu), blocked pages removed from menus, granted pages under Additional Access. Access refreshes when the user returns to the window.
 The role gives each user a default. The Org Admin overrides it per user, page and action.
 First case: an HR employee gets to **view** **Invoices** and **Bill & Receipts**.
 

@@ -22,6 +22,7 @@ import { getCollectionsNavItems } from '@/pages/ModernCollectionsDashboard';
 import api from '@/lib/api';
 import { hasStudyAbroadAccess, getOrgFeatures } from '@/lib/orgFeatures';
 import { toast } from 'sonner';
+import { applyAccessToMenu } from '@/lib/accessPages';
 import { confirmDialog } from '@/lib/confirm';
 
 type ViewMode = 'dashboard' | 'table';
@@ -342,7 +343,8 @@ function App() {
   const hasInviteToken = urlParams.has('token');
 
   const tables = useMemo(() => {
-    const items = withAIReports(getAvailableTables());
+    // Pages blocked or added for this person are applied on top of the role menu
+    const items = applyAccessToMenu(user, withAIReports(getAvailableTables()));
     const orgFeatures = getOrgFeatures(user);
     const isSuper = user?.role === 'superadmin';
     // Feature not granted to this organization: drop the menu entry (and its now-empty section header).
@@ -354,7 +356,7 @@ function App() {
       if (t.id === 'academic_centers' && !orgFeatures.includes('academic_centers')) return false;
       return true;
     });
-  }, [user?.role, (user as any)?.organization, (user as any)?.subDepartmentId, (user as any)?.isBranchManager, deptType, isCollectionsOverseer]);
+  }, [user?.role, (user as any)?.organization, (user as any)?.subDepartmentId, (user as any)?.isBranchManager, deptType, isCollectionsOverseer, user?.access]);
 
   // Validate activeTable against allowed tables for the user
   useEffect(() => {
@@ -502,6 +504,7 @@ function App() {
         { id: 'login_branding', label: 'Login Branding' },
         { id: 'enrollment_link_config', label: 'Enrollment Link Config' },
         { id: 'flow_settings', label: 'Flow Settings' },
+        { id: 'access_control', label: 'Access Control' },
       ];
     }
 

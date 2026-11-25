@@ -18,6 +18,7 @@ import { ModernBranchManagerDashboard } from './ModernBranchManagerDashboard';
 import { ModernStudentPortal } from './ModernStudentPortal';
 import { ModernFacultyPortal } from './ModernFacultyPortal';
 import { AIReportBuilder } from '@/components/ai-reports/AIReportBuilder';
+import { accessScreen } from '@/lib/accessPages';
 
 
 interface DashboardProps {
@@ -106,6 +107,10 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
     (initialTab === 'ai_reports' && aiAllowed ? <AIReportBuilder panel={panel} /> : dashboard);
 
   const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student';
+
+  // A page added for this person, or one blocked for them, whatever their dashboard
+  const accessPage = accessScreen(user, initialTab);
+  if (accessPage) return accessPage;
 
   // Branch managers always get the branch dashboard — skip all other routing
   if (isBranchManager) {
