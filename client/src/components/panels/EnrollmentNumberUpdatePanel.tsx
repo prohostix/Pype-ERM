@@ -6,6 +6,7 @@ import { Save, RefreshCw, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { awaitsEnrollmentNo } from '@/lib/opsPending';
 
 export function EnrollmentNumberUpdatePanel() {
   const [students, setStudents] = useState<any[]>([]);
@@ -37,7 +38,7 @@ export function EnrollmentNumberUpdatePanel() {
         api.get('/students?missingEnrollment=true'),
         api.get('/students?hasEnrollment=true')
       ]);
-      setStudents(pendingRes.data.data || []);
+      setStudents((pendingRes.data.data || []).filter(awaitsEnrollmentNo));
       setUpdatedStudents(updatedRes.data.data || []);
       setUpdates({});
     } catch (e) {

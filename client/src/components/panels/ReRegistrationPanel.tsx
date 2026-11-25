@@ -203,12 +203,14 @@ export function ReRegistrationPanel() {
               {activeTab === 'pending' && (
                 <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={async () => {
                   try {
-                    await api.patch(`/students/${selectedStudent.id}`, { reregStatus: { completed: true } });
+                    await api.put(`/students/${selectedStudent.id}`, {
+                      reregStatus: { ...selectedStudent.reregStatus, completed: true, completedAt: new Date().toISOString() },
+                    });
                     toast.success('Re-registration marked as completed!');
                     setSelectedStudent(null);
                     fetchStudents();
-                  } catch (e) {
-                    toast.error('Failed to update student');
+                  } catch (e: any) {
+                    toast.error(e.response?.data?.message || 'Failed to update student');
                   }
                 }}>Mark Completed</Button>
               )}

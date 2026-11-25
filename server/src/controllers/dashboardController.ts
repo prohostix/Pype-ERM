@@ -2,8 +2,52 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
-
 import { findCurrency, getOrgCurrencyCode } from '../utils/currency.js';
+import { OPS_PENDING_STATUSES } from './enrollmentReviewController.js';
+
+/** Students an Operations sub admin's overview covers */
+const subAdminStudentFilter = (assignedIds: any) => [
+  { enrolledBy: null },
+  { referredBy: null },
+  { enrolledBy: { in: assignedIds } },
+  { referredBy: { in: assignedIds } }
+];
+
+const documentsOf = (s: any): any[] => (Array.isArray(s.documents) ? s.documents : []);
+
+/** Uploaded and waiting on Operations: an unapproved document or photo, or a rejected photo */
+const pendingDocumentStudents = (students: any[]) => students.filter(s => {
+  const docs = documentsOf(s);
+  const photoStatus = (s.admissionProgress as any)?.photoStatus;
+  if (photoStatus === 'rejected') return true;
+  return docs.length > 0 && (docs.some((d: any) => d && d.status !== 'approved') || photoStatus !== 'approved');
+}).map(s => ({
+  id: s.id,
+  name: s.name,
+  enrollmentNo: s.enrollmentNo,
+  unapprovedDocs: documentsOf(s).filter((d: any) => d && d.status !== 'approved'),
+  photoStatus: (s.admissionProgress as any)?.photoStatus
+}));
+
+// One page of the students behind the "Documents Pending" count: ?page=&limit=
+export const getDocumentsPending = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const page = Math.max(1, parseInt(String(req.query.page || '1'), 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit || '10'), 10) || 10));
+  const where: any = { organizationId: req.user.organizationId };
+  if (req.user.role === 'ops_sub_admin') {
+    const user = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    where.OR = subAdminStudentFilter(Array.isArray(user?.assignedSalesUsers) ? user.assignedSalesUsers : []);
+  }
+  // The rule reads inside JSON fields, so it is applied here and only the requested page is sent
+  const students = await prisma.student.findMany({
+    where,
+    select: { id: true, name: true, enrollmentNo: true, admissionProgress: true, documents: true },
+    orderBy: [{ createdAt: 'desc' }, { id: 'desc' }]
+  });
+  const pending = pendingDocumentStudents(students);
+  res.json({ success: true, total: pending.length, data: pending.slice((page - 1) * limit, page * limit) });
+});
+
 export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Response) => {
   const orgId = req.user.organizationId;
   const role = req.user.role;
@@ -167,12 +211,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
       const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
       const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
       
-      studentWhere.OR = [
-        { enrolledBy: null },
-        { referredBy: null },
-        { enrolledBy: { in: assignedIds } },
-        { referredBy: { in: assignedIds } }
-      ];
+      studentWhere.OR = subAdminStudentFilter(assignedIds);
 
       enrollmentWhere.OR = [
         { salesUserId: null },
@@ -185,45 +224,29 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     }
     
     metrics.pendingApplications = await prisma.enrollment.count({
-      where: { ...enrollmentWhere, status: { notIn: ['enrolled', 'rejected', 'department_rejected'] } }
+      where: { ...enrollmentWhere, status: { in: OPS_PENDING_STATUSES } }
     });
     
     const studentsStatus = await prisma.student.findMany({
       where: studentWhere,
-      select: { id: true, name: true, enrollmentNo: true, admissionProgress: true, reregStatus: true, documents: true }
+      select: { id: true, name: true, status: true, isPrevious: true, enrollmentNo: true, admissionProgress: true, reregStatus: true, documents: true }
     });
     
-    metrics.uniSubmissionsPending = studentsStatus.filter(s => {
+    // Only approved, ongoing students without a number are waiting on university submission and numbering
+    const awaitingNumber = studentsStatus.filter(s => s.status === 'active' && !s.isPrevious && !s.enrollmentNo);
+    metrics.enrollmentNumbersPending = awaitingNumber.length;
+    metrics.uniSubmissionsPending = awaitingNumber.filter(s => {
       const prog = s.admissionProgress as any;
-      return !prog || (!prog.universitySubmitted && !prog.uni_sub?.completed);
+      return !prog?.universitySubmitted && !prog?.uni_sub?.completed;
     }).length;
     
-    metrics.documentsPending = studentsStatus.filter(s => {
-      const docs = Array.isArray((s as any).documents) ? (s as any).documents : [];
-      const hasUnapprovedDocs = docs.length === 0 || docs.some((d: any) => d && d.status !== 'approved');
-      const photoStatus = (s.admissionProgress as any)?.photoStatus;
-      return hasUnapprovedDocs || photoStatus !== 'approved';
-    }).map(s => {
-      const docs = Array.isArray((s as any).documents) ? (s as any).documents : [];
-      const unapprovedDocs = docs.filter((d: any) => d && d.status !== 'approved');
-      const photoStatus = (s.admissionProgress as any)?.photoStatus;
-      return {
-        id: (s as any).id,
-        name: (s as any).name,
-        enrollmentNo: (s as any).enrollmentNo,
-        unapprovedDocs,
-        photoStatus
-      };
-    });
+    metrics.documentsMissing = studentsStatus.filter(s => documentsOf(s).length === 0).length;
+    metrics.documentsPending = pendingDocumentStudents(studentsStatus);
     
     metrics.reRegistrationPending = studentsStatus.filter(s => {
       const rereg = s.reregStatus as any;
       return !rereg || !rereg.completed;
     }).length;
-    
-    metrics.enrollmentNumbersPending = await prisma.student.count({
-      where: { ...orgQuery, enrollmentNo: null }
-    });
     
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

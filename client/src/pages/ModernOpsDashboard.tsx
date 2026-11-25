@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
+import { DocumentsPendingDialog } from '@/components/panels/DocumentsPendingDialog';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
@@ -183,6 +184,7 @@ export function getOpsNavItems(role?: string) {
 }
 
 function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (tab: string) => void }) {
+  const [showDocuments, setShowDocuments] = useState(false);
   const docsPending = Array.isArray(metrics.documentsPending) ? metrics.documentsPending.length : (metrics.documentsPending || 0);
   const rejectedStudents = Array.isArray(metrics.documentsPending)
     ? metrics.documentsPending.filter((s: any) => s.photoStatus === 'rejected' || s.unapprovedDocs?.some((d: any) => d.status === 'rejected'))
@@ -190,6 +192,7 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
 
   return (
     <div className="space-y-6">
+      <DocumentsPendingDialog open={showDocuments} onClose={() => setShowDocuments(false)} />
       <div>
         <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Operations Overview</h2>
         <p className="text-muted-foreground text-sm mt-1.5">Monitor and manage daily operations</p>
@@ -208,7 +211,7 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
           />
           <OpsMetricCard title="Uni Submission Pending" value={metrics.uniSubmissionsPending || 0} onClick={() => onNavigate('university_submission')} />
           <OpsMetricCard title="Enrollment No Pending" value={metrics.enrollmentNumbersPending || 0} onClick={() => onNavigate('enrollment_number_update')} />
-          <OpsMetricCard title="Documents Pending" value={docsPending} onClick={() => onNavigate('document_received')} />
+          <OpsMetricCard title="Documents Pending" value={docsPending} note={metrics.documentsMissing > 0 ? `${metrics.documentsMissing} more have no documents` : undefined} onClick={() => setShowDocuments(true)} />
           <OpsMetricCard title="Re-registration Pending" value={metrics.reRegistrationPending || 0} onClick={() => onNavigate('re_registration')} />
           <OpsMetricCard
             title="Admission Closing Alerts"

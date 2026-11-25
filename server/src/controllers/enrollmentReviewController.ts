@@ -8,6 +8,9 @@ export const getPendingReviews = asyncHandler(async (req: AuthRequest, res: Resp
   res.json({ success: true, count: enrollments.length, data: enrollments });
 });
 
+/** Application statuses waiting for Operations: the Admission Review pending tab and the overview count */
+export const OPS_PENDING_STATUSES = ['payment_pending', 'receipt_submitted', 'submitted', 'document_review', 'dept_review', 'ops_upgrade_verification'];
+
 export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { tab } = req.query; // 'pending' | 'completed'
 
@@ -17,7 +20,7 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
     statusFilter = { in: ['finance_review', 'university_review', 'enrolled', 'rejected', 'department_rejected', 'ops_rejected'] };
   } else {
     // Default: pending dept review (including upgrade verification from sales)
-    statusFilter = { in: ['payment_pending', 'receipt_submitted', 'submitted', 'document_review', 'dept_review', 'ops_upgrade_verification'] };
+    statusFilter = { in: OPS_PENDING_STATUSES };
   }
 
   const baseWhere: any = {

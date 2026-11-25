@@ -7,6 +7,7 @@ import { RefreshCw, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { awaitsUniSubmission } from '@/lib/opsPending';
 
 export function UniversitySubmissionPanel() {
   const [students, setStudents] = useState<any[]>([]);
@@ -72,7 +73,7 @@ export function UniversitySubmissionPanel() {
   };
 
   const pendingStudents = students.filter(s => {
-    const isPending = !s.admissionProgress?.universitySubmitted && !s.admissionProgress?.uni_sub?.completed;
+    const isPending = awaitsUniSubmission(s);
     if (!isPending) return false;
     return applyFilters(s);
   });
