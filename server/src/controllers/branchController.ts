@@ -142,7 +142,8 @@ export const assignBranchManager = asyncHandler(async (req: AuthRequest, res: Re
     where: { id: req.params.id },
     data: {
       branchManagerId: userId || null,
-      additionalDeptIds: additionalDeptObjects
+      // Leave the branch's departments alone unless the caller sent a new list
+      ...(Array.isArray(additionalDeptIds) && { additionalDeptIds: additionalDeptObjects })
     }
   });
 

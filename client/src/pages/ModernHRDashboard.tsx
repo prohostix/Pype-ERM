@@ -59,7 +59,7 @@ export function ModernHRDashboard({ initialTab, onNavigate }: { initialTab?: str
         />
       );
       case 'users': return <HRUsersPanel />;
-      case 'employees': return <EmployeesPanel />;
+      case 'employees': return <EmployeesPanel onManageUsers={() => handleNavigate('users')} />;
       case 'team_permissions': return <TeamPermissionsPanel />;
       case 'leaves': return <LeavesPanel />;
       case 'my_leaves': return <LeavesPanel isMyPortal />;

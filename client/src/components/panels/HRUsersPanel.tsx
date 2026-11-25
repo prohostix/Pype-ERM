@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Key, Users, ArrowRightLeft, TrendingUp, TrendingDown, Ban, CheckCircle2, UserMinus, UserCheck } from 'lucide-react';
+import { Plus, Edit, Trash2, Key, Users, ArrowRightLeft, TrendingUp, TrendingDown, Ban, CheckCircle2, UserMinus, UserCheck, Building2 } from 'lucide-react';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Select,
@@ -19,55 +18,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
-interface User {
-  id?: string;
-  name: string;
-  email: string;
-  role: string;
-  designation?: string;
-  departmentId?: string;
-  additionalDepartmentIds?: string[];
-  subDepartmentId?: string;
-  reportingTo?: string;
-  department?: { name: string; id?: string };
-  additionalDepartments?: { id: string; name: string }[];
-  subDepartment?: { name: string };
-  reportingToUser?: { name: string };
-  status?: string;
-  branchId?: string;
-  branch?: { id: string; name: string };
-  biometricId?: string;
-  allowSystemPunchIn?: boolean;
-  requireSelfiePunchIn?: boolean;
-  allowAnywherePunchIn?: boolean;
-  requiresAttendance?: boolean;
-}
-
-interface Department {
-  id?: string;
-  name: string;
-  type: string;
-  managerId?: string;
-  parentDepartmentId?: string;
-}
-
-interface SubDepartment {
-  id?: string;
-  name: string;
-  parentDeptId: string;
-}
-
-interface DesignationOption {
-  id: string;
-  title: string;
-  departmentId?: { id: string; name: string };
-  maxHeadcount: number;
-  filledBy: any[];
-}
+import {
+  UserFormDialog,
+  isStaffUser,
+  type StaffUser as User,
+  type Department,
+  type SubDepartment,
+  type DesignationOption,
+} from '@/components/panels/UserFormDialog';
 
 export function HRUsersPanel() {
   const [users, setUsers] = useState<User[]>([]);
@@ -84,24 +45,6 @@ export function HRUsersPanel() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'employee',
-    designation: '',
-    departmentId: '',
-    additionalDepartmentIds: [] as string[],
-    subDepartmentId: '',
-    reportingTo: '',
-    branchId: 'none',
-    biometricId: '',
-    allowSystemPunchIn: true,
-    requireSelfiePunchIn: false,
-    allowAnywherePunchIn: false,
-    requiresAttendance: true
-  });
 
   const [transferData, setTransferData] = useState({
     departmentId: '',
@@ -120,6 +63,10 @@ export function HRUsersPanel() {
     newPassword: '',
     confirmPassword: '',
   });
+
+  const [managerUser, setManagerUser] = useState<User | null>(null);
+  const [managerBranchId, setManagerBranchId] = useState('');
+  const [assigningManager, setAssigningManager] = useState(false);
 
   const [activeTab, setActiveTab] = useState('active');
   const [page, setPage] = useState(1);
@@ -144,13 +91,6 @@ export function HRUsersPanel() {
   };
 
   useEffect(() => {
-    // Fetch sub-departments when department changes
-    if (formData.departmentId) {
-      fetchSubDepartmentsByParent(formData.departmentId);
-    }
-  }, [formData.departmentId]);
-
-  useEffect(() => {
     // Fetch sub-departments when transfer department changes
     if (transferData.departmentId) {
       fetchSubDepartmentsByParent(transferData.departmentId);
@@ -163,12 +103,7 @@ export function HRUsersPanel() {
       const response = await api.get('/users');
       const allUsers = response.data.data || response.data || [];
       // Exclude top-level admin roles — everyone else is headcount
-      const staffUsers = allUsers.filter((u: User) => {
-        if (['ceo', 'org_admin', 'superadmin', 'student'].includes(u.role)) return false;
-        if (u.role === 'center_admin' && !isOrgAdmin) return false;
-        return true;
-      });
-      setUsers(staffUsers);
+      setUsers(allUsers.filter((u: User) => isStaffUser(u, isOrgAdmin)));
     } catch (error) {
       console.error('Failed to fetch users:', error);
     } finally {
@@ -209,52 +144,6 @@ export function HRUsersPanel() {
       setSubDepartments(response.data.data || response.data || []);
     } catch (error) {
       console.error('Failed to fetch sub-departments:', error);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const additionalDepts = formData.additionalDepartmentIds.filter(id => id && id !== formData.departmentId);
-      if (editingUser) {
-        const userId = editingUser.id || editingUser.id;
-        await api.put(`/users/${userId}`, {
-          name: formData.name,
-          email: formData.email,
-          role: formData.role,
-          designation: formData.designation || undefined,
-          departmentId: (formData.departmentId && formData.departmentId !== 'none') ? formData.departmentId : undefined,
-          additionalDepartmentIds: additionalDepts,
-          subDepartmentId: (formData.subDepartmentId && formData.subDepartmentId !== 'none') ? formData.subDepartmentId : undefined,
-          reportingTo: (formData.reportingTo && formData.reportingTo !== 'none') ? formData.reportingTo : undefined,
-          branchId: (formData.branchId && formData.branchId !== 'none') ? formData.branchId : null,
-          biometricId: formData.biometricId || undefined,
-          allowSystemPunchIn: formData.allowSystemPunchIn,
-          requireSelfiePunchIn: formData.requireSelfiePunchIn,
-          allowAnywherePunchIn: formData.allowAnywherePunchIn,
-          requiresAttendance: formData.requiresAttendance,
-        });
-      } else {
-        await api.post('/users', {
-          ...formData,
-          additionalDepartmentIds: additionalDepts,
-          departmentId: (formData.departmentId && formData.departmentId !== 'none') ? formData.departmentId : undefined,
-          subDepartmentId: (formData.subDepartmentId && formData.subDepartmentId !== 'none') ? formData.subDepartmentId : undefined,
-          reportingTo: (formData.reportingTo && formData.reportingTo !== 'none') ? formData.reportingTo : undefined,
-          branchId: (formData.branchId && formData.branchId !== 'none') ? formData.branchId : undefined,
-          biometricId: formData.biometricId || undefined,
-          allowSystemPunchIn: formData.allowSystemPunchIn,
-          requireSelfiePunchIn: formData.requireSelfiePunchIn,
-          allowAnywherePunchIn: formData.allowAnywherePunchIn,
-          requiresAttendance: formData.requiresAttendance,
-        });
-      }
-      setDialogOpen(false);
-      resetForm();
-      fetchUsers();
-    } catch (error) {
-      console.error('Failed to save user:', error);
-      alert('Failed to save user. Please try again.');
     }
   };
 
@@ -374,42 +263,39 @@ export function HRUsersPanel() {
       fetchUsers();
     } catch (error) {
       console.error(`Failed to ${action} user:`, error);
-      alert(`Failed to process action. Please try again.`);
+      alert('Failed to process action. Please try again.');
     }
   };
 
   const openEditDialog = (user: User) => {
     setEditingUser(user);
-    const deptId = typeof user.departmentId === 'object' && user.departmentId !== null
-      ? ((user.departmentId as any).id || (user.departmentId as any).id)
-      : user.departmentId;
-    const subDeptId = typeof user.subDepartmentId === 'object' && user.subDepartmentId !== null
-      ? ((user.subDepartmentId as any).id || (user.subDepartmentId as any).id)
-      : user.subDepartmentId;
-    const reportingToId = typeof user.reportingTo === 'object' && user.reportingTo !== null
-      ? ((user.reportingTo as any).id || (user.reportingTo as any).id)
-      : user.reportingTo;
-    const additionalIds = (user.additionalDepartmentIds || user.additionalDepartments || []).map((d: any) =>
-      typeof d === 'object' ? (d.id || d.id) : d
-    ).filter(Boolean);
-    setFormData({
-      name: user.name,
-      email: user.email,
-      password: '',
-      role: user.role,
-      designation: user.designation || '',
-      departmentId: deptId?.toString() || '',
-      additionalDepartmentIds: additionalIds,
-      subDepartmentId: subDeptId?.toString() || '',
-      reportingTo: reportingToId?.toString() || '',
-      branchId: user.branchId?.toString() || 'none',
-      biometricId: user.biometricId || '',
-      allowSystemPunchIn: user.allowSystemPunchIn ?? true,
-      requireSelfiePunchIn: user.requireSelfiePunchIn ?? false,
-      allowAnywherePunchIn: user.allowAnywherePunchIn ?? false,
-      requiresAttendance: user.requiresAttendance ?? true,
-    });
     setDialogOpen(true);
+  };
+
+  const openManagerDialog = (user: User) => {
+    setManagerUser(user);
+    setManagerBranchId(branches.some((b) => b.id === user.branchId) ? user.branchId! : '');
+    fetchBranches();
+  };
+
+  const targetBranch = branches.find((b) => b.id === managerBranchId);
+  const alreadyManages = branches.find((b) => managerUser && b.branchManagerId === managerUser.id);
+
+  const handleAssignManager = async () => {
+    if (!managerUser || !targetBranch) return;
+    setAssigningManager(true);
+    try {
+      await api.patch(`/org/branches/${targetBranch.id}/manager`, { userId: managerUser.id });
+      setManagerUser(null);
+      fetchBranches();
+      fetchUsers();
+      alert(`${managerUser.name} is now the manager of ${targetBranch.name}.`);
+    } catch (error: any) {
+      console.error('Failed to assign branch manager:', error);
+      alert(error.response?.data?.message || 'Failed to assign branch manager. Please try again.');
+    } finally {
+      setAssigningManager(false);
+    }
   };
 
   const openTransferDialog = (user: User) => {
@@ -437,27 +323,6 @@ export function HRUsersPanel() {
     setSelectedUserId(userId);
     setPasswordData({ newPassword: '', confirmPassword: '' });
     setPasswordDialogOpen(true);
-  };
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      email: '',
-      password: '',
-      role: 'employee',
-      designation: '',
-      departmentId: '',
-      additionalDepartmentIds: [],
-      subDepartmentId: '',
-      reportingTo: '',
-      branchId: 'none',
-      biometricId: '',
-      allowSystemPunchIn: true,
-      requireSelfiePunchIn: false,
-      allowAnywherePunchIn: false,
-      requiresAttendance: true,
-    });
-    setEditingUser(null);
   };
 
   const getRoleBadgeColor = (_role: string) => 'bg-white text-slate-700 border-0 rounded-full px-3 capitalize';
@@ -503,308 +368,13 @@ export function HRUsersPanel() {
               </Select>
             </div>
           )}
-          <Dialog open={dialogOpen} onOpenChange={(open) => {
-            setDialogOpen(open);
-            if (!open) resetForm();
-          }}>
-            <DialogTrigger asChild>
-              <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Employee User
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8 max-h-[90vh] overflow-y-auto" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
-              <DialogHeader>
-                <DialogTitle className="text-xl font-semibold tracking-tight">
-                  {editingUser ? 'Edit Employee User' : 'Create Employee User'}
-                </DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                  />
-                </div>
-                {!editingUser && (
-                  <div>
-                    <Label htmlFor="password">Password</Label>
-                    <Input
-                      id="password"
-                      type="password" autoComplete="new-password"
-                      value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      required
-                      minLength={6}
-                      placeholder="Minimum 6 characters"
-                    />
-                  </div>
-                )}
-                <div>
-                  <Label htmlFor="designation">Designation</Label>
-                  {designations.length > 0 ? (
-                    <Select
-                      value={formData.designation}
-                      onValueChange={(value) => {
-                        // Auto-fill department if designation has one
-                        const desig = designations.find(d => d.title === value);
-                        setFormData({
-                          ...formData,
-                          designation: value,
-                          departmentId: desig?.departmentId?.id || formData.departmentId,
-                        });
-                      }}
-                    >
-                      <SelectTrigger className="truncate">
-                        <SelectValue placeholder="Select from org chart..." className="truncate" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {designations.map(d => {
-                          const filled = d.filledBy?.length || 0;
-                          const isCurrent = editingUser?.designation === d.title;
-                          const vacant = d.maxHeadcount - filled;
-                          const label = `${d.title}${d.departmentId ? ` — ${d.departmentId.name}` : ''}${vacant <= 0 && !isCurrent ? ' (Full)' : isCurrent ? ' (Current)' : ` (${vacant} open)`}`;
-                          return (
-                            <SelectItem key={d.id} value={d.title} disabled={vacant <= 0 && !isCurrent}>
-                              <span className="block max-w-[340px] truncate">{label}</span>
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  ) : (
-                    <Input
-                      id="designation"
-                      value={formData.designation}
-                      onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                      placeholder="e.g., Senior Manager, Team Lead"
-                    />
-                  )}
-                  {designations.length === 0 && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Tip: Org Admin can define positions in the Hierarchy chart for structured assignment.
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor="role">Role</Label>
-                  <Select
-                    value={formData.role}
-                    onValueChange={(value) => setFormData({ ...formData, role: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="employee">Employee / Staff</SelectItem>
-                      <SelectItem value="hr_admin">HR Admin</SelectItem>
-                      <SelectItem value="hr_sub_admin">HR Sub Admin</SelectItem>
-                      <SelectItem value="finance_admin">Finance Admin</SelectItem>
-                      <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
-                      <SelectItem value="ops_admin">Operations Admin</SelectItem>
-                      <SelectItem value="ops_sub_admin">Ops Sub Admin</SelectItem>
-                      <SelectItem value="sales_admin">Sales Admin</SelectItem>
-                      <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
-                      <SelectItem value="collections_admin">Collections Admin</SelectItem>
-                      {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
-                      <SelectItem value="general_manager">General Manager</SelectItem>
-                      <SelectItem value="branch_manager">Branch Manager</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="biometricId">Biometric Device PIN</Label>
-                  <Input
-                    id="biometricId"
-                    placeholder="Optional (e.g. 101)"
-                    value={formData.biometricId}
-                    onChange={(e) => setFormData({ ...formData, biometricId: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="department">Primary Department</Label>
-                  <Select
-                    value={formData.departmentId}
-                    onValueChange={(value) => {
-                      setFormData({ ...formData, departmentId: value, subDepartmentId: '' });
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select department (optional)" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">No Department</SelectItem>
-                      {departments.map((dept) => (
-                        <SelectItem key={dept.id || dept.id} value={(dept.id || dept.id)!}>
-                          {dept.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="branch">Branch <span className="text-xs text-muted-foreground font-normal">(Main Office if empty)</span></Label>
-                  <Select
-                    value={formData.branchId}
-                    onValueChange={(value) => {
-                      setFormData({ ...formData, branchId: value });
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select branch (optional)" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">Main Office / No Branch</SelectItem>
-                      {branches.map((branch: any) => (
-                        <SelectItem key={branch.id} value={branch.id}>
-                          {branch.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                {/* Additional departments — for branch managers etc. */}
-                <div>
-                  <Label>Additional Departments <span className="text-xs text-muted-foreground font-normal">(for branch managers with multi-dept access)</span></Label>
-                  <div className="mt-2 border rounded-lg p-3 space-y-2 max-h-36 overflow-y-auto bg-muted/30">
-                    {departments
-                      .filter(d => (d.id || d.id) !== formData.departmentId && (d.id || d.id) !== 'none')
-                      .map(dept => {
-                        const deptId = (dept.id || dept.id)!;
-                        const checked = formData.additionalDepartmentIds.includes(deptId);
-                        return (
-                          <label key={deptId} className="flex items-center gap-2 cursor-pointer text-sm">
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => {
-                                const next = checked
-                                  ? formData.additionalDepartmentIds.filter(id => id !== deptId)
-                                  : [...formData.additionalDepartmentIds, deptId];
-                                setFormData({ ...formData, additionalDepartmentIds: next });
-                              }}
-                              className="rounded"
-                            />
-                            {dept.name}
-                            <span className="text-xs text-muted-foreground">({dept.type})</span>
-                          </label>
-                        );
-                      })}
-                    {departments.length === 0 && <p className="text-xs text-muted-foreground">No departments available</p>}
-                  </div>
-                </div>
-                {formData.departmentId && subDepartments.length > 0 && (
-                  <div>
-                    <Label htmlFor="subDepartment">Sub-Department</Label>
-                    <Select
-                      value={formData.subDepartmentId}
-                      onValueChange={(value) => setFormData({ ...formData, subDepartmentId: value })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select sub-department (optional)" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">No Sub-Department</SelectItem>
-                        {subDepartments.map((subDept) => (
-                          <SelectItem key={subDept.id || subDept.id} value={(subDept.id || subDept.id)!}>
-                            {subDept.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-                <div>
-                  <Label htmlFor="reportingTo">Reports To</Label>
-                  <Select
-                    value={formData.reportingTo}
-                    onValueChange={(value) => setFormData({ ...formData, reportingTo: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select reporting manager (optional)" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">No Manager</SelectItem>
-                      {users.filter(u => u.status !== 'resigned' && (u.id || u.id) !== (editingUser?.id || editingUser?.id)).map((user) => (
-                        <SelectItem key={user.id || user.id} value={(user.id || user.id)!}>
-                          {user.name} {user.designation ? `(${user.designation})` : ''}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-center justify-between mt-4">
-                  <div className="space-y-0.5">
-                    <Label>Allow System Punch-In (Web/App)</Label>
-                    <p className="text-sm text-muted-foreground">If disabled, employee must use physical biometric device.</p>
-                  </div>
-                  <Switch
-                    checked={formData.allowSystemPunchIn}
-                    onCheckedChange={(checked) => setFormData({ ...formData, allowSystemPunchIn: checked })}
-                  />
-                </div>
-                <div className="flex items-center justify-between mt-4">
-                  <div className="space-y-0.5">
-                    <Label>Require Selfie for Punch-In</Label>
-                    <p className="text-sm text-muted-foreground">If enabled, employee must take a photo via webcam to punch in.</p>
-                  </div>
-                  <Switch
-                    checked={formData.requireSelfiePunchIn}
-                    onCheckedChange={(checked) => setFormData({ ...formData, requireSelfiePunchIn: checked })}
-                  />
-                </div>
-                <div className="flex items-center justify-between mt-4">
-                  <div className="space-y-0.5">
-                    <Label>Allow Anywhere Punch-In</Label>
-                    <p className="text-sm text-muted-foreground">If enabled, employee bypasses the geofencing (location) restriction.</p>
-                  </div>
-                  <Switch
-                    checked={formData.allowAnywherePunchIn}
-                    onCheckedChange={(checked) => setFormData({ ...formData, allowAnywherePunchIn: checked })}
-                  />
-                </div>
-                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-xl border border-border/50">
-                  <div>
-                    <h4 className="text-sm font-semibold text-foreground">Requires Attendance</h4>
-                    <p className="text-xs text-muted-foreground mt-0.5">User must punch in/out to mark attendance</p>
-                  </div>
-                  <Switch
-                    checked={formData.requiresAttendance}
-                    onCheckedChange={(checked) => setFormData({ ...formData, requiresAttendance: checked })}
-                    className="data-[state=checked]:bg-primary"
-                  />
-                </div>
-                <div className="flex justify-end gap-2 mt-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                      setDialogOpen(false);
-                      resetForm();
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit">
-                    {editingUser ? 'Update' : 'Create'} User
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <Button
+            onClick={() => { setEditingUser(null); setDialogOpen(true); }}
+            className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Employee User
+          </Button>
         </div>
       </div>
 
@@ -911,6 +481,17 @@ export function HRUsersPanel() {
                       >
                         <TrendingDown className="w-4 h-4" />
                       </Button>
+                      {branches.length > 0 && user.status !== 'resigned' && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
+                          onClick={() => openManagerDialog(user)}
+                          title="Assign as Branch Manager"
+                        >
+                          <Building2 className="w-4 h-4" />
+                        </Button>
+                      )}
                       <Button
                         variant="outline"
                         size="sm"
@@ -964,6 +545,56 @@ export function HRUsersPanel() {
           </div>
         )}
       </div>
+
+      <UserFormDialog
+        open={dialogOpen}
+        editingUser={editingUser}
+        onClose={() => { setDialogOpen(false); setEditingUser(null); }}
+        onSaved={() => fetchUsers()}
+      />
+
+      {/* Branch Manager Dialog */}
+      <Dialog open={!!managerUser} onOpenChange={(open) => { if (!open) setManagerUser(null); }}>
+        <DialogContent className="sm:max-w-[450px] wizard-form border-0 rounded-[2rem] bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Assign Branch Manager</DialogTitle>
+            <p className="text-sm text-muted-foreground">Make {managerUser?.name} the manager of a branch.</p>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Branch</Label>
+              <Select value={managerBranchId} onValueChange={setManagerBranchId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select branch" />
+                </SelectTrigger>
+                <SelectContent>
+                  {branches.map((b: any) => (
+                    <SelectItem key={b.id} value={b.id}>
+                      {b.name} {b.branchManager?.name ? `(manager: ${b.branchManager.name})` : '(vacant)'}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {alreadyManages ? (
+              <p className="text-sm text-amber-700 bg-amber-50 rounded-2xl p-3">
+                {managerUser?.name} already manages {alreadyManages.name}. A person can manage only one branch.
+              </p>
+            ) : targetBranch && (
+              <p className="text-sm text-slate-600 bg-[#f4f6f3] rounded-2xl p-3">
+                {targetBranch.branchManager?.name ? `${targetBranch.branchManager.name} will be replaced. ` : ''}
+                {managerUser?.name} will be moved to {targetBranch.name} and will see the Branch Manager menu.
+              </p>
+            )}
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setManagerUser(null)}>Cancel</Button>
+              <Button type="button" onClick={handleAssignManager} disabled={!targetBranch || !!alreadyManages || assigningManager}>
+                {assigningManager ? 'Assigning...' : 'Assign Manager'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Password Change Dialog */}
       <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>

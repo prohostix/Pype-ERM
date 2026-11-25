@@ -159,7 +159,7 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
   const {
     email, name, phone, role, designation, reportingTo,
     departmentId, subDepartmentId, branchId, studyCenterId,
-    organizationId: bodyOrgId, status, password, biometricId,
+    organizationId: bodyOrgId, status, password, biometricId, additionalDepartmentIds,
     allowSystemPunchIn, requireSelfiePunchIn, allowAnywherePunchIn, requiresAttendance
   } = req.body;
 
@@ -201,6 +201,7 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
       departmentId,
       subDepartmentId,
       branchId: branchId || undefined,
+      additionalDepartmentIds: Array.isArray(additionalDepartmentIds) ? additionalDepartmentIds : undefined,
       studyCenterId: studyCenterId || undefined,
       status: status || 'active',
       biometricId: biometricId || undefined,

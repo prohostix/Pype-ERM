@@ -240,30 +240,21 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
   const saveEmployment = async () => {
     setSaving(true);
     try {
-      const [profileRes, userRes] = await Promise.allSettled([
-        api.put(`/hr/employee-profiles/${userId}`, {
-          employeeCode: employmentForm.employeeCode,
-          joinDate: employmentForm.joinDate || null,
-          confirmationDate: employmentForm.confirmationDate || null,
-          probationEndDate: employmentForm.probationEndDate || null,
-          employmentType: employmentForm.employmentType,
-          workLocation: employmentForm.workLocation,
-        }),
-        api.put(`/users/${userId}`, {
-          designation: employmentForm.designation,
-          phone: employmentForm.phone,
-        }),
-      ]);
-      const errMsg = (r: PromiseRejectedResult) => r.reason?.response?.data?.message || 'request failed';
-      if (profileRes.status === 'fulfilled' && userRes.status === 'fulfilled') {
-        toast.success('Employment info saved');
-      } else {
-        if (profileRes.status === 'rejected') toast.error(`Employment details not saved: ${errMsg(profileRes)}`);
-        if (userRes.status === 'rejected') toast.error(`Designation/phone not saved: ${errMsg(userRes)}`);
-        if (profileRes.status === 'fulfilled' || userRes.status === 'fulfilled') toast.info('The other part of the form was saved.');
-      }
+      await api.put(`/hr/employee-profiles/${userId}`, {
+        employeeCode: employmentForm.employeeCode,
+        joinDate: employmentForm.joinDate || null,
+        confirmationDate: employmentForm.confirmationDate || null,
+        probationEndDate: employmentForm.probationEndDate || null,
+        employmentType: employmentForm.employmentType,
+        workLocation: employmentForm.workLocation,
+      });
+      toast.success('Employment info saved');
       fetchProfile();
-    } finally { setSaving(false); }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Employment details not saved');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const saveSalary = async () => {
@@ -593,8 +584,8 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                 <SectionTitle icon={Briefcase} title="Employment Details" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div><Label>Employee Code</Label><Input value={employmentForm.employeeCode} onChange={e => setEmploymentForm({ ...employmentForm, employeeCode: e.target.value })} /></div>
-                  <div><Label>Designation</Label><Input value={employmentForm.designation} onChange={e => setEmploymentForm({ ...employmentForm, designation: e.target.value })} /></div>
-                  <div><Label>Phone</Label><Input value={employmentForm.phone} onChange={e => setEmploymentForm({ ...employmentForm, phone: e.target.value })} /></div>
+                  <div><Label>Designation</Label><Input value={employmentForm.designation} disabled /><p className="text-xs text-muted-foreground mt-1">Change in the Users screen.</p></div>
+                  <div><Label>Phone</Label><Input value={employmentForm.phone} disabled /><p className="text-xs text-muted-foreground mt-1">Change in the Users screen.</p></div>
                   <div><Label>Employment Type</Label>
                     <Select value={employmentForm.employmentType} onValueChange={v => setEmploymentForm({ ...employmentForm, employmentType: v })}>
                       <SelectTrigger><SelectValue /></SelectTrigger>

@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
+import { UserFormDialog } from '@/components/panels/UserFormDialog';
 import { ListPagination } from '@/components/ui/list-pagination';
 
 export function VacanciesPanel() {
@@ -24,13 +25,6 @@ export function VacanciesPanel() {
     departmentId: '',
     count: '1',
     status: 'open'
-  });
-
-  const [hireFormData, setHireFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'employee',
   });
 
   useEffect(() => {
@@ -110,37 +104,7 @@ export function VacanciesPanel() {
 
   const openHireDialog = (vacancy: any) => {
     setSelectedVacancy(vacancy);
-    setHireFormData({
-      name: '',
-      email: '',
-      password: '',
-      role: 'employee',
-    });
     setHireDialogOpen(true);
-  };
-
-  const handleHireSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      // Create the user with the vacancy's department
-      await api.post('/users', {
-        ...hireFormData,
-        departmentId: selectedVacancy.departmentId,
-      });
-      
-      alert(`User ${hireFormData.name} created successfully and assigned to ${selectedVacancy.department?.name || 'department'}!`);
-      setHireDialogOpen(false);
-      setHireFormData({
-        name: '',
-        email: '',
-        password: '',
-        role: 'employee',
-      });
-      setSelectedVacancy(null);
-    } catch (error: any) {
-      console.error('Failed to create user:', error);
-      alert(error.response?.data?.message || 'Failed to create user');
-    }
   };
 
   const resetForm = () => {
@@ -331,103 +295,16 @@ export function VacanciesPanel() {
         </div>
       </div>
 
-      {/* Hire Dialog */}
-      <Dialog open={hireDialogOpen} onOpenChange={setHireDialogOpen}>
-        <DialogContent className="wizard-form max-w-md border-0 rounded-[2rem] overflow-hidden p-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
-          <div className="bg-[#f4f6f3] p-6 border-b border-slate-100 flex items-center gap-3">
-            <div>
-              <DialogTitle className="text-xl font-semibold tracking-tight">Hire Candidate</DialogTitle>
-              <p className="text-sm text-muted-foreground mt-0.5 font-medium truncate max-w-[250px]">
-                {selectedVacancy?.designation}
-              </p>
-            </div>
-          </div>
-          
-          <form onSubmit={handleHireSubmit} className="p-6 space-y-4">
-            <div className="bg-[#f4f6f3] p-4 rounded-2xl text-sm space-y-1 mb-2">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-slate-500">Dept:</span>
-                <span className="font-semibold text-foreground">
-                  {typeof selectedVacancy?.departmentId === 'object'
-                    ? selectedVacancy?.departmentId?.name
-                    : selectedVacancy?.department?.name}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                The new user will be automatically assigned to this department.
-              </p>
-            </div>
-            
-            <div className="space-y-2">
-              <Label className="text-xs font-semibold text-slate-600" htmlFor="hire-name">Full Name</Label>
-              <Input
-                id="hire-name"
-                className="rounded-xl h-11"
-                value={hireFormData.name}
-                onChange={(e) => setHireFormData({ ...hireFormData, name: e.target.value })}
-                required
-                placeholder="Enter employee name"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-xs font-semibold text-slate-600" htmlFor="hire-email">Email Address</Label>
-              <Input
-                id="hire-email"
-                type="email"
-                className="rounded-xl h-11"
-                value={hireFormData.email}
-                onChange={(e) => setHireFormData({ ...hireFormData, email: e.target.value })}
-                required
-                placeholder="employee@company.com"
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-xs font-semibold text-slate-600" htmlFor="hire-role">Role</Label>
-                <Select
-                  value={hireFormData.role}
-                  onValueChange={(value) => setHireFormData({ ...hireFormData, role: value })}
-                >
-                  <SelectTrigger className="rounded-xl h-11">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    <SelectItem value="employee">Employee</SelectItem>
-                    <SelectItem value="hr_sub_admin">HR Manager</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-xs font-semibold text-slate-600" htmlFor="hire-password">Initial Password</Label>
-                <Input
-                  id="hire-password"
-                  type="password"
-                  className="rounded-xl h-11"
-                  value={hireFormData.password}
-                  onChange={(e) => setHireFormData({ ...hireFormData, password: e.target.value })}
-                  required
-                  minLength={6}
-                  placeholder="Min. 6 chars"
-                />
-              </div>
-            </div>
-            
-            <div className="pt-4 flex justify-end gap-2">
-              <Button 
-                type="button" 
-                variant="ghost"
-                className="rounded-full h-11 px-6"
-                onClick={() => setHireDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" className="rounded-full h-11 px-7 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-                Create User & Hire
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <UserFormDialog
+        open={hireDialogOpen}
+        onClose={() => setHireDialogOpen(false)}
+        title="Hire Candidate"
+        description={selectedVacancy?.designation}
+        defaultDepartmentId={
+          (typeof selectedVacancy?.departmentId === 'object' ? selectedVacancy?.departmentId?.id : selectedVacancy?.departmentId) || ''
+        }
+        onSaved={(name) => alert(`User ${name} created successfully.`)}
+      />
     </div>
   );
 }
