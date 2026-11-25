@@ -1,8 +1,9 @@
-import { Response } from 'express';
+import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
+import { isHrRole, manageableRoles, userChangeError } from '../utils/userGuards.js';
 
 // Safe user select — never expose password hash
 const USER_SELECT = {
@@ -174,9 +175,6 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
     return;
   }
 
-  const userId = await generateUserId();
-  const hashedPassword = password ? await hashPassword(password) : await hashPassword(`User@${Math.floor(100000 + Math.random() * 900000)}`);
-
   let finalRole = role || 'student';
   if (reportingTo) {
     const manager = await prisma.user.findUnique({ where: { id: reportingTo }, select: { role: true } });
@@ -186,6 +184,24 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
       finalRole = 'sales_sub_admin';
     }
   }
+
+  let finalBranchId = branchId;
+  if (isHrRole(callerRole)) {
+    if (!manageableRoles(callerRole, allowed).includes(finalRole)) {
+      res.status(403).json({ success: false, message: `You cannot create a user with role '${finalRole}'` });
+      return;
+    }
+    if (req.user.branchId) {
+      if (branchId && branchId !== req.user.branchId) {
+        res.status(403).json({ success: false, message: 'You can only create users in your own branch' });
+        return;
+      }
+      finalBranchId = req.user.branchId;
+    }
+  }
+
+  const userId = await generateUserId();
+  const hashedPassword = password ? await hashPassword(password) : await hashPassword(`User@${Math.floor(100000 + Math.random() * 900000)}`);
 
   const user = await prisma.user.create({
     data: {
@@ -200,7 +216,7 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
       reportingTo,
       departmentId,
       subDepartmentId,
-      branchId: branchId || undefined,
+      branchId: finalBranchId || undefined,
       additionalDepartmentIds: Array.isArray(additionalDepartmentIds) ? additionalDepartmentIds : undefined,
       studyCenterId: studyCenterId || undefined,
       status: status || 'active',
@@ -240,7 +256,7 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   }
 
   // Role restriction on update
-  if (role && !(userExists.role === 'study_abroad_admin' && role === 'study_abroad_admin')) {
+  if (role && role !== userExists.role) {
     const callerRole = req.user.role as string;
     const allowed = CREATABLE_ROLES[callerRole] || [];
     if (!allowed.includes(role)) {
@@ -287,6 +303,12 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   if (allowAnywherePunchIn !== undefined) updateData.allowAnywherePunchIn = allowAnywherePunchIn;
   if (requiresAttendance !== undefined) updateData.requiresAttendance = requiresAttendance;
 
+  const denied = userChangeError(req.user, userExists, CREATABLE_ROLES[req.user.role] || [], updateData);
+  if (denied) {
+    res.status(403).json({ success: false, message: denied });
+    return;
+  }
+
   const user = await prisma.user.update({
     where: { id: req.params.id },
     data: updateData,
@@ -295,6 +317,30 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
 
   res.status(200).json({ success: true, data: user });
 });
+
+/**
+ * Runs before the delete handler. The handler itself is only reached after delete approval,
+ * so a request the caller may not make has to be refused here.
+ */
+export const guardUserDelete = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const where: any = { id: req.params.id };
+    if (req.user.role !== 'superadmin') where.organizationId = req.user.organizationId;
+    const target = await prisma.user.findFirst({ where, select: { id: true, role: true, branchId: true } });
+    if (!target) {
+      res.status(404).json({ success: false, message: 'User not found' });
+      return;
+    }
+    const denied = userChangeError(req.user, target, CREATABLE_ROLES[req.user.role] || []);
+    if (denied) {
+      res.status(403).json({ success: false, message: denied });
+      return;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const deleteUser = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { id: req.params.id };

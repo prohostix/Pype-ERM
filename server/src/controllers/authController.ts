@@ -4,6 +4,7 @@ import prisma from '../lib/prisma.js';
 import { generateToken, generateRefreshToken } from '../utils/jwt.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, comparePassword, generateUserId } from '../utils/authUtils.js';
+import { ACCOUNT_DISABLED_MESSAGE, isAccountDisabled } from '../utils/userGuards.js';
 
 // @desc    Register user
 // @route   POST /api/v1/auth/register
@@ -16,7 +17,6 @@ export const register = asyncHandler(async (req: AuthRequest, res: Response) => 
     email,
     password,
     name,
-    role,
     phone,
     designation,
     reportingTo,
@@ -42,8 +42,8 @@ export const register = asyncHandler(async (req: AuthRequest, res: Response) => 
   const userId = await generateUserId();
   const hashedPassword = await hashPassword(password);
 
-  // Prevent privilege escalation — nobody can register themselves as superadmin
-  const assignedRole = (role === 'superadmin' || role === 'org_admin' || role === 'center_admin' || role === 'study_abroad_admin') ? 'student' : (role || 'student');
+  // This endpoint is public, so it only ever creates student logins. Staff accounts come from /users.
+  const assignedRole = 'student';
 
   // Create user
   const user = await prisma.user.create({
@@ -132,6 +132,11 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
         return;
       }
 
+      if (isAccountDisabled(faculty.status)) {
+        res.status(403).json({ success: false, code: 'ACCOUNT_DISABLED', message: ACCOUNT_DISABLED_MESSAGE });
+        return;
+      }
+
       // If logging in from a custom org page, restrict to that org
       if (organizationId && faculty.organizationId !== organizationId) {
         res.status(403).json({ success: false, message: 'Your account is not registered with this organization.' });
@@ -174,6 +179,11 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
   // If logging in from a custom org page, restrict to that org (allow superadmin to bypass)
   if (organizationId && user.organizationId !== organizationId && user.role !== 'superadmin') {
     res.status(403).json({ success: false, message: 'Your account is not registered with this organization.' });
+    return;
+  }
+
+  if (isAccountDisabled(user.status)) {
+    res.status(403).json({ success: false, code: 'ACCOUNT_DISABLED', message: ACCOUNT_DISABLED_MESSAGE });
     return;
   }
 

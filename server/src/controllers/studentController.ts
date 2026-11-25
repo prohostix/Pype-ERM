@@ -10,6 +10,7 @@ import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '
 
 import { findCurrency, getOrgCurrencyCode } from '../utils/currency.js';
 import { loadGapStatuses } from '../utils/videoGap.js';
+import { isOwnStudentAccount } from '../utils/userGuards.js';
 const SALES_ROLES = ['sales_admin', 'sales_sub_admin', 'sales', 'employee', 'student'];
 
 export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -609,6 +610,8 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     }
   }
 
+  if (req.user.role !== 'superadmin') whereClause.organizationId = req.user.organizationId;
+
   const studentExists = await prisma.student.findFirst({ where: whereClause });
   if (!studentExists) {
     res.status(404).json({ success: false, message: 'Student not found' });
@@ -622,6 +625,10 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     // Check if user exists first, because some legacy migrations might have skipped user creation
     const existingUser = await prisma.user.findFirst({ where: { email: studentExists.email } });
     if (existingUser) {
+      if (!isOwnStudentAccount(existingUser, studentExists.organizationId)) {
+        res.status(403).json({ success: false, message: 'This email belongs to another account, so its password cannot be changed here' });
+        return;
+      }
       await prisma.user.update({
         where: { id: existingUser.id },
         data: { password: hashedPassword }
@@ -927,6 +934,11 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
 
       // Ensure user account exists
       let studentUser = await prisma.user.findUnique({ where: { email: s.email } });
+      if (studentUser && !isOwnStudentAccount(studentUser, organizationId)) {
+        results.skipped++;
+        results.errors.push(`Email already belongs to another account: ${s.email}`);
+        continue;
+      }
       let generatedUid = s.enrollmentNo || s.enrollmentno || s.enrollment_no || s['enrollment no'] || s.enrollment || '';
       const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
       if (!studentUser) {

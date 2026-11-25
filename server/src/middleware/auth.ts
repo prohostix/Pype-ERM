@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import prisma from '../lib/prisma.js';
+import { ACCOUNT_DISABLED_MESSAGE, isAccountDisabled } from '../utils/userGuards.js';
 
 export interface AuthRequest extends Request {
   user?: any;
@@ -65,6 +66,11 @@ export const protect = async (
 
       if (!user) {
         res.status(401).json({ success: false, message: 'Invalid token or user not found' });
+        return;
+      }
+
+      if (isAccountDisabled(user.status)) {
+        res.status(401).json({ success: false, code: 'ACCOUNT_DISABLED', message: ACCOUNT_DISABLED_MESSAGE });
         return;
       }
 

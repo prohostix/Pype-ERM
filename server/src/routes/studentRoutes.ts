@@ -33,12 +33,21 @@ import {
   deleteStudentRemark,
 } from '../controllers/studentController.js';
 import { bulkSetStudentFilterValue, setStudentFilterValue, getStudentFilterData } from '../controllers/studentFilterController.js';
-import { protect, authorize } from '../middleware/auth.js';
+import { protect, authorize, type AuthRequest } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
 
 const router = express.Router();
 
 router.use(protect);
+
+// Staff records: students and faculty use their own portal routes.
+router.use((req: AuthRequest, res, next) => {
+  if (['student', 'faculty'].includes(req.user.role)) {
+    res.status(403).json({ success: false, message: 'Access denied' });
+    return;
+  }
+  next();
+});
 
 // Student uniqueness validation
 router.get('/check-unique', checkStudentUniqueness);

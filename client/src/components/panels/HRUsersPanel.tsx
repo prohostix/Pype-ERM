@@ -168,7 +168,7 @@ export function HRUsersPanel() {
       toast.success('Employee transferred successfully!');
     } catch (error) {
       console.error('Failed to transfer employee:', error);
-      toast.error('Failed to transfer employee. Please try again.');
+      toast.error((error as any).response?.data?.message || 'Failed to transfer employee. Please try again.');
     }
   };
 
@@ -192,7 +192,7 @@ export function HRUsersPanel() {
       toast.success(`Employee ${promotionData.type === 'promotion' ? 'promoted' : 'demoted'} successfully!`);
     } catch (error) {
       console.error(`Failed to ${promotionData.type} employee:`, error);
-      toast.error(`Failed to ${promotionData.type} employee. Please try again.`);
+      toast.error((error as any).response?.data?.message || `Failed to ${promotionData.type} employee. Please try again.`);
     }
   };
 
@@ -219,7 +219,7 @@ export function HRUsersPanel() {
       toast.success('Password updated successfully!');
     } catch (error) {
       console.error('Failed to update password:', error);
-      toast.error('Failed to update password. Please try again.');
+      toast.error((error as any).response?.data?.message || 'Failed to update password. Please try again.');
     }
   };
 
@@ -234,7 +234,7 @@ export function HRUsersPanel() {
       // and it's pending approval — the toast is already shown, so suppress the alert.
       if (error?.message === 'DELETE_REQUESTED_NOT_COMPLETED' || error?.isDeleteRequest) return;
       console.error('Failed to delete user:', error);
-      toast.error('Failed to delete user. Please try again.');
+      toast.error((error as any).response?.data?.message || 'Failed to delete user. Please try again.');
     }
   };
 
@@ -249,7 +249,7 @@ export function HRUsersPanel() {
       fetchUsers();
     } catch (error) {
       console.error('Failed to toggle user status:', error);
-      toast.error('Failed to update user status. Please try again.');
+      toast.error((error as any).response?.data?.message || 'Failed to update user status. Please try again.');
     }
   };
 
@@ -265,7 +265,7 @@ export function HRUsersPanel() {
       fetchUsers();
     } catch (error) {
       console.error(`Failed to ${action} user:`, error);
-      toast.error('Failed to process action. Please try again.');
+      toast.error((error as any).response?.data?.message || 'Failed to process action. Please try again.');
     }
   };
 

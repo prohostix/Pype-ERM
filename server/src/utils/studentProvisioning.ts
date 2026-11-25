@@ -3,6 +3,7 @@ import { hashPassword, generateUserId } from './authUtils.js';
 import { sendEmail, sendBrandedStudentCredentials } from './emailService.js';
 import { sendAdmissionConfirmationWhatsApp } from './whatsappService.js';
 import { enqueueNotification } from './notificationQueue.js';
+import { isOwnStudentAccount } from './userGuards.js';
 
 export async function provisionStudentAfterApproval(enrollmentId: string) {
   try {
@@ -46,6 +47,10 @@ export async function provisionStudentAfterApproval(enrollmentId: string) {
           status: 'active',
         },
       });
+    } else if (!isOwnStudentAccount(studentUser, enrollment.organizationId)) {
+      // The address belongs to a staff or other organization's login: leave that account untouched.
+      generatedUid = studentUser.userId || '';
+      generatedPassword = '(Existing account)';
     } else {
       generatedUid = studentUser.userId || await generateUserId();
       await prisma.user.update({

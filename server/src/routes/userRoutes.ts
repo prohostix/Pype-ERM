@@ -6,6 +6,7 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  guardUserDelete,
   getSubordinates,
   updateUserPermissions,
   updateSalesAssignment, updateOpsAssignment,
@@ -31,7 +32,7 @@ router
   .route('/:id')
   .get(getUser)
   .put(authorize('superadmin', 'org_admin', 'hr_admin', 'hr_sub_admin'), updateUser)
-  .delete(authorize('superadmin', 'org_admin', 'hr_admin', 'hr_sub_admin'), deleteUser);
+  .delete(authorize('superadmin', 'org_admin', 'hr_admin', 'hr_sub_admin'), guardUserDelete, deleteUser);
 
 router
   .route('/:id/permissions')

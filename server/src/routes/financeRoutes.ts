@@ -86,16 +86,17 @@ import {
   completeBatchPayment,
 } from '../controllers/payrollController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { requireInvoiceWriter } from '../middleware/invoiceAccess.js';
 
 const router = express.Router();
 
 router.use(protect);
 
 // Invoices
-router.route('/invoices').get(getInvoices).post(createInvoice);
+router.route('/invoices').get(getInvoices).post(requireInvoiceWriter, createInvoice);
 router.route('/invoices/:id')
   .get(getInvoice)
-  .put(updateInvoice)
+  .put(requireInvoiceWriter, updateInvoice)
   .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deleteInvoice);
 router.put('/invoices/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), approveInvoice);
 
