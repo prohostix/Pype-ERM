@@ -273,6 +273,15 @@ Group by group, in the order of [all-features.md](all-features.md).
 
 Also fixed: admission review approve, reject, document and photo actions, and session update, delete and approve, now check the organization.
 
-### Waiting for a decision
+### Sales admission pages (connected)
 
-Generate Student Link, Provisional Enrollment, Admission Pipeline and Admission Approval list records belonging to a sales person. Decide what a user given these pages should see. Student Portal Management follows them.
+Decision: a user given one of these pages sees everything in their branch.
+
+| Page | Notes |
+|---|---|
+| Generate Student Link | Links created by people in the branch |
+| Provisional Enrollment | May only enrol existing students of the branch |
+| Admission Pipeline, Admission Approval | Applications whose student or sales person is in the branch; no passwords; fees only with invoice access |
+| Student Portal Management | Branch students; Edit changes portal logins only. Blocking and unlocking videos stays with the Org Admin |
+
+Also fixed: link regeneration, sales admin approval and rejection, and receipt upload now check the organization.

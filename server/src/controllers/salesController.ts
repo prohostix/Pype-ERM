@@ -68,6 +68,7 @@ export const convertLead = asyncHandler(async (req: AuthRequest, res: Response) 
 });
 
 import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
+import type { PageRequest } from '../access/pageGuard.js';
 
 // Targets
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -135,12 +136,18 @@ export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response)
 });
 
 // Invites
-export const listMyInvites = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const listMyInvites = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = {};
   if (['org_admin', 'superadmin', 'ceo', 'general_manager'].includes(req.user.role)) {
     where.organizationId = req.user.organizationId;
   } else {
     where.referredBy = req.user.id;
+  }
+  // Someone given this page sees their branch's links
+  if (req.ownBranchOnly) {
+    delete where.referredBy;
+    where.organizationId = req.user.organizationId;
+    where.referrer = { branchId: req.user.branchId };
   }
   const invites = await prisma.studyCenterInvite.findMany({
     where,
@@ -183,6 +190,14 @@ export const generateInvite = asyncHandler(async (req: AuthRequest, res: Respons
   res.status(201).json({ success: true, data: invite });
 });
 export const regenerateInvite = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const own = await prisma.studyCenterInvite.findFirst({
+    where: { id: req.params.id, ...(req.user.role !== 'superadmin' && { organizationId: req.user.organizationId }) },
+    select: { id: true }
+  });
+  if (!own) {
+    res.status(404).json({ success: false, message: 'Invite not found' });
+    return;
+  }
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + 7);
   const invite = await prisma.studyCenterInvite.update({

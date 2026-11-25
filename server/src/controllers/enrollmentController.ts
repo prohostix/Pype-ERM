@@ -4,6 +4,7 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
+import type { PageRequest } from '../access/pageGuard.js';
 
 export const getWallet = asyncHandler(async (req: AuthRequest, res: Response) => {
   const wallet = await prisma.studyCenterWallet.findUnique({ where: { studyCenterId: req.user.studyCenterId || '' } });
@@ -44,8 +45,16 @@ export const getEnrollablePrograms = asyncHandler(async (req: AuthRequest, res: 
   res.json({ success: true, count: programs.length, data: programs });
 });
 
-export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const createEnrollment = asyncHandler(async (req: PageRequest, res: Response) => {
   const { studentId, feeMode, universityId, ...rest } = req.body;
+  // Someone given this page may only enrol existing students of their branch
+  if (req.ownBranchOnly) {
+    const named = rest.studentId || studentId;
+    if (named && !(await prisma.student.findFirst({ where: { id: named, organizationId: req.user.organizationId, branchId: req.user.branchId }, select: { id: true } }))) {
+      res.status(404).json({ success: false, message: 'Student not found' });
+      return;
+    }
+  }
   const data: any = {
     ...rest,
     organizationId: req.user.organizationId
@@ -314,7 +323,7 @@ export const uploadReceipt = asyncHandler(async (req: AuthRequest, res: Response
     where: { id: enrollmentId }
   });
 
-  if (!enrollment) {
+  if (!enrollment || (req.user.role !== 'superadmin' && enrollment.organizationId !== req.user.organizationId)) {
     res.status(404);
     throw new Error('Enrollment not found');
   }

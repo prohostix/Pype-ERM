@@ -15,6 +15,8 @@ export function StudentPortalManagementPanel() {
   const { user } = useAuth();
   // Only org admins can block or restore a student's videos
   const canBlockVideos = ['org_admin', 'superadmin'].includes(user?.role || '');
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayEdit = user?.access?.student_portal_management?.edit?.allowed ?? true;
   const [blockTarget, setBlockTarget] = useState<any>(null);
   const [blockReason, setBlockReason] = useState('');
   // Unlock-gap override: skip the wait for a student's next video
@@ -229,14 +231,16 @@ export function StudentPortalManagementPanel() {
                         Unlock Next Video
                       </Button>
                     )}
-                    <Button
-                      className={student.credentials
-                        ? 'h-10 rounded-full px-5 bg-white border border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold'
-                        : 'h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold'}
-                      onClick={() => openManageDialog(student)}
-                    >
-                      Manage Access
-                    </Button>
+                    {mayEdit && (
+                      <Button
+                        className={student.credentials
+                          ? 'h-10 rounded-full px-5 bg-white border border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold'
+                          : 'h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold'}
+                        onClick={() => openManageDialog(student)}
+                      >
+                        Manage Access
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}

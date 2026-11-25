@@ -35,7 +35,7 @@ import {
 import { bulkSetStudentFilterValue, setStudentFilterValue, getStudentFilterData } from '../controllers/studentFilterController.js';
 import { protect, authorize, type AuthRequest } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
-import { studentAction, studentContext, studentRead, type StudentRequest } from '../access/studentGuard.js';
+import { studentAction, studentContext, studentRead, studentUpdate, type StudentRequest } from '../access/studentGuard.js';
 
 const router = express.Router();
 
@@ -76,7 +76,7 @@ router.put('/:id/documents/:docIndex/status', studentAction('edit', ['org_admin'
 router.put('/:id/photo/status', studentAction('edit', ['org_admin', 'superadmin', 'ops_admin', 'ops_sub_admin', 'employee']), updatePhotoStatus);
 
 router.route('/').get(getStudents).post(studentAction('create', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin', 'general_manager']), createStudent);
-router.route('/:id').get(studentRead, getStudent).put(studentAction('edit', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin']), updateStudent).delete(studentAction('delete', ['org_admin', 'superadmin']), deleteStudent);
+router.route('/:id').get(studentRead, getStudent).put(studentUpdate(['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin']), updateStudent).delete(studentAction('delete', ['org_admin', 'superadmin']), deleteStudent);
 router.put('/:id/progress/:stepId', studentAction('edit', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin']), upload.single('proof'), updateAdmissionProgress);
 router.put('/:id/academic-progress', studentAction('edit', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin']), updateStudentAcademicProgress);
 router.put('/:id/video-block', authorize('org_admin', 'superadmin'), setStudentVideoBlock);

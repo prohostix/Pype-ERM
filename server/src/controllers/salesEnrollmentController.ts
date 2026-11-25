@@ -11,8 +11,23 @@ import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '
 import { sendPushNotification } from '../services/notification.service.js';
 import { emitToUser } from '../config/socket.js';
 import { historyList, appendHistory } from '../utils/statusHistory.js';
+import { enrollmentBranchWhere, type PageRequest } from '../access/pageGuard.js';
+import { restrictEnrollment, restrictStudent } from '../access/studentRules.js';
 
 // ─── Public: Validate invite token and get form data ─────────────────────────
+
+const sameOrganization = (req: AuthRequest, record: { organizationId: string }) =>
+  req.user.role === 'superadmin' || record.organizationId === req.user.organizationId;
+
+/** Applications as the caller may see them: someone given a page gets no passwords, and fees only with invoice access */
+const visibleApplications = (req: PageRequest, enrollments: any[]) => {
+  if (!req.ownBranchOnly) return enrollments;
+  const hideFees = !req.access?.invoices?.view?.allowed;
+  return enrollments.map((e: any) => ({
+    ...(hideFees ? restrictEnrollment(e) : e),
+    student: e.student && restrictStudent(e.student, { hideFees, hideCredentials: true }),
+  }));
+};
 
 export const validateStudentInviteToken = asyncHandler(async (req: Request, res: Response) => {
   const { token } = req.params;
@@ -303,7 +318,7 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
 
 // ─── Sales: Get all enrollments from their invite links ──────────────────────
 
-export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getSalesEnrollmentPipeline = asyncHandler(async (req: PageRequest, res: Response) => {
   const orgId = req.user.organizationId;
   let allowedIds = [req.user.id];
 
@@ -326,7 +341,10 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
     }
   };
 
-  if (!isGlobalAdmin) {
+  if (req.ownBranchOnly) {
+    // Someone given this page sees everything in their branch
+    whereClause.AND = [enrollmentBranchWhere(req.user.branchId)];
+  } else if (!isGlobalAdmin) {
     whereClause.salesUserId = { in: allowedIds };
   }
 
@@ -360,7 +378,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
     rejected: enrollments.filter((e: any) => e.status === 'rejected').length,
   };
 
-  const data = enrollments.map((e: any) => ({ ...e, rejectedBySalesAdmin: isSalesAdminRejected(e) }));
+  const data = visibleApplications(req, enrollments).map((e: any) => ({ ...e, rejectedBySalesAdmin: isSalesAdminRejected(e) }));
   res.status(200).json({ success: true, count: enrollments.length, summary, data });
 });
 
@@ -932,7 +950,7 @@ const isSalesAdminRejected = (e: any): boolean => {
 
 // ─── Sales: Verify student enrollment from invite link ───────────────────────
 
-export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const verifySalesEnrollment = asyncHandler(async (req: PageRequest, res: Response) => {
   const { id } = req.params;
   const orgId = req.user.organizationId;
   const salesUserId = req.user.id;
@@ -976,7 +994,7 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
 
   // The creating sales user, or Sales Admin / Org Admin / Super Admin
   const isPrivilegedAdmin = ['sales_admin', 'org_admin', 'superadmin'].includes(req.user.role);
-  if (enrollment.organizationId !== orgId || (enrollment.salesUserId !== salesUserId && !isPrivilegedAdmin)) {
+  if (enrollment.organizationId !== orgId || (enrollment.salesUserId !== salesUserId && !isPrivilegedAdmin && !req.ownBranchOnly)) {
     res.status(403).json({ success: false, message: 'Not authorized to verify this enrollment' });
     return;
   }
@@ -1259,7 +1277,7 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
 // Everything else on the application stays locked. Only the sales user who
 // created it can do this, and only while it sits in "rejected" with Finance's
 // remarks (a Finance rejection). It goes straight back to Finance review.
-export const resubmitPaymentReceipt = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const resubmitPaymentReceipt = asyncHandler(async (req: PageRequest, res: Response) => {
   const { id } = req.params;
   const { receiptUrl } = req.body;
 
@@ -1273,7 +1291,7 @@ export const resubmitPaymentReceipt = asyncHandler(async (req: AuthRequest, res:
     res.status(404).json({ success: false, message: 'Enrollment not found' });
     return;
   }
-  const canReupload = enrollment.salesUserId === req.user.id ||
+  const canReupload = req.ownBranchOnly || enrollment.salesUserId === req.user.id ||
     ['sales_admin', 'superadmin', 'org_admin', 'branch_manager'].includes(req.user.role);
   if (!canReupload) {
     res.status(403).json({ success: false, message: 'You are not authorized to re-upload this payment receipt.' });
@@ -1405,7 +1423,7 @@ export const resubmitPaymentReceipt = asyncHandler(async (req: AuthRequest, res:
 // statusHistory is a plain JSON column. Some older code saved entries with
 // (helpers moved above verifySalesEnrollment)
 
-export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getSalesAdminReviews = asyncHandler(async (req: PageRequest, res: Response) => {
   // ?view=rejected -> applications this admin's team submitted that a Sales
   // Admin rejected, so they can be edited and re-requested.
   const wantRejected = req.query.view === 'rejected';
@@ -1455,6 +1473,10 @@ export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: R
     baseWhere.salesUserId = { in: allowedUserIds };
   }
   // org_admin / superadmin see all
+  if (req.ownBranchOnly) {
+    delete baseWhere.salesUserId;
+    baseWhere.AND = [enrollmentBranchWhere(req.user.branchId)];
+  }
 
   const enrollments = await prisma.enrollment.findMany({
     where: baseWhere,
@@ -1466,7 +1488,7 @@ export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: R
     },
     orderBy: { updatedAt: 'desc' }
   });
-  const data = wantRejected ? enrollments.filter(isSalesAdminRejected) : enrollments;
+  const data = visibleApplications(req, wantRejected ? enrollments.filter(isSalesAdminRejected) : enrollments);
   res.json({ success: true, count: data.length, data });
 });
 
@@ -1475,7 +1497,7 @@ export const approveBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Re
     where: { id: req.params.id },
     include: { program: { select: { name: true } } }
   });
-  if (!enrollment || enrollment.status !== 'sales_admin_review') {
+  if (!enrollment || enrollment.status !== 'sales_admin_review' || !sameOrganization(req, enrollment)) {
     res.status(404).json({ success: false, message: 'Enrollment not found or not in review status' });
     return;
   }
@@ -1596,7 +1618,7 @@ export const rejectBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Res
     where: { id: req.params.id },
     include: { program: { select: { name: true } } }
   });
-  if (!enrollment || enrollment.status !== 'sales_admin_review') {
+  if (!enrollment || enrollment.status !== 'sales_admin_review' || !sameOrganization(req, enrollment)) {
     res.status(404).json({ success: false, message: 'Enrollment not found or not in review status' });
     return;
   }

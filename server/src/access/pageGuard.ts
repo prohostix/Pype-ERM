@@ -17,7 +17,7 @@ interface Options {
 }
 
 /** Replaces `authorize(...)`: the role list still applies to anyone without a setting of their own. */
-export const pageAction = (pageKey: string, action: Action, legacyRoles: string[], options: Options = {}) =>
+export const pageAction = (pageKey: string, action: Action, legacyRoles: string[] | null, options: Options = {}) =>
   async (req: PageRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
       const managed = await prisma.branch.findFirst({ where: { branchManagerId: req.user.id }, select: { id: true } });
@@ -42,6 +42,13 @@ export const pageAction = (pageKey: string, action: Action, legacyRoles: string[
       next(error);
     }
   };
+
+/** Study partner invite links made by someone in the branch. */
+export const inviteInBranch = async (req: PageRequest, branchId: string): Promise<boolean> =>
+  Boolean(await prisma.studyCenterInvite.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId, referrer: { branchId } },
+    select: { id: true },
+  }));
 
 /** Applications of a branch: the student or the sales person belongs to it. */
 export const enrollmentBranchWhere = (branchId: string) => ({ OR: [{ student: { branchId } }, { salesUser: { branchId } }] });

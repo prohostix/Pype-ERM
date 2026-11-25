@@ -42,6 +42,7 @@ import {
   getConversionReport
 } from '../controllers/salesReportController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { pageAction, enrollmentInBranch, inviteInBranch } from '../access/pageGuard.js';
 
 const router = express.Router();
 
@@ -57,8 +58,10 @@ router.route('/targets').get(getTargets).post(authorize('sales_admin', 'sales_su
 router.route('/targets/:id').get(getTarget).put(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin'), updateTarget).delete(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin'), deleteTarget);
 
 // Invite routes — available to all sales department employees
-router.route('/invites').get(listMyInvites).post(generateInvite);
-router.patch('/invites/:id/regenerate', regenerateInvite);
+router.route('/invites')
+  .get(pageAction('invite_links', 'view', null), listMyInvites)
+  .post(pageAction('invite_links', 'create', null), generateInvite);
+router.patch('/invites/:id/regenerate', pageAction('invite_links', 'edit', null, { inBranch: inviteInBranch }), regenerateInvite);
 
 // Programs by university (for invite creation)
 router.get('/programs-by-university', getProgramsByUniversity);
@@ -75,18 +78,18 @@ router.get('/my-centers/admissions', getMyCenterAdmissions);
 router.get('/my-centers/:centerId', getMyCenterDetail);
 
 // Sales-led Student applications & Direct enrollment
-router.get('/student-applications', getSalesEnrollmentPipeline);
+router.get('/student-applications', pageAction('admission_pipeline', 'view', null), getSalesEnrollmentPipeline);
 router.post('/direct-enroll', createDirectEnrollment);
-router.put('/student-applications/:id/verify', verifySalesEnrollment);
-router.put('/student-applications/:id/resubmit-receipt', resubmitPaymentReceipt);
+router.put('/student-applications/:id/verify', pageAction('admission_pipeline', 'edit', null, { inBranch: enrollmentInBranch }), verifySalesEnrollment);
+router.put('/student-applications/:id/resubmit-receipt', pageAction('admission_pipeline', 'edit', null, { inBranch: enrollmentInBranch }), resubmitPaymentReceipt);
 router.put('/student-applications/:id/approve-ops', authorize('ops_admin', 'superadmin', 'org_admin'), approveSalesEnrollmentOps);
 router.put('/student-applications/:id/approve-finance', authorize('finance_admin', 'finance_sub_admin', 'superadmin', 'org_admin'), approveSalesEnrollmentFinance);
 router.put('/student-applications/:id/reject', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'superadmin', 'org_admin'), rejectSalesEnrollment);
 
 // Sales Admin Review Flow
-router.get('/sales-admin-reviews', authorize('sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'), getSalesAdminReviews);
-router.put('/student-applications/:id/sales-admin-approve', authorize('sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'), approveBySalesAdmin);
-router.put('/student-applications/:id/sales-admin-reject', authorize('sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'), rejectBySalesAdmin);
+router.get('/sales-admin-reviews', pageAction('admission_approval', 'view', ['sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin']), getSalesAdminReviews);
+router.put('/student-applications/:id/sales-admin-approve', pageAction('admission_approval', 'approve', ['sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'], { inBranch: enrollmentInBranch }), approveBySalesAdmin);
+router.put('/student-applications/:id/sales-admin-reject', pageAction('admission_approval', 'approve', ['sales_admin', 'sales_sub_admin', 'superadmin', 'org_admin'], { inBranch: enrollmentInBranch }), rejectBySalesAdmin);
 
 // Sales Reports
 router.get('/reports/members', getReportMembers);

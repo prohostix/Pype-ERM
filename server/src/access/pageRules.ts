@@ -17,12 +17,13 @@ export const isGrantedPage = (access: Access, pageKey: string): boolean => {
  * still decides for anyone without a setting. `ownBranchOnly` is set when the permission comes
  * from an Org Admin.
  */
-export const decidePageAction = (access: Access, pageKey: string, action: Action, role: string, legacyRoles: string[]): { allowed: boolean; ownBranchOnly: boolean } => {
+export const decidePageAction = (access: Access, pageKey: string, action: Action, role: string, legacyRoles: string[] | null): { allowed: boolean; ownBranchOnly: boolean } => {
   const page = access[pageKey];
   const setting = page?.[action];
   const refused = { allowed: false, ownBranchOnly: false };
   if (page?.view?.override === 'deny' || setting?.override === 'deny') return refused;
   if (isGrantedPage(access, pageKey)) return setting?.allowed ? { allowed: true, ownBranchOnly: true } : refused;
   if (setting?.override === 'allow' && setting.allowed) return { allowed: true, ownBranchOnly: !setting.byDefault };
-  return { allowed: legacyRoles.includes(role), ownBranchOnly: false };
+  // null: the route accepted any signed-in user
+  return { allowed: legacyRoles === null || legacyRoles.includes(role), ownBranchOnly: false };
 };

@@ -6,6 +6,11 @@ import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { StudentFiltersPanel } from '@/components/panels/StudentFiltersPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
+import { SalesInvitePanel } from '@/components/panels/SalesInvitePanel';
+import { ProvisionalEnrollmentPanel } from '@/components/panels/ProvisionalEnrollmentPanel';
+import { SalesStudentPipelinePanel } from '@/components/panels/SalesStudentPipelinePanel';
+import { SalesAdminReviewPanel } from '@/components/panels/SalesAdminReviewPanel';
+import { StudentPortalManagementPanel } from '@/components/panels/StudentPortalManagementPanel';
 import { InvoicesPanel } from '@/components/panels/InvoicesPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
 import { canDo, type UserAccess } from '@/lib/access';
@@ -17,6 +22,11 @@ const PAGES: AccessPage[] = [
   { key: 'student_filters', label: 'Student Filters', menuIds: ['student_filters'], render: () => <StudentFiltersPanel /> },
   { key: 'admission_review', label: 'Admission Review', menuIds: ['admission_review', 'enrollment_review'], render: () => <DeptEnrollmentReviewPanel /> },
   { key: 'admission_sessions', label: 'Admission Sessions', menuIds: ['sessions', 'admissions'], render: () => <AdmissionSessionsPanel /> },
+  { key: 'invite_links', label: 'Generate Student Link', menuIds: ['invite_links'], render: () => <SalesInvitePanel /> },
+  { key: 'provisional_enrollment', label: 'Provisional Enrollment', menuIds: ['provisional_enrollment'], render: () => <ProvisionalEnrollmentPanel /> },
+  { key: 'admission_pipeline', label: 'Admission Pipeline', menuIds: ['admission_pipeline', 'admission_status_overview', 'student_applications', 'pending_admissions'], render: () => <SalesStudentPipelinePanel /> },
+  { key: 'admission_approval', label: 'Admission Approval', menuIds: ['admission_approval', 'sales_enrollment_review'], render: () => <SalesAdminReviewPanel /> },
+  { key: 'student_portal_management', label: 'Student Portal Management', menuIds: ['student_portal_management'], render: () => <StudentPortalManagementPanel /> },
   { key: 'invoices', label: 'Invoices', menuIds: ['invoices'], render: () => <InvoicesPanel /> },
   { key: 'bill_receipts', label: 'Bill & Receipts', menuIds: ['bill_receipts'], render: () => <BillReceiptPanel /> },
 ];

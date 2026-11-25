@@ -14,6 +14,8 @@ import { CS } from '@/lib/currency';
 import { confirmDialog } from '@/lib/confirm';
 export function SalesAdminReviewPanel() {
   const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayApprove = user?.access?.admission_approval?.approve?.allowed ?? true;
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -181,7 +183,7 @@ export function SalesAdminReviewPanel() {
                       <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => { setReopening(enrollment); setFormOpen(true); }}>
                         Edit & Re-request
                       </Button>
-                    ) : (
+                    ) : mayApprove && (
                       <>
                         <Button variant="outline" className="h-10 rounded-full px-5 text-red-600 border-red-200 bg-white hover:bg-red-50 font-semibold" disabled={processing} onClick={() => setRejectDialog({ open: true, id: enrollment.id })}>
                           Reject
@@ -317,7 +319,7 @@ export function SalesAdminReviewPanel() {
 
           <DialogFooter className="gap-2 sm:gap-0">
             <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDetailDialog({ open: false, enrollment: null })}>Close</Button>
-            {e && (
+            {e && mayApprove && (
               <>
                 <Button 
                   variant="outline"

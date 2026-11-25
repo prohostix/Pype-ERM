@@ -61,6 +61,9 @@ const hasStudentList = (user: AccessUser): boolean => {
   return Boolean(user.subDepartmentId) && ['operations', 'finance'].includes(user.departmentType || '');
 };
 
+const isSales = (user: AccessUser): boolean =>
+  ['sales_admin', 'sales_sub_admin', 'sales'].includes(user.role) || (user.role === 'employee' && user.departmentType === 'sales');
+
 export const FEATURES: Feature[] = [
   {
     key: 'students',
@@ -109,6 +112,45 @@ export const FEATURES: Feature[] = [
       const approvals: Action[] = ['finance_admin', 'finance_sub_admin'].includes(user.role) ? ['approve'] : [];
       return ['view', ...deletes, ...approvals];
     },
+  },
+  {
+    key: 'invite_links',
+    label: 'Generate Student Link',
+    group: 'Students and admissions',
+    actions: ['view', 'create', 'edit'],
+    defaultActions: (user) => (isSales(user) || ['superadmin', 'executive', 'branch', 'org_admin'].includes(screensOf(user)) ? ['view', 'create', 'edit'] : []),
+  },
+  {
+    key: 'provisional_enrollment',
+    label: 'Provisional Enrollment',
+    group: 'Students and admissions',
+    actions: ['view', 'create'],
+    defaultActions: (user) => (isSales(user) || ['superadmin', 'org_admin'].includes(user.role) ? ['view', 'create'] : []),
+  },
+  {
+    key: 'admission_pipeline',
+    label: 'Admission Pipeline',
+    group: 'Students and admissions',
+    actions: ['view', 'edit'],
+    defaultActions: (user) => (isSales(user) || ['superadmin', 'org_admin'].includes(user.role) ? ['view', 'edit'] : []),
+  },
+  {
+    key: 'admission_approval',
+    label: 'Admission Approval (Sales)',
+    group: 'Students and admissions',
+    actions: ['view', 'approve'],
+    // Sales admins and the manager of a sales sub department
+    defaultActions: (user) => (['superadmin', 'sales_admin'].includes(user.role)
+      || (user.role === 'employee' && user.departmentType === 'sales' && Boolean(user.subDepartmentId)) ? ['view', 'approve'] : []),
+  },
+  {
+    key: 'student_portal_management',
+    label: 'Student Portal Management',
+    group: 'Students and admissions',
+    actions: ['view', 'edit'],
+    // `edit` is the portal login; blocking and unlocking videos stays with the Org Admin
+    defaultActions: (user) => (['superadmin', 'ops_admin', 'ops_sub_admin'].includes(user.role)
+      || (user.role === 'employee' && user.departmentType === 'operations' && Boolean(user.subDepartmentId)) ? ['view', 'edit'] : []),
   },
   {
     key: 'invoices',

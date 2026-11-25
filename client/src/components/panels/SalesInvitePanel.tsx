@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
 
 interface University { id: string; name: string; code: string; }
 interface Program { id: string; name: string; code: string; universityId: string; courseType: string; specialisations?: string[]; }
@@ -32,6 +33,10 @@ const STATUS_COLOR: Record<string, string> = {
 const STATUS_DOT: Record<string, string> = { pending: 'bg-[#54b947]', used: 'bg-slate-400', expired: 'bg-rose-500' };
 
 export function SalesInvitePanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayCreate = user?.access?.invite_links?.create?.allowed ?? true;
+  const mayEdit = user?.access?.invite_links?.edit?.allowed ?? true;
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'used' | 'expired'>('all');
   const [invites, setInvites] = useState<Invite[]>([]);
   const [universities, setUniversities] = useState<University[]>([]);
@@ -346,9 +351,11 @@ export function SalesInvitePanel() {
           <Button variant="outline" onClick={fetchInvites} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50">
             <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />Refresh
           </Button>
-          <Button onClick={handleOpenDialog} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
-            <Plus className="w-4 h-4" />Generate Invite
-          </Button>
+          {mayCreate && (
+            <Button onClick={handleOpenDialog} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
+              <Plus className="w-4 h-4" />Generate Invite
+            </Button>
+          )}
         </div>
       </div>
 
@@ -405,7 +412,9 @@ export function SalesInvitePanel() {
           </div>
           <p className="text-foreground font-medium mb-1">No invite links yet</p>
           <p className="text-sm text-muted-foreground mb-6">Generate one to get started.</p>
-          <Button onClick={handleOpenDialog} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="h-4 w-4 mr-2" />Generate Invite</Button>
+          {mayCreate && (
+            <Button onClick={handleOpenDialog} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="h-4 w-4 mr-2" />Generate Invite</Button>
+          )}
         </div>
       ) : visibleInvites.length === 0 ? (
         <div className="rounded-3xl border border-dashed border-slate-300 bg-white py-14 text-center text-sm text-muted-foreground">No {statusFilter} invite links.</div>
@@ -447,9 +456,11 @@ export function SalesInvitePanel() {
                     </Button>
                   )}
                   {(inv.status === 'used' || inv.status === 'expired') && (
-                    <Button variant="outline" onClick={() => handleRegenerate(inv)} disabled={regenerating === inv.id} className="h-11 px-5 rounded-full bg-white border-slate-200 font-semibold gap-2 hover:bg-[#eaf6e6]">
-                      <RotateCcw className={cn('w-4 h-4', regenerating === inv.id && 'animate-spin')} />Regenerate
-                    </Button>
+                    mayEdit ? (
+                      <Button variant="outline" onClick={() => handleRegenerate(inv)} disabled={regenerating === inv.id} className="h-11 px-5 rounded-full bg-white border-slate-200 font-semibold gap-2 hover:bg-[#eaf6e6]">
+                        <RotateCcw className={cn('w-4 h-4', regenerating === inv.id && 'animate-spin')} />Regenerate
+                      </Button>
+                    ) : null
                   )}
                 </div>
               </CardContent>

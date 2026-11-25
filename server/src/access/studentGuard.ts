@@ -4,7 +4,8 @@ import prisma from '../lib/prisma.js';
 import { Action } from './catalog.js';
 import { loadAccess } from './load.js';
 import { AccessRequest } from './guard.js';
-import { decideStudentAction, hidesStudentFees, isGrantedStudentUser, studentBranchWhere } from './studentRules.js';
+import { decideStudentAction, isGrantedStudentUser, studentBranchWhere } from './studentRules.js';
+import { isGrantedPage } from './pageRules.js';
 
 export interface StudentRequest extends AccessRequest {
   /** Present when the caller sees students only because an Org Admin allowed it. */
@@ -23,12 +24,14 @@ export const studentContext = async (req: StudentRequest, res: Response, next: N
       return;
     }
     req.access = access;
-    if (isGrantedStudentUser(access)) {
+    // Given the Students page, or given Student Portal Management without having a student list by role
+    const portalOnly = isGrantedPage(access, 'student_portal_management') && !access.students.view?.byDefault;
+    if (isGrantedStudentUser(access) || portalOnly) {
       // The resolver only allows access to users who have a branch
       req.studentLimits = {
         branchId: req.user.branchId,
-        hideFees: hidesStudentFees(access),
-        hideCredentials: !access.students.edit?.allowed,
+        hideFees: !access.invoices?.view?.allowed,
+        hideCredentials: !(access.students.edit?.allowed || access.student_portal_management.edit?.allowed),
       };
     }
     next();
@@ -80,6 +83,33 @@ export const studentAction = (action: Action, legacyRoles: string[]) =>
       next(error);
     }
   };
+
+/**
+ * Saving only a student's portal login also follows the Student Portal Management page; anything
+ * else follows the Students page.
+ */
+export const studentUpdate = (legacyRoles: string[]) => {
+  const otherwise = studentAction('edit', legacyRoles);
+  return async (req: StudentRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const keys = Object.keys(req.body || {});
+      const portal = req.access!.student_portal_management;
+      if (keys.length !== 1 || keys[0] !== 'credentials') { await otherwise(req, res, next); return; }
+      if (portal?.view?.override === 'deny' || portal?.edit?.override === 'deny') {
+        res.status(403).json({ success: false, message: 'You do not have permission to do this' });
+        return;
+      }
+      if (!isGrantedPage(req.access!, 'student_portal_management') || !portal?.edit?.allowed) { await otherwise(req, res, next); return; }
+      if (!(await inBranch(req, req.params.id, req.user.branchId))) {
+        res.status(404).json({ success: false, message: 'Student not found' });
+        return;
+      }
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+};
 
 /** For reading one student's details: granted users stay inside their branch. */
 export const studentRead = async (req: StudentRequest, res: Response, next: NextFunction): Promise<void> => {

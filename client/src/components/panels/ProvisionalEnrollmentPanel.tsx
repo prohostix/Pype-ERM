@@ -25,6 +25,7 @@ import { toast } from 'sonner';
 import { shrinkImage, TARGET_MAX_BYTES } from '@/lib/uploadFile';
 
 import { CS, numLocale } from '@/lib/currency';
+import { useAuth } from '@/hooks/useAuth';
 function Section({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) {
   return (
   <section className="space-y-4">
@@ -38,6 +39,9 @@ function Section({ icon: Icon, title, children }: { icon: React.ElementType; tit
 }
 
 export function ProvisionalEnrollmentPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayCreate = user?.access?.provisional_enrollment?.create?.allowed ?? true;
   const [programs, setPrograms] = useState<any[]>([]);
   const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -624,28 +628,30 @@ export function ProvisionalEnrollmentPanel() {
             </CardContent>
           </Card>
 
-          <Button
-            className="w-full h-12 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm shadow-none"
-            onClick={handleSubmit}
-            disabled={submitting || compressing}
-          >
-            {compressing ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Compressing Receipt...
-              </>
-            ) : submitting ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Submitting to Finance...
-              </>
-            ) : (
-              <>
-                Submit to Finance
-                <Send className="w-4 h-4 ml-2" />
-              </>
-            )}
-          </Button>
+          {mayCreate && (
+            <Button
+              className="w-full h-12 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm shadow-none"
+              onClick={handleSubmit}
+              disabled={submitting || compressing}
+            >
+              {compressing ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Compressing Receipt...
+                </>
+              ) : submitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Submitting to Finance...
+                </>
+              ) : (
+                <>
+                  Submit to Finance
+                  <Send className="w-4 h-4 ml-2" />
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </div>
     </div>

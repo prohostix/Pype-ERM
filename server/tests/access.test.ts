@@ -225,3 +225,22 @@ test('a granted page action is limited to the settings', () => {
   assert.equal(decidePageAction(access, 'admission_review', 'approve', 'employee', legacy).allowed, false);
   assert.equal(decidePageAction(resolveAccess(hr, []), 'admission_review', 'approve', 'employee', legacy).allowed, true);
 });
+
+test('sales admission pages default to the roles whose screens include them', () => {
+  const of = (user: object, key: string) => allowed({ id: 'u', ...user }, [], key);
+  assert.deepEqual(of({ role: 'sales_sub_admin' }, 'admission_pipeline'), ['view', 'edit']);
+  assert.deepEqual(of({ role: 'sales_admin' }, 'admission_approval'), ['view', 'approve']);
+  assert.deepEqual(of({ role: 'sales_sub_admin' }, 'admission_approval'), []);
+  assert.deepEqual(of({ role: 'ceo' }, 'invite_links'), ['view', 'create', 'edit']);
+  assert.deepEqual(of({ role: 'ops_admin' }, 'student_portal_management'), ['view', 'edit']);
+  assert.deepEqual(of({ role: 'employee', departmentType: 'sales' }, 'provisional_enrollment'), ['view', 'create']);
+  for (const key of ['invite_links', 'provisional_enrollment', 'admission_pipeline', 'admission_approval', 'student_portal_management']) assert.deepEqual(allowed(hr, [], key), [], key);
+});
+
+test('routes that accepted any signed-in user still do for people without settings', () => {
+  assert.equal(decidePageAction(resolveAccess(hr, []), 'admission_pipeline', 'edit', 'employee', null).allowed, true);
+  const blocked = resolveAccess(hr, [row('edit', 'deny', { featureKey: 'admission_pipeline' })]);
+  assert.equal(decidePageAction(blocked, 'admission_pipeline', 'edit', 'employee', null).allowed, false);
+  const viewer = resolveAccess(hr, [row('view', 'allow', { featureKey: 'admission_pipeline' })]);
+  assert.deepEqual(decidePageAction(viewer, 'admission_pipeline', 'edit', 'employee', null), { allowed: false, ownBranchOnly: false });
+});
