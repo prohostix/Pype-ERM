@@ -8,6 +8,8 @@ import { enqueueNotification } from '../utils/notificationQueue.js';
 
 import { findCurrency, getOrgCurrencyCode } from '../utils/currency.js';
 import { invoiceScope, type AccessRequest } from '../access/guard.js';
+import type { PageRequest } from '../access/pageGuard.js';
+import { studentBranchWhere } from '../access/studentRules.js';
 // ── Payment Reminders ────────────────────────────────────────────────────────
 
 export const getOverdueSchedules = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -1007,7 +1009,7 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
   res.status(200).json({ success: true, count: logs.length, data: logs });
 });
 
-export const getDiscounts = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getDiscounts = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = { 
     organizationId: req.user.organizationId,
     discountAmount: { gt: 0 }
@@ -1021,6 +1023,11 @@ export const getDiscounts = asyncHandler(async (req: AuthRequest, res: Response)
       { enrolledByUser: { branchId: req.user.branchId } },
       { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
     ];
+  }
+
+  if (req.ownBranchOnly) {
+    delete where.OR;
+    where.AND = [studentBranchWhere(req.user.branchId)];
   }
 
   const students = await prisma.student.findMany({
@@ -1039,7 +1046,7 @@ export const getDiscounts = asyncHandler(async (req: AuthRequest, res: Response)
   res.status(200).json({ success: true, count: students.length, data: students });
 });
 
-export const applyDiscount = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const applyDiscount = asyncHandler(async (req: PageRequest, res: Response) => {
   const { studentId, discountAmount, discountReason } = req.body;
 
   if (!studentId || discountAmount === undefined) {
@@ -1050,7 +1057,8 @@ export const applyDiscount = asyncHandler(async (req: AuthRequest, res: Response
   const student = await prisma.student.findFirst({
     where: {
       id: studentId,
-      organizationId: req.user.organizationId
+      organizationId: req.user.organizationId,
+      ...(req.ownBranchOnly && studentBranchWhere(req.user.branchId))
     }
   });
 

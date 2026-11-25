@@ -10,6 +10,7 @@ import { api } from '../../lib/api';
 
 import { CS } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { useAuth } from '@/hooks/useAuth';
 interface StudentDiscount {
   id: string;
   name: string;
@@ -28,6 +29,9 @@ interface StudentOption {
 }
 
 export function DiscountsPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayCreate = user?.access?.discounts?.create?.allowed ?? true;
   const [discounts, setDiscounts] = useState<StudentDiscount[]>([]);
   const [students, setStudents] = useState<StudentOption[]>([]);
   const [loading, setLoading] = useState(true);
@@ -214,9 +218,11 @@ export function DiscountsPanel() {
           </div>
           <DialogFooter>
             <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleApplyDiscount} disabled={submitting || !selectedStudent || !amount}>
-              {submitting ? 'Applying...' : 'Apply Discount'}
-            </Button>
+            {mayCreate && (
+              <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleApplyDiscount} disabled={submitting || !selectedStudent || !amount}>
+                {submitting ? 'Applying...' : 'Apply Discount'}
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -191,7 +191,7 @@ export const approveInvoice = asyncHandler(async (req: AccessRequest, res: Respo
 });
 
 // Payments
-export const getPayments = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getPayments = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
 
   // Branch-level isolation for payments list
@@ -207,12 +207,16 @@ export const getPayments = asyncHandler(async (req: AuthRequest, res: Response) 
     };
   }
 
+  // Someone given this page sees only their branch
+  if (req.ownBranchOnly) where.invoice = invoiceBranchWhere(req.user, true);
+
   const payments = await prisma.paymentEntry.findMany({
     where,
     include: {
       invoice: {
         include: {
-          student: true
+          // Never the whole student record, which holds the portal password
+          student: { select: { id: true, name: true, email: true, phone: true, admissionNo: true, enrollmentNo: true, branchId: true } }
         }
       }
     }
@@ -229,7 +233,24 @@ export const getPayment = asyncHandler(async (req: AuthRequest, res: Response) =
   }
   res.json({ success: true, data: payment });
 });
-export const createPayment = asyncHandler(async (req: AuthRequest, res: Response) => {
+/** Why a payment may not be recorded against what the request names; null when it may */
+const paymentTargetError = async (req: PageRequest): Promise<string | null> => {
+  const { invoiceId, scheduleId, studentId } = req.body;
+  const own = req.user.role === 'superadmin' ? {} : { organizationId: req.user.organizationId };
+  const scope = req.ownBranchOnly ? invoiceBranchWhere(req.user, true) : null;
+  const student = req.ownBranchOnly ? studentBranchWhere(req.user.branchId) : null;
+  if (invoiceId && !(await prisma.invoice.findFirst({ where: { id: invoiceId, ...own, ...(scope && { AND: [scope] }) }, select: { id: true } }))) return 'Invoice not found';
+  if (scheduleId && !(await prisma.paymentSchedule.findFirst({ where: { id: scheduleId, ...own, ...(student && { student }) }, select: { id: true } }))) return 'Payment schedule not found';
+  if (studentId && !(await prisma.student.findFirst({ where: { id: studentId, ...own, ...(student && student) }, select: { id: true } }))) return 'Student not found';
+  return null;
+};
+
+export const createPayment = asyncHandler(async (req: PageRequest, res: Response) => {
+  const denied = await paymentTargetError(req);
+  if (denied) {
+    res.status(404).json({ success: false, message: denied });
+    return;
+  }
   let invoiceId = req.body.invoiceId;
   const scheduleId = req.body.scheduleId;
 
@@ -529,7 +550,9 @@ const parseExpenseDate = (value: unknown): Date | null | 'invalid' => {
   return d;
 };
 
-export const createExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
+const mayApproveExpenses = (req: PageRequest): boolean => can(req.access!, 'expenses', 'approve');
+
+export const createExpense = asyncHandler(async (req: PageRequest, res: Response) => {
   const { amount, category, description, title, receipts, receiptUrl, status, remarks } = req.body;
 
   if (amount === undefined || amount === null || isNaN(Number(amount))) {
@@ -550,21 +573,32 @@ export const createExpense = asyncHandler(async (req: AuthRequest, res: Response
       category: category || 'other',
       description: description || title || '',
       receipts: receipts || (receiptUrl ? [receiptUrl] : []),
-      status: status || 'pending',
+      // Only an approver may file a claim that is already decided, or file it for someone else
+      status: (mayApproveExpenses(req) && status) || 'pending',
       ...(remarks ? { remarks } : {}),
       organizationId: req.user.organizationId,
-      employeeId: req.body.employeeId || req.user.id
+      employeeId: (mayApproveExpenses(req) && !req.ownBranchOnly && req.body.employeeId) || req.user.id
     }
   });
   res.status(201).json({ success: true, data: expense });
 });
-export const updateExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateExpense = asyncHandler(async (req: PageRequest, res: Response) => {
   const exists = await prisma.expenseClaim.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Expense not found' });
     return;
   }
   const { title, description, amount, category, receipts, receiptUrl, status, remarks } = req.body;
+  if (!mayApproveExpenses(req)) {
+    const refusal = status !== undefined && status !== exists.status ? 'Only an approver can change the status of an expense'
+      : exists.status !== 'pending' ? 'Only an approver can change an expense that has been decided'
+      : exists.employeeId !== req.user.id && !can(req.access!, 'expenses', 'edit') ? 'You can only change your own expense'
+      : null;
+    if (refusal) {
+      res.status(403).json({ success: false, message: refusal });
+      return;
+    }
+  }
   const updateData: any = {};
   if (description !== undefined) updateData.description = description;
   else if (title !== undefined) updateData.description = title;
@@ -593,10 +627,14 @@ export const deleteExpense = asyncHandler(async (req: AuthRequest, res: Response
   await prisma.expenseClaim.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
-export const approveExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const approveExpense = asyncHandler(async (req: PageRequest, res: Response) => {
   const exists = await prisma.expenseClaim.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Expense not found' });
+    return;
+  }
+  if (req.ownBranchOnly && exists.employeeId === req.user.id) {
+    res.status(403).json({ success: false, message: 'You cannot decide your own expense' });
     return;
   }
   const { action, remarks } = req.body || {};
@@ -616,6 +654,9 @@ export const approveExpense = asyncHandler(async (req: AuthRequest, res: Respons
 import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
 import { invoiceScope, type AccessRequest } from '../access/guard.js';
 import { can } from '../access/resolve.js';
+import type { PageRequest } from '../access/pageGuard.js';
+import { invoiceBranchWhere } from '../access/invoiceRules.js';
+import { studentBranchWhere } from '../access/studentRules.js';
 
 // Targets
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -687,9 +728,15 @@ export const getFeeStructures = asyncHandler(async (req: AuthRequest, res: Respo
   });
   res.json({ success: true, count: fees.length, data: fees });
 });
+/** The fee structure named in the URL, only within the caller's organization */
+const ownFee = (req: AuthRequest) => ({
+  id: req.params.id,
+  ...(req.user.role !== 'superadmin' && { organizationId: req.user.organizationId })
+});
+
 export const getFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const fee = await prisma.feeStructure.findUnique({
-    where: { id: req.params.id },
+  const fee = await prisma.feeStructure.findFirst({
+    where: ownFee(req),
     include: {
       program: {
         include: { university: true }
@@ -782,7 +829,7 @@ export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.feeStructure.findUnique({ where: { id: req.params.id } });
+  const exists = await prisma.feeStructure.findFirst({ where: ownFee(req) });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Fee structure not found' });
     return;
@@ -846,7 +893,7 @@ export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
   res.json({ success: true, data: fee });
 });
 export const deleteFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.feeStructure.findUnique({ where: { id: req.params.id } });
+  const exists = await prisma.feeStructure.findFirst({ where: ownFee(req) });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Fee structure not found' });
     return;

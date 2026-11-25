@@ -47,8 +47,8 @@ const screensOf = (user: AccessUser): Screens => {
   return 'other';
 };
 
-/** Roles the invoice delete and approve routes accept. */
-const INVOICE_APPROVER_ROLES = ['superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin'];
+/** Roles the finance routes accept for changing payments, fees and discounts, and for approvals. */
+const FINANCE_APPROVER_ROLES = ['superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin'];
 
 /** Whose screens include a student list. */
 const hasStudentList = (user: AccessUser): boolean => {
@@ -153,6 +153,46 @@ export const FEATURES: Feature[] = [
       || (user.role === 'employee' && user.departmentType === 'operations' && Boolean(user.subDepartmentId)) ? ['view', 'edit'] : []),
   },
   {
+    key: 'payments',
+    label: 'Payments',
+    group: 'Finance',
+    actions: ['view', 'create', 'edit', 'delete'],
+    defaultActions: (user) => {
+      if (screensOf(user) === 'other' && !isSales(user)) return [];
+      return FINANCE_APPROVER_ROLES.includes(user.role) ? ['view', 'create', 'edit', 'delete'] : ['view'];
+    },
+  },
+  {
+    key: 'expenses',
+    label: 'Expenses',
+    group: 'Finance',
+    actions: ['view', 'create', 'edit', 'delete', 'approve'],
+    defaultActions: (user) => {
+      if (screensOf(user) === 'other') return [];
+      return FINANCE_APPROVER_ROLES.includes(user.role) ? ['view', 'create', 'edit', 'delete', 'approve'] : ['view', 'create', 'edit'];
+    },
+  },
+  {
+    key: 'fee_structures',
+    label: 'Fee Structures',
+    group: 'Finance',
+    actions: ['view', 'create', 'edit'],
+    defaultActions: (user) => {
+      if (!['org_admin', 'finance', 'superadmin'].includes(screensOf(user))) return [];
+      return FINANCE_APPROVER_ROLES.includes(user.role) ? ['view', 'create', 'edit'] : ['view'];
+    },
+  },
+  {
+    key: 'discounts',
+    label: 'Discounts',
+    group: 'Finance',
+    actions: ['view', 'create'],
+    defaultActions: (user) => {
+      if (!['finance', 'superadmin'].includes(screensOf(user))) return [];
+      return FINANCE_APPROVER_ROLES.includes(user.role) ? ['view', 'create'] : ['view'];
+    },
+  },
+  {
     key: 'invoices',
     label: 'Invoices',
     group: 'Finance',
@@ -161,7 +201,7 @@ export const FEATURES: Feature[] = [
       if (screensOf(user) === 'other') return [];
       const writes: Action[] = canWriteInvoices(user, { managesBranch: !!user.isBranchManager, departmentType: user.departmentType })
         ? ['create', 'edit'] : [];
-      const approvals: Action[] = INVOICE_APPROVER_ROLES.includes(user.role) ? ['delete', 'approve'] : [];
+      const approvals: Action[] = FINANCE_APPROVER_ROLES.includes(user.role) ? ['delete', 'approve'] : [];
       return ['view', ...writes, ...approvals, 'download'];
     },
   },

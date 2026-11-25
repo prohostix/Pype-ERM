@@ -11,7 +11,13 @@ import { toast } from 'sonner';
 
 import { CS, numLocale } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { useAuth } from '@/hooks/useAuth';
 export function PaymentsPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayCreate = user?.access?.payments?.create?.allowed ?? true;
+  const mayEdit = user?.access?.payments?.edit?.allowed ?? true;
+  const mayDelete = user?.access?.payments?.delete?.allowed ?? true;
   const [payments, setPayments] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -152,9 +158,11 @@ export function PaymentsPanel() {
           <p className="text-muted-foreground text-sm mt-1.5">Track and manage payment entries</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Payment</Button>
-          </DialogTrigger>
+          {mayCreate && (
+            <DialogTrigger asChild>
+              <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Payment</Button>
+            </DialogTrigger>
+          )}
           <DialogContent className="wizard-form max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
             <DialogHeader>
               <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Payment' : 'Add New Payment'}</DialogTitle>
@@ -345,8 +353,12 @@ export function PaymentsPanel() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(payment)}><Edit className="w-4 h-4" /></Button>
-                    <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(payment.id)}><Trash2 className="w-4 h-4" /></Button>
+                    {mayEdit && (
+                      <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(payment)}><Edit className="w-4 h-4" /></Button>
+                    )}
+                    {mayDelete && (
+                      <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(payment.id)}><Trash2 className="w-4 h-4" /></Button>
+                    )}
                   </div>
                 </div>
               ))}

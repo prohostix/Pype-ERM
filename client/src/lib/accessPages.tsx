@@ -11,6 +11,10 @@ import { ProvisionalEnrollmentPanel } from '@/components/panels/ProvisionalEnrol
 import { SalesStudentPipelinePanel } from '@/components/panels/SalesStudentPipelinePanel';
 import { SalesAdminReviewPanel } from '@/components/panels/SalesAdminReviewPanel';
 import { StudentPortalManagementPanel } from '@/components/panels/StudentPortalManagementPanel';
+import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
+import { ExpensesPanel } from '@/components/panels/ExpensesPanel';
+import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
+import { DiscountsPanel } from '@/components/panels/DiscountsPanel';
 import { InvoicesPanel } from '@/components/panels/InvoicesPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
 import { canDo, type UserAccess } from '@/lib/access';
@@ -27,6 +31,10 @@ const PAGES: AccessPage[] = [
   { key: 'admission_pipeline', label: 'Admission Pipeline', menuIds: ['admission_pipeline', 'admission_status_overview', 'student_applications', 'pending_admissions'], render: () => <SalesStudentPipelinePanel /> },
   { key: 'admission_approval', label: 'Admission Approval', menuIds: ['admission_approval', 'sales_enrollment_review'], render: () => <SalesAdminReviewPanel /> },
   { key: 'student_portal_management', label: 'Student Portal Management', menuIds: ['student_portal_management'], render: () => <StudentPortalManagementPanel /> },
+  { key: 'payments', label: 'Payments', menuIds: ['payments', 'payment_status', 'pending_payment', 'payment'], render: () => <PaymentsPanel /> },
+  { key: 'expenses', label: 'Expenses', menuIds: ['expenses'], render: () => <ExpensesPanel /> },
+  { key: 'fee_structures', label: 'Fee Structures', menuIds: ['fee_structures', 'fees', 'fee_structure', 'fee_structure_res'], render: () => <FeeStructuresPanel /> },
+  { key: 'discounts', label: 'Discounts', menuIds: ['discounts'], render: () => <DiscountsPanel /> },
   { key: 'invoices', label: 'Invoices', menuIds: ['invoices'], render: () => <InvoicesPanel /> },
   { key: 'bill_receipts', label: 'Bill & Receipts', menuIds: ['bill_receipts'], render: () => <BillReceiptPanel /> },
 ];

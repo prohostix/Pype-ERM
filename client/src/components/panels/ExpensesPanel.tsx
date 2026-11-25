@@ -13,7 +13,14 @@ import { CS } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { confirmDialog, promptDialog } from '@/lib/confirm';
+import { useAuth } from '@/hooks/useAuth';
 export function ExpensesPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayCreate = user?.access?.expenses?.create?.allowed ?? true;
+  const mayEdit = user?.access?.expenses?.edit?.allowed ?? true;
+  const mayDelete = user?.access?.expenses?.delete?.allowed ?? true;
+  const mayApprove = user?.access?.expenses?.approve?.allowed ?? true;
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -130,9 +137,11 @@ export function ExpensesPanel() {
           <p className="text-muted-foreground text-sm mt-1.5">Track and approve expense claims</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Expense</Button>
-          </DialogTrigger>
+          {mayCreate && (
+            <DialogTrigger asChild>
+              <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Expense</Button>
+            </DialogTrigger>
+          )}
           <DialogContent className="wizard-form max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
             <DialogHeader>
               <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Expense' : 'Add New Expense'}</DialogTitle>
@@ -215,20 +224,28 @@ export function ExpensesPanel() {
                       <span className={cn('rounded-full px-3 py-1 text-[11px] font-semibold capitalize', expense.status === 'approved' ? 'bg-[#dff3da] text-[#256c1d]' : expense.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700')}>{expense.status}</span>
                       {expense.status === 'pending' && (
                         <>
-                          <Button variant="ghost" size="sm" title="Approve" className="rounded-full hover:bg-white" onClick={() => handleApprove(expenseId, 'approve')}>
-                            <CheckCircle className="w-4 h-4 text-[#256c1d]" />
-                          </Button>
-                          <Button variant="ghost" size="sm" title="Reject" className="rounded-full hover:bg-red-50" onClick={() => handleApprove(expenseId, 'reject')}>
-                            <XCircle className="w-4 h-4 text-red-500" />
-                          </Button>
+                          {mayApprove && (
+                            <Button variant="ghost" size="sm" title="Approve" className="rounded-full hover:bg-white" onClick={() => handleApprove(expenseId, 'approve')}>
+                              <CheckCircle className="w-4 h-4 text-[#256c1d]" />
+                            </Button>
+                          )}
+                          {mayApprove && (
+                            <Button variant="ghost" size="sm" title="Reject" className="rounded-full hover:bg-red-50" onClick={() => handleApprove(expenseId, 'reject')}>
+                              <XCircle className="w-4 h-4 text-red-500" />
+                            </Button>
+                          )}
                         </>
                       )}
-                      <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(expense)}>
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(expenseId)}>
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      {mayEdit && (
+                        <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(expense)}>
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      )}
+                      {mayDelete && (
+                        <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(expenseId)}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                 );

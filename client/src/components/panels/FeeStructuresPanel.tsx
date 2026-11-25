@@ -8,8 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
 
 export function FeeStructuresPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayCreate = user?.access?.fee_structures?.create?.allowed ?? true;
+  const mayEdit = user?.access?.fee_structures?.edit?.allowed ?? true;
   const [step, setStep] = useState<number>(1);
   const [fees, setFees] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
@@ -658,9 +663,11 @@ export function FeeStructuresPanel() {
                       </div>
                     </div>
                   </div>
-                  <Button onClick={handleSave} disabled={saving} className="gap-2 h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-                    <Save className="w-4 h-4" /> Save Fee Structure
-                  </Button>
+                  {(mayCreate || mayEdit) && (
+                    <Button onClick={handleSave} disabled={saving} className="gap-2 h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                      <Save className="w-4 h-4" /> Save Fee Structure
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="px-6 sm:px-8 pb-8 pt-6">

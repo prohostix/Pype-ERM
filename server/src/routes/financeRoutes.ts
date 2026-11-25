@@ -87,10 +87,13 @@ import {
 } from '../controllers/payrollController.js';
 import { protect, authorize, type AuthRequest } from '../middleware/auth.js';
 import { requireAccess, requireAccessOrPaymentsSummary } from '../access/guard.js';
+import { pageAction, expenseInBranch, paymentInBranch } from '../access/pageGuard.js';
 
 const router = express.Router();
 
 router.use(protect);
+
+const FINANCE_CHANGERS = ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'];
 
 // Staff finance data: students and faculty see their own fees through the portal routes.
 router.use((req: AuthRequest, res, next) => {
@@ -112,19 +115,23 @@ router.route('/invoices/:id')
 router.put('/invoices/:id/approve', requireAccess(['invoices', 'approve']), approveInvoice);
 
 // Payments
-router.route('/payments').get(getPayments).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), createPayment);
+router.route('/payments')
+  .get(pageAction('payments', 'view', null), getPayments)
+  .post(pageAction('payments', 'create', FINANCE_CHANGERS), createPayment);
 router.route('/payments/:id')
-  .get(getPayment)
-  .put(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updatePayment)
-  .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deletePayment);
+  .get(pageAction('payments', 'view', null, { inBranch: paymentInBranch }), getPayment)
+  .put(pageAction('payments', 'edit', FINANCE_CHANGERS, { inBranch: paymentInBranch }), updatePayment)
+  .delete(pageAction('payments', 'delete', FINANCE_CHANGERS, { inBranch: paymentInBranch }), deletePayment);
 
-// Expenses
-router.route('/expenses').get(getExpenses).post(createExpense);
+// Expenses: anyone may claim one; only approvers change its status
+router.route('/expenses')
+  .get(pageAction('expenses', 'view', null), getExpenses)
+  .post(pageAction('expenses', 'create', null), createExpense);
 router.route('/expenses/:id')
-  .get(getExpense)
-  .put(updateExpense)
-  .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deleteExpense);
-router.put('/expenses/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), approveExpense);
+  .get(pageAction('expenses', 'view', null, { inBranch: expenseInBranch }), getExpense)
+  .put(pageAction('expenses', 'edit', null, { inBranch: expenseInBranch }), updateExpense)
+  .delete(pageAction('expenses', 'delete', FINANCE_CHANGERS, { inBranch: expenseInBranch }), deleteExpense);
+router.put('/expenses/:id/approve', pageAction('expenses', 'approve', FINANCE_CHANGERS, { inBranch: expenseInBranch }), approveExpense);
 
 // Targets
 router.route('/targets').get(getTargets).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), createTarget);
@@ -133,15 +140,12 @@ router.route('/targets/:id')
   .put(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updateTarget)
   .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deleteTarget);
 
-// Fee Structures
-router.route('/fees').get(getFeeStructures).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), createFeeStructure);
+// Fee Structures (many forms read the list, so reading stays open)
+router.route('/fees').get(getFeeStructures).post(pageAction('fee_structures', 'create', FINANCE_CHANGERS), createFeeStructure);
 router.route('/fees/:id')
   .get(getFeeStructure)
-  .put(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updateFeeStructure)
-  .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deleteFeeStructure);
-
-// Discounts
-router.route('/discounts').get(getDiscounts).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), applyDiscount);
+  .put(pageAction('fee_structures', 'edit', FINANCE_CHANGERS), updateFeeStructure)
+  .delete(pageAction('fee_structures', 'edit', FINANCE_CHANGERS), deleteFeeStructure);
 
 // University Auth Fees
 router.route('/auth-fees').get(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getAuthFees).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), createAuthFee);
@@ -229,7 +233,7 @@ router.route('/university-payments')
 
 // Discounts
 router.route('/discounts')
-  .get(getDiscounts)
-  .post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), applyDiscount);
+  .get(pageAction('discounts', 'view', null), getDiscounts)
+  .post(pageAction('discounts', 'create', FINANCE_CHANGERS), applyDiscount);
 
 export default router;

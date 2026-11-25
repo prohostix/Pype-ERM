@@ -5,6 +5,7 @@ import { Action } from './catalog.js';
 import { loadAccess } from './load.js';
 import { AccessRequest } from './guard.js';
 import { decidePageAction, isGrantedPage } from './pageRules.js';
+import { invoiceBranchWhere } from './invoiceRules.js';
 
 export interface PageRequest extends AccessRequest {
   /** Set when the caller has this permission only because an Org Admin allowed it. */
@@ -47,6 +48,18 @@ export const pageAction = (pageKey: string, action: Action, legacyRoles: string[
 export const inviteInBranch = async (req: PageRequest, branchId: string): Promise<boolean> =>
   Boolean(await prisma.studyCenterInvite.findFirst({
     where: { id: req.params.id, organizationId: req.user.organizationId, referrer: { branchId } },
+    select: { id: true },
+  }));
+
+export const expenseInBranch = async (req: PageRequest, branchId: string): Promise<boolean> =>
+  Boolean(await prisma.expenseClaim.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId, user: { branchId } },
+    select: { id: true },
+  }));
+
+export const paymentInBranch = async (req: PageRequest, branchId: string): Promise<boolean> =>
+  Boolean(await prisma.paymentEntry.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId, invoice: invoiceBranchWhere({ role: req.user.role, branchId }, true)! },
     select: { id: true },
   }));
 

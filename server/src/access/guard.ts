@@ -31,7 +31,7 @@ const guard = (checks: Check[], options: { paymentsSummary?: boolean } = {}) =>
         return;
       }
       if (checks.some(([feature, action]) => can(req.access!, feature, action))) { next(); return; }
-      if (options.paymentsSummary && hasPaymentsScreen(req.subject!)) {
+      if (options.paymentsSummary && (hasPaymentsScreen(req.subject!) || can(req.access!, 'payments', 'view'))) {
         req.summaryOnly = true;
         next();
         return;

@@ -244,3 +244,20 @@ test('routes that accepted any signed-in user still do for people without settin
   const viewer = resolveAccess(hr, [row('view', 'allow', { featureKey: 'admission_pipeline' })]);
   assert.deepEqual(decidePageAction(viewer, 'admission_pipeline', 'edit', 'employee', null), { allowed: false, ownBranchOnly: false });
 });
+
+test('finance page defaults follow the screens and route roles', () => {
+  const of = (user: object, key: string) => allowed({ id: 'u', ...user }, [], key);
+  assert.deepEqual(of({ role: 'finance_admin' }, 'expenses'), ['view', 'create', 'edit', 'delete', 'approve']);
+  assert.deepEqual(of({ role: 'ceo' }, 'expenses'), ['view', 'create', 'edit']);
+  assert.deepEqual(of({ role: 'sales_admin' }, 'payments'), ['view']);
+  assert.deepEqual(of({ role: 'finance_sub_admin' }, 'fee_structures'), ['view', 'create', 'edit']);
+  assert.deepEqual(of({ role: 'ceo' }, 'discounts'), []);
+  for (const key of ['payments', 'expenses', 'fee_structures', 'discounts']) assert.deepEqual(allowed(hr, [], key), [], key);
+});
+
+test('an expense approval can be given without other changes', () => {
+  const access = resolveAccess(hr, [row('approve', 'allow', { featureKey: 'expenses' })]);
+  const changers = ['finance_admin', 'org_admin'];
+  assert.deepEqual(decidePageAction(access, 'expenses', 'approve', 'employee', changers), { allowed: true, ownBranchOnly: true });
+  assert.equal(decidePageAction(access, 'expenses', 'delete', 'employee', changers).allowed, false);
+});

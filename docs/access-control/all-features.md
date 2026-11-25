@@ -68,14 +68,14 @@ Also not listed: dashboards and overview pages, AI Reports, "coming soon" screen
 |---|---|---|---|
 | Invoices | view, create, edit, delete, download | Branch Manager, CEO / General Manager, Finance, Org Admin | Connected |
 | Bill & Receipts | view, download | Finance, Org Admin | Connected |
-| Payments | view, create, edit, delete | Branch Manager, CEO / General Manager, Finance, Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Not yet |
+| Payments | view, create, edit, delete | Branch Manager, CEO / General Manager, Finance, Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
 | Student Payment Log | view, create, download | Finance | Not yet |
 | Pending Payments | view, approve | Finance | Not yet |
 | Provisional Verifications | view, approve | Finance | Not yet |
 | Finance Enrollments | view, approve | Branch Manager, CEO / General Manager, Finance, Org Admin | Not yet |
-| Fee Structures | view, create, edit | Finance, Org Admin | Not yet |
-| Discounts | view, create | Finance | Not yet |
-| Expenses | view, create, edit, delete, approve | Branch Manager, CEO / General Manager, Finance, Org Admin | Not yet |
+| Fee Structures | view, create, edit | Finance, Org Admin | Connected |
+| Discounts | view, create | Finance | Connected |
+| Expenses | view, create, edit, delete, approve | Branch Manager, CEO / General Manager, Finance, Org Admin | Connected |
 | Collections | view, create, edit, delete, send | CEO / General Manager, Collections, Finance, Org Admin | Not yet |
 | Payment Gateway | view, create | Finance | Not yet |
 | Wallet Top-up | view, approve | Finance | Not yet |

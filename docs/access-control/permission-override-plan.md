@@ -285,3 +285,14 @@ Decision: a user given one of these pages sees everything in their branch.
 | Student Portal Management | Branch students; Edit changes portal logins only. Blocking and unlocking videos stays with the Org Admin |
 
 Also fixed: link regeneration, sales admin approval and rejection, and receipt upload now check the organization.
+
+### Finance, first part: Payments, Expenses, Fee Structures, Discounts (connected)
+
+| Rule | Behaviour |
+|---|---|
+| Expense status | Only a user with approve may set or change it |
+| Expense claims | Anyone may submit their own; without approve, only pending ones can be changed, and only your own unless the page gives you edit |
+| Own expense | A user given approve cannot decide their own claim |
+| Data for users given a page | Own branch; fee structures are organization-wide |
+
+Also fixed: fee structures and payment targets check the organization, and the payment list no longer sends student portal passwords.
