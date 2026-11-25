@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 
 interface PollOption {
   text: string;
@@ -31,6 +32,9 @@ interface Poll {
 export function PollsPanel() {
   const { user } = useAuth();
   const isHR = user?.role === 'hr_admin' || user?.role === 'hr_sub_admin';
+  const mayCreate = mayOn(user, 'polls', 'create', isHR);
+  const mayEdit = mayOn(user, 'polls', 'edit', isHR);
+  const mayDelete = mayOn(user, 'polls', 'delete', isHR);
   const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
@@ -139,7 +143,7 @@ export function PollsPanel() {
           <Button variant="outline" onClick={fetchPolls} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className="w-4 h-4 mr-2" /> Refresh
           </Button>
-          {isHR && (
+          {mayCreate && (
             <Button onClick={() => setCreateOpen(true)} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
               <Plus className="w-4 h-4 mr-2" /> Create Poll
             </Button>
@@ -153,7 +157,7 @@ export function PollsPanel() {
         <div className="rounded-3xl bg-white border border-slate-100 py-16 text-center text-muted-foreground">
           <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><BarChart2 className="w-6 h-6" /></div>
           <p className="text-sm">No polls yet</p>
-          {isHR && <p className="text-xs mt-1">Create a poll to gather employee feedback</p>}
+          {mayCreate && <p className="text-xs mt-1">Create a poll to gather employee feedback</p>}
         </div>
       ) : (
         <div className="space-y-4">
@@ -183,12 +187,14 @@ export function PollsPanel() {
                         <span className="text-xs text-muted-foreground">{total} vote{total !== 1 ? 's' : ''}</span>
                       </div>
                     </div>
-                    {isHR && (
+                    {(mayEdit || mayDelete) && (
                       <div className="flex items-center gap-2 shrink-0">
-                        <Switch checked={poll.isActive} onCheckedChange={() => handleToggleActive(poll)} />
-                        <Button variant="ghost" size="sm" className="rounded-full hover:bg-red-50" onClick={() => handleDelete(poll.id)}>
-                          <Trash2 className="w-4 h-4 text-red-500" />
-                        </Button>
+                        <Switch checked={poll.isActive} disabled={!mayEdit} onCheckedChange={() => handleToggleActive(poll)} />
+                        {mayDelete && (
+                          <Button variant="ghost" size="sm" className="rounded-full hover:bg-red-50" onClick={() => handleDelete(poll.id)}>
+                            <Trash2 className="w-4 h-4 text-red-500" />
+                          </Button>
+                        )}
                       </div>
                     )}
                   </div>

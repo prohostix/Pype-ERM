@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import { partnerBranchWhere, type PageRequest } from '../access/pageGuard.js';
+import { partnerBranchWhere, type PageRequest, userInReach, refuseOwnRecord } from '../access/pageGuard.js';
 
 export const getPerformanceMetrics = asyncHandler(async (req: AuthRequest, res: Response) => {
   const [total, completed] = await Promise.all([
@@ -17,12 +17,14 @@ export const getRiskMetrics = asyncHandler(async (req: AuthRequest, res: Respons
   res.json({ success: true, data: { overdueTasks: overdue } });
 });
 
-export const getEscalations = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getEscalations = asyncHandler(async (req: PageRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   const person = { select: { id: true, name: true, email: true, role: true } };
+  // Someone given this page sees their own branch, or every branch if they have none
+  const branch = req.ownBranchOnly ? req.user.branchId || null : null;
   const [rows, overdue] = await Promise.all([
     prisma.escalation.findMany({
-      where: { organizationId },
+      where: { organizationId, ...(branch && { employee: { branchId: branch } }) },
       orderBy: { escalatedAt: 'desc' },
       include: {
         employee: person, deptAdmin: person, handler: { select: { id: true, name: true } }, resolver: { select: { id: true, name: true } },
@@ -31,7 +33,7 @@ export const getEscalations = asyncHandler(async (req: AuthRequest, res: Respons
     }),
     // overdue work that is heading towards an escalation
     prisma.task.findMany({
-      where: { organizationId, status: 'overdue' },
+      where: { organizationId, status: 'overdue', ...(branch && { assignee: { branchId: branch } }) },
       orderBy: { deadline: 'asc' },
       take: 50,
       select: { id: true, title: true, deadline: true, priority: true, gracePeriodEnd: true, escalationStatus: true, assignee: person },
@@ -46,14 +48,19 @@ export const getEscalations = asyncHandler(async (req: AuthRequest, res: Respons
 // Handle an escalation. The screens send { action, resolution, newDeadline, reassignTo }
 // (action = resolve | reassign | extend | justify) rather than database columns, so
 // translate that into the escalation's own fields and, where it applies, its task.
-export const handleEscalation = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const handleEscalation = asyncHandler(async (req: PageRequest, res: Response) => {
   const existing = await prisma.escalation.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId },
+    where: {
+      id: req.params.id, organizationId: req.user.organizationId,
+      ...(req.ownBranchOnly && req.user.branchId && { employee: { branchId: req.user.branchId } }),
+    },
   });
   if (!existing) {
     res.status(404).json({ success: false, message: 'Escalation not found' });
     return;
   }
+
+  if (refuseOwnRecord(req, res, existing.employeeId, 'escalation')) return;
 
   const { action, resolution, newDeadline, reassignTo } = req.body || {};
   const now = new Date();
@@ -280,8 +287,12 @@ export const getDepartmentManagers = asyncHandler(async (req: AuthRequest, res: 
   res.json({ success: true, count: managers.length, data: managers });
 });
 
-export const assignTask = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const assignTask = asyncHandler(async (req: PageRequest, res: Response) => {
   const { assigneeId, assignedTo, deadline, ...rest } = req.body;
+  if (!(await userInReach(req, assignedTo || assigneeId))) {
+    res.status(404).json({ success: false, message: 'That person was not found' });
+    return;
+  }
   const task = await prisma.task.create({
     data: {
       ...rest,

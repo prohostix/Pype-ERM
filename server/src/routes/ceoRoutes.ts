@@ -47,8 +47,8 @@ router.get('/center-onboarding', authorize('ceo', 'general_manager'), getCenterO
 router.get('/enrollment-overview', authorize('ceo', 'general_manager'), getStudentEnrollmentOverview);
 
 // Escalation routes
-router.get('/escalations', authorize('ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'ops_admin', 'org_admin', 'superadmin'), getEscalations);
-router.patch('/escalations/:id', authorize('ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'ops_admin', 'org_admin', 'superadmin'), handleEscalation);
+router.get('/escalations', pageAction('escalations', 'view', ['ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'ops_admin', 'org_admin', 'superadmin']), getEscalations);
+router.patch('/escalations/:id', pageAction('escalations', 'edit', ['ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'ops_admin', 'org_admin', 'superadmin']), handleEscalation);
 
 // Task assignment routes
 router.get('/managers', authorize('ceo', 'general_manager'), getDepartmentManagers);

@@ -36,9 +36,10 @@ export const createPoll = asyncHandler(async (req: AuthRequest, res: Response) =
 });
 
 export const updatePoll = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id: _id, organizationId: _organizationId, createdBy: _createdBy, ...data } = req.body;
   const poll = await prisma.poll.update({
     where: { id: req.params.id },
-    data: req.body
+    data
   });
   res.json({ success: true, data: poll });
 });
@@ -52,8 +53,8 @@ export const votePoll = asyncHandler(async (req: AuthRequest, res: Response) => 
   const { optionIndexes } = req.body;
   const pollId = req.params.id;
 
-  const poll = await prisma.poll.findUnique({
-    where: { id: pollId }
+  const poll = await prisma.poll.findFirst({
+    where: { id: pollId, organizationId: req.user.organizationId }
   });
 
   if (!poll || poll.status !== 'active') {

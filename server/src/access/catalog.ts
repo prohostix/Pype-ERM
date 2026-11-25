@@ -261,6 +261,7 @@ const HR_ADMINS = ['hr_admin', 'hr_sub_admin'];
 const FINANCE_ADMINS = ['finance_admin', 'finance_sub_admin'];
 const OPERATIONS = ['ops_admin', 'ops_sub_admin'];
 const EXECUTIVES = ['ceo', 'general_manager'];
+const MANAGERS = [...EXECUTIVES, ...HR_ADMINS, ...FINANCE_ADMINS, ...OPERATIONS, 'sales_admin', 'sales_sub_admin', 'collections_admin', 'branch_manager'];
 /** These actions for these roles, nothing for anyone else. A Superadmin has everything. */
 const forRoles = (...grants: [roles: string[], actions: Action[]][]) => (user: AccessUser): Action[] =>
   user.role === 'superadmin'
@@ -316,6 +317,30 @@ const CONNECTED: Record<string, (user: AccessUser) => Action[]> = {
   academic_centers: forRoles(),
   faculties: forRoles(),
   study_abroad: forRoles(),
+  university_submission: forRoles([OPERATIONS, ['view', 'edit']]),
+  enrollment_numbers: forRoles([OPERATIONS, ['view', 'edit']]),
+  re_registration: forRoles([OPERATIONS, ['view', 'edit']]),
+  exam_registration: forRoles([OPERATIONS, ['view', 'create', 'edit', 'delete']]),
+  document_received: forRoles([OPERATIONS, ['view', 'create']]),
+  document_dispatch: forRoles([OPERATIONS, ['view', 'create']]),
+  courier_tracking: forRoles([OPERATIONS, ['view']]),
+  delivery_confirmation: forRoles([OPERATIONS, ['view', 'edit']]),
+  announcements: forRoles([HR_ADMINS, ['view', 'create', 'edit', 'delete']]),
+  bulk_sms: forRoles([[...OPERATIONS, ...HR_ADMINS, 'sales_admin', 'sales_sub_admin'], ['view', 'create']]),
+  bulk_whatsapp: forRoles([[...OPERATIONS, ...HR_ADMINS, 'sales_admin', 'sales_sub_admin'], ['view', 'create']]),
+  email_notifications: forRoles([[...OPERATIONS, ...HR_ADMINS, 'sales_admin', 'sales_sub_admin'], ['view', 'create']]),
+  important_updates: forRoles([OPERATIONS, ['view']]),
+  polls: forRoles([HR_ADMINS, ['view', 'create', 'edit', 'delete']]),
+  leads: (user) => (isSales(user) ? ['view', 'create', 'edit', 'delete'] : forRoles([[...EXECUTIVES, 'branch_manager'], ['view', 'create', 'edit', 'delete']])(user)),
+  targets: (user) => (isSales(user) && !['sales_admin', 'sales_sub_admin'].includes(user.role) ? ['view']
+    : forRoles([[...EXECUTIVES, 'branch_manager', 'sales_admin', 'sales_sub_admin'], ['view', 'create', 'edit', 'delete']])(user)),
+  team_performance: (user) => (isSales(user) ? ['view'] : forRoles([[...EXECUTIVES, 'branch_manager'], ['view']])(user)),
+  tasks: forRoles([MANAGERS, ['view', 'create', 'edit', 'delete']]),
+  escalations: forRoles([[...EXECUTIVES, 'sales_admin', 'sales_sub_admin', 'ops_admin'], ['view', 'edit']]),
+  employee_escalations: forRoles([['employee'], ['view', 'create']]),
+  meetings: forRoles([MANAGERS, ['view', 'create', 'edit', 'delete']]),
+  // Everyone's menu already has a notice board
+  notice_board: (user) => (['student', 'faculty'].includes(user.role) ? [] : ['view']),
 };
 
 export const FEATURES: Feature[] = [

@@ -4,8 +4,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function BulkSmsPanel() {
+  const { user } = useAuth();
+  const mayCreate = mayOn(user, 'bulk_sms', 'create', true);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [recipientCount] = useState(0);
@@ -60,9 +64,11 @@ export function BulkSmsPanel() {
               </div>
             </div>
 
-            <Button onClick={handleSend} disabled={loading || !message} className="w-full h-12 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-              {loading ? 'Sending...' : 'Send SMS Campaign'}
-            </Button>
+            {mayCreate && (
+              <Button onClick={handleSend} disabled={loading || !message} className="w-full h-12 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                {loading ? 'Sending...' : 'Send SMS Campaign'}
+              </Button>
+            )}
           </div>
         </div>
 

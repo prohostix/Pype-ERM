@@ -68,16 +68,18 @@ export const convertLead = asyncHandler(async (req: AuthRequest, res: Response) 
 });
 
 import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
-import { partnerBranchWhere, type PageRequest } from '../access/pageGuard.js';
+import { partnerBranchWhere, targetBranchWhere, userInReach, refuseOwnRecord, type PageRequest } from '../access/pageGuard.js';
 import { withoutPortalLogins } from '../access/partnerSecrets.js';
 
 // Targets
-export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getTargets = asyncHandler(async (req: PageRequest, res: Response) => {
   const { role, id: userId, organizationId, departmentId } = req.user;
   const canManage = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'finance_admin', 'finance_sub_admin'].includes(role);
   
   const whereClause: any = { organizationId };
-  if (!canManage) {
+  if (req.ownBranchOnly) {
+    Object.assign(whereClause, targetBranchWhere(req.user.branchId));
+  } else if (!canManage) {
     whereClause.OR = [
       { employeeId: userId },
       { departmentId: departmentId || '' }
@@ -101,19 +103,30 @@ export const getTarget = asyncHandler(async (req: AuthRequest, res: Response) =>
   }
   res.json({ success: true, data: target });
 });
-export const createTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const target = await prisma.target.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+export const createTarget = asyncHandler(async (req: PageRequest, res: Response) => {
+  const { branchId: _branchId, ...fields } = req.body;
+  if ((fields.employeeId && !(await userInReach(req, fields.employeeId))) || (req.ownBranchOnly && req.user.branchId && !fields.employeeId)) {
+    res.status(404).json({ success: false, message: 'Choose a person you can set targets for' });
+    return;
+  }
+  if (refuseOwnRecord(req, res, fields.employeeId, 'target')) return;
+  const target = await prisma.target.create({ data: { ...fields, organizationId: req.user.organizationId } });
   await handleTargetRollup(target.id, req.user.organizationId);
   await syncParentTargets(req.user.organizationId);
   res.status(201).json({ success: true, data: target });
 });
-export const updateTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateTarget = asyncHandler(async (req: PageRequest, res: Response) => {
   const exists = await prisma.target.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Target not found' });
     return;
   }
+  if (refuseOwnRecord(req, res, exists.employeeId, 'target')) return;
   const { title, targetAmount, period, employeeId, departmentId } = req.body;
+  if (employeeId && !(await userInReach(req, employeeId))) {
+    res.status(404).json({ success: false, message: 'That person was not found' });
+    return;
+  }
   const updateData: any = {};
   if (title !== undefined) updateData.title = title;
   if (targetAmount !== undefined) updateData.targetAmount = Number(targetAmount);
@@ -125,12 +138,13 @@ export const updateTarget = asyncHandler(async (req: AuthRequest, res: Response)
   await syncParentTargets(req.user.organizationId);
   res.json({ success: true, data: target });
 });
-export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const deleteTarget = asyncHandler(async (req: PageRequest, res: Response) => {
   const exists = await prisma.target.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Target not found' });
     return;
   }
+  if (refuseOwnRecord(req, res, exists.employeeId, 'target')) return;
   await prisma.target.delete({ where: { id: req.params.id } });
   await syncParentTargets(req.user.organizationId);
   res.json({ success: true, data: {} });
@@ -213,7 +227,7 @@ export const regenerateInvite = asyncHandler(async (req: AuthRequest, res: Respo
 });
 
 // Performance
-export const getTeamPerformance = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getTeamPerformance = asyncHandler(async (req: PageRequest, res: Response) => {
   let whereClause: any = { organizationId: req.user.organizationId };
 
   if (['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'].includes(req.user.role)) {
@@ -231,6 +245,12 @@ export const getTeamPerformance = asyncHandler(async (req: AuthRequest, res: Res
     if (req.user.departmentId) {
       whereClause.OR.push({ departmentId: req.user.departmentId });
     }
+  }
+
+  // Someone given this page sees the staff of their branch, or everyone if they have none
+  if (req.ownBranchOnly) {
+    delete whereClause.OR;
+    if (req.user.branchId) whereClause.branchId = req.user.branchId;
   }
 
   // A branch manager's team is the staff of their own branch.

@@ -12,6 +12,7 @@ import api from '@/lib/api';
 
 import { useAuth } from '@/hooks/useAuth';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 
 const PRIORITY_COLORS: Record<string, string> = {
   high: 'bg-red-100 text-red-800',
@@ -30,6 +31,9 @@ const TYPE_COLORS: Record<string, string> = {
 export function AnnouncementsPanel() {
   const { user } = useAuth();
   const canManage = ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'].includes(user?.role || '');
+  const mayCreate = mayOn(user, 'announcements', 'create', canManage);
+  const mayEdit = mayOn(user, 'announcements', 'edit', canManage);
+  const mayDelete = mayOn(user, 'announcements', 'delete', canManage);
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -105,7 +109,7 @@ export function AnnouncementsPanel() {
           <Button variant="outline" onClick={fetchAnnouncements} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className="w-4 h-4 mr-2" /> Refresh
           </Button>
-          {canManage && (
+          {mayCreate && (
             <Button onClick={() => { resetForm(); setDialogOpen(true); }} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
               <Plus className="w-4 h-4 mr-2" /> New Announcement
             </Button>
@@ -147,10 +151,10 @@ export function AnnouncementsPanel() {
                       </div>
                     </div>
                     <div className="flex gap-1 shrink-0">
-                      {canManage && (
+                      {(mayEdit || mayDelete) && (
                         <>
-                          <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(a)}><Edit className="w-4 h-4" /></Button>
-                          <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(aid)}><Trash2 className="w-4 h-4" /></Button>
+                          {mayEdit && <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(a)}><Edit className="w-4 h-4" /></Button>}
+                          {mayDelete && <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(aid)}><Trash2 className="w-4 h-4" /></Button>}
                         </>
                       )}
                     </div>
@@ -162,7 +166,7 @@ export function AnnouncementsPanel() {
         </div>
       </div>
 
-      {canManage && (
+      {(mayCreate || mayEdit) && (
       <Dialog open={dialogOpen} onOpenChange={open => { setDialogOpen(open); if (!open) resetForm(); }}>
         <DialogContent className="wizard-form max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>

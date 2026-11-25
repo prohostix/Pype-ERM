@@ -1310,8 +1310,10 @@ export const bulkEnrollmentUpdate = asyncHandler(async (req: AuthRequest, res: R
       whereClause.OR = [{ enrolledBy: { in: assignedIds } }, { referredBy: { in: assignedIds } }];
     }
       }
+      // Someone given Enrollment Number Update stays inside their branch
+      const { ownBranchOnly } = req as AuthRequest & { ownBranchOnly?: boolean };
       const student = await prisma.student.findFirst({
-        where: whereClause
+        where: ownBranchOnly ? { ...whereClause, AND: [studentBranchWhere(req.user.branchId)] } : whereClause
       });
       if (student) {
         // Update Student

@@ -856,7 +856,8 @@ export const createAnnouncement = asyncHandler(async (req: AuthRequest, res: Res
   res.status(201).json({ success: true, data: announcement });
 });
 export const updateAnnouncement = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { expiresAt, ...rest } = req.body;
+  // The owner and author are never changed from a request
+  const { expiresAt, id: _id, organizationId: _organizationId, postedBy: _postedBy, ...rest } = req.body;
   const updateData: any = { ...rest };
   if (expiresAt) updateData.expiresAt = new Date(expiresAt);
 

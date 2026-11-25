@@ -657,7 +657,7 @@ export const approveExpense = asyncHandler(async (req: PageRequest, res: Respons
 import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
 import { invoiceScope, type AccessRequest } from '../access/guard.js';
 import { can } from '../access/resolve.js';
-import { enrollmentBranchWhere, partnerBranchWhere, withoutPasswords, type PageRequest } from '../access/pageGuard.js';
+import { userInReach, enrollmentBranchWhere, partnerBranchWhere, withoutPasswords, type PageRequest } from '../access/pageGuard.js';
 import { invoiceBranchWhere } from '../access/invoiceRules.js';
 import { studentBranchWhere } from '../access/studentRules.js';
 
@@ -667,7 +667,7 @@ export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) =
   // Branch-level isolation
   const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
-    where.branchId = req.user.branchId;
+    where.employee = { branchId: req.user.branchId };
   }
   const targets = await prisma.target.findMany({ where, include: { employee: true } });
   res.json({ success: true, count: targets.length, data: targets });
@@ -684,9 +684,14 @@ export const getTarget = asyncHandler(async (req: AuthRequest, res: Response) =>
   res.json({ success: true, data: target });
 });
 export const createTarget = asyncHandler(async (req: PageRequest, res: Response) => {
+  const { branchId: _branchId, ...fields } = req.body;
+  // Someone given this page sets targets for people of their own branch
+  if (req.ownBranchOnly && req.user.branchId && !(await userInReach(req, fields.employeeId))) {
+    res.status(404).json({ success: false, message: 'Choose a person from your branch' });
+    return;
+  }
   const target = await prisma.target.create({
-    // A user given this page creates targets for their own branch
-    data: { ...req.body, ...(req.ownBranchOnly && req.user.branchId && { branchId: req.user.branchId }), organizationId: req.user.organizationId }
+    data: { ...fields, organizationId: req.user.organizationId }
   });
   await handleTargetRollup(target.id, req.user.organizationId);
   await syncParentTargets(req.user.organizationId);
@@ -698,13 +703,16 @@ export const updateTarget = asyncHandler(async (req: AuthRequest, res: Response)
     res.status(404).json({ success: false, message: 'Target not found' });
     return;
   }
-  const { title, targetAmount, period, employeeId, branchId } = req.body;
+  const { title, targetAmount, period, employeeId } = req.body;
+  if (employeeId && !(await userInReach(req as PageRequest, employeeId))) {
+    res.status(404).json({ success: false, message: 'That person was not found' });
+    return;
+  }
   const updateData: any = {};
   if (title !== undefined) updateData.title = title;
   if (targetAmount !== undefined) updateData.targetAmount = Number(targetAmount);
   if (period !== undefined) updateData.period = period;
   if (employeeId !== undefined) updateData.employeeId = employeeId;
-  if (branchId !== undefined && !((req as PageRequest).ownBranchOnly && req.user.branchId)) updateData.branchId = branchId || null;
   const target = await prisma.target.update({ where: { id: req.params.id }, data: updateData });
   await handleTargetRollup(target.id, req.user.organizationId);
   await syncParentTargets(req.user.organizationId);

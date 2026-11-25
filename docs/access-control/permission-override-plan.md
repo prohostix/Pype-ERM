@@ -383,3 +383,16 @@ Universities, Programs, Program Allocation, Academic Partners, Academic Partners
 | Remaining risk | Creating a partner or faculty member lets them set up that login |
 
 Also fixed for everyone: any signed-in user could read partner portal passwords; student and faculty logins can no longer read partner records; partner, university, program and allocation requests check the organization.
+
+## University work, Documents, Communication, Sales and tasks (connected 25 Nov 2026)
+
+Every page can now be given except Executive Tasks, which has no screen of its own.
+
+| Rule for someone acting on given access | Behaviour |
+|---|---|
+| University work, Documents, Exam Registration | Students of their branch; no passwords. Submission and Re-registration save only that one value |
+| Targets, Team Performance, Tasks, Escalations, Meetings | Their branch; every branch if they have none. Own targets and escalations cannot be changed |
+| Announcements, Polls, Messages, Leads | Organization-wide: these have no branch |
+| Pages everyone already has (My Escalations, Notice Board, Important Updates) | Allow adds the menu entry |
+
+Also fixed for everyone: tasks, escalations, announcements, polls, meetings and exam registrations did not check the organization; anyone could list every escalation; document records included student passwords; student and faculty logins could read sales leads; sales targets were filtered by a field that does not exist.

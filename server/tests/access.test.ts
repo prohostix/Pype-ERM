@@ -290,12 +290,12 @@ test('remaining finance pages default to finance roles', () => {
 });
 
 test('block-only pages can be blocked but not given', () => {
-  const change = (effect: string) => [{ featureKey: 'bulk_sms', action: 'create', effect }];
+  const change = (effect: string) => [{ featureKey: 'executive_tasks', action: 'create', effect }];
   assert.ok(changeError('admin', hr, change('allow')));
   assert.equal(changeError('admin', hr, change('deny')), null);
   assert.equal(needsRow(hr, change('deny')[0] as any), true);
-  const forced = resolveAccess(hr, [row('create', 'allow', { featureKey: 'bulk_sms' })]);
-  assert.equal(forced.bulk_sms.create!.override, undefined, 'a stored allow is ignored');
+  const forced = resolveAccess(hr, [row('create', 'allow', { featureKey: 'executive_tasks' })]);
+  assert.equal(forced.executive_tasks.create!.override, undefined, 'a stored allow is ignored');
 });
 
 test('an HR Admin can be given the finance side of payroll', () => {
@@ -362,6 +362,10 @@ test('portal logins are sent only to an Org Admin', () => {
   const rows = [{ name: 'p', credentials: { password: 'x' } }];
   assert.deepEqual(withoutPortalLogins({ role: 'org_admin' }, rows), rows);
   for (const role of ['ops_admin', 'sales_admin', 'employee', 'center_admin']) assert.deepEqual(withoutPortalLogins({ role }, rows), [{ name: 'p' }], role);
+});
+
+test('every page but Executive Tasks can be given', () => {
+  assert.deepEqual(FEATURES.filter((f) => f.blockOnly).map((f) => f.key), ['executive_tasks']);
 });
 
 test('requests are matched to the page they belong to', () => {

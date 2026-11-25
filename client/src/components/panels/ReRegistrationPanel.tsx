@@ -7,8 +7,12 @@ import { RefreshCw, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function ReRegistrationPanel() {
+  const { user } = useAuth();
+  const mayEdit = mayOn(user, 're_registration', 'edit', true);
   const [students, setStudents] = useState<any[]>([]);
   const [completedStudents, setCompletedStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -200,7 +204,7 @@ export function ReRegistrationPanel() {
             </div>
             <DialogFooter>
               <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setSelectedStudent(null)}>Cancel</Button>
-              {activeTab === 'pending' && (
+              {mayEdit && activeTab === 'pending' && (
                 <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={async () => {
                   try {
                     await api.put(`/students/${selectedStudent.id}`, {

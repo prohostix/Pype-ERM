@@ -628,7 +628,9 @@ export const getAnnouncements = asyncHandler(async (req: AuthRequest, res: Respo
   res.json({ success: true, count: announcements.length, data: announcements });
 });
 export const getAnnouncement = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const announcement = await prisma.announcement.findUnique({ where: { id: req.params.id } });
+  const announcement = await prisma.announcement.findFirst({
+    where: { id: req.params.id, ...(req.user.role !== 'superadmin' && { organizationId: req.user.organizationId }) }
+  });
   res.json({ success: true, data: announcement });
 });
 export const createAnnouncement = asyncHandler(async (req: AuthRequest, res: Response) => {

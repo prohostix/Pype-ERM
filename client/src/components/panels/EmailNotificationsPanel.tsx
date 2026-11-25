@@ -5,8 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function EmailNotificationsPanel() {
+  const { user } = useAuth();
+  const mayCreate = mayOn(user, 'email_notifications', 'create', true);
   const [loading, setLoading] = useState(false);
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
@@ -73,9 +77,11 @@ export function EmailNotificationsPanel() {
               <Input type="file" className="hidden" multiple />
             </div>
 
-            <Button onClick={handleSend} disabled={loading || !message || !subject} className="w-full h-12 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-              {loading ? 'Sending...' : 'Send Email Campaign'}
-            </Button>
+            {mayCreate && (
+              <Button onClick={handleSend} disabled={loading || !message || !subject} className="w-full h-12 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                {loading ? 'Sending...' : 'Send Email Campaign'}
+              </Button>
+            )}
           </div>
         </div>
 

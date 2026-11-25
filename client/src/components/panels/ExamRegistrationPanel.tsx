@@ -4,8 +4,12 @@ import { RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function ExamRegistrationPanel() {
+  const { user } = useAuth();
+  const mayEdit = mayOn(user, 'exam_registration', 'edit', true);
   const [registrations, setRegistrations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -84,7 +88,7 @@ export function ExamRegistrationPanel() {
                   </div>
                   <div className="flex items-center gap-2 flex-wrap lg:justify-end">
                     <span className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize ${statusPill(reg.status)}`}>{reg.status}</span>
-                    {reg.status === 'pending' && (
+                    {mayEdit && reg.status === 'pending' && (
                       <>
                         <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => updateStatus(reg.id, 'approved')}>Approve</Button>
                         <Button variant="outline" className="h-10 rounded-full px-5 text-red-600 border-red-200 bg-white hover:bg-red-50" onClick={() => updateStatus(reg.id, 'rejected')}>Reject</Button>

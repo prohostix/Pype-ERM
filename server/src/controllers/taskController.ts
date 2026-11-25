@@ -27,8 +27,9 @@ const ROLE_HIERARCHY: Record<string, number> = {
 };
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { userInReach, type PageRequest } from '../access/pageGuard.js';
 
-export const getTasks = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getTasks = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = {};
   if (req.user.role !== 'superadmin') {
     where.organizationId = req.user.organizationId;
@@ -39,6 +40,12 @@ export const getTasks = asyncHandler(async (req: AuthRequest, res: Response) => 
       ];
     }
   }
+  // Someone given this page sees their branch's tasks, or every task if they have no branch
+  if (req.ownBranchOnly) {
+    delete where.OR;
+    if (req.user.branchId) where.assignee = { branchId: req.user.branchId };
+  }
+
   if (req.query.assignedTo) where.assignedTo = req.query.assignedTo as string;
   if (req.query.status) where.status = req.query.status as string;
   if (req.query.departmentId) where.departmentId = req.query.departmentId as string;
@@ -71,7 +78,7 @@ export const getTask = asyncHandler(async (req: AuthRequest, res: Response) => {
   res.status(200).json({ success: true, data: task });
 });
 
-export const createTask = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const createTask = asyncHandler(async (req: PageRequest, res: Response) => {
   const { title, description, assignedTo, deadline, priority, departmentId, organizationId } = req.body;
   const orgId = req.user.organizationId || organizationId;
   if (!orgId) {
@@ -79,6 +86,11 @@ export const createTask = asyncHandler(async (req: AuthRequest, res: Response) =
     return;
   }
 
+  // A task can only go to someone of the same organization
+  if (assignedTo && !(await userInReach(req, assignedTo))) {
+    res.status(404).json({ success: false, message: 'That person was not found' });
+    return;
+  }
   if (assignedTo) {
     const assignee = await prisma.user.findUnique({ where: { id: assignedTo }, select: { role: true } });
     if (assignee) {
@@ -117,13 +129,18 @@ export const createTask = asyncHandler(async (req: AuthRequest, res: Response) =
   res.status(201).json({ success: true, data: task });
 });
 
-export const updateTask = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateTask = asyncHandler(async (req: PageRequest, res: Response) => {
   const { title, description, assignedTo, deadline, status, priority, departmentId } = req.body;
   
   const updateData: any = {};
   if (title) updateData.title = title;
   if (description) updateData.description = description;
   
+  // A task can only go to someone of the same organization
+  if (assignedTo && !(await userInReach(req, assignedTo))) {
+    res.status(404).json({ success: false, message: 'That person was not found' });
+    return;
+  }
   if (assignedTo) {
     const assignee = await prisma.user.findUnique({ where: { id: assignedTo }, select: { role: true } });
     if (assignee) {

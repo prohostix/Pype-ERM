@@ -10,9 +10,13 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 
 export function LeadsPanel() {
   const { user } = useAuth();
+  const mayCreate = mayOn(user, 'leads', 'create', true);
+  const mayEdit = mayOn(user, 'leads', 'edit', true);
+  const mayDelete = mayOn(user, 'leads', 'delete', true);
   const isSalesAdmin = (user?.role === 'sales_admin' || user?.role === 'sales_sub_admin');
 
   const [leads, setLeads] = useState<any[]>([]);
@@ -240,9 +244,11 @@ export function LeadsPanel() {
           <p className="text-muted-foreground text-sm mt-1.5">Track and convert sales leads</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Lead</Button>
-          </DialogTrigger>
+          {mayCreate && (
+            <DialogTrigger asChild>
+              <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Lead</Button>
+            </DialogTrigger>
+          )}
           <DialogContent className="wizard-form max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
             <DialogHeader>
               <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Lead' : 'Add New Lead'}</DialogTitle>
@@ -356,32 +362,40 @@ export function LeadsPanel() {
                       <span className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize ${getStatusColor(lead.status)}`}>{lead.status}</span>
                       {lead.status !== 'converted' && lead.status !== 'lost' && (
                         <>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="rounded-full hover:bg-white"
-                            onClick={() => openConvertToCenterDialog(lead)} 
-                            title="Convert to Academic Partner"
-                          >
-                            <Building2 className="w-4 h-4 text-[#256c1d]" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="rounded-full hover:bg-white"
-                            onClick={() => handleConvert(leadId)} 
-                            title="Convert to Student"
-                          >
-                            <CheckCircle className="w-4 h-4 text-[#256c1d]" />
-                          </Button>
+                          {mayEdit && (
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="rounded-full hover:bg-white"
+                              onClick={() => openConvertToCenterDialog(lead)} 
+                              title="Convert to Academic Partner"
+                            >
+                              <Building2 className="w-4 h-4 text-[#256c1d]" />
+                            </Button>
+                          )}
+                          {mayEdit && (
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="rounded-full hover:bg-white"
+                              onClick={() => handleConvert(leadId)} 
+                              title="Convert to Student"
+                            >
+                              <CheckCircle className="w-4 h-4 text-[#256c1d]" />
+                            </Button>
+                          )}
                         </>
                       )}
-                      <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(lead)}>
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(leadId)}>
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      {mayEdit && (
+                        <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(lead)}>
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      )}
+                      {mayDelete && (
+                        <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(leadId)}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                 );

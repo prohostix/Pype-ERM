@@ -4,8 +4,12 @@ import { RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function DeliveryConfirmationPanel() {
+  const { user } = useAuth();
+  const mayEdit = mayOn(user, 'delivery_confirmation', 'edit', true);
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -76,7 +80,7 @@ export function DeliveryConfirmationPanel() {
                       <span className="text-xs text-muted-foreground">Tracking: <span className="font-mono text-slate-700">{log.trackingNumber || 'N/A'}</span></span>
                     </div>
                   </div>
-                  <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => markDelivered(log.id)}>Confirm Delivery</Button>
+                  {mayEdit && <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => markDelivered(log.id)}>Confirm Delivery</Button>}
                 </div>
               ))}
               <ListPagination

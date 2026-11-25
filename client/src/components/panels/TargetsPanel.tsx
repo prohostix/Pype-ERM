@@ -13,6 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 import { CS, numLocale } from '@/lib/currency';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 interface TargetsPanelProps {
   endpoint: string; // '/finance/targets' or '/sales/targets'
   title?: string;
@@ -21,6 +22,9 @@ interface TargetsPanelProps {
 export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsPanelProps) {
   const { user } = useAuth();
   const canManage = (user?.role === 'sales_admin' || user?.role === 'sales_sub_admin') || user?.role === 'ceo' || user?.role === 'org_admin' || user?.role === 'superadmin';
+  const mayCreate = mayOn(user, 'targets', 'create', canManage);
+  const mayEdit = mayOn(user, 'targets', 'edit', canManage);
+  const mayDelete = mayOn(user, 'targets', 'delete', canManage);
 
   const [targets, setTargets] = useState<any[]>([]);
   const [employees, setEmployees] = useState<any[]>([]);
@@ -139,7 +143,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
           <p className="text-muted-foreground text-sm mt-1.5">Set and track performance targets</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-          {canManage && (
+          {mayCreate && (
           <DialogTrigger asChild>
             <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Target</Button>
           </DialogTrigger>
@@ -257,10 +261,10 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        {canManage && (
+                        {(mayEdit || mayDelete) && (
                           <>
-                            <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(t)}><Edit className="w-4 h-4" /></Button>
-                            <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(tid)}><Trash2 className="w-4 h-4" /></Button>
+                            {mayEdit && <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(t)}><Edit className="w-4 h-4" /></Button>}
+                            {mayDelete && <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(tid)}><Trash2 className="w-4 h-4" /></Button>}
                           </>
                         )}
                       </div>

@@ -7,11 +7,26 @@ import {
   deleteEscalation,
   resolveEscalation,
 } from '../controllers/escalationController.js';
-import { protect, authorize } from '../middleware/auth.js';
+import { protect, authorize, type AuthRequest } from '../middleware/auth.js';
+import prisma from '../lib/prisma.js';
 
 const router = express.Router();
 
 router.use(protect);
+
+// An escalation named in the URL must belong to the caller's organization
+router.param('id', async (req: AuthRequest, res, next, id) => {
+  try {
+    if (req.user.role === 'superadmin') return next();
+    if (!(await prisma.escalation.findFirst({ where: { id, organizationId: req.user.organizationId }, select: { id: true } }))) {
+      res.status(404).json({ success: false, message: 'Escalation not found' });
+      return;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.route('/').get(getEscalations).post(createEscalation);
 router.route('/:id')

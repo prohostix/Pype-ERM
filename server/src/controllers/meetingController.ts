@@ -1,8 +1,15 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
+import type { PageRequest } from '../access/pageGuard.js';
+import { can } from '../access/resolve.js';
 
-export const getMeetings = async (req: AuthRequest, res: Response) => {
+/** Someone given this action may act on meetings hosted in their branch, or any if they have none */
+const isGiven = async (req: PageRequest, hostId: string, action: 'edit' | 'delete'): Promise<boolean> =>
+  Boolean(req.ownBranchOnly && can(req.access!, 'meetings', action))
+  && (!req.user.branchId || Boolean(await prisma.user.findFirst({ where: { id: hostId, branchId: req.user.branchId }, select: { id: true } })));
+
+export const getMeetings = async (req: PageRequest, res: Response) => {
   try {
     const { organizationId, role, id, name, branchId } = req.user!;
 
@@ -17,7 +24,10 @@ export const getMeetings = async (req: AuthRequest, res: Response) => {
 
     let whereClause: any = { organizationId };
 
-    if (isGlobal) {
+    if (req.ownBranchOnly) {
+      // Someone given Meetings sees their branch's meetings, or every meeting if they have none
+      if (branchId) whereClause.host = { branchId };
+    } else if (isGlobal) {
       // Global leadership (CEO, Org Admin, Superadmin, General Manager) can view all meetings across all branches
       if (filterBranchId && filterBranchId !== 'all') {
         whereClause.host = { branchId: filterBranchId };
@@ -125,7 +135,7 @@ export const createMeeting = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const updateMeeting = async (req: AuthRequest, res: Response) => {
+export const updateMeeting = async (req: PageRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { role, id: userId } = req.user!;
@@ -133,12 +143,12 @@ export const updateMeeting = async (req: AuthRequest, res: Response) => {
 
     const meeting = await prisma.meeting.findUnique({ where: { id } });
 
-    if (!meeting) {
+    if (!meeting || (role !== 'superadmin' && meeting.organizationId !== req.user!.organizationId)) {
       return res.status(404).json({ message: 'Meeting not found' });
     }
 
     const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
-    if (meeting.hostId !== userId && !globalRoles.includes(role)) {
+    if (meeting.hostId !== userId && !globalRoles.includes(role) && !(await isGiven(req, meeting.hostId, 'edit'))) {
       return res.status(403).json({ message: 'Unauthorized to update this meeting' });
     }
 
@@ -211,19 +221,19 @@ export const updateMeeting = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const deleteMeeting = async (req: AuthRequest, res: Response) => {
+export const deleteMeeting = async (req: PageRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { role, id: userId } = req.user!;
 
     const meeting = await prisma.meeting.findUnique({ where: { id } });
 
-    if (!meeting) {
+    if (!meeting || (role !== 'superadmin' && meeting.organizationId !== req.user!.organizationId)) {
       return res.status(404).json({ message: 'Meeting not found' });
     }
 
     const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
-    if (meeting.hostId !== userId && !globalRoles.includes(role)) {
+    if (meeting.hostId !== userId && !globalRoles.includes(role) && !(await isGiven(req, meeting.hostId, 'delete'))) {
       return res.status(403).json({ message: 'Unauthorized to delete this meeting' });
     }
 

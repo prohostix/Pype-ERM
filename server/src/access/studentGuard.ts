@@ -26,7 +26,9 @@ export const studentContext = async (req: StudentRequest, res: Response, next: N
     req.access = access;
     // Given the Students page, or given Student Portal Management without having a student list by role
     const portalOnly = isGrantedPage(access, 'student_portal_management') && !access.students.view?.byDefault;
-    const reportOnly = isGrantedPage(access, 'student_report') && !access.students.view?.byDefault;
+    // Pages that work from the student list
+    const reportOnly = ['student_report', 'university_submission', 'enrollment_numbers', 're_registration', 'document_received', 'document_dispatch']
+      .some((page) => isGrantedPage(access, page)) && !access.students.view?.byDefault;
     if (isGrantedStudentUser(access) || portalOnly || reportOnly) {
       // Without a branch the limit is the whole organization
       req.studentLimits = {
@@ -85,6 +87,26 @@ export const studentAction = (action: Action, legacyRoles: string[]) =>
     }
   };
 
+/** Bulk enrollment numbers: the Students rules, or someone given Enrollment Number Update. */
+export const enrollmentNumberUpdate = (legacyRoles: string[]) => {
+  const otherwise = studentAction('edit', legacyRoles);
+  return async (req: StudentRequest & { ownBranchOnly?: boolean }, res: Response, next: NextFunction): Promise<void> => {
+    const page = req.access!.enrollment_numbers;
+    if (!isGrantedPage(req.access!, 'enrollment_numbers') || !page?.edit?.allowed) { await otherwise(req, res, next); return; }
+    req.ownBranchOnly = true;
+    next();
+  };
+};
+
+/** Fields a university-work page saves on a student, and the page that allows it. */
+const SINGLE_FIELD: Record<string, { page: string; change: (current: any, sent: any) => object }> = {
+  admissionProgress: { page: 'university_submission', change: (current, sent) => ({ ...current, universitySubmitted: Boolean(sent?.universitySubmitted) }) },
+  reregStatus: {
+    page: 're_registration',
+    change: (current, sent) => ({ ...current, completed: Boolean(sent?.completed), ...(sent?.completed && { completedAt: new Date().toISOString() }) }),
+  },
+};
+
 /**
  * Saving only a student's portal login also follows the Student Portal Management page; anything
  * else follows the Students page.
@@ -94,6 +116,21 @@ export const studentUpdate = (legacyRoles: string[]) => {
   return async (req: StudentRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
       const keys = Object.keys(req.body || {});
+      const single = keys.length === 1 ? SINGLE_FIELD[keys[0]] : undefined;
+      if (single && isGrantedPage(req.access!, single.page) && req.access![single.page]?.edit?.allowed) {
+        const student = await prisma.student.findFirst({
+          where: { id: req.params.id, organizationId: req.user.organizationId, ...studentBranchWhere(req.user.branchId) },
+          select: { admissionProgress: true, reregStatus: true },
+        });
+        if (!student) {
+          res.status(404).json({ success: false, message: 'Student not found' });
+          return;
+        }
+        // Only that one value changes; everything else stays as stored
+        req.body = { [keys[0]]: single.change((student as any)[keys[0]] || {}, req.body[keys[0]]) };
+        next();
+        return;
+      }
       const portal = req.access!.student_portal_management;
       if (keys.length !== 1 || keys[0] !== 'credentials') { await otherwise(req, res, next); return; }
       if (portal?.view?.override === 'deny' || portal?.edit?.override === 'deny') {

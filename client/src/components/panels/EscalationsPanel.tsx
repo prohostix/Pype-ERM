@@ -9,6 +9,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 interface Person { id: string; name: string; email?: string; role?: string }
 interface Escalation {
@@ -243,6 +245,8 @@ const ACTIONS = [
 ] as const;
 
 function Detail({ esc, onDone }: { esc: Escalation; onDone: () => void }) {
+  const { user } = useAuth();
+  const mayEdit = mayOn(user, 'escalations', 'edit', true);
   const p = prio(esc.priority);
   const done = !isOpen(esc);
   const [action, setAction] = useState<string>('');
@@ -339,7 +343,7 @@ function Detail({ esc, onDone }: { esc: Escalation; onDone: () => void }) {
             )}
             {action === 'extend' && <Input type="date" value={newDeadline} min={new Date().toISOString().slice(0, 10)} onChange={(e) => setNewDeadline(e.target.value)} />}
             {needsNote && <Textarea rows={3} value={resolution} onChange={(e) => setResolution(e.target.value)} placeholder={action === 'resolve' ? 'What was decided or done?' : 'Why is the delay acceptable?'} />}
-            <Button className="w-full h-12 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" disabled={!ready || busy} onClick={submit}>{busy ? 'Submitting…' : 'Confirm decision'}</Button>
+            <Button className="w-full h-12 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" disabled={!ready || busy || !mayEdit} onClick={submit}>{busy ? 'Submitting…' : 'Confirm decision'}</Button>
           </div>
         )}
       </div>

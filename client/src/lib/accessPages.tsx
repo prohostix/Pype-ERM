@@ -72,6 +72,28 @@ import { SalesCentersPanel } from '@/components/panels/SalesCentersPanel';
 import { AcademicCentersPanel } from '@/components/panels/AcademicCentersPanel';
 import { FacultiesPanel } from '@/components/panels/FacultiesPanel';
 import { StudyAbroadPartnersPanel } from '@/components/panels/StudyAbroadPartnersPanel';
+import { UniversitySubmissionPanel } from '@/components/panels/UniversitySubmissionPanel';
+import { EnrollmentNumberUpdatePanel } from '@/components/panels/EnrollmentNumberUpdatePanel';
+import { ReRegistrationPanel } from '@/components/panels/ReRegistrationPanel';
+import { ExamRegistrationPanel } from '@/components/panels/ExamRegistrationPanel';
+import { DocumentReceivedPanel } from '@/components/panels/DocumentReceivedPanel';
+import { DocumentDispatchPanel } from '@/components/panels/DocumentDispatchPanel';
+import { CourierTrackingPanel } from '@/components/panels/CourierTrackingPanel';
+import { DeliveryConfirmationPanel } from '@/components/panels/DeliveryConfirmationPanel';
+import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
+import { BulkSmsPanel } from '@/components/panels/BulkSmsPanel';
+import { BulkWhatsAppPanel } from '@/components/panels/BulkWhatsAppPanel';
+import { EmailNotificationsPanel } from '@/components/panels/EmailNotificationsPanel';
+import { ImportantUpdatesPanel } from '@/components/panels/ImportantUpdatesPanel';
+import { PollsPanel } from '@/components/panels/PollsPanel';
+import { LeadsPanel } from '@/components/panels/LeadsPanel';
+import { TargetsPanel } from '@/components/panels/TargetsPanel';
+import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
+import { TasksPanel } from '@/components/panels/TasksPanel';
+import { EscalationsPanel } from '@/components/panels/EscalationsPanel';
+import { EmployeeEscalationsPanel } from '@/components/panels/EmployeeEscalationsPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
+import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 
 interface AccessPage { key: string; label: string; menuIds: string[]; render?: () => ReactElement; exceptRoles?: string[]; onlyRoles?: string[] }
 
@@ -144,6 +166,28 @@ const PAGES: AccessPage[] = [
   { key: 'academic_centers', label: 'Academic Centers', menuIds: ['academic_centers'], render: () => <AcademicCentersPanel /> },
   { key: 'faculties', label: 'Faculties', menuIds: ['faculties'], render: () => <FacultiesPanel /> },
   { key: 'study_abroad', label: 'Study Abroad Partners', menuIds: ['study_abroad_partners'], render: () => <StudyAbroadPartnersPanel /> },
+  { key: 'university_submission', label: 'University Submission', menuIds: ['university_submission'], render: () => <UniversitySubmissionPanel /> },
+  { key: 'enrollment_numbers', label: 'Enrollment Number Update', menuIds: ['enrollment_number_update'], render: () => <EnrollmentNumberUpdatePanel /> },
+  { key: 're_registration', label: 'Re-registration', menuIds: ['re_registration'], render: () => <ReRegistrationPanel /> },
+  { key: 'exam_registration', label: 'Exam Registration', menuIds: ['exam_registration'], render: () => <ExamRegistrationPanel /> },
+  { key: 'document_received', label: 'Document Received', menuIds: ['document_received'], render: () => <DocumentReceivedPanel /> },
+  { key: 'document_dispatch', label: 'Document Dispatch', menuIds: ['document_dispatch'], render: () => <DocumentDispatchPanel /> },
+  { key: 'courier_tracking', label: 'Courier Tracking', menuIds: ['courier_tracking'], render: () => <CourierTrackingPanel /> },
+  { key: 'delivery_confirmation', label: 'Delivery Confirmation', menuIds: ['delivery_confirmation'], render: () => <DeliveryConfirmationPanel /> },
+  { key: 'announcements', label: 'Announcements', menuIds: ['announcements', 'team_announcements'], render: () => <AnnouncementsPanel /> },
+  { key: 'bulk_sms', label: 'Bulk SMS', menuIds: ['bulk_sms'], render: () => <BulkSmsPanel /> },
+  { key: 'bulk_whatsapp', label: 'Bulk WhatsApp', menuIds: ['bulk_whatsapp'], render: () => <BulkWhatsAppPanel /> },
+  { key: 'email_notifications', label: 'Email Notifications', menuIds: ['email_notifications'], render: () => <EmailNotificationsPanel /> },
+  { key: 'important_updates', label: 'Important Updates', menuIds: ['important_updates'], render: () => <ImportantUpdatesPanel /> },
+  { key: 'polls', label: 'Polls', menuIds: ['polls'], render: () => <PollsPanel /> },
+  { key: 'leads', label: 'Leads', menuIds: ['leads', 'lead_management'], render: () => <LeadsPanel /> },
+  { key: 'targets', label: 'Targets', menuIds: ['targets', 'individual_target', 'target_vs_achievement', 'incentive_status'], render: () => <TargetsPanel endpoint="/sales/targets" title="Targets" /> },
+  { key: 'team_performance', label: 'Team Performance', menuIds: ['team_members', 'todays_performance', 'my_team', 'team'], render: () => <TeamPerformancePanel /> },
+  { key: 'tasks', label: 'Tasks', menuIds: ['tasks', 'assign_tasks', 'pending_actions'], exceptRoles: ['employee'], render: () => <TasksPanel /> },
+  { key: 'escalations', label: 'Escalations', menuIds: ['escalations', 'team_requests', 'approval_requests'], exceptRoles: ['employee'], render: () => <EscalationsPanel /> },
+  { key: 'employee_escalations', label: 'My Escalations', menuIds: ['escalations'], onlyRoles: ['employee'], render: () => <EmployeeEscalationsPanel /> },
+  { key: 'meetings', label: 'Meetings', menuIds: ['meetings'], render: () => <MeetingsPanel /> },
+  { key: 'notice_board', label: 'Notice Board', menuIds: ['notice-board', 'notice_board'], render: () => <NoticeBoardPanel /> },
 ];
 
 const ALL_PAGES: AccessPage[] = [...PAGES, ...BLOCK_ONLY_PAGES];

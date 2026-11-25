@@ -77,7 +77,7 @@ import {
 } from '../controllers/salaryController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
-import { pageAction, givenContext } from '../access/pageGuard.js';
+import { pageAction, givenContext, ownedBy } from '../access/pageGuard.js';
 
 const router = express.Router();
 
@@ -165,15 +165,15 @@ router.patch('/employee-profiles/:userId/salary', authorize('hr_admin', 'hr_sub_
 
 // Announcements (HR creates, all org members can read)
 router.get('/announcements', getAnnouncements);
-router.post('/announcements', authorize('hr_admin', 'hr_sub_admin'), createAnnouncement);
-router.put('/announcements/:id', authorize('hr_admin', 'hr_sub_admin'), updateAnnouncement);
-router.delete('/announcements/:id', authorize('hr_admin', 'hr_sub_admin'), deleteAnnouncement);
+router.post('/announcements', pageAction('announcements', 'create', ['hr_admin', 'hr_sub_admin']), createAnnouncement);
+router.put('/announcements/:id', pageAction('announcements', 'edit', ['hr_admin', 'hr_sub_admin'], { inOrganization: ownedBy('announcement') }), updateAnnouncement);
+router.delete('/announcements/:id', pageAction('announcements', 'delete', ['hr_admin', 'hr_sub_admin'], { inOrganization: ownedBy('announcement') }), deleteAnnouncement);
 
 // Polls (HR creates, all org members can view and vote)
 router.get('/polls', getPolls);
-router.post('/polls', authorize('hr_admin', 'hr_sub_admin'), createPoll);
-router.put('/polls/:id', authorize('hr_admin', 'hr_sub_admin'), updatePoll);
-router.delete('/polls/:id', authorize('hr_admin', 'hr_sub_admin'), deletePoll);
+router.post('/polls', pageAction('polls', 'create', ['hr_admin', 'hr_sub_admin']), createPoll);
+router.put('/polls/:id', pageAction('polls', 'edit', ['hr_admin', 'hr_sub_admin'], { inOrganization: ownedBy('poll') }), updatePoll);
+router.delete('/polls/:id', pageAction('polls', 'delete', ['hr_admin', 'hr_sub_admin'], { inOrganization: ownedBy('poll') }), deletePoll);
 router.post('/polls/:id/vote', votePoll);
 
 export default router;

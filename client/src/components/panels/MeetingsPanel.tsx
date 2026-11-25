@@ -14,6 +14,7 @@ import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { confirmDialog } from '@/lib/confirm';
+import { isGiven, mayOn } from '@/lib/access';
 
 interface Meeting {
   id: string;
@@ -44,6 +45,10 @@ interface Meeting {
 export function MeetingsPanel() {
   const { user } = useAuth();
   const isGlobalRole = ['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(user?.role || '');
+  // Added by an Org Admin: may manage others' meetings as far as they were allowed
+  const givenMeetings = isGiven(user, 'meetings');
+  const mayEditOthers = isGlobalRole || (givenMeetings && mayOn(user, 'meetings', 'edit', false));
+  const mayDeleteOthers = isGlobalRole || (givenMeetings && mayOn(user, 'meetings', 'delete', false));
 
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [loading, setLoading] = useState(true);
@@ -548,7 +553,7 @@ export function MeetingsPanel() {
                     )}>
                       {meeting.status}
                     </span>
-                    {(isGlobalRole || user?.id === meeting.hostId) && (
+                    {(mayDeleteOthers || user?.id === meeting.hostId) && (
                       <Button
                         variant="ghost"
                         size="icon"
@@ -637,7 +642,7 @@ export function MeetingsPanel() {
                         <h4 className="font-medium flex items-center gap-2 text-sm">
                           <FileText className="w-4 h-4 text-primary" /> Meeting Minutes / Report
                         </h4>
-                        {(user?.id === meeting.hostId || isGlobalRole) && (
+                        {(user?.id === meeting.hostId || mayEditOthers) && (
                           <div className="flex gap-2">
                             <Button 
                               variant="ghost" 
@@ -670,7 +675,7 @@ export function MeetingsPanel() {
                     </div>
                   ) : (
                     <div className="flex gap-2">
-                      {(user?.id === meeting.hostId || isGlobalRole) && (
+                      {(user?.id === meeting.hostId || mayEditOthers) && (
                         <>
                           <Button 
                             variant="outline" 

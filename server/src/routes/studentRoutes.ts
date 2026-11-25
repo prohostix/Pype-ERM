@@ -35,7 +35,7 @@ import {
 import { bulkSetStudentFilterValue, setStudentFilterValue, getStudentFilterData } from '../controllers/studentFilterController.js';
 import { protect, authorize, type AuthRequest } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
-import { studentAction, studentContext, studentNotify, studentRead, studentUpdate, type StudentRequest } from '../access/studentGuard.js';
+import { studentAction, studentContext, studentNotify, studentRead, studentUpdate, type StudentRequest, enrollmentNumberUpdate } from '../access/studentGuard.js';
 
 const router = express.Router();
 
@@ -62,7 +62,7 @@ router.route('/marks/:id').get(getInternalMark).put(studentAction('edit', ['ops_
 
 // Student routes
 router.post('/bulk-import', studentAction('import', ['org_admin', 'superadmin', 'center_admin']), bulkImportStudents);
-router.post('/bulk-enrollment-update', studentAction('edit', ['org_admin', 'superadmin', 'ops_admin', 'employee']), bulkEnrollmentUpdate);
+router.post('/bulk-enrollment-update', enrollmentNumberUpdate(['org_admin', 'superadmin', 'ops_admin', 'employee']), bulkEnrollmentUpdate);
 router.post('/bulk-update-program', authorize('org_admin', 'superadmin'), bulkUpdateProgram);
 router.post('/bulk-record-payment', authorize('org_admin', 'superadmin'), bulkRecordPayment);
 const FILTER_EDITORS = ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'];

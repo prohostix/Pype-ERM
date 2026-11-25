@@ -44,19 +44,23 @@ import {
 import { protect, authorize } from '../middleware/auth.js';
 import { pageAction, anyPageAction, enrollmentInBranch, inviteInBranch } from '../access/pageGuard.js';
 import { staffAndPartnersOnly } from '../access/partnerSecrets.js';
+import { givenContext, ownedBy, targetInBranch } from '../access/pageGuard.js';
 
 const router = express.Router();
 
 router.use(protect);
 
 // Lead routes
+// Leads are staff records
+router.use('/leads', staffAndPartnersOnly);
 router.route('/leads').get(getLeads).post(createLead);
 router.route('/leads/:id').get(getLead).put(updateLead).delete(deleteLead);
 router.put('/leads/:id/convert', convertLead);
 
 // Target routes
-router.route('/targets').get(getTargets).post(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin'), createTarget);
-router.route('/targets/:id').get(getTarget).put(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin'), updateTarget).delete(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin'), deleteTarget);
+router.route('/targets').get(givenContext('targets'), getTargets).post(pageAction('targets', 'create', ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin']), createTarget);
+const ownTarget = { inOrganization: ownedBy('target'), inBranch: targetInBranch };
+router.route('/targets/:id').get(getTarget).put(pageAction('targets', 'edit', ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin'], ownTarget), updateTarget).delete(pageAction('targets', 'delete', ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'org_admin', 'superadmin'], ownTarget), deleteTarget);
 
 // Invite routes — available to all sales department employees
 router.route('/invites')
@@ -71,7 +75,7 @@ router.get('/programs-by-university', getProgramsByUniversity);
 router.get('/sessions-by-university', getSessionsByUniversity);
 
 // Team performance
-router.get('/team-performance', getTeamPerformance);
+router.get('/team-performance', givenContext('team_performance'), getTeamPerformance);
 
 // My study centers (via invite links — self + subordinates)
 router.get('/my-centers', staffAndPartnersOnly, pageAction('partners_sales', 'view', null), getMyCenters);

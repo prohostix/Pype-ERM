@@ -82,6 +82,9 @@ export const givenContext = (pageKey: string) =>
     }
   };
 
+/** Sales targets carry no branch of their own: they belong to the branch of the person they are for. */
+export const targetBranchWhere = (branchId: BranchId) => inOwnBranch(branchId, (id) => ({ employee: { branchId: id } }));
+
 /** Someone acting only because an Org Admin allowed it may not act on their own record. */
 export const refuseOwnRecord = (req: PageRequest, res: Response, userId: string | null | undefined, what: string): boolean => {
   if (!req.ownBranchOnly || userId !== req.user.id) return false;
@@ -150,7 +153,7 @@ export const paymentInBranch = async (req: PageRequest, branchId: string): Promi
   }));
 };
 
-type Model = 'studyCenter' | 'walletTopUp' | 'enrollment' | 'paymentLink' | 'paymentSchedule' | 'target' | 'branch' | 'department' | 'designation' | 'university' | 'program';
+type Model = 'studyCenter' | 'walletTopUp' | 'enrollment' | 'paymentLink' | 'paymentSchedule' | 'target' | 'branch' | 'department' | 'designation' | 'university' | 'program' | 'poll' | 'announcement' | 'documentLog' | 'task' | 'escalation';
 
 /** The record named in the URL belongs to the caller's organization. */
 export const ownedBy = (model: Model) => async (req: PageRequest): Promise<boolean> =>
@@ -169,7 +172,7 @@ export const partnerInBranch = recordInBranch('studyCenter', partnerBranchWhere)
 export const topUpInBranch = recordInBranch('walletTopUp', (branchId) => ({ studyCenter: partnerBranchWhere(branchId) }));
 export const linkInBranch = recordInBranch('paymentLink', (branchId) => ({ student: { branchId } }));
 export const scheduleInBranch = recordInBranch('paymentSchedule', (branchId) => ({ student: { branchId } }));
-export const targetInBranch = recordInBranch('target', (branchId) => ({ branchId }));
+export const targetInBranch = recordInBranch('target', (branchId) => ({ employee: { branchId } }));
 
 /** Someone given a page is not sent students' portal passwords. */
 export const withoutPasswords = <T extends { student?: any; credentials?: unknown }>(req: PageRequest, rows: T[]): T[] =>

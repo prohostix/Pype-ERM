@@ -8,8 +8,12 @@ import { toast } from 'sonner';
 import api from '@/lib/api';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { awaitsUniSubmission } from '@/lib/opsPending';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function UniversitySubmissionPanel() {
+  const { user } = useAuth();
+  const mayEdit = mayOn(user, 'university_submission', 'edit', true);
   const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('pending');
@@ -183,9 +187,11 @@ export function UniversitySubmissionPanel() {
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel className="h-11 px-6 rounded-full">Cancel</AlertDialogCancel>
-                              <AlertDialogAction className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => markSubmitted(student.id)}>
-                                Confirm
-                              </AlertDialogAction>
+                              {mayEdit && (
+                                <AlertDialogAction className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => markSubmitted(student.id)}>
+                                  Confirm
+                                </AlertDialogAction>
+                              )}
                             </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>

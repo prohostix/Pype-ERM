@@ -37,30 +37,30 @@ Also not listed: dashboards and overview pages, AI Reports, "coming soon" screen
 
 | Page | Actions found | Panels that have it | Access Control |
 |---|---|---|---|
-| University Submission | view, edit | Operations | Block only |
-| Enrollment Number Update | view, bulk/import | Operations | Block only |
-| Re-registration | view, edit | Operations | Block only |
-| Exam Registration | view, edit | Operations | Block only |
+| University Submission | view, edit | Operations | Connected |
+| Enrollment Number Update | view, bulk/import | Operations | Connected |
+| Re-registration | view, edit | Operations | Connected |
+| Exam Registration | view, edit | Operations | Connected |
 
 ## 4. Documents
 
 | Page | Actions found | Panels that have it | Access Control |
 |---|---|---|---|
-| Document Received | view, create | Operations | Block only |
-| Document Dispatch | view, create | Operations | Block only |
-| Courier Tracking | view | Operations | Block only |
-| Delivery Confirmation | view, edit | Operations | Block only |
+| Document Received | view, create | Operations | Connected |
+| Document Dispatch | view, create | Operations | Connected |
+| Courier Tracking | view | Operations | Connected |
+| Delivery Confirmation | view, edit | Operations | Connected |
 
 ## 5. Communication
 
 | Page | Actions found | Panels that have it | Access Control |
 |---|---|---|---|
-| Announcements | view, create, edit, delete | Branch Manager, CEO / General Manager, Employee, HR, Operations, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Block only |
-| Bulk SMS | view, create, send | Operations | Block only |
-| Bulk WhatsApp | view, create, send | Operations | Block only |
-| Email Notifications | view, create, send | Operations | Block only |
-| Important Updates | view | Sales Admin | Block only |
-| Polls | view, create, edit, delete | HR | Block only |
+| Announcements | view, create, edit, delete | Branch Manager, CEO / General Manager, Employee, HR, Operations, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
+| Bulk SMS | view, create, send | Operations | Connected |
+| Bulk WhatsApp | view, create, send | Operations | Connected |
+| Email Notifications | view, create, send | Operations | Connected |
+| Important Updates | view | Sales Admin | Connected |
+| Polls | view, create, edit, delete | HR | Connected |
 
 ## 6. Finance
 
@@ -119,15 +119,15 @@ Also not listed: dashboards and overview pages, AI Reports, "coming soon" screen
 
 | Page | Actions found | Panels that have it | Access Control |
 |---|---|---|---|
-| Leads | view, create, edit, delete | Branch Manager, CEO / General Manager, Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Block only |
-| Targets | view, edit, delete | Branch Manager, CEO / General Manager, Finance, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Block only |
-| Team Performance | view | Branch Manager, CEO / General Manager, Employee, Sales Admin | Block only |
-| Tasks | view, create, edit, delete | Branch Manager, Collections, Employee, HR, Operations, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Block only |
+| Leads | view, create, edit, delete | Branch Manager, CEO / General Manager, Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
+| Targets | view, edit, delete | Branch Manager, CEO / General Manager, Finance, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
+| Team Performance | view | Branch Manager, CEO / General Manager, Employee, Sales Admin | Connected |
+| Tasks | view, create, edit, delete | Branch Manager, Collections, Employee, HR, Operations, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
 | CEO Tasks | view, create | CEO / General Manager | Block only |
-| Escalations | view, edit | CEO / General Manager, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Block only |
-| Employee Escalations | view, create | Employee | Block only |
-| Meetings | view, create, edit, delete | Branch Manager, CEO / General Manager, Collections, Finance, HR, Operations, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Block only |
-| Notice Board | view, create | Branch Manager, CEO / General Manager, Collections, Employee, Finance, HR, Operations, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Block only |
+| Escalations | view, edit | CEO / General Manager, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
+| Employee Escalations | view, create | Employee | Connected |
+| Meetings | view, create, edit, delete | Branch Manager, CEO / General Manager, Collections, Finance, HR, Operations, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
+| Notice Board | view, create | Branch Manager, CEO / General Manager, Collections, Employee, Finance, HR, Operations, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
 
 ## 10. Reports
 

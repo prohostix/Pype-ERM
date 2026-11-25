@@ -2,8 +2,14 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import type { PageRequest } from '../access/pageGuard.js';
+import { studentBranchWhere } from '../access/studentRules.js';
 
-export const getDocumentLogs = asyncHandler(async (req: AuthRequest, res: Response) => {
+/** Someone given a documents page works with the students of their own branch */
+const givenStudents = (req: PageRequest) =>
+  (req.ownBranchOnly && req.user.branchId ? { AND: [{ student: studentBranchWhere(req.user.branchId) }] } : {});
+
+export const getDocumentLogs = asyncHandler(async (req: PageRequest, res: Response) => {
   const { type, status } = req.query;
   const where: any = { organizationId: req.user.organizationId };
   if (type) where.type = type as string;
@@ -22,10 +28,13 @@ export const getDocumentLogs = asyncHandler(async (req: AuthRequest, res: Respon
     ];
   }
 
+  Object.assign(where, givenStudents(req));
+
   const logs = await prisma.documentLog.findMany({
     where,
     include: {
-      student: true,
+      // Never the student's portal password
+      student: { omit: { credentials: true } },
       loggedByUser: { select: { id: true, name: true, role: true } }
     },
     orderBy: { createdAt: 'desc' }
@@ -34,7 +43,7 @@ export const getDocumentLogs = asyncHandler(async (req: AuthRequest, res: Respon
   res.status(200).json({ success: true, count: logs.length, data: logs });
 });
 
-export const getDocumentLog = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getDocumentLog = asyncHandler(async (req: PageRequest, res: Response) => {
   let whereClause: any = { id: req.params.id, organizationId: req.user.organizationId };
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
@@ -48,8 +57,8 @@ export const getDocumentLog = asyncHandler(async (req: AuthRequest, res: Respons
   }
 
   const log = await prisma.documentLog.findFirst({
-    where: whereClause,
-    include: { student: true }
+    where: { ...whereClause, ...givenStudents(req) },
+    include: { student: { omit: { credentials: true } } }
   });
   if (!log) {
     res.status(404).json({ success: false, message: 'Document log not found' });
@@ -58,9 +67,21 @@ export const getDocumentLog = asyncHandler(async (req: AuthRequest, res: Respons
   res.status(200).json({ success: true, data: log });
 });
 
-export const createDocumentLog = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const createDocumentLog = asyncHandler(async (req: PageRequest, res: Response) => {
   const { studentId, type, documentName, documentType, status, notes, courierName, trackingNumber, dispatchDate, deliveryDate } = req.body;
   
+  const limited = Boolean(req.ownBranchOnly && req.user.branchId);
+  const reachable = studentId
+    ? Boolean(await prisma.student.findFirst({
+      where: { id: studentId, organizationId: req.user.organizationId, ...(limited && studentBranchWhere(req.user.branchId)) },
+      select: { id: true }
+    }))
+    : !limited;
+  if (!reachable) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+
   const log = await prisma.documentLog.create({
     data: {
       organizationId: req.user.organizationId!,
@@ -81,7 +102,7 @@ export const createDocumentLog = asyncHandler(async (req: AuthRequest, res: Resp
   res.status(201).json({ success: true, data: log });
 });
 
-export const updateDocumentLog = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const updateDocumentLog = asyncHandler(async (req: PageRequest, res: Response) => {
   const { status, notes, courierName, trackingNumber, dispatchDate, deliveryDate } = req.body;
   
   let whereClause: any = { id: req.params.id, organizationId: req.user.organizationId };
@@ -96,7 +117,7 @@ export const updateDocumentLog = asyncHandler(async (req: AuthRequest, res: Resp
     ];
   }
 
-  const existing = await prisma.documentLog.findFirst({ where: whereClause });
+  const existing = await prisma.documentLog.findFirst({ where: { ...whereClause, ...givenStudents(req) } });
   if (!existing) {
     res.status(404).json({ success: false, message: 'Document log not found or unauthorized' });
     return;

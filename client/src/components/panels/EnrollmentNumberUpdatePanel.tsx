@@ -7,8 +7,12 @@ import { toast } from 'sonner';
 import api from '@/lib/api';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { awaitsEnrollmentNo } from '@/lib/opsPending';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function EnrollmentNumberUpdatePanel() {
+  const { user } = useAuth();
+  const mayEdit = mayOn(user, 'enrollment_numbers', 'edit', true);
   const [students, setStudents] = useState<any[]>([]);
   const [updatedStudents, setUpdatedStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -110,11 +114,11 @@ export function EnrollmentNumberUpdatePanel() {
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
-          {activeTab === 'pending' && (
-            <Button onClick={saveUpdates} disabled={saving || Object.keys(updates).length === 0} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-              <Save className="w-4 h-4 mr-2" />
-              {saving ? 'Saving...' : 'Save Changes'}
-            </Button>
+          {mayEdit && activeTab === 'pending' && (
+              <Button onClick={saveUpdates} disabled={saving || Object.keys(updates).length === 0} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                <Save className="w-4 h-4 mr-2" />
+                {saving ? 'Saving...' : 'Save Changes'}
+              </Button>
           )}
         </div>
       </div>

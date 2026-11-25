@@ -8,8 +8,12 @@ import { RefreshCw, Plus, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function DocumentReceivedPanel() {
+  const { user } = useAuth();
+  const mayCreate = mayOn(user, 'document_received', 'create', true);
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -83,10 +87,12 @@ export function DocumentReceivedPanel() {
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
-          <Button onClick={() => setShowReceivedModal(true)} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
-            <Plus className="w-4 h-4 mr-2" />
-            Log Received
-          </Button>
+          {mayCreate && (
+            <Button onClick={() => setShowReceivedModal(true)} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+              <Plus className="w-4 h-4 mr-2" />
+              Log Received
+            </Button>
+          )}
         </div>
       </div>
 
