@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { can, resolveAccess, type Override } from '../src/access/resolve.js';
 import { FEATURES } from '../src/access/catalog.js';
+import { decideStudentAction, hidesStudentFees, isGrantedStudentUser, restrictStudent } from '../src/access/studentRules.js';
 import { changeError, needsRow } from '../src/access/changes.js';
 import { hasPaymentsScreen, invoiceBranchWhere, isGrantedReader } from '../src/access/invoiceRules.js';
 
@@ -101,7 +102,7 @@ test('protected accounts ignore overrides, disabled accounts are allowed nothing
 });
 
 test('a page outside the organization plan stays off', () => {
-  const gated = [{ ...FEATURES[0], orgFeature: 'billing' }];
+  const gated = [{ ...FEATURES.find((f) => f.key === 'invoices')!, orgFeature: 'billing' }];
   assert.equal(can(resolveAccess(hr, [row('view')], [], gated), 'invoices', 'view'), false);
   assert.equal(can(resolveAccess(hr, [row('view')], ['billing'], gated), 'invoices', 'view'), true);
 });
@@ -152,4 +153,55 @@ test('settings equal to the default are not stored, except blocking view', () =>
   assert.equal(needsRow(finance, c('allow')), false);
   assert.equal(needsRow(finance, c('deny')), true);
   assert.equal(needsRow(finance, c('default')), false);
+});
+
+const student = (action: string, effect = 'allow', over: Partial<Override> = {}) => row(action, effect, { featureKey: 'students', ...over });
+const STAFF_EDIT = ['org_admin', 'sales_admin', 'employee', 'ops_admin'];
+
+test('student list defaults follow the screens', () => {
+  assert.deepEqual(allowed({ id: 'u', role: 'org_admin' }, [], 'students'), ['view', 'create', 'edit', 'delete', 'import', 'send', 'download']);
+  assert.deepEqual(allowed({ id: 'u', role: 'ops_admin' }, [], 'students'), ['view', 'download']);
+  assert.deepEqual(allowed({ id: 'u', role: 'employee', departmentType: 'sales' }, [], 'students'), ['view', 'download']);
+  for (const user of [hr, { id: 'u', role: 'hr_admin' }, { id: 'u', role: 'employee', departmentType: 'operations' }]) {
+    assert.deepEqual(allowed(user, [], 'students'), [], JSON.stringify(user));
+  }
+});
+
+test('an HR employee given View can only read, in their branch, without fees', () => {
+  const access = resolveAccess(hr, [student('view')]);
+  assert.equal(isGrantedStudentUser(access), true);
+  assert.equal(hidesStudentFees(access), true);
+  // The old route lists accept any employee: that must not apply to a granted user
+  for (const action of ['create', 'edit', 'delete', 'import', 'send'] as const) {
+    assert.equal(decideStudentAction(access, action, 'employee', STAFF_EDIT).allowed, false, action);
+  }
+});
+
+test('a granted action works and stays in the branch', () => {
+  const access = resolveAccess(hr, [student('view'), student('edit'), row('view')]);
+  assert.deepEqual(decideStudentAction(access, 'edit', 'employee', STAFF_EDIT), { allowed: true, ownBranchOnly: true });
+  assert.equal(hidesStudentFees(access), false, 'invoice viewers may see fees');
+});
+
+test('users without settings keep what the routes already allowed', () => {
+  const access = resolveAccess(hr, []);
+  assert.deepEqual(decideStudentAction(access, 'edit', 'employee', STAFF_EDIT), { allowed: true, ownBranchOnly: false });
+  assert.equal(decideStudentAction(access, 'delete', 'employee', ['org_admin']).allowed, false);
+  assert.equal(isGrantedStudentUser(access), false);
+});
+
+test('blocking applies to default users', () => {
+  const ops = { ...hr, role: 'ops_admin', departmentType: 'operations' };
+  const blocked = (action: string) => resolveAccess(ops, [student(action, 'deny', { roleAtGrant: 'ops_admin' })]);
+  assert.equal(decideStudentAction(blocked('edit'), 'edit', 'ops_admin', STAFF_EDIT).allowed, false);
+  assert.equal(decideStudentAction(blocked('view'), 'edit', 'ops_admin', STAFF_EDIT).allowed, false);
+  assert.equal(decideStudentAction(blocked('delete'), 'edit', 'ops_admin', STAFF_EDIT).allowed, true);
+});
+
+test('a granted user is not sent fees or passwords', () => {
+  const record = { id: 's', name: 'A', credentials: { password: 'x' }, invoices: [1], paymentSchedules: [1], admissionProgress: { paymentPlan: 'p', photoStatus: 'ok' },
+    program: { name: 'P', feeStructures: [1] }, enrollments: [{ id: 'e', payment: {}, initialPaymentAmount: 5, status: 'enrolled' }] };
+  const seen = JSON.stringify(restrictStudent(record, { hideFees: true, hideCredentials: true }));
+  for (const secret of ['credentials', 'invoices', 'paymentSchedules', 'paymentPlan', 'feeStructures', 'payment', 'initialPaymentAmount']) assert.ok(!seen.includes(secret), secret);
+  assert.ok(seen.includes('photoStatus') && seen.includes('enrolled'));
 });

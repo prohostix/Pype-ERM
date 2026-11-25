@@ -2,6 +2,7 @@
 // Pages whose access an Org Admin can set per user: which menu entries they are, and what to open
 // for someone who was given a page their role's dashboard does not have.
 import type { ReactElement } from 'react';
+import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { InvoicesPanel } from '@/components/panels/InvoicesPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
 import { canDo, type UserAccess } from '@/lib/access';
@@ -9,6 +10,7 @@ import { canDo, type UserAccess } from '@/lib/access';
 interface AccessPage { key: string; label: string; menuIds: string[]; render: () => ReactElement }
 
 const PAGES: AccessPage[] = [
+  { key: 'students', label: 'Students', menuIds: ['students', 'enrolled_students', 'student_status', 'team_enrolled_students'], render: () => <StudentsPanel /> },
   { key: 'invoices', label: 'Invoices', menuIds: ['invoices'], render: () => <InvoicesPanel /> },
   { key: 'bill_receipts', label: 'Bill & Receipts', menuIds: ['bill_receipts'], render: () => <BillReceiptPanel /> },
 ];

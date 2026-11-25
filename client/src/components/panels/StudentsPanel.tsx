@@ -23,6 +23,7 @@ import { StudentReportDialog } from './StudentReportDialog';
 import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
 import { CS } from '@/lib/currency';
+import type { AccessAction } from '@/lib/access';
 import { confirmDialog } from '@/lib/confirm';
 interface MultiSelectFilterOption {
   value: string;
@@ -397,8 +398,17 @@ const matchesState = (student: any, state: string): boolean => {
 
 export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completingEnrollment, hideList }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean; completingEnrollment?: any; hideList?: boolean } = {}) {
   const { user } = useAuth();
-  const canWrite = ['org_admin', 'superadmin', 'center_admin'].includes(user?.role || '');
-  const canDelete = ['org_admin', 'superadmin'].includes(user?.role || '');
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const byRole = ['org_admin', 'superadmin', 'center_admin'].includes(user?.role || '');
+  const may = (action: AccessAction, fallback: boolean) => user?.access?.students?.[action]?.allowed ?? fallback;
+  const canCreate = may('create', byRole);
+  const canEdit = may('edit', byRole);
+  const canImport = may('import', byRole);
+  const canSend = may('send', byRole);
+  const canDelete = may('delete', ['org_admin', 'superadmin'].includes(user?.role || ''));
+  const canDownload = may('download', true);
+  // Someone given this page without a finance role is not sent fees or payments
+  const feesHidden = Boolean(user?.access?.students?.view?.allowed && !user.access.students.view.byDefault && !user.access.invoices?.view?.allowed);
   const [students, setStudents] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
   const [universities, setUniversities] = useState<any[]>([]);
@@ -2369,6 +2379,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         };
       });
 
+      // Fee columns would only show zeros to someone who is not sent fees
+      if (feesHidden) rows.forEach((r: any) => { delete r['Total Fees']; delete r['Paid Fees']; delete r['Balance Amount']; });
+
       const worksheet = XLSX.utils.json_to_sheet(rows);
 
       // Set generous column widths
@@ -4114,7 +4127,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
         <div className="flex flex-wrap items-center gap-2 flex-shrink-0">
           {/* Export Excel Button */}
-          <Button
+          {canDownload && <Button
             variant="outline"
             onClick={handleExportExcel}
             disabled={isExporting || filteredStudents.length === 0}
@@ -4130,7 +4143,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
             <span className="sm:hidden">
               {selectedStudentIds.size > 0 ? `(${selectedStudentIds.size})` : 'Export'}
             </span>
-          </Button>
+          </Button>}
 
           {canBuildReport && (
             <>
@@ -4147,17 +4160,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
             </>
           )}
 
-          {canWrite && (
+          {canImport && (
+            <Button variant="outline" onClick={() => setBulkDialogOpen(true)} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium shadow-sm hover:bg-slate-50">
+              <Upload className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Bulk Import</span>
+            </Button>
+          )}
+          {/* The same form edits students, so it stays available to someone who may only edit */}
+          {(canCreate || canEdit) && (
             <>
-              {/* Bulk Import Button */}
-              <Button variant="outline" onClick={() => setBulkDialogOpen(true)} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium shadow-sm hover:bg-slate-50">
-                <Upload className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Bulk Import</span>
-              </Button>
-
               <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
-                <DialogTrigger asChild>
-                  <Button className="h-11 px-5 rounded-full text-sm font-semibold bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm"><Plus className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Add Student</span></Button>
-                </DialogTrigger>
+                {canCreate && (
+                  <DialogTrigger asChild>
+                    <Button className="h-11 px-5 rounded-full text-sm font-semibold bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm"><Plus className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Add Student</span></Button>
+                  </DialogTrigger>
+                )}
                 {renderStudentFormModalContent()}
               </Dialog>
             </>
@@ -4844,7 +4860,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                       <Button variant="outline" size="icon" className="w-10 h-10 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => setViewingProfileStudent(student)} title="View profile">
                         <Eye className="w-4 h-4" />
                       </Button>
-                      {canWrite && (
+                      {canEdit && (
                         <Button variant="outline" size="icon" className="w-10 h-10 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => handleEdit(student)} title="Edit student">
                           <Edit className="w-4 h-4" />
                         </Button>
@@ -4856,10 +4872,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56 rounded-2xl p-1.5">
-                          <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenNotif(student)}><Bell className="w-4 h-4" />Send notification</DropdownMenuItem>
-                          <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenWhatsApp(student)}><MessageSquare className="w-4 h-4" />WhatsApp message</DropdownMenuItem>
-                          <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenSchedule(student)}><CalendarDays className="w-4 h-4" />Payment schedule</DropdownMenuItem>
-                          <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenCredentials(student)}><Key className="w-4 h-4" />Login credentials</DropdownMenuItem>
+                          {canSend && <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenNotif(student)}><Bell className="w-4 h-4" />Send notification</DropdownMenuItem>}
+                          {canSend && <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenWhatsApp(student)}><MessageSquare className="w-4 h-4" />WhatsApp message</DropdownMenuItem>}
+                          {!feesHidden && <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenSchedule(student)}><CalendarDays className="w-4 h-4" />Payment schedule</DropdownMenuItem>}
+                          {canEdit && <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenCredentials(student)}><Key className="w-4 h-4" />Login credentials</DropdownMenuItem>}
                           <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenEnrollHistory(student)}><History className="w-4 h-4" />Enrollment history</DropdownMenuItem>
                           {canDelete && (
                             <>
@@ -4909,16 +4925,18 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                       <span className="hidden sm:inline">Set Filter</span>
                     </Button>
                   )}
-                  <Button
-                    size="sm"
-                    className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 hover:text-emerald-200 border-0 gap-2 h-8 rounded-full transition-colors"
-                    onClick={handleExportExcel}
-                    disabled={isExporting}
-                    title="Export selected students to Excel"
-                  >
-                    <Download className={cn("w-4 h-4", isExporting && "animate-bounce")} />
-                    <span className="hidden sm:inline">Export Excel</span>
-                  </Button>
+                  {canDownload && (
+                    <Button
+                      size="sm"
+                      className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 hover:text-emerald-200 border-0 gap-2 h-8 rounded-full transition-colors"
+                      onClick={handleExportExcel}
+                      disabled={isExporting}
+                      title="Export selected students to Excel"
+                    >
+                      <Download className={cn("w-4 h-4", isExporting && "animate-bounce")} />
+                      <span className="hidden sm:inline">Export Excel</span>
+                    </Button>
+                  )}
                   <div className="w-px h-6 bg-slate-700 ml-1" />
                   <button
                     onClick={() => setSelectedStudentIds(new Set())}

@@ -1,7 +1,7 @@
 // What the signed-in user may do on a page. The server decides and enforces this (server/src/access);
 // the screens use it only to avoid showing buttons that would be refused.
 
-export type AccessAction = 'view' | 'create' | 'edit' | 'delete' | 'approve' | 'download';
+export type AccessAction = 'view' | 'create' | 'edit' | 'delete' | 'approve' | 'download' | 'import' | 'send';
 
 export type UserAccess = Record<string, Partial<Record<AccessAction, { allowed: boolean; byDefault: boolean }>>>;
 

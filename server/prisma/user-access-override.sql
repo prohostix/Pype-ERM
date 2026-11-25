@@ -1,5 +1,5 @@
 -- Per-user permission overrides. Adds one new table; changes nothing that exists.
--- Not applied yet. Review, back up, then run once.
+-- Applied to the live database on 2026-11-25, after a snapshot. Do not run again there.
 
 -- CreateTable
 CREATE TABLE "UserAccessOverride" (

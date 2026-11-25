@@ -1,7 +1,7 @@
 # Per-user permission override: plan and edge cases
 
-Date: 2026-11-25. Status: steps 0 to 4 coded, except invoice pagination. Table not created, nothing deployed.
-Live database compared read only on 2026-11-25: the only difference from the schema file is the new table.
+Date: 2026-11-25. Status: steps 0 to 4 coded, except invoice pagination. Table created on the live database (2026-11-25); code not deployed.
+After creating it, the live database matched the schema file.
 
 Step 3 notes:
 - Payments users (including Sales) get a short invoice list: number, amounts, status, student and partner name.
@@ -247,3 +247,19 @@ Schema change: the local `.env` is production and `deploy.sh` runs `prisma db pu
 |---|---|
 | Sales reads the invoice list through Payments? | Yes, reading only |
 | Refuse student and faculty logins on all finance requests? | Yes |
+
+## 10. Connecting all pages
+
+Group by group, in the order of [all-features.md](all-features.md).
+
+### Students page (connected)
+
+| Rule | Behaviour |
+|---|---|
+| Users without a setting | Server routes accept the same roles as before |
+| Given the page without having it by role | Only the page settings count; own branch only |
+| Fees and payments | Not sent unless the user can also view invoices |
+| Login credentials | Not sent without edit |
+| Bulk changes | Refused for permissions that come from an override; import adds new students only |
+| View blocked | Page and its changes refused. The student list request stays readable because other screens use it |
+

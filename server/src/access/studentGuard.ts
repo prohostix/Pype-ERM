@@ -1,0 +1,95 @@
+/** Route middleware for the Students page. */
+import { Response, NextFunction } from 'express';
+import prisma from '../lib/prisma.js';
+import { Action } from './catalog.js';
+import { loadAccess } from './load.js';
+import { AccessRequest } from './guard.js';
+import { decideStudentAction, hidesStudentFees, isGrantedStudentUser, studentBranchWhere } from './studentRules.js';
+
+export interface StudentRequest extends AccessRequest {
+  /** Present when the caller sees students only because an Org Admin allowed it. */
+  studentLimits?: { branchId: string; hideFees: boolean; hideCredentials: boolean };
+  /** An import allowed by an Org Admin may add new students but not change existing accounts. */
+  newStudentsOnly?: boolean;
+}
+
+/** Works out the caller's access once for every student request. */
+export const studentContext = async (req: StudentRequest, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const managed = await prisma.branch.findFirst({ where: { branchManagerId: req.user.id }, select: { id: true } });
+    const access = await loadAccess(req.user, Boolean(managed));
+    if (!access) {
+      res.status(503).json({ success: false, message: 'Could not check your permissions. Please try again.' });
+      return;
+    }
+    req.access = access;
+    if (isGrantedStudentUser(access)) {
+      // The resolver only allows access to users who have a branch
+      req.studentLimits = {
+        branchId: req.user.branchId,
+        hideFees: hidesStudentFees(access),
+        hideCredentials: !access.students.edit?.allowed,
+      };
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+const inBranch = async (req: StudentRequest, studentId: string, branchId: string): Promise<boolean> =>
+  Boolean(await prisma.student.findFirst({
+    where: { id: studentId, organizationId: req.user.organizationId, ...studentBranchWhere(branchId) },
+    select: { id: true },
+  }));
+
+/** Replaces `authorize(...)`: the role list still applies to anyone without a setting of their own. */
+export const studentAction = (action: Action, legacyRoles: string[]) =>
+  async (req: StudentRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { allowed, ownBranchOnly } = decideStudentAction(req.access!, action, req.user.role, legacyRoles);
+      if (!allowed) {
+        res.status(403).json({ success: false, message: 'You do not have permission to do this' });
+        return;
+      }
+      if (ownBranchOnly) {
+        const branchId = req.user.branchId;
+        // Bulk changes name any number of students, so they cannot be held to one branch here
+        if (!req.params.id && !['create', 'import'].includes(action)) {
+          res.status(403).json({ success: false, message: 'Bulk changes are not available with the access you were given' });
+          return;
+        }
+        if (action === 'import') req.newStudentsOnly = true;
+        // Upgrading an existing student changes that record
+        const upgraded = action === 'create' ? req.body?.existingStudentId || (req.body?.isUpgrade && req.body?.studentId) : undefined;
+        if (upgraded && !(await inBranch(req, upgraded, branchId))) {
+          res.status(404).json({ success: false, message: 'Student not found' });
+          return;
+        }
+        if (req.params.id && !(await inBranch(req, req.params.id, branchId))) {
+          res.status(404).json({ success: false, message: 'Student not found' });
+          return;
+        }
+        // Whatever they create or change stays in their branch
+        if (req.body && typeof req.body === 'object') {
+          if (action === 'create' || action === 'import' || req.body.branchId !== undefined) req.body.branchId = branchId;
+        }
+      }
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+
+/** For reading one student's details: granted users stay inside their branch. */
+export const studentRead = async (req: StudentRequest, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    if (req.studentLimits && !(await inBranch(req, req.params.id, req.studentLimits.branchId))) {
+      res.status(404).json({ success: false, message: 'Student not found' });
+      return;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};

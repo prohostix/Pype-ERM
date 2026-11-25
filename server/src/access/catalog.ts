@@ -6,7 +6,7 @@
 import { canWriteInvoices } from '../utils/userGuards.js';
 
 /** `view` opens the page; every other action needs it. */
-export type Action = 'view' | 'create' | 'edit' | 'delete' | 'approve' | 'download';
+export type Action = 'view' | 'create' | 'edit' | 'delete' | 'approve' | 'download' | 'import' | 'send';
 
 /** What the defaults and rules need to know about a user. */
 export interface AccessUser {
@@ -50,7 +50,31 @@ const screensOf = (user: AccessUser): Screens => {
 /** Roles the invoice delete and approve routes accept. */
 const INVOICE_APPROVER_ROLES = ['superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin'];
 
+/** Whose screens include a student list. */
+const hasStudentList = (user: AccessUser): boolean => {
+  if (['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager', 'ops_admin', 'ops_sub_admin',
+    'finance_admin', 'finance_sub_admin', 'finance', 'sales_admin', 'sales_sub_admin', 'sales',
+    'collections_admin', 'collections', 'center_admin'].includes(user.role)) return true;
+  if (user.isBranchManager && !['student', 'faculty'].includes(user.role)) return true;
+  if (user.role !== 'employee') return false;
+  if (['sales', 'collections'].includes(user.departmentType || '')) return true;
+  return Boolean(user.subDepartmentId) && ['operations', 'finance'].includes(user.departmentType || '');
+};
+
 export const FEATURES: Feature[] = [
+  {
+    key: 'students',
+    label: 'Students',
+    group: 'Students and admissions',
+    actions: ['view', 'create', 'edit', 'delete', 'import', 'send', 'download'],
+    // The buttons the Students screen shows for each role
+    defaultActions: (user) => {
+      if (!hasStudentList(user)) return [];
+      const writes: Action[] = ['superadmin', 'org_admin', 'center_admin'].includes(user.role) ? ['create', 'edit', 'import', 'send'] : [];
+      const deletes: Action[] = ['superadmin', 'org_admin'].includes(user.role) ? ['delete'] : [];
+      return ['view', ...writes, ...deletes, 'download'];
+    },
+  },
   {
     key: 'invoices',
     label: 'Invoices',

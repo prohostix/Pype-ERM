@@ -11,9 +11,11 @@ import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '
 import { findCurrency, getOrgCurrencyCode } from '../utils/currency.js';
 import { loadGapStatuses } from '../utils/videoGap.js';
 import { isOwnStudentAccount } from '../utils/userGuards.js';
+import type { StudentRequest } from '../access/studentGuard.js';
+import { restrictEnrollment, restrictStudent, studentBranchWhere } from '../access/studentRules.js';
 const SALES_ROLES = ['sales_admin', 'sales_sub_admin', 'sales', 'employee', 'student'];
 
-export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getStudents = asyncHandler(async (req: StudentRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
   if (req.query.status) where.status = req.query.status as string;
   if (req.query.missingEnrollment === 'true') {
@@ -136,10 +138,17 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
     }
   }
 
+  // Whatever else was asked for (such as ?centerId), granted users only see their own branch
+  if (req.studentLimits) {
+    if (!where.AND) where.AND = [];
+    where.AND.push(studentBranchWhere(req.studentLimits.branchId));
+  }
+
   const students = await prisma.student.findMany({
     where,
     include: {
-      enrolledByUser: true,
+      // Only what the screens show: never the whole account, which holds the password hash
+      enrolledByUser: { select: { id: true, name: true, email: true, role: true, branchId: true } },
       enrollments: { include: { payment: true } },
       program: { include: { feeStructures: true } },
       center: true,
@@ -152,10 +161,11 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
     },
     orderBy: { createdAt: 'desc' }
   });
-  res.status(200).json({ success: true, count: students.length, data: students });
+  const limits = req.studentLimits;
+  res.status(200).json({ success: true, count: students.length, data: limits ? students.map((s) => restrictStudent(s, limits)) : students });
 });
 
-export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getStudent = asyncHandler(async (req: StudentRequest, res: Response) => {
   let whereClause: any = { id: req.params.id };
   // Enforce branch isolation for students list
   const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
@@ -210,6 +220,11 @@ export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) =
     }
   }
 
+  // Granted users stay inside their branch
+  if (req.studentLimits) {
+    whereClause.organizationId = req.user.organizationId;
+  }
+
   const student = await prisma.student.findFirst({
     where: whereClause,
     include: { enrollments: { include: { payment: true } }, program: { include: { feeStructures: true } }, center: true, university: { include: { feeStructures: true } }, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } }, invoices: { include: { payments: true }, orderBy: { createdAt: 'asc' } } }
@@ -218,7 +233,7 @@ export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) =
     res.status(404).json({ success: false, message: 'Student not found' });
     return;
   }
-  res.status(200).json({ success: true, data: student });
+  res.status(200).json({ success: true, data: req.studentLimits ? restrictStudent(student, req.studentLimits) : student });
 });
 
 export const createStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -799,6 +814,7 @@ export const deleteStudent = asyncHandler(async (req: AuthRequest, res: Response
       whereClause.OR = [{ enrolledBy: { in: assignedIds } }, { referredBy: { in: assignedIds } }];
     }
   }
+  if (req.user.role !== 'superadmin') whereClause.organizationId = req.user.organizationId;
   const studentExists = await prisma.student.findFirst({ where: whereClause });
   if (!studentExists) {
     res.status(404).json({ success: false, message: 'Student not found' });
@@ -937,6 +953,11 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
       if (studentUser && !isOwnStudentAccount(studentUser, organizationId)) {
         results.skipped++;
         results.errors.push(`Email already belongs to another account: ${s.email}`);
+        continue;
+      }
+      if (studentUser && (req as StudentRequest).newStudentsOnly) {
+        results.skipped++;
+        results.errors.push(`An account already exists for ${s.email}`);
         continue;
       }
       let generatedUid = s.enrollmentNo || s.enrollmentno || s.enrollment_no || s['enrollment no'] || s.enrollment || '';
@@ -1457,7 +1478,7 @@ export const updateStudentAcademicProgress = asyncHandler(async (req: AuthReques
 });
 
 // GET /students/:id/enrollments — full enrollment history for a student
-export const getStudentEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getStudentEnrollments = asyncHandler(async (req: StudentRequest, res: Response) => {
   const { id } = req.params;
 
   const enrollments = await prisma.enrollment.findMany({
@@ -1471,7 +1492,7 @@ export const getStudentEnrollments = asyncHandler(async (req: AuthRequest, res: 
     orderBy: { createdAt: 'desc' },
   });
 
-  res.status(200).json({ success: true, data: enrollments });
+  res.status(200).json({ success: true, data: req.studentLimits?.hideFees ? enrollments.map(restrictEnrollment) : enrollments });
 });
 
 /**
