@@ -1217,40 +1217,34 @@ export const getPlatformUsageMetrics = asyncHandler(async (req: AuthRequest, res
     }
   });
 
-  // Fetch audit logs over period for actions timeline
-  const auditsList = await prisma.auditLog.findMany({
-    where: {
-      ...orgWhere,
-      timestamp: { gte: startDate }
-    },
-    select: {
-      timestamp: true,
-      action: true,
-      entityType: true,
-      userId: true
-    }
-  });
-
-  auditsList.forEach(a => {
-    const d = new Date(a.timestamp);
-    const key = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
-    if (monthMap[key]) {
-      monthMap[key].actions++;
-    }
-  });
+  // Audit activity is aggregated in the database; no audit rows are loaded into memory.
+  const monthKeys = Object.keys(monthMap);
+  const monthlyActionCounts = await Promise.all(
+    monthKeys.map((_, idx) => {
+      const from = new Date(now.getFullYear(), now.getMonth() - (monthsCount - 1) + idx, 1);
+      const to = new Date(now.getFullYear(), now.getMonth() - (monthsCount - 1) + idx + 1, 1);
+      return prisma.auditLog.count({ where: { ...orgWhere, timestamp: { gte: from, lt: to } } });
+    })
+  );
+  monthKeys.forEach((key, idx) => { monthMap[key].actions = monthlyActionCounts[idx]; });
 
   const correlationTrend = Object.values(monthMap);
 
-  // 4. User Actions Breakdown
+  // 4. User Actions Breakdown (grouped counts)
+  const [actionGroups, entityGroups] = await Promise.all([
+    prisma.auditLog.groupBy({ by: ['action'], where: { ...orgWhere, timestamp: { gte: startDate } }, _count: { _all: true } }),
+    prisma.auditLog.groupBy({ by: ['entityType'], where: { ...orgWhere, timestamp: { gte: startDate } }, _count: { _all: true } }),
+  ]);
+
   const actionCounts: Record<string, number> = {};
   const entityCounts: Record<string, number> = {};
-
-  auditsList.forEach(a => {
-    const actionKey = (a.action || 'other').toLowerCase();
-    actionCounts[actionKey] = (actionCounts[actionKey] || 0) + 1;
-
-    const entityKey = a.entityType || 'General';
-    entityCounts[entityKey] = (entityCounts[entityKey] || 0) + 1;
+  actionGroups.forEach(g => {
+    const key = (g.action || 'other').toLowerCase();
+    actionCounts[key] = (actionCounts[key] || 0) + g._count._all;
+  });
+  entityGroups.forEach(g => {
+    const key = g.entityType || 'General';
+    entityCounts[key] = (entityCounts[key] || 0) + g._count._all;
   });
 
   const actionDistribution = Object.entries(actionCounts).map(([action, count]) => ({
@@ -1264,43 +1258,23 @@ export const getPlatformUsageMetrics = asyncHandler(async (req: AuthRequest, res
     count
   })).sort((a, b) => b.count - a.count).slice(0, 8);
 
-  // 5. Recent Detailed Audit Logs (last 100)
-  const auditLogs = await prisma.auditLog.findMany({
-    where: orgWhere,
-    take: 100,
-    orderBy: { timestamp: 'desc' },
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          role: true
-        }
-      },
-      organization: {
-        select: {
-          id: true,
-          name: true
-        }
-      }
-    }
+  // 5. Top Active Operators (aggregated in the database; the audit list itself is paged separately)
+  const operatorGroups = await prisma.auditLog.groupBy({
+    by: ['userId'],
+    where: { ...orgWhere, userId: { not: null } },
+    _count: { _all: true },
+    orderBy: { _count: { userId: 'desc' } },
+    take: 5
   });
-
-  // 6. Top Active Operators
-  const userActionMap: Record<string, { user: any; count: number }> = {};
-  auditLogs.forEach(a => {
-    if (a.user) {
-      if (!userActionMap[a.user.id]) {
-        userActionMap[a.user.id] = { user: a.user, count: 0 };
-      }
-      userActionMap[a.user.id].count++;
-    }
-  });
-
-  const topOperators = Object.values(userActionMap)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
+  const operatorUsers = operatorGroups.length
+    ? await prisma.user.findMany({
+        where: { id: { in: operatorGroups.map(g => g.userId as string) } },
+        select: { id: true, name: true, email: true, role: true }
+      })
+    : [];
+  const topOperators = operatorGroups
+    .map(g => ({ user: operatorUsers.find(u => u.id === g.userId), count: g._count._all }))
+    .filter(o => o.user);
 
   res.status(200).json({
     success: true,
@@ -1318,8 +1292,63 @@ export const getPlatformUsageMetrics = asyncHandler(async (req: AuthRequest, res
       correlationTrend,
       actionDistribution,
       entityDistribution,
-      topOperators,
-      auditLogs
+      topOperators
     }
   });
 });
+
+/**
+ * Paged audit trail for the Usage & Telemetry page.
+ * Query: organizationId, page (1-based), limit (max 100), search, action, entity, all=1 (export, capped).
+ */
+export const getPlatformAuditLogs = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user.role !== 'superadmin') {
+    res.status(403).json({ success: false, message: 'Superadmin privileges required' });
+    return;
+  }
+
+  const requestedOrgId = req.query.organizationId as string;
+  const search = String(req.query.search || '').trim();
+  const action = String(req.query.action || '').trim();
+  const entity = String(req.query.entity || '').trim();
+  const exportAll = req.query.all === '1';
+
+  const page = Math.max(1, parseInt(String(req.query.page || '1'), 10) || 1);
+  const limit = exportAll ? 5000 : Math.min(100, Math.max(1, parseInt(String(req.query.limit || '10'), 10) || 10));
+
+  const where: any = {};
+  if (requestedOrgId && requestedOrgId !== 'all') where.organizationId = requestedOrgId;
+  if (action && action !== 'all') where.action = { equals: action, mode: 'insensitive' };
+  if (entity && entity !== 'all') where.entityType = { equals: entity, mode: 'insensitive' };
+  if (search) {
+    where.OR = [
+      { action: { contains: search, mode: 'insensitive' } },
+      { entityType: { contains: search, mode: 'insensitive' } },
+      { entityId: { contains: search, mode: 'insensitive' } },
+      { ipAddress: { contains: search, mode: 'insensitive' } },
+      { user: { name: { contains: search, mode: 'insensitive' } } },
+      { user: { email: { contains: search, mode: 'insensitive' } } },
+      { organization: { name: { contains: search, mode: 'insensitive' } } },
+    ];
+  }
+
+  const [total, items] = await Promise.all([
+    prisma.auditLog.count({ where }),
+    prisma.auditLog.findMany({
+      where,
+      skip: exportAll ? 0 : (page - 1) * limit,
+      take: limit,
+      orderBy: { timestamp: 'desc' },
+      include: {
+        user: { select: { id: true, name: true, email: true, role: true } },
+        organization: { select: { id: true, name: true } },
+      },
+    }),
+  ]);
+
+  res.status(200).json({
+    success: true,
+    data: { items, total, page, limit, totalPages: Math.max(1, Math.ceil(total / limit)) },
+  });
+});
+

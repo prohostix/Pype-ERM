@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { RefreshCw, CheckCircle, XCircle, Search, GraduationCap, Clock, AlertCircle, Ban, Eye, FileText } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -84,6 +83,14 @@ export function FinanceEnrollmentsPanel() {
   const [rejectDialog, setRejectDialog] = useState<{ open: boolean; id: string }>({ open: false, id: '' });
   const [remarks, setRemarks] = useState('');
   const [viewStudent, setViewStudent] = useState<Enrollment | null>(null);
+  // Client-side pagination; changing the stage filter, search or page size returns to page 1
+  const [pageSize, setPageSize] = useState(10);
+  const PAGE_SIZE = pageSize;
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(enrollments.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pagedEnrollments = enrollments.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  useEffect(() => { setPage(1); }, [pageSize, statusFilter, search]);
   const getRelevantFeeStructure = (enrollment: any) => {
     const list: any[] = enrollment?.program?.feeStructures;
     if (!Array.isArray(list) || list.length === 0) return null;
@@ -220,106 +227,106 @@ export function FinanceEnrollmentsPanel() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Student Enrollments</h2>
-          <p className="text-muted-foreground text-sm mt-1">All student enrollment data across every stage.</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Student Enrollments</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">All student enrollment data across every stage.</p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => fetchData()} disabled={loading}>
+        <Button variant="outline" onClick={() => fetchData()} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
           <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh
         </Button>
       </div>
 
       {/* Summary Cards */}
       {summary && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-7 gap-4">
-          <SummaryCard label="Fee Pending" count={summary.payment_pending} icon={<Clock className="w-4 h-4" />} color="text-orange-500 bg-orange-50 dark:bg-orange-900/20" onClick={() => handleTabChange('payment_pending')} />
-          <SummaryCard label="Receipt Uploaded" count={summary.receipt_submitted} icon={<FileText className="w-4 h-4" />} color="text-cyan-500 bg-cyan-50 dark:bg-cyan-900/20" onClick={() => handleTabChange('receipt_submitted')} />
-          <SummaryCard label="Doc Review" count={summary.document_review} icon={<AlertCircle className="w-4 h-4" />} color="text-blue-500 bg-blue-50 dark:bg-blue-900/20" onClick={() => handleTabChange('document_review')} />
-          <SummaryCard label="Finance Review" count={summary.finance_review} icon={<Clock className="w-4 h-4" />} color="text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20" onClick={() => handleTabChange('finance_review')} />
-          <SummaryCard label="Enrolled" count={summary.enrolled} icon={<GraduationCap className="w-4 h-4" />} color="text-green-500 bg-green-50 dark:bg-green-900/20" onClick={() => handleTabChange('enrolled')} />
-          <SummaryCard label="Rejected" count={summary.rejected} icon={<XCircle className="w-4 h-4" />} color="text-red-500 bg-red-50 dark:bg-red-900/20" onClick={() => handleTabChange('rejected')} />
-          <SummaryCard label="Dept Rejected" count={summary.department_rejected} icon={<Ban className="w-4 h-4" />} color="text-red-400 bg-red-50 dark:bg-red-900/20" onClick={() => handleTabChange('department_rejected')} />
+        <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-3">
+          <SummaryCard label="Fee Pending" count={summary.payment_pending} icon={<Clock className="w-4 h-4" />} active={statusFilter === 'payment_pending'} onClick={() => handleTabChange('payment_pending')} />
+          <SummaryCard label="Receipt Uploaded" count={summary.receipt_submitted} icon={<FileText className="w-4 h-4" />} active={statusFilter === 'receipt_submitted'} onClick={() => handleTabChange('receipt_submitted')} />
+          <SummaryCard label="Doc Review" count={summary.document_review} icon={<AlertCircle className="w-4 h-4" />} active={statusFilter === 'document_review'} onClick={() => handleTabChange('document_review')} />
+          <SummaryCard label="Finance Review" count={summary.finance_review} icon={<Clock className="w-4 h-4" />} active={statusFilter === 'finance_review'} onClick={() => handleTabChange('finance_review')} />
+          <SummaryCard label="Enrolled" count={summary.enrolled} icon={<GraduationCap className="w-4 h-4" />} active={statusFilter === 'enrolled'} onClick={() => handleTabChange('enrolled')} />
+          <SummaryCard label="Rejected" count={summary.rejected} icon={<XCircle className="w-4 h-4" />} active={statusFilter === 'rejected'} onClick={() => handleTabChange('rejected')} />
+          <SummaryCard label="Dept Rejected" count={summary.department_rejected} icon={<Ban className="w-4 h-4" />} active={statusFilter === 'department_rejected'} onClick={() => handleTabChange('department_rejected')} />
         </div>
       )}
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        {/* Status tabs */}
-        <div className="flex flex-wrap gap-1">
-          {FILTER_TABS.map(tab => (
-            <button
-              key={tab.key}
-              onClick={() => handleTabChange(tab.key)}
-              className={cn(
-                'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
-                statusFilter === tab.key
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
-              )}
-            >
-              {tab.label}
-              {summary && tab.key && (
-                <span className="ml-1.5 opacity-70">
-                  {summary[tab.key as keyof Summary] ?? 0}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Search */}
-        <form onSubmit={handleSearch} className="flex gap-2 ml-auto">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+      <div className="rounded-3xl bg-white border border-slate-100 p-4 space-y-4">
+        {/* Search first */}
+        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search name, email, ID..."
-              className="pl-8 h-8 text-sm w-56"
+              className="pl-11 h-12 text-sm w-full rounded-full bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
             />
           </div>
-          <Button type="submit" size="sm" variant="outline" className="h-8">Search</Button>
+          <Button type="submit" className="h-12 px-7 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Search</Button>
         </form>
+
+        {/* Status tabs */}
+        <div className="flex flex-wrap gap-2">
+          {FILTER_TABS.map(tab => {
+            const active = statusFilter === tab.key;
+            const count = summary && tab.key ? (summary[tab.key as keyof Summary] ?? 0) : null;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => handleTabChange(tab.key)}
+                className={cn(
+                  'inline-flex items-center gap-2 pl-4 pr-2 py-1.5 rounded-full text-sm font-semibold transition-colors border',
+                  active
+                    ? 'bg-[#8ae47e] border-[#8ae47e] text-[#0b1d14]'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:border-[#cfe9c9]'
+                )}
+              >
+                {tab.label}
+                {count !== null ? (
+                  <span className={cn('min-w-6 h-6 px-2 rounded-full text-xs flex items-center justify-center tabular-nums', active ? 'bg-white/70 text-[#0b1d14]' : 'bg-slate-100 text-slate-600')}>{count}</span>
+                ) : <span className="w-2" />}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Table */}
       {loading ? (
-        <div className="space-y-3">{[1, 2, 3, 4].map(i => <div key={i} className="h-16 bg-muted rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1, 2, 3, 4].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
       ) : enrollments.length === 0 ? (
-        <Card>
-          <CardContent className="py-16 text-center text-muted-foreground">
-            <GraduationCap className="w-10 h-10 mx-auto mb-3 opacity-20" />
-            <p>No enrollments found{statusFilter ? ` with status "${statusFilter.replace('_', ' ')}"` : ''}.</p>
-          </CardContent>
-        </Card>
+        <div className="rounded-3xl bg-white border border-slate-100 py-16 text-center text-muted-foreground">
+          <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><GraduationCap className="w-6 h-6" /></div>
+          <p className="text-sm">No enrollments found{statusFilter ? ` with status "${statusFilter.replace('_', ' ')}"` : ''}.</p>
+        </div>
       ) : (
-        <div className="rounded-xl border border-border overflow-hidden">
+        <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-muted/50 border-b border-border">
+            <thead className="bg-[#f4f6f3] border-b border-slate-100">
               <tr>
-                <th className="text-left p-3 font-medium text-muted-foreground">Student</th>
-                <th className="text-left p-3 font-medium text-muted-foreground hidden md:table-cell">Program</th>
-                <th className="text-left p-3 font-medium text-muted-foreground hidden lg:table-cell">Center</th>
-                <th className="text-left p-3 font-medium text-muted-foreground hidden sm:table-cell">Fee Paid</th>
-                <th className="text-left p-3 font-medium text-muted-foreground">Status</th>
-                <th className="text-left p-3 font-medium text-muted-foreground hidden lg:table-cell">Date</th>
-                <th className="text-right p-3 font-medium text-muted-foreground">Actions</th>
+                <th className="text-left px-4 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Student</th>
+                <th className="text-left px-4 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500 hidden md:table-cell">Program</th>
+                <th className="text-left px-4 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500 hidden lg:table-cell">Center</th>
+                <th className="text-left px-4 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500 hidden sm:table-cell">Fee Paid</th>
+                <th className="text-left px-4 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Status</th>
+                <th className="text-left px-4 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500 hidden lg:table-cell">Date</th>
+                <th className="text-right px-4 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
-              {enrollments.map(e => {
+            <tbody className="divide-y divide-slate-100">
+              {pagedEnrollments.map(e => {
                 const meta = STATUS_META[e.status] || { label: e.status, color: 'bg-muted text-muted-foreground', icon: null };
                 return (
-                  <tr key={e.id} className="hover:bg-muted/30 transition-colors">
-                    <td className="p-3">
-                      <p className="font-medium">{e.studentName}</p>
+                  <tr key={e.id} className="hover:bg-[#f7faf6] transition-colors">
+                    <td className="px-4 py-4">
+                      <p className="font-semibold text-slate-900">{e.studentName}</p>
                       <p className="text-xs text-muted-foreground">{e.studentEmail}</p>
                       {e.enrollmentNumber && <p className="text-[10px] text-muted-foreground font-mono">{e.enrollmentNumber}</p>}
                     </td>
-                    <td className="p-3 hidden md:table-cell text-muted-foreground">{getProgramName(e)}</td>
-                    <td className="p-3 hidden lg:table-cell text-muted-foreground">{getCenterName(e)}</td>
-                    <td className="p-3 hidden sm:table-cell">
+                    <td className="px-4 py-4 hidden md:table-cell text-muted-foreground">{getProgramName(e)}</td>
+                    <td className="px-4 py-4 hidden lg:table-cell text-muted-foreground">{getCenterName(e)}</td>
+                    <td className="px-4 py-4 hidden sm:table-cell">
                       {e.payment ? (
                         <span className="text-green-600 font-medium">{CS()}{e.payment.amount.toLocaleString()}</span>
                       ) : e.initialPaymentAmount ? (
@@ -328,8 +335,8 @@ export function FinanceEnrollmentsPanel() {
                         <span className="text-muted-foreground text-xs">—</span>
                       )}
                     </td>
-                    <td className="p-3">
-                      <span className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold', meta.color)}>
+                    <td className="px-4 py-4">
+                      <span className={cn('inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold', meta.color)}>
                         {meta.icon}{meta.label}
                       </span>
                       {(e.financeRemarks || e.departmentRemarks) && (
@@ -338,20 +345,20 @@ export function FinanceEnrollmentsPanel() {
                         </p>
                       )}
                     </td>
-                    <td className="p-3 hidden lg:table-cell text-muted-foreground text-xs">
+                    <td className="px-4 py-4 hidden lg:table-cell text-muted-foreground text-xs">
                       {new Date(e.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="p-3 text-right">
+                    <td className="px-4 py-4 text-right">
                       <div className="flex gap-1.5 justify-end">
-                        <Button size="sm" variant="outline" className="h-7 text-xs text-primary border-primary/30 hover:bg-primary/10" onClick={() => setViewStudent(e)}>
+                        <Button size="sm" variant="outline" className="h-8 rounded-full px-3.5 text-xs text-[#256c1d] border-[#cfe9c9] bg-white hover:bg-[#eaf6e6]" onClick={() => setViewStudent(e)}>
                           <Eye className="w-3 h-3 mr-1" />View
                         </Button>
                         {canAct && e.status === 'finance_review' && !e.isProvisional && (
                           <>
-                            <Button size="sm" variant="outline" className="h-7 text-xs text-green-600 border-green-300 hover:bg-green-50 dark:hover:bg-green-900/20" onClick={() => handleApprove(e.id)}>
+                            <Button size="sm" variant="outline" className="h-8 rounded-full px-3.5 text-xs text-[#256c1d] border-[#cfe9c9] bg-[#eaf6e6] hover:bg-[#dff3da]" onClick={() => handleApprove(e.id)}>
                               <CheckCircle className="w-3 h-3 mr-1" />Enroll
                             </Button>
-                            <Button size="sm" variant="outline" className="h-7 text-xs text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => { setRejectDialog({ open: true, id: e.id }); setRemarks(''); }}>
+                            <Button size="sm" variant="outline" className="h-8 rounded-full px-3.5 text-xs text-red-600 border-red-200 bg-white hover:bg-red-50" onClick={() => { setRejectDialog({ open: true, id: e.id }); setRemarks(''); }}>
                               <XCircle className="w-3 h-3 mr-1" />Reject
                             </Button>
                           </>
@@ -366,36 +373,78 @@ export function FinanceEnrollmentsPanel() {
         </div>
       )}
 
+      {/* Pagination (always shown when there are results) */}
+      {!loading && enrollments.length > 0 && (() => {
+        const pages: (number | '…')[] = [];
+        const add = (n: number | '…') => { if (pages[pages.length - 1] !== n) pages.push(n); };
+        for (let n = 1; n <= totalPages; n++) {
+          if (n === 1 || n === totalPages || Math.abs(n - currentPage) <= 1) add(n);
+          else if (pages[pages.length - 1] !== '…') add('…');
+        }
+        const nav = 'h-9 min-w-9 px-3 rounded-full text-sm font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none';
+        return (
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 rounded-3xl bg-white px-5 py-4 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_8px_24px_-14px_rgba(16,24,40,0.10)]">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-muted-foreground">
+              <span>
+                Showing <span className="font-semibold text-foreground">{(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, enrollments.length)}</span> of <span className="font-semibold text-foreground">{enrollments.length.toLocaleString()}</span>
+              </span>
+              <label className="flex items-center gap-2">
+                Rows
+                <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))} className="h-9 rounded-full border border-slate-200 bg-white px-3 text-sm text-slate-700">
+                  {[5, 10, 25, 50].map(n => <option key={n} value={n}>{n}</option>)}
+                </select>
+              </label>
+            </div>
+
+            <nav className="flex items-center gap-1" aria-label="Pagination">
+              <button type="button" className={`${nav} text-slate-600 hover:bg-[#f4f6f3]`} onClick={() => setPage(currentPage - 1)} disabled={currentPage <= 1}>Previous</button>
+              {pages.map((n, i) => n === '…' ? (
+                <span key={`e${i}`} className="px-1 text-slate-400">…</span>
+              ) : (
+                <button key={n} type="button" onClick={() => setPage(n)} aria-current={n === currentPage ? 'page' : undefined}
+                  className={`${nav} tabular-nums ${n === currentPage ? 'bg-[#0b1d14] text-white' : 'text-slate-600 hover:bg-[#f4f6f3]'}`}>{n}</button>
+              ))}
+              <button type="button" className={`${nav} text-slate-600 hover:bg-[#f4f6f3]`} onClick={() => setPage(currentPage + 1)} disabled={currentPage >= totalPages}>Next</button>
+            </nav>
+          </div>
+        );
+      })()}
+
       {/* Reject Dialog */}
       <Dialog open={rejectDialog.open} onOpenChange={o => setRejectDialog(d => ({ ...d, open: o }))}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Reject Enrollment</DialogTitle></DialogHeader>
-          <div className="space-y-2 py-2">
-            <Label>Remarks (required)</Label>
-            <Input value={remarks} onChange={e => setRemarks(e.target.value)} placeholder="Reason for rejection..." />
+        <DialogContent className="w-[96vw] sm:max-w-md p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader className="px-7 pt-7 pb-4 text-left">
+            <DialogTitle className="text-xl font-semibold tracking-tight">Reject Enrollment</DialogTitle>
+            <p className="text-sm text-muted-foreground">Add a reason so the student and team know what to fix.</p>
+          </DialogHeader>
+          <div className="space-y-2 px-7 pb-2">
+            <Label className="text-xs font-semibold uppercase tracking-wide text-slate-500">Remarks (required)</Label>
+            <Input value={remarks} onChange={e => setRemarks(e.target.value)} placeholder="Reason for rejection..." className="h-11 rounded-2xl bg-slate-50 border-slate-200" />
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setRejectDialog({ open: false, id: '' })}>Cancel</Button>
-            <Button variant="destructive" onClick={handleReject} disabled={!remarks.trim()}>Reject</Button>
+          <DialogFooter className="px-7 py-5 gap-2">
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setRejectDialog({ open: false, id: '' })}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-red-600 hover:bg-red-700 text-white" onClick={handleReject} disabled={!remarks.trim()}>Reject</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* View Student Details Dialog */}
       <Dialog open={!!viewStudent} onOpenChange={o => !o && setViewStudent(null)}>
-        <DialogContent className="max-w-3xl max-h-[92vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>Enrollment Details</DialogTitle></DialogHeader>
+        <DialogContent className="w-[96vw] sm:max-w-3xl p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] flex flex-col" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader className="px-7 pt-7 pb-4 text-left shrink-0 border-b border-slate-100">
+            <DialogTitle className="text-xl font-semibold tracking-tight">Enrollment Details</DialogTitle>
+          </DialogHeader>
           {viewStudent && (
-            <div className="space-y-6 pb-2 text-sm">
+            <div className="space-y-6 px-7 py-6 text-sm overflow-y-auto flex-1">
 
               {/* Photo + Identity */}
               <div className="flex gap-5 items-start">
                 <div className="shrink-0">
                   {(viewStudent.student?.photo || viewStudent.photo) ? (
-                    <img src={getDocUrl((viewStudent.student?.photo || viewStudent.photo) as string)} alt="Student" className="w-24 h-24 rounded-xl object-cover border shadow-sm" />
+                    <img src={getDocUrl((viewStudent.student?.photo || viewStudent.photo) as string)} alt="Student" className="w-24 h-24 rounded-2xl object-cover border border-slate-100" />
                   ) : (
-                    <div className="w-24 h-24 rounded-xl bg-muted flex items-center justify-center border">
-                      <GraduationCap className="w-10 h-10 text-muted-foreground" />
+                    <div className="w-24 h-24 rounded-2xl bg-[#eaf6e6] flex items-center justify-center">
+                      <GraduationCap className="w-10 h-10 text-[#256c1d]" />
                     </div>
                   )}
                 </div>
@@ -411,7 +460,7 @@ export function FinanceEnrollmentsPanel() {
 
               {/* Program & University */}
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Program &amp; University</h4>
+                <h4 className="text-xs font-semibold uppercase tracking-widest text-[#256c1d] mb-3 border-b border-slate-100 pb-2">Program &amp; University</h4>
                 <div className="grid grid-cols-2 gap-3">
                   <Field label="Program" value={(viewStudent as any).program?.name ? `${(viewStudent as any).program.name} (${(viewStudent as any).program.code})` : getProgramName(viewStudent)} />
                   <Field
@@ -440,7 +489,7 @@ export function FinanceEnrollmentsPanel() {
               {/* Fee Details */}
               {(feeRows.length > 0 || viewStudent.payment || viewStudent.initialPaymentAmount) && (
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Fee Details</h4>
+                  <h4 className="text-xs font-semibold uppercase tracking-widest text-[#256c1d] mb-3 border-b border-slate-100 pb-2">Fee Details</h4>
                   {feeRows.length > 0 && relevantFee && (
                     <div className="rounded-lg border overflow-hidden mb-3">
                       <table className="w-full text-xs">
@@ -505,7 +554,7 @@ export function FinanceEnrollmentsPanel() {
 
               {/* Personal Details */}
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Personal Details</h4>
+                <h4 className="text-xs font-semibold uppercase tracking-widest text-[#256c1d] mb-3 border-b border-slate-100 pb-2">Personal Details</h4>
                 <div className="grid grid-cols-2 gap-3">
                   <Field label="Gender" value={viewStudent.gender || viewStudent.student?.gender} />
                   <Field label="Category" value={viewStudent.category || viewStudent.student?.category} />
@@ -544,7 +593,7 @@ export function FinanceEnrollmentsPanel() {
 
               {/* Documents */}
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Uploaded Documents</h4>
+                <h4 className="text-xs font-semibold uppercase tracking-widest text-[#256c1d] mb-3 border-b border-slate-100 pb-2">Uploaded Documents</h4>
                 {!viewStudent.student?.documents || viewStudent.student.documents.filter(Boolean).length === 0 ? (
                   <p className="text-muted-foreground italic py-2">No documents uploaded.</p>
                 ) : (
@@ -572,11 +621,11 @@ export function FinanceEnrollmentsPanel() {
               {/* Payment Receipt */}
               {(viewStudent.receiptUrl || viewStudent.status === 'receipt_submitted') && (
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1 flex justify-between items-center">
+                  <h4 className="text-xs font-semibold uppercase tracking-widest text-[#256c1d] mb-3 border-b border-slate-100 pb-2 flex justify-between items-center">
                     Payment Receipt
                     {viewStudent.receiptVerified && <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-700">VERIFIED</span>}
                   </h4>
-                  <div className="p-4 border rounded-xl bg-slate-50 dark:bg-slate-900/10 flex items-start gap-4">
+                  <div className="p-4 rounded-2xl bg-[#f4f6f3] flex items-start gap-4">
                     {viewStudent.receiptUrl ? (
                       <>
                         <a href={api.getFileUrl(viewStudent.receiptUrl)} target="_blank" rel="noreferrer" className="w-20 h-20 rounded border bg-white overflow-hidden shrink-0 block">
@@ -591,11 +640,11 @@ export function FinanceEnrollmentsPanel() {
                               </div>
                             ) : (
                               <div className="flex flex-wrap items-center gap-2 mt-2">
-                                <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleVerifyReceipt(viewStudent.id)}>
+                                <Button size="sm" className="h-9 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => handleVerifyReceipt(viewStudent.id)}>
                                   <CheckCircle className="w-3.5 h-3.5 mr-1" />
                                   Verify Receipt & Enroll
                                 </Button>
-                                <Button size="sm" variant="outline" className="text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => {
+                                <Button size="sm" variant="outline" className="h-9 rounded-full text-red-600 border-red-200 bg-white hover:bg-red-50" onClick={() => {
                                   setRejectDialog({ open: true, id: viewStudent.id });
                                   setRemarks('');
                                 }}>
@@ -626,24 +675,28 @@ export function FinanceEnrollmentsPanel() {
 
 function Field({ label, value }: { label: string; value?: React.ReactNode }) {
   return (
-    <div>
-      <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground block mb-0.5">{label}</span>
-      <span className="text-sm">{value || <span className="text-muted-foreground italic">N/A</span>}</span>
+    <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+      <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 block mb-0.5">{label}</span>
+      <span className="text-sm font-medium text-slate-900">{value || <span className="text-muted-foreground italic">N/A</span>}</span>
     </div>
   );
 }
 
-function SummaryCard({ label, count, icon, color, onClick }: { label: string; count: number; icon: React.ReactNode; color: string; onClick: () => void }) {
+function SummaryCard({ label, count, icon, active, onClick }: { label: string; count: number; icon: React.ReactNode; active: boolean; onClick: () => void }) {
   return (
-    <Card className="cursor-pointer hover:border-primary/40 transition-colors" onClick={onClick}>
-      <CardContent className="p-6 flex items-center gap-4">
-        <div className={cn('p-2 rounded-lg', color)}>{icon}</div>
-        <div>
-          <p className="text-xl font-bold">{count}</p>
-          <p className="text-[11px] text-muted-foreground">{label}</p>
-        </div>
-      </CardContent>
-    </Card>
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        'text-left rounded-3xl p-5 flex items-center justify-between gap-3 border transition-all hover:-translate-y-0.5',
+        active ? 'bg-[#eaf6e6] border-[#8ae47e]' : 'bg-white border-slate-100 hover:border-[#cfe9c9]'
+      )}
+    >
+      <div className="min-w-0">
+        <p className="text-xs font-medium text-slate-500 truncate">{label}</p>
+        <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-1.5">{count}</p>
+      </div>
+      <div className={cn('w-11 h-11 shrink-0 rounded-2xl flex items-center justify-center', active ? 'bg-white text-[#256c1d]' : 'bg-[#eaf6e6] text-[#256c1d]')}>{icon}</div>
+    </button>
   );
 }
-

@@ -733,27 +733,23 @@ export function LicensesPanel() {
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         <div>
-          <div className="flex items-center gap-2 text-primary mb-1">
-            <Receipt className="w-4 h-4 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-widest text-primary">Monthly Billing Cycles</span>
-          </div>
-          <h2 className="text-2xl font-bold tracking-tight">Pricings and Bills</h2>
-          <p className="text-muted-foreground text-sm">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Pricings and Bills</h2>
+          <p className="text-muted-foreground text-sm mt-1.5 max-w-2xl">
             Configure partner & direct pricing, generate monthly institutional bills, and review/download historical invoices.
           </p>
         </div>
 
         {/* Month Selector Control */}
-        <div className="flex items-center gap-2 bg-muted/50 p-2 rounded-xl border border-border/80">
-          <Calendar className="w-4 h-4 text-primary ml-1 shrink-0" />
-          <span className="text-xs font-semibold text-foreground shrink-0">Billing Month:</span>
+        <div className="flex items-center gap-2 h-11 rounded-full bg-white dark:bg-card shadow-sm border border-slate-200/70 dark:border-white/10 pl-4 pr-1.5 shrink-0">
+          <Calendar className="w-4 h-4 text-[#256c1d] shrink-0" />
+          <span className="text-xs font-medium text-muted-foreground shrink-0">Billing month</span>
           <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-            <SelectTrigger className="h-8 text-xs font-bold w-[165px] bg-background">
+            <SelectTrigger className="h-8 text-sm font-semibold w-[165px] border-0 shadow-none focus:ring-0 bg-transparent">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-2xl">
               {monthOptions.map(m => (
                 <SelectItem key={m.value} value={m.value} className="text-xs">
                   {m.label} {m.value === currentMonthValue && '(Current)'}
@@ -764,7 +760,7 @@ export function LicensesPanel() {
           <Button 
             variant="ghost" 
             size="icon" 
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            className="h-8 w-8 rounded-full bg-[#f4f6f3] text-muted-foreground hover:text-foreground hover:bg-[#eaf6e6]"
             onClick={() => fetchData(selectedMonth)}
             title="Refresh billing data"
           >
@@ -775,67 +771,67 @@ export function LicensesPanel() {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={val => setActiveTab(val as 'current' | 'history')}>
-        <TabsList className="bg-muted/60 p-1">
-          <TabsTrigger value="current" className="text-xs font-semibold">
+        <TabsList className="bg-white dark:bg-card border border-slate-200/70 shadow-sm rounded-full p-1 h-auto">
+          <TabsTrigger value="current" className="text-xs font-semibold rounded-full px-4 h-9 data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none">
             <Receipt className="w-3.5 h-3.5 mr-1.5" />
             Organizations & Plans ({selectedMonthLabel})
           </TabsTrigger>
-          <TabsTrigger value="history" className="text-xs font-semibold relative">
-            <History className="w-3.5 h-3.5 mr-1.5 text-indigo-600 dark:text-indigo-400" />
+          <TabsTrigger value="history" className="text-xs font-semibold relative rounded-full px-4 h-9 data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none">
+            <History className="w-3.5 h-3.5 mr-1.5 text-green-600 dark:text-green-400" />
             Bill History & Invoices
-            <Badge variant="secondary" className="ml-1.5 text-[10px] px-1.5 py-0 h-4 bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">
+            <Badge variant="secondary" className="ml-1.5 text-[10px] px-1.5 py-0 h-4 bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300">
               {billHistory.length} bills
             </Badge>
           </TabsTrigger>
         </TabsList>
 
         {/* TAB 1: Current Month Billing */}
-        <TabsContent value="current" className="space-y-5">
+        <TabsContent value="current" className="space-y-5 mt-6">
           {/* Summary strip */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <Card className="lg:col-span-1 border-border/70 shadow-xs bg-gradient-to-br from-emerald-50 to-background dark:from-emerald-950/30 dark:to-background">
-              <CardContent className="p-5">
+            <Card className="lg:col-span-1 rounded-3xl gap-0 bg-[#0b1d14] text-white">
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{selectedMonthLabel} billing</p>
-                  <TrendingUp className="w-4 h-4 text-emerald-600" />
+                  <p className="text-xs font-medium text-emerald-100/70">{selectedMonthLabel} billing</p>
+                  <TrendingUp className="w-4 h-4 text-[#8ae47e]" />
                 </div>
-                <p className="mt-2 text-3xl font-bold tracking-tight text-emerald-700 dark:text-emerald-400">
+                <p className="mt-3 text-4xl font-semibold tracking-tight text-[#8ae47e]">
                   {CS()}{totalCalculatedBilling.toLocaleString(numLocale())}
                 </p>
-                <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+                <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-emerald-50/80">
                   <span className="inline-flex items-center gap-1"><Building2 className="w-3.5 h-3.5" />{totalOrgs} organizations</span>
-                  <span className="inline-flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />{billsGenerated} generated</span>
+                  <span className="inline-flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-[#8ae47e]" />{billsGenerated} generated</span>
                   <span>{billsPaid} paid</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="lg:col-span-2 border-border/70 shadow-xs">
-              <CardContent className="p-5">
+            <Card className="lg:col-span-2 rounded-3xl gap-0">
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Enrollments this month</p>
+                  <p className="text-xs font-medium text-muted-foreground">Enrollments this month</p>
                   <p className="text-sm font-bold">{totalAllEnrollments.toLocaleString()} total</p>
                 </div>
-                <div className="mt-3 flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
+                <div className="mt-4 flex h-2.5 w-full overflow-hidden rounded-full bg-[#f1f3ef]">
                   {totalAllEnrollments > 0 && (
                     <>
-                      <div className="bg-indigo-500" style={{ width: `${(totalPartnerEnrollments / totalAllEnrollments) * 100}%` }} />
+                      <div className="bg-green-500" style={{ width: `${(totalPartnerEnrollments / totalAllEnrollments) * 100}%` }} />
                       <div className="bg-slate-500" style={{ width: `${(totalDirectEnrollments / totalAllEnrollments) * 100}%` }} />
-                      <div className="bg-sky-500" style={{ width: `${(totalStudyAbroadEnrollments / totalAllEnrollments) * 100}%` }} />
+                      <div className="bg-teal-500" style={{ width: `${(totalStudyAbroadEnrollments / totalAllEnrollments) * 100}%` }} />
                     </>
                   )}
                 </div>
                 <div className="mt-4 grid grid-cols-3 gap-3">
                   {[
-                    { label: 'Academic Partner', value: totalPartnerEnrollments, dot: 'bg-indigo-500', icon: Users },
+                    { label: 'Academic Partner', value: totalPartnerEnrollments, dot: 'bg-green-500', icon: Users },
                     { label: 'Direct Admissions', value: totalDirectEnrollments, dot: 'bg-slate-500', icon: UserCheck },
-                    { label: 'Study Abroad', value: totalStudyAbroadEnrollments, dot: 'bg-sky-500', icon: Globe2 },
+                    { label: 'Study Abroad', value: totalStudyAbroadEnrollments, dot: 'bg-teal-500', icon: Globe2 },
                   ].map(item => (
                     <div key={item.label}>
                       <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                         <span className={`h-2 w-2 rounded-full ${item.dot}`} />{item.label}
                       </div>
-                      <p className="mt-0.5 text-xl font-bold tracking-tight">{item.value.toLocaleString()}</p>
+                      <p className="mt-0.5 text-2xl font-semibold tracking-tight">{item.value.toLocaleString()}</p>
                     </div>
                   ))}
                 </div>
@@ -851,11 +847,11 @@ export function LicensesPanel() {
                 placeholder="Search organization, email or plan..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="pl-9 h-9 text-sm bg-background"
+                className="pl-10 h-11 text-sm rounded-full bg-white border-slate-200 shadow-sm"
               />
             </div>
             <Select value={featureFilter} onValueChange={setFeatureFilter}>
-              <SelectTrigger className="h-9 text-sm w-full sm:w-[210px] bg-background">
+              <SelectTrigger className="h-11 text-sm w-full sm:w-[230px] rounded-full bg-white border-slate-200 shadow-sm px-4">
                 <SelectValue placeholder="Filter Feature" />
               </SelectTrigger>
               <SelectContent>
@@ -874,7 +870,7 @@ export function LicensesPanel() {
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary" />
             </div>
           ) : filteredOrgs.length === 0 ? (
-            <Card className="border-dashed p-12 text-center text-muted-foreground space-y-2">
+            <Card className="border border-dashed border-slate-300 shadow-none rounded-3xl p-12 text-center text-muted-foreground space-y-2">
               <Building2 className="w-10 h-10 mx-auto text-muted-foreground/40" />
               <p className="text-base font-semibold text-foreground">No organizations found</p>
               <p className="text-xs">Adjust your search query or filters.</p>
@@ -888,13 +884,13 @@ export function LicensesPanel() {
                 const stale = Boolean(existingBill && existingBill.totalStudentCount !== details.totalStudentCount);
 
                 return (
-                  <Card key={org.id} className="border-border/70 shadow-xs overflow-hidden">
+                  <Card key={org.id} className="rounded-3xl overflow-hidden gap-0">
                     {/* Card header */}
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 px-5 py-4 border-b bg-muted/20">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 px-6 pt-6 pb-3">
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                           <h3 className="text-base font-semibold truncate">{org.name}</h3>
-                          <Badge variant="outline" className="text-[11px] font-medium border-indigo-200 text-indigo-700 bg-indigo-50/70 dark:bg-indigo-950/40 dark:text-indigo-300">
+                          <Badge variant="outline" className="text-[11px] font-medium border-green-200 text-green-700 bg-green-50/70 dark:bg-green-950/40 dark:text-green-300">
                             {details.planName}
                           </Badge>
                         </div>
@@ -916,9 +912,9 @@ export function LicensesPanel() {
                       </div>
                     </div>
 
-                    <CardContent className="p-5 space-y-4">
+                    <CardContent className="px-6 pt-3 pb-6 space-y-5">
                       {stale && (
-                        <div className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-300">
+                        <div className="flex items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-300">
                           <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
                           <span>
                             The generated bill covers {existingBill!.totalStudentCount} students but there are now {details.totalStudentCount}. Regenerate the bill to include the latest enrollments.
@@ -961,11 +957,11 @@ export function LicensesPanel() {
                       </div>
 
                       {/* Footer: total + actions */}
-                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-4 border-t">
+                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-5 border-t border-slate-100 dark:border-white/10">
                         <div className="flex items-center gap-6">
                           <div>
-                            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{selectedMonthLabel} bill</p>
-                            <p className="text-2xl font-bold tracking-tight text-emerald-700 dark:text-emerald-400">
+                            <p className="text-xs font-medium text-muted-foreground">{selectedMonthLabel} bill</p>
+                            <p className="text-3xl font-semibold tracking-tight text-[#256c1d] dark:text-emerald-400">
                               {CS()}{details.totalBill.toLocaleString(numLocale())}
                             </p>
                           </div>
@@ -973,7 +969,7 @@ export function LicensesPanel() {
                             <p><strong className="text-foreground">{details.totalStudentCount}</strong> enrollments</p>
                             <button
                               type="button"
-                              className="mt-0.5 inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 font-medium"
+                              className="mt-0.5 inline-flex items-center gap-1 text-green-600 hover:text-green-800 dark:text-green-400 font-medium"
                               onClick={() => handleOpenMonthEnrollments(org)}
                               title={`View itemized list for ${selectedMonthLabel}`}
                             >
@@ -985,23 +981,23 @@ export function LicensesPanel() {
                         <div className="flex flex-wrap items-center gap-2">
                           <Button
                             size="sm"
-                            className="h-8 text-xs bg-indigo-600 hover:bg-indigo-700 text-white"
+                            className="h-10 px-5 rounded-full text-xs font-semibold bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14]"
                             onClick={() => handleGenerateBill(org)}
                             disabled={generatingId === org.id}
                           >
                             {generatingId === org.id ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Receipt className="w-3.5 h-3.5 mr-1" />}
                             {existingBill ? 'Regenerate bill' : 'Generate bill'}
                           </Button>
-                          <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => handleOpenConfigure(org)}>
+                          <Button variant="outline" size="sm" className="h-10 px-4 rounded-full text-xs bg-white border-slate-200 hover:bg-slate-50" onClick={() => handleOpenConfigure(org)}>
                             <Sliders className="w-3.5 h-3.5 mr-1" /> Configure pricing
                           </Button>
-                          <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => handleViewStatementFromOrg(org)}>
+                          <Button variant="outline" size="sm" className="h-10 px-4 rounded-full text-xs bg-white border-slate-200 hover:bg-slate-50" onClick={() => handleViewStatementFromOrg(org)}>
                             <FileText className="w-3.5 h-3.5 mr-1" /> Statement
                           </Button>
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="h-8 text-xs text-muted-foreground"
+                            className="h-10 px-4 rounded-full text-xs text-muted-foreground hover:bg-[#f4f6f3]"
                             onClick={() => {
                               setSearchQuery(org.name);
                               setHistoryMonthFilter('all');
@@ -1021,22 +1017,22 @@ export function LicensesPanel() {
         </TabsContent>
 
         {/* TAB 2: Historical Bills & Invoices */}
-        <TabsContent value="history" className="space-y-4">
+        <TabsContent value="history" className="space-y-5 mt-6">
           {/* History Header & Search */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-muted/30 p-3 rounded-xl border border-border/60">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <Input 
                 placeholder="Search bill no or organization..." 
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="pl-9 h-9 text-xs bg-background"
+                className="pl-10 h-11 text-sm rounded-full bg-white border-slate-200 shadow-sm"
               />
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <Select value={historyMonthFilter} onValueChange={setHistoryMonthFilter}>
-                <SelectTrigger className="h-9 text-xs w-[170px] bg-background">
+                <SelectTrigger className="h-11 text-sm w-[180px] rounded-full bg-white border-slate-200 shadow-sm px-4">
                   <SelectValue placeholder="All Months" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1048,7 +1044,7 @@ export function LicensesPanel() {
               </Select>
 
               <Select value={historyStatusFilter} onValueChange={setHistoryStatusFilter}>
-                <SelectTrigger className="h-9 text-xs w-[130px] bg-background">
+                <SelectTrigger className="h-11 text-sm w-[140px] rounded-full bg-white border-slate-200 shadow-sm px-4">
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1061,15 +1057,15 @@ export function LicensesPanel() {
           </div>
 
           {filteredHistory.length === 0 ? (
-            <Card className="border-dashed p-12 text-center text-muted-foreground space-y-2">
+            <Card className="border border-dashed border-slate-300 shadow-none rounded-3xl p-12 text-center text-muted-foreground space-y-2">
               <Receipt className="w-10 h-10 mx-auto text-muted-foreground/40" />
               <p className="text-base font-semibold text-foreground">No historical bills found</p>
               <p className="text-xs">Generated monthly bills will be listed here with payment tracking and download options.</p>
             </Card>
           ) : (
-            <div className="rounded-xl border border-border/80 bg-card overflow-hidden shadow-xs">
+            <div className="rounded-3xl bg-card overflow-hidden p-3 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_28px_-14px_rgba(16,24,40,0.10)]">
               <Table>
-                <TableHeader className="bg-muted/40">
+                <TableHeader className="[&_tr]:border-0 [&_th]:bg-[#f4f6f3] [&_th:first-child]:rounded-l-full [&_th:last-child]:rounded-r-full">
                   <TableRow>
                     <TableHead className="font-semibold text-xs">Bill / Invoice #</TableHead>
                     <TableHead className="font-semibold text-xs">Organization</TableHead>
@@ -1089,7 +1085,7 @@ export function LicensesPanel() {
                     const directTotal = bill.directEnrollment?.enrollmentTotal ?? 0;
 
                     return (
-                      <TableRow key={bill.id} className="hover:bg-muted/30">
+                      <TableRow key={bill.id} className="hover:bg-[#f4f6f3] border-0">
                         {/* Bill No */}
                         <TableCell>
                           <div className="font-mono font-bold text-xs text-foreground">{bill.billNo}</div>
@@ -1126,7 +1122,7 @@ export function LicensesPanel() {
                         <TableCell className="text-right">
                           {bill.academicPartner.enabled ? (
                             <div>
-                              <div className="font-semibold text-xs text-indigo-700 dark:text-indigo-300">
+                              <div className="font-semibold text-xs text-green-700 dark:text-green-300">
                                 {CS()}{bill.academicPartner.subtotal.toLocaleString(numLocale())}
                               </div>
                               <div className="text-[10px] text-muted-foreground">
@@ -1201,7 +1197,7 @@ export function LicensesPanel() {
                             <Button 
                               variant="outline" 
                               size="sm" 
-                              className="h-8 text-xs px-2 text-indigo-700 bg-indigo-50/60 hover:bg-indigo-100 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-800"
+                              className="h-8 text-xs px-2 text-green-700 bg-green-50/60 hover:bg-green-100 border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-800"
                               onClick={() => handleDownloadBillPDFFromRow(bill)}
                               title="Download Invoice as PDF"
                             >
@@ -1291,10 +1287,10 @@ export function LicensesPanel() {
 
                 {/* FEATURE 1: Academic Partner — shown only when enabled under Organizations → Manage Features */}
                 {planForm.academic_partners && (
-                <div className="rounded-xl border border-indigo-200/90 bg-indigo-50/30 dark:bg-indigo-950/20 dark:border-indigo-900/60 p-4 space-y-3">
+                <div className="rounded-xl border border-green-200/90 bg-green-50/30 dark:bg-green-950/20 dark:border-green-900/60 p-4 space-y-3">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                      <div className="w-8 h-8 rounded-lg bg-green-600 text-white flex items-center justify-center shrink-0 mt-0.5">
                         <Users className="w-4 h-4" />
                       </div>
                       <div>
@@ -1307,10 +1303,10 @@ export function LicensesPanel() {
                   </div>
 
                   {(
-                    <div className="pt-3 border-t border-indigo-200/60 dark:border-indigo-900/50 space-y-3">
+                    <div className="pt-3 border-t border-green-200/60 dark:border-green-900/50 space-y-3">
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
-                          <Label className="text-xs font-semibold text-indigo-950 dark:text-indigo-200">
+                          <Label className="text-xs font-semibold text-green-950 dark:text-green-200">
                             Base Value ({CS()}) *
                           </Label>
                           <Input 
@@ -1327,7 +1323,7 @@ export function LicensesPanel() {
                         </div>
 
                         <div className="space-y-1">
-                          <Label className="text-xs font-semibold text-indigo-950 dark:text-indigo-200">
+                          <Label className="text-xs font-semibold text-green-950 dark:text-green-200">
                             Rate Per Partner Student ({CS()}) *
                           </Label>
                           <Input 
@@ -1344,7 +1340,7 @@ export function LicensesPanel() {
                         </div>
                       </div>
 
-                      <div className="text-xs text-indigo-900/80 dark:text-indigo-300 bg-indigo-100/50 dark:bg-indigo-950/60 px-3 py-1.5 rounded-lg flex items-center justify-between">
+                      <div className="text-xs text-green-900/80 dark:text-green-300 bg-green-100/50 dark:bg-green-950/60 px-3 py-1.5 rounded-lg flex items-center justify-between">
                         <span>Partner Subtotal:</span>
                         <strong>{CS()}{partnerBase.toLocaleString(numLocale())} (Base) + ({partnerCount} partner students × {CS()}{partnerPerFee}) = {CS()}{partnerSubtotal.toLocaleString(numLocale())}</strong>
                       </div>
@@ -1355,9 +1351,9 @@ export function LicensesPanel() {
 
                 {/* Study Abroad Partner — shown only when enabled under Organizations → Manage Features */}
                 {planForm.study_abroad_partners && (
-                <div className="rounded-xl border border-sky-200/90 bg-sky-50/30 dark:bg-sky-950/20 dark:border-sky-900/60 p-4 space-y-3">
+                <div className="rounded-xl border border-teal-200/90 bg-teal-50/30 dark:bg-teal-950/20 dark:border-teal-900/60 p-4 space-y-3">
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                    <div className="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center shrink-0 mt-0.5">
                       <Globe2 className="w-4 h-4" />
                     </div>
                     <div>
@@ -1367,10 +1363,10 @@ export function LicensesPanel() {
                       </p>
                     </div>
                   </div>
-                  <div className="pt-3 border-t border-sky-200/60 dark:border-sky-900/50 space-y-3">
+                  <div className="pt-3 border-t border-teal-200/60 dark:border-teal-900/50 space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <Label className="text-xs font-semibold text-sky-950 dark:text-sky-200">Base Value ({CS()}) *</Label>
+                        <Label className="text-xs font-semibold text-teal-950 dark:text-teal-200">Base Value ({CS()}) *</Label>
                         <Input
                           type="number" min="0" step="0.01"
                           value={planForm.studyAbroadBasePrice}
@@ -1382,7 +1378,7 @@ export function LicensesPanel() {
                         <p className="text-[10px] text-muted-foreground">Fixed periodic fee for Study Abroad Partner</p>
                       </div>
                       <div className="space-y-1">
-                        <Label className="text-xs font-semibold text-sky-950 dark:text-sky-200">Rate Per Study Abroad Student ({CS()}) *</Label>
+                        <Label className="text-xs font-semibold text-teal-950 dark:text-teal-200">Rate Per Study Abroad Student ({CS()}) *</Label>
                         <Input
                           type="number" min="0" step="0.01"
                           value={planForm.studyAbroadPerEnrollmentFee}
@@ -1394,7 +1390,7 @@ export function LicensesPanel() {
                         <p className="text-[10px] text-muted-foreground">Charged per student enrolled via Study Abroad partners</p>
                       </div>
                     </div>
-                    <div className="text-xs text-sky-900/80 dark:text-sky-300 bg-sky-100/50 dark:bg-sky-950/60 px-3 py-1.5 rounded-lg flex items-center justify-between">
+                    <div className="text-xs text-teal-900/80 dark:text-teal-300 bg-teal-100/50 dark:bg-teal-950/60 px-3 py-1.5 rounded-lg flex items-center justify-between">
                       <span>Study Abroad Subtotal:</span>
                       <strong>{CS()}{studyAbroadBase.toLocaleString(numLocale())} (Base) + ({studyAbroadCount} study abroad students × {CS()}{studyAbroadPerFee}) = {CS()}{studyAbroadSubtotal.toLocaleString(numLocale())}</strong>
                     </div>
@@ -1549,7 +1545,7 @@ export function LicensesPanel() {
                     type="button" 
                     variant="outline" 
                     size="sm" 
-                    className="h-8 text-xs text-indigo-700 bg-indigo-50 border-indigo-200 hover:bg-indigo-100 dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-800"
+                    className="h-8 text-xs text-green-700 bg-green-50 border-green-200 hover:bg-green-100 dark:bg-green-950 dark:text-green-300 dark:border-green-800"
                     onClick={() => handleDownloadStatementPDF(statementData.invoiceNo)}
                   >
                     <Download className="w-3.5 h-3.5 mr-1" /> Download PDF
@@ -1632,7 +1628,7 @@ export function LicensesPanel() {
                       </TableCell>
                       <TableCell className="text-center text-xs">
                         {statementData.partnerEnabled ? (
-                          <Badge variant="outline" className="text-[10px] bg-indigo-50 text-indigo-700 border-indigo-200">Enabled</Badge>
+                          <Badge variant="outline" className="text-[10px] bg-green-50 text-green-700 border-green-200">Enabled</Badge>
                         ) : (
                           <span className="text-muted-foreground">Disabled</span>
                         )}
@@ -1655,7 +1651,7 @@ export function LicensesPanel() {
                       </TableCell>
                       <TableCell className="text-center text-xs">
                         {statementData.partnerEnabled ? (
-                          <span className="font-semibold text-indigo-700 dark:text-indigo-300">
+                          <span className="font-semibold text-green-700 dark:text-green-300">
                             {statementData.partnerStudentCount} partner students
                           </span>
                         ) : (
@@ -1759,7 +1755,7 @@ export function LicensesPanel() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                      <Users className="w-3.5 h-3.5 text-indigo-600" />
+                      <Users className="w-3.5 h-3.5 text-green-600" />
                       Enrolled Students in {statementData.billingMonthLabel} ({statementData.totalStudentCount})
                     </h4>
                     <p className="text-[11px] text-muted-foreground mt-0.5">
@@ -1771,7 +1767,7 @@ export function LicensesPanel() {
                 {statementData.enrollments && statementData.enrollments.length > 0 ? (
                   <div className="rounded-lg border overflow-hidden">
                     <Table>
-                      <TableHeader className="bg-muted/40">
+                      <TableHeader className="[&_tr]:border-0 [&_th]:bg-[#f4f6f3] [&_th:first-child]:rounded-l-full [&_th:last-child]:rounded-r-full">
                         <TableRow>
                           <TableHead className="text-[11px] h-8 font-semibold w-10">#</TableHead>
                           <TableHead className="text-[11px] h-8 font-semibold">Student Name</TableHead>
@@ -1792,7 +1788,7 @@ export function LicensesPanel() {
                             <TableCell className="py-1.5 font-mono text-[11px]">{st.enrollmentNumber}</TableCell>
                             <TableCell className="py-1.5">
                               {st.isPartnerEnrollment ? (
-                                <Badge variant="outline" className="text-[10px] bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300">
+                                <Badge variant="outline" className="text-[10px] bg-green-50 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-300">
                                   Partner: {st.studyCenterName || 'Study Center'}
                                 </Badge>
                               ) : (
@@ -1850,7 +1846,7 @@ export function LicensesPanel() {
                 <Button 
                   type="button" 
                   size="sm" 
-                  className="h-9 text-xs bg-indigo-600 hover:bg-indigo-700 text-white" 
+                  className="h-9 text-xs bg-green-600 hover:bg-green-700 text-white" 
                   onClick={() => handleDownloadStatementPDF(statementData.invoiceNo)}
                 >
                   <Download className="w-4 h-4 mr-1.5" /> Download PDF
@@ -1870,7 +1866,7 @@ export function LicensesPanel() {
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-indigo-600" />
+              <Users className="w-5 h-5 text-green-600" />
               <DialogTitle>
                 Enrollments: {activeOrgEnrollments?.org.name} ({activeOrgEnrollments?.monthLabel})
               </DialogTitle>
@@ -1905,8 +1901,8 @@ export function LicensesPanel() {
             return (
               <div className="space-y-4 pt-1">
                 {/* Information Callout */}
-                <div className="rounded-xl border border-indigo-100 bg-indigo-50/50 dark:bg-indigo-950/20 dark:border-indigo-900/40 p-3 flex items-start gap-2.5 text-xs">
-                  <Info className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                <div className="rounded-xl border border-green-100 bg-green-50/50 dark:bg-green-950/20 dark:border-green-900/40 p-3 flex items-start gap-2.5 text-xs">
+                  <Info className="w-4 h-4 text-green-600 shrink-0 mt-0.5" />
                   <div className="text-muted-foreground">
                     <strong className="text-foreground">Monthly Enrollment Breakdown: </strong>
                     Academic Partner enrollments are billed at {CS()}{details.academicPartnerPerEnrollmentFee}/partner student. Direct admissions are billed at {CS()}{details.directPerEnrollmentFee}/direct student.
@@ -1932,7 +1928,7 @@ export function LicensesPanel() {
                       onClick={() => setEnrollmentsTypeFilter('partner')}
                       className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
                         enrollmentsTypeFilter === 'partner' 
-                          ? 'bg-indigo-600 text-white shadow-xs' 
+                          ? 'bg-green-600 text-white shadow-xs' 
                           : 'bg-background hover:bg-muted text-muted-foreground'
                       }`}
                     >
@@ -1965,7 +1961,7 @@ export function LicensesPanel() {
                 {/* Billed Partner & Direct Usage Summary */}
                 <div className="flex items-center justify-between text-xs px-1 text-muted-foreground">
                   <div>
-                    Partner Students: <strong className="text-foreground">{partnerCount}</strong> × {CS()}{details.academicPartnerPerEnrollmentFee} = <strong className="text-indigo-600 dark:text-indigo-400">{CS()}{(partnerCount * details.academicPartnerPerEnrollmentFee).toLocaleString(numLocale())}</strong>
+                    Partner Students: <strong className="text-foreground">{partnerCount}</strong> × {CS()}{details.academicPartnerPerEnrollmentFee} = <strong className="text-green-600 dark:text-green-400">{CS()}{(partnerCount * details.academicPartnerPerEnrollmentFee).toLocaleString(numLocale())}</strong>
                   </div>
                   <div>
                     Direct Admissions: <strong className="text-foreground">{directCount}</strong> × {CS()}{details.directPerEnrollmentFee} = <strong className="text-foreground">{CS()}{(directCount * details.directPerEnrollmentFee).toLocaleString(numLocale())}</strong>
@@ -1992,7 +1988,7 @@ export function LicensesPanel() {
                 ) : (
                   <div className="rounded-xl border border-border/80 overflow-hidden shadow-xs">
                     <Table>
-                      <TableHeader className="bg-muted/40">
+                      <TableHeader className="[&_tr]:border-0 [&_th]:bg-[#f4f6f3] [&_th:first-child]:rounded-l-full [&_th:last-child]:rounded-r-full">
                         <TableRow>
                           <TableHead className="text-xs font-semibold w-10">#</TableHead>
                           <TableHead className="text-xs font-semibold">Student</TableHead>
@@ -2016,7 +2012,7 @@ export function LicensesPanel() {
                             </TableCell>
                             <TableCell>
                               {st.isPartnerEnrollment ? (
-                                <Badge variant="outline" className="text-[10px] bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300">
+                                <Badge variant="outline" className="text-[10px] bg-green-50 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-300">
                                   Partner: {st.studyCenterName || 'Study Center'}
                                 </Badge>
                               ) : (
@@ -2053,7 +2049,7 @@ export function LicensesPanel() {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="h-7 text-xs text-indigo-600 hover:text-indigo-800"
+                        className="h-7 text-xs text-green-600 hover:text-green-800"
                         onClick={() => handleDownloadEnrollmentsCSV(filteredList, `Enrollments_${org.name.replace(/\s+/g, '_')}_${monthLabel.replace(/\s+/g, '_')}.csv`)}
                       >
                         <Download className="w-3 h-3 mr-1" /> Export CSV
@@ -2067,7 +2063,7 @@ export function LicensesPanel() {
                     <Button 
                       type="button" 
                       size="sm" 
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                      className="bg-green-600 hover:bg-green-700 text-white"
                       onClick={() => {
                         setEnrollmentsDialogOpen(false);
                         handleGenerateBill(org);
@@ -2088,10 +2084,10 @@ export function LicensesPanel() {
 
 
 const TILE_TONES = {
-  indigo: { box: 'border-indigo-200/80 bg-indigo-50/40 dark:border-indigo-900/60 dark:bg-indigo-950/20', icon: 'bg-indigo-600', text: 'text-indigo-700 dark:text-indigo-300' },
-  slate: { box: 'border-slate-200 bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/40', icon: 'bg-slate-700', text: 'text-slate-700 dark:text-slate-300' },
-  sky: { box: 'border-sky-200/80 bg-sky-50/40 dark:border-sky-900/60 dark:bg-sky-950/20', icon: 'bg-sky-600', text: 'text-sky-700 dark:text-sky-300' },
-  emerald: { box: 'border-emerald-200/80 bg-emerald-50/40 dark:border-emerald-900/60 dark:bg-emerald-950/20', icon: 'bg-emerald-600', text: 'text-emerald-700 dark:text-emerald-300' },
+  indigo: { box: 'border-transparent bg-[#f4f6f3] dark:bg-muted/30', icon: 'bg-[#256c1d]', text: 'text-[#256c1d] dark:text-emerald-300' },
+  slate: { box: 'border-transparent bg-[#f4f6f3] dark:bg-muted/30', icon: 'bg-[#0b1d14]', text: 'text-foreground' },
+  sky: { box: 'border-transparent bg-[#f4f6f3] dark:bg-muted/30', icon: 'bg-[#54b947]', text: 'text-[#256c1d] dark:text-emerald-300' },
+  emerald: { box: 'border-transparent bg-[#f4f6f3] dark:bg-muted/30', icon: 'bg-[#8ae47e] !text-[#0b1d14]', text: 'text-[#256c1d] dark:text-emerald-300' },
 } as const;
 
 /** One billable component of an organization's plan: what it is, how it is priced, what it adds to the bill. */
@@ -2106,7 +2102,7 @@ function ComponentTile({ icon: Icon, tone, title, enabled, amount, lines }: {
   const t = TILE_TONES[tone];
   if (!enabled) {
     return (
-      <div className="rounded-xl border border-dashed border-border/80 p-3.5 opacity-60">
+      <div className="rounded-2xl border border-dashed border-slate-300 p-4 opacity-60">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg bg-muted text-muted-foreground flex items-center justify-center"><Icon className="w-3.5 h-3.5" /></div>
           <span className="text-sm font-medium text-muted-foreground">{title}</span>
@@ -2116,12 +2112,12 @@ function ComponentTile({ icon: Icon, tone, title, enabled, amount, lines }: {
     );
   }
   return (
-    <div className={`rounded-xl border p-3.5 ${t.box}`}>
+    <div className={`rounded-2xl border p-4 ${t.box}`}>
       <div className="flex items-center gap-2">
-        <div className={`w-7 h-7 rounded-lg text-white flex items-center justify-center ${t.icon}`}><Icon className="w-3.5 h-3.5" /></div>
+        <div className={`w-8 h-8 rounded-full text-white flex items-center justify-center ${t.icon}`}><Icon className="w-3.5 h-3.5" /></div>
         <span className="text-sm font-medium">{title}</span>
       </div>
-      <p className={`mt-3 text-lg font-bold tracking-tight ${t.text}`}>{CS()}{amount.toLocaleString(numLocale())}</p>
+      <p className={`mt-3 text-xl font-semibold tracking-tight ${t.text}`}>{CS()}{amount.toLocaleString(numLocale())}</p>
       <div className="mt-1 space-y-0.5">
         {lines.map(l => <p key={l} className="text-[11px] text-muted-foreground">{l}</p>)}
       </div>

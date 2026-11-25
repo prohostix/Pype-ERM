@@ -198,24 +198,24 @@ export function UniversitiesPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         <div>
-          <h2 className="text-2xl font-bold">University Management</h2>
-          <p className="text-muted-foreground">Manage affiliated universities and institutions</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">University Management</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Manage affiliated universities and institutions</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
           {isOrgAdmin && (
             <DialogTrigger asChild>
-              <Button><Plus className="w-4 h-4 mr-2" />Add University</Button>
+              <Button className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm"><Plus className="w-4 h-4" />Add University</Button>
             </DialogTrigger>
           )}
-          <DialogContent className="max-w-3xl max-h-[90vh] p-0 gap-0 flex flex-col overflow-hidden">
-            <DialogHeader className="px-6 pt-5 pb-3 border-b">
-              <DialogTitle className="flex items-center gap-2">
-                <span className="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center"><Building2 className="h-4 w-4 text-white" /></span>
+          <DialogContent className="w-[96vw] sm:max-w-3xl max-h-[92vh] p-0 gap-0 flex flex-col overflow-hidden rounded-[2rem] border-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+            <DialogHeader className="px-6 sm:px-8 pt-7 pb-4 space-y-3 text-left">
+              <DialogTitle className="flex items-center gap-4 text-2xl font-semibold tracking-tight text-left">
+                <span className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Building2 className="h-5 w-5" /></span>
                 {editingId ? 'Edit University' : 'Add New University'}
               </DialogTitle>
-              <div className="flex gap-1 pt-3 -mb-3" role="tablist">
+              <div className="flex gap-1.5" role="tablist">
                 {([
                   ['details', 'Details', true],
                   ['form', 'Enrollment Form', isOrgAdmin],
@@ -227,7 +227,7 @@ export function UniversitiesPanel() {
                     role="tab"
                     aria-selected={dialogTab === key}
                     onClick={() => setDialogTab(key)}
-                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${dialogTab === key ? 'border-cyan-600 text-cyan-700' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
+                    className={`px-5 py-2 text-sm font-semibold rounded-full transition-colors ${dialogTab === key ? 'bg-[#0b1d14] text-white' : 'bg-[#f4f6f3] text-slate-600 hover:bg-[#eaf6e6]'}`}
                   >
                     {label}
                   </button>
@@ -235,12 +235,12 @@ export function UniversitiesPanel() {
               </div>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="flex flex-col min-h-0 flex-1">
-              <div className="flex-1 overflow-y-auto px-6 py-5">
+              <div className="flex-1 overflow-y-auto px-6 sm:px-8 py-5 border-t border-slate-100">
               <div className={dialogTab === 'details' ? 'space-y-4' : 'hidden'}>
-              <div className="rounded-xl border bg-slate-50 dark:bg-slate-900 p-4">
-                <Label>University Logo</Label>
+              <div className="rounded-3xl bg-[#f4f6f3] dark:bg-slate-900 p-5">
+                <Label className="font-semibold">University logo</Label>
                 <div className="mt-2 flex items-center gap-4">
-                  <div className="w-16 h-16 rounded border bg-slate-50 flex items-center justify-center overflow-hidden">
+                  <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center overflow-hidden">
                     {formData.logo ? (
                       <img src={api.getFileUrl(formData.logo)} alt="Logo" className="w-full h-full object-contain" />
                     ) : (
@@ -425,14 +425,14 @@ export function UniversitiesPanel() {
 
               {/* ── Branch Access ── */}
               {isOrgAdmin && branches.length > 0 && (
-                <div className={`rounded-xl border-2 border-dashed border-cyan-200 bg-cyan-50/40 p-4 space-y-3 ${dialogTab === 'access' ? '' : 'hidden'}`}>
+                <div className={`rounded-xl border-2 border-dashed border-teal-200 bg-teal-50/40 p-4 space-y-3 ${dialogTab === 'access' ? '' : 'hidden'}`}>
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-cyan-600 flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-lg bg-teal-600 flex items-center justify-center">
                       <GitBranch className="h-4 w-4 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-cyan-900">Branch Access Control</p>
-                      <p className="text-xs text-cyan-700">Who can see and use this university?</p>
+                      <p className="text-sm font-semibold text-teal-900">Branch Access Control</p>
+                      <p className="text-xs text-teal-700">Who can see and use this university?</p>
                     </div>
                   </div>
 
@@ -465,10 +465,10 @@ export function UniversitiesPanel() {
                     <button type="button"
                       onClick={() => setAccessMode('multi')}
                       className={`rounded-lg border-2 p-3 text-left transition-all ${accessMode === 'multi'
-                          ? 'border-cyan-500 bg-cyan-50'
-                          : 'border-slate-200 bg-white hover:border-cyan-300'}`}>
-                      <GitBranch className={`h-5 w-5 mb-1 ${accessMode === 'multi' ? 'text-cyan-600' : 'text-slate-400'}`} />
-                      <p className={`text-xs font-semibold ${accessMode === 'multi' ? 'text-cyan-700' : 'text-slate-600'}`}>
+                          ? 'border-teal-500 bg-teal-50'
+                          : 'border-slate-200 bg-white hover:border-teal-300'}`}>
+                      <GitBranch className={`h-5 w-5 mb-1 ${accessMode === 'multi' ? 'text-teal-600' : 'text-slate-400'}`} />
+                      <p className={`text-xs font-semibold ${accessMode === 'multi' ? 'text-teal-700' : 'text-slate-600'}`}>
                         Select Branches
                       </p>
                       <p className="text-[10px] text-muted-foreground mt-0.5">Pick 2 or more</p>
@@ -477,10 +477,10 @@ export function UniversitiesPanel() {
                     <button type="button"
                       onClick={() => { setAccessMode('academic_partners'); setSelectedBranchIds([]); }}
                       className={`rounded-lg border-2 p-3 text-left transition-all ${accessMode === 'academic_partners'
-                          ? 'border-purple-500 bg-purple-50'
-                          : 'border-slate-200 bg-white hover:border-purple-300'}`}>
-                      <Building2 className={`h-5 w-5 mb-1 ${accessMode === 'academic_partners' ? 'text-purple-600' : 'text-slate-400'}`} />
-                      <p className={`text-xs font-semibold ${accessMode === 'academic_partners' ? 'text-purple-700' : 'text-slate-600'}`}>
+                          ? 'border-lime-500 bg-lime-50'
+                          : 'border-slate-200 bg-white hover:border-lime-300'}`}>
+                      <Building2 className={`h-5 w-5 mb-1 ${accessMode === 'academic_partners' ? 'text-lime-600' : 'text-slate-400'}`} />
+                      <p className={`text-xs font-semibold ${accessMode === 'academic_partners' ? 'text-lime-700' : 'text-slate-600'}`}>
                         Academic Partners
                       </p>
                       <p className="text-[10px] text-muted-foreground mt-0.5">Partner allocation only</p>
@@ -499,9 +499,9 @@ export function UniversitiesPanel() {
 
                   {/* Academic Partners — confirmation note */}
                   {accessMode === 'academic_partners' && (
-                    <div className="flex items-start gap-2 bg-purple-50 border border-purple-200 rounded-lg px-3 py-2">
-                      <Building2 className="h-4 w-4 text-purple-600 mt-0.5 shrink-0" />
-                      <p className="text-xs text-purple-800">
+                    <div className="flex items-start gap-2 bg-lime-50 border border-lime-200 rounded-lg px-3 py-2">
+                      <Building2 className="h-4 w-4 text-lime-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-lime-800">
                         This university is reserved for <strong>Academic Partners</strong>. It won't appear in regular operations lists.
                       </p>
                     </div>
@@ -548,7 +548,7 @@ export function UniversitiesPanel() {
                           return (
                             <label key={b.id}
                               className="flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-slate-50 transition-colors">
-                              <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${checked ? 'bg-cyan-600 border-cyan-600' : 'border-slate-300'}`}
+                              <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${checked ? 'bg-teal-600 border-teal-600' : 'border-slate-300'}`}
                                 onClick={() => setSelectedBranchIds(prev =>
                                   prev.includes(b.id) ? prev.filter(x => x !== b.id) : [...prev, b.id]
                                 )}>
@@ -561,9 +561,9 @@ export function UniversitiesPanel() {
                         })}
                       </div>
                       {selectedBranchIds.length > 0 ? (
-                        <div className="flex items-start gap-2 bg-cyan-50 border border-cyan-200 rounded-lg px-3 py-2">
-                          <GitBranch className="h-4 w-4 text-cyan-600 mt-0.5 shrink-0" />
-                          <p className="text-xs text-cyan-800">
+                        <div className="flex items-start gap-2 bg-teal-50 border border-teal-200 rounded-lg px-3 py-2">
+                          <GitBranch className="h-4 w-4 text-teal-600 mt-0.5 shrink-0" />
+                          <p className="text-xs text-teal-800">
                             Accessible by <strong>{selectedBranchIds.length} branch{selectedBranchIds.length > 1 ? 'es' : ''}</strong>.
                             Branches not selected won't see this university.
                           </p>
@@ -589,9 +589,9 @@ export function UniversitiesPanel() {
 
       {/* ── Grouped university list ── */}
       {loading ? (
-        <div className="text-center py-16 text-muted-foreground">Loading...</div>
+        <div className="space-y-4">{[1, 2, 3].map(i => <div key={i} className="h-24 bg-[#f4f6f3] rounded-3xl animate-pulse" />)}</div>
       ) : universities.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">No universities found</div>
+        <div className="rounded-3xl border border-dashed border-slate-300 bg-white py-16 text-center text-muted-foreground"><span className="w-14 h-14 rounded-full bg-[#f4f6f3] flex items-center justify-center mx-auto mb-3"><Building2 className="w-6 h-6" /></span>No universities found</div>
       ) : (() => {
         // Build groups
         // 1. "All Branches" — universities with no branch restriction
@@ -610,28 +610,28 @@ export function UniversitiesPanel() {
         });
 
         const UniRow = ({ u }: { u: University }) => (
-          <div className="flex items-center justify-between px-4 py-3 hover:bg-muted/40 transition-colors">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 px-5 py-4 hover:bg-[#f4f6f3] transition-colors">
             <div className="flex items-center gap-3 cursor-pointer flex-1" onClick={() => setSelectedUniversity(u)}>
-              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden border">
+              <div className="w-11 h-11 rounded-2xl bg-[#eaf6e6] flex items-center justify-center shrink-0 overflow-hidden">
                 {u.logo ? (
                   <img src={api.getFileUrl(u.logo)} alt={u.name} className="w-full h-full object-contain bg-white" />
                 ) : (
-                  <Building2 className="w-4 h-4 text-primary" />
+                  <Building2 className="w-4 h-4 text-[#256c1d]" />
                 )}
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <p className="font-medium text-sm hover:underline">{u.name}</p>
+                  <p className="font-semibold text-base hover:text-[#256c1d] transition-colors">{u.name}</p>
                   {u.isAcademicPartnerOnly ? (
-                    <Badge variant="outline" className="text-[10px] h-5 px-1.5 bg-purple-50 text-purple-700 border-purple-200">
+                    <Badge variant="outline" className="text-[11px] h-6 px-2.5 rounded-full bg-[#f1f3ef] text-slate-600 border-transparent">
                       Academic Partner
                     </Badge>
                   ) : (u.allowedBranchIds || []).length === 0 ? (
-                    <Badge variant="outline" className="text-[10px] h-5 px-1.5 bg-green-50 text-green-700 border-green-200">All Branches</Badge>
+                    <Badge variant="outline" className="text-[11px] h-6 px-2.5 rounded-full bg-[#e3f7dd] text-[#1f6a17] border-transparent">All Branches</Badge>
                   ) : (u.allowedBranchIds || []).length === 1 ? (
-                    <Badge variant="outline" className="text-[10px] h-5 px-1.5 bg-amber-50 text-amber-700 border-amber-200" title={`Exclusive to ${(u.allowedBranchIds as any)[0]?.name}`}>Branch Specific</Badge>
+                    <Badge variant="outline" className="text-[11px] h-6 px-2.5 rounded-full bg-amber-50 text-amber-700 border-transparent" title={`Exclusive to ${(u.allowedBranchIds as any)[0]?.name}`}>Branch Specific</Badge>
                   ) : (
-                    <Badge variant="outline" className="text-[10px] h-5 px-1.5 bg-cyan-50 text-cyan-700 border-cyan-200">Multi-Branch ({(u.allowedBranchIds || []).length})</Badge>
+                    <Badge variant="outline" className="text-[11px] h-6 px-2.5 rounded-full bg-[#eaf6e6] text-[#256c1d] border-transparent">Multi-Branch ({(u.allowedBranchIds || []).length})</Badge>
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5">
@@ -640,19 +640,19 @@ export function UniversitiesPanel() {
               </div>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <Badge variant={u.status === 'active' ? 'default' : 'secondary'} className="text-xs">{u.status}</Badge>
+              <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full capitalize ${u.status === 'active' ? 'bg-[#e3f7dd] text-[#1f6a17]' : 'bg-slate-100 text-slate-600'}`}><span className={`w-1.5 h-1.5 rounded-full ${u.status === 'active' ? 'bg-[#54b947]' : 'bg-slate-400'}`} />{u.status}</span>
               {isOrgAdmin && (
                 <>
-                  <div className="h-4 border-l mx-1 border-slate-300"></div>
-                  <Button variant="ghost" size="sm" className="text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50" onClick={() => setAddProgramUniId(u.id)} title="Add Program">
+                  <div className="h-5 border-l mx-1 border-slate-200"></div>
+                  <Button variant="outline" size="sm" className="h-9 px-4 rounded-full bg-white border-slate-200 text-slate-700 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => setAddProgramUniId(u.id)} title="Add Program">
                     <BookOpen className="w-3.5 h-3.5 mr-1" /> Program
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50" onClick={() => setManageSessionsUni(u)} title="Sessions">
+                  <Button variant="outline" size="sm" className="h-9 px-4 rounded-full bg-white border-slate-200 text-slate-700 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => setManageSessionsUni(u)} title="Sessions">
                     <Calendar className="w-3.5 h-3.5 mr-1" /> Session
                   </Button>
-                  <div className="h-4 border-l mx-1 border-slate-300"></div>
-                  <Button variant="ghost" size="sm" onClick={() => handleEdit(u)}><Edit className="w-3.5 h-3.5" /></Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleDelete(u.id)}><Trash2 className="w-3.5 h-3.5" /></Button>
+                  <div className="h-5 border-l mx-1 border-slate-200"></div>
+                  <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => handleEdit(u)} title="Edit"><Edit className="w-3.5 h-3.5" /></Button>
+                  <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white border-slate-200 text-rose-500 hover:bg-rose-50 hover:text-rose-600" onClick={() => handleDelete(u.id)} title="Delete"><Trash2 className="w-3.5 h-3.5" /></Button>
                 </>
               )}
             </div>
@@ -660,16 +660,16 @@ export function UniversitiesPanel() {
         );
 
         return (
-          <div className="space-y-4">
+          <div className="space-y-5">
             {/* All-branches section */}
             {globalUnis.length > 0 && (
-              <div className="border rounded-xl overflow-hidden">
-                <div className="flex items-center gap-2 px-4 py-3 bg-slate-50 border-b">
-                  <Globe className="h-4 w-4 text-slate-500" />
-                  <span className="text-sm font-semibold text-slate-700">All Branches</span>
+              <div className="rounded-3xl bg-white dark:bg-card overflow-hidden shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_28px_-14px_rgba(16,24,40,0.10)]">
+                <div className="flex items-center gap-3 px-5 py-4 bg-[#f4f6f3]">
+                  <span className="w-9 h-9 rounded-full bg-white flex items-center justify-center"><Globe className="h-4 w-4 text-[#256c1d]" /></span>
+                  <span className="text-base font-semibold text-foreground">All Branches</span>
                   <span className="ml-auto text-xs text-muted-foreground">{globalUnis.length} universit{globalUnis.length > 1 ? 'ies' : 'y'}</span>
                 </div>
-                <div className="divide-y">
+                <div className="divide-y divide-slate-100 dark:divide-white/10">
                   {globalUnis.map(u => <UniRow key={u.id} u={u} />)}
                 </div>
               </div>
@@ -677,21 +677,19 @@ export function UniversitiesPanel() {
 
             {/* Per-branch sections */}
             {Array.from(branchMap.values()).map(({ branch, unis }) => (
-              <div key={branch.id} className="border-2 rounded-xl overflow-hidden" style={{ borderColor: '#0891b233' }}>
-                <div className="flex items-center gap-2 px-4 py-3 border-b" style={{ background: '#0891b211' }}>
-                  <div className="w-6 h-6 rounded-lg bg-cyan-600 flex items-center justify-center">
-                    <GitBranch className="h-3.5 w-3.5 text-white" />
-                  </div>
-                  <span className="text-sm font-semibold text-cyan-900">{branch.name}</span>
-                  <span className="text-xs font-mono text-cyan-600 bg-cyan-100 px-1.5 py-0.5 rounded">{branch.code}</span>
+              <div key={branch.id} className="rounded-3xl bg-white dark:bg-card overflow-hidden shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_28px_-14px_rgba(16,24,40,0.10)]">
+                <div className="flex items-center gap-3 px-5 py-4 bg-[#eaf6e6]">
+                  <span className="w-9 h-9 rounded-full bg-white flex items-center justify-center"><GitBranch className="h-4 w-4 text-[#256c1d]" /></span>
+                  <span className="text-base font-semibold text-foreground">{branch.name}</span>
+                  <span className="text-xs font-mono text-slate-600 bg-white px-2.5 py-0.5 rounded-full">{branch.code}</span>
                   {unis.length === 1 && unis[0].allowedBranchIds.length === 1 && (
-                    <span className="flex items-center gap-1 text-[10px] font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full ml-1">
+                    <span className="flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full ml-1">
                       <Lock className="h-2.5 w-2.5" /> Exclusive
                     </span>
                   )}
                   <span className="ml-auto text-xs text-muted-foreground">{unis.length} universit{unis.length > 1 ? 'ies' : 'y'}</span>
                 </div>
-                <div className="divide-y">
+                <div className="divide-y divide-slate-100 dark:divide-white/10">
                   {unis.map(u => <UniRow key={u.id} u={u} />)}
                 </div>
               </div>

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, BookOpen, Calendar, Plus } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { ProgramDetailPanel } from './ProgramDetailPanel';
@@ -65,105 +64,103 @@ export function UniversityDetailPanel({ university, onBack }: UniversityDetailPa
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" onClick={onBack} size="sm">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Back to Universities
-        </Button>
-      </div>
+      <Button variant="outline" onClick={onBack} className="h-10 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6] font-semibold gap-2">
+        <ArrowLeft className="w-4 h-4" /> Back to Universities
+      </Button>
 
-      <div className="flex items-center gap-4">
-        {university.logo ? (
-          <div className="w-16 h-16 rounded-lg bg-white border overflow-hidden shrink-0">
-            <img src={api.getFileUrl(university.logo)} alt={university.name} className="w-full h-full object-contain" />
+      <div className="rounded-3xl bg-white border border-slate-100 p-5 sm:p-6 flex items-center gap-5">
+        {university.logo && (
+          <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 overflow-hidden shrink-0">
+            <img src={api.getFileUrl(university.logo)} alt={university.name} className="w-full h-full object-contain p-1" />
           </div>
-        ) : null}
-        <div>
-          <h2 className="text-2xl font-bold">{university.name}</h2>
-          <p className="text-muted-foreground">{university.code} {university.contact ? `• ${university.contact}` : ''} {university.address ? `• ${university.address}` : ''}</p>
+        )}
+        <div className="min-w-0">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight truncate">{university.name}</h2>
+          <div className="flex flex-wrap items-center gap-2 mt-2">
+            {university.code && <span className="rounded-full bg-[#f4f6f3] px-3 py-1 text-xs font-semibold font-mono text-slate-700">{university.code}</span>}
+            {university.contact && <span className="text-sm text-muted-foreground">{university.contact}</span>}
+            {university.address && <span className="text-sm text-muted-foreground">{university.address}</span>}
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
         {/* Programs List */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-indigo-600" />
-              Programs ({programs.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+            <h3 className="text-lg font-semibold tracking-tight">Programs</h3>
+            <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{programs.length}</span>
+          </div>
+          <div className="p-4 sm:p-5">
             {loading ? (
-              <div className="text-center py-4 text-muted-foreground">Loading...</div>
+              <div className="space-y-3">{[1, 2].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
             ) : programs.length === 0 ? (
-              <div className="text-center py-4 text-muted-foreground">No programs found for this university.</div>
+              <div className="text-center py-10 text-sm text-muted-foreground">No programs found for this university.</div>
             ) : (
               <div className="space-y-3">
                 {programs.map((p: any) => (
-                  <div key={p.id} onClick={() => setSelectedProgramId(p.id)} className="p-3 border rounded-lg hover:bg-slate-50 transition-colors cursor-pointer group">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-semibold text-sm">{p.name}</p>
-                        <p className="text-xs font-mono text-muted-foreground">{p.code}</p>
+                  <div key={p.id} onClick={() => setSelectedProgramId(p.id)} className="p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors cursor-pointer">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="font-semibold text-slate-900 truncate">{p.name}</p>
+                        <p className="text-xs font-mono text-muted-foreground mt-0.5">{p.code}</p>
                       </div>
-                      <Badge variant="secondary" className="text-[10px]">{p.courseType}</Badge>
+                      <Badge className="rounded-full border-0 bg-white text-slate-700 text-[11px] font-semibold px-3 hover:bg-white shrink-0">{p.courseType}</Badge>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Sessions List */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Calendar className="w-5 h-5 text-emerald-600" />
-              Admission Sessions ({sessions.length})
-            </CardTitle>
+        <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-6 py-5 flex items-center justify-between gap-3 border-b border-slate-100">
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-semibold tracking-tight">Admission Sessions</h3>
+              <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{sessions.length}</span>
+            </div>
             <Button
-              size="sm"
               variant="outline"
-              className="h-8 gap-1 text-emerald-700 border-emerald-200 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400"
+              className="h-10 rounded-full px-5 gap-1 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold"
               onClick={() => setManageSessionsOpen(true)}
             >
               <Plus className="w-3.5 h-3.5" /> Manage &amp; Create
             </Button>
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div className="p-4 sm:p-5">
             {loading ? (
-              <div className="text-center py-4 text-muted-foreground">Loading...</div>
+              <div className="space-y-3">{[1, 2].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
             ) : sessions.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground space-y-3">
-                <p>No sessions found for this university.</p>
+              <div className="text-center py-10 text-muted-foreground space-y-4">
+                <p className="text-sm">No sessions found for this university.</p>
                 <Button
-                  size="sm"
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1"
+                  className="h-11 px-6 rounded-full gap-1 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
                   onClick={() => setManageSessionsOpen(true)}
                 >
-                  <Plus className="w-3.5 h-3.5" /> Create Session
+                  <Plus className="w-4 h-4" /> Create Session
                 </Button>
               </div>
             ) : (
               <div className="space-y-3">
                 {sessions.map((s: any) => (
-                  <div key={s.id} className="p-3 border rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-semibold text-sm">{s.name}</p>
-                        <p className="text-xs text-muted-foreground">
+                  <div key={s.id} className="p-4 rounded-2xl bg-[#f4f6f3]">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="font-semibold text-slate-900 truncate">{s.name}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           {s.startDate && new Date(s.startDate).toLocaleDateString()} - {s.endDate && new Date(s.endDate).toLocaleDateString()}
                         </p>
                       </div>
-                      <Badge className="text-[10px]">{s.status}</Badge>
+                      <Badge className="rounded-full border-0 bg-[#dff3da] text-[#256c1d] text-[11px] font-semibold px-3 capitalize hover:bg-[#dff3da] shrink-0">{s.status}</Badge>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       <UniversitySessionsDialog

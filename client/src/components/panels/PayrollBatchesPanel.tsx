@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CheckCircle, XCircle, CreditCard, RefreshCw } from 'lucide-react';
+import { CreditCard, RefreshCw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -118,11 +118,11 @@ export function PayrollBatchesPanel() {
 
   const getStatusColor = (status: string) => {
     const map: Record<string, string> = {
-      pending_finance_approval: 'bg-yellow-100 text-yellow-800',
-      approved_by_finance: 'bg-blue-100 text-blue-800',
-      payment_in_progress: 'bg-orange-100 text-orange-800',
-      completed: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
+      pending_finance_approval: 'bg-amber-100 text-amber-700',
+      approved_by_finance: 'bg-sky-100 text-sky-700',
+      payment_in_progress: 'bg-orange-100 text-orange-700',
+      completed: 'bg-[#dff3da] text-[#256c1d]',
+      rejected: 'bg-red-100 text-red-700',
     };
     return map[status] || 'bg-gray-100 text-gray-800';
   };
@@ -132,57 +132,57 @@ export function PayrollBatchesPanel() {
     : batches.filter(b => b.status === activeTab);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Payroll Batches</h2>
-          <p className="text-muted-foreground">Review and process payroll batches from HR</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Payroll Batches</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Review and process payroll batches from HR</p>
         </div>
-        <Button variant="outline" onClick={fetchBatches}>
+        <Button variant="outline" onClick={fetchBatches} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
           <RefreshCw className="w-4 h-4 mr-2" />
           Refresh
         </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="pending_finance_approval">Pending Approval</TabsTrigger>
-          <TabsTrigger value="approved_by_finance">Approved</TabsTrigger>
-          <TabsTrigger value="payment_in_progress">In Progress</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
-          <TabsTrigger value="rejected">Rejected</TabsTrigger>
+        <TabsList className="flex-wrap h-auto gap-1.5 bg-white p-2 rounded-3xl border border-slate-100 w-fit max-w-full">
+          <TabsTrigger value="all" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">All</TabsTrigger>
+          <TabsTrigger value="pending_finance_approval" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Pending Approval</TabsTrigger>
+          <TabsTrigger value="approved_by_finance" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Approved</TabsTrigger>
+          <TabsTrigger value="payment_in_progress" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">In Progress</TabsTrigger>
+          <TabsTrigger value="completed" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Completed</TabsTrigger>
+          <TabsTrigger value="rejected" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Rejected</TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeTab}>
-          <Card>
-            <CardHeader>
-              <CardTitle>Payroll Batches</CardTitle>
+          <Card className="mt-4 rounded-3xl bg-white border border-slate-100 shadow-none py-6 gap-5">
+            <CardHeader className="px-6">
+              <CardTitle className="text-lg font-semibold tracking-tight">Payroll Batches</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-6">
               {loading ? (
-                <div className="text-center py-8">Loading...</div>
+                <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
               ) : filteredBatches.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
-                  <CreditCard className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p>No payroll batches found</p>
+                  <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><CreditCard className="w-6 h-6" /></div>
+                  <p className="font-medium text-slate-900">No payroll batches found</p>
                   <p className="text-sm">HR will transfer payroll batches here for approval</p>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {filteredBatches.map((batch) => {
                     const bid = batch.id || batch.id || '';
                     return (
-                      <div key={bid} className="border rounded-lg hover:border-primary/30 transition-colors overflow-hidden">
-                        <div className="flex items-center justify-between p-4 bg-card hover:bg-muted/30 transition-colors">
+                      <div key={bid} className="rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors overflow-hidden">
+                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-1">
-                            <span className="font-semibold">Month: {batch.month}</span>
-                            <Badge className={getStatusColor(batch.status)}>
+                            <span className="font-semibold text-slate-900">Month: {batch.month}</span>
+                            <Badge className={`rounded-full border-0 px-3 ${getStatusColor(batch.status)}`}>
                               {batch.status.replace(/_/g, ' ')}
                             </Badge>
                           </div>
-                          <div className="text-sm text-muted-foreground flex gap-4">
+                          <div className="text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-1">
                             <span>{batch.employeeCount} employees</span>
                             <span className="font-medium text-foreground">
                               Total: {CS()}{batch.totalAmount?.toLocaleString()}
@@ -202,28 +202,26 @@ export function PayrollBatchesPanel() {
                             </p>
                           )}
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap">
                           {isFinance && batch.status === 'pending_finance_approval' && (
                             <>
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="text-green-600"
+                                className="h-9 rounded-full px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold border-0"
                                 onClick={() => handleApprove(bid)}
                               >
-                                <CheckCircle className="w-3 h-3 mr-1" />
                                 Approve
                               </Button>
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="text-red-600"
+                                className="h-9 rounded-full px-4 text-red-600 border-red-200 bg-white hover:bg-red-50"
                                 onClick={() => {
                                   setSelectedBatch(batch);
                                   setRejectDialogOpen(true);
                                 }}
                               >
-                                <XCircle className="w-3 h-3 mr-1" />
                                 Reject
                               </Button>
                             </>
@@ -232,43 +230,43 @@ export function PayrollBatchesPanel() {
                             <Button
                               size="sm"
                               variant="outline"
+                              className="h-9 rounded-full px-4 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold"
                               onClick={() => handleStartPayment(bid)}
                             >
-                              <CreditCard className="w-3 h-3 mr-1" />
                               Start Payment
                             </Button>
                           )}
                           {isFinance && batch.status === 'payment_in_progress' && (
                             <Button
                               size="sm"
+                              className="h-9 rounded-full px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
                               onClick={() => {
                                 setSelectedBatch(batch);
                                 setPaymentDialogOpen(true);
                               }}
                             >
-                              <CheckCircle className="w-3 h-3 mr-1" />
                               Complete Payment
                             </Button>
                           )}
-                          <Button size="sm" variant="ghost" onClick={() => setExpandedBatch(expandedBatch === bid ? null : bid)}>
+                          <Button size="sm" variant="ghost" className="h-9 rounded-full px-4 text-[#256c1d] hover:bg-white font-semibold" onClick={() => setExpandedBatch(expandedBatch === bid ? null : bid)}>
                             {expandedBatch === bid ? 'Hide Details' : 'View Details'}
                           </Button>
                         </div>
                       </div>
                       
                       {expandedBatch === bid && (batch as any).payrolls && (
-                        <div className="p-4 bg-muted/20 border-t space-y-3">
-                          <h4 className="font-semibold text-sm mb-2 border-b pb-2">Employee Breakdown</h4>
+                        <div className="p-4 bg-white/60 border-t border-slate-200/60 space-y-3">
+                          <h4 className="font-semibold text-sm mb-2 border-b border-slate-200 pb-2">Employee Breakdown</h4>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[400px] overflow-y-auto pr-2">
                             {(batch as any).payrolls.map((p: any) => (
-                              <div key={p.id} className="bg-background p-3 rounded-md border text-xs">
+                              <div key={p.id} className="bg-white p-4 rounded-2xl text-xs">
                                 <div className="flex justify-between font-semibold mb-2">
                                   <span>{p.user?.name || 'Employee'} ({p.user?.employeeProfile?.employeeId || p.employeeId})</span>
-                                  <span className="text-primary">Net: {CS()}{p.netSalary?.toLocaleString()}</span>
+                                  <span className="text-[#256c1d]">Net: {CS()}{p.netSalary?.toLocaleString()}</span>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
                                   <div>
-                                    <p className="text-emerald-600 font-medium border-b mb-1 pb-0.5">Earnings</p>
+                                    <p className="text-[#256c1d] font-medium border-b border-slate-100 mb-1 pb-0.5">Earnings</p>
                                     <div className="flex justify-between"><span>Basic:</span><span>{CS()}{p.basicSalary?.toLocaleString()}</span></div>
                                     {Object.entries(p.allowances || {}).map(([k, v]) => (
                                       <div key={k} className="flex justify-between"><span className="capitalize">{k}:</span><span>{CS()}{Number(v).toLocaleString()}</span></div>
@@ -277,7 +275,7 @@ export function PayrollBatchesPanel() {
                                     {p.overtime > 0 && <div className="flex justify-between"><span>Overtime:</span><span>{CS()}{p.overtime.toLocaleString()}</span></div>}
                                   </div>
                                   <div>
-                                    <p className="text-rose-600 font-medium border-b mb-1 pb-0.5">Deductions</p>
+                                    <p className="text-red-600 font-medium border-b border-slate-100 mb-1 pb-0.5">Deductions</p>
                                     {Object.entries(p.deductions || {}).map(([k, v]) => (
                                       <div key={k} className="flex justify-between"><span className="capitalize">{k}:</span><span>{CS()}{Number(v).toLocaleString()}</span></div>
                                     ))}
@@ -301,11 +299,11 @@ export function PayrollBatchesPanel() {
 
       {/* Reject Dialog */}
       <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Reject Payroll Batch</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Reject Payroll Batch</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-4 pt-2">
             <div>
               <Label>Rejection Reason *</Label>
               <Input
@@ -315,8 +313,8 @@ export function PayrollBatchesPanel() {
               />
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setRejectDialogOpen(false)}>Cancel</Button>
-              <Button variant="destructive" onClick={handleReject}>Reject Batch</Button>
+              <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setRejectDialogOpen(false)}>Cancel</Button>
+              <Button className="h-11 px-6 rounded-full bg-red-600 hover:bg-red-700 text-white font-semibold" onClick={handleReject}>Reject Batch</Button>
             </div>
           </div>
         </DialogContent>
@@ -324,9 +322,9 @@ export function PayrollBatchesPanel() {
 
       {/* Complete Payment Dialog */}
       <Dialog open={paymentDialogOpen} onOpenChange={setPaymentDialogOpen}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Complete Batch Payment</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Complete Batch Payment</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
@@ -340,7 +338,7 @@ export function PayrollBatchesPanel() {
             <div>
               <Label>Payment Method</Label>
               <select
-                className="w-full border rounded-md px-3 py-2 text-sm"
+                className="w-full h-11 rounded-xl border border-transparent bg-[#f4f6f3] px-3 text-sm outline-none focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
                 value={paymentData.paymentMethod}
                 onChange={(e) => setPaymentData({ ...paymentData, paymentMethod: e.target.value })}
               >
@@ -358,8 +356,8 @@ export function PayrollBatchesPanel() {
               />
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setPaymentDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleCompletePayment}>Mark as Paid</Button>
+              <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setPaymentDialogOpen(false)}>Cancel</Button>
+              <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleCompletePayment}>Mark as Paid</Button>
             </div>
           </div>
         </DialogContent>

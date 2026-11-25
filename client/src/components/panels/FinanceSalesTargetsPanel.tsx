@@ -35,10 +35,10 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const progressColor = (pct: number) => {
-  if (pct >= 100) return 'bg-success';
-  if (pct >= 60) return 'bg-primary';
-  if (pct >= 30) return 'bg-warning';
-  return 'bg-error';
+  if (pct >= 100) return 'bg-[#54b947]';
+  if (pct >= 60) return 'bg-[#8ae47e]';
+  if (pct >= 30) return 'bg-amber-400';
+  return 'bg-red-400';
 };
 
 export function FinanceSalesTargetsPanel() {
@@ -149,18 +149,18 @@ export function FinanceSalesTargetsPanel() {
     : 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 wizard-form fee-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Sales Targets</h2>
-          <p className="text-sm text-muted-foreground mt-1">Assign and track targets for the sales team</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Sales Targets</h2>
+          <p className="text-sm text-muted-foreground mt-1.5">Assign and track targets for the sales team</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={fetchAll} disabled={loading}>
+          <Button variant="outline" onClick={fetchAll} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />
             Refresh
           </Button>
-          <Button size="sm" onClick={openCreate}>
+          <Button onClick={openCreate} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
             <Plus className="w-4 h-4 mr-2" />
             Assign Target
           </Button>
@@ -168,48 +168,34 @@ export function FinanceSalesTargetsPanel() {
       </div>
 
       {/* Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-primary/10 text-primary"><Target className="w-5 h-5" /></div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {[
+          { label: 'Total Targets', value: String(totalTargets), icon: Target, box: 'bg-[#f4f6f3] text-slate-600' },
+          { label: 'Achieved 100%', value: String(achieved100), icon: TrendingUp, box: 'bg-[#eaf6e6] text-[#256c1d]' },
+          { label: 'Avg Progress', value: `${avgProgress}%`, icon: Users, box: 'bg-amber-50 text-amber-600' },
+        ].map(({ label, value, icon: Icon, box }) => (
+          <div key={label} className="rounded-3xl bg-white border border-slate-100 p-6 flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs text-muted-foreground uppercase font-medium">Total Targets</p>
-              <p className="text-2xl font-bold">{totalTargets}</p>
+              <p className="text-xs font-medium text-slate-500">{label}</p>
+              <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-1">{value}</p>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-success/10 text-success"><TrendingUp className="w-5 h-5" /></div>
-            <div>
-              <p className="text-xs text-muted-foreground uppercase font-medium">Achieved 100%</p>
-              <p className="text-2xl font-bold">{achieved100}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5 flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-warning/10 text-warning"><Users className="w-5 h-5" /></div>
-            <div>
-              <p className="text-xs text-muted-foreground uppercase font-medium">Avg Progress</p>
-              <p className="text-2xl font-bold">{avgProgress}%</p>
-            </div>
-          </CardContent>
-        </Card>
+            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${box}`}><Icon className="w-5 h-5" /></div>
+          </div>
+        ))}
       </div>
 
       {/* Form */}
       {showForm && (
-        <Card className="border-primary/30">
-          <CardHeader>
-            <CardTitle className="text-base">{editTarget ? 'Edit Target' : 'Assign New Target'}</CardTitle>
+        <Card className="rounded-3xl bg-white border border-[#cfe9c9] shadow-none py-7 gap-5">
+          <CardHeader className="px-7">
+            <CardTitle className="text-lg font-semibold tracking-tight">{editTarget ? 'Edit Target' : 'Assign New Target'}</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-7">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="space-y-1">
-                <label className="text-xs font-medium text-muted-foreground uppercase">Sales User</label>
+                <label className="text-xs font-semibold text-slate-600">Sales User</label>
                 <select
-                  className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-background"
+                  className="w-full h-11 rounded-xl border border-transparent bg-[#f4f6f3] px-3 text-sm outline-none focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
                   value={form.employeeId}
                   onChange={e => setForm(f => ({ ...f, employeeId: e.target.value }))}
                 >
@@ -220,9 +206,9 @@ export function FinanceSalesTargetsPanel() {
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-muted-foreground uppercase">Type</label>
+                <label className="text-xs font-semibold text-slate-600">Type</label>
                 <select
-                  className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-background"
+                  className="w-full h-11 rounded-xl border border-transparent bg-[#f4f6f3] px-3 text-sm outline-none focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
                   value={form.type}
                   onChange={e => setForm(f => ({ ...f, type: e.target.value as any }))}
                 >
@@ -232,42 +218,42 @@ export function FinanceSalesTargetsPanel() {
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-muted-foreground uppercase">Period (YYYY-MM)</label>
+                <label className="text-xs font-semibold text-slate-600">Period (YYYY-MM)</label>
                 <input
                   type="month"
-                  className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-background"
+                  className="w-full h-11 rounded-xl border border-transparent bg-[#f4f6f3] px-3 text-sm outline-none focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
                   value={form.period}
                   onChange={e => setForm(f => ({ ...f, period: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-muted-foreground uppercase">Target Value</label>
+                <label className="text-xs font-semibold text-slate-600">Target Value</label>
                 <input
                   type="number"
                   min="0"
-                  className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-background"
+                  className="w-full h-11 rounded-xl border border-transparent bg-[#f4f6f3] px-3 text-sm outline-none focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
                   placeholder="e.g. 100000"
                   value={form.target}
                   onChange={e => setForm(f => ({ ...f, target: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-muted-foreground uppercase">Achieved (optional)</label>
+                <label className="text-xs font-semibold text-slate-600">Achieved (optional)</label>
                 <input
                   type="number"
                   min="0"
-                  className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-background"
+                  className="w-full h-11 rounded-xl border border-transparent bg-[#f4f6f3] px-3 text-sm outline-none focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
                   placeholder="0"
                   value={form.achieved}
                   onChange={e => setForm(f => ({ ...f, achieved: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-muted-foreground uppercase">Incentive (optional)</label>
+                <label className="text-xs font-semibold text-slate-600">Incentive (optional)</label>
                 <input
                   type="number"
                   min="0"
-                  className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-background"
+                  className="w-full h-11 rounded-xl border border-transparent bg-[#f4f6f3] px-3 text-sm outline-none focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
                   placeholder="e.g. 5000"
                   value={form.incentive}
                   onChange={e => setForm(f => ({ ...f, incentive: e.target.value }))}
@@ -275,28 +261,28 @@ export function FinanceSalesTargetsPanel() {
               </div>
             </div>
             <div className="flex gap-2 mt-4">
-              <Button size="sm" onClick={handleSave} disabled={saving}>
+              <Button onClick={handleSave} disabled={saving} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                 {saving ? 'Saving...' : editTarget ? 'Update' : 'Assign'}
               </Button>
-              <Button size="sm" variant="outline" onClick={() => setShowForm(false)}>Cancel</Button>
+              <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setShowForm(false)}>Cancel</Button>
             </div>
           </CardContent>
         </Card>
       )}
 
       {/* Targets list */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Assigned Targets</CardTitle>
+      <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+        <CardHeader className="px-7">
+          <CardTitle className="text-lg font-semibold tracking-tight">Assigned Targets</CardTitle>
           <CardDescription>All targets assigned to sales team members</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-7">
           {loading ? (
-            <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-16 bg-muted rounded-xl animate-pulse" />)}</div>
+            <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : targets.length === 0 ? (
             <div className="py-12 text-center text-muted-foreground">
-              <Target className="w-10 h-10 mx-auto mb-3 opacity-20" />
-              <p className="font-medium">No targets assigned yet</p>
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Target className="w-6 h-6" /></div>
+              <p className="font-medium text-slate-900">No targets assigned yet</p>
               <p className="text-sm mt-1">Click "Assign Target" to get started.</p>
             </div>
           ) : (
@@ -304,16 +290,16 @@ export function FinanceSalesTargetsPanel() {
               {targets.map(t => {
                 const pct = t.target > 0 ? Math.min(100, Math.round((t.achieved / t.target) * 100)) : 0;
                 return (
-                  <div key={t.id} className="flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/30 transition-colors">
+                  <div key={t.id} className="flex items-center gap-4 p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span className="font-semibold text-sm">{t.employeeId?.name || 'Unknown'}</span>
-                        <Badge variant="outline" className="text-[10px] uppercase">{TYPE_LABELS[t.type]}</Badge>
-                        <Badge variant="outline" className="text-[10px]">{t.period}</Badge>
-                        {t.incentive ? <Badge variant="outline" className="text-[10px] text-success border-success/30">{CS()}{t.incentive.toLocaleString()} incentive</Badge> : null}
+                        <span className="font-semibold text-slate-900">{t.employeeId?.name || 'Unknown'}</span>
+                        <Badge variant="outline" className="text-[10px] uppercase rounded-full bg-white border-slate-200">{TYPE_LABELS[t.type]}</Badge>
+                        <Badge variant="outline" className="text-[10px] rounded-full bg-white border-slate-200">{t.period}</Badge>
+                        {t.incentive ? <Badge variant="outline" className="text-[10px] rounded-full bg-[#dff3da] text-[#256c1d] border-0">{CS()}{t.incentive.toLocaleString()} incentive</Badge> : null}
                       </div>
                       <div className="flex items-center gap-3 mt-2">
-                        <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                        <div className="flex-1 h-2.5 bg-white rounded-full overflow-hidden">
                           <div className={cn('h-full rounded-full transition-all', progressColor(pct))} style={{ width: `${pct}%` }} />
                         </div>
                         <span className="text-xs font-bold shrink-0 w-10 text-right">{pct}%</span>
@@ -323,10 +309,10 @@ export function FinanceSalesTargetsPanel() {
                       </div>
                     </div>
                     <div className="flex gap-1 shrink-0">
-                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => openEdit(t)}>
+                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-full hover:bg-white" onClick={() => openEdit(t)}>
                         <Edit2 className="w-3.5 h-3.5" />
                       </Button>
-                      <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => handleDelete(t.id)}>
+                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(t.id)}>
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     </div>

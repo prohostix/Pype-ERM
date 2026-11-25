@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link2, QrCode, Copy, CheckCircle, Clock, XCircle, Plus, Search, ExternalLink } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
 import { CS } from '@/lib/currency';
+import { ListPagination } from '@/components/ui/list-pagination';
 // Inline SVG QR-like placeholder using a canvas-free approach
 function QRDisplay({ value }: { value: string }) {
   // Generate a deterministic "pattern" using string hash for visual representation
@@ -49,7 +48,7 @@ export function PaymentGatewayPanel() {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const [creating, setCreating] = useState(false);
   const [form, setForm] = useState({
@@ -110,18 +109,18 @@ export function PaymentGatewayPanel() {
   };
 
   const statusIcon = (status: string) => {
-    if (status === 'paid') return <CheckCircle className="w-4 h-4 text-emerald-500" />;
-    if (status === 'expired') return <XCircle className="w-4 h-4 text-rose-500" />;
-    return <Clock className="w-4 h-4 text-amber-500" />;
+    if (status === 'paid') return <span className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center"><CheckCircle className="w-5 h-5" /></span>;
+    if (status === 'expired') return <span className="w-11 h-11 rounded-2xl bg-white text-red-500 flex items-center justify-center"><XCircle className="w-5 h-5" /></span>;
+    return <span className="w-11 h-11 rounded-2xl bg-white text-amber-500 flex items-center justify-center"><Clock className="w-5 h-5" /></span>;
   };
 
   const statusBadge = (s: string) => {
     const map: Record<string, string> = {
-      active: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30',
-      paid: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30',
-      expired: 'bg-rose-100 text-rose-700 dark:bg-rose-900/30',
+      active: 'bg-sky-100 text-sky-700',
+      paid: 'bg-[#dff3da] text-[#256c1d]',
+      expired: 'bg-red-100 text-red-700',
     };
-    return <Badge className={map[s] || ''}>{s}</Badge>;
+    return <span className={`rounded-full px-3 py-0.5 text-[11px] font-semibold capitalize ${map[s] || 'bg-slate-100 text-slate-600'}`}>{s}</span>;
   };
 
   const filtered = links.filter(l =>
@@ -134,56 +133,58 @@ export function PaymentGatewayPanel() {
   }, [search]);
 
   return (
-    <div className="space-y-4">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Link2 className="w-5 h-5 text-violet-500" />
-              Payment Gateway Links
-            </CardTitle>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2 w-4 h-4 text-muted-foreground" />
-                <Input placeholder="Search student..." className="pl-8 h-8 w-48 text-sm" value={search} onChange={e => setSearch(e.target.value)} />
-              </div>
-              <Button size="sm" onClick={() => setCreateOpen(true)} className="gap-1.5 bg-violet-600 hover:bg-violet-700 text-white">
-                <Plus className="w-3.5 h-3.5" /> Generate Link
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            {[
-              { label: 'Total Links', value: links.length, color: 'text-violet-600' },
-              { label: 'Active', value: links.filter(l => l.status === 'active').length, color: 'text-blue-600' },
-              { label: 'Paid', value: links.filter(l => l.status === 'paid').length, color: 'text-emerald-600' },
-            ].map(s => (
-              <div key={s.label} className="p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/30 text-center">
-                <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
-                <div className="text-xs text-muted-foreground">{s.label}</div>
-              </div>
-            ))}
-          </div>
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Payment Gateway Links</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Generate and share payment links for student fees.</p>
+        </div>
+        <Button onClick={() => setCreateOpen(true)} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+          <Plus className="w-4 h-4 mr-2" />Generate Link
+        </Button>
+      </div>
 
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {[
+          { label: 'Total Links', value: links.length, color: 'text-slate-900' },
+          { label: 'Active', value: links.filter(l => l.status === 'active').length, color: 'text-sky-600' },
+          { label: 'Paid', value: links.filter(l => l.status === 'paid').length, color: 'text-[#256c1d]' },
+        ].map(s => (
+          <div key={s.label} className="rounded-3xl bg-white border border-slate-100 p-5">
+            <div className="text-xs font-medium text-slate-500">{s.label}</div>
+            <div className={`text-3xl font-semibold tracking-tight mt-1 ${s.color}`}>{s.value}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 p-4">
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Input placeholder="Search student..." className="pl-11 h-12 rounded-full bg-[#f4f6f3] border-transparent text-sm" value={search} onChange={e => setSearch(e.target.value)} />
+        </div>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Links</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{filtered.length} found</span>}
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="text-center py-12 text-muted-foreground">Loading...</div>
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : filtered.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              <QrCode className="w-10 h-10 mx-auto mb-2 opacity-30" />
-              <p>No payment links generated yet</p>
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><QrCode className="w-6 h-6" /></div>
+              <p className="text-sm">No payment links generated yet</p>
             </div>
           ) : (
-            <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
+            <div className="space-y-3">
               {(() => {
-                const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
                 const paginatedFiltered = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
                 return (
                   <>
               {paginatedFiltered.map(link => (
-                <div key={link.id} className="flex items-center justify-between p-3.5 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                <div key={link.id} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                   <div className="flex items-center gap-3">
                     <div>{statusIcon(link.status)}</div>
                     <div>
@@ -203,66 +204,40 @@ export function PaymentGatewayPanel() {
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <div className="text-right mr-2">
-                      <div className="font-bold text-violet-600">{CS()}{link.amount.toLocaleString()}</div>
+                      <div className="font-semibold text-lg text-slate-900">{CS()}{link.amount.toLocaleString()}</div>
                     </div>
-                    <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => copyLink(link)} title="Copy link">
+                    <Button size="sm" variant="outline" className="h-9 w-9 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => copyLink(link)} title="Copy link">
                       <Copy className="w-3.5 h-3.5" />
                     </Button>
-                    <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => { setSelectedLink(link); setQrOpen(true); }} title="Show QR">
+                    <Button size="sm" variant="outline" className="h-9 w-9 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => { setSelectedLink(link); setQrOpen(true); }} title="Show QR">
                       <QrCode className="w-3.5 h-3.5" />
                     </Button>
-                    <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => window.open(link.paymentUrl, '_blank')} title="Open link">
+                    <Button size="sm" variant="outline" className="h-9 w-9 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => window.open(link.paymentUrl, '_blank')} title="Open link">
                       <ExternalLink className="w-3.5 h-3.5" />
                     </Button>
                   </div>
                 </div>
               ))}
               
-              {/* Pagination Controls */}
-              {(() => {
-                const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
-                if (totalPages <= 1) return null;
-                return (
-                  <div className="flex items-center justify-between p-4 border-t mt-4 rounded-md bg-slate-50 dark:bg-slate-900/20">
-                    <div className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length} links
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                      >
-                        Previous
-                      </Button>
-                      <div className="text-sm font-medium px-2">
-                        Page {currentPage} of {totalPages}
-                      </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        disabled={currentPage === totalPages}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })()}
+              <ListPagination
+                total={filtered.length}
+                page={currentPage}
+                pageSize={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(n) => { setItemsPerPage(n); setCurrentPage(1); }}
+              />
                   </>
                 );
               })()}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Create Link Dialog */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>Generate Payment Link</DialogTitle></DialogHeader>
+        <DialogContent className="wizard-form max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader><DialogTitle className="text-xl font-semibold tracking-tight">Generate Payment Link</DialogTitle></DialogHeader>
           <div className="space-y-4 py-2">
             <div>
               <Label>Student <span className="text-rose-500">*</span></Label>
@@ -316,10 +291,10 @@ export function PaymentGatewayPanel() {
               </Select>
             </div>
             <div className="flex gap-2 pt-2">
-              <Button onClick={handleCreate} disabled={creating} className="flex-1 bg-violet-600 hover:bg-violet-700 text-white gap-1.5">
+              <Button onClick={handleCreate} disabled={creating} className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold gap-1.5">
                 <Link2 className="w-4 h-4" /> {creating ? 'Generating...' : 'Generate Link'}
               </Button>
-              <Button variant="outline" onClick={() => setCreateOpen(false)}>Cancel</Button>
+              <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setCreateOpen(false)}>Cancel</Button>
             </div>
           </div>
         </DialogContent>
@@ -327,21 +302,21 @@ export function PaymentGatewayPanel() {
 
       {/* QR Dialog */}
       <Dialog open={qrOpen} onOpenChange={setQrOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader><DialogTitle>Payment QR Code</DialogTitle></DialogHeader>
+        <DialogContent className="max-w-sm rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader><DialogTitle className="text-xl font-semibold tracking-tight">Payment QR Code</DialogTitle></DialogHeader>
           {selectedLink && (
             <div className="space-y-4 py-2">
               <div className="text-center">
                 <div className="font-semibold">{selectedLink.student?.name}</div>
-                <div className="text-2xl font-bold text-violet-600 mt-1">{CS()}{selectedLink.amount.toLocaleString()}</div>
+                <div className="text-3xl font-semibold tracking-tight text-[#256c1d] mt-1">{CS()}{selectedLink.amount.toLocaleString()}</div>
                 <div className="text-sm text-muted-foreground">{selectedLink.description}</div>
               </div>
               <QRDisplay value={selectedLink.paymentUrl} />
               <div className="flex gap-2">
-                <Button className="flex-1 gap-1.5" variant="outline" onClick={() => copyLink(selectedLink)}>
+                <Button className="flex-1 gap-1.5 h-11 rounded-full" variant="outline" onClick={() => copyLink(selectedLink)}>
                   <Copy className="w-4 h-4" /> Copy Link
                 </Button>
-                <Button className="flex-1 gap-1.5 bg-violet-600 hover:bg-violet-700 text-white" onClick={() => window.open(selectedLink.paymentUrl, '_blank')}>
+                <Button className="flex-1 gap-1.5 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => window.open(selectedLink.paymentUrl, '_blank')}>
                   <ExternalLink className="w-4 h-4" /> Open
                 </Button>
               </div>

@@ -38,6 +38,7 @@ const EMPLOYEE_NAV_ITEMS: TableItem[] = [
   { id: 'notice-board', label: 'Notice Board' },
   { id: 'team', label: 'My Team' },
   { id: 'ld-portal', label: 'L&D Portal' },
+  { id: 'escalations', label: 'Escalations' },
 ];
 
 const STUDENT_NAV_ITEMS: TableItem[] = [
@@ -437,8 +438,6 @@ function App() {
         { id: 'usage', label: 'Usage & Telemetry' },
         { id: 'organizations', label: 'Organizations' },
         { id: 'licenses', label: 'Pricings and Bills' },
-        { id: 'users', label: 'Users' },
-        { id: 'departments', label: 'Departments' },
         { id: 'inquiries', label: 'Enquiries' },
         { id: 'audit_logs', label: 'Audit Logs' },
       ];
@@ -461,8 +460,6 @@ function App() {
         { id: 'users', label: 'Users' },
         { id: 'departments', label: 'Departments' },
         { id: 'employees', label: 'Employees' },
-        { id: 'tasks', label: 'Tasks' },
-        { id: 'meetings', label: 'Meetings' },
 
         { id: '__pipeline_section', label: 'Pipeline', isSection: true },
         { id: 'invite_links', label: 'Generate Student Link' },
@@ -613,7 +610,7 @@ function App() {
       mutableResult.push({ id: 'collections', label: 'Collections' });
     }
 
-    if (user.role !== 'student' && user.role !== 'center_student' && !mutableResult.some(t => t.id === 'meetings')) {
+    if (user.role !== 'student' && user.role !== 'center_student' && (user.role as string) !== 'org_admin' && !mutableResult.some(t => t.id === 'meetings')) {
       mutableResult.push({ id: 'meetings', label: 'Meetings' });
     }
 

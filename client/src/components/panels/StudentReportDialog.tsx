@@ -43,11 +43,11 @@ const PRESETS: { label: string; keys: string[] }[] = [
 ];
 
 const STATUS_TONE: Record<string, string> = {
-  active: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400',
-  pending: 'bg-orange-100 text-orange-700 dark:bg-orange-950/40 dark:text-orange-400',
-  completed: 'bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400',
-  dropped: 'bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400',
-  enrolled: 'bg-teal-100 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400',
+  active: 'bg-[#e3f7dd] text-[#1f6a17]',
+  pending: 'bg-amber-50 text-amber-700',
+  completed: 'bg-[#e3f7dd] text-[#1f6a17]',
+  dropped: 'bg-rose-50 text-rose-700',
+  enrolled: 'bg-[#e3f7dd] text-[#1f6a17]',
 };
 
 function cell(v: unknown, type: FieldType): string {
@@ -162,40 +162,40 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
     .map((g) => ({ ...g, fields: q ? g.fields.filter((f) => f.label.toLowerCase().includes(q)) : g.fields }))
     .filter((g) => g.fields.length > 0);
 
-  const selectCls = 'h-8 text-xs rounded-lg bg-white dark:bg-slate-900';
+  const selectCls = 'h-10 text-xs rounded-full bg-[#f4f6f3] border-transparent px-4';
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[96vw] max-w-[96vw] sm:max-w-[1180px] h-[90vh] max-h-[90vh] p-0 gap-0 overflow-hidden flex flex-col rounded-2xl">
+      <DialogContent className="w-[96vw] max-w-[96vw] sm:max-w-[1180px] h-[90vh] max-h-[90vh] p-0 gap-0 overflow-hidden flex flex-col rounded-[2rem] border-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
         {/* Header */}
-        <DialogHeader className="px-5 py-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-slate-900 space-y-0">
+        <DialogHeader className="px-6 sm:px-8 pt-7 pb-5 space-y-0 shrink-0">
           <div className="flex items-center gap-3 pr-8">
-            <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
               <FileSpreadsheet className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <DialogTitle className="text-base sm:text-lg leading-tight">Build Student Report</DialogTitle>
-              <p className="text-xs text-muted-foreground">Choose the columns you need, add filters, then export to Excel.</p>
+              <DialogTitle className="text-2xl font-semibold tracking-tight leading-tight">Build Student Report</DialogTitle>
+              <p className="text-sm text-muted-foreground mt-0.5">Choose the columns you need, add filters, then export to Excel.</p>
             </div>
             {access && (
-              <span className="ml-auto hidden sm:inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-900 rounded-full px-2.5 py-1 shrink-0">
+              <span className="ml-auto hidden sm:inline-flex items-center gap-1 text-[11px] font-medium text-[#1f6a17] bg-[#e3f7dd] px-3 py-1.5 rounded-full">
                 <ShieldCheck className="w-3.5 h-3.5" /> {access}
               </span>
             )}
           </div>
         </DialogHeader>
 
-        <div className="flex-1 min-h-0 grid md:grid-cols-[300px_minmax(0,1fr)] overflow-hidden">
+        <div className="flex-1 min-h-0 grid md:grid-cols-[320px_minmax(0,1fr)] overflow-hidden border-t border-slate-100">
           {/* Left: column picker */}
-          <aside className="flex flex-col min-h-0 border-b md:border-b-0 md:border-r bg-slate-50/60 dark:bg-slate-900/40 max-h-[34vh] md:max-h-none">
-            <div className="p-3 space-y-2.5 border-b">
+          <aside className="flex flex-col min-h-0 border-b md:border-b-0 md:border-r border-slate-100 bg-[#f4f6f3] dark:bg-slate-900/40 max-h-[34vh] md:max-h-none">
+            <div className="p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5 text-sm font-semibold"><Columns3 className="w-4 h-4 text-blue-600" /> Columns</span>
+                <span className="flex items-center gap-2 text-base font-semibold"><Columns3 className="w-4 h-4 text-[#256c1d]" /> Columns</span>
                 <span className="text-xs text-muted-foreground">{columns.length} of {allFields.length}</span>
               </div>
               <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-slate-400" />
-                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search columns..." className="h-8 pl-8 text-xs rounded-lg bg-white dark:bg-slate-900" />
+                <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+                <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search columns..." className="h-10 pl-10 text-sm rounded-full bg-white border-transparent" />
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {PRESETS.filter((p) => p.keys.some((k) => fields[k])).map((p) => (
@@ -203,7 +203,7 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
                     key={p.label}
                     type="button"
                     onClick={() => applyPreset(p.keys)}
-                    className="text-[11px] font-medium px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-400 hover:text-blue-700 transition-colors"
+                    className="text-[11px] font-semibold px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d] transition-colors"
                   >
                     {p.label}
                   </button>
@@ -211,19 +211,19 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
                 <button
                   type="button"
                   onClick={() => setColumns(allFields.map((f) => f.key))}
-                  className="text-[11px] font-medium px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-400 hover:text-blue-700 transition-colors"
+                  className="text-[11px] font-semibold px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d] transition-colors"
                 >
                   All
                 </button>
                 {columns.length > 0 && (
-                  <button type="button" onClick={() => setColumns([])} className="text-[11px] font-medium px-2.5 py-1 rounded-full text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors">
+                  <button type="button" onClick={() => setColumns([])} className="text-[11px] font-semibold px-3 py-1.5 rounded-full text-rose-600 hover:bg-rose-50 transition-colors">
                     Clear
                   </button>
                 )}
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-2 space-y-1">
+            <div className="flex-1 overflow-y-auto px-3 pb-3 space-y-1">
               {loadingCols && <div className="py-8 text-center"><Loader2 className="w-4 h-4 animate-spin inline text-slate-400" /></div>}
               {!loadingCols && visibleGroups.length === 0 && (
                 <p className="py-8 text-center text-xs text-muted-foreground">No columns match "{search}"</p>
@@ -234,7 +234,7 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
                 const open = q ? true : !collapsed[g.label];
                 return (
                   <div key={g.label} className="rounded-lg">
-                    <div className="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-white dark:hover:bg-slate-800/60">
+                    <div className="flex items-center justify-between px-3 py-2 rounded-2xl hover:bg-white dark:hover:bg-slate-800/60">
                       <button
                         type="button"
                         onClick={() => setCollapsed((c) => ({ ...c, [g.label]: !c[g.label] }))}
@@ -242,16 +242,16 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
                       >
                         {open ? <ChevronDown className="w-3.5 h-3.5 text-slate-400" /> : <ChevronRight className="w-3.5 h-3.5 text-slate-400" />}
                         {g.label}
-                        <span className={cn('text-[10px] font-bold px-1.5 rounded-full', picked ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' : 'bg-slate-200/70 text-slate-500 dark:bg-slate-800')}>
+                        <span className={cn('text-[10px] font-bold px-1.5 rounded-full', picked ? 'bg-[#e3f7dd] text-[#1f6a17]' : 'bg-slate-200/70 text-slate-500 dark:bg-slate-800')}>
                           {picked}/{full.fields.length}
                         </span>
                       </button>
-                      <button type="button" className="text-[11px] text-blue-600 hover:underline" onClick={() => setGroup(full, picked !== full.fields.length)}>
+                      <button type="button" className="text-[11px] font-semibold text-[#256c1d] hover:underline" onClick={() => setGroup(full, picked !== full.fields.length)}>
                         {picked === full.fields.length ? 'None' : 'All'}
                       </button>
                     </div>
                     {open && (
-                      <div className="ml-3 pl-2 border-l border-slate-200 dark:border-slate-700 mb-1">
+                      <div className="ml-4 pl-2 border-l border-slate-200 dark:border-slate-700 mb-1">
                         {g.fields.map((f) => (
                           <label key={f.key} className="flex items-center gap-2 py-1 px-2 rounded-md hover:bg-white dark:hover:bg-slate-800/60 cursor-pointer text-[13px]">
                             <Checkbox checked={columns.includes(f.key)} onCheckedChange={() => toggle(f.key)} />
@@ -267,23 +267,23 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
           </aside>
 
           {/* Right: selected columns, filters, preview */}
-          <section className="flex flex-col min-h-0 min-w-0 p-4 gap-3 overflow-y-auto md:overflow-hidden">
+          <section className="flex flex-col min-h-0 min-w-0 p-5 sm:p-6 gap-4 overflow-y-auto md:overflow-hidden">
             {/* Selected columns (order = order in Excel) */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Report columns</span>
+                <span className="text-base font-semibold text-foreground">Report columns</span>
                 {columns.length > 1 && <span className="text-[11px] text-muted-foreground">Use the arrows to reorder</span>}
               </div>
               {columns.length === 0 ? (
-                <p className="text-xs text-muted-foreground border border-dashed rounded-lg px-3 py-2.5">Nothing selected. Tick columns on the left or choose a preset.</p>
+                <p className="text-xs text-muted-foreground border border-dashed border-slate-300 rounded-2xl px-4 py-3">Nothing selected. Tick columns on the left or choose a preset.</p>
               ) : (
                 <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
                   {columns.map((k, i) => (
-                    <span key={k} className="group inline-flex items-center gap-0.5 pl-1 pr-1 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-900 text-xs text-blue-800 dark:text-blue-200">
+                    <span key={k} className="group inline-flex items-center gap-0.5 pl-1.5 pr-1.5 py-1 rounded-full bg-[#eaf6e6] text-xs text-[#1f6a17] dark:text-emerald-200">
                       <button type="button" disabled={i === 0} onClick={() => move(k, -1)} className="p-0.5 rounded-full opacity-40 hover:opacity-100 disabled:opacity-10" title="Move left"><ArrowLeft className="w-3 h-3" /></button>
                       <span className="px-1 font-medium">{fields[k]?.label ?? k}</span>
                       <button type="button" disabled={i === columns.length - 1} onClick={() => move(k, 1)} className="p-0.5 rounded-full opacity-40 hover:opacity-100 disabled:opacity-10" title="Move right"><ArrowRight className="w-3 h-3" /></button>
-                      <button type="button" onClick={() => toggle(k)} className="p-0.5 rounded-full hover:bg-blue-200/60 dark:hover:bg-blue-800/50" title="Remove"><X className="w-3 h-3" /></button>
+                      <button type="button" onClick={() => toggle(k)} className="p-0.5 rounded-full hover:bg-[#d6f0d0]" title="Remove"><X className="w-3 h-3" /></button>
                     </span>
                   ))}
                 </div>
@@ -291,17 +291,17 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
             </div>
 
             {/* Filters */}
-            <div className="rounded-xl border bg-white dark:bg-slate-900/40">
-              <div className="flex items-center justify-between px-3 py-2 border-b">
-                <span className="flex items-center gap-1.5 text-sm font-semibold">
-                  <Filter className="w-4 h-4 text-blue-600" /> Filters
-                  {activeFilters.length > 0 && <span className="text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 px-1.5 rounded-full">{activeFilters.length}</span>}
+            <div className="rounded-3xl bg-[#f4f6f3] dark:bg-slate-900/40">
+              <div className="flex items-center justify-between px-5 pt-4">
+                <span className="flex items-center gap-2 text-base font-semibold">
+                  <Filter className="w-4 h-4 text-[#256c1d]" /> Filters
+                  {activeFilters.length > 0 && <span className="text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 px-1.5 rounded-full">{activeFilters.length}</span>}
                 </span>
-                <Button type="button" variant="ghost" size="sm" className="h-7 text-xs text-blue-600" onClick={addFilter} disabled={!groups.length}>
+                <Button type="button" variant="ghost" size="sm" className="h-9 px-4 rounded-full text-xs font-semibold bg-white text-[#256c1d] hover:bg-[#eaf6e6]" onClick={addFilter} disabled={!groups.length}>
                   <Plus className="w-3.5 h-3.5 mr-1" /> Add filter
                 </Button>
               </div>
-              <div className="p-3">
+              <div className="px-5 pb-4 pt-3">
                 {filters.length === 0 ? (
                   <p className="text-xs text-muted-foreground">No filters. Every student you can see is included.</p>
                 ) : (
@@ -351,15 +351,15 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
             </div>
 
             {/* Preview */}
-            <div className="flex-1 min-h-[220px] flex flex-col rounded-xl border overflow-hidden bg-white dark:bg-slate-900/40">
-              <div className="flex items-center justify-between px-3 py-2 border-b bg-slate-50/70 dark:bg-slate-900/60">
-                <span className="flex items-center gap-1.5 text-sm font-semibold"><Table2 className="w-4 h-4 text-blue-600" /> Preview</span>
+            <div className="flex-1 min-h-[220px] flex flex-col rounded-3xl overflow-hidden bg-[#f4f6f3] dark:bg-slate-900/40">
+              <div className="flex items-center justify-between px-5 pt-4 pb-3">
+                <span className="flex items-center gap-2 text-base font-semibold"><Table2 className="w-4 h-4 text-[#256c1d]" /> Preview</span>
                 <span className="flex items-center gap-2 text-[11px] text-muted-foreground">
                   {running && <Loader2 className="w-3 h-3 animate-spin" />}
                   {result && !running && <>{result.rows.length}{result.meta.truncated ? '+' : ''} row(s){result.meta.truncated ? ' · first 100 shown' : ''}</>}
                 </span>
               </div>
-              <div className={cn('flex-1 overflow-auto transition-opacity', running && result && 'opacity-60')}>
+              <div className={cn('flex-1 overflow-auto transition-opacity mx-3 mb-3 rounded-2xl bg-white', running && result && 'opacity-60')}>
                 {!result ? (
                   <div className="h-full flex flex-col items-center justify-center gap-2 text-sm text-muted-foreground p-6 text-center">
                     {running ? <Loader2 className="w-5 h-5 animate-spin" /> : <Table2 className="w-8 h-8 text-slate-300" />}
@@ -369,9 +369,9 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
                   <table className="w-full text-xs border-separate border-spacing-0">
                     <thead>
                       <tr>
-                        <th className="sticky top-0 z-10 bg-slate-100 dark:bg-slate-800 text-right font-medium text-slate-400 px-3 py-2 w-10 border-b">#</th>
+                        <th className="sticky top-0 z-10 bg-[#f1f3ef] dark:bg-slate-800 text-right font-medium text-slate-400 px-3 py-2 w-10 border-b">#</th>
                         {result.columns.map((c) => (
-                          <th key={c.key} className="sticky top-0 z-10 bg-slate-100 dark:bg-slate-800 text-left font-semibold text-slate-700 dark:text-slate-200 px-3 py-2 whitespace-nowrap border-b">{c.label}</th>
+                          <th key={c.key} className="sticky top-0 z-10 bg-[#f1f3ef] dark:bg-slate-800 text-left font-semibold text-slate-700 dark:text-slate-200 px-3 py-2 whitespace-nowrap border-b">{c.label}</th>
                         ))}
                       </tr>
                     </thead>
@@ -380,7 +380,7 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
                         <tr><td colSpan={result.columns.length + 1} className="px-3 py-10 text-center text-muted-foreground">No students match these filters.</td></tr>
                       )}
                       {result.rows.map((row, i) => (
-                        <tr key={i} className="hover:bg-blue-50/50 dark:hover:bg-slate-800/50">
+                        <tr key={i} className="hover:bg-[#f4f6f3] dark:hover:bg-slate-800/50">
                           <td className="px-3 py-1.5 text-right text-slate-400 border-b border-slate-100 dark:border-slate-800">{i + 1}</td>
                           {result.columns.map((c) => {
                             const text = cell(row[c.key], c.type);
@@ -402,13 +402,13 @@ export function StudentReportDialog({ open, onOpenChange }: { open: boolean; onO
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between gap-3 px-5 py-3 border-t bg-slate-50/70 dark:bg-slate-900/60">
+        <div className="flex items-center justify-between gap-3 px-6 sm:px-8 py-5 border-t border-slate-100 shrink-0">
           <span className="text-xs text-muted-foreground truncate">
             {columns.length} column{columns.length === 1 ? '' : 's'} · {activeFilters.length} filter{activeFilters.length === 1 ? '' : 's'}
           </span>
           <div className="flex items-center gap-2 shrink-0">
-            <Button type="button" variant="ghost" size="sm" onClick={() => onOpenChange(false)}>Close</Button>
-            <Button type="button" size="sm" onClick={exportExcel} disabled={exporting || !columns.length} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">Close</Button>
+            <Button type="button" onClick={exportExcel} disabled={exporting || !columns.length} className="h-11 rounded-full px-7 bg-slate-900 hover:bg-slate-800 text-white font-semibold">
               {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />} Export Excel
             </Button>
           </div>

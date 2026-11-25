@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Calendar } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Plus, Edit, Trash2, Calendar, CalendarCheck, Clock, CheckCircle2, Lock, GraduationCap } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
@@ -14,14 +15,18 @@ export function AdmissionSessionsPanel() {
   const isFinance = ['finance_admin', 'finance_sub_admin'].includes(user?.role || '');
   const [sessions, setSessions] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
+  const [universities, setUniversities] = useState<any[]>([]);
+  const [universityFilter, setUniversityFilter] = useState<string>('all'); // 'all', 'none' (no university) or a university id
   const [loading, setLoading] = useState(false);
   
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingSession, setEditingSession] = useState<any>(null);
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'active' | 'closed'>('all');
 
   useEffect(() => {
     fetchSessions();
     fetchDepartments();
+    api.get('/operations/universities?all=true').then(r => setUniversities(r.data.data || [])).catch(() => {});
   }, []);
 
   const fetchSessions = async () => {
@@ -71,96 +76,200 @@ export function AdmissionSessionsPanel() {
     }
   };
 
+  const fmtDate = (d?: string) => (d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—');
+  const STATUS_STYLE: Record<string, { pill: string; dot: string }> = {
+    active: { pill: 'bg-[#e3f7dd] text-[#1f6a17]', dot: 'bg-[#54b947]' },
+    approved: { pill: 'bg-[#eaf6e6] text-[#256c1d]', dot: 'bg-[#54b947]' },
+    pending: { pill: 'bg-amber-50 text-amber-700', dot: 'bg-amber-500' },
+    closed: { pill: 'bg-slate-100 text-slate-600', dot: 'bg-slate-400' },
+  };
+  const allValidSessions = sessions.filter(s => s && s.id);
+  const uniIdOf = (s: any): string => {
+    const u = s.universityId ?? s.university;
+    return (typeof u === 'object' && u ? (u.id || '') : (u || '')).toString();
+  };
+  const uniName = (id: string) => universities.find((u: any) => u.id === id)?.name || '';
+  // Only list universities that have at least one session (plus a "no university" option when needed)
+  const universitiesWithSessions = Array.from(new Set(allValidSessions.map(uniIdOf).filter(Boolean)));
+  const hasUniversityLess = allValidSessions.some(s => !uniIdOf(s));
+  const validSessions = allValidSessions.filter(s =>
+    universityFilter === 'all' ? true : universityFilter === 'none' ? !uniIdOf(s) : uniIdOf(s) === universityFilter
+  );
+  const counts = {
+    all: validSessions.length,
+    pending: validSessions.filter(s => s.status === 'pending').length,
+    approved: validSessions.filter(s => s.status === 'approved').length,
+    active: validSessions.filter(s => s.status === 'active').length,
+    closed: validSessions.filter(s => s.status === 'closed').length,
+  };
+  const visible = validSessions.filter(s => statusFilter === 'all' || s.status === statusFilter);
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         <div>
-          <h2 className="text-2xl font-bold">Admission Session Management</h2>
-          <p className="text-muted-foreground">Manage admission sessions and cycles</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">Admission Sessions</h2>
+          <p className="text-sm text-muted-foreground mt-1.5">Manage admission sessions and cycles</p>
         </div>
         {canWrite && (
-          <Button onClick={() => { setEditingSession(null); setDialogOpen(true); }}>
-            <Plus className="w-4 h-4 mr-2" />Add Session
+          <Button onClick={() => { setEditingSession(null); setDialogOpen(true); }} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto">
+            <Plus className="w-4 h-4" />Add Session
           </Button>
         )}
       </div>
 
-      <Card>
-        <CardHeader><CardTitle>Admission Sessions</CardTitle></CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="text-center py-8">Loading...</div>
-          ) : sessions.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No sessions found</div>
-          ) : (
-            <div className="space-y-2">
-              {sessions.filter(s => s && (s.id || s.id)).map((s) => {
-                const sid = s.id || s.id;
-                return (
-                  <div key={sid} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Calendar className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <div className="font-medium">{s.name}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {s.startDate && new Date(s.startDate).toLocaleDateString()} – {s.endDate && new Date(s.endDate).toLocaleDateString()}
-                        </div>
-                        {s.examDate && (
-                          <div className="text-xs text-muted-foreground">Exam: {new Date(s.examDate).toLocaleDateString()}</div>
-                        )}
-                        {s.subDepartmentIds && s.subDepartmentIds.length > 0 ? (
-                          <div className="text-xs text-muted-foreground mt-1 flex flex-wrap gap-1 items-center">
-                            <span className="font-medium mr-1">Departments:</span>
-                            {s.subDepartmentIds.map((did: string) => {
-                              const d = departments.find((dept: any) => dept.id === did);
-                              return d ? (
-                                <Badge key={did} variant="secondary" className="text-[10px] px-1 py-0">
-                                  {d.name}
-                                </Badge>
-                              ) : null;
-                            })}
-                          </div>
-                        ) : s.subDepartmentId ? (
-                          <div className="text-xs text-muted-foreground mt-1 flex flex-wrap gap-1 items-center">
-                            <span className="font-medium mr-1">Department:</span>
-                            {(() => {
-                              const d = departments.find((dept: any) => dept.id === s.subDepartmentId);
-                              return d ? (
-                                <Badge variant="secondary" className="text-[10px] px-1 py-0">
-                                  {d.name}
-                                </Badge>
-                              ) : null;
-                            })()}
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge>{s.status}</Badge>
-                      {isFinance && s.status === 'pending' && (
-                        <Button size="sm" variant="outline" className="text-green-600 border-green-600 hover:bg-green-50" onClick={() => handleApprove(sid)}>
-                          Approve
-                        </Button>
-                      )}
-                      {canWrite && (
-                        <>
-                          <Button variant="ghost" size="sm" onClick={() => handleEdit(s)}><Edit className="w-4 h-4" /></Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleDelete(sid)}><Trash2 className="w-4 h-4" /></Button>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+      {/* Summary */}
+      {allValidSessions.length > 0 && (
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
+          {[
+            { label: 'Total sessions', value: counts.all, icon: CalendarCheck },
+            { label: 'Active', value: counts.active, icon: CheckCircle2 },
+            { label: 'Pending', value: counts.pending, icon: Clock },
+            { label: 'Closed', value: counts.closed, icon: Lock },
+          ].map(({ label, value, icon: Icon }) => (
+            <Card key={label} className="rounded-3xl gap-0">
+              <CardContent className="p-6 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground">{label}</p>
+                  <p className="text-3xl font-semibold tracking-tight mt-1">{value}</p>
+                </div>
+                <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+                  <Icon className="w-5 h-5" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* Filters: university + status */}
+      {allValidSessions.length > 0 && (
+        <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+          <Select value={universityFilter} onValueChange={setUniversityFilter}>
+            <SelectTrigger className="h-11 w-full lg:w-[280px] rounded-full bg-white border-slate-200 shadow-sm text-sm px-4">
+              <SelectValue placeholder="All universities" />
+            </SelectTrigger>
+            <SelectContent className="rounded-2xl max-h-72">
+              <SelectItem value="all">All universities</SelectItem>
+              {universitiesWithSessions.map(id => (
+                <SelectItem key={id} value={id}>{uniName(id) || 'University'}</SelectItem>
+              ))}
+              {hasUniversityLess && <SelectItem value="none">No university</SelectItem>}
+            </SelectContent>
+          </Select>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {([
+              { id: 'all', label: 'All' },
+              { id: 'active', label: 'Active' },
+              { id: 'approved', label: 'Approved' },
+              { id: 'pending', label: 'Pending' },
+              { id: 'closed', label: 'Closed' },
+            ] as const).map(f => (
+              <button
+                key={f.id}
+                onClick={() => setStatusFilter(f.id)}
+                className={cn('px-4 py-2 rounded-full text-xs font-semibold transition-colors', statusFilter === f.id ? 'bg-[#0b1d14] text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50')}
+              >
+                {f.label} ({counts[f.id]})
+              </button>
+            ))}
+          </div>
+
+          {universityFilter !== 'all' && (
+            <button onClick={() => setUniversityFilter('all')} className="text-xs font-semibold text-rose-600 hover:underline lg:ml-auto">Clear university filter</button>
           )}
-        </CardContent>
-      </Card>
-      
-      <SessionFormDialog 
-        open={dialogOpen} 
+        </div>
+      )}
+
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">{[1, 2, 3].map(i => <div key={i} className="h-56 bg-[#f4f6f3] rounded-3xl animate-pulse" />)}</div>
+      ) : allValidSessions.length === 0 ? (
+        <div className="border border-dashed border-slate-300 rounded-3xl p-16 text-center bg-white">
+          <div className="w-14 h-14 rounded-full bg-[#f4f6f3] flex items-center justify-center mx-auto mb-3"><Calendar className="h-6 w-6 text-muted-foreground" /></div>
+          <p className="text-foreground font-medium mb-1">No sessions found</p>
+          {canWrite && <p className="text-sm text-muted-foreground">Add a session to start an admission cycle.</p>}
+        </div>
+      ) : visible.length === 0 ? (
+        <div className="rounded-3xl border border-dashed border-slate-300 bg-white py-14 text-center text-sm text-muted-foreground">{universityFilter !== 'all' ? 'No sessions match this university and status.' : `No ${statusFilter} sessions.`}</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 sm:gap-6">
+          {visible.map((s) => {
+            const sid = s.id;
+            const st = STATUS_STYLE[s.status] || STATUS_STYLE.closed;
+            const deptIds: string[] = s.subDepartmentIds && s.subDepartmentIds.length > 0 ? s.subDepartmentIds : (s.subDepartmentId ? [s.subDepartmentId] : []);
+            const deptList = deptIds.map(did => departments.find((d: any) => d.id === did)).filter(Boolean);
+            return (
+              <Card key={sid} className="rounded-3xl gap-0 hover:-translate-y-0.5 transition-all duration-300">
+                <CardContent className="p-6 flex flex-col gap-5 h-full">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3.5 min-w-0">
+                      <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+                        <Calendar className="w-5 h-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-base text-foreground truncate" title={s.name}>{s.name}</h3>
+                        <div className="flex items-center gap-1.5 flex-wrap mt-1.5">
+                          <span className={cn('inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full capitalize', st.pill)}>
+                            <span className={cn('w-1.5 h-1.5 rounded-full', st.dot)} />{s.status}
+                          </span>
+                          {uniName(uniIdOf(s)) && (
+                            <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#f1f3ef] text-slate-600 truncate max-w-[180px]" title={uniName(uniIdOf(s))}>{uniName(uniIdOf(s))}</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    {canWrite && (
+                      <div className="flex gap-1.5 shrink-0">
+                        <button onClick={() => handleEdit(s)} title="Edit session" className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center text-[#256c1d] hover:bg-[#eaf6e6] transition-colors"><Edit className="w-3.5 h-3.5" /></button>
+                        <button onClick={() => handleDelete(sid)} title="Delete session" className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center text-rose-500 hover:bg-rose-50 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                      <p className="text-[11px] text-muted-foreground font-medium">Starts</p>
+                      <p className="text-sm font-semibold mt-0.5">{fmtDate(s.startDate)}</p>
+                    </div>
+                    <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                      <p className="text-[11px] text-muted-foreground font-medium">Ends</p>
+                      <p className="text-sm font-semibold mt-0.5">{fmtDate(s.endDate)}</p>
+                    </div>
+                    {s.examDate && (
+                      <div className="col-span-2 rounded-2xl bg-[#eaf6e6] px-4 py-3 flex items-center justify-between">
+                        <span className="text-[11px] text-[#256c1d] font-medium">Exam date</span>
+                        <span className="text-sm font-semibold text-[#1f6a17]">{fmtDate(s.examDate)}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {deptList.length > 0 && (
+                    <div>
+                      <p className="text-[11px] text-muted-foreground font-medium mb-2 flex items-center gap-1.5"><GraduationCap className="w-3 h-3" />Departments</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {deptList.map((d: any) => (
+                          <span key={d.id} className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-600">{d.name}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {isFinance && s.status === 'pending' && (
+                    <Button onClick={() => handleApprove(sid)} className="mt-auto h-11 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold">
+                      Approve session
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+
+      <SessionFormDialog
+        open={dialogOpen}
         onOpenChange={(open) => { setDialogOpen(open); if (!open) setEditingSession(null); }}
         onSuccess={fetchSessions}
         editingSession={editingSession}

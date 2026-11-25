@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { RefreshCw, CheckCircle } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { ListPagination } from '@/components/ui/list-pagination';
 
 export function ExamRegistrationPanel() {
   const [registrations, setRegistrations] = useState<any[]>([]);
@@ -13,7 +11,7 @@ export function ExamRegistrationPanel() {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     fetchRegistrations();
@@ -42,113 +40,70 @@ export function ExamRegistrationPanel() {
     }
   };
 
-  return (
-    <Card className="border-none shadow-none">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Exam Registration</CardTitle>
-            <CardDescription>Manage student exam applications and approvals</CardDescription>
-          </div>
-          <Button variant="outline" size="sm" onClick={fetchRegistrations} disabled={loading}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-        ) : registrations.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
-            <CheckCircle className="w-8 h-8 text-green-500 mb-2" />
-            <p className="text-muted-foreground">No pending exam registrations!</p>
-          </div>
-        ) : (
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Student</TableHead>
-                  <TableHead>Semester / Year</TableHead>
-                  <TableHead>Subject Codes</TableHead>
-                  <TableHead>Exam Center</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {(() => {
+  const pageCount = Math.max(1, Math.ceil(registrations.length / itemsPerPage));
+  const safePage = Math.min(currentPage, pageCount);
+  const paginatedRegistrations = registrations.slice((safePage - 1) * itemsPerPage, safePage * itemsPerPage);
+  const statusPill = (st: string) =>
+    st === 'approved' ? 'bg-[#dff3da] text-[#256c1d]' : st === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700';
 
-                  const paginatedRegistrations = registrations.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-                  return (
-                    <>
-                {paginatedRegistrations.map((reg) => (
-                  <TableRow key={reg.id}>
-                    <TableCell>
-                      <div className="font-medium">{reg.student?.name}</div>
-                      <div className="text-xs text-muted-foreground">{reg.student?.enrollmentNo || 'N/A'}</div>
-                    </TableCell>
-                    <TableCell>{reg.semester}</TableCell>
-                    <TableCell>{reg.subjectCodes}</TableCell>
-                    <TableCell>{reg.examCenter || 'N/A'}</TableCell>
-                    <TableCell>
-                      <Badge variant={reg.status === 'approved' ? 'default' : reg.status === 'rejected' ? 'destructive' : 'secondary'} className={reg.status === 'pending' ? "bg-blue-100 text-blue-700" : ""}>
-                        {reg.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right flex justify-end gap-2">
-                      {reg.status === 'pending' && (
-                        <>
-                          <Button size="sm" variant="outline" onClick={() => updateStatus(reg.id, 'approved')}>Approve</Button>
-                          <Button size="sm" variant="destructive" onClick={() => updateStatus(reg.id, 'rejected')}>Reject</Button>
-                        </>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-                    </>
-                  );
-                })()}
-              </TableBody>
-            </Table>
-            
-            {/* Pagination Controls */}
-            {(() => {
-              const totalPages = Math.max(1, Math.ceil(registrations.length / itemsPerPage));
-              if (totalPages <= 1) return null;
-              return (
-                <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
-                  <div className="text-sm text-muted-foreground">
-                    Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, registrations.length)} of {registrations.length} registrations
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                      disabled={currentPage === 1}
-                    >
-                      Previous
-                    </Button>
-                    <div className="text-sm font-medium px-2">
-                      Page {currentPage} of {totalPages}
+  return (
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Exam Registration</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Manage student exam applications and approvals</p>
+        </div>
+        <Button variant="outline" onClick={fetchRegistrations} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
+          <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          Refresh
+        </Button>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Registrations</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{registrations.length} total</span>}
+        </div>
+        <div className="p-4 sm:p-5">
+          {loading ? (
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
+          ) : registrations.length === 0 ? (
+            <div className="text-center py-14 text-sm text-muted-foreground">No pending exam registrations!</div>
+          ) : (
+            <div className="space-y-3">
+              {paginatedRegistrations.map((reg) => (
+                <div key={reg.id} className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                  <div className="min-w-0">
+                    <div className="font-semibold text-slate-900">{reg.student?.name}</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">{reg.student?.enrollmentNo || 'N/A'}</div>
+                    <div className="flex flex-wrap items-center gap-2 mt-2 text-xs">
+                      <span className="rounded-full bg-white px-3 py-0.5 font-semibold text-slate-700">{reg.semester}</span>
+                      <span className="text-slate-600">Subjects: <span className="font-mono">{reg.subjectCodes}</span></span>
+                      <span className="text-muted-foreground">· Exam center: {reg.examCenter || 'N/A'}</span>
                     </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                      disabled={currentPage === totalPages}
-                    >
-                      Next
-                    </Button>
+                  </div>
+                  <div className="flex items-center gap-2 flex-wrap lg:justify-end">
+                    <span className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize ${statusPill(reg.status)}`}>{reg.status}</span>
+                    {reg.status === 'pending' && (
+                      <>
+                        <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => updateStatus(reg.id, 'approved')}>Approve</Button>
+                        <Button variant="outline" className="h-10 rounded-full px-5 text-red-600 border-red-200 bg-white hover:bg-red-50" onClick={() => updateStatus(reg.id, 'rejected')}>Reject</Button>
+                      </>
+                    )}
                   </div>
                 </div>
-              );
-            })()}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+              ))}
+              <ListPagination
+                total={registrations.length}
+                page={safePage}
+                pageSize={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(n) => { setItemsPerPage(n); setCurrentPage(1); }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

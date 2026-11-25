@@ -35,7 +35,8 @@ const CREATABLE_ROLES: Record<string, string[]> = {
   collections_admin: ['student', 'employee'],
 };
 
-export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => {
+// Scoping shared by the list and the department-count endpoints
+const buildUserScope = (req: AuthRequest) => {
   const where: any = {};
 
   if (req.user.role !== 'superadmin') {
@@ -46,7 +47,7 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
   const globalRoles = [
     'superadmin', 'org_admin', 'ceo', 'general_manager'
   ];
-  
+
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     if (['hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
       // HR also sees the General Manager, who belongs to no branch
@@ -55,11 +56,17 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
       where.branchId = req.user.branchId;
     }
   }
+  return where;
+};
+
+export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = buildUserScope(req);
 
   if (req.query.role) {
     where.role = req.query.role as string;
   }
-  if (req.query.departmentId) where.departmentId = req.query.departmentId as string;
+  if (req.query.departmentId === 'unassigned') where.departmentId = null;
+  else if (req.query.departmentId) where.departmentId = req.query.departmentId as string;
   if (req.query.status) where.status = req.query.status as string;
 
   if (!req.query.role) {
@@ -73,9 +80,67 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
     where.role = 'none'; // invalid role to return empty
   }
 
+  // Paged mode (used by the Users page): ?page=1&limit=12&search=...
+  if (req.query.page) {
+    const page = Math.max(1, parseInt(String(req.query.page), 10) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit || '12'), 10) || 12));
+    const search = String(req.query.search || '').trim();
+
+    if (!req.query.status) where.status = { not: 'resigned' };
+
+    const and: any[] = [];
+    if (where.OR) { and.push({ OR: where.OR }); delete where.OR; }
+    if (search) {
+      and.push({
+        OR: [
+          { name: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
+          { phone: { contains: search, mode: 'insensitive' } },
+          { designation: { contains: search, mode: 'insensitive' } },
+          { userId: { contains: search, mode: 'insensitive' } },
+          { biometricId: { contains: search, mode: 'insensitive' } },
+          { department: { name: { contains: search, mode: 'insensitive' } } },
+        ],
+      });
+    }
+    if (and.length) where.AND = and;
+
+    const [total, users] = await Promise.all([
+      prisma.user.count({ where }),
+      prisma.user.findMany({ where, select: USER_SELECT, orderBy: { name: 'asc' }, skip: (page - 1) * limit, take: limit }),
+    ]);
+
+    res.status(200).json({
+      success: true, count: users.length, data: users,
+      total, page, limit, totalPages: Math.max(1, Math.ceil(total / limit)),
+    });
+    return;
+  }
+
   const users = await prisma.user.findMany({ where, select: USER_SELECT });
 
   res.status(200).json({ success: true, count: users.length, data: users });
+});
+
+/** Number of (non-student, non-resigned) users per department and per role, for the Users page. */
+export const getUserDepartmentCounts = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = buildUserScope(req);
+  where.status = { not: 'resigned' };
+  if (['hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
+    where.role = { notIn: ['student', 'center_admin', 'study_abroad_admin'] };
+  } else {
+    where.role = { not: 'student' };
+  }
+
+  const [groups, roleGroups] = await Promise.all([
+    prisma.user.groupBy({ by: ['departmentId'], where, _count: { _all: true } }),
+    prisma.user.groupBy({ by: ['role'], where, _count: { _all: true } }),
+  ]);
+  const data = groups.map(g => ({ departmentId: g.departmentId, count: g._count._all }));
+  const roles = roleGroups.map(g => ({ role: g.role, count: g._count._all }));
+  const total = data.reduce((sum, d) => sum + d.count, 0);
+
+  res.status(200).json({ success: true, data, roles, total });
 });
 
 export const getUser = asyncHandler(async (req: AuthRequest, res: Response) => {

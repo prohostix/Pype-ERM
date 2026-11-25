@@ -1,16 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import {
   Dialog,
   DialogContent,
@@ -25,10 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Check, ChevronsUpDown, Plus, Edit2, Trash2, MonitorSmartphone, X } from 'lucide-react';
+import { Check, ChevronsUpDown, Search, Plus, Edit2, Trash2, MonitorSmartphone, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import api from '@/lib/api';
@@ -190,43 +180,59 @@ export function AssetManagementPanel() {
   };
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <MonitorSmartphone className="w-6 h-6 text-primary" />
-            Employee Assets
-          </CardTitle>
-          <CardDescription>
-            Search and select an employee to view or manage their assigned assets.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4 mb-6">
-            <div className="flex-1 max-w-sm flex flex-col space-y-2">
-              <Label>Select Employee</Label>
-              <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openCombobox}
-                    className="w-full justify-between font-normal"
-                    disabled={loading}
-                  >
-                    {selectedEmployeeId
-                      ? `${selectedEmployee?.name} ${selectedEmployee?.employeeProfile?.employeeId ? `(${selectedEmployee.employeeProfile.employeeId})` : ''}`
-                      : "Search employee..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[300px] p-0" align="start">
-                  <Command>
-                    <CommandInput placeholder="Search employees..." />
-                    <CommandList>
-                      <CommandEmpty>No employee found.</CommandEmpty>
-                      <CommandGroup>
-                        {employees.map((emp) => (
+    <div className="space-y-6 wizard-form">
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Employee Assets</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Search and select an employee to view or manage their assigned assets.</p>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 p-5 sm:p-6 space-y-4">
+        <div className="flex flex-col md:flex-row md:items-end gap-4">
+          <div className="flex-1 max-w-xl flex flex-col space-y-2">
+            <Label className="text-xs font-semibold text-slate-600">Select Employee</Label>
+            <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  role="combobox"
+                  aria-expanded={openCombobox}
+                  disabled={loading}
+                  className={cn(
+                    'w-full h-14 rounded-2xl px-4 flex items-center gap-3 text-left transition-colors border disabled:opacity-60',
+                    selectedEmployeeId ? 'bg-[#eaf6e6] border-[#8ae47e]' : 'bg-[#f4f6f3] border-transparent hover:bg-[#eef5ec]'
+                  )}
+                >
+                  {selectedEmployeeId ? (
+                    <>
+                      <span className="w-9 h-9 rounded-xl bg-white text-[#256c1d] font-semibold flex items-center justify-center shrink-0">
+                        {(selectedEmployee?.name || '?')[0].toUpperCase()}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-semibold text-slate-900 truncate">{selectedEmployee?.name}</span>
+                        <span className="block text-xs text-slate-500 truncate">
+                          {selectedEmployee?.employeeProfile?.employeeId || selectedEmployee?.email}
+                          {(selectedEmployee as any)?.role ? ` · ${String((selectedEmployee as any).role).replace(/_/g, ' ')}` : ''}
+                        </span>
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="w-9 h-9 rounded-xl bg-white text-slate-400 flex items-center justify-center shrink-0"><Search className="w-4 h-4" /></span>
+                      <span className="flex-1 text-sm text-slate-500">Search employee by name, ID or role…</span>
+                    </>
+                  )}
+                  <ChevronsUpDown className="h-4 w-4 shrink-0 text-slate-400" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[min(92vw,420px)] p-2 rounded-3xl border-slate-100 shadow-xl" align="start">
+                <Command className="bg-transparent">
+                  <CommandInput placeholder="Search employees..." className="h-11" />
+                  <CommandList className="max-h-72 mt-1">
+                    <CommandEmpty>No employee found.</CommandEmpty>
+                    <CommandGroup>
+                      {employees.map((emp) => {
+                        const isSel = selectedEmployeeId === emp.id;
+                        return (
                           <CommandItem
                             key={emp.id}
                             value={`${emp.name} ${emp.employeeProfile?.employeeId || ''} ${emp.email} ${(emp as any).role || ''}`}
@@ -234,112 +240,114 @@ export function AssetManagementPanel() {
                               setSelectedEmployeeId(emp.id);
                               setOpenCombobox(false);
                             }}
+                            className={cn('rounded-2xl px-3 py-2.5 gap-3 cursor-pointer', isSel && 'bg-[#eaf6e6]')}
                           >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                selectedEmployeeId === emp.id ? "opacity-100" : "opacity-0"
-                              )}
-                            />
-                            {emp.name} {emp.employeeProfile?.employeeId ? `(${emp.employeeProfile.employeeId})` : ''}
-                            <span className="ml-2 text-xs text-muted-foreground capitalize">{String((emp as any).role || '').replace(/_/g, ' ')}</span>
+                            <span className="w-9 h-9 rounded-xl bg-[#f4f6f3] text-[#256c1d] font-semibold flex items-center justify-center shrink-0">
+                              {(emp.name || '?')[0].toUpperCase()}
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-sm font-semibold text-slate-900 truncate">{emp.name}</span>
+                              <span className="block text-xs text-slate-500 truncate">{emp.employeeProfile?.employeeId || emp.email}</span>
+                            </span>
+                            <span className="rounded-full bg-[#f4f6f3] px-2.5 py-0.5 text-[10px] font-semibold text-slate-600 capitalize shrink-0">
+                              {String((emp as any).role || '').replace(/_/g, ' ')}
+                            </span>
+                            {isSel && <Check className="h-4 w-4 text-[#256c1d] shrink-0" />}
                           </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                        );
+                      })}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          {selectedEmployeeId && (
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setSelectedEmployeeId(null)} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
+                Clear
+              </Button>
+              <Button onClick={() => handleOpenDialog()} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                <Plus className="w-4 h-4 mr-2" />
+                Allot Asset(s)
+              </Button>
             </div>
-            
-            {selectedEmployeeId && (
-              <div className="flex items-end">
-                <Button onClick={() => handleOpenDialog()}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Allot Asset(s)
-                </Button>
+          )}
+        </div>
+      </div>
+
+      {selectedEmployeeId ? (
+        <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+            <h3 className="text-lg font-semibold tracking-tight">Assigned Assets</h3>
+            <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{employeeAssets.length} total</span>
+          </div>
+          <div className="p-4 sm:p-5">
+            {employeeAssets.length === 0 ? (
+              <div className="text-center py-14 text-muted-foreground">
+                <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><MonitorSmartphone className="w-6 h-6" /></div>
+                <p className="text-sm">No assets allotted to this employee</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {employeeAssets.map(asset => (
+                  <div key={asset.id} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center shrink-0">
+                        <MonitorSmartphone className="w-5 h-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-900 truncate">{asset.brand} {asset.model}</div>
+                        <div className="flex flex-wrap items-center gap-2 mt-1">
+                          <span className="rounded-full bg-white px-2.5 py-0.5 text-[11px] font-semibold text-slate-600 capitalize">{asset.type.toLowerCase()}</span>
+                          <span className="text-xs text-muted-foreground">Assigned {new Date(asset.assignedDate).toLocaleDateString()}</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1 flex flex-wrap gap-x-3">
+                          {asset.serialNumber && <span>SN: <span className="font-mono text-slate-700">{asset.serialNumber}</span></span>}
+                          {asset.imeiNumber && <span>IMEI: <span className="font-mono text-slate-700">{asset.imeiNumber}</span></span>}
+                          {asset.phoneNumber && <span>Phone: {asset.phoneNumber}</span>}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={cn(
+                        'rounded-full px-3 py-1 text-[11px] font-semibold capitalize',
+                        asset.status === 'ASSIGNED' ? 'bg-[#dff3da] text-[#256c1d]' :
+                        asset.status === 'RETURNED' ? 'bg-slate-200/70 text-slate-600' :
+                        'bg-red-100 text-red-700'
+                      )}>
+                        {asset.status.toLowerCase()}
+                      </span>
+                      <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleOpenDialog(asset)}>
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(asset.id)} className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
-
-          {selectedEmployeeId ? (
-            <div className="rounded-md border mt-6">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Asset Details</TableHead>
-                    <TableHead>Identifiers</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Assigned Date</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {employeeAssets.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                        No assets allotted to this employee
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    employeeAssets.map(asset => (
-                      <TableRow key={asset.id}>
-                        <TableCell>
-                          <div className="flex flex-col">
-                            <span className="font-medium">{asset.brand} {asset.model}</span>
-                            <span className="text-xs text-muted-foreground">{asset.type}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-col text-sm">
-                            {asset.serialNumber && <span>SN: {asset.serialNumber}</span>}
-                            {asset.imeiNumber && <span>IMEI: {asset.imeiNumber}</span>}
-                            {asset.phoneNumber && <span>Phone: {asset.phoneNumber}</span>}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={
-                            asset.status === 'ASSIGNED' ? 'default' :
-                            asset.status === 'RETURNED' ? 'secondary' :
-                            'destructive'
-                          }>
-                            {asset.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          {new Date(asset.assignedDate).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" onClick={() => handleOpenDialog(asset)}>
-                            <Edit2 className="w-4 h-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleDelete(asset.id)} className="text-red-500 hover:text-red-600">
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          ) : (
-            <div className="text-center py-12 text-muted-foreground bg-slate-50 dark:bg-slate-900 rounded-md mt-6">
-              Please select an employee to view or allot assets.
-            </div>
-          )}
-        </CardContent>
-      </Card>
+        </div>
+      ) : (
+        <div className="text-center py-16 text-muted-foreground bg-white border border-slate-100 rounded-3xl">
+          <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><MonitorSmartphone className="w-6 h-6" /></div>
+          <p className="text-sm">Please select an employee to view or allot assets.</p>
+        </div>
+      )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="wizard-form max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>{editingAsset ? 'Edit Asset' : 'Allot New Asset(s)'}</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">{editingAsset ? 'Edit Asset' : 'Allot New Asset(s)'}</DialogTitle>
           </DialogHeader>
           
           <div className="space-y-6 py-4">
             {formsData.map((formData, index) => (
-              <div key={index} className={cn("relative p-4 rounded-lg border", formsData.length > 1 ? "bg-slate-50 dark:bg-slate-900/50" : "")}>
+              <div key={index} className={cn("relative p-5 rounded-2xl", formsData.length > 1 ? "bg-[#f4f6f3]" : "bg-[#f4f6f3]")}>
                 {formsData.length > 1 && (
                   <Button 
                     variant="ghost" 
@@ -362,7 +370,7 @@ export function AssetManagementPanel() {
                       value={formData.type} 
                       onValueChange={(val: any) => updateFormData(index, { type: val })}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -384,7 +392,7 @@ export function AssetManagementPanel() {
                       }}
                       disabled={true} // Usually disabled because we selected employee in the main view
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-white">
                         <SelectValue placeholder="Select Employee" />
                       </SelectTrigger>
                       <SelectContent>
@@ -458,7 +466,7 @@ export function AssetManagementPanel() {
                       value={formData.status} 
                       onValueChange={(val: any) => updateFormData(index, { status: val })}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -504,7 +512,7 @@ export function AssetManagementPanel() {
 
             {!editingAsset && (
               <div className="pt-2">
-                <Button variant="outline" className="w-full border-dashed" onClick={addAnotherAsset}>
+                <Button variant="outline" className="w-full h-11 rounded-full border-dashed border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]" onClick={addAnotherAsset}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Another Asset
                 </Button>
@@ -513,8 +521,8 @@ export function AssetManagementPanel() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={handleCloseDialog}>Cancel</Button>
-            <Button onClick={handleSubmit}>{editingAsset ? 'Update' : 'Save All'}</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={handleCloseDialog}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleSubmit}>{editingAsset ? 'Update' : 'Save All'}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

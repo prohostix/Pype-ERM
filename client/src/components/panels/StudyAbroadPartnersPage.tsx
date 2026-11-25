@@ -19,11 +19,11 @@ export function StudyAbroadPartnersPage() {
   const [tab, setTab] = useState('partners');
   if (!isOrg) return <StudyAbroadPartnersPanel />;
   return (
-    <Tabs value={tab} onValueChange={setTab} className="space-y-4">
-      <TabsList>
-        <TabsTrigger value="partners">Partners</TabsTrigger>
-        <TabsTrigger value="applications">Applications</TabsTrigger>
-        <TabsTrigger value="commission">Commission</TabsTrigger>
+    <Tabs value={tab} onValueChange={setTab} className="space-y-6">
+      <TabsList className="h-auto rounded-3xl bg-white border border-slate-100 p-2 gap-2 w-fit max-w-full overflow-x-auto">
+        <TabsTrigger value="partners" className="rounded-full px-5 py-2.5 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Partners</TabsTrigger>
+        <TabsTrigger value="applications" className="rounded-full px-5 py-2.5 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Applications</TabsTrigger>
+        <TabsTrigger value="commission" className="rounded-full px-5 py-2.5 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Commission</TabsTrigger>
       </TabsList>
       <TabsContent value="partners"><StudyAbroadPartnersPanel /></TabsContent>
       <TabsContent value="applications"><StudyAbroadApplicationsPanel /></TabsContent>

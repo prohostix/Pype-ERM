@@ -61,11 +61,11 @@ export function SalesAdmissionReportPanel() {
               <div className="h-[280px] w-full p-4">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={trendData} margin={{ top: 10, right: 16, left: -16, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.2} vertical={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e8ece6" vertical={false} />
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} dy={10} />
                     <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} allowDecimals={false} />
-                    <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                    <Line type="monotone" dataKey="admissions" name="Admissions" stroke="hsl(var(--primary))" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6, strokeWidth: 0 }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e8ece6', borderRadius: '16px', fontSize: 12 }} />
+                    <Line type="monotone" dataKey="admissions" name="Admissions" stroke="#54b947" strokeWidth={3} dot={{ r: 4, strokeWidth: 2, fill: '#54b947' }} activeDot={{ r: 6, strokeWidth: 0 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -75,7 +75,7 @@ export function SalesAdmissionReportPanel() {
               {byUniv.length === 0 ? (
                 <EmptyState icon={Inbox} text="No admissions for this selection." />
               ) : (
-                <ul className="divide-y divide-border/50 max-h-[280px] overflow-y-auto">
+                <ul className="divide-y divide-slate-100 max-h-[280px] overflow-y-auto">
                   {byUniv.map(([name, count], i) => (
                     <RankRow key={name} rank={i + 1} label={name} value={count} max={byUniv[0][1]} tone="info" />
                   ))}
@@ -88,9 +88,9 @@ export function SalesAdmissionReportPanel() {
             {byProg.length === 0 ? (
               <EmptyState icon={Inbox} text="No admissions for this selection." />
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 md:divide-x divide-border/50">
+              <div className="grid grid-cols-1 md:grid-cols-2 md:divide-x divide-slate-100">
                 {byProg.map(([name, count], i) => (
-                  <ul key={name} className="border-b border-border/50">
+                  <ul key={name} className="border-b border-slate-100">
                     <RankRow rank={i + 1} label={name} value={count} max={byProg[0][1]} tone="success" />
                   </ul>
                 ))}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, GraduationCap, Search, ChevronDown, ChevronUp, User, CheckCircle, Clock, XCircle, Plus, Phone, Mail, MessageCircle, Upload, UploadCloud, Trash2 } from 'lucide-react';
+import { RefreshCw, GraduationCap, Search, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, User, CheckCircle, Clock, XCircle, Plus, Phone, Mail, MessageCircle, Upload, UploadCloud, Trash2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -68,20 +68,33 @@ interface Summary {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  ops_upgrade_verification: { label: 'Awaiting Ops Upgrade Check', color: 'bg-emerald-100 text-emerald-800 border-emerald-300', icon: <Clock className="w-3 h-3" /> },
-  sales_admin_review: { label: 'Admin Review', color: 'bg-indigo-100 text-indigo-700 border-indigo-200', icon: <Clock className="w-3 h-3" /> },
-  sales_verification_pending: { label: 'Pending Verification', color: 'bg-purple-100 text-purple-700 border-purple-200', icon: <Clock className="w-3 h-3" /> },
-  receipt_submitted: { label: 'Receipt Submitted & Ops Pending', color: 'bg-amber-100 text-amber-700 border-amber-200', icon: <Clock className="w-3 h-3" /> },
-  provisional_finance_pending: { label: 'Prov. Fin. Pending', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: <Clock className="w-3 h-3" /> },
-  provisional_finance_verified: { label: 'Prov. Fin. Verified', color: 'bg-green-100 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
-  provisional_finance_rejected: { label: 'Prov. Receipt Rejected', color: 'bg-red-100 text-red-700 border-red-200', icon: <XCircle className="w-3 h-3" /> },
-  document_review: { label: 'Ops Review', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: <Clock className="w-3 h-3" /> },
-  finance_review: { label: 'Finance Review', color: 'bg-blue-100 text-blue-700 border-blue-200', icon: <Clock className="w-3 h-3" /> },
-  enrolled: { label: 'Enrolled', color: 'bg-green-100 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
-  ops_rejected: { label: 'Rejected by Ops', color: 'bg-red-100 text-red-700 border-red-200', icon: <XCircle className="w-3 h-3" /> },
-  rejected: { label: 'Rejected (Finance / Sales Admin)', color: 'bg-red-100 text-red-700 border-red-200', icon: <XCircle className="w-3 h-3" /> },
-  submitted: { label: 'Submitted', color: 'bg-muted text-muted-foreground', icon: <Clock className="w-3 h-3" /> },
+  ops_upgrade_verification: { label: 'Awaiting Ops Upgrade Check', color: 'bg-[#eaf6e6] text-[#256c1d] border-transparent', icon: <Clock className="w-3 h-3" /> },
+  sales_admin_review: { label: 'Admin Review', color: 'bg-[#eaf6e6] text-[#256c1d] border-transparent', icon: <Clock className="w-3 h-3" /> },
+  sales_verification_pending: { label: 'Pending Verification', color: 'bg-amber-50 text-amber-700 border-transparent', icon: <Clock className="w-3 h-3" /> },
+  receipt_submitted: { label: 'Receipt Submitted & Ops Pending', color: 'bg-slate-100 text-slate-600 border-transparent', icon: <Clock className="w-3 h-3" /> },
+  provisional_finance_pending: { label: 'Prov. Fin. Pending', color: 'bg-amber-50 text-amber-700 border-transparent', icon: <Clock className="w-3 h-3" /> },
+  provisional_finance_verified: { label: 'Prov. Fin. Verified', color: 'bg-[#e3f7dd] text-[#1f6a17] border-transparent', icon: <CheckCircle className="w-3 h-3" /> },
+  provisional_finance_rejected: { label: 'Prov. Receipt Rejected', color: 'bg-rose-50 text-rose-700 border-transparent', icon: <XCircle className="w-3 h-3" /> },
+  document_review: { label: 'Ops Review', color: 'bg-amber-50 text-amber-700 border-transparent', icon: <Clock className="w-3 h-3" /> },
+  finance_review: { label: 'Finance Review', color: 'bg-[#eaf6e6] text-[#256c1d] border-transparent', icon: <Clock className="w-3 h-3" /> },
+  enrolled: { label: 'Enrolled', color: 'bg-[#e3f7dd] text-[#1f6a17] border-transparent', icon: <CheckCircle className="w-3 h-3" /> },
+  ops_rejected: { label: 'Rejected by Ops', color: 'bg-rose-50 text-rose-700 border-transparent', icon: <XCircle className="w-3 h-3" /> },
+  rejected: { label: 'Rejected (Finance / Sales Admin)', color: 'bg-rose-50 text-rose-700 border-transparent', icon: <XCircle className="w-3 h-3" /> },
+  submitted: { label: 'Submitted', color: 'bg-slate-100 text-slate-600 border-transparent', icon: <Clock className="w-3 h-3" /> },
 };
+
+const STAGE_FILTERS: { key: string; label: string }[] = [
+  { key: 'ops_upgrade_verification', label: 'Upgrade Check' },
+  { key: 'sales_admin_review', label: 'Admin Review' },
+  { key: 'sales_verification_pending', label: 'To Verify' },
+  { key: 'provisional_finance_pending', label: 'Prov. Pending' },
+  { key: 'provisional_finance_verified', label: 'Prov. Verified' },
+  { key: 'provisional_finance_rejected', label: 'Prov. Rejected' },
+  { key: 'document_review', label: 'Ops Review' },
+  { key: 'finance_review', label: 'Finance' },
+  { key: 'enrolled', label: 'Enrolled' },
+  { key: 'ops_rejected', label: 'Rejected' },
+];
 
 const ROLE_LABELS: Record<string, string> = {
   ops_admin: 'Operations',
@@ -94,6 +107,8 @@ const ROLE_LABELS: Record<string, string> = {
 };
 
 export function SalesStudentPipelinePanel() {
+  const PAGE_SIZE = 10;
+  const [page, setPage] = useState(1);
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(false);
@@ -155,6 +170,12 @@ export function SalesStudentPipelinePanel() {
 
   const filtered = baseFiltered.filter(e => statusFilter === 'all' || e.status === statusFilter);
 
+  // Pagination over the filtered list; any filter change returns to the first page
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pagedEnrollments = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  useEffect(() => { setPage(1); }, [search, statusFilter, salesSubFilter]);
+
   const computedSummary = {
     total: baseFiltered.length,
     ops_upgrade_verification: baseFiltered.filter(e => e.status === 'ops_upgrade_verification').length,
@@ -195,23 +216,22 @@ export function SalesStudentPipelinePanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         <div>
-          <h2 className="text-xl font-bold">Student Application Pipeline</h2>
-          <p className="text-sm text-muted-foreground mt-1">Track all applications submitted via your invite links</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">Student Application Pipeline</h2>
+          <p className="text-sm text-muted-foreground mt-1.5">Track all applications submitted via your invite links</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={fetchPipeline} disabled={loading}>
-            <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />
+        <div className="flex items-center gap-2.5 shrink-0">
+          <Button variant="outline" onClick={fetchPipeline} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50">
+            <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
             Refresh
           </Button>
 
           <Button
-            size="sm"
-            className="bg-primary hover:bg-primary/90 text-white font-medium shadow-sm transition-all flex items-center"
+            className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm"
             onClick={() => setEnrollDialogOpen(true)}
           >
-            <Plus className="w-4 h-4 mr-2" />
+            <Plus className="w-4 h-4" />
             Direct Enroll Student
           </Button>
 
@@ -231,55 +251,74 @@ export function SalesStudentPipelinePanel() {
         </div>
       </div>
 
-      {/* Summary cards */}
+      {/* Overview */}
+      {computedSummary && (() => {
+        const cs: any = computedSummary;
+        const rejectedTotal = (cs.ops_rejected || 0) + (cs.rejected || 0) + (cs.provisional_finance_rejected || 0);
+        const enrolledTotal = cs.enrolled || 0;
+        const inProgress = Math.max(0, (cs.total || 0) - enrolledTotal - rejectedTotal);
+        return (
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
+            {[
+              { label: 'Total applications', value: cs.total || 0, icon: GraduationCap },
+              { label: 'In progress', value: inProgress, icon: Clock },
+              { label: 'Enrolled', value: enrolledTotal, icon: CheckCircle },
+              { label: 'Rejected', value: rejectedTotal, icon: XCircle },
+            ].map(({ label, value, icon: Icon }) => (
+              <Card key={label} className="rounded-3xl gap-0">
+                <CardContent className="p-6 flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground">{label}</p>
+                    <p className="text-3xl font-semibold tracking-tight mt-1">{value}</p>
+                  </div>
+                  <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        );
+      })()}
+
+      {/* Stage filter: one scrollable row, in pipeline order */}
       {computedSummary && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-9 gap-3">
-          {[
-            { key: 'total', label: 'Total', color: 'text-foreground' },
-            { key: 'ops_upgrade_verification', label: 'Upgrade Check', color: 'text-emerald-600' },
-            { key: 'sales_admin_review', label: 'Admin Review', color: 'text-indigo-600' },
-            { key: 'sales_verification_pending', label: 'To Verify', color: 'text-purple-600' },
-            { key: 'provisional_finance_pending', label: 'Prov. Pending', color: 'text-yellow-600' },
-            { key: 'provisional_finance_verified', label: 'Prov. Verified', color: 'text-green-600' },
-            { key: 'provisional_finance_rejected', label: 'Prov. Rejected', color: 'text-red-600' },
-            { key: 'document_review', label: 'Ops Review', color: 'text-yellow-600' },
-            { key: 'finance_review', label: 'Finance', color: 'text-blue-600' },
-            { key: 'enrolled', label: 'Enrolled', color: 'text-green-600' },
-            { key: 'ops_rejected', label: 'Rejected', color: 'text-red-600' },
-          ].map(({ key, label, color }) => (
-            <button
-              key={key}
-              onClick={() => setStatusFilter(statusFilter === key ? 'all' : key)}
-              className={cn(
-                'p-3 rounded-xl border text-left transition-all hover:border-primary/40',
-                statusFilter === key ? 'border-primary bg-primary/5' : 'border-border bg-card'
-              )}
-            >
-              <p className="text-xs text-muted-foreground">{label}</p>
-              <p className={cn('text-2xl font-bold mt-0.5', color)}>
-                {key === 'ops_rejected' 
-                  ? ((computedSummary as any)['ops_rejected'] || 0) + ((computedSummary as any)['rejected'] || 0)
-                  : ((computedSummary as any)[key] || 0)}
-              </p>
-            </button>
-          ))}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {STAGE_FILTERS.map(({ key, label }) => {
+            const cs: any = computedSummary;
+            const count = key === 'ops_rejected' ? (cs.ops_rejected || 0) + (cs.rejected || 0) : (cs[key] || 0);
+            const active = statusFilter === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setStatusFilter(active ? 'all' : key)}
+                className={cn(
+                  'shrink-0 inline-flex items-center gap-2 pl-4 pr-2 py-2 rounded-full text-xs font-semibold transition-colors',
+                  active ? 'bg-[#0b1d14] text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                )}
+              >
+                {label}
+                <span className={cn('min-w-[22px] text-center rounded-full px-1.5 py-0.5 text-[11px]', active ? 'bg-white/15 text-white' : 'bg-[#f1f3ef] text-slate-600')}>{count}</span>
+              </button>
+            );
+          })}
         </div>
       )}
 
       {/* Filters */}
-      <div className="flex gap-3">
+      <div className="flex flex-col md:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search by name, email or program..."
-            className="pl-9"
+            className="pl-11 h-11 rounded-full bg-white border-slate-200 shadow-sm text-sm"
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
         </div>
         
         <select
-          className="h-10 px-3 border rounded-md text-sm bg-background w-[180px]"
+          className="h-11 px-4 border border-slate-200 rounded-full text-sm bg-white shadow-sm md:w-[200px]"
           value={statusFilter}
           onChange={e => setStatusFilter(e.target.value)}
         >
@@ -291,7 +330,7 @@ export function SalesStudentPipelinePanel() {
 
         {['sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'].includes(user?.role || '') && (
           <select
-            className="h-10 px-3 border rounded-md text-sm bg-background w-[200px]"
+            className="h-11 px-4 border border-slate-200 rounded-full text-sm bg-white shadow-sm md:w-[220px]"
             value={salesSubFilter}
             onChange={e => setSalesSubFilter(e.target.value)}
           >
@@ -307,9 +346,9 @@ export function SalesStudentPipelinePanel() {
 
       {/* Enrollment list */}
       {loading ? (
-        <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-4">{[1, 2, 3].map(i => <div key={i} className="h-28 bg-[#f4f6f3] rounded-3xl animate-pulse" />)}</div>
       ) : filtered.length === 0 ? (
-        <Card>
+        <Card className="rounded-3xl border border-dashed border-slate-300 shadow-none">
           <CardContent className="py-16 text-center text-muted-foreground">
             <GraduationCap className="w-10 h-10 mx-auto mb-3 opacity-30" />
             <p className="font-medium">No applications found</p>
@@ -317,8 +356,8 @@ export function SalesStudentPipelinePanel() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-3">
-          {filtered.map(e => {
+        <div className="space-y-4">
+          {pagedEnrollments.map(e => {
             const cfg = statusCfg(e.status, e);
             const isExpanded = expandedId === e.id;
             const history: StatusHistoryEntry[] = Array.isArray(e.statusHistory) ? e.statusHistory : [];
@@ -329,12 +368,12 @@ export function SalesStudentPipelinePanel() {
             const hasRejected = rejectedDocs.length > 0 || hasRejectedPhoto;
 
             return (
-              <Card key={e.id} className="hover:border-primary/30 transition-colors">
-                <CardContent className="p-4">
+              <Card key={e.id} className="rounded-3xl gap-0 hover:-translate-y-0.5 transition-all duration-300">
+                <CardContent className="p-6">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className={cn('inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border font-medium', cfg.color)}>
+                        <span className={cn('inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full border font-semibold', cfg.color)}>
                           {cfg.icon}{cfg.label}
                         </span>
                         {e.isUpgrade && (
@@ -343,20 +382,20 @@ export function SalesStudentPipelinePanel() {
                           </span>
                         )}
                         {e.enrollmentNumber && (
-                          <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">{e.enrollmentNumber}</span>
+                          <span className="font-mono text-[11px] bg-[#f1f3ef] text-slate-600 px-2.5 py-1 rounded-full">{e.enrollmentNumber}</span>
                         )}
                       </div>
-                      <h4 className="font-semibold">{e.studentName}</h4>
-                      <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-1 text-sm text-muted-foreground">
-                        <span>{e.studentEmail}</span>
-                        <span>{e.studentPhone}</span>
-                        <span>{e.program?.name || 'N/A'} {e.program?.code ? `(${e.program.code})` : ''}</span>
-                        <span>{new Date(e.createdAt).toLocaleDateString()}</span>
+                      <h4 className="font-semibold text-lg text-foreground mt-1">{e.studentName}</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1.5 mt-3 text-sm text-muted-foreground">
+                        <span className="flex items-center gap-2 min-w-0"><Mail className="w-3.5 h-3.5 shrink-0" /><span className="truncate">{e.studentEmail}</span></span>
+                        <span className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 shrink-0" />{e.studentPhone}</span>
+                        <span className="flex items-center gap-2 min-w-0"><GraduationCap className="w-3.5 h-3.5 shrink-0" /><span className="truncate">{e.program?.name || 'N/A'} {e.program?.code ? `(${e.program.code})` : ''}</span></span>
+                        <span className="flex items-center gap-2"><Clock className="w-3.5 h-3.5 shrink-0" />Applied {new Date(e.createdAt).toLocaleDateString()}</span>
                       </div>
 
                       {/* Rejected Items Notice */}
                       {hasRejected && (
-                        <div className="mt-2 bg-red-50 border border-red-200 text-red-700 p-2 rounded text-xs">
+                        <div className="mt-3 bg-rose-50 text-rose-700 p-3.5 rounded-2xl text-xs">
                           <strong>Action Required:</strong>
                           <ul className="list-disc pl-4 mt-1">
                             {hasRejectedPhoto && <li>Student Photo was rejected.</li>}
@@ -372,7 +411,7 @@ export function SalesStudentPipelinePanel() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="h-8 px-3 text-xs text-green-600 hover:text-green-700 hover:bg-green-50/50 border-green-200"
+                          className="h-9 px-4 rounded-full text-xs text-[#256c1d] hover:text-[#1f6a17] hover:bg-[#eaf6e6] bg-white border-slate-200"
                           asChild
                         >
                           <a
@@ -388,7 +427,7 @@ export function SalesStudentPipelinePanel() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="h-8 px-3 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50/50 border-blue-200"
+                          className="h-9 px-4 rounded-full text-xs text-slate-700 hover:bg-[#f4f6f3] bg-white border-slate-200"
                           asChild
                         >
                           <a
@@ -402,7 +441,7 @@ export function SalesStudentPipelinePanel() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="h-8 px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 border-border"
+                          className="h-9 px-4 rounded-full text-xs text-slate-700 hover:bg-[#f4f6f3] bg-white border-slate-200"
                           asChild
                         >
                           <a
@@ -421,7 +460,7 @@ export function SalesStudentPipelinePanel() {
                           <Button
                             variant="default"
                             size="sm"
-                            className="bg-rose-600 hover:bg-rose-700"
+                            className="h-10 px-5 rounded-full bg-rose-600 hover:bg-rose-700"
                             onClick={(evt) => {
                               evt.stopPropagation();
                               setNewReceiptUrl('');
@@ -441,7 +480,7 @@ export function SalesStudentPipelinePanel() {
                           <Button
                             variant="default"
                             size="sm"
-                            className="bg-rose-600 hover:bg-rose-700"
+                            className="h-10 px-5 rounded-full bg-rose-600 hover:bg-rose-700"
                             onClick={(evt) => {
                               evt.stopPropagation();
                               setVerifyingStudent(e);
@@ -457,7 +496,7 @@ export function SalesStudentPipelinePanel() {
                       {/* Verification Action (Only for Ops rejection, provisional verified, or link verification) */}
                       {!isSalesAdminRejection(e) && !canReuploadReceipt(e) && !e.financeRemarks && (hasRejected || e.status === 'sales_verification_pending' || e.status === 'rejected' || e.status === 'ops_rejected' || e.status === 'provisional_finance_verified') && (
                         <div className="mt-4">
-                          <Button variant="default" size="sm" className={cn("bg-purple-600 hover:bg-purple-700", (hasRejected || e.status === 'ops_rejected' || e.status === 'rejected') && "bg-rose-600 hover:bg-rose-700")} onClick={(evt) => {
+                          <Button variant="default" size="sm" className={cn("h-10 px-5 rounded-full bg-slate-900 hover:bg-slate-800", (hasRejected || e.status === 'ops_rejected' || e.status === 'rejected') && "bg-rose-600 hover:bg-rose-700")} onClick={(evt) => {
                             evt.stopPropagation();
                             if (e.status === 'provisional_finance_verified') {
                               // Open full wizard
@@ -486,7 +525,7 @@ export function SalesStudentPipelinePanel() {
                         <p className="text-xs text-yellow-600 mt-1 font-medium">📋 Waiting for Operations review</p>
                       )}
                       {e.status === 'finance_review' && (
-                        <p className="text-xs text-blue-600 mt-1 font-medium">
+                        <p className="text-xs text-emerald-600 mt-1 font-medium">
                           💰 With Finance{e.departmentReviewer ? ` — verified by ${e.departmentReviewer.name}` : ''}
                         </p>
                       )}
@@ -511,10 +550,10 @@ export function SalesStudentPipelinePanel() {
                       )}
                     </div>
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
                       onClick={() => setExpandedId(isExpanded ? null : e.id)}
-                      className="shrink-0"
+                      className="shrink-0 h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
                     >
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </Button>
@@ -522,17 +561,17 @@ export function SalesStudentPipelinePanel() {
 
                   {/* Expanded: full status timeline */}
                   {isExpanded && (
-                    <div className="mt-4 pt-4 border-t border-border">
-                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Application Timeline</p>
+                    <div className="mt-5 pt-5 border-t border-slate-100 dark:border-white/10">
+                      <p className="text-sm font-semibold text-foreground mb-4">Application timeline</p>
                       <div className="space-y-3">
                         {history.map((h, i) => (
                           <div key={i} className="flex gap-3">
                             <div className="flex flex-col items-center">
                               <div className={cn(
-                                'w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0',
-                                h.status === 'enrolled' ? 'bg-green-100 text-green-700' :
-                                  h.status.includes('rejected') ? 'bg-red-100 text-red-700' :
-                                    'bg-muted text-muted-foreground'
+                                'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0',
+                                h.status === 'enrolled' ? 'bg-[#e3f7dd] text-[#1f6a17]' :
+                                  h.status.includes('rejected') ? 'bg-rose-50 text-rose-700' :
+                                    'bg-[#f1f3ef] text-slate-500'
                               )}>
                                 <User className="w-3.5 h-3.5" />
                               </div>
@@ -564,6 +603,36 @@ export function SalesStudentPipelinePanel() {
               </Card>
             );
           })}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {!loading && filtered.length > PAGE_SIZE && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
+          <span>
+            Showing {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)} of {filtered.length.toLocaleString()}
+          </span>
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage <= 1}
+              onClick={() => { setPage(currentPage - 1); setExpandedId(null); }}
+              className="h-9 rounded-full px-4 bg-white border-slate-200 gap-1"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" /> Previous
+            </Button>
+            <span className="px-3 font-medium text-foreground tabular-nums">Page {currentPage} of {totalPages}</span>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage >= totalPages}
+              onClick={() => { setPage(currentPage + 1); setExpandedId(null); }}
+              className="h-9 rounded-full px-4 bg-white border-slate-200 gap-1"
+            >
+              Next <ChevronRight className="w-3.5 h-3.5" />
+            </Button>
+          </div>
         </div>
       )}
 

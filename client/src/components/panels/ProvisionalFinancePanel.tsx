@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, FileText, Search, RefreshCw } from 'lucide-react';
+import { FileText, Search, RefreshCw } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -12,6 +11,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 
 import { CS, numLocale } from '@/lib/currency';
+import { ListPagination } from '@/components/ui/list-pagination';
 type Mode = 'view' | 'verify' | 'reject';
 
 // statusHistory may be an array or (from older writes) an object of entries.
@@ -28,6 +28,8 @@ export function ProvisionalFinancePanel() {
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const [active, setActive] = useState<any | null>(null);
   const [mode, setMode] = useState<Mode>('view');
@@ -111,69 +113,74 @@ export function ProvisionalFinancePanel() {
           .some((v) => (v || '').toLowerCase().includes(q)))
     : enrollments;
 
+  const currentPage = Math.min(page, Math.max(1, Math.ceil(filtered.length / pageSize)));
+  const pagedRows = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   const receiptUrl = active ? (active.receiptUrl || active.provisionalReceiptUrl) : null;
   const isPdf = !!receiptUrl && /\.pdf(\?|$)/i.test(receiptUrl);
   const activeRejection = active ? lastRejection(active) : null;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between gap-3">
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h2 className="text-2xl font-bold">Provisional Verifications</h2>
-          <p className="text-muted-foreground text-sm mt-1">Verify or reject payment receipts from provisional enrollments.</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Provisional Verifications</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Verify or reject payment receipts from provisional enrollments.</p>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchEnrollments} disabled={loading}>
+        <Button variant="outline" onClick={fetchEnrollments} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
           <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
           Refresh
         </Button>
       </div>
 
-      <Card>
-        <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 space-y-0">
-          <div>
-            <CardTitle>Pending Receipts ({enrollments.length})</CardTitle>
-            <CardDescription>Review the receipt, then verify it or send it back to Sales</CardDescription>
-          </div>
-          <div className="relative w-full md:w-72">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search student, program, sales…"
-              value={search}
-              onChange={(ev) => setSearch(ev.target.value)}
-              className="pl-9"
-            />
-          </div>
-        </CardHeader>
-        <CardContent>
+      <div className="rounded-3xl bg-white border border-slate-100 p-4">
+        <div className="relative">
+          <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Input
+            placeholder="Search student, program, sales…"
+            value={search}
+            onChange={(ev) => { setSearch(ev.target.value); setPage(1); }}
+            className="pl-11 h-12 rounded-full bg-[#f4f6f3] border-transparent"
+          />
+        </div>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Pending Receipts ({enrollments.length})</h3>
+          <p className="text-sm text-muted-foreground">Review the receipt, then verify it or send it back to Sales</p>
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="space-y-2">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-muted rounded-md animate-pulse" />)}</div>
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-24 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : filtered.length === 0 ? (
-            <p className="text-center text-muted-foreground py-8">
-              {enrollments.length === 0 ? 'No pending provisional enrollments.' : 'No matches for your search.'}
-            </p>
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><FileText className="w-6 h-6" /></div>
+              <p className="text-sm">{enrollments.length === 0 ? 'No pending provisional enrollments.' : 'No matches for your search.'}</p>
+            </div>
           ) : (
-            <div className="space-y-4">
-              {filtered.map((e) => {
+            <div className="space-y-3">
+              {pagedRows.map((e) => {
                 const prev = lastRejection(e);
                 const hasReceipt = !!(e.receiptUrl || e.provisionalReceiptUrl);
                 return (
-                  <div key={e.id} className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-muted/30 rounded-xl border">
+                  <div key={e.id} className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors rounded-2xl">
                     <div className="space-y-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <p className="font-bold text-sm">{e.studentName}</p>
+                        <p className="font-semibold text-base text-slate-900">{e.studentName}</p>
                         {prev && (
-                          <Badge variant="outline" className="text-[10px] border-amber-300 bg-amber-50 text-amber-700">
+                          <Badge variant="outline" className="text-[10px] rounded-full border-0 bg-amber-100 text-amber-700">
                             Re-submitted
                           </Badge>
                         )}
                         {!hasReceipt && (
-                          <Badge variant="outline" className="text-[10px] border-red-300 bg-red-50 text-red-700">
+                          <Badge variant="outline" className="text-[10px] rounded-full border-0 bg-red-100 text-red-700">
                             No receipt
                           </Badge>
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground">{e.studentEmail} • {e.studentPhone}</p>
-                      <p className="text-xs font-medium bg-primary/10 text-primary w-fit px-2 py-0.5 rounded-full">{e.program?.name}</p>
+                      <p className="text-xs font-semibold bg-white text-[#256c1d] w-fit px-2.5 py-0.5 rounded-full">{e.program?.name}</p>
                       <p className="text-xs text-muted-foreground">
                         Claimed <span className="font-semibold text-foreground">{formatINR(e.initialPaymentAmount)}</span>
                         {e.salesUser?.name ? ` • by ${e.salesUser.name}` : ''}
@@ -185,42 +192,38 @@ export function ProvisionalFinancePanel() {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2 shrink-0">
-                      <Button variant="outline" size="sm" onClick={() => open(e, 'view')}>
-                        <FileText className="w-4 h-4 mr-2" />
+                      <Button variant="outline" className="h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold" onClick={() => open(e, 'view')}>
                         View Receipt
                       </Button>
                       <Button
                         variant="outline"
-                        size="sm"
-                        className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                        className="h-10 rounded-full px-5 border-red-200 bg-white text-red-600 hover:bg-red-50 hover:text-red-700"
                         onClick={() => open(e, 'reject')}
                       >
-                        <XCircle className="w-4 h-4 mr-2" />
                         Reject
                       </Button>
                       <Button
-                        size="sm"
-                        className="bg-green-600 hover:bg-green-700 text-white"
+                        className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
                         disabled={!hasReceipt}
                         title={hasReceipt ? undefined : 'No receipt uploaded — reject it so Sales can upload one'}
                         onClick={() => open(e, 'verify')}
                       >
-                        <CheckCircle className="w-4 h-4 mr-2" />
                         Verify
                       </Button>
                     </div>
                   </div>
                 );
               })}
+              <ListPagination total={filtered.length} page={currentPage} pageSize={pageSize} onPageChange={setPage} onPageSizeChange={(n) => { setPageSize(n); setPage(1); }} />
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       <Dialog open={!!active} onOpenChange={(o) => { if (!o) close(); }}>
-        <DialogContent className={mode === 'view' ? 'max-w-3xl h-[85vh] flex flex-col' : 'max-w-md'}>
+        <DialogContent className={`wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8 ${mode === 'view' ? 'max-w-3xl h-[85vh] flex flex-col' : 'max-w-md'}`} style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">
               {mode === 'verify' ? 'Verify Receipt' : mode === 'reject' ? 'Reject Receipt' : `Receipt for ${active?.studentName || ''}`}
             </DialogTitle>
           </DialogHeader>
@@ -232,7 +235,7 @@ export function ProvisionalFinancePanel() {
                 {active.initialPaymentDate ? ` • paid ${format(new Date(active.initialPaymentDate), 'dd MMM yyyy')}` : ''}
                 {active.salesUser?.name ? ` • submitted by ${active.salesUser.name}` : ''}
               </div>
-              <div className="flex-1 min-h-0 bg-muted rounded-md overflow-hidden relative flex items-center justify-center">
+              <div className="flex-1 min-h-0 bg-[#f4f6f3] rounded-2xl overflow-hidden relative flex items-center justify-center">
                 {receiptUrl ? (
                   isPdf ? (
                     <iframe src={api.getFileUrl(receiptUrl)} className="w-full h-full" />
@@ -244,25 +247,23 @@ export function ProvisionalFinancePanel() {
                 )}
               </div>
               {receiptUrl && (
-                <a href={api.getFileUrl(receiptUrl)} target="_blank" rel="noreferrer" className="text-xs text-primary underline w-fit">
+                <a href={api.getFileUrl(receiptUrl)} target="_blank" rel="noreferrer" className="text-xs font-semibold text-[#256c1d] underline w-fit">
                   Open in new tab
                 </a>
               )}
               <DialogFooter>
                 <Button
                   variant="outline"
-                  className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                  className="h-11 rounded-full px-6 border-red-200 bg-white text-red-600 hover:bg-red-50 hover:text-red-700"
                   onClick={() => setMode('reject')}
                 >
-                  <XCircle className="w-4 h-4 mr-2" />
                   Reject
                 </Button>
                 <Button
-                  className="bg-green-600 hover:bg-green-700 text-white"
+                  className="h-11 rounded-full px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
                   disabled={!receiptUrl}
                   onClick={() => setMode('verify')}
                 >
-                  <CheckCircle className="w-4 h-4 mr-2" />
                   Verify
                 </Button>
               </DialogFooter>
@@ -288,9 +289,9 @@ export function ProvisionalFinancePanel() {
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setMode('view')} disabled={submitting}>Back to receipt</Button>
+                <Button variant="outline" className="h-11 rounded-full px-6" onClick={() => setMode('view')} disabled={submitting}>Back to receipt</Button>
                 <Button
-                  className="bg-green-600 hover:bg-green-700 text-white"
+                  className="h-11 rounded-full px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
                   disabled={submitting || !(Number(amount) > 0)}
                   onClick={handleVerify}
                 >
@@ -323,8 +324,8 @@ export function ProvisionalFinancePanel() {
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setMode('view')} disabled={submitting}>Back to receipt</Button>
-                <Button variant="destructive" disabled={submitting || !remarks.trim()} onClick={handleReject}>
+                <Button variant="outline" className="h-11 rounded-full px-6" onClick={() => setMode('view')} disabled={submitting}>Back to receipt</Button>
+                <Button className="h-11 rounded-full px-6 bg-red-600 hover:bg-red-700 text-white font-semibold" disabled={submitting || !remarks.trim()} onClick={handleReject}>
                   {submitting ? 'Rejecting…' : 'Reject Receipt'}
                 </Button>
               </DialogFooter>

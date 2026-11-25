@@ -1,14 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react';
-import { 
-  Target, 
-  GraduationCap, 
-  Zap, 
-  ArrowUpRight,
-  BarChart3,
-  Clock
-} from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { TargetsPanel } from '@/components/panels/TargetsPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
@@ -24,9 +17,7 @@ import { SubSalesPortalPanel } from '@/components/panels/SubSalesPortalPanel';
 import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
 import { EnrollStudentPanel } from '@/components/panels/EnrollStudentPanel';
 import { ProvisionalEnrollmentPanel } from '@/components/panels/ProvisionalEnrollmentPanel';
-import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
 import { LeadsPanel } from '@/components/panels/LeadsPanel';
-import { CEOKPIReportPanel } from '@/components/panels/CEOKPIReportPanel';
 import { MyProfilePanel } from '@/components/panels/MyProfilePanel';
 import { SalesTeamReportPanel } from '@/components/panels/SalesTeamReportPanel';
 import { SalesCounselorReportPanel } from '@/components/panels/SalesCounselorReportPanel';
@@ -37,6 +28,8 @@ import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
 import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { EscalationsPanel } from '@/components/panels/EscalationsPanel';
 import { ComplaintsPanel } from '@/components/panels/ComplaintsPanel';
+import { ImportantUpdatesPanel } from '@/components/panels/ImportantUpdatesPanel';
+import { ComingSoonPanel } from '@/components/panels/ComingSoonPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
 import TeamPermissionsPanel from '@/components/panels/TeamPermissionsPanel';
@@ -50,13 +43,11 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  Legend
 } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -134,10 +125,6 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       case 'team_members':
       case 'todays_performance':
       case 'my_team': return <TeamPerformancePanel />;
-      case 'attendance_overview':
-      case 'activity_monitoring':
-      case 'team_availability':
-      case 'daily_activity_report': return <EmployeeActivityReportPanel />;
 
       // Target Management
       case 'targets':
@@ -173,8 +160,8 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       // Team Communication
       case 'team_announcements':
       case 'announcements': return <AnnouncementsPanel />;
-      case 'team_notes':
-      case 'important_updates':
+      case 'team_notes': return <ComingSoonPanel title="Team Notes" description="Shared notes for your sales team." note="Team notes aren't available yet. You'll be able to write and share notes with your team here once this module launches." />;
+      case 'important_updates': return <ImportantUpdatesPanel />;
       case 'notice-board': return <NoticeBoardPanel />;
 
       // Sales Resources
@@ -188,7 +175,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       case 'university_details_res':
       case 'universities': return <UniversitiesPanel />;
       case 'sales_materials':
-      case 'brochures': return <NoticeBoardPanel />;
+      case 'brochures': return <ComingSoonPanel title="Sales Materials" description="Brochures and materials your team can share with students." note="Sales materials aren't available yet. Brochures and shareable files will be listed here once this module launches." />;
 
       // Requests & Approvals
       case 'team_requests':
@@ -236,7 +223,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
 
       { id: '__my_team', label: 'My Team', isSection: true },
       { id: 'team_members', label: 'Team Members' },
-      { id: 'attendance_overview', label: 'Attendance Overview' },
       { id: 'team_permissions', label: 'Team Permissions' },
 
       { id: '__tasks', label: 'Task Management', isSection: true },
@@ -250,7 +236,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
       { id: 'team_reports', label: 'Team Reports' },
       { id: 'admission_reports', label: 'Admission Reports' },
       { id: 'conversion_report', label: 'Conversion Report' },
-      { id: 'daily_activity_report', label: 'Daily Activity Report' },
 
       { id: '__communication', label: 'Team Communication', isSection: true },
       { id: 'team_announcements', label: 'Team Announcements' },
@@ -321,265 +306,227 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
 }
 
 function OverviewContent({ metrics, students, targets, loading, onNavigate }: any) {
-  // Compute live stats
   const totalStudents = students.length;
   const activeStudents = students.filter((s: any) => s.status === 'active').length;
   const pendingStudents = students.filter((s: any) => s.status === 'pending').length;
 
-  // Student Program breakdown from real data
-  const programCounts: Record<string, number> = {};
-  students.forEach((s: any) => {
-    const prog = s.program?.name || 'Unknown Program';
-    programCounts[prog] = (programCounts[prog] || 0) + 1;
-  });
-  const COLORS = ['hsl(var(--primary))', 'hsl(var(--info))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--error))'];
-  const programData = Object.entries(programCounts).map(([name, value], i) => ({
-    name, value, color: COLORS[i % COLORS.length],
-  }));
+  const tally = (keyOf: (s: any) => string) => {
+    const m: Record<string, number> = {};
+    students.forEach((s: any) => { const k = keyOf(s); m[k] = (m[k] || 0) + 1; });
+    return Object.keys(m).map(k => ({ name: k, value: m[k] })).sort((x, y) => y.value - x.value);
+  };
+  const programRows = tally((s) => s.program?.name || 'Unknown Program').slice(0, 8);
+  const universityRows = tally((s) => s.university?.name || s.program?.university?.name || 'Unknown').slice(0, 8);
+  const PALETTE = ['#54b947', '#8ae47e', '#256c1d', '#b8d8b0', '#0b1d14', '#64748b'];
 
   // Target progress — compute from achieved/target since model has no status/progress fields
   const activeTargets = targets.filter((t: any) => (t.achieved || 0) < t.target);
   const avgProgress = activeTargets.length
-    ? Math.round(activeTargets.reduce((s: number, t: any) => {
+    ? Math.round(activeTargets.reduce((sum: number, t: any) => {
         const pct = t.target > 0 ? Math.round((t.achieved / t.target) * 100) : 0;
-        return s + pct;
+        return sum + pct;
       }, 0) / activeTargets.length)
     : 0;
 
-  // Student status bar chart
   const statusData = [
-    { label: 'Active', value: activeStudents, color: 'hsl(var(--success))' },
-    { label: 'Pending', value: pendingStudents, color: 'hsl(var(--warning))' },
-    { label: 'Inactive', value: students.filter((s: any) => s.status === 'inactive').length, color: 'hsl(var(--error))' },
-    { label: 'Completed', value: students.filter((s: any) => s.status === 'completed').length, color: 'hsl(var(--info))' },
+    { label: 'Active', value: activeStudents },
+    { label: 'Pending', value: pendingStudents },
+    { label: 'Inactive', value: students.filter((s: any) => s.status === 'inactive').length },
+    { label: 'Completed', value: students.filter((s: any) => s.status === 'completed').length },
   ];
+
+  // New admissions per month, last 6 months
+  const today = new Date();
+  const trend = Array.from({ length: 6 }, (_, i) => {
+    const d = new Date(today.getFullYear(), today.getMonth() - (5 - i), 1);
+    return { key: `${d.getFullYear()}-${d.getMonth()}`, name: d.toLocaleDateString('en-US', { month: 'short' }), count: 0 };
+  });
+  students.forEach((s: any) => {
+    if (!s.createdAt) return;
+    const d = new Date(s.createdAt);
+    const m = trend.find(x => x.key === `${d.getFullYear()}-${d.getMonth()}`);
+    if (m) m.count++;
+  });
+  const thisMonth = trend[5].count;
+  const lastMonth = trend[4].count;
 
   const recentStudents = [...students]
     .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, 4);
+    .slice(0, 5);
 
-  return (
-    <>
-      {/* Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <SalesMetric
-          title="Total Students Enrolled"
-          value={loading ? '...' : totalStudents}
-          trend={`${activeStudents} active`}
-          icon={<GraduationCap className="w-5 h-5" />}
-          color="primary"
-          onClick={() => onNavigate('enrolled_students')}
-        />
-        <SalesMetric
-          title="Pending Verification"
-          value={loading ? '...' : pendingStudents}
-          trend="Awaiting review"
-          icon={<Clock className="w-5 h-5" />}
-          color="success"
-          onClick={() => onNavigate('enrolled_students')}
-        />
-        <SalesMetric
-          title="Active Targets"
-          value={loading ? '...' : activeTargets.length}
-          trend={avgProgress > 0 ? `${avgProgress}% avg progress` : 'No targets yet'}
-          icon={<Target className="w-5 h-5" />}
-          color="warning"
-          onClick={() => onNavigate('targets')}
-        />
-        <SalesMetric
-          title="Pending Tasks"
-          value={loading ? '...' : (metrics.pendingTasks || 0)}
-          trend={metrics.overdueTasks ? `${metrics.overdueTasks} overdue` : 'On track'}
-          icon={<Zap className="w-5 h-5" />}
-          color="info"
-          onClick={() => onNavigate('tasks')}
-        />
-      </div>
+  const tip = { backgroundColor: '#fff', border: '1px solid #e8ece6', borderRadius: '16px', fontSize: 12 };
+  const statusPill = (st: string) =>
+    st === 'active' || st === 'admitted' ? 'bg-[#dff3da] text-[#256c1d]' : st === 'cancelled' || st === 'inactive' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700';
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Student Status Chart */}
-        <Card
-          className="lg:col-span-2 border-none shadow-xl bg-card/60 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors"
-          onClick={() => onNavigate('enrolled_students')}
-        >
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>Student Status Distribution</CardTitle>
-              <CardDescription>Live database breakdown — click to manage students</CardDescription>
+  const stats = [
+    { title: 'Total Students Enrolled', value: loading ? '...' : totalStudents, note: `${activeStudents} active`, tab: 'enrolled_students' },
+    { title: 'Pending Verification', value: loading ? '...' : pendingStudents, note: 'Awaiting review', tab: 'enrolled_students' },
+    { title: 'Joined This Month', value: loading ? '...' : thisMonth, note: lastMonth > 0 ? `${thisMonth >= lastMonth ? '+' : ''}${Math.round(((thisMonth - lastMonth) / lastMonth) * 100)}% vs last month` : 'No previous month', tab: 'enrolled_students' },
+    { title: 'Active Targets', value: loading ? '...' : activeTargets.length, note: avgProgress > 0 ? `${avgProgress}% avg progress` : 'No targets yet', tab: 'targets' },
+    { title: 'Pending Tasks', value: loading ? '...' : (metrics.pendingTasks || 0), note: metrics.overdueTasks ? `${metrics.overdueTasks} overdue` : 'On track', tab: 'tasks' },
+  ];
+
+  const RankRows = ({ rows }: { rows: { name: string; value: number }[] }) => {
+    if (!rows.length) return <p className="py-8 text-center text-sm text-muted-foreground">No data yet</p>;
+    const max = Math.max(...rows.map(r => r.value), 1);
+    const total = rows.reduce((n, r) => n + r.value, 0) || 1;
+    return (
+      <div className="space-y-3">
+        {rows.map(r => (
+          <div key={r.name} className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+            <div className="flex items-center justify-between gap-3 text-sm">
+              <span className="font-medium text-slate-900 truncate">{r.name}</span>
+              <span className="shrink-0 text-slate-600"><span className="font-semibold text-slate-900">{r.value}</span> · {Math.round((r.value / total) * 100)}%</span>
             </div>
-            <BarChart3 className="w-5 h-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="h-[260px]">
-            {students.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={statusData} margin={{ top: 5, right: 20, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-                  <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} allowDecimals={false} />
-                  <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '12px' }} />
-                  <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={36}>
-                    {statusData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
-                <GraduationCap className="w-10 h-10 opacity-20" />
-                <p className="text-sm">No students registered yet</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Student Programs */}
-        <Card
-          className="border-none shadow-xl bg-card/60 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors"
-          onClick={() => onNavigate('enrolled_students')}
-        >
-          <CardHeader>
-            <CardTitle>Program Distribution</CardTitle>
-            <CardDescription>Academic course breakdown</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col items-center">
-            {programData.length > 0 ? (
-              <>
-                <div className="h-[160px] w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={programData} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={4} dataKey="value">
-                        {programData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '12px' }} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="w-full grid grid-cols-2 gap-2 mt-2">
-                  {programData.map(item => (
-                    <div key={item.name} className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-                      <span className="text-xs text-muted-foreground truncate">{item.name}</span>
-                      <span className="text-xs font-bold ml-auto">{item.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="h-[200px] flex flex-col items-center justify-center text-muted-foreground gap-2">
-                <GraduationCap className="w-8 h-8 opacity-20" />
-                <p className="text-sm">No course data yet</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+            <div className="h-2 rounded-full bg-white mt-2 overflow-hidden">
+              <div className="h-full rounded-full bg-[#54b947]" style={{ width: `${(r.value / max) * 100}%` }} />
+            </div>
+          </div>
+        ))}
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Recent Students */}
-        <Card className="cursor-pointer hover:border-primary/30 transition-colors" onClick={() => onNavigate('enrolled_students')}>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg">Recent Enrollments</CardTitle>
-            <Button variant="ghost" size="sm" className="text-primary font-bold" onClick={e => { e.stopPropagation(); onNavigate('enrolled_students'); }}>
-              View All <ArrowUpRight className="ml-1 w-3 h-3" />
-            </Button>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {loading ? (
-              [1,2,3].map(i => <div key={i} className="h-12 bg-muted rounded-lg animate-pulse" />)
-            ) : recentStudents.length === 0 ? (
-              <div className="py-6 text-center text-muted-foreground">
-                <GraduationCap className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                <p className="text-sm">No active students</p>
-              </div>
-            ) : (
-              recentStudents.map((student: any) => (
-                <div key={student.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
-                      {(student.name || '?')[0].toUpperCase()}
-                    </div>
-                    <div>
-                      <h5 className="text-sm font-bold">{student.name || 'Unknown'}</h5>
-                      <p className="text-[10px] text-muted-foreground">{student.program?.name || 'N/A'} · {new Date(student.createdAt).toLocaleDateString()}</p>
-                    </div>
-                  </div>
-                  <Badge variant="outline" className="text-[10px] uppercase font-bold bg-green-50 text-green-700 border-green-200">{student.status}</Badge>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Targets + Punch */}
-        <div className="space-y-4">
-          <Card className="cursor-pointer hover:border-primary/30 transition-colors" onClick={() => onNavigate('targets')}>
-            <CardHeader className="flex flex-row items-center justify-between pb-3">
-              <CardTitle className="text-lg">Active Targets</CardTitle>
-              <Button variant="ghost" size="sm" className="text-primary font-bold" onClick={e => { e.stopPropagation(); onNavigate('targets'); }}>
-                View All <ArrowUpRight className="ml-1 w-3 h-3" />
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {loading ? (
-                [1,2].map(i => <div key={i} className="h-10 bg-muted rounded-lg animate-pulse" />)
-              ) : activeTargets.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-4">No active targets</p>
-              ) : (
-              activeTargets.slice(0, 3).map((t: any) => {
-                  const pct = t.target > 0 ? Math.round((t.achieved / t.target) * 100) : 0;
-                  const label = typeof t.employeeId === 'object' ? t.employeeId?.name
-                    : typeof t.departmentId === 'object' ? t.departmentId?.name
-                    : t.type || 'Target';
-                  return (
-                  <div key={t.id} className="space-y-1">
-                    <div className="flex justify-between text-xs">
-                      <span className="font-medium truncate max-w-[180px]">{label} ({t.period})</span>
-                      <span className="font-bold text-primary">{pct}%</span>
-                    </div>
-                    <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                      <div className="h-full bg-primary rounded-full" style={{ width: `${pct}%` }} />
-                    </div>
-                  </div>
-                  );
-                })
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function SalesMetric({ title, value, trend, icon, color, onClick }: any) {
-  const colorMap: any = {
-    primary: 'bg-primary/10 text-primary',
-    info: 'bg-info/10 text-info',
-    warning: 'bg-warning/10 text-warning',
-    success: 'bg-success/10 text-success',
+    );
   };
 
-  return (
-    <Card
-      className={cn('group transition-all duration-300 hover:border-primary/50', onClick && 'cursor-pointer')}
-      onClick={onClick}
-    >
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className={cn('p-2.5 rounded-xl transition-transform group-hover:scale-110', colorMap[color])}>
-            {icon}
-          </div>
-          <p className="text-[10px] font-bold text-muted-foreground uppercase">{trend}</p>
-        </div>
+  const Panel = ({ title, subtitle, action, children, className = '' }: any) => (
+    <div className={`rounded-3xl bg-white border border-slate-100 overflow-hidden ${className}`}>
+      <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest">{title}</p>
-          <p className="text-3xl font-bold tracking-tight mt-1">{value}</p>
+          <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
+          {subtitle && <p className="text-sm text-muted-foreground mt-0.5">{subtitle}</p>}
         </div>
-      </CardContent>
-    </Card>
+        {action}
+      </div>
+      <div className="p-5 sm:p-6">{children}</div>
+    </div>
+  );
+
+  const viewAll = (tab: string) => (
+    <Button variant="outline" className="h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold" onClick={() => onNavigate(tab)}>
+      View All <ArrowUpRight className="ml-1 w-3.5 h-3.5" />
+    </Button>
+  );
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Team Summary</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Admissions, targets and tasks for your sales team at a glance.</p>
+      </div>
+
+      {/* Stats strip */}
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="grid grid-cols-2 lg:grid-cols-5 divide-x divide-y lg:divide-y-0 divide-slate-100">
+          {stats.map(st => (
+            <button key={st.title} type="button" onClick={() => onNavigate(st.tab)} className="text-left p-5 sm:p-6 hover:bg-[#f7faf6] transition-colors">
+              <p className="text-sm font-medium text-slate-500">{st.title}</p>
+              <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-2">{st.value}</p>
+              <p className="text-xs text-muted-foreground mt-1.5">{st.note}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <Panel className="lg:col-span-2" title="New Admissions" subtitle="Last 6 months">
+          <div className="h-[260px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={trend} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e8ece6" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} allowDecimals={false} />
+                <Tooltip cursor={{ fill: '#f4f6f3' }} contentStyle={tip} />
+                <Bar dataKey="count" name="Admissions" fill="#54b947" radius={[10, 10, 0, 0]} barSize={36} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </Panel>
+
+        <Panel title="Student Status" subtitle="Live breakdown">
+          {students.length > 0 ? (
+            <div className="h-[260px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={statusData} dataKey="value" nameKey="label" cx="50%" cy="46%" innerRadius={55} outerRadius={85} paddingAngle={3}>
+                    {statusData.map((_e, i) => <Cell key={i} fill={PALETTE[i % PALETTE.length]} />)}
+                  </Pie>
+                  <Tooltip contentStyle={tip} />
+                  <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <p className="py-16 text-center text-sm text-muted-foreground">No students registered yet</p>
+          )}
+        </Panel>
+      </div>
+
+      {/* Breakdowns */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Panel title="Program Distribution" subtitle="Top programs by students" action={viewAll('enrolled_students')}>
+          <RankRows rows={programRows} />
+        </Panel>
+        <Panel title="University Distribution" subtitle="Top universities by students">
+          <RankRows rows={universityRows} />
+        </Panel>
+      </div>
+
+      {/* Recent enrollments + targets */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Panel title="Recent Enrollments" action={viewAll('enrolled_students')}>
+          {loading ? (
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
+          ) : recentStudents.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">No students yet</p>
+          ) : (
+            <div className="space-y-3">
+              {recentStudents.map((student: any) => (
+                <div key={student.id} className="flex items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3]">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-2xl bg-white text-slate-700 flex items-center justify-center font-semibold text-sm shrink-0">
+                      {(student.name || '?')[0].toUpperCase()}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-slate-900 truncate">{student.name || 'Unknown'}</p>
+                      <p className="text-xs text-muted-foreground truncate">{student.program?.name || 'N/A'} · {new Date(student.createdAt).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <span className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize shrink-0 ${statusPill(student.status)}`}>{student.status}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </Panel>
+
+        <Panel title="Active Targets" action={viewAll('targets')}>
+          {loading ? (
+            <div className="space-y-3">{[1, 2].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
+          ) : activeTargets.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">No active targets</p>
+          ) : (
+            <div className="space-y-3">
+              {activeTargets.slice(0, 5).map((t: any) => {
+                const pct = t.target > 0 ? Math.round((t.achieved / t.target) * 100) : 0;
+                const label = typeof t.employeeId === 'object' ? t.employeeId?.name
+                  : typeof t.departmentId === 'object' ? t.departmentId?.name
+                  : t.type || 'Target';
+                return (
+                  <div key={t.id} className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                    <div className="flex items-center justify-between gap-3 text-sm">
+                      <span className="font-medium text-slate-900 truncate">{label} <span className="text-muted-foreground font-normal">({t.period})</span></span>
+                      <span className="font-semibold text-slate-900 shrink-0">{pct}%</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-white mt-2 overflow-hidden">
+                      <div className="h-full rounded-full bg-[#54b947]" style={{ width: `${Math.min(100, pct)}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </Panel>
+      </div>
+    </div>
   );
 }
 
@@ -673,173 +620,107 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
   const expectedIncentive = myTargets.reduce((sum: number, t: any) => sum + (achievedFor(t) >= t.target ? (t.incentive || 0) : 0), 0);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">{user?.name || 'Sales Dashboard'}</h1>
-          <p className="text-muted-foreground mt-1">{user?.designation || (user?.role === 'sales_sub_admin' ? 'Sales Sub Admin' : 'Sales Professional')}</p>
-        </div>
-        {activeTab === 'overview' && (
-          <Select value={month} onValueChange={setMonth}>
-            <SelectTrigger className="w-full md:w-52"><SelectValue placeholder="Select month" /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All time</SelectItem>
-              {monthOptions.map((m) => <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        )}
-      </div>
-
-      {/* Summary cards: Overview page only */}
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      {/* Summary strips: Overview page only */}
       {activeTab === 'overview' && (<>
-      {/* Executive Overview Row 1: Performance */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase font-bold">My Admissions</p>
-          <p className="text-2xl font-bold mt-1 text-primary">{loading ? '...' : monthStudents.length}</p>
-        </CardContent></Card>
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('targets')}><CardContent className="p-4 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase font-bold">My Target</p>
-          <p className="text-2xl font-bold mt-1">
-            {loading ? '...' : targetTotal}
-          </p>
-        </CardContent></Card>
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('targets')}><CardContent className="p-4 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase font-bold">Achievement %</p>
-          <p className="text-2xl font-bold mt-1 text-info">
-            {loading ? '...' : achievementPct}%
-          </p>
-        </CardContent></Card>
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase font-bold">My Collection</p>
-          <p className="text-2xl font-bold mt-1 text-success">
-            {loading ? '...' : `${CS()}${actualCollection.toLocaleString(numLocale())}`}
-          </p>
-        </CardContent></Card>
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('targets')}><CardContent className="p-4 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase font-bold">Expected Incentive</p>
-          <p className="text-2xl font-bold mt-1 text-warning">
-            {loading ? '...' : `${CS()}${expectedIncentive.toLocaleString(numLocale())}`}
-          </p>
-        </CardContent></Card>
-      </div>
+      <StatStrip title="Performance" loading={loading} onNavigate={handleNavigate} action={
+        <Select value={month} onValueChange={setMonth}>
+          <SelectTrigger className="w-44 h-10 rounded-full bg-white border-slate-200 px-4 text-sm"><SelectValue placeholder="Select month" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All time</SelectItem>
+            {monthOptions.map((m) => <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      } items={[
+        { label: 'My admissions', value: monthStudents.length, tab: 'enrolled_students' },
+        { label: 'My target', value: targetTotal, tab: 'targets' },
+        { label: 'Achievement', value: `${achievementPct}%`, tab: 'targets', tone: 'text-[#256c1d]' },
+        { label: 'My collection', value: `${CS()}${actualCollection.toLocaleString(numLocale())}`, tab: 'enrolled_students' },
+        { label: 'Expected incentive', value: `${CS()}${expectedIncentive.toLocaleString(numLocale())}`, tab: 'targets' },
+      ]} />
 
-      {/* Executive Overview Row 2: Admission Status */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
-          <div className="p-2 bg-yellow-500/10 rounded-full text-yellow-500"><Clock className="w-4 h-4" /></div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold">Verification Pending</p>
-            <p className="text-xl font-bold">{loading ? '...' : monthStudents.filter((s: any) => s.status === 'pending').length}</p>
-          </div>
-        </CardContent></Card>
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
-          <div className="p-2 bg-orange-500/10 rounded-full text-orange-500"><Zap className="w-4 h-4" /></div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold">Payment Pending</p>
-            <p className="text-xl font-bold">{loading ? '...' : monthStudents.filter((s: any) => s.status === 'payment_pending').length}</p>
-          </div>
-        </CardContent></Card>
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('admission_status_overview')}><CardContent className="p-4 flex items-center gap-3">
-          <div className="p-2 bg-blue-500/10 rounded-full text-blue-500"><ArrowUpRight className="w-4 h-4" /></div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold">Ops Handover Pending</p>
-            <p className="text-xl font-bold">{loading ? '...' : monthStudents.filter((s: any) => s.status === 'ops_pending').length}</p>
-          </div>
-        </CardContent></Card>
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
-          <div className="p-2 bg-green-500/10 rounded-full text-green-500"><Target className="w-4 h-4" /></div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold">Ops Accepted</p>
-            <p className="text-xl font-bold">{loading ? '...' : monthStudents.filter((s: any) => s.status === 'active').length}</p>
-          </div>
-        </CardContent></Card>
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
-          <div className="p-2 bg-red-500/10 rounded-full text-red-500"><BarChart3 className="w-4 h-4" /></div>
-          <div>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold">Cancelled Admissions</p>
-            <p className="text-xl font-bold">{loading ? '...' : monthStudents.filter((s: any) => s.status === 'cancelled').length}</p>
-          </div>
-        </CardContent></Card>
-      </div>
+      <StatStrip title="Admission status" loading={loading} onNavigate={handleNavigate} items={[
+        { label: 'Verification pending', value: monthStudents.filter((s: any) => s.status === 'pending').length, tab: 'enrolled_students', tone: 'text-amber-600' },
+        { label: 'Payment pending', value: monthStudents.filter((s: any) => s.status === 'payment_pending').length, tab: 'enrolled_students', tone: 'text-amber-600' },
+        { label: 'Ops handover pending', value: monthStudents.filter((s: any) => s.status === 'ops_pending').length, tab: 'admission_status_overview' },
+        { label: 'Ops accepted', value: monthStudents.filter((s: any) => s.status === 'active').length, tab: 'enrolled_students', tone: 'text-[#256c1d]' },
+        { label: 'Cancelled admissions', value: monthStudents.filter((s: any) => s.status === 'cancelled').length, tab: 'enrolled_students', tone: 'text-red-600' },
+      ]} />
       </>)}
 
       {/* Content rendered by active tab — tabs are in the sidebar */}
       {(() => {
         switch (activeTab) {
           case 'overview': return (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-3">
-                  <CardTitle className="text-base">Recent Enrollments</CardTitle>
-                  <Button variant="ghost" size="sm" className="text-primary text-xs" onClick={() => handleNavigate('enrolled_students')}>
-                    View All <ArrowUpRight className="ml-1 w-3 h-3" />
-                  </Button>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  {loading ? [1,2,3].map(i => <div key={i} className="h-10 bg-muted rounded animate-pulse" />) :
-                    myStudents.length === 0 ? <p className="text-sm text-muted-foreground text-center py-4">No enrollments yet</p> :
-                    myStudents.slice(0, 4).map((s: any) => (
-                      <div key={s.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
-                        <div>
-                          <p className="text-sm font-medium">{s.name || 'Student'}</p>
-                          <p className="text-[10px] text-muted-foreground">{s.program?.name || 'N/A'} · {new Date(s.createdAt).toLocaleDateString()}</p>
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
+              <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+                <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-lg font-semibold tracking-tight">Recent enrollments</h3>
+                    <p className="text-sm text-muted-foreground mt-0.5">Your latest admissions</p>
+                  </div>
+                  <Button variant="outline" onClick={() => handleNavigate('enrolled_students')} className="h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold">View all</Button>
+                </div>
+                <div className="p-5 sm:p-6 space-y-2">
+                  {loading ? [1, 2, 3].map(i => <div key={i} className="h-14 rounded-2xl bg-slate-100 animate-pulse" />) :
+                    myStudents.length === 0 ? <p className="text-sm text-muted-foreground text-center py-10">No enrollments yet</p> :
+                    myStudents.slice(0, 5).map((s: any) => (
+                      <div key={s.id} className="flex items-center justify-between gap-3 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors px-4 py-3">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-slate-900 truncate">{s.name || 'Student'}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5 truncate">{s.program?.name || 'N/A'} · {new Date(s.createdAt).toLocaleDateString()}</p>
                         </div>
-                        <Badge variant="outline" className="text-[10px] uppercase bg-green-50 text-green-700 border-green-200">{s.status}</Badge>
+                        <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold capitalize text-slate-700 shrink-0">{String(s.status || '').replace(/_/g, ' ')}</span>
                       </div>
                     ))
                   }
-                </CardContent>
-              </Card>
-              <div className="space-y-4">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-3">
-                    <CardTitle className="text-base">My Targets</CardTitle>
-                    <Button variant="ghost" size="sm" className="text-primary text-xs" onClick={() => handleNavigate('targets')}>
-                      View All <ArrowUpRight className="ml-1 w-3 h-3" />
-                    </Button>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {loading ? [1,2].map(i => <div key={i} className="h-8 bg-muted rounded animate-pulse" />) :
-                      myTargets.length === 0 ? <p className="text-sm text-muted-foreground text-center py-2">No targets assigned</p> :
-                      myTargets.slice(0, 3).map((t: any) => {
-                        const pct = t.target > 0 ? Math.min(100, Math.round((t.achieved / t.target) * 100)) : 0;
-                        const remaining = Math.max(0, t.target - t.achieved);
-                        return (
-                          <div key={t.id} className="space-y-1.5">
-                            <div className="flex justify-between items-center text-xs">
-                              <div className="flex items-center gap-1.5">
-                                <span className="font-medium capitalize">{t.type} · {t.period}</span>
-                                {t.incentive > 0 && (
-                                  <span className="text-[9px] bg-emerald-500/10 text-emerald-500 px-1.5 py-0.5 rounded-full font-bold">
-                                    Incentive: {CS()}{t.incentive.toLocaleString(numLocale())}
-                                  </span>
-                                )}
-                              </div>
-                              <span className="font-bold text-primary">{pct}%</span>
-                            </div>
-                            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                              <div className="h-full bg-primary rounded-full" style={{ width: `${pct}%` }} />
-                            </div>
-                            <div className="text-[10px] text-muted-foreground">
-                              {t.achieved >= t.target ? (
-                                <span className="text-emerald-500 font-bold">✓ Target Completed!</span>
-                              ) : (
-                                <span>
-                                  {t.type === 'revenue' ? (
-                                    `${CS()}${remaining.toLocaleString(numLocale())} left to achieve`
-                                  ) : (
-                                    `${remaining} ${t.type} left`
-                                  )}
+                </div>
+              </div>
+
+              <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+                <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-lg font-semibold tracking-tight">My targets</h3>
+                    <p className="text-sm text-muted-foreground mt-0.5">Progress against what you were assigned</p>
+                  </div>
+                  <Button variant="outline" onClick={() => handleNavigate('targets')} className="h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold">View all</Button>
+                </div>
+                <div className="p-5 sm:p-6 space-y-2">
+                  {loading ? [1, 2].map(i => <div key={i} className="h-16 rounded-2xl bg-slate-100 animate-pulse" />) :
+                    myTargets.length === 0 ? <p className="text-sm text-muted-foreground text-center py-10">No targets assigned</p> :
+                    myTargets.slice(0, 4).map((t: any) => {
+                      const pct = t.target > 0 ? Math.min(100, Math.round((t.achieved / t.target) * 100)) : 0;
+                      const remaining = Math.max(0, t.target - t.achieved);
+                      return (
+                        <div key={t.id} className="rounded-2xl bg-[#f4f6f3] px-4 py-3.5">
+                          <div className="flex justify-between items-center gap-3 text-sm mb-2">
+                            <div className="flex items-center gap-2 flex-wrap min-w-0">
+                              <span className="font-semibold text-slate-900 capitalize">{t.type} · {t.period}</span>
+                              {t.incentive > 0 && (
+                                <span className="rounded-full bg-[#dff3da] text-[#256c1d] px-2.5 py-0.5 text-xs font-semibold">
+                                  Incentive {CS()}{t.incentive.toLocaleString(numLocale())}
                                 </span>
                               )}
                             </div>
+                            <span className="font-semibold text-[#256c1d] tabular-nums">{pct}%</span>
                           </div>
-                        );
-                      })
-                    }
-                  </CardContent>
-                </Card>
+                          <div className="h-2.5 bg-white rounded-full overflow-hidden">
+                            <div className="h-full bg-[#54b947] rounded-full" style={{ width: `${pct}%` }} />
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-2">
+                            {t.achieved >= t.target ? (
+                              <span className="text-[#256c1d] font-semibold">Target completed</span>
+                            ) : t.type === 'revenue' ? (
+                              `${CS()}${remaining.toLocaleString(numLocale())} left to achieve`
+                            ) : (
+                              `${remaining} ${t.type} left`
+                            )}
+                          </p>
+                        </div>
+                      );
+                    })
+                  }
+                </div>
               </div>
             </div>
           );
@@ -894,8 +775,6 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
           case 'follow_up_status':
           case 'hot_leads': return <LeadsPanel />;
 
-          case 'daily_activity_report':
-          case 'attendance_overview': return <EmployeeActivityReportPanel />;
 
           // Resources
           case 'course_details':
@@ -908,7 +787,7 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
           case 'fee_structure':
           case 'fee_structure_res': return <FeeStructuresPanel />;
           case 'brochures':
-          case 'sales_materials': return <NoticeBoardPanel />;
+          case 'sales_materials': return <ComingSoonPanel title="Sales Materials" description="Brochures and materials your team can share with students." note="Sales materials aren't available yet. Brochures and shareable files will be listed here once this module launches." />;
 
           // Requests & Approvals
           case 'team_requests':
@@ -929,13 +808,33 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
           case 'holidays': return <HolidaysPanel />;
           case 'announcements':
           case 'team_announcements': return <AnnouncementsPanel />;
-          case 'notice-board':
-          case 'team_notes':
-          case 'important_updates': return <NoticeBoardPanel />;
+          case 'notice-board': return <NoticeBoardPanel />;
+          case 'team_notes': return <ComingSoonPanel title="Team Notes" description="Shared notes for your sales team." note="Team notes aren't available yet. You'll be able to write and share notes with your team here once this module launches." />;
+          case 'important_updates': return <ImportantUpdatesPanel />;
 
           default: return null;
         }
       })()}
     </div>
+  );
+}
+
+function StatStrip({ title, items, onNavigate, action, loading }: { title: string; action?: React.ReactNode; loading?: boolean; items: { label: string; value: any; tab: string; tone?: string }[]; onNavigate: (tab: string) => void }) {
+  return (
+    <section>
+      <div className="flex items-center justify-between gap-3 mb-3"><h3 className="text-lg font-semibold tracking-tight">{title}</h3>{action}</div>
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 divide-x divide-y xl:divide-y-0 divide-slate-100">
+          {items.map((k) => (
+            <button key={k.label} type="button" onClick={() => onNavigate(k.tab)} className="text-left p-5 sm:p-6 hover:bg-[#f7faf6] transition-colors">
+              <p className="text-sm font-medium text-slate-500">{k.label}</p>
+              {loading
+                ? <div className="mt-3 h-8 w-20 rounded-full bg-slate-100 animate-pulse" aria-label="Loading" />
+                : <p className={`text-2xl sm:text-3xl font-semibold tracking-tight mt-2 tabular-nums ${k.tone || 'text-slate-900'}`}>{k.value}</p>}
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

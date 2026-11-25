@@ -2,20 +2,13 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react';
 import {
-  Users,
-  Briefcase,
-  Clock,
-  Heart,
-  Award,
   ArrowRight,
   CheckCircle2,
   XCircle,
   RefreshCw,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
@@ -31,7 +24,6 @@ import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { PayrollBatchesPanel } from '@/components/panels/PayrollBatchesPanel';
 import { ManagerAssignmentPanel } from '@/components/panels/ManagerAssignmentPanel';
 import { HRSettingsPanel } from '@/components/attendance/HRSettingsPanel';
-import { BiometricDevicesPanel } from '@/components/panels/BiometricDevicesPanel';
 import { AssetManagementPanel } from '@/components/panels/AssetManagementPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { SalaryConfigPanel } from '@/components/panels/SalaryConfigPanel';
@@ -39,8 +31,6 @@ import { LeaveAllocationPanel } from '@/components/panels/LeaveAllocationPanel';
 import { PollsPanel } from '@/components/panels/PollsPanel';
 import { OrgHierarchyPanel } from '@/components/panels/OrgHierarchyPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
-import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
-import { DeleteRequestsPanel } from '@/components/panels/DeleteRequestsPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
 export function ModernHRDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
@@ -88,12 +78,9 @@ export function ModernHRDashboard({ initialTab, onNavigate }: { initialTab?: str
       case 'org-chart': return <OrgHierarchyPanel />;
       case 'managers': return <ManagerAssignmentPanel />;
       case 'att-settings': return <HRSettingsPanel />;
-      case 'biometric-devices': return <BiometricDevicesPanel />;
-      case 'activity_report': return <EmployeeActivityReportPanel />;
       case 'my_payslips': return <PayrollPanel />;
       case 'notice-board': return <NoticeBoardPanel />;
       case 'assets': return <AssetManagementPanel />;
-      case 'delete_approvals': return <DeleteRequestsPanel />;
       default: return null;
     }
   };
@@ -126,10 +113,7 @@ export function getHRNavItems() {
     { id: 'org-chart', label: 'Org Chart' },
     { id: 'managers', label: 'Managers' },
     { id: 'att-settings', label: 'Att. Settings' },
-    { id: 'biometric-devices', label: 'Biometric Devices' },
     { id: 'assets', label: 'Assets' },
-    { id: 'activity_report', label: 'Activity Report' },
-    { id: 'delete_approvals', label: 'Delete Approvals' },
     { id: '__portal_section', label: 'My Portal', isSection: true },
     { id: 'my_leaves', label: 'My Leaves' },
     { id: 'my_attendance', label: 'My Attendance' },
@@ -170,300 +154,195 @@ function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; o
 
   return (
     <div className="space-y-6">
-      {/* Core Metrics & Attendance Widget Top Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-4">
-        <div className="xl:col-span-4">
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-            <HRMetricCard
-              title="Total Headcount"
-              value={metrics.totalEmployees ?? '—'}
-              icon={<Users className="w-5 h-5" />}
-              subtext="Active across all wings"
-              color="primary"
-              onClick={() => onNavigate('users')}
-            />
-            <HRMetricCard
-              title="Open Vacancies"
-              value={metrics.totalVacancies ?? vacancies.length}
-              icon={<Briefcase className="w-5 h-5" />}
-              subtext={highPriorityVacancies.length > 0 ? `${highPriorityVacancies.length} high priority` : 'No high priority'}
-              color="info"
-              onClick={() => onNavigate('vacancies')}
-            />
-            <HRMetricCard
-              title="Absent Today"
-              value={metrics.absentToday ?? absentToday.length}
-              icon={<Clock className="w-5 h-5" />}
-              subtext={(metrics.absentToday ?? absentToday.length) > 0 ? `${metrics.absentToday ?? absentToday.length} not checked in` : 'All present'}
-              color="warning"
-              onClick={() => onNavigate('attendance', { filter: 'absent' })}
-            />
-            <HRMetricCard
-              title="Present Today"
-              value={metrics.presentToday ?? '—'}
-              icon={<Heart className="w-5 h-5" />}
-              subtext={metrics.onLeave != null ? `${metrics.onLeave} on leave` : 'Attendance today'}
-              color="success"
-              onClick={() => onNavigate('attendance', { filter: 'present' })}
-            />
-            <HRMetricCard
-              title="Probation Ended"
-              value={metrics.probationEnded ?? '0'}
-              icon={<Award className="w-5 h-5" />}
-              subtext="Action needed for Leave Allocation"
-              color="primary"
-              onClick={() => onNavigate('leave-alloc')}
-            />
-          </div>
-        </div>
-        {punchWidget && (
-          <div className="xl:col-span-1">
-            {punchWidget}
-          </div>
-        )}
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">HR Overview</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Headcount, attendance, hiring and leave at a glance.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Recruitment Pipeline — live vacancies */}
-        <Card className="lg:col-span-2 border border-slate-200/60 dark:border-slate-800/60 shadow-md rounded-2xl overflow-hidden bg-card">
-          <CardHeader className="flex flex-row items-center justify-between bg-muted/30 border-b border-border/40 py-5 px-6">
-            <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onNavigate('vacancies')}>
-              <div className="p-2.5 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
-                <Briefcase className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors">Open Vacancies</CardTitle>
-                <CardDescription className="text-xs mt-0.5">Live hiring positions across departments</CardDescription>
-              </div>
+      {/* Core metrics */}
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="grid grid-cols-2 lg:grid-cols-5 divide-x divide-y lg:divide-y-0 divide-slate-100">
+          <HRMetricCard
+            title="Total Headcount"
+            value={metrics.totalEmployees ?? '—'}
+            subtext="Active across all wings"
+            onClick={() => onNavigate('users')}
+          />
+          <HRMetricCard
+            title="Open Vacancies"
+            value={metrics.totalVacancies ?? vacancies.length}
+            subtext={highPriorityVacancies.length > 0 ? `${highPriorityVacancies.length} high priority` : 'No high priority'}
+            onClick={() => onNavigate('vacancies')}
+          />
+          <HRMetricCard
+            title="Absent Today"
+            value={metrics.absentToday ?? absentToday.length}
+            subtext={(metrics.absentToday ?? absentToday.length) > 0 ? `${metrics.absentToday ?? absentToday.length} not checked in` : 'All present'}
+            onClick={() => onNavigate('attendance', { filter: 'absent' })}
+          />
+          <HRMetricCard
+            title="Present Today"
+            value={metrics.presentToday ?? '—'}
+            subtext={metrics.onLeave != null ? `${metrics.onLeave} on leave` : 'Attendance today'}
+            onClick={() => onNavigate('attendance', { filter: 'present' })}
+          />
+          <HRMetricCard
+            title="Probation Ended"
+            value={metrics.probationEnded ?? '0'}
+            subtext="Action needed for Leave Allocation"
+            onClick={() => onNavigate('leave-alloc')}
+          />
+        </div>
+      </div>
+
+      {punchWidget && <div>{punchWidget}</div>}
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+        {/* Open vacancies */}
+        <div className="lg:col-span-2 rounded-3xl bg-white border border-slate-100 overflow-hidden">
+          <div className="flex flex-row items-center justify-between gap-3 px-6 py-5 border-b border-slate-100">
+            <div className="cursor-pointer" onClick={() => onNavigate('vacancies')}>
+              <h3 className="text-lg font-semibold tracking-tight">Open Vacancies</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">Live hiring positions across departments</p>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-muted" onClick={fetchOverviewData}>
-                <RefreshCw className="w-4 h-4 text-muted-foreground" />
+              <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full hover:bg-[#eaf6e6]" onClick={fetchOverviewData} title="Refresh">
+                <RefreshCw className="w-4 h-4 text-slate-500" />
               </Button>
-              <Button variant="outline" size="sm" className="rounded-full px-4 h-8 text-xs font-semibold hover:bg-primary hover:text-primary-foreground border-slate-200/60 transition-all duration-300" onClick={() => onNavigate('vacancies')}>
+              <Button variant="outline" className="rounded-full px-5 h-10 text-sm font-semibold bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]" onClick={() => onNavigate('vacancies')}>
                 View All <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Button>
             </div>
-          </CardHeader>
-          <CardContent className="p-6">
+          </div>
+          <div className="p-4 sm:p-5">
             {loadingVacancies ? (
-              <div className="space-y-4">
-                {[1, 2, 3].map(i => <div key={i} className="h-16 bg-muted/50 rounded-xl animate-pulse" />)}
+              <div className="space-y-3">
+                {[1, 2, 3].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}
               </div>
             ) : vacancies.length === 0 ? (
               <button
-                className="w-full flex flex-col items-center justify-center py-12 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all rounded-xl border border-dashed border-border/60"
+                className="w-full flex flex-col items-center justify-center py-12 text-muted-foreground hover:bg-[#f4f6f3] transition-colors rounded-2xl"
                 onClick={() => onNavigate('vacancies')}
               >
-                <div className="p-4 bg-muted/30 rounded-full mb-3">
-                  <Briefcase className="w-8 h-8 opacity-40" />
-                </div>
-                <p className="text-sm font-medium">No open vacancies</p>
-                <p className="text-xs opacity-60 mt-1">Click here to create a new hiring position</p>
+                <p className="text-sm font-medium text-slate-900">No open vacancies</p>
+                <p className="text-xs mt-1">Click here to create a new hiring position</p>
               </button>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {vacancies.slice(0, 5).map(v => (
                   <VacancyItem key={v.id} vacancy={v} onClick={() => onNavigate('vacancies')} />
                 ))}
                 {vacancies.length > 5 && (
                   <button
-                    className="w-full text-xs font-semibold text-muted-foreground hover:text-primary transition-colors pt-2 flex items-center justify-center gap-1 group"
+                    className="w-full text-xs font-semibold text-[#256c1d] hover:underline pt-2 flex items-center justify-center gap-1"
                     onClick={() => onNavigate('vacancies')}
                   >
-                    View {vacancies.length - 5} more positions <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                    View {vacancies.length - 5} more positions <ArrowRight className="w-3 h-3" />
                   </button>
                 )}
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Right column */}
-        <div className="space-y-6">
-          <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-md rounded-2xl bg-card overflow-hidden">
-            <CardHeader className="bg-muted/30 border-b border-border/40 py-4 px-5">
-              <CardTitle className="text-sm font-bold flex items-center gap-2 cursor-pointer hover:text-primary transition-colors" onClick={() => onNavigate('leaves')}>
-                <div className="p-1.5 bg-primary/10 rounded-lg">
-                  <Clock className="w-4 h-4 text-primary" />
-                </div>
-                Leave Summary
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-5">
-              <div className="space-y-2">
-                {[
-                  { label: 'Pending', value: metrics.pendingLeaves ?? pendingLeaves.length, color: 'bg-yellow-500', tab: 'leaves' },
-                  { label: 'Present Today', value: metrics.presentToday ?? '—', color: 'bg-green-500', tab: 'attendance' },
-                  { label: 'On Leave', value: metrics.onLeave ?? '—', color: 'bg-blue-500', tab: 'leaves' },
-                ].map(item => (
-                  <button
-                    key={item.label}
-                    className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-muted/50 transition-all group text-left border border-transparent hover:border-border/50"
-                    onClick={() => onNavigate(item.tab)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={cn('w-2 h-2 rounded-full shadow-sm', item.color)} />
-                      <span className="text-sm text-muted-foreground font-medium">{item.label}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm font-bold text-foreground">{item.value}</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="relative border border-success/20 shadow-md rounded-2xl overflow-hidden bg-gradient-to-br from-success to-success/80 text-success-foreground group">
-            <div className="absolute top-0 right-0 p-4 opacity-10 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform duration-500">
-              <Award className="w-24 h-24 text-white" />
+        <div className="flex flex-col gap-4">
+          <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden flex-1">
+            <div className="px-6 py-5 border-b border-slate-100 cursor-pointer" onClick={() => onNavigate('leaves')}>
+              <h3 className="text-lg font-semibold tracking-tight">Leave Summary</h3>
             </div>
-            <CardContent className="relative z-10 p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-2xl bg-white/20 backdrop-blur-md shadow-inner">
-                  <Award className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-extrabold text-lg text-white">Top Employee</h4>
-                  <p className="text-xs text-white/90 mt-0.5 font-medium tracking-wide">Recognize excellence</p>
-                </div>
-              </div>
-              
-              <div className="mt-6 pt-5 border-t border-white/20 flex items-center justify-between">
-                <div className="flex -space-x-2">
-                  <div className="w-8 h-8 rounded-full border-2 border-success/50 bg-white/40 backdrop-blur-sm" />
-                  <div className="w-8 h-8 rounded-full border-2 border-success/50 bg-white/60 backdrop-blur-sm" />
-                  <div className="w-8 h-8 rounded-full border-2 border-success/50 bg-white shadow-sm flex items-center justify-center">
-                    <span className="text-[10px] font-bold text-success">+</span>
-                  </div>
-                </div>
-                <Button
-                  variant="secondary"
-                  className="h-8 rounded-full text-xs font-bold bg-white text-success hover:bg-white/90 shadow-sm transition-all hover:shadow-md px-4"
-                  onClick={() => onNavigate('employees')}
+            <div className="p-4 space-y-2">
+              {[
+                { label: 'Pending', value: metrics.pendingLeaves ?? pendingLeaves.length, tab: 'leaves' },
+                { label: 'Present Today', value: metrics.presentToday ?? '—', tab: 'attendance' },
+                { label: 'On Leave', value: metrics.onLeave ?? '—', tab: 'leaves' },
+              ].map(item => (
+                <button
+                  key={item.label}
+                  className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors group text-left"
+                  onClick={() => onNavigate(item.tab)}
                 >
-                  Nominate <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+                  <span className="text-sm text-slate-600 font-medium">{item.label}</span>
+                  <span className="text-lg font-semibold text-slate-900">{item.value}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl bg-[#eaf6e6] border border-[#cfe9c9] p-6">
+            <h4 className="font-semibold text-lg tracking-tight text-[#1d5a17]">Top Employee</h4>
+            <p className="text-sm text-[#256c1d]/80 mt-0.5">Recognize excellence</p>
+            <Button
+              className="mt-5 h-11 rounded-full px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
+              onClick={() => onNavigate('employees')}
+            >
+              Nominate <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Pending Leave Approvals — live data */}
-      <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-md rounded-2xl overflow-hidden bg-card">
-        <CardHeader className="flex flex-row items-center justify-between bg-muted/30 border-b border-border/40 py-5 px-6">
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onNavigate('leaves')}>
-            <div className="p-2.5 bg-yellow-500/10 rounded-xl group-hover:bg-yellow-500/20 transition-colors">
-              <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-500" />
-            </div>
-            <div>
-              <CardTitle className="text-lg font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-500 transition-colors">Pending Leave Approvals</CardTitle>
-              <CardDescription className="text-xs mt-0.5">Review and approve employee time off</CardDescription>
-            </div>
+      {/* Pending leave approvals */}
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="flex flex-row items-center justify-between gap-3 px-6 py-5 border-b border-slate-100">
+          <div className="cursor-pointer" onClick={() => onNavigate('leaves')}>
+            <h3 className="text-lg font-semibold tracking-tight">Pending Leave Approvals</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">Review and approve employee time off</p>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs rounded-full px-3 py-1 border-yellow-500/30 text-yellow-600 dark:text-yellow-500 bg-yellow-500/5">{pendingLeaves.length} pending</Badge>
+            <span className="rounded-full bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1">{pendingLeaves.length} pending</span>
             {pendingLeaves.length > 0 && (
-              <Button variant="outline" size="sm" className="rounded-full px-4 h-8 text-xs font-semibold hover:bg-yellow-500 hover:text-white hover:border-yellow-500 border-slate-200/60 transition-all duration-300" onClick={() => onNavigate('leaves')}>
+              <Button variant="outline" className="rounded-full px-5 h-10 text-sm font-semibold bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]" onClick={() => onNavigate('leaves')}>
                 View All <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Button>
             )}
           </div>
-        </CardHeader>
-        <CardContent className="p-6">
+        </div>
+        <div className="p-4 sm:p-5">
           {loadingLeaves ? (
-            <div className="space-y-4">
-              {[1, 2, 3].map(i => <div key={i} className="h-16 bg-muted/50 rounded-xl animate-pulse" />)}
+            <div className="space-y-3">
+              {[1, 2, 3].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}
             </div>
           ) : pendingLeaves.length === 0 ? (
             <button
-              className="w-full flex flex-col items-center justify-center py-12 text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-all rounded-xl border border-dashed border-border/60"
+              className="w-full flex flex-col items-center justify-center py-12 text-muted-foreground hover:bg-[#f4f6f3] transition-colors rounded-2xl"
               onClick={() => onNavigate('leaves')}
             >
-              <div className="p-4 bg-muted/30 rounded-full mb-3">
-                <CheckCircle2 className="w-8 h-8 opacity-40 text-success" />
-              </div>
-              <p className="text-sm font-medium">All caught up!</p>
-              <p className="text-xs opacity-60 mt-1">No pending leave requests to review</p>
+              <p className="text-sm font-medium text-slate-900">All caught up!</p>
+              <p className="text-xs mt-1">No pending leave requests to review</p>
             </button>
           ) : (
-            <div className="space-y-4">
-              {pendingLeaves.slice(0, 5).map(leave => (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+              {pendingLeaves.slice(0, 6).map(leave => (
                 <LiveLeaveItem key={leave.id} leave={leave} onRefresh={fetchOverviewData} onViewAll={() => onNavigate('leaves')} />
               ))}
-              {pendingLeaves.length > 5 && (
+              {pendingLeaves.length > 6 && (
                 <button
-                  className="w-full text-xs font-semibold text-muted-foreground hover:text-yellow-600 dark:hover:text-yellow-500 transition-colors pt-2 flex items-center justify-center gap-1 group"
+                  className="lg:col-span-2 w-full text-xs font-semibold text-[#256c1d] hover:underline pt-2 flex items-center justify-center gap-1"
                   onClick={() => onNavigate('leaves')}
                 >
-                  View {pendingLeaves.length - 5} more requests <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  View {pendingLeaves.length - 6} more requests <ArrowRight className="w-3 h-3" />
                 </button>
               )}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
 
-function HRMetricCard({ title, value, icon, subtext, color, onClick }: any) {
-  const gradientMap: any = {
-    primary: "from-primary/10 via-primary/5 to-transparent",
-    info: "from-info/10 via-info/5 to-transparent",
-    warning: "from-warning/10 via-warning/5 to-transparent",
-    success: "from-success/10 via-success/5 to-transparent",
-  };
-
-  const iconMap: any = {
-    primary: "bg-primary/20 text-primary group-hover:bg-primary group-hover:text-white",
-    info: "bg-info/20 text-info group-hover:bg-info group-hover:text-white",
-    warning: "bg-warning/20 text-warning group-hover:bg-warning group-hover:text-white",
-    success: "bg-success/20 text-success group-hover:bg-success group-hover:text-white",
-  };
-
+function HRMetricCard({ title, value, subtext, onClick }: any) {
   return (
-    <Card
-      className={cn(
-        "relative overflow-hidden group shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer border border-slate-200/60 dark:border-slate-800/60 rounded-2xl bg-card"
-      )}
+    <button
+      type="button"
+      className="text-left p-5 sm:p-6 hover:bg-[#f7faf6] transition-colors flex flex-col"
       onClick={onClick}
     >
-      {/* Subtle background gradient overlay based on the metric's color */}
-      <div className={cn("absolute inset-0 bg-gradient-to-br opacity-50", gradientMap[color])} />
-      
-      <CardContent className="relative p-6 z-10 flex flex-col h-full justify-between">
-        <div className="flex items-start justify-between">
-          <div className="space-y-4">
-            <div className={cn("p-3 rounded-xl transition-all duration-300 w-fit", iconMap[color])}>
-              {icon}
-            </div>
-            <div>
-              <p className="text-4xl font-extrabold tracking-tight text-foreground">{value}</p>
-              <p className="text-sm font-semibold text-muted-foreground mt-1 tracking-wide">{title}</p>
-            </div>
-          </div>
-          
-          {/* Slide-in arrow animation */}
-          <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-[-10px] group-hover:translate-x-0">
-            <div className="p-2 bg-background/50 backdrop-blur-sm rounded-full">
-              <ArrowRight className="w-4 h-4 text-foreground" />
-            </div>
-          </div>
-        </div>
-        
-        {/* Divider and Subtext */}
-        <div className="mt-5 pt-4 border-t border-black/5 dark:border-white/5">
-          <p className="text-xs text-muted-foreground font-medium flex items-center gap-1.5">
-            <span className={cn("w-1.5 h-1.5 rounded-full animate-pulse", color === 'success' ? 'bg-success' : color === 'warning' ? 'bg-warning' : color === 'info' ? 'bg-info' : 'bg-primary')} />
-            {subtext}
-          </p>
-        </div>
-      </CardContent>
-    </Card>
+      <p className="text-sm font-medium text-slate-500">{title}</p>
+      <p className="text-4xl font-semibold tracking-tight text-slate-900 mt-2">{value}</p>
+      <p className="text-xs text-muted-foreground mt-2">{subtext}</p>
+    </button>
   );
 }
 
@@ -484,20 +363,20 @@ function VacancyItem({ vacancy, onClick }: { vacancy: any; onClick?: () => void 
   const total = vacancy.count ?? 1;
 
   return (
-    <div className="space-y-2 cursor-pointer group" onClick={onClick}>
+    <div className="space-y-3 cursor-pointer group p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors" onClick={onClick}>
       <div className="flex items-center justify-between">
         <div className="min-w-0">
-          <h5 className="text-sm font-bold truncate group-hover:text-primary transition-colors">{vacancy.title}</h5>
-          <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">
+          <h5 className="text-sm font-semibold text-slate-900 truncate">{vacancy.title}</h5>
+          <p className="text-xs text-muted-foreground">
             {deptName} • {total - filled} position{total - filled !== 1 ? 's' : ''} open
           </p>
         </div>
-        <Badge variant="outline" className="text-[10px] bg-muted py-0.5 font-bold uppercase capitalize shrink-0 ml-2">
+        <Badge variant="outline" className="text-[11px] bg-white border-0 rounded-full px-3 py-0.5 font-semibold capitalize shrink-0 ml-2">
           {stage}
         </Badge>
       </div>
-      <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
-        <div className="h-full bg-primary rounded-full transition-all duration-1000" style={{ width: `${progress}%` }} />
+      <div className="h-2 w-full bg-white rounded-full overflow-hidden">
+        <div className="h-full bg-[#54b947] rounded-full transition-all duration-1000" style={{ width: `${progress}%` }} />
       </div>
     </div>
   );
@@ -528,23 +407,23 @@ function LiveLeaveItem({ leave, onRefresh, onViewAll }: { leave: any; onRefresh:
 
   return (
     <div
-      className="flex items-center justify-between p-2 rounded-xl border border-transparent hover:border-border hover:bg-muted/30 transition-all group cursor-pointer"
+      className="flex items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors group cursor-pointer"
       onClick={onViewAll}
     >
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">
+        <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-sm font-semibold text-slate-700 shrink-0">
           {name.charAt(0).toUpperCase()}
         </div>
         <div>
-          <p className="text-sm font-bold group-hover:text-primary transition-colors">{name}</p>
+          <p className="text-sm font-semibold text-slate-900">{name}</p>
           <p className="text-[11px] text-muted-foreground">{type} • {dateStr}</p>
         </div>
       </div>
       <div className="flex items-center gap-1">
-        <Badge className="text-[10px] py-0.5 uppercase font-bold bg-warning/10 text-warning">Pending</Badge>
+        <Badge className="text-[11px] rounded-full border-0 px-3 py-0.5 font-semibold bg-amber-100 text-amber-700">Pending</Badge>
         <Button
           variant="ghost" size="icon-sm"
-          className="opacity-0 group-hover:opacity-100 h-7 w-7 text-green-600 hover:bg-green-50"
+          className="h-9 w-9 rounded-full text-[#256c1d] hover:bg-white"
           disabled={acting}
           onClick={(e) => { e.stopPropagation(); handleQuickAction('approve'); }}
           title="Quick approve"
@@ -553,7 +432,7 @@ function LiveLeaveItem({ leave, onRefresh, onViewAll }: { leave: any; onRefresh:
         </Button>
         <Button
           variant="ghost" size="icon-sm"
-          className="opacity-0 group-hover:opacity-100 h-7 w-7 text-red-500 hover:bg-red-50"
+          className="h-9 w-9 rounded-full text-red-500 hover:bg-red-50"
           disabled={acting}
           onClick={(e) => { e.stopPropagation(); handleQuickAction('reject'); }}
           title="Quick reject"

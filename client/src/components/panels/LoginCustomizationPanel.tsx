@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Palette, Globe, Upload, Save, Lock, Link as LinkIcon, Edit2, Code2 } from 'lucide-react';
+import { Palette, Globe, Save, Link as LinkIcon, Code2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -124,45 +124,50 @@ export function LoginCustomizationPanel() {
   const loginUrl = slug ? `${window.location.origin}/login/${slug}` : '';
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 w-full max-w-5xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      
+    <div className="space-y-6 wizard-form">
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Login Branding</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Customise the login page your team and students see.</p>
+      </div>
+
       {!slug ? (
-        <Card className="border-indigo-100 dark:border-indigo-900/50 shadow-sm bg-gradient-to-br from-indigo-50/50 to-white dark:from-indigo-950/20 dark:to-background">
+        <Card className="rounded-3xl bg-white border border-slate-100 shadow-none">
           <CardHeader className="text-center py-12">
-            <div className="mx-auto w-16 h-16 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mb-4">
+            <div className="mx-auto w-16 h-16 bg-[#eaf6e6] text-[#256c1d] rounded-2xl flex items-center justify-center mb-4">
               <Palette className="w-8 h-8" />
             </div>
-            <CardTitle className="text-2xl mb-2">Create Your Custom Login Page</CardTitle>
+            <CardTitle className="text-2xl font-semibold tracking-tight mb-2">Create Your Custom Login Page</CardTitle>
             <CardDescription className="text-base max-w-lg mx-auto">
               Give your team and students a branded login experience. This will generate a unique, permanent link just for your organization.
             </CardDescription>
             <div className="mt-8">
-              <Button onClick={handleInit} disabled={saving} size="lg" className="px-8 shadow-md">
+              <Button onClick={handleInit} disabled={saving} className="h-11 px-8 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                 {saving ? 'Creating...' : 'Create Custom Login'}
               </Button>
             </div>
           </CardHeader>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
           <div className="space-y-6">
-            <Card className="border-green-100 dark:border-green-900/30 shadow-sm">
-              <CardHeader className="pb-4 bg-green-50/50 dark:bg-green-900/10 border-b border-green-100 dark:border-green-900/30">
-                <CardTitle className="text-base flex items-center gap-2 text-green-700 dark:text-green-400">
-                  <Lock className="w-4 h-4" /> Your Unique Login URL
+            <Card className="rounded-3xl bg-[#eaf6e6] border border-[#cfe9c9] shadow-none py-6 gap-4">
+              <CardHeader className="px-6">
+                <CardTitle className="text-base font-semibold text-[#256c1d]">
+                  Your Unique Login URL
                 </CardTitle>
                 <CardDescription>
                   This link is permanently assigned to your organization.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="pt-4 flex items-center gap-3">
-                <div className="flex-1 bg-muted px-4 py-3 rounded-md text-sm font-medium border break-all flex items-center gap-2">
+              <CardContent className="px-6 flex items-center gap-3">
+                <div className="flex-1 bg-white px-4 py-3 rounded-2xl text-sm font-medium break-all flex items-center gap-2">
                   <LinkIcon className="w-4 h-4 text-muted-foreground shrink-0" />
                   {loginUrl}
                 </div>
                 <Button 
                   variant="outline" 
+                  className="h-11 px-5 rounded-full border-[#cfe9c9] bg-white text-[#256c1d] hover:bg-[#dff3da]"
                   onClick={() => {
                     navigator.clipboard.writeText(loginUrl);
                     toast.success('Link copied to clipboard!');
@@ -173,18 +178,18 @@ export function LoginCustomizationPanel() {
               </CardContent>
             </Card>
 
-            <Card className="shadow-sm">
-              <CardHeader className="border-b">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Edit2 className="w-5 h-5 text-indigo-500" /> Branding Design
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-6 gap-4">
+              <CardHeader className="px-6">
+                <CardTitle className="text-lg font-semibold tracking-tight">
+                  Branding Design
                 </CardTitle>
                 <CardDescription>Customize colors, logos, and welcome messages.</CardDescription>
               </CardHeader>
-              <CardContent className="pt-6">
+              <CardContent className="px-6">
                 <Tabs value={branding.mode || 'normal'} onValueChange={(val) => setBranding({...branding, mode: val})} className="w-full">
-                  <TabsList className="grid w-full grid-cols-2 mb-6">
-                    <TabsTrigger value="normal">Normal Mode</TabsTrigger>
-                    <TabsTrigger value="developer">Developer Mode</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-2 mb-6 h-auto rounded-full bg-[#f4f6f3] p-1.5">
+                    <TabsTrigger value="normal" className="rounded-full py-2 font-semibold data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Normal Mode</TabsTrigger>
+                    <TabsTrigger value="developer" className="rounded-full py-2 font-semibold data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Developer Mode</TabsTrigger>
                   </TabsList>
                   
                   <TabsContent value="normal">
@@ -193,7 +198,7 @@ export function LoginCustomizationPanel() {
                       <div className="space-y-4">
                         <Label>Organization Logo</Label>
                         <div className="flex items-start gap-4">
-                          <div className="w-24 h-24 rounded-lg border border-dashed flex items-center justify-center bg-muted/30 overflow-hidden shrink-0">
+                          <div className="w-24 h-24 rounded-3xl border-2 border-dashed border-[#cfe9c9] flex items-center justify-center bg-[#f4f6f3] overflow-hidden shrink-0">
                             {orgLogo ? (
                               <img src={orgLogo} alt="Logo" className="w-full h-full object-contain p-2" />
                             ) : (
@@ -208,7 +213,7 @@ export function LoginCustomizationPanel() {
                               If you want to update this image, please navigate to the{' '}
                               <button 
                                 type="button"
-                                className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
+                                className="text-[#256c1d] hover:underline font-semibold"
                                 onClick={() => window.location.href = '/?table=settings'}
                               >
                                 general organization settings page
@@ -221,7 +226,7 @@ export function LoginCustomizationPanel() {
                       <div className="space-y-2">
                         <Label>Primary Theme Color</Label>
                         <div className="flex gap-4 items-center">
-                          <div className="w-10 h-10 rounded-md shadow-sm border overflow-hidden shrink-0 relative">
+                          <div className="w-11 h-11 rounded-xl border border-slate-200 overflow-hidden shrink-0 relative">
                             <input 
                               type="color" 
                               className="absolute -top-2 -left-2 w-14 h-14 cursor-pointer"
@@ -247,7 +252,7 @@ export function LoginCustomizationPanel() {
                       </div>
 
                       <div className="pt-4 flex justify-end">
-                        <Button type="submit" disabled={saving}>
+                        <Button type="submit" disabled={saving} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                           <Save className="w-4 h-4 mr-2" /> {saving ? 'Saving...' : 'Save Design'}
                         </Button>
                       </div>
@@ -256,7 +261,7 @@ export function LoginCustomizationPanel() {
                   
                   <TabsContent value="developer">
                     <form onSubmit={handleSave} className="space-y-6">
-                      <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-lg p-4 mb-4 text-sm text-amber-800 dark:text-amber-300">
+                      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-4 text-sm text-amber-800 dark:text-amber-300">
                         <strong>Important Rules for Developer Mode:</strong>
                         <ul className="list-disc pl-5 mt-2 space-y-1">
                           <li>You must include an input with <code>id="pype-email"</code></li>
@@ -289,7 +294,7 @@ export function LoginCustomizationPanel() {
                       </div>
 
                       <div className="pt-4 flex justify-end">
-                        <Button type="submit" disabled={saving}>
+                        <Button type="submit" disabled={saving} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                           <Save className="w-4 h-4 mr-2" /> {saving ? 'Saving...' : 'Save Design'}
                         </Button>
                       </div>
@@ -301,12 +306,12 @@ export function LoginCustomizationPanel() {
           </div>
 
           <div className="hidden lg:block relative">
-            <div className="sticky top-6 rounded-xl border bg-muted/30 p-2 overflow-hidden shadow-sm aspect-[4/5] flex flex-col justify-center items-center">
-              <div className="absolute top-2 left-2 right-2 bg-background/50 backdrop-blur-sm rounded-lg p-2 text-xs text-center text-muted-foreground border">
+            <div className="sticky top-6 rounded-3xl bg-[#f4f6f3] p-3 overflow-hidden aspect-[4/5] flex flex-col justify-center items-center">
+              <div className="absolute top-2 left-2 right-2 bg-white rounded-full px-3 py-1.5 text-xs text-center font-semibold text-slate-500">
                 Live Preview
               </div>
               
-              <div className="w-full h-full max-h-full max-w-sm bg-background border rounded-xl shadow-lg overflow-hidden flex flex-col relative">
+              <div className="w-full h-full max-h-full max-w-sm bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col relative">
                 {branding.mode === 'developer' ? (
                   <div className="w-full h-full overflow-auto" dangerouslySetInnerHTML={{ __html: branding.customHtml || '<div class="p-4 text-center text-muted-foreground text-sm">Waiting for custom HTML...</div>' }} />
                 ) : (
@@ -335,7 +340,7 @@ export function LoginCustomizationPanel() {
                       </div>
                       
                       <div 
-                        className="h-10 w-full rounded-md mt-6 flex items-center justify-center text-sm font-medium text-white shadow"
+                        className="h-10 w-full rounded-full mt-6 flex items-center justify-center text-sm font-medium text-white shadow"
                         style={{ backgroundColor: branding.primaryColor }}
                       >
                         Sign In

@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { RefreshCw, CheckCircle, Send, Building2, Search } from 'lucide-react';
+import { RefreshCw, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { ListPagination } from '@/components/ui/list-pagination';
 
 export function UniversitySubmissionPanel() {
   const [students, setStudents] = useState<any[]>([]);
@@ -20,7 +18,7 @@ export function UniversitySubmissionPanel() {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -85,253 +83,129 @@ export function UniversitySubmissionPanel() {
     return applyFilters(s);
   });
 
+  const sel = 'h-11 rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 outline-none focus:border-[#54b947]';
+  const activeList = activeTab === 'pending' ? pendingStudents : submittedStudents;
+  const pageCount = Math.max(1, Math.ceil(activeList.length / itemsPerPage));
+  const safePage = Math.min(currentPage, pageCount);
+  const pageRows = activeList.slice((safePage - 1) * itemsPerPage, safePage * itemsPerPage);
+
   return (
-    <Card className="border-none shadow-none">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>University Submission</CardTitle>
-            <CardDescription>Track and manage student applications pending university submission</CardDescription>
-          </div>
-          <Button variant="outline" size="sm" onClick={fetchStudents} disabled={loading}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">University Submission</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Track and manage student applications pending university submission</p>
         </div>
-      </CardHeader>
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-            <TabsList>
-              <TabsTrigger value="pending">Pending Submission ({pendingStudents.length})</TabsTrigger>
-              <TabsTrigger value="submitted">Submitted ({submittedStudents.length})</TabsTrigger>
-            </TabsList>
-            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-              <div className="relative w-full sm:w-64">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search students..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              <select 
-                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                value={centerFilter}
-                onChange={e => setCenterFilter(e.target.value)}
-              >
-                <option value="all">All Centers</option>
-                {centers.map(c => (
-                  <option key={c as string} value={c as string}>{c as React.ReactNode}</option>
-                ))}
-              </select>
-              <select 
-                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                value={programFilter}
-                onChange={e => setProgramFilter(e.target.value)}
-              >
-                <option value="all">All Programs</option>
-                {programs.map(p => (
-                  <option key={p as string} value={p as string}>{p as React.ReactNode}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-          
-          {(() => {
-            const totalPendingPages = Math.max(1, Math.ceil(pendingStudents.length / itemsPerPage));
-            const paginatedPending = pendingStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-            return (
-          <TabsContent value="pending" className="m-0">
-            {loading ? (
-              <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : pendingStudents.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
-                <CheckCircle className="w-8 h-8 text-green-500 mb-2" />
-                <p className="text-muted-foreground">{searchQuery ? 'No students found matching your search.' : 'All files are submitted to universities!'}</p>
-              </div>
-            ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Student</TableHead>
-                      <TableHead>Program</TableHead>
-                      <TableHead>University</TableHead>
-                      <TableHead>Documents</TableHead>
-                      <TableHead className="text-right">Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedPending.map((student) => (
-                      <TableRow key={student.id}>
-                        <TableCell>
-                          <div className="font-medium">{student.name}</div>
-                          <div className="text-xs text-muted-foreground">{student.admissionNo || 'N/A'}</div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm">{student.program?.name || 'N/A'}</div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="flex w-fit items-center gap-1">
-                            <Building2 className="w-3 h-3" />
-                            {student.university?.name || 'Assigned'}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary" className="bg-green-100 text-green-700">Verified</Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button size="sm">
-                                <Send className="w-4 h-4 mr-2" />
-                                Mark Submitted
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Are you sure you want to mark {student.name}'s application as submitted to the university?
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => markSubmitted(student.id)}>
-                                  Confirm
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                
-                {/* Pagination Controls */}
-                {totalPendingPages > 1 && (
-                  <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
-                    <div className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, pendingStudents.length)} of {pendingStudents.length} students
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                      >
-                        Previous
-                      </Button>
-                      <div className="text-sm font-medium px-2">
-                        Page {currentPage} of {totalPendingPages}
-                      </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.min(totalPendingPages, p + 1))}
-                        disabled={currentPage === totalPendingPages}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </TabsContent>
-          );
-          })()}
-          
-          {(() => {
-            const totalSubmittedPages = Math.max(1, Math.ceil(submittedStudents.length / itemsPerPage));
-            const paginatedSubmitted = submittedStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-            return (
-          <TabsContent value="submitted" className="m-0">
-            {loading ? (
-              <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : submittedStudents.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
-                <p className="text-muted-foreground">No students have been submitted yet.</p>
-              </div>
-            ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Student</TableHead>
-                      <TableHead>Program</TableHead>
-                      <TableHead>University</TableHead>
-                      <TableHead>Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedSubmitted.map((student) => (
-                      <TableRow key={student.id}>
-                        <TableCell>
-                          <div className="font-medium">{student.name}</div>
-                          <div className="text-xs text-muted-foreground">{student.admissionNo || 'N/A'}</div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm">{student.program?.name || 'N/A'}</div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="flex w-fit items-center gap-1">
-                            <Building2 className="w-3 h-3" />
-                            {student.university?.name || 'Assigned'}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary" className="bg-green-100 text-green-700">
-                            <CheckCircle className="w-3 h-3 mr-1 inline-block" />
-                            Submitted
-                          </Badge>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                
-                {/* Pagination Controls */}
-                {totalSubmittedPages > 1 && (
-                  <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
-                    <div className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, submittedStudents.length)} of {submittedStudents.length} students
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                      >
-                        Previous
-                      </Button>
-                      <div className="text-sm font-medium px-2">
-                        Page {currentPage} of {totalSubmittedPages}
-                      </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.min(totalSubmittedPages, p + 1))}
-                        disabled={currentPage === totalSubmittedPages}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </TabsContent>
-          );
-          })()}
+        <Button variant="outline" onClick={fetchStudents} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
+          <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          Refresh
+        </Button>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 p-4 space-y-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="h-auto bg-[#f4f6f3] p-1.5 rounded-full gap-1 w-fit max-w-full">
+            <TabsTrigger value="pending" className="rounded-full px-5 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Pending Submission ({pendingStudents.length})</TabsTrigger>
+            <TabsTrigger value="submitted" className="rounded-full px-5 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Submitted ({submittedStudents.length})</TabsTrigger>
+          </TabsList>
         </Tabs>
-      </CardContent>
-    </Card>
+        <div className="flex flex-col lg:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              type="search"
+              placeholder="Search students..."
+              className="pl-11 h-11 rounded-full bg-[#f4f6f3] border-transparent"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <select className={sel + (centerFilter !== 'all' ? ' !bg-[#8ae47e] !border-[#8ae47e] !text-[#0b1d14]' : '')} value={centerFilter} onChange={e => setCenterFilter(e.target.value)}>
+            <option value="all">All Centers</option>
+            {centers.map(c => (
+              <option key={c as string} value={c as string}>{c as React.ReactNode}</option>
+            ))}
+          </select>
+          <select className={sel + (programFilter !== 'all' ? ' !bg-[#8ae47e] !border-[#8ae47e] !text-[#0b1d14]' : '')} value={programFilter} onChange={e => setProgramFilter(e.target.value)}>
+            <option value="all">All Programs</option>
+            {programs.map(p => (
+              <option key={p as string} value={p as string}>{p as React.ReactNode}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">{activeTab === 'pending' ? 'Pending Submission' : 'Submitted to University'}</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{activeList.length} students</span>}
+        </div>
+        <div className="p-4 sm:p-5">
+          {loading ? (
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
+          ) : activeList.length === 0 ? (
+            <div className="text-center py-14 text-muted-foreground">
+              <p className="text-sm">
+                {activeTab === 'pending'
+                  ? (searchQuery ? 'No students found matching your search.' : 'All files are submitted to universities!')
+                  : 'No students have been submitted yet.'}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {pageRows.map((student) => (
+                <div key={student.id} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                  <div className="min-w-0">
+                    <div className="font-semibold text-slate-900">{student.name}</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">{student.admissionNo || 'N/A'}</div>
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
+                      <span className="text-sm text-slate-700">{student.program?.name || 'N/A'}</span>
+                      <span className="rounded-full bg-white px-3 py-0.5 text-xs font-semibold text-slate-600">{student.university?.name || 'Assigned'}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 justify-between md:justify-end">
+                    {activeTab === 'pending' ? (
+                      <>
+                        <span className="rounded-full bg-[#dff3da] text-[#256c1d] text-[11px] font-semibold px-3 py-1">Documents verified</span>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                              Mark Submitted
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent className="rounded-[2rem] border-0 bg-white p-6 sm:p-8" {...{ style: { fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" } }}>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle className="text-xl font-semibold tracking-tight">Confirm Submission</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to mark {student.name}'s application as submitted to the university?
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel className="h-11 px-6 rounded-full">Cancel</AlertDialogCancel>
+                              <AlertDialogAction className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => markSubmitted(student.id)}>
+                                Confirm
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </>
+                    ) : (
+                      <span className="rounded-full bg-[#dff3da] text-[#256c1d] text-[11px] font-semibold px-3 py-1">Submitted</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <ListPagination
+                total={activeList.length}
+                page={safePage}
+                pageSize={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(n) => { setItemsPerPage(n); setCurrentPage(1); }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

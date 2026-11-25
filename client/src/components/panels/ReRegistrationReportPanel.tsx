@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Download, RefreshCw, BarChart4 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { ReportHeader, ReportCard, ReportStats, ReportEmpty, ReportLoading, downloadCsv, REPORT_COLORS, reportTooltipStyle, reportGridStroke } from './ReportKit';
+import { toast } from 'sonner';
 import api from '@/lib/api';
 
-const COLORS = ['#FFBB28', '#00C49F', '#FF8042', '#0088FE', '#8884D8', '#82CA9D'];
 
 export function ReRegistrationReportPanel() {
   const [loading, setLoading] = useState(false);
@@ -27,100 +25,115 @@ export function ReRegistrationReportPanel() {
     fetchReport();
   }, []);
 
+  const handleExport = () => {
+    if (!data) return;
+    const rows = [
+      ...(data.metrics || []).map((r: any) => ({ Section: 'Overall', Name: r.name, Pending: '', Completed: '', 'Not Started': '', Count: r.value })),
+      ...(data.byProgram || []).map((r: any) => ({ Section: 'By Program', Name: r.name, Pending: r.pending, Completed: r.completed, 'Not Started': r.notStarted, Count: r.pending + r.completed + r.notStarted })),
+      ...(data.byBranch || []).map((r: any) => ({ Section: 'By Branch', Name: r.name, Pending: r.pending, Completed: r.completed, 'Not Started': r.notStarted, Count: r.pending + r.completed + r.notStarted })),
+    ];
+    if (!downloadCsv('reregistration_report.csv', rows)) toast.warning('No data to export');
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Re-registration Report</h2>
-          <p className="text-muted-foreground">Track student semester re-registration status</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={fetchReport} disabled={loading}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-          <Button size="sm">
-            <Download className="w-4 h-4 mr-2" />
-            Export CSV
-          </Button>
-        </div>
-      </div>
+      <ReportHeader
+        title="Re-registration Report"
+        description="Track student semester re-registration status"
+        loading={loading}
+        onRefresh={fetchReport}
+        onExport={handleExport}
+      />
 
       {!data && loading ? (
-        <div className="flex items-center justify-center p-12 border border-dashed rounded-lg">
-          <RefreshCw className="w-8 h-8 animate-spin text-muted-foreground" />
-        </div>
+        <ReportLoading />
       ) : !data ? (
-        <div className="flex flex-col items-center justify-center p-12 text-center border border-dashed rounded-lg">
-          <BarChart4 className="w-8 h-8 text-muted-foreground mb-4" />
-          <p className="text-muted-foreground">No data available.</p>
-        </div>
+        <div className="rounded-3xl bg-white border border-slate-100 py-16 text-center text-sm text-muted-foreground">No data available.</div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          
-          <Card className="col-span-1 lg:col-span-3">
-            <CardHeader>
-              <CardTitle>Total Eligible Students: {data.totalEligible}</CardTitle>
-              <CardDescription>Number of active students evaluated for re-registration</CardDescription>
-            </CardHeader>
-          </Card>
+        <div className="space-y-4">
+          <ReportStats
+            items={[
+              { label: 'Eligible Students', value: data.totalEligible },
+              { label: 'Completed', value: data.summary?.completed ?? 0, note: `${data.summary?.completionRate ?? 0}% completion rate`, tone: 'good' },
+              { label: 'Pending', value: data.summary?.pending ?? 0, tone: (data.summary?.pending ?? 0) > 0 ? 'warn' : undefined },
+              { label: 'Not Started', value: data.summary?.notStarted ?? 0 },
+            ]}
+          />
 
-          <Card className="col-span-1 md:col-span-2 lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Re-registration Status Distribution</CardTitle>
-            </CardHeader>
-            <CardContent className="h-[300px]">
-              {data.metrics?.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={data.metrics} layout="vertical" margin={{ left: 50 }}>
-                    <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                    <XAxis type="number" />
-                    <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 12 }} />
-                    <Tooltip cursor={{ fill: 'transparent' }} />
-                    <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-                      {data.metrics.map((_entry: any, index: number) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="flex h-full items-center justify-center text-muted-foreground">No metrics data</div>
-              )}
-            </CardContent>
-          </Card>
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
+            <ReportCard className="lg:col-span-2" title="Re-registration Status Distribution">
+              <div className="h-[300px]">
+                {data.metrics?.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={data.metrics} layout="vertical" margin={{ left: 40 }}>
+                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={reportGridStroke} />
+                      <XAxis type="number" allowDecimals={false} axisLine={false} tickLine={false} />
+                      <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                      <Tooltip cursor={{ fill: '#f4f6f3' }} contentStyle={reportTooltipStyle} />
+                      <Bar dataKey="value" radius={[0, 10, 10, 0]}>
+                        {data.metrics.map((_e: any, i: number) => <Cell key={i} fill={REPORT_COLORS[i % REPORT_COLORS.length]} />)}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : <ReportEmpty message="No metrics data" />}
+              </div>
+            </ReportCard>
 
-          <Card className="col-span-1 md:col-span-2 lg:col-span-1">
-            <CardHeader>
-              <CardTitle>Completion Rate</CardTitle>
-            </CardHeader>
-            <CardContent className="h-[300px]">
-              {data.metrics?.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={data.metrics}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {data.metrics.map((_entry: any, index: number) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="flex h-full items-center justify-center text-muted-foreground">No status data</div>
-              )}
-            </CardContent>
-          </Card>
+            <ReportCard title="Completion Rate">
+              <div className="h-[300px]">
+                {data.metrics?.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={data.metrics} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={3} dataKey="value">
+                        {data.metrics.map((_e: any, i: number) => <Cell key={i} fill={REPORT_COLORS[i % REPORT_COLORS.length]} />)}
+                      </Pie>
+                      <Tooltip contentStyle={reportTooltipStyle} />
+                      <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : <ReportEmpty message="No status data" />}
+              </div>
+            </ReportCard>
+          </div>
 
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+            <ReportCard title="By Program" subtitle="Pending, completed and not started">
+              {(data.byProgram?.length ?? 0) > 0 ? (
+                <div className="h-[320px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={data.byProgram} layout="vertical" margin={{ left: 40 }}>
+                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={reportGridStroke} />
+                      <XAxis type="number" allowDecimals={false} axisLine={false} tickLine={false} />
+                      <YAxis dataKey="name" type="category" width={130} tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                      <Tooltip cursor={{ fill: '#f4f6f3' }} contentStyle={reportTooltipStyle} />
+                      <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+                      <Bar dataKey="completed" name="Completed" stackId="a" fill="#54b947" />
+                      <Bar dataKey="pending" name="Pending" stackId="a" fill="#f5b942" />
+                      <Bar dataKey="notStarted" name="Not Started" stackId="a" fill="#cbd5c8" radius={[0, 10, 10, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : <ReportEmpty message="No program data" />}
+            </ReportCard>
+            <ReportCard title="By Branch" subtitle="Pending, completed and not started">
+              {(data.byBranch?.length ?? 0) > 0 ? (
+                <div className="h-[320px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={data.byBranch} layout="vertical" margin={{ left: 40 }}>
+                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={reportGridStroke} />
+                      <XAxis type="number" allowDecimals={false} axisLine={false} tickLine={false} />
+                      <YAxis dataKey="name" type="category" width={130} tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                      <Tooltip cursor={{ fill: '#f4f6f3' }} contentStyle={reportTooltipStyle} />
+                      <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+                      <Bar dataKey="completed" name="Completed" stackId="a" fill="#54b947" />
+                      <Bar dataKey="pending" name="Pending" stackId="a" fill="#f5b942" />
+                      <Bar dataKey="notStarted" name="Not Started" stackId="a" fill="#cbd5c8" radius={[0, 10, 10, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : <ReportEmpty message="No branch data" />}
+            </ReportCard>
+          </div>
         </div>
       )}
     </div>

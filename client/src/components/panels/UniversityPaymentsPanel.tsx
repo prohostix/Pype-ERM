@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CheckCircle2, AlertCircle, DollarSign, Landmark } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { CheckCircle2, AlertCircle, Landmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -10,6 +9,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 
 import { CS, numLocale } from '@/lib/currency';
+import { ListPagination } from '@/components/ui/list-pagination';
 interface PaymentRecord {
   id: string;
   amountPaid: number;
@@ -46,6 +46,8 @@ interface StudentWithPayments {
 export function UniversityPaymentsPanel() {
   const [students, setStudents] = useState<StudentWithPayments[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<StudentWithPayments | null>(null);
   const [formData, setFormData] = useState({
@@ -162,152 +164,106 @@ export function UniversityPaymentsPanel() {
 
   const stats = getOverallStats();
 
+  const ledger = students.filter((student) => calculatePaymentData(student).totalUniversityFee > 0);
+  const currentPage = Math.min(page, Math.max(1, Math.ceil(ledger.length / pageSize)));
+  const pagedLedger = ledger.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 wizard-form">
       <div>
-        <h2 className="text-2xl font-bold">University Payments Management</h2>
-        <p className="text-muted-foreground">Track and log payments made to universities against student admissions</p>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">University Payments Management</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Track and log payments made to universities against student admissions</p>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border-none shadow-sm bg-card/60 backdrop-blur">
-          <CardContent className="p-5 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-muted-foreground uppercase font-semibold">Total Expected Payment</p>
-              <p className="text-2xl font-bold mt-1">{CS()}{stats.expected.toLocaleString(numLocale())}</p>
+        {[
+          { label: 'Total Expected Payment', value: stats.expected, color: 'text-slate-900', box: 'bg-[#f4f6f3] text-slate-600', Icon: Landmark },
+          { label: 'Total Amount Paid', value: stats.received, color: 'text-[#256c1d]', box: 'bg-[#eaf6e6] text-[#256c1d]', Icon: CheckCircle2 },
+          { label: 'Total Outstanding Balance', value: stats.pending, color: 'text-amber-600', box: 'bg-amber-50 text-amber-600', Icon: AlertCircle },
+        ].map(({ label, value, color, box, Icon }) => (
+          <div key={label} className="rounded-3xl bg-white border border-slate-100 p-6 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-xs font-medium text-slate-500">{label}</p>
+              <p className={`text-3xl font-semibold tracking-tight mt-1 truncate ${color}`}>{CS()}{value.toLocaleString(numLocale())}</p>
             </div>
-            <div className="p-3 bg-primary/10 rounded-full text-primary">
-              <Landmark className="w-6 h-6" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-none shadow-sm bg-card/60 backdrop-blur">
-          <CardContent className="p-5 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-muted-foreground uppercase font-semibold">Total Amount Paid</p>
-              <p className="text-2xl font-bold mt-1 text-emerald-500">{CS()}{stats.received.toLocaleString(numLocale())}</p>
-            </div>
-            <div className="p-3 bg-emerald-500/10 rounded-full text-emerald-500">
-              <CheckCircle2 className="w-6 h-6" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-none shadow-sm bg-card/60 backdrop-blur">
-          <CardContent className="p-5 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-muted-foreground uppercase font-semibold">Total Outstanding Balance</p>
-              <p className="text-2xl font-bold mt-1 text-amber-500">{CS()}{stats.pending.toLocaleString(numLocale())}</p>
-            </div>
-            <div className="p-3 bg-amber-500/10 rounded-full text-amber-500">
-              <AlertCircle className="w-6 h-6" />
-            </div>
-          </CardContent>
-        </Card>
+            <div className={`w-11 h-11 rounded-2xl shrink-0 flex items-center justify-center ${box}`}><Icon className="w-5 h-5" /></div>
+          </div>
+        ))}
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>University Fee Ledger</CardTitle>
-          <CardDescription>View expected and recorded university fee payments for each student</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <h3 className="text-lg font-semibold tracking-tight">University Fee Ledger</h3>
+            <p className="text-sm text-muted-foreground">View expected and recorded university fee payments for each student</p>
+          </div>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{ledger.length} students</span>}
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : students.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No student admissions found</div>
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Landmark className="w-6 h-6" /></div>
+              <p className="text-sm">No student admissions found</p>
+            </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm border-collapse">
-                <thead>
-                  <tr className="border-b border-border bg-muted/30">
-                    <th className="p-3 font-semibold text-muted-foreground">Student</th>
-                    <th className="p-3 font-semibold text-muted-foreground">University &amp; Program</th>
-                    <th className="p-3 font-semibold text-muted-foreground text-right">University Fee</th>
-                    <th className="p-3 font-semibold text-muted-foreground text-right">Paid</th>
-                    <th className="p-3 font-semibold text-muted-foreground text-right">Balance</th>
-                    <th className="p-3 font-semibold text-muted-foreground">Status</th>
-                    <th className="p-3 font-semibold text-muted-foreground text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {students
-                    .filter((student) => {
-                      const { totalUniversityFee } = calculatePaymentData(student);
-                      return totalUniversityFee > 0;
-                    })
-                    .map((student) => {
-                      const {
-                      totalUniversityFee,
-                      received,
-                      balance,
-                      statusLabel,
-                      statusColor
-                    } = calculatePaymentData(student);
-
-                    return (
-                      <tr key={student.id} className="border-b border-border hover:bg-muted/10 transition-colors">
-                        <td className="p-3 font-medium">
-                          <div>
-                            <p className="font-semibold text-foreground">{student.name}</p>
-                            <p className="text-[10px] text-muted-foreground">{student.email}</p>
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <div>
-                            <p className="font-semibold text-foreground">{student.program?.name || 'N/A'}</p>
-                            <div className="flex items-center gap-1.5 mt-0.5">
-                              <p className="text-[10px] text-muted-foreground">{student.program?.university?.name || 'N/A'}</p>
-                              {student.program?.university?.isAcademicPartnerOnly && (
-                                <Badge variant="outline" className="text-[9px] h-3.5 px-1 bg-purple-50 text-purple-700 border-purple-200">
-                                  Academic Partner
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-3 text-right">{CS()}{totalUniversityFee.toLocaleString(numLocale())}</td>
-                        <td className="p-3 text-right text-emerald-500 font-medium">{CS()}{received.toLocaleString(numLocale())}</td>
-                        <td className="p-3 text-right text-amber-500 font-semibold">{CS()}{balance.toLocaleString(numLocale())}</td>
-                        <td className="p-3">
-                          <Badge variant="outline" className={statusColor}>{statusLabel}</Badge>
-                        </td>
-                        <td className="p-3 text-center">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleRecordClick(student)}
-                            disabled={balance === 0 && totalUniversityFee > 0}
-                          >
-                            <DollarSign className="w-3.5 h-3.5 mr-1" /> Log Payout
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+            <div className="space-y-3">
+              {pagedLedger.map((student) => {
+                const { totalUniversityFee, received, balance, statusLabel, statusColor } = calculatePaymentData(student);
+                return (
+                  <div key={student.id} className="rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors p-4 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+                    <div className="min-w-0 xl:w-1/3">
+                      <p className="font-semibold text-slate-900 truncate">{student.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{student.email}</p>
+                      <div className="flex items-center flex-wrap gap-2 mt-2">
+                        <span className="text-sm font-medium text-slate-700">{student.program?.name || 'N/A'}</span>
+                        <span className="text-xs text-muted-foreground">{student.program?.university?.name || 'N/A'}</span>
+                        {student.program?.university?.isAcademicPartnerOnly && (
+                          <Badge variant="outline" className="text-[10px] px-2 rounded-full bg-white text-slate-600 border-slate-200">Academic Partner</Badge>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 text-right xl:flex-1 xl:max-w-md">
+                      <div><p className="text-[11px] text-slate-500">University Fee</p><p className="font-semibold text-slate-900">{CS()}{totalUniversityFee.toLocaleString(numLocale())}</p></div>
+                      <div><p className="text-[11px] text-slate-500">Paid</p><p className="font-semibold text-[#256c1d]">{CS()}{received.toLocaleString(numLocale())}</p></div>
+                      <div><p className="text-[11px] text-slate-500">Balance</p><p className="font-semibold text-amber-600">{CS()}{balance.toLocaleString(numLocale())}</p></div>
+                    </div>
+                    <div className="flex items-center gap-3 justify-between xl:justify-end">
+                      <Badge variant="outline" className={`rounded-full px-3 ${statusColor}`}>{statusLabel}</Badge>
+                      <Button
+                        variant="outline"
+                        className="h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold"
+                        onClick={() => handleRecordClick(student)}
+                        disabled={balance === 0 && totalUniversityFee > 0}
+                      >
+                        Log Payout
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+              <ListPagination total={ledger.length} page={currentPage} pageSize={pageSize} onPageChange={setPage} onPageSizeChange={(n) => { setPageSize(n); setPage(1); }} />
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Record Commission Payment Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="wizard-form max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Log Payment Made</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Log Payment Made</DialogTitle>
           </DialogHeader>
           {selectedStudent && (() => {
             const { totalUniversityFee, received, balance } = calculatePaymentData(selectedStudent);
             return (
               <form onSubmit={handleSubmit} className="space-y-4 pt-2">
-                <div className="p-3 rounded-lg bg-muted/40 space-y-1">
+                <div className="p-4 rounded-2xl bg-[#f4f6f3] space-y-1">
                   <p className="text-xs text-muted-foreground">Expected Payment: <span className="font-bold text-foreground">{CS()}{totalUniversityFee.toLocaleString(numLocale())}</span></p>
-                  <p className="text-xs text-muted-foreground">Already Paid: <span className="font-bold text-emerald-500">{CS()}{received.toLocaleString(numLocale())}</span></p>
-                  <p className="text-xs text-muted-foreground">Remaining Balance: <span className="font-bold text-amber-500">{CS()}{balance.toLocaleString(numLocale())}</span></p>
+                  <p className="text-xs text-muted-foreground">Already Paid: <span className="font-semibold text-[#256c1d]">{CS()}{received.toLocaleString(numLocale())}</span></p>
+                  <p className="text-xs text-muted-foreground">Remaining Balance: <span className="font-semibold text-amber-600">{CS()}{balance.toLocaleString(numLocale())}</span></p>
                 </div>
 
                 <div className="space-y-1">
@@ -335,7 +291,7 @@ export function UniversityPaymentsPanel() {
                 <div className="space-y-1">
                   <Label>Payment Status</Label>
                   <select
-                    className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-background"
+                    className="w-full h-11 rounded-xl border border-transparent bg-[#f4f6f3] px-3 text-sm outline-none focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                   >
@@ -344,9 +300,9 @@ export function UniversityPaymentsPanel() {
                   </select>
                 </div>
 
-                <div className="flex gap-2 border-t pt-4">
-                  <Button type="submit" className="flex-1">Submit Payment</Button>
-                  <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                <div className="flex gap-2 border-t border-slate-100 pt-4">
+                  <Button type="submit" className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Submit Payment</Button>
+                  <Button type="button" variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDialogOpen(false)}>Cancel</Button>
                 </div>
               </form>
             );

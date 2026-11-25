@@ -26,12 +26,12 @@ const MONTHS = [
 ];
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  present: { label: 'Present', color: 'bg-emerald-100 text-emerald-700 border-emerald-300' },
-  late:    { label: 'Late Check-in', color: 'bg-amber-100 text-amber-700 border-amber-300' },
-  absent:  { label: 'Absent', color: 'bg-rose-100 text-rose-700 border-rose-300' },
-  half_day:{ label: 'Half Day', color: 'bg-orange-100 text-orange-700 border-orange-300' },
-  leave:   { label: 'Paid Leave', color: 'bg-purple-100 text-purple-700 border-purple-300' },
-  wfh:     { label: 'Work From Home', color: 'bg-blue-100 text-blue-700 border-blue-300' },
+  present: { label: 'Present', color: 'bg-[#dff3da] text-[#256c1d] border-transparent' },
+  late:    { label: 'Late Check-in', color: 'bg-amber-100 text-amber-700 border-transparent' },
+  absent:  { label: 'Absent', color: 'bg-red-100 text-red-700 border-transparent' },
+  half_day:{ label: 'Half Day', color: 'bg-orange-100 text-orange-700 border-transparent' },
+  leave:   { label: 'Paid Leave', color: 'bg-violet-100 text-violet-700 border-transparent' },
+  wfh:     { label: 'Work From Home', color: 'bg-sky-100 text-sky-700 border-transparent' },
 };
 
 function formatTime(isoString: string | null | undefined): string {
@@ -275,20 +275,20 @@ export function AttendanceCalendar({
     if (record) {
       switch (record.status) {
         case 'present':
-        case 'late':   return 'bg-emerald-500 text-white hover:bg-emerald-600';
-        case 'absent': return 'bg-rose-500 text-white hover:bg-rose-600';
-        case 'half_day': return 'bg-amber-500 text-white hover:bg-amber-600';
-        case 'leave':  return 'bg-purple-500 text-white hover:bg-purple-600';
-        case 'wfh':    return 'bg-blue-500 text-white hover:bg-blue-600';
-        default:       return 'bg-slate-500 text-white';
+        case 'late':   return 'bg-[#2fb344] text-white border-[#2fb344] hover:bg-[#28a03b]';
+        case 'absent': return 'bg-[#f04444] text-white border-[#f04444] hover:bg-[#e03030]';
+        case 'half_day': return 'bg-[#f59e0b] text-white border-[#f59e0b] hover:bg-[#e08e08]';
+        case 'leave':  return 'bg-[#8b5cf6] text-white border-[#8b5cf6] hover:bg-[#7a49e8]';
+        case 'wfh':    return 'bg-[#0ea5e9] text-white border-[#0ea5e9] hover:bg-[#0b95d6]';
+        default:       return 'bg-slate-500 text-white border-slate-500';
       }
     }
 
     // No record — determine by date type
-    if (isHolidayDate(date)) return 'bg-orange-400 text-white hover:bg-orange-500';   // Holiday
-    if (isWeekOff(date)) return 'bg-slate-400 dark:bg-slate-600 text-white hover:opacity-90'; // Weekend
-    if (isPast(date)) return 'bg-rose-500 text-white hover:bg-rose-600'; // Auto-absent: workday, no record
-    return 'bg-slate-100 dark:bg-slate-800/40 text-muted-foreground border border-border hover:bg-muted'; // Future
+    if (isHolidayDate(date)) return 'bg-[#fb923c] text-white border-[#fb923c] hover:bg-[#f27f22]';   // Holiday
+    if (isWeekOff(date)) return 'bg-[#94a3b8] text-white border-[#94a3b8] hover:bg-[#8393ab]'; // Weekend
+    if (isPast(date)) return 'bg-[#f04444] text-white border-[#f04444] hover:bg-[#e03030]'; // Auto-absent: workday, no record
+    return 'bg-white text-slate-500 border-slate-200 hover:bg-[#f4f6f3]'; // Future
   };
 
   const resolvePhotoUrl = (url: string | null | undefined): string | null => {
@@ -297,16 +297,13 @@ export function AttendanceCalendar({
   };
 
   return (
-    <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-xl rounded-2xl bg-card/60 backdrop-blur-xl overflow-hidden">
-      <CardHeader className="flex flex-col sm:flex-row items-center justify-between p-5 sm:p-6 border-b border-border/40 bg-muted/20 gap-4">
+    <Card className="bg-transparent border-0 shadow-none py-0 gap-6 hover:shadow-none">
+      <CardHeader className="flex flex-col sm:flex-row items-center justify-between px-0 py-0 gap-4">
         <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="p-3 bg-primary/10 rounded-2xl shrink-0">
-            <Calendar className="w-6 h-6 text-primary" />
-          </div>
           <div>
-            <CardTitle className="text-xl font-bold">Month-wise Calendar</CardTitle>
-            <div className="text-xs text-muted-foreground mt-1 flex flex-wrap items-center gap-2">
-              <span className="font-bold text-foreground bg-background px-2 py-0.5 rounded-md shadow-sm border border-border/50">{employeeName}</span>
+            <CardTitle className="text-xl font-semibold tracking-tight">Month-wise Calendar</CardTitle>
+            <div className="text-xs text-muted-foreground mt-1.5 flex flex-wrap items-center gap-2">
+              <span className="font-semibold text-[#256c1d] bg-[#eaf6e6] px-2.5 py-0.5 rounded-full">{employeeName}</span>
               <span className="hidden sm:inline">•</span>
               <span>{isHR ? 'Click any day to edit' : 'Click any day to view details'}</span>
             </div>
@@ -314,12 +311,12 @@ export function AttendanceCalendar({
         </div>
 
         <div className="flex flex-wrap items-center justify-end gap-3 w-full sm:w-auto">
-          <div className="flex items-center gap-1.5 bg-background border border-slate-200/50 dark:border-slate-800/50 rounded-xl p-1 shadow-sm">
-            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-muted" onClick={handlePrevMonth}>
+          <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-full p-1">
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full hover:bg-[#eaf6e6]" onClick={handlePrevMonth}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <Select value={selectedMonth.toString()} onValueChange={(val) => setSelectedMonth(parseInt(val))}>
-              <SelectTrigger className="h-8 border-none bg-transparent shadow-none focus:ring-0 w-[110px] text-xs font-bold px-2">
+              <SelectTrigger className="h-9 border-none bg-transparent shadow-none focus:ring-0 w-[110px] text-sm font-semibold px-2">
                 <SelectValue placeholder="Month" />
               </SelectTrigger>
               <SelectContent className="rounded-xl">
@@ -329,7 +326,7 @@ export function AttendanceCalendar({
               </SelectContent>
             </Select>
             <Select value={selectedYear.toString()} onValueChange={(val) => setSelectedYear(parseInt(val))}>
-              <SelectTrigger className="h-8 border-none bg-transparent shadow-none focus:ring-0 w-[80px] text-xs font-bold px-2">
+              <SelectTrigger className="h-9 border-none bg-transparent shadow-none focus:ring-0 w-[84px] text-sm font-semibold px-2">
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent className="rounded-xl">
@@ -338,51 +335,51 @@ export function AttendanceCalendar({
                 ))}
               </SelectContent>
             </Select>
-            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-muted" onClick={handleNextMonth}>
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full hover:bg-[#eaf6e6]" onClick={handleNextMonth}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
 
           <div className="flex items-center gap-2">
             {isHR && (
-              <Button variant="outline" size="sm" className="h-10 rounded-xl shadow-sm text-xs font-semibold gap-1.5 px-4"
+              <Button variant="outline" className="h-11 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6] text-sm font-semibold gap-1.5 px-5"
                 onClick={handleMarkAllPresent} disabled={loading}>
-                <CheckCircle className="w-4 h-4 text-primary" /> Mark Weekdays
+                <CheckCircle className="w-4 h-4 text-[#256c1d]" /> Mark Weekdays
               </Button>
             )}
-            <Button variant="outline" size="sm" className="h-10 rounded-xl shadow-sm text-xs font-semibold gap-1.5 px-4 transition-transform hover:scale-105" onClick={onToggleView}>
-              <List className="w-4 h-4 text-primary" /> List View
+            <Button variant="outline" className="h-11 rounded-full bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] text-sm font-semibold gap-1.5 px-5" onClick={onToggleView}>
+              <List className="w-4 h-4" /> List View
             </Button>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="p-5 sm:p-6 space-y-8">
+      <CardContent className="px-0 py-0 space-y-6">
         {/* Summary KPIs */}
-        <div className="grid grid-cols-2 md:grid-cols-7 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
           {[
-            { label: 'Present', count: presentCount, color: 'emerald' },
-            { label: 'Late', count: lateCount, color: 'yellow' },
-            { label: 'Absent', count: absentCount, color: 'rose' },
-            { label: 'Half Day', count: halfDayCount, color: 'amber' },
-            { label: 'Paid Leave', count: leaveCount, color: 'purple' },
-            { label: 'WFH', count: wfhCount, color: 'blue' },
-            { label: 'Holiday', count: holidayCount, color: 'orange' },
-            { label: 'Week Off', count: weekOffCount, color: 'slate' },
-          ].map(({ label, count, color }) => (
-            <div key={label} className={`flex flex-col justify-center items-center gap-1.5 p-3 rounded-2xl border border-${color}-500/20 bg-background/50 hover:bg-${color}-500/5 shadow-sm transition-colors text-center`}>
-              <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{label}</span>
-              <span className={`text-3xl font-black text-${color}-600 dark:text-${color}-400 leading-none`}>{count}</span>
+            { label: 'Present', count: presentCount, num: 'text-[#256c1d]', dot: 'bg-[#54b947]' },
+            { label: 'Late', count: lateCount, num: 'text-amber-600', dot: 'bg-amber-400' },
+            { label: 'Absent', count: absentCount, num: 'text-red-600', dot: 'bg-red-400' },
+            { label: 'Half Day', count: halfDayCount, num: 'text-amber-600', dot: 'bg-amber-400' },
+            { label: 'Paid Leave', count: leaveCount, num: 'text-violet-600', dot: 'bg-violet-400' },
+            { label: 'WFH', count: wfhCount, num: 'text-sky-600', dot: 'bg-sky-400' },
+            { label: 'Holiday', count: holidayCount, num: 'text-orange-600', dot: 'bg-orange-400' },
+            { label: 'Week Off', count: weekOffCount, num: 'text-slate-600', dot: 'bg-slate-400' },
+          ].map(({ label, count, num, dot }) => (
+            <div key={label} className="flex flex-col gap-2 p-4 rounded-2xl bg-[#f4f6f3]">
+              <span className="flex items-center gap-1.5 text-xs font-medium text-slate-500"><span className={`w-2 h-2 rounded-full ${dot}`} />{label}</span>
+              <span className={`text-3xl font-semibold tracking-tight leading-none ${num}`}>{count}</span>
             </div>
           ))}
         </div>
 
         {/* Calendar Grid */}
-        <div className="rounded-3xl p-5 bg-muted/30 border border-slate-200/60 dark:border-slate-800/60 shadow-inner">
-          <div className="grid grid-cols-7 gap-2 text-center text-[11px] font-bold text-muted-foreground uppercase tracking-widest pb-3 border-b border-border/40">
+        <div className="rounded-3xl p-4 sm:p-6 bg-[#f4f6f3]">
+          <div className="grid grid-cols-7 gap-2 text-center text-[11px] font-semibold text-slate-500 uppercase tracking-widest pb-3">
             {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => <div key={d}>{d}</div>)}
           </div>
-          <div className="grid grid-cols-7 gap-3 mt-4">
+          <div className="grid grid-cols-7 gap-2 sm:gap-3 mt-2">
             {calendarDays.map((dayObj, index) => {
               if (dayObj === null) return <div key={`empty-${index}`} className="aspect-square" />;
               const formattedDay = dayObj.day < 10 ? `0${dayObj.day}` : dayObj.day.toString();
@@ -393,13 +390,13 @@ export function AttendanceCalendar({
               return (
                 <button
                   key={`day-${dayObj.day}`}
-                  className={`aspect-square rounded-2xl flex flex-col items-center justify-center font-black text-sm sm:text-base transition-all shadow-sm border ${getDayColor(dayObj)} ${isClickable ? 'cursor-pointer hover:-translate-y-0.5 hover:shadow-md' : 'cursor-default'}`}
+                  className={`aspect-square rounded-2xl flex flex-col items-center justify-center font-semibold text-sm sm:text-base transition-all border ${getDayColor(dayObj)} ${isClickable ? 'cursor-pointer hover:-translate-y-0.5' : 'cursor-default'}`}
                   onClick={() => handleDayClick(dayObj)}
                   title={dayObj.record?.notes ? `Notes: ${dayObj.record.notes}` : undefined}
                 >
                   <span>{formattedDay}</span>
                   {dayObj.record?.isLate && (
-                    <span className="w-1.5 h-1.5 bg-yellow-300 rounded-full mt-1 shadow-sm" title="Late Check-in" />
+                    <span className="w-1.5 h-1.5 bg-yellow-300 rounded-full mt-1" title="Late Check-in" />
                   )}
                   {(hasInPhoto || hasOutPhoto) && (
                     <Camera className="w-3 h-3 mt-1 opacity-80" title="Selfie attached" />
@@ -411,27 +408,27 @@ export function AttendanceCalendar({
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap justify-center sm:justify-start gap-4 text-[11px] font-medium text-muted-foreground bg-background/50 p-3 rounded-2xl border border-border/40 shadow-sm">
-          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-emerald-500 shadow-sm" />Present / Late</span>
-          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-rose-500 shadow-sm" />Absent</span>
-          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-amber-500 shadow-sm" />Half Day</span>
-          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-purple-500 shadow-sm" />Leave</span>
-          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-blue-500 shadow-sm" />WFH</span>
-          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-orange-400 shadow-sm" />Holiday</span>
-          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-slate-400 shadow-sm" />Week Off</span>
-          <span className="flex items-center gap-1.5"><Camera className="w-3.5 h-3.5 text-muted-foreground" />Selfie attached</span>
+        <div className="flex flex-wrap justify-center sm:justify-start gap-x-5 gap-y-2 text-xs font-medium text-slate-600">
+          <span className="flex items-center gap-2"><span className="w-4 h-4 rounded-md bg-[#2fb344]" />Present / Late</span>
+          <span className="flex items-center gap-2"><span className="w-4 h-4 rounded-md bg-[#f04444]" />Absent</span>
+          <span className="flex items-center gap-2"><span className="w-4 h-4 rounded-md bg-[#f59e0b]" />Half Day</span>
+          <span className="flex items-center gap-2"><span className="w-4 h-4 rounded-md bg-[#8b5cf6]" />Leave</span>
+          <span className="flex items-center gap-2"><span className="w-4 h-4 rounded-md bg-[#0ea5e9]" />WFH</span>
+          <span className="flex items-center gap-2"><span className="w-4 h-4 rounded-md bg-[#fb923c]" />Holiday</span>
+          <span className="flex items-center gap-2"><span className="w-4 h-4 rounded-md bg-[#94a3b8]" />Week Off</span>
+          <span className="flex items-center gap-2"><Camera className="w-3.5 h-3.5 text-slate-500" />Selfie attached</span>
         </div>
       </CardContent>
 
       {/* ─── Day Detail Modal (all users) ─── */}
       <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
-        <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
-          <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3">
-            <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
+        <DialogContent className="wizard-form max-w-md border-0 rounded-[2rem] overflow-hidden p-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <div className="bg-[#f4f6f3] p-6 border-b border-slate-100 flex items-center gap-3">
+            <div className="w-11 h-11 bg-white rounded-2xl text-[#256c1d] flex items-center justify-center">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <DialogTitle className="text-xl font-bold">
+              <DialogTitle className="text-xl font-semibold tracking-tight">
                 {detailRecord?.date
                   ? new Date(detailRecord.date).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })
                   : ''}
@@ -444,7 +441,7 @@ export function AttendanceCalendar({
             {detailRecord?.record ? (
               <div className="space-y-5">
                 {/* Status badge */}
-                <div className="flex items-center gap-3 bg-muted/30 p-3 rounded-2xl border border-border/40">
+                <div className="flex items-center gap-3 bg-[#f4f6f3] p-3.5 rounded-2xl">
                   <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Status</span>
                   <Badge className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full shadow-sm ${STATUS_LABELS[detailRecord.record.status]?.color || 'bg-slate-100 text-slate-700'}`}>
                     {STATUS_LABELS[detailRecord.record.status]?.label || detailRecord.record.status}
@@ -456,7 +453,7 @@ export function AttendanceCalendar({
 
                 {/* Punch times */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-2xl border bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800 shadow-sm relative overflow-hidden">
+                  <div className="p-4 rounded-2xl bg-[#eaf6e6] relative overflow-hidden">
                     <div className="absolute -right-4 -top-4 opacity-5">
                       <LogIn className="w-20 h-20" />
                     </div>
@@ -468,7 +465,7 @@ export function AttendanceCalendar({
                       {formatTime(detailRecord.record.checkIn)}
                     </span>
                   </div>
-                  <div className="p-4 rounded-2xl border bg-rose-50 dark:bg-rose-900/10 border-rose-200 dark:border-rose-800 shadow-sm relative overflow-hidden">
+                  <div className="p-4 rounded-2xl bg-red-50 relative overflow-hidden">
                     <div className="absolute -right-4 -top-4 opacity-5">
                       <LogOut className="w-20 h-20" />
                     </div>
@@ -483,7 +480,7 @@ export function AttendanceCalendar({
                 </div>
 
                 {/* Working hours */}
-                <div className="flex items-center gap-3 p-4 rounded-2xl border bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800 shadow-sm">
+                <div className="flex items-center gap-3 p-4 rounded-2xl bg-sky-50">
                   <div className="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-xl">
                     <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   </div>
@@ -497,18 +494,18 @@ export function AttendanceCalendar({
 
                 {/* Location info if available */}
                 {(detailRecord.record.checkInLocation || detailRecord.record.checkOutLocation) && (
-                  <div className="p-4 rounded-2xl border bg-muted/30 shadow-sm space-y-2">
+                  <div className="p-4 rounded-2xl bg-[#f4f6f3] space-y-2">
                     <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-muted-foreground mb-2">
                       <MapPin className="w-4 h-4" /> Location
                     </div>
                     {detailRecord.record.checkInLocation?.address && (
-                      <div className="flex items-start gap-2 bg-background p-2.5 rounded-xl border border-border/50 text-xs">
+                      <div className="flex items-start gap-2 bg-white p-2.5 rounded-xl text-xs">
                         <span className="font-bold text-emerald-600 shrink-0">IN:</span>
                         <span className="text-muted-foreground">{detailRecord.record.checkInLocation.address}</span>
                       </div>
                     )}
                     {detailRecord.record.checkOutLocation?.address && (
-                      <div className="flex items-start gap-2 bg-background p-2.5 rounded-xl border border-border/50 text-xs">
+                      <div className="flex items-start gap-2 bg-white p-2.5 rounded-xl text-xs">
                         <span className="font-bold text-rose-600 shrink-0">OUT:</span>
                         <span className="text-muted-foreground">{detailRecord.record.checkOutLocation.address}</span>
                       </div>
@@ -518,7 +515,7 @@ export function AttendanceCalendar({
 
                 {/* Notes */}
                 {detailRecord.record.notes && (
-                  <div className="flex items-start gap-3 p-4 rounded-2xl border bg-yellow-500/5 border-yellow-500/20 text-sm shadow-sm">
+                  <div className="flex items-start gap-3 p-4 rounded-2xl bg-amber-50 text-sm">
                     <div className="p-1.5 bg-yellow-500/10 rounded-lg shrink-0">
                       <FileText className="w-4 h-4 text-yellow-600" />
                     </div>
@@ -537,7 +534,7 @@ export function AttendanceCalendar({
                         <div className="space-y-2">
                           <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider text-center bg-muted/50 py-1 rounded-md">Punch In Selfie</p>
                           <button
-                            className="w-full overflow-hidden rounded-2xl border-2 border-border shadow-sm hover:border-primary/50 hover:shadow-md transition-all group"
+                            className="w-full overflow-hidden rounded-2xl border-2 border-transparent hover:border-[#8ae47e] transition-all group"
                             onClick={() => { setSelfieUrl(resolvePhotoUrl(detailRecord.record.checkInPhoto) || ''); setSelfieOpen(true); }}
                           >
                             <img
@@ -553,7 +550,7 @@ export function AttendanceCalendar({
                         <div className="space-y-2">
                           <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider text-center bg-muted/50 py-1 rounded-md">Punch Out Selfie</p>
                           <button
-                            className="w-full overflow-hidden rounded-2xl border-2 border-border shadow-sm hover:border-primary/50 hover:shadow-md transition-all group"
+                            className="w-full overflow-hidden rounded-2xl border-2 border-transparent hover:border-[#8ae47e] transition-all group"
                             onClick={() => { setSelfieUrl(resolvePhotoUrl(detailRecord.record.checkOutPhoto) || ''); setSelfieOpen(true); }}
                           >
                             <img
@@ -570,7 +567,7 @@ export function AttendanceCalendar({
                 )}
               </div>
             ) : (
-              <div className="text-center py-12 px-6 rounded-2xl border-2 border-dashed border-border/50 bg-muted/10">
+              <div className="text-center py-12 px-6 rounded-2xl bg-[#f4f6f3]">
                 {detailRecord && isHolidayDate(detailRecord.date) ? (
                   <div className="space-y-2">
                     <div className="text-4xl mb-3">🎉</div>
@@ -611,20 +608,20 @@ export function AttendanceCalendar({
 
       {/* ─── Selfie Lightbox ─── */}
       <Dialog open={selfieOpen} onOpenChange={setSelfieOpen}>
-        <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl p-1 bg-black/90 overflow-hidden">
+        <DialogContent className="max-w-md border-0 rounded-[2rem] p-1 bg-black/90 overflow-hidden">
           <img src={selfieUrl} alt="Selfie" className="w-full h-auto max-h-[80vh] rounded-2xl object-contain" />
         </DialogContent>
       </Dialog>
 
       {/* ─── HR Edit Day Attendance Dialog ─── */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
-          <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3">
-            <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
+        <DialogContent className="wizard-form max-w-md border-0 rounded-[2rem] overflow-hidden p-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <div className="bg-[#f4f6f3] p-6 border-b border-slate-100 flex items-center gap-3">
+            <div className="w-11 h-11 bg-white rounded-2xl text-[#256c1d] flex items-center justify-center">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <DialogTitle className="text-xl font-bold">Edit Attendance</DialogTitle>
+              <DialogTitle className="text-xl font-semibold tracking-tight">Edit Attendance</DialogTitle>
               <p className="text-sm text-muted-foreground mt-0.5">
                 {selectedDayRecord?.date
                   ? new Date(selectedDayRecord.date).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
@@ -636,7 +633,7 @@ export function AttendanceCalendar({
           <div className="p-6">
             {/* If there's a record with selfies, show them in the edit modal too */}
             {selectedDayRecord?.record && (selectedDayRecord.record.checkInPhoto || selectedDayRecord.record.checkOutPhoto) && (
-              <div className="flex gap-4 mb-6 bg-muted/30 p-3 rounded-2xl border border-border/40">
+              <div className="flex gap-4 mb-6 bg-[#f4f6f3] p-3 rounded-2xl">
                 {selectedDayRecord.record.checkInPhoto && (
                   <div className="flex-1 text-center space-y-1">
                     <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">In Selfie</p>
@@ -673,7 +670,7 @@ export function AttendanceCalendar({
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-2 gap-4 bg-muted/20 p-4 rounded-2xl border border-border/40">
+              <div className="grid grid-cols-2 gap-4 bg-[#f4f6f3] p-4 rounded-2xl">
                 <div className="space-y-2">
                   <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Check In</Label>
                   <Input type="time" value={editForm.checkIn}
@@ -695,8 +692,8 @@ export function AttendanceCalendar({
                   className="rounded-xl h-11 shadow-sm" />
               </div>
               <div className="flex justify-end gap-2 pt-4">
-                <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setEditDialogOpen(false)}>Cancel</Button>
-                <Button type="submit" className="rounded-xl px-6 shadow-md" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</Button>
+                <Button type="button" variant="ghost" className="rounded-full h-11 px-6" onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+                <Button type="submit" className="rounded-full h-11 px-7 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</Button>
               </div>
             </form>
           </div>

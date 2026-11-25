@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Users, CheckCircle, Link2, Copy, Building2 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
@@ -175,12 +173,12 @@ export function LeadsPanel() {
 
   const getStatusColor = (status: string) => {
     const colors: any = {
-      new: 'bg-blue-100 text-blue-800',
+      new: 'bg-sky-100 text-sky-700',
       contacted: 'bg-yellow-100 text-yellow-800',
       qualified: 'bg-purple-100 text-purple-800',
       proposal: 'bg-orange-100 text-orange-800',
       negotiation: 'bg-indigo-100 text-indigo-800',
-      converted: 'bg-green-100 text-green-800',
+      converted: 'bg-[#dff3da] text-[#256c1d]',
       lost: 'bg-red-100 text-red-800'
     };
     return colors[status] || '';
@@ -190,44 +188,36 @@ export function LeadsPanel() {
     <div className="space-y-6">
       {/* Referral Links Section — sales_admin only */}
       {isSalesAdmin && (
-      <Card className="bg-gradient-to-r from-primary/10 to-primary/5">
-        <CardHeader>
-          <div className="flex items-center justify-between">
+      <div className="rounded-3xl bg-[#eaf6e6] border border-[#cfe9c9] p-5 sm:p-6">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-3">
+            <span className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center"><Link2 className="w-5 h-5" /></span>
             <div>
-              <CardTitle className="flex items-center gap-2">
-                <Link2 className="w-5 h-5" />
-                My Referral Links
-              </CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">
-                Share your referral link to earn commissions
-              </p>
+              <h3 className="text-lg font-semibold tracking-tight">My Referral Links</h3>
+              <p className="text-sm text-slate-600">Share your referral link to earn commissions</p>
             </div>
-            {referralLinks.length === 0 && (
-              <Button onClick={generateReferralLink} variant="default">
-                <Plus className="w-4 h-4 mr-2" />
-                Generate Link
-              </Button>
-            )}
           </div>
-        </CardHeader>
-        <CardContent>
+          {referralLinks.length === 0 && (
+            <Button onClick={generateReferralLink} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+              <Plus className="w-4 h-4 mr-2" />
+              Generate Link
+            </Button>
+          )}
+        </div>
+        <div className="mt-5">
           {referralLinks.length > 0 ? (
             <div className="space-y-3">
               {referralLinks.map((link: any) => (
-                <div key={link.id || link.id} className="flex items-center justify-between p-3 bg-background rounded-lg border">
-                  <div className="flex-1">
-                    <p className="font-mono text-sm">{link.fullUrl}</p>
-                    <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
-                      <span>Centers: {link.metrics?.centersReferred || 0}</span>
-                      <span>Students: {link.metrics?.studentsReferred || 0}</span>
-                      <span>Revenue: ${link.metrics?.revenueGenerated || 0}</span>
+                <div key={link.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-white rounded-2xl">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-mono text-sm break-all">{link.fullUrl}</p>
+                    <div className="flex flex-wrap gap-2 mt-2 text-xs">
+                      <span className="rounded-full bg-[#f4f6f3] px-2.5 py-1 text-slate-600">Centers: {link.metrics?.centersReferred || 0}</span>
+                      <span className="rounded-full bg-[#f4f6f3] px-2.5 py-1 text-slate-600">Students: {link.metrics?.studentsReferred || 0}</span>
+                      <span className="rounded-full bg-[#f4f6f3] px-2.5 py-1 text-slate-600">Revenue: ${link.metrics?.revenueGenerated || 0}</span>
                     </div>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => copyReferralLink(link.fullUrl)}
-                  >
+                  <Button variant="outline" onClick={() => copyReferralLink(link.fullUrl)} className="h-10 px-5 rounded-full border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]">
                     <Copy className="w-4 h-4 mr-2" />
                     Copy
                   </Button>
@@ -235,26 +225,26 @@ export function LeadsPanel() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-muted-foreground py-4">
+            <p className="text-center text-slate-600 text-sm py-3">
               No referral links yet. Generate one to start earning!
             </p>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
       )}
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Lead Management</h2>
-          <p className="text-muted-foreground">Track and convert sales leads</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Lead Management</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Track and convert sales leads</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
           <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Add Lead</Button>
+            <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Lead</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="wizard-form max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
             <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Lead' : 'Add New Lead'}</DialogTitle>
+              <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Lead' : 'Add New Lead'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -320,35 +310,39 @@ export function LeadsPanel() {
                 <Textarea value={formData.notes} onChange={(e) => setFormData({...formData, notes: e.target.value})} rows={3} />
               </div>
               <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                <Button type="submit" className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Save</Button>
+                <Button type="button" variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDialogOpen(false)}>Cancel</Button>
               </div>
             </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Leads</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Leads</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{leads.length} total</span>}
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : leads.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No leads found</div>
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Users className="w-6 h-6" /></div>
+              <p className="text-sm">No leads found</p>
+            </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {leads.filter(lead => lead && (lead.id || lead.id)).map((lead) => {
                 const leadId = lead.id || lead.id;
                 return (
-                  <div key={leadId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
+                  <div key={leadId} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Users className="w-6 h-6 text-primary" />
+                      <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center shrink-0">
+                        <Users className="w-5 h-5" />
                       </div>
                       <div className="flex-1">
-                        <div className="font-medium">{lead.centerName}</div>
+                        <div className="font-semibold text-slate-900">{lead.centerName}</div>
                         <div className="text-sm text-muted-foreground">
                           {lead.contactName} • {lead.email} • {lead.phone} • {lead.source}
                         </div>
@@ -358,31 +352,33 @@ export function LeadsPanel() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge className={getStatusColor(lead.status)}>{lead.status}</Badge>
+                      <span className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize ${getStatusColor(lead.status)}`}>{lead.status}</span>
                       {lead.status !== 'converted' && lead.status !== 'lost' && (
                         <>
                           <Button 
                             variant="ghost" 
                             size="sm" 
+                            className="rounded-full hover:bg-white"
                             onClick={() => openConvertToCenterDialog(lead)} 
                             title="Convert to Academic Partner"
                           >
-                            <Building2 className="w-4 h-4 text-primary" />
+                            <Building2 className="w-4 h-4 text-[#256c1d]" />
                           </Button>
                           <Button 
                             variant="ghost" 
                             size="sm" 
+                            className="rounded-full hover:bg-white"
                             onClick={() => handleConvert(leadId)} 
                             title="Convert to Student"
                           >
-                            <CheckCircle className="w-4 h-4 text-success" />
+                            <CheckCircle className="w-4 h-4 text-[#256c1d]" />
                           </Button>
                         </>
                       )}
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(lead)}>
+                      <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(lead)}>
                         <Edit className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(leadId)}>
+                      <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(leadId)}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
@@ -391,14 +387,14 @@ export function LeadsPanel() {
               })}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Convert to Academic Partner Dialog */}
       <Dialog open={convertDialogOpen} onOpenChange={setConvertDialogOpen}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Convert Lead to Academic Partner</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Convert Lead to Academic Partner</DialogTitle>
             <p className="text-sm text-muted-foreground mt-2">
               Create a new academic partner from this lead
             </p>
@@ -455,13 +451,14 @@ export function LeadsPanel() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button type="submit" className="flex-1">
+              <Button type="submit" className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                 <Building2 className="w-4 h-4 mr-2" />
                 Create Academic Partner
               </Button>
               <Button
                 type="button"
                 variant="outline"
+                className="h-11 px-6 rounded-full"
                 onClick={() => setConvertDialogOpen(false)}
               >
                 Cancel

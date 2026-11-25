@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, Play, CheckCircle, Send, RefreshCw, Edit, Save, X } from 'lucide-react';
+import { DollarSign, Play, Send, RefreshCw, Edit, Save, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -150,46 +150,46 @@ export function PayrollPanel() {
   const confirmedPayrolls = payrolls.filter(p => p.status === 'confirmed');
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-3">
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Payroll Management</h2>
-          <p className="text-muted-foreground text-sm">Generate, edit, confirm and submit payroll to Finance</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Payroll Management</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Generate, edit, confirm and submit payroll to Finance</p>
         </div>
         <div className="flex gap-2 flex-wrap">
-          <Button variant="outline" size="sm" onClick={fetchPayrolls}>
+          <Button variant="outline" onClick={fetchPayrolls} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className="w-4 h-4 mr-1" /> Refresh
           </Button>
           {confirmedPayrolls.length > 0 && (
-            <Button variant="outline" size="sm" onClick={() => setTransferOpen(true)}>
+            <Button variant="outline" onClick={() => setTransferOpen(true)} className="h-11 px-5 rounded-full bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]">
               <Send className="w-4 h-4 mr-1" /> Submit to Finance ({confirmedPayrolls.length})
             </Button>
           )}
-          <Button size="sm" onClick={() => setGenerateOpen(true)}>
+          <Button onClick={() => setGenerateOpen(true)} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
             <Play className="w-4 h-4 mr-1" /> Generate Payroll
           </Button>
         </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="flex-wrap h-auto gap-1">
-          <TabsTrigger value="all">All ({payrolls.length})</TabsTrigger>
-          <TabsTrigger value="draft">Draft</TabsTrigger>
-          <TabsTrigger value="confirmed">Confirmed</TabsTrigger>
-          <TabsTrigger value="transferred_to_finance">Submitted</TabsTrigger>
-          <TabsTrigger value="paid">Paid</TabsTrigger>
+        <TabsList className="flex-wrap h-auto gap-1.5 bg-white p-2 rounded-3xl border border-slate-100 w-fit max-w-full">
+          <TabsTrigger value="all" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">All ({payrolls.length})</TabsTrigger>
+          <TabsTrigger value="draft" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Draft</TabsTrigger>
+          <TabsTrigger value="confirmed" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Confirmed</TabsTrigger>
+          <TabsTrigger value="transferred_to_finance" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Submitted</TabsTrigger>
+          <TabsTrigger value="paid" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Paid</TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeTab} className="mt-4">
-          <Card>
-            <CardHeader><CardTitle>Payroll Records</CardTitle></CardHeader>
-            <CardContent>
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-6 gap-5">
+            <CardHeader className="px-6"><CardTitle className="text-lg font-semibold tracking-tight">Payroll Records</CardTitle></CardHeader>
+            <CardContent className="px-6">
               {loading ? (
-                <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-muted rounded-lg animate-pulse" />)}</div>
+                <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
               ) : filtered.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
-                  <DollarSign className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                  <p>No payroll records</p>
+                  <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><DollarSign className="w-6 h-6" /></div>
+                  <p className="font-medium text-slate-900">No payroll records</p>
                   <p className="text-sm">Generate payroll to get started</p>
                 </div>
               ) : (
@@ -198,81 +198,103 @@ export function PayrollPanel() {
                     const empName = (p as any).user?.name || p.employeeId?.name || p.employeeId?.userId?.name || 'Employee';
                     const isSelected = selectedIds.includes(p.id);
                     return (
-                      <div key={p.id} className={`flex items-center gap-3 p-4 border rounded-lg transition-colors ${isSelected ? 'border-primary bg-primary/5' : 'hover:bg-muted/30'}`}>
-                        {p.status === 'confirmed' && (
-                          <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(p.id)} className="w-4 h-4 shrink-0" />
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap mb-1">
-                            <span className="font-semibold">{empName}</span>
-                            <Badge variant="outline" className="text-xs">{p.month}</Badge>
-                            <Badge className={`text-xs ${STATUS_COLOR[p.status] || 'bg-gray-100'}`}>
-                              {p.status.replace(/_/g, ' ')}
-                            </Badge>
-                          </div>
-                          <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted-foreground mb-2">
-                            <span>Basic: {CS()}{p.basicSalary?.toLocaleString()}</span>
-                            <span>Gross: {CS()}{p.grossSalary?.toLocaleString()}</span>
-                            <span className="font-semibold text-foreground">Net: {CS()}{p.netSalary?.toLocaleString()}</span>
-                            {p.remarks && <span className="text-orange-600">{p.remarks}</span>}
-                          </div>
-                          
-                          {/* Full Breakdown */}
-                          <div className="grid grid-cols-2 gap-4 text-xs bg-muted/20 p-2.5 rounded-lg border border-border/40">
-                            <div>
-                              <p className="font-semibold text-emerald-600 mb-1">Earnings</p>
-                              <div className="space-y-0.5 opacity-80">
-                                {Object.entries(p.allowances || {}).map(([key, val]) => (
-                                  <div key={key} className="flex justify-between">
-                                    <span className="capitalize">{key}:</span>
-                                    <span>{CS()}{Number(val).toLocaleString()}</span>
-                                  </div>
-                                ))}
-                                {p.bonus > 0 && (
-                                  <div className="flex justify-between">
-                                    <span>Bonus:</span>
-                                    <span>{CS()}{p.bonus.toLocaleString()}</span>
-                                  </div>
-                                )}
-                                {p.overtime > 0 && (
-                                  <div className="flex justify-between">
-                                    <span>Overtime:</span>
-                                    <span>{CS()}{p.overtime.toLocaleString()}</span>
-                                  </div>
-                                )}
+                      <div key={p.id} className={`rounded-3xl p-5 sm:p-6 space-y-5 transition-colors ${isSelected ? 'bg-[#eaf6e6] ring-1 ring-[#8ae47e]' : 'bg-[#f4f6f3]'}`}>
+                        {/* Top: employee + status + actions */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            {p.status === 'confirmed' && (
+                              <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(p.id)} className="w-4 h-4 shrink-0 accent-[#54b947]" />
+                            )}
+                            <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center font-semibold shrink-0">
+                              {(empName || '?')[0].toUpperCase()}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-semibold text-slate-900 truncate uppercase tracking-wide text-sm">{empName}</p>
+                              <div className="flex items-center gap-2 flex-wrap mt-1">
+                                <Badge variant="outline" className="text-xs rounded-full bg-white border-0 text-slate-600">{p.month}</Badge>
+                                <Badge className={`text-xs rounded-full border-0 capitalize ${STATUS_COLOR[p.status] || 'bg-gray-100'}`}>
+                                  {p.status.replace(/_/g, ' ')}
+                                </Badge>
                               </div>
                             </div>
-                            <div>
-                              <p className="font-semibold text-rose-600 mb-1">Deductions</p>
-                              <div className="space-y-0.5 opacity-80">
-                                {Object.entries(p.deductions || {}).map(([key, val]) => (
-                                  <div key={key} className="flex justify-between">
-                                    <span className="capitalize">
-                                      {key === 'wfh' ? 'WFH Penalty' :
-                                       key === 'lateDeduction' ? 'Late Deduction' :
-                                       key === 'earlyExitDeduction' ? 'Early Exit Deduction' :
-                                       key === 'leaveDeduction' ? 'Leave / LOP' :
-                                       key.replace(/([A-Z])/g, ' $1')}:
-                                    </span>
-                                    <span>{CS()}{Number(val).toLocaleString()}</span>
-                                  </div>
-                                ))}
-                                {Object.keys(p.deductions || {}).length === 0 && <span className="text-muted-foreground">None</span>}
-                              </div>
-                            </div>
+                          </div>
+                          <div className="flex gap-2 shrink-0">
+                            {(p.status === 'draft' || p.status === 'processed') && (
+                              <Button size="sm" variant="outline" className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => openEdit(p)} title="Edit">
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                            )}
+                            {(p.status === 'draft' || p.status === 'processed') && (
+                              <Button size="sm" className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => handleConfirm(p.id)}>
+                                Confirm
+                              </Button>
+                            )}
                           </div>
                         </div>
-                        <div className="flex gap-2 shrink-0">
-                          {(p.status === 'draft' || p.status === 'processed') && (
-                            <Button size="sm" variant="outline" onClick={() => openEdit(p)}>
-                              <Edit className="w-3.5 h-3.5" />
-                            </Button>
-                          )}
-                          {(p.status === 'draft' || p.status === 'processed') && (
-                            <Button size="sm" variant="outline" className="text-green-600" onClick={() => handleConfirm(p.id)}>
-                              <CheckCircle className="w-3.5 h-3.5 mr-1" /> Confirm
-                            </Button>
-                          )}
+
+                        {/* Salary summary */}
+                        <div className="grid grid-cols-3 gap-3">
+                          <div className="rounded-2xl bg-white p-4">
+                            <p className="text-xs font-medium text-slate-500">Basic</p>
+                            <p className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 mt-0.5">{CS()}{p.basicSalary?.toLocaleString()}</p>
+                          </div>
+                          <div className="rounded-2xl bg-white p-4">
+                            <p className="text-xs font-medium text-slate-500">Gross</p>
+                            <p className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 mt-0.5">{CS()}{p.grossSalary?.toLocaleString()}</p>
+                          </div>
+                          <div className="rounded-2xl bg-[#8ae47e] p-4">
+                            <p className="text-xs font-medium text-[#0b1d14]/70">Net pay</p>
+                            <p className="text-lg sm:text-xl font-semibold tracking-tight text-[#0b1d14] mt-0.5">{CS()}{p.netSalary?.toLocaleString()}</p>
+                          </div>
+                        </div>
+                        {p.remarks && <p className="text-xs text-orange-600">{p.remarks}</p>}
+
+                        {/* Breakdown */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div className="rounded-2xl bg-white p-4">
+                            <p className="text-sm font-semibold text-[#256c1d] mb-2">Earnings</p>
+                            <div className="divide-y divide-slate-100 text-sm">
+                              {Object.entries(p.allowances || {}).map(([key, val]) => (
+                                <div key={key} className="flex justify-between py-2">
+                                  <span className="capitalize text-slate-600">{key}</span>
+                                  <span className="font-medium text-slate-900 tabular-nums">{CS()}{Number(val).toLocaleString()}</span>
+                                </div>
+                              ))}
+                              {p.bonus > 0 && (
+                                <div className="flex justify-between py-2">
+                                  <span className="text-slate-600">Bonus</span>
+                                  <span className="font-medium text-slate-900 tabular-nums">{CS()}{p.bonus.toLocaleString()}</span>
+                                </div>
+                              )}
+                              {p.overtime > 0 && (
+                                <div className="flex justify-between py-2">
+                                  <span className="text-slate-600">Overtime</span>
+                                  <span className="font-medium text-slate-900 tabular-nums">{CS()}{p.overtime.toLocaleString()}</span>
+                                </div>
+                              )}
+                              {Object.keys(p.allowances || {}).length === 0 && !(p.bonus > 0) && !(p.overtime > 0) && (
+                                <p className="py-2 text-slate-400">None</p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="rounded-2xl bg-white p-4">
+                            <p className="text-sm font-semibold text-red-600 mb-2">Deductions</p>
+                            <div className="divide-y divide-slate-100 text-sm">
+                              {Object.entries(p.deductions || {}).map(([key, val]) => (
+                                <div key={key} className="flex justify-between py-2">
+                                  <span className="capitalize text-slate-600">
+                                    {key === 'wfh' ? 'WFH Penalty' :
+                                     key === 'lateDeduction' ? 'Late Deduction' :
+                                     key === 'earlyExitDeduction' ? 'Early Exit Deduction' :
+                                     key === 'leaveDeduction' ? 'Leave / LOP' :
+                                     key.replace(/([A-Z])/g, ' $1')}
+                                  </span>
+                                  <span className="font-medium text-slate-900 tabular-nums">{CS()}{Number(val).toLocaleString()}</span>
+                                </div>
+                              ))}
+                              {Object.keys(p.deductions || {}).length === 0 && <p className="py-2 text-slate-400">None</p>}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     );
@@ -286,8 +308,8 @@ export function PayrollPanel() {
 
       {/* Generate Dialog */}
       <Dialog open={generateOpen} onOpenChange={setGenerateOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>Generate Monthly Payroll</DialogTitle></DialogHeader>
+        <DialogContent className="wizard-form max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader><DialogTitle className="text-xl font-semibold tracking-tight">Generate Monthly Payroll</DialogTitle></DialogHeader>
           <div className="space-y-4 pt-2">
             <div className="space-y-1">
               <Label>Month</Label>
@@ -299,7 +321,7 @@ export function PayrollPanel() {
                 <button
                   type="button"
                   onClick={() => setGenerateMode('smart')}
-                  className={`p-3 rounded-xl border text-left text-sm transition-colors ${generateMode === 'smart' ? 'border-primary bg-primary/5' : 'border-border hover:bg-muted/30'}`}
+                  className={`p-4 rounded-2xl border text-left text-sm transition-colors ${generateMode === 'smart' ? 'border-[#8ae47e] bg-[#eaf6e6]' : 'border-transparent bg-[#f4f6f3] hover:bg-[#eef5ec]'}`}
                 >
                   <p className="font-semibold">Smart Generate</p>
                   <p className="text-xs text-muted-foreground mt-0.5">Uses salary configs + auto late deductions from attendance</p>
@@ -307,7 +329,7 @@ export function PayrollPanel() {
                 <button
                   type="button"
                   onClick={() => setGenerateMode('basic')}
-                  className={`p-3 rounded-xl border text-left text-sm transition-colors ${generateMode === 'basic' ? 'border-primary bg-primary/5' : 'border-border hover:bg-muted/30'}`}
+                  className={`p-4 rounded-2xl border text-left text-sm transition-colors ${generateMode === 'basic' ? 'border-[#8ae47e] bg-[#eaf6e6]' : 'border-transparent bg-[#f4f6f3] hover:bg-[#eef5ec]'}`}
                 >
                   <p className="font-semibold">Basic Generate</p>
                   <p className="text-xs text-muted-foreground mt-0.5">Uses Employee model salary with default allowances</p>
@@ -315,23 +337,23 @@ export function PayrollPanel() {
               </div>
             </div>
             {generateMode === 'smart' && (
-              <p className="text-xs text-muted-foreground p-3 bg-muted/50 rounded-lg">
+              <p className="text-xs text-muted-foreground p-3 bg-[#f4f6f3] rounded-2xl">
                 Smart mode reads each employee's salary config, calculates late deductions from attendance records, and generates accurate payroll automatically.
               </p>
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setGenerateOpen(false)}>Cancel</Button>
-            <Button onClick={handleGenerate}>Generate</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setGenerateOpen(false)}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleGenerate}>Generate</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Edit Payroll Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="wizard-form max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">
               Edit Payroll — {(editPayroll as any)?.user?.name || editPayroll?.employeeId?.name || 'Employee'} ({editPayroll?.month})
             </DialogTitle>
           </DialogHeader>
@@ -383,7 +405,7 @@ export function PayrollPanel() {
                 onChange={e => setEditForm((f: any) => ({ ...f, remarks: e.target.value }))} />
             </div>
             {/* Live preview */}
-            <div className="p-3 rounded-xl bg-muted/50 grid grid-cols-3 gap-3 text-sm">
+            <div className="p-4 rounded-2xl bg-[#f4f6f3] grid grid-cols-3 gap-3 text-sm">
               <div>
                 <p className="text-xs text-muted-foreground">Gross</p>
                 <p className="font-bold text-blue-600">{CS()}{calcGross(editForm).toLocaleString()}</p>
@@ -401,8 +423,8 @@ export function PayrollPanel() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditOpen(false)}><X className="w-4 h-4 mr-1" />Cancel</Button>
-            <Button onClick={handleEditSave} disabled={editSaving}>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setEditOpen(false)}><X className="w-4 h-4 mr-1" />Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleEditSave} disabled={editSaving}>
               <Save className="w-4 h-4 mr-1" />{editSaving ? 'Saving...' : 'Save Changes'}
             </Button>
           </DialogFooter>
@@ -411,8 +433,8 @@ export function PayrollPanel() {
 
       {/* Transfer to Finance Dialog */}
       <Dialog open={transferOpen} onOpenChange={setTransferOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>Submit Payroll to Finance</DialogTitle></DialogHeader>
+        <DialogContent className="wizard-form max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader><DialogTitle className="text-xl font-semibold tracking-tight">Submit Payroll to Finance</DialogTitle></DialogHeader>
           <div className="space-y-4 pt-2">
             <p className="text-sm text-muted-foreground">
               Check the boxes next to confirmed payrolls, then submit them to Finance for approval and salary disbursement.
@@ -424,8 +446,8 @@ export function PayrollPanel() {
             <p className="text-sm font-medium">{selectedIds.length} payroll(s) selected</p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setTransferOpen(false)}>Cancel</Button>
-            <Button onClick={handleTransfer} disabled={!selectedIds.length}>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setTransferOpen(false)}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleTransfer} disabled={!selectedIds.length}>
               <Send className="w-4 h-4 mr-1" /> Submit to Finance
             </Button>
           </DialogFooter>

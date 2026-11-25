@@ -1,10 +1,9 @@
 import { useRef, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { User, Mail, Phone, Briefcase, Building2, MapPin, Hash, ShieldCheck, Clock, Camera, Loader2, Pencil, Check, X } from 'lucide-react';
+import { Camera, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
@@ -119,28 +118,27 @@ export function MyProfilePanel() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-5xl mx-auto">
-      <div className="flex flex-col md:flex-row items-center gap-4 justify-between">
+    <div className="space-y-6 wizard-form fee-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">My Profile</h2>
-          <p className="text-muted-foreground">View and update your personal details.</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">My Profile</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">View and update your personal details.</p>
         </div>
-        <Badge variant={user.status === 'active' ? 'default' : 'secondary'} className="text-sm px-3 py-1 bg-success/20 text-success hover:bg-success/30">
-          <ShieldCheck className="w-4 h-4 mr-1" />
+        <span className={`rounded-full px-4 py-1.5 text-sm font-semibold ${user.status === 'active' || !user.status ? 'bg-[#dff3da] text-[#256c1d]' : 'bg-slate-200/70 text-slate-600'}`}>
           {(user.status || 'active').charAt(0).toUpperCase() + (user.status || 'active').slice(1)} Account
-        </Badge>
+        </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
         {/* Left Column - Main Profile Card */}
-        <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl md:col-span-1">
-          <CardContent className="pt-10 pb-8 flex flex-col items-center text-center">
+        <div className="rounded-3xl bg-white border border-slate-100 lg:col-span-1">
+          <div className="p-6 sm:p-8 flex flex-col items-center text-center">
             <div className="relative mb-6">
-              <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center shadow-inner ring-4 ring-background overflow-hidden">
+              <div className="w-32 h-32 rounded-full bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center overflow-hidden text-4xl font-semibold">
                 {user.avatar ? (
                   <img src={api.getFileUrl(user.avatar)} alt={user.name} className="w-full h-full object-cover" />
                 ) : (
-                  <User className="w-16 h-16 text-primary" />
+                  <span>{(user.name || '?')[0].toUpperCase()}</span>
                 )}
                 {uploading && (
                   <div className="absolute inset-0 rounded-full bg-black/45 flex items-center justify-center">
@@ -153,7 +151,7 @@ export function MyProfilePanel() {
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
                 title="Change profile picture"
-                className="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg ring-2 ring-background hover:opacity-90 disabled:opacity-60"
+                className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-[#8ae47e] text-[#0b1d14] flex items-center justify-center ring-4 ring-white hover:bg-[#7bd96f] disabled:opacity-60"
               >
                 <Camera className="w-4 h-4" />
               </button>
@@ -169,64 +167,61 @@ export function MyProfilePanel() {
               <button
                 type="button"
                 onClick={handleRemoveAvatar}
-                className="text-xs text-muted-foreground hover:text-destructive -mt-3 mb-4"
+                className="text-xs font-semibold text-slate-500 hover:text-red-600 -mt-3 mb-4"
               >
                 Remove picture
               </button>
             )}
 
-            <h3 className="text-2xl font-bold mb-1">{user.name}</h3>
-            <p className="text-primary font-medium mb-4">{user.designation || 'Employee'}</p>
+            <h3 className="text-2xl font-semibold tracking-tight mb-1">{user.name}</h3>
+            <p className="text-slate-600 font-medium mb-4">{user.designation || 'Employee'}</p>
 
-            <Badge variant="outline" className="mb-6 font-semibold">
+            <span className="mb-6 rounded-full bg-[#f4f6f3] px-4 py-1.5 text-xs font-semibold text-slate-700">
               Role: {formatRole(user.role)}
-            </Badge>
+            </span>
 
-            <div className="w-full space-y-4 text-sm mt-2 border-t pt-6">
-              <div className="flex items-center text-muted-foreground">
-                <Mail className="w-4 h-4 mr-3 text-primary" />
-                <span className="truncate">{user.email}</span>
+            <div className="w-full space-y-2 text-sm mt-2">
+              <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3 text-left">
+                <p className="text-xs text-slate-500">Email</p>
+                <p className="font-medium text-slate-900 truncate">{user.email}</p>
               </div>
-              <div className="flex items-center text-muted-foreground">
-                <Phone className="w-4 h-4 mr-3 text-primary" />
-                <span>{user.phone || 'Not provided'}</span>
+              <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3 text-left">
+                <p className="text-xs text-slate-500">Phone</p>
+                <p className="font-medium text-slate-900">{user.phone || 'Not provided'}</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Right Column - Details */}
-        <div className="md:col-span-2 space-y-6">
-          <Card className="border-none shadow-md bg-card/60">
-            <CardHeader className="pb-3 border-b flex flex-row items-center justify-between space-y-0">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <User className="w-5 h-5 text-primary" />
-                Personal Details
-              </CardTitle>
+        <div className="lg:col-span-2 space-y-4">
+          <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+            <div className="px-6 py-5 border-b border-slate-100 flex flex-row items-center justify-between gap-3">
+              <h3 className="text-lg font-semibold tracking-tight">Personal Details</h3>
               {!editing ? (
-                <Button variant="outline" size="sm" onClick={startEditing}>
-                  <Pencil className="w-4 h-4 mr-2" /> Edit
+                <Button variant="outline" onClick={startEditing} className="h-10 px-5 rounded-full bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold">
+                  Edit
                 </Button>
               ) : (
                 <div className="flex gap-2">
-                  <Button variant="ghost" size="sm" onClick={() => setEditing(false)} disabled={saving}>
-                    <X className="w-4 h-4 mr-1" /> Cancel
+                  <Button variant="ghost" onClick={() => setEditing(false)} disabled={saving} className="h-10 px-5 rounded-full">
+                    Cancel
                   </Button>
-                  <Button size="sm" onClick={handleSave} disabled={saving}>
-                    {saving ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Check className="w-4 h-4 mr-1" />}
+                  <Button onClick={handleSave} disabled={saving} className="h-10 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                    {saving ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : null}
                     Save
                   </Button>
                 </div>
               )}
-            </CardHeader>
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            </div>
+            <div className="p-5 sm:p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="profile-name">Full Name</Label>
                   {editing ? (
                     <Input id="profile-name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
                   ) : (
-                    <p className="font-medium">{user.name}</p>
+                    <p className="font-medium rounded-2xl bg-[#f4f6f3] px-4 py-3 text-slate-900">{user.name}</p>
                   )}
                 </div>
                 <div className="space-y-2">
@@ -234,73 +229,64 @@ export function MyProfilePanel() {
                   {editing ? (
                     <Input id="profile-phone" type="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="e.g. +91 98765 43210" />
                   ) : (
-                    <p className="font-medium">{user.phone || 'Not provided'}</p>
+                    <p className="font-medium rounded-2xl bg-[#f4f6f3] px-4 py-3 text-slate-900">{user.phone || 'Not provided'}</p>
                   )}
                 </div>
                 <div className="space-y-2 sm:col-span-2">
                   <Label>Email</Label>
-                  <p className="font-medium">{user.email}</p>
+                  <p className="font-medium rounded-2xl bg-[#f4f6f3] px-4 py-3 text-slate-900">{user.email}</p>
                   {editing && (
                     <p className="text-xs text-muted-foreground">Your email is your login, so it can only be changed by an administrator.</p>
                   )}
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card className="border-none shadow-md bg-card/60">
-            <CardHeader className="pb-3 border-b">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Briefcase className="w-5 h-5 text-primary" />
-                Employment Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Employee ID</p>
-                  <p className="font-medium flex items-center gap-2">
-                    <Hash className="w-4 h-4 text-muted-foreground" />
+          <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+            <div className="px-6 py-5 border-b border-slate-100">
+              <h3 className="text-lg font-semibold tracking-tight">Employment Details</h3>
+            </div>
+            <div className="p-5 sm:p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                  <p className="text-xs text-slate-500 mb-0.5">Employee ID</p>
+                  <p className="font-medium text-slate-900">
                     {(user as any).userId || (user as any).employeeId || 'N/A'}
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Organization</p>
-                  <p className="font-medium flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-muted-foreground" />
+                <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                  <p className="text-xs text-slate-500 mb-0.5">Organization</p>
+                  <p className="font-medium text-slate-900">
                     {user.organization?.name || 'N/A'}
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Department</p>
-                  <p className="font-medium flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-muted-foreground" />
+                <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                  <p className="text-xs text-slate-500 mb-0.5">Department</p>
+                  <p className="font-medium text-slate-900">
                     {(user as any).department?.name || 'Not assigned'}
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Sub-Department</p>
-                  <p className="font-medium flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-muted-foreground" />
+                <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                  <p className="text-xs text-slate-500 mb-0.5">Sub-Department</p>
+                  <p className="font-medium text-slate-900">
                     {(user as any).subDepartment?.name || 'Not assigned'}
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Work Location</p>
-                  <p className="font-medium flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-muted-foreground" />
+                <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                  <p className="text-xs text-slate-500 mb-0.5">Work Location</p>
+                  <p className="font-medium text-slate-900">
                     {(user as any).employeeProfileDetail?.workLocation || (user as any).branch?.name || user.organization?.address || 'Head Office'}
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Join Date</p>
-                  <p className="font-medium flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-muted-foreground" />
+                <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                  <p className="text-xs text-slate-500 mb-0.5">Join Date</p>
+                  <p className="font-medium text-slate-900">
                     {(user as any).employeeProfileDetail?.joinDate ? new Date((user as any).employeeProfileDetail.joinDate).toLocaleDateString() : 'N/A'}
                   </p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Probation Status</p>
+                <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                  <p className="text-xs text-slate-500 mb-0.5">Probation Status</p>
                   {probation ? (
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-2">
@@ -315,19 +301,18 @@ export function MyProfilePanel() {
                       )}
                     </div>
                   ) : (
-                    <p className="font-medium">N/A</p>
+                    <p className="font-medium text-slate-900">N/A</p>
                   )}
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Last Login</p>
-                  <p className="font-medium flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-muted-foreground" />
+                <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3">
+                  <p className="text-xs text-slate-500 mb-0.5">Last Login</p>
+                  <p className="font-medium text-slate-900">
                     {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A'}
                   </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>

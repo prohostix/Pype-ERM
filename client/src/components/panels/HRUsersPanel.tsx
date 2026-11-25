@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Key, Users, ArrowRightLeft, TrendingUp, TrendingDown, Ban, CheckCircle2, UserMinus, UserCheck } from 'lucide-react';
+import { ListPagination } from '@/components/ui/list-pagination';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -122,6 +122,8 @@ export function HRUsersPanel() {
   });
 
   const [activeTab, setActiveTab] = useState('active');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const [branches, setBranches] = useState<any[]>([]);
   const [selectedBranchFilter, setSelectedBranchFilter] = useState<string>('all');
@@ -458,23 +460,7 @@ export function HRUsersPanel() {
     setEditingUser(null);
   };
 
-  const getRoleBadgeColor = (role: string) => {
-    const map: Record<string, string> = {
-      employee: 'bg-blue-100 text-blue-800',
-      student: 'bg-green-100 text-green-800',
-      hr_admin: 'bg-orange-100 text-orange-800',
-      hr_sub_admin: 'bg-orange-100 text-orange-700',
-      finance_admin: 'bg-emerald-100 text-emerald-800',
-      finance_sub_admin: 'bg-emerald-50 text-emerald-700',
-      ops_admin: 'bg-indigo-100 text-indigo-800',
-      ops_sub_admin: 'bg-violet-100 text-violet-800',
-      sales_admin: 'bg-pink-100 text-pink-800',
-      sales_sub_admin: 'bg-pink-100 text-pink-800',
-      center_admin: 'bg-cyan-100 text-cyan-800',
-
-    };
-    return map[role] || 'bg-gray-100 text-gray-800';
-  };
+  const getRoleBadgeColor = (_role: string) => 'bg-white text-slate-700 border-0 rounded-full px-3 capitalize';
 
   const displayedUsers = users.filter((user) => {
     const isResigned = user.status === 'resigned';
@@ -485,36 +471,27 @@ export function HRUsersPanel() {
     const empBranchId = typeof user.branchId === 'object' ? (user.branchId as any)?.id : (user.branchId || (user as any).branch?.id);
     return empBranchId?.toString() === selectedBranchFilter;
   });
+  const currentPage = Math.min(page, Math.max(1, Math.ceil(displayedUsers.length / pageSize)));
+  const pagedUsers = displayedUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   if (loading) {
     return (
-      <Card>
-        <CardContent className="p-8">
-          <div className="text-center text-muted-foreground">Loading users...</div>
-        </CardContent>
-      </Card>
+      <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-24 bg-slate-100 rounded-3xl animate-pulse" />)}</div>
     );
   }
 
   return (
-    <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-md rounded-2xl overflow-hidden bg-card">
-      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-muted/30 border-b border-border/40 py-5 px-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-primary/10 rounded-xl">
-            <Users className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <CardTitle className="text-xl font-bold">User Management</CardTitle>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Manage all staff accounts — HR, Finance, Ops, Sales, and Employees
-            </p>
-          </div>
+    <div className="space-y-6 wizard-form">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">User Management</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Manage all staff accounts — HR, Finance, Ops, Sales, and Employees</p>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           {branches.length > 0 && (
             <div className="w-48 sm:w-56">
-              <Select value={selectedBranchFilter} onValueChange={setSelectedBranchFilter}>
-                <SelectTrigger className="w-full h-9">
+              <Select value={selectedBranchFilter} onValueChange={(v) => { setSelectedBranchFilter(v); setPage(1); }}>
+                <SelectTrigger className="w-full h-11 rounded-full px-5 bg-white border-slate-200 font-semibold">
                   <SelectValue placeholder="All Branches" />
                 </SelectTrigger>
                 <SelectContent>
@@ -531,14 +508,14 @@ export function HRUsersPanel() {
             if (!open) resetForm();
           }}>
             <DialogTrigger asChild>
-              <Button size="sm" className="h-9">
+              <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Employee User
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8 max-h-[90vh] overflow-y-auto" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
               <DialogHeader>
-                <DialogTitle>
+                <DialogTitle className="text-xl font-semibold tracking-tight">
                   {editingUser ? 'Edit Employee User' : 'Create Employee User'}
                 </DialogTitle>
               </DialogHeader>
@@ -829,50 +806,51 @@ export function HRUsersPanel() {
             </DialogContent>
           </Dialog>
         </div>
-      </CardHeader>
-      <CardContent className="p-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-          <TabsList>
-            <TabsTrigger value="active">Active Staff</TabsTrigger>
-            <TabsTrigger value="resigned">Resigned Staff</TabsTrigger>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 p-4 sm:p-5">
+        <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); setPage(1); }} className="mb-6">
+          <TabsList className="h-auto bg-[#f4f6f3] p-1.5 rounded-full gap-1 w-fit">
+            <TabsTrigger value="active" className="rounded-full px-5 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Active Staff</TabsTrigger>
+            <TabsTrigger value="resigned" className="rounded-full px-5 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Resigned Staff</TabsTrigger>
           </TabsList>
         </Tabs>
 
         {displayedUsers.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground rounded-2xl border border-dashed border-border/60 bg-muted/10">
-            <div className="p-4 bg-muted/30 rounded-full mb-4">
-              <Users className="w-8 h-8 opacity-40" />
+          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+            <div className="w-14 h-14 bg-[#eaf6e6] text-[#256c1d] rounded-2xl mb-3 flex items-center justify-center">
+              <Users className="w-6 h-6" />
             </div>
             <p className="text-sm font-medium">No users found in this category.</p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {displayedUsers
+          <div className="space-y-3">
+            {pagedUsers
               .map((user) => {
                 const userId = user.id || user.id || '';
                 return (
                   <div
                     key={userId}
-                    className="flex flex-col xl:flex-row xl:items-center justify-between p-6 mb-4 border border-slate-200/60 dark:border-slate-800/60 rounded-xl hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 hover:bg-muted/20 transition-all duration-300 group bg-card gap-6"
+                    className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 p-5 sm:p-6 rounded-3xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors"
                   >
                     <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        <h3 className="font-semibold">{user.name}</h3>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-semibold text-lg text-slate-900">{user.name}</h3>
                         <Badge className={getRoleBadgeColor(user.role)}>
                           {user.role}
                         </Badge>
                         {user.branchId && (
-                          <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5">
+                          <Badge variant="outline" className="border-0 rounded-full px-3 text-[#256c1d] bg-[#dff3da]">
                             {user.branch?.name || (typeof user.branchId === 'object' ? (user.branchId as any)?.name : 'Assigned to Branch')}
                           </Badge>
                         )}
                         {user.status === 'inactive' && (
-                          <Badge variant="outline" className="bg-orange-50 text-orange-700">
+                          <Badge variant="outline" className="border-0 rounded-full px-3 bg-amber-100 text-amber-700">
                             Inactive
                           </Badge>
                         )}
                         {user.status === 'resigned' && (
-                          <Badge variant="outline" className="bg-red-50 text-red-700">
+                          <Badge variant="outline" className="border-0 rounded-full px-3 bg-red-100 text-red-700">
                             Resigned
                           </Badge>
                         )}
@@ -905,10 +883,11 @@ export function HRUsersPanel() {
                         </p>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 flex-wrap xl:justify-end opacity-60 group-hover:opacity-100 transition-opacity mt-4 xl:mt-0 pt-4 xl:pt-0 border-t border-border/50 xl:border-none">
+                    <div className="flex items-center gap-1.5 flex-wrap xl:justify-end pt-3 xl:pt-0 border-t border-slate-200/70 xl:border-none">
                       <Button
                         variant="outline"
                         size="sm"
+                        className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
                         onClick={() => openTransferDialog(user)}
                         title="Transfer Employee"
                       >
@@ -917,6 +896,7 @@ export function HRUsersPanel() {
                       <Button
                         variant="outline"
                         size="sm"
+                        className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
                         onClick={() => openPromotionDialog(user, 'promotion')}
                         title="Promote Employee"
                       >
@@ -925,6 +905,7 @@ export function HRUsersPanel() {
                       <Button
                         variant="outline"
                         size="sm"
+                        className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
                         onClick={() => openPromotionDialog(user, 'demotion')}
                         title="Demote Employee"
                       >
@@ -933,6 +914,7 @@ export function HRUsersPanel() {
                       <Button
                         variant="outline"
                         size="sm"
+                        className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
                         onClick={() => openPasswordDialog(userId)}
                         title="Change Password"
                       >
@@ -941,6 +923,7 @@ export function HRUsersPanel() {
                       <Button
                         variant="outline"
                         size="sm"
+                        className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
                         onClick={() => openEditDialog(user)}
                         title="Edit User"
                       >
@@ -951,7 +934,7 @@ export function HRUsersPanel() {
                         size="sm"
                         onClick={() => handleToggleStatus(user)}
                         title={user.status === 'active' ? 'Suspend User' : 'Activate User'}
-                        className={user.status === 'active' ? 'text-orange-500 hover:text-orange-600' : 'text-green-500 hover:text-green-600'}
+                        className={`h-10 w-10 p-0 rounded-full bg-white ${user.status === 'active' ? 'text-amber-600 border-amber-200 hover:bg-amber-50' : 'text-[#256c1d] border-[#cfe9c9] hover:bg-[#eaf6e6]'}`}
                       >
                         {user.status === 'active' ? <Ban className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
                       </Button>
@@ -960,13 +943,14 @@ export function HRUsersPanel() {
                         size="sm"
                         onClick={() => handleResign(user)}
                         title={user.status === 'resigned' ? 'Re-activate Employee' : 'Resign Employee'}
-                        className={user.status === 'resigned' ? 'text-blue-500 hover:text-blue-600' : 'text-red-600 hover:text-red-700'}
+                        className={`h-10 w-10 p-0 rounded-full bg-white ${user.status === 'resigned' ? 'text-sky-600 border-sky-200 hover:bg-sky-50' : 'text-red-600 border-red-200 hover:bg-red-50'}`}
                       >
                         {user.status === 'resigned' ? <UserCheck className="w-4 h-4" /> : <UserMinus className="w-4 h-4" />}
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
+                        className="h-10 w-10 p-0 rounded-full bg-white text-red-600 border-red-200 hover:bg-red-50"
                         onClick={() => handleDelete(userId)}
                         title="Delete User"
                       >
@@ -976,20 +960,21 @@ export function HRUsersPanel() {
                   </div>
                 );
               })}
+            <ListPagination total={displayedUsers.length} page={currentPage} pageSize={pageSize} onPageChange={setPage} onPageSizeChange={(n) => { setPageSize(n); setPage(1); }} />
           </div>
         )}
-      </CardContent>
+      </div>
 
       {/* Password Change Dialog */}
       <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
-          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+        <DialogContent className="sm:max-w-[425px] wizard-form border-0 rounded-[2rem] overflow-hidden p-0 gap-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader className="bg-[#f4f6f3] p-6 border-b border-slate-100 m-0 space-y-0">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-primary/10 rounded-xl">
-                <Key className="w-5 h-5 text-primary" />
+              <div className="w-11 h-11 bg-white rounded-2xl flex items-center justify-center">
+                <Key className="w-5 h-5 text-[#256c1d]" />
               </div>
               <div className="text-left">
-                <DialogTitle className="text-xl font-bold">Change Password</DialogTitle>
+                <DialogTitle className="text-xl font-semibold tracking-tight">Change Password</DialogTitle>
                 <p className="text-xs text-muted-foreground mt-0.5 font-normal">Securely update credentials</p>
               </div>
             </div>
@@ -1040,14 +1025,14 @@ export function HRUsersPanel() {
 
       {/* Transfer Employee Dialog */}
       <Dialog open={transferDialogOpen} onOpenChange={setTransferDialogOpen}>
-        <DialogContent className="sm:max-w-[450px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
-          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+        <DialogContent className="sm:max-w-[450px] wizard-form border-0 rounded-[2rem] overflow-hidden p-0 gap-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader className="bg-[#f4f6f3] p-6 border-b border-slate-100 m-0 space-y-0">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-blue-500/10 rounded-xl">
                 <ArrowRightLeft className="w-5 h-5 text-blue-600 dark:text-blue-500" />
               </div>
               <div className="text-left">
-                <DialogTitle className="text-xl font-bold">Transfer Employee</DialogTitle>
+                <DialogTitle className="text-xl font-semibold tracking-tight">Transfer Employee</DialogTitle>
                 <p className="text-xs text-muted-foreground mt-0.5 font-normal">Reassign to a new department</p>
               </div>
             </div>
@@ -1138,8 +1123,8 @@ export function HRUsersPanel() {
 
       {/* Promotion/Demotion Dialog */}
       <Dialog open={promotionDialogOpen} onOpenChange={setPromotionDialogOpen}>
-        <DialogContent className="sm:max-w-[450px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
-          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+        <DialogContent className="sm:max-w-[450px] wizard-form border-0 rounded-[2rem] overflow-hidden p-0 gap-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader className="bg-[#f4f6f3] p-6 border-b border-slate-100 m-0 space-y-0">
             <div className="flex items-center gap-3">
               <div className={`p-2.5 rounded-xl ${promotionData.type === 'promotion' ? "bg-green-500/10" : "bg-orange-500/10"}`}>
                 {promotionData.type === 'promotion' ? 
@@ -1148,7 +1133,7 @@ export function HRUsersPanel() {
                 }
               </div>
               <div className="text-left">
-                <DialogTitle className="text-xl font-bold">
+                <DialogTitle className="text-xl font-semibold tracking-tight">
                   {promotionData.type === 'promotion' ? 'Promote' : 'Demote'} Employee
                 </DialogTitle>
                 <p className="text-xs text-muted-foreground mt-0.5 font-normal">Update designation and role</p>
@@ -1269,6 +1254,6 @@ export function HRUsersPanel() {
           </div>
         </DialogContent>
       </Dialog>
-    </Card>
+    </div>
   );
 }

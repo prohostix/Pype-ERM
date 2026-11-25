@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Megaphone, RefreshCw } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -95,49 +94,52 @@ export function AnnouncementsPanel() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Announcements</h2>
-          <p className="text-muted-foreground text-sm">Publish org-wide announcements visible to all employees</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Announcements</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Publish org-wide announcements visible to all employees</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={fetchAnnouncements}>
-            <RefreshCw className="w-4 h-4 mr-1" /> Refresh
+          <Button variant="outline" onClick={fetchAnnouncements} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
+            <RefreshCw className="w-4 h-4 mr-2" /> Refresh
           </Button>
           {canManage && (
-            <Button size="sm" onClick={() => { resetForm(); setDialogOpen(true); }}>
-              <Plus className="w-4 h-4 mr-1" /> New Announcement
+            <Button onClick={() => { resetForm(); setDialogOpen(true); }} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+              <Plus className="w-4 h-4 mr-2" /> New Announcement
             </Button>
           )}
         </div>
       </div>
 
-      <Card>
-        <CardHeader><CardTitle>Published Announcements</CardTitle></CardHeader>
-        <CardContent>
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Published Announcements</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{announcements.length} total</span>}
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-muted rounded-lg animate-pulse" />)}</div>
+            <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-24 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : announcements.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              <Megaphone className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p>No announcements yet</p>
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Megaphone className="w-6 h-6" /></div>
+              <p className="text-sm">No announcements yet</p>
             </div>
           ) : (
             <div className="space-y-3">
               {announcements.map(a => {
                 const aid = a.id || a.id;
                 return (
-                  <div key={aid} className="flex items-start gap-4 p-4 border rounded-lg hover:bg-muted/30 transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <Megaphone className="w-5 h-5 text-primary" />
+                  <div key={aid} className="flex items-start gap-4 p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                    <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center shrink-0">
+                      <Megaphone className="w-5 h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold">{a.title}</p>
+                      <p className="font-semibold text-slate-900">{a.title}</p>
                       <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">{a.content}</p>
                       <div className="flex flex-wrap items-center gap-2 mt-2">
-                        <Badge className={`text-xs ${TYPE_COLORS[a.type] || ''}`}>{a.type}</Badge>
-                        <Badge className={`text-xs ${PRIORITY_COLORS[a.priority] || ''}`}>{a.priority}</Badge>
+                        <Badge className={`text-xs rounded-full border-0 px-3 ${TYPE_COLORS[a.type] || ''}`}>{a.type}</Badge>
+                        <Badge className={`text-xs rounded-full border-0 px-3 ${PRIORITY_COLORS[a.priority] || ''}`}>{a.priority}</Badge>
                         {a.postedBy?.name && <span className="text-xs text-muted-foreground">by {a.postedBy.name}</span>}
                         <span className="text-xs text-muted-foreground">{new Date(a.postedAt || a.createdAt).toLocaleDateString()}</span>
                         {a.expiresAt && <span className="text-xs text-orange-600">Expires {new Date(a.expiresAt).toLocaleDateString()}</span>}
@@ -146,8 +148,8 @@ export function AnnouncementsPanel() {
                     <div className="flex gap-1 shrink-0">
                       {canManage && (
                         <>
-                          <Button variant="ghost" size="sm" onClick={() => handleEdit(a)}><Edit className="w-4 h-4" /></Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleDelete(aid)}><Trash2 className="w-4 h-4" /></Button>
+                          <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(a)}><Edit className="w-4 h-4" /></Button>
+                          <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(aid)}><Trash2 className="w-4 h-4" /></Button>
                         </>
                       )}
                     </div>
@@ -156,14 +158,14 @@ export function AnnouncementsPanel() {
               })}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {canManage && (
       <Dialog open={dialogOpen} onOpenChange={open => { setDialogOpen(open); if (!open) resetForm(); }}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="wizard-form max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>{editingId ? 'Edit Announcement' : 'New Announcement'}</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Announcement' : 'New Announcement'}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4 pt-2">
             <div className="space-y-1">
@@ -205,8 +207,8 @@ export function AnnouncementsPanel() {
               <Input type="date" value={form.expiresAt} onChange={e => setForm(f => ({ ...f, expiresAt: e.target.value }))} />
             </div>
             <div className="flex gap-2 pt-2">
-              <Button type="submit" className="flex-1">{editingId ? 'Update' : 'Publish'}</Button>
-              <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+              <Button type="submit" className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">{editingId ? 'Update' : 'Publish'}</Button>
+              <Button type="button" variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDialogOpen(false)}>Cancel</Button>
             </div>
           </form>
         </DialogContent>

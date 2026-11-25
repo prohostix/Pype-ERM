@@ -208,12 +208,9 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-primary/10 rounded-2xl">
-            <CalendarPlus className="w-6 h-6 text-primary" />
-          </div>
           <div>
-            <h2 className="text-2xl font-bold">Leave Requests</h2>
-            <p className="text-muted-foreground text-sm mt-1">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Leave Requests</h2>
+            <p className="text-muted-foreground text-sm mt-1.5">
               {isDeptManager
                 ? 'Review and approve leave requests from your department.'
                 : isHR
@@ -223,12 +220,12 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" onClick={fetchLeaves} disabled={loading} className="rounded-xl border-slate-200/60 shadow-sm h-10 px-4">
+          <Button variant="outline" onClick={fetchLeaves} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className={cn('w-4 h-4 mr-2 text-muted-foreground', loading && 'animate-spin')} />
             Refresh
           </Button>
           {(!isHR || isMyPortal) && (
-            <Button size="sm" onClick={() => setCreateOpen(true)} className="rounded-xl shadow-md h-10 px-4 transition-transform hover:scale-105 active:scale-95">
+            <Button onClick={() => setCreateOpen(true)} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
               <Plus className="w-4 h-4 mr-2" />
               New Request
             </Button>
@@ -241,21 +238,21 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
       {balances && user?.role !== 'ceo' && user?.role !== 'general_manager' && user?.role !== 'branch_manager' && (
         <div className="mb-6">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="text-lg font-semibold">My Leave Balances</h3>
+            <h3 className="text-lg font-semibold tracking-tight">My Leave Balances</h3>
             <Input
               type="month"
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="w-48"
+              className="w-48 h-10 rounded-full bg-white"
             />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Sick Leave */}
-            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-card/60 backdrop-blur-xl">
-              <CardContent className="pt-5 pb-5">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
+              <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
-                  <p className="font-medium">Sick Leave</p>
-                  <Badge variant="outline">{balances.sick.available.toFixed(1)} Available</Badge>
+                  <p className="font-semibold text-slate-900">Sick Leave</p>
+                  <Badge variant="outline" className="rounded-full bg-[#eaf6e6] text-[#256c1d] border-[#cfe9c9]">{balances.sick.available.toFixed(1)} Available</Badge>
                 </div>
                 <div className="text-sm text-muted-foreground mb-1">
                   Accrued (This Month): {balances.sick.accrued.toFixed(1)}
@@ -267,11 +264,11 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
             </Card>
 
             {/* Casual Leave */}
-            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-card/60 backdrop-blur-xl">
-              <CardContent className="pt-5 pb-5">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
+              <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
-                  <p className="font-medium">Casual Leave</p>
-                  <Badge variant="outline" className="bg-blue-500/10 text-blue-600 border-blue-200">{balances.casual.available.toFixed(1)} Available</Badge>
+                  <p className="font-semibold text-slate-900">Casual Leave</p>
+                  <Badge variant="outline" className="rounded-full bg-[#eaf6e6] text-[#256c1d] border-[#cfe9c9]">{balances.casual.available.toFixed(1)} Available</Badge>
                 </div>
                 <div className="text-sm text-muted-foreground mb-1">
                   Accrued (Last 3m): {(balances.casual.accrued * 3).toFixed(1)}
@@ -288,11 +285,11 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
             </Card>
 
             {/* Earned Leave */}
-            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-card/60 backdrop-blur-xl">
-              <CardContent className="pt-5 pb-5">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
+              <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
-                  <p className="font-medium">Earned Leave</p>
-                  <Badge variant="outline">{balances.earned.available.toFixed(1)} Available</Badge>
+                  <p className="font-semibold text-slate-900">Earned Leave</p>
+                  <Badge variant="outline" className="rounded-full bg-[#eaf6e6] text-[#256c1d] border-[#cfe9c9]">{balances.earned.available.toFixed(1)} Available</Badge>
                 </div>
                 <div className="text-sm text-muted-foreground mb-1">
                   Accrued (YTD): {balances.earned.accrued.toFixed(1)}
@@ -304,11 +301,11 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
             </Card>
 
             {/* WFH */}
-            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-purple-500/5 backdrop-blur-xl border-purple-500/20">
-              <CardContent className="pt-5 pb-5">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
+              <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <p className="font-medium text-purple-600">Work From Home</p>
-                  <Badge variant="outline" className="border-purple-200 text-purple-600 bg-purple-50">{balances.wfh?.available.toFixed(1) || 0} Available</Badge>
+                  <Badge variant="outline" className="rounded-full border-purple-200 text-purple-600 bg-purple-50">{balances.wfh?.available.toFixed(1) || 0} Available</Badge>
                 </div>
                 <div className="text-sm text-muted-foreground mb-1">
                   Allocated: {balances.wfh?.accrued.toFixed(1) || 0}
@@ -320,11 +317,11 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
             </Card>
 
             {/* Unpaid */}
-            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-red-500/5 backdrop-blur-xl border-red-500/20">
-              <CardContent className="pt-5 pb-5">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
+              <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <p className="font-medium text-red-600">Loss of Pay</p>
-                  <Badge variant="destructive">{balances.unpaid.taken.toFixed(1)} Days</Badge>
+                  <Badge variant="destructive" className="rounded-full">{balances.unpaid.taken.toFixed(1)} Days</Badge>
                 </div>
                 <div className="text-sm text-muted-foreground mt-2">
                   Leaves marked as unpaid due to insufficient balance.
@@ -344,13 +341,13 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
           { label: 'Withdrawals', count: counts.withdraw_pending, color: 'text-orange-600', bg: 'bg-orange-500/10' },
           { label: 'Rejected', count: counts.rejected, color: 'text-red-600', bg: 'bg-red-500/10' },
         ].map(({ label, count, color, bg }) => (
-          <Card key={label} className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm hover:shadow-md transition-shadow rounded-2xl bg-card/60 backdrop-blur-xl">
-            <CardContent className="pt-5 pb-5 flex items-center justify-between">
+          <Card key={label} className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
+            <CardContent className="p-6 flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground mb-1">{label}</p>
-                <p className={cn('text-3xl font-bold', color)}>{count}</p>
+                <p className="text-xs font-medium text-slate-500 mb-1">{label}</p>
+                <p className={cn('text-3xl font-semibold tracking-tight', color)}>{count}</p>
               </div>
-              <div className={cn("p-3 rounded-2xl", bg)}>
+              <div className={cn("w-11 h-11 rounded-2xl flex items-center justify-center", bg)}>
                 <FileText className={cn("w-5 h-5", color)} />
               </div>
             </CardContent>
@@ -360,26 +357,26 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="flex-wrap h-auto gap-1 bg-muted/40 p-1.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/50">
-          <TabsTrigger value="all" className="rounded-xl data-[state=active]:shadow-sm">All ({counts.all})</TabsTrigger>
-          <TabsTrigger value="pending" className="rounded-xl data-[state=active]:shadow-sm">Pending ({counts.pending})</TabsTrigger>
-          <TabsTrigger value="dept_approved" className="rounded-xl data-[state=active]:shadow-sm">Dept Approved ({counts.dept_approved})</TabsTrigger>
-          <TabsTrigger value="approved" className="rounded-xl data-[state=active]:shadow-sm">Approved ({counts.approved})</TabsTrigger>
-          <TabsTrigger value="withdraw_pending" className="rounded-xl data-[state=active]:shadow-sm">Withdrawals ({counts.withdraw_pending})</TabsTrigger>
-          <TabsTrigger value="rejected" className="rounded-xl data-[state=active]:shadow-sm">Rejected ({counts.rejected})</TabsTrigger>
-          {!isEmployee && !isMyPortal && <TabsTrigger value="mine" className="rounded-xl data-[state=active]:shadow-sm">My Requests</TabsTrigger>}
+        <TabsList className="flex-wrap h-auto gap-1.5 bg-white p-2 rounded-3xl border border-slate-100 w-fit max-w-full">
+          <TabsTrigger value="all" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">All ({counts.all})</TabsTrigger>
+          <TabsTrigger value="pending" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Pending ({counts.pending})</TabsTrigger>
+          <TabsTrigger value="dept_approved" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Dept Approved ({counts.dept_approved})</TabsTrigger>
+          <TabsTrigger value="approved" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Approved ({counts.approved})</TabsTrigger>
+          <TabsTrigger value="withdraw_pending" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Withdrawals ({counts.withdraw_pending})</TabsTrigger>
+          <TabsTrigger value="rejected" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Rejected ({counts.rejected})</TabsTrigger>
+          {!isEmployee && !isMyPortal && <TabsTrigger value="mine" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">My Requests</TabsTrigger>}
         </TabsList>
 
         <TabsContent value={activeTab} className="mt-6">
           {loading ? (
             <div className="space-y-4">
-              {[1, 2, 3].map(i => <div key={i} className="h-32 bg-muted/40 rounded-2xl animate-pulse" />)}
+              {[1, 2, 3].map(i => <div key={i} className="h-32 bg-slate-100 rounded-3xl animate-pulse" />)}
             </div>
           ) : filtered.length === 0 ? (
-            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-card/40 backdrop-blur-sm border-dashed">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
               <CardContent className="py-20 text-center text-muted-foreground flex flex-col items-center">
-                <div className="p-4 bg-muted/50 rounded-full mb-4">
-                  <Clock className="w-8 h-8 opacity-40" />
+                <div className="w-14 h-14 bg-[#eaf6e6] text-[#256c1d] rounded-2xl mb-4 flex items-center justify-center">
+                  <Clock className="w-7 h-7" />
                 </div>
                 <p className="text-lg font-medium">No leave requests found</p>
                 <p className="text-sm opacity-70 mt-1">Check back later or submit a new request.</p>
@@ -401,7 +398,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                 const canWithdrawAct = !isOwner && !blockedGm && leave.status === 'withdraw_pending' && (isHR || isExecutive);
 
                 return (
-                  <Card key={leave.id} className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm hover:shadow-lg rounded-2xl hover:border-primary/30 transition-all duration-300 bg-card/60 backdrop-blur-xl group overflow-hidden">
+                  <Card key={leave.id} className="rounded-3xl bg-white border border-slate-100 hover:border-[#8ae47e] shadow-none py-0 transition-colors group overflow-hidden">
                     <CardContent className="p-0">
                       <div className="p-5 sm:p-6 flex flex-col sm:flex-row items-start justify-between gap-5">
                         <div className="flex-1 min-w-0">
@@ -431,7 +428,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                               <Badge variant="outline" className="text-[11px] rounded-full bg-background/50 backdrop-blur-sm">{leave.department.name}</Badge>
                             )}
                             {leave.isHalfDay && (
-                              <Badge variant="outline" className="text-[11px] bg-primary/10 text-primary border-primary/20 rounded-full">
+                              <Badge variant="outline" className="text-[11px] bg-[#eaf6e6] text-[#256c1d] border-[#cfe9c9] rounded-full">
                                 Half Day ({leave.halfDayType === 'first_half' ? '1st Half' : '2nd Half'})
                               </Badge>
                             )}
@@ -439,7 +436,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
                           {/* Employee name */}
                           <div className="flex items-center gap-3 mb-2">
-                            <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                            <div className="w-10 h-10 rounded-2xl bg-[#eaf6e6] flex items-center justify-center text-[#256c1d]">
                               <UserCircle2 className="w-5 h-5" />
                             </div>
                             <div>
@@ -453,7 +450,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                           </div>
 
                           {/* Dates + reason */}
-                          <div className="bg-muted/30 rounded-xl p-3 mt-3 border border-border/40">
+                          <div className="bg-[#f4f6f3] rounded-2xl p-4 mt-3">
                             <div className="flex items-center gap-2 text-xs font-medium text-foreground/80 mb-1.5">
                               <Clock className="w-3.5 h-3.5 text-muted-foreground" />
                               {new Date(leave.startDate).toDateString() === new Date(leave.endDate).toDateString() ? (
@@ -475,13 +472,13 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                           {(leave.deptApprover || leave.hrApprover) && (
                             <div className="flex items-center gap-2 mt-3 flex-wrap">
                               {leave.deptApprover && (
-                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/30 border border-border/50 px-2 py-1 rounded-md">
+                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-[#f4f6f3] px-2.5 py-1 rounded-full">
                                   <UserCircle2 className="w-3 h-3 opacity-70" />
                                   <span>Dept: <span className="font-medium text-foreground/80">{leave.deptApprover.name}</span>{leave.deptApprover.designation ? ` (${leave.deptApprover.designation})` : ''}</span>
                                 </div>
                               )}
                               {leave.hrApprover && (
-                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/30 border border-border/50 px-2 py-1 rounded-md">
+                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-[#f4f6f3] px-2.5 py-1 rounded-full">
                                   <UserCircle2 className="w-3 h-3 opacity-70" />
                                   <span>Final: <span className="font-medium text-foreground/80">{leave.hrApprover.name}</span>{leave.hrApprover.designation ? ` (${leave.hrApprover.designation})` : ''}</span>
                                 </div>
@@ -492,7 +489,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                           {/* Expandable remarks */}
                           {(leave.deptAdminRemarks || leave.hrRemarks) && (
                             <button
-                              className="flex items-center gap-1.5 mt-2 text-xs font-medium text-primary hover:text-primary/80 transition-colors bg-primary/5 px-2.5 py-1 rounded-full"
+                              className="flex items-center gap-1.5 mt-2 text-xs font-medium text-[#256c1d] hover:bg-[#dff3da] transition-colors bg-[#eaf6e6] px-3 py-1.5 rounded-full"
                               onClick={() => setExpanded(isExpanded ? null : leave.id)}
                             >
                               {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -501,7 +498,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                           )}
 
                           {isExpanded && (
-                            <div className="mt-3 space-y-3 text-sm bg-muted/20 p-4 rounded-xl border border-border/40">
+                            <div className="mt-3 space-y-3 text-sm bg-[#f4f6f3] p-4 rounded-2xl">
                               {leave.deptAdminRemarks && (
                                 <div className="space-y-1">
                                   <div className="flex items-center gap-2">
@@ -512,7 +509,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                                       <span className="text-xs text-muted-foreground">— {leave.deptApprover.name}</span>
                                     )}
                                   </div>
-                                  <p className="text-muted-foreground text-sm bg-background/50 p-2 rounded-lg border border-border/30">{leave.deptAdminRemarks}</p>
+                                  <p className="text-muted-foreground text-sm bg-white p-3 rounded-xl">{leave.deptAdminRemarks}</p>
                                 </div>
                               )}
                               {leave.hrRemarks && (() => {
@@ -566,7 +563,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                                             <span className="text-xs text-muted-foreground">— {leave.hrApprover.name}</span>
                                           )}
                                         </div>
-                                        <p className="text-muted-foreground text-sm bg-background/50 p-2 rounded-lg border border-border/30 whitespace-pre-wrap">{reviewerRemarks}</p>
+                                        <p className="text-muted-foreground text-sm bg-white p-3 rounded-xl whitespace-pre-wrap">{reviewerRemarks}</p>
                                       </div>
                                     )}
                                   </>
@@ -579,39 +576,39 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                         {/* Action buttons & Workflow */}
                         <div className="flex flex-col sm:items-end justify-between gap-6 shrink-0 w-full sm:w-auto">
 
-                          <div className="flex sm:flex-col gap-2 w-full sm:w-auto md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="flex sm:flex-col gap-2 w-full sm:w-auto">
                             {canDeptAct && (
                               <>
-                                <Button size="sm" className="rounded-xl shadow-sm h-9 bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto" onClick={() => openAction(leave, 'dept', 'approve')}>
+                                <Button size="sm" className="rounded-full h-9 px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold w-full sm:w-auto" onClick={() => openAction(leave, 'dept', 'approve')}>
                                   <CheckCircle className="w-4 h-4 mr-1.5" /> Approve
                                 </Button>
-                                <Button size="sm" variant="outline" className="rounded-xl border-red-200 shadow-sm h-9 text-red-600 hover:bg-red-50 hover:text-red-700 w-full sm:w-auto" onClick={() => openAction(leave, 'dept', 'reject')}>
+                                <Button size="sm" variant="outline" className="rounded-full border-red-200 h-9 px-4 text-red-600 hover:bg-red-50 hover:text-red-700 w-full sm:w-auto" onClick={() => openAction(leave, 'dept', 'reject')}>
                                   <XCircle className="w-4 h-4 mr-1.5" /> Reject
                                 </Button>
                               </>
                             )}
                             {canHRAct && (
                               <>
-                                <Button size="sm" className="rounded-xl shadow-sm h-9 bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto" onClick={() => openAction(leave, 'hr', 'approve')}>
+                                <Button size="sm" className="rounded-full h-9 px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold w-full sm:w-auto" onClick={() => openAction(leave, 'hr', 'approve')}>
                                   <CheckCircle className="w-4 h-4 mr-1.5" /> Final Approve
                                 </Button>
-                                <Button size="sm" variant="outline" className="rounded-xl border-red-200 shadow-sm h-9 text-red-600 hover:bg-red-50 hover:text-red-700 w-full sm:w-auto" onClick={() => openAction(leave, 'hr', 'reject')}>
+                                <Button size="sm" variant="outline" className="rounded-full border-red-200 h-9 px-4 text-red-600 hover:bg-red-50 hover:text-red-700 w-full sm:w-auto" onClick={() => openAction(leave, 'hr', 'reject')}>
                                   <XCircle className="w-4 h-4 mr-1.5" /> Reject
                                 </Button>
                               </>
                             )}
                             {canWithdrawAct && (
                               <>
-                                <Button size="sm" className="rounded-xl shadow-sm h-9 bg-orange-500 hover:bg-orange-600 text-white w-full sm:w-auto" onClick={() => openAction(leave, 'hr', 'approve')}>
+                                <Button size="sm" className="rounded-full h-9 px-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold w-full sm:w-auto" onClick={() => openAction(leave, 'hr', 'approve')}>
                                   <CheckCircle className="w-4 h-4 mr-1.5" /> Approve Withdrawal
                                 </Button>
-                                <Button size="sm" variant="outline" className="rounded-xl border-red-200 shadow-sm h-9 text-red-600 hover:bg-red-50 hover:text-red-700 w-full sm:w-auto" onClick={() => openAction(leave, 'hr', 'reject')}>
+                                <Button size="sm" variant="outline" className="rounded-full border-red-200 h-9 px-4 text-red-600 hover:bg-red-50 hover:text-red-700 w-full sm:w-auto" onClick={() => openAction(leave, 'hr', 'reject')}>
                                   <XCircle className="w-4 h-4 mr-1.5" /> Reject Withdrawal
                                 </Button>
                               </>
                             )}
                             {isOwner && ['pending', 'approved', 'dept_approved'].includes(leave.status) && (
-                              <Button size="sm" variant="ghost" className="rounded-xl h-9 text-red-500 hover:text-red-600 hover:bg-red-50 w-full sm:w-auto" onClick={() => openAction(leave, 'employee', 'withdraw')}>
+                              <Button size="sm" variant="ghost" className="rounded-full h-9 px-4 text-red-500 hover:text-red-600 hover:bg-red-50 w-full sm:w-auto" onClick={() => openAction(leave, 'employee', 'withdraw')}>
                                 <Trash2 className="w-4 h-4 mr-1.5" /> Withdraw Request
                               </Button>
                             )}
@@ -694,13 +691,13 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
       {/* Create Leave / Permission Dialog */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
-          <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3">
-            <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
+        <DialogContent className="max-w-md wizard-form border-0 rounded-[2rem] overflow-hidden p-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <div className="bg-[#f4f6f3] p-6 border-b border-slate-100 flex items-center gap-3">
+            <div className="w-11 h-11 bg-white rounded-2xl text-[#256c1d] flex items-center justify-center">
               <CalendarPlus className="w-5 h-5" />
             </div>
             <div>
-              <DialogTitle className="text-xl">
+              <DialogTitle className="text-xl font-semibold tracking-tight">
                 {(form.type === 'late_coming' || form.type === 'early_exit') ? 'Request Permission' : 'Submit Leave Request'}
               </DialogTitle>
               <p className="text-sm text-muted-foreground mt-0.5">
@@ -818,8 +815,8 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
               />
             </div>
             <div className="pt-2 flex justify-end gap-2">
-              <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setCreateOpen(false)}>Cancel</Button>
-              <Button type="submit" className="rounded-xl px-6" disabled={submitting}>
+              <Button type="button" variant="ghost" className="rounded-full h-11 px-6" onClick={() => setCreateOpen(false)}>Cancel</Button>
+              <Button type="submit" className="rounded-full h-11 px-7 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" disabled={submitting}>
                 {submitting ? 'Submitting...' : (form.type === 'late_coming' || form.type === 'early_exit') ? 'Submit Permission' : 'Submit Request'}
               </Button>
             </div>
@@ -829,13 +826,13 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
       {/* Approve/Reject Action Dialog */}
       <Dialog open={actionDialog} onOpenChange={setActionDialog}>
-        <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
+        <DialogContent className="max-w-md wizard-form border-0 rounded-[2rem] overflow-hidden p-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <div className={cn("p-6 border-b flex items-center gap-3", actionMode === 'approve' ? 'bg-green-500/10 border-green-500/10 text-green-700' : actionMode === 'withdraw' ? 'bg-orange-500/10 border-orange-500/10 text-orange-700' : 'bg-red-500/10 border-red-500/10 text-red-700')}>
             <div className={cn("p-2.5 rounded-2xl", actionMode === 'approve' ? 'bg-green-500/20' : actionMode === 'withdraw' ? 'bg-orange-500/20' : 'bg-red-500/20')}>
               {actionMode === 'withdraw' ? <Trash2 className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
             </div>
             <div>
-              <DialogTitle className="text-xl">
+              <DialogTitle className="text-xl font-semibold tracking-tight">
                 {actionMode === 'approve' ? 'Approve' : actionMode === 'withdraw' ? 'Withdraw' : 'Reject'} Request
               </DialogTitle>
               <p className="text-sm opacity-80 mt-0.5">
@@ -882,11 +879,11 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
               />
             </div>
             <div className="pt-2 flex justify-end gap-2">
-              <Button variant="ghost" className="rounded-xl" onClick={() => setActionDialog(false)} disabled={actionSubmitting}>Cancel</Button>
+              <Button variant="ghost" className="rounded-full h-11 px-6" onClick={() => setActionDialog(false)} disabled={actionSubmitting}>Cancel</Button>
               <Button
                 onClick={handleAction}
                 disabled={actionSubmitting || (actionMode === 'withdraw' && !remarks.trim())}
-                className={cn("rounded-xl px-6", actionMode === 'approve' ? 'bg-green-600 hover:bg-green-700 text-white' : actionMode === 'withdraw' ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-red-600 hover:bg-red-700 text-white')}
+                className={cn("rounded-full h-11 px-7 font-semibold", actionMode === 'approve' ? 'bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14]' : actionMode === 'withdraw' ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-red-600 hover:bg-red-700 text-white')}
               >
                 {actionSubmitting ? 'Processing...' : actionMode === 'approve' ? 'Confirm Approval' : actionMode === 'withdraw' ? 'Submit Withdrawal' : 'Confirm Rejection'}
               </Button>
@@ -897,7 +894,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
       {/* Delete Dialog */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent className="max-w-sm border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
+        <DialogContent className="max-w-sm wizard-form border-0 rounded-[2rem] overflow-hidden p-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <div className="bg-red-500/10 p-6 border-b border-red-500/10 flex items-center gap-3">
             <div className="p-2.5 bg-red-500/20 rounded-2xl text-red-600">
               <Trash2 className="w-5 h-5" />
@@ -909,8 +906,8 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
           <div className="p-6">
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">Are you sure you want to withdraw this leave request? This action cannot be undone.</p>
             <div className="flex justify-end gap-2">
-              <Button variant="ghost" className="rounded-xl" onClick={() => setDeleteOpen(false)}>Cancel</Button>
-              <Button variant="destructive" className="rounded-xl px-6" onClick={handleDelete}>Withdraw</Button>
+              <Button variant="ghost" className="rounded-full h-11 px-6" onClick={() => setDeleteOpen(false)}>Cancel</Button>
+              <Button variant="destructive" className="rounded-full h-11 px-7" onClick={handleDelete}>Withdraw</Button>
             </div>
           </div>
         </DialogContent>

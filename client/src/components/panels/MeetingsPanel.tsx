@@ -233,11 +233,11 @@ export function MeetingsPanel() {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="space-y-6 wizard-form">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Meetings</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Meetings</h2>
+          <p className="text-sm text-muted-foreground mt-1.5">
             {isGlobalRole 
               ? 'View, monitor, and coordinate meetings across all branches' 
               : 'Schedule and manage your team meetings and discussions'}
@@ -245,15 +245,14 @@ export function MeetingsPanel() {
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
-            <Button className="shadow-lg hover:shadow-xl transition-all rounded-full px-6">
+            <Button className="h-11 rounded-full px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
               <Plus className="w-4 h-4 mr-2" /> Call Meeting
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-none shadow-2xl rounded-2xl">
-            <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-6 border-b border-border/50">
+          <DialogContent className="wizard-form max-w-3xl max-h-[90vh] overflow-y-auto p-0 border-0 rounded-[2rem] bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+            <div className="bg-[#f4f6f3] p-6 border-b border-slate-100">
               <DialogHeader>
-                <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-                  <Calendar className="w-6 h-6 text-primary" />
+                <DialogTitle className="text-xl font-semibold tracking-tight">
                   Schedule a New Meeting
                 </DialogTitle>
                 <DialogDescription className="text-muted-foreground mt-1 text-sm">
@@ -266,8 +265,8 @@ export function MeetingsPanel() {
               
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-muted-foreground" /> Meeting Details
+                  <h3 className="text-lg font-semibold tracking-tight mb-4">
+                    Meeting Details
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2 md:col-span-2">
@@ -437,9 +436,9 @@ export function MeetingsPanel() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-6 border-t border-border/50">
-                <Button type="button" variant="ghost" onClick={() => setIsCreateOpen(false)} className="rounded-full px-6">Cancel</Button>
-                <Button type="submit" className="rounded-full px-8 shadow-md">Schedule Meeting</Button>
+              <div className="flex items-center justify-end gap-3 pt-6 border-t border-slate-100">
+                <Button type="button" variant="ghost" onClick={() => setIsCreateOpen(false)} className="rounded-full h-11 px-6">Cancel</Button>
+                <Button type="submit" className="rounded-full h-11 px-8 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Schedule Meeting</Button>
               </div>
             </form>
           </DialogContent>
@@ -447,21 +446,21 @@ export function MeetingsPanel() {
       </div>
 
       {/* Filter toolbar */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 bg-card p-3 rounded-xl border border-border/60 shadow-sm">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 bg-white p-3 rounded-3xl border border-slate-100">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input 
             placeholder="Search meetings by title, agenda, host, branch, or attendee..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="pl-9 h-9 bg-muted/40"
+            className="pl-10 h-11 rounded-full bg-[#f4f6f3] border-transparent"
           />
         </div>
         
         {isGlobalRole && (
           <div className="w-full md:w-56">
             <Select value={selectedBranch} onValueChange={setSelectedBranch}>
-              <SelectTrigger className="h-9">
+              <SelectTrigger className="h-11 rounded-full px-4 bg-white border-slate-200 font-semibold">
                 <Building2 className="w-3.5 h-3.5 mr-2 text-muted-foreground" />
                 <SelectValue placeholder="All Branches" />
               </SelectTrigger>
@@ -479,7 +478,7 @@ export function MeetingsPanel() {
 
         <div className="w-full md:w-44">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="h-9">
+            <SelectTrigger className="h-11 rounded-full px-4 bg-white border-slate-200 font-semibold">
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
             <SelectContent>
@@ -494,11 +493,11 @@ export function MeetingsPanel() {
 
       <div className="grid gap-4">
         {loading ? (
-          <div className="text-center py-12 text-muted-foreground">Loading meetings...</div>
+          <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-32 bg-slate-100 rounded-3xl animate-pulse" />)}</div>
         ) : filteredMeetings.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground bg-muted/20 rounded-xl border border-dashed flex flex-col items-center justify-center gap-2">
-            <Calendar className="w-8 h-8 text-muted-foreground/50" />
-            <p className="font-medium">No meetings found</p>
+          <div className="text-center py-14 text-muted-foreground bg-white rounded-3xl border border-slate-100 flex flex-col items-center justify-center gap-2">
+            <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mb-1"><Calendar className="w-6 h-6" /></div>
+            <p className="font-medium text-slate-900">No meetings found</p>
             <p className="text-xs text-muted-foreground">
               {searchQuery || statusFilter !== 'all' || selectedBranch !== 'all'
                 ? 'Try adjusting your search or filters'
@@ -507,21 +506,20 @@ export function MeetingsPanel() {
           </div>
         ) : (
           filteredMeetings.map((meeting) => (
-            <Card key={meeting.id} className="transition-all hover:shadow-md">
-              <CardHeader className="pb-3">
+            <Card key={meeting.id} className="rounded-3xl bg-white border border-slate-100 shadow-none py-6 gap-4 hover:border-[#8ae47e] transition-colors">
+              <CardHeader className="px-6 pb-0">
                 <div className="flex justify-between items-start gap-4">
                   <div className="space-y-1.5 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <Video className="w-5 h-5 text-primary" />
+                      <CardTitle className="text-lg font-semibold tracking-tight flex items-center gap-2">
                         {meeting.title || 'Untitled Meeting'}
                       </CardTitle>
                       {meeting.host?.branch?.name ? (
-                        <Badge variant="outline" className="flex items-center gap-1 text-xs font-normal border-primary/30 bg-primary/5 text-primary">
+                        <Badge variant="outline" className="flex items-center gap-1 text-xs font-normal border-0 bg-[#eaf6e6] text-[#256c1d] rounded-full">
                           <Building2 className="w-3 h-3" /> {meeting.host.branch.name}
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="flex items-center gap-1 text-xs font-normal border-border text-muted-foreground">
+                        <Badge variant="outline" className="flex items-center gap-1 text-xs font-normal border-0 bg-[#f4f6f3] text-slate-600 rounded-full">
                           <Building2 className="w-3 h-3" /> Head Office
                         </Badge>
                       )}
@@ -535,7 +533,7 @@ export function MeetingsPanel() {
                         <Clock className="w-4 h-4 text-muted-foreground/70" /> 
                         {meeting.time}
                       </span>
-                      <span className="flex items-center gap-1 capitalize px-2 py-0.5 rounded-md bg-secondary/60 text-xs border border-border">
+                      <span className="flex items-center gap-1 capitalize px-2.5 py-0.5 rounded-full bg-[#f4f6f3] text-xs text-slate-600">
                         {meeting.type || 'offline'}
                       </span>
                     </div>
@@ -543,9 +541,9 @@ export function MeetingsPanel() {
                   <div className="flex items-center gap-2">
                     <span className={cn(
                       "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider",
-                      meeting.status === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                      meeting.status === 'cancelled' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
-                      'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                      meeting.status === 'completed' ? 'bg-[#dff3da] text-[#256c1d]' :
+                      meeting.status === 'cancelled' ? 'bg-red-100 text-red-700' :
+                      'bg-sky-100 text-sky-700'
                     )}>
                       {meeting.status}
                     </span>
@@ -553,7 +551,7 @@ export function MeetingsPanel() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                        className="h-9 w-9 rounded-full text-red-500 hover:text-red-600 hover:bg-red-50"
                         onClick={() => handleDeleteMeeting(meeting.id)}
                         title="Delete meeting"
                       >
@@ -563,12 +561,12 @@ export function MeetingsPanel() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="px-6">
                 <div className="space-y-4 text-sm">
                   {meeting.type === 'online' && meeting.meetingUrl && (
-                    <div className="flex items-center gap-2 p-3 bg-primary/5 border border-primary/20 rounded-lg">
-                      <Video className="w-4 h-4 text-primary" />
-                      <a href={meeting.meetingUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline font-medium">
+                    <div className="flex items-center gap-2 p-3.5 bg-[#eaf6e6] rounded-2xl">
+                      <Video className="w-4 h-4 text-[#256c1d]" />
+                      <a href={meeting.meetingUrl} target="_blank" rel="noreferrer" className="text-[#256c1d] hover:underline font-semibold">
                         Join Meeting
                       </a>
                     </div>
@@ -581,25 +579,25 @@ export function MeetingsPanel() {
                   <div>
                     <h4 className="font-medium text-foreground mb-1">Attendees</h4>
                     <div className="flex flex-wrap gap-2">
-                      <span className="px-2.5 py-1 bg-primary/10 text-primary rounded-md text-xs font-medium border border-primary/20 flex items-center gap-1">
+                      <span className="px-3 py-1 bg-[#dff3da] text-[#256c1d] rounded-full text-xs font-semibold flex items-center gap-1">
                         {meeting.host?.name || 'Unknown'} (Host{meeting.host?.branch?.name ? ` • ${meeting.host.branch.name}` : ''})
                       </span>
                       {meeting.attendees?.map((a: any, i: number) => (
-                        <span key={i} className="px-2.5 py-1 bg-secondary rounded-md text-xs border border-border">
+                        <span key={i} className="px-3 py-1 bg-[#f4f6f3] text-slate-700 rounded-full text-xs">
                           {a.name}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  <div className="border-t border-border/50 pt-4 mt-4">
+                  <div className="border-t border-slate-100 pt-4 mt-4">
                     <h4 className="font-medium text-foreground mb-3 text-sm">Follow-up Tasks</h4>
                     <div className="space-y-2 mb-3">
                       {(meeting.followUps || []).length === 0 ? (
                         <p className="text-xs text-muted-foreground italic">No follow-ups added yet.</p>
                       ) : (
                         meeting.followUps!.map((fu: any, idx: number) => (
-                          <div key={idx} className="flex items-center gap-2 text-sm bg-muted/20 p-2 rounded-md border border-border/40">
+                          <div key={idx} className="flex items-center gap-2 text-sm bg-[#f4f6f3] p-2.5 rounded-xl">
                             <button 
                               onClick={() => handleToggleFollowUp(meeting, idx)}
                               className="text-muted-foreground hover:text-primary transition-colors flex-shrink-0"
@@ -633,7 +631,7 @@ export function MeetingsPanel() {
                   </div>
 
                   {meeting.minutes ? (
-                    <div className="bg-muted/50 p-4 rounded-lg border border-border/50 space-y-2">
+                    <div className="bg-[#f4f6f3] p-4 rounded-2xl space-y-2">
                       <div className="flex justify-between items-center">
                         <h4 className="font-medium flex items-center gap-2 text-sm">
                           <FileText className="w-4 h-4 text-primary" /> Meeting Minutes / Report
@@ -705,7 +703,7 @@ export function MeetingsPanel() {
                       <h4 className="font-medium text-foreground mb-2 text-xs uppercase tracking-wider text-muted-foreground">Reschedule History</h4>
                       <div className="space-y-3">
                         {meeting.rescheduleHistory.map((history: any, idx: number) => (
-                          <div key={idx} className="bg-muted/30 p-3 rounded-lg border border-border/40 text-xs">
+                          <div key={idx} className="bg-[#f4f6f3] p-3 rounded-2xl text-xs">
                             <div className="flex justify-between items-center mb-1">
                               <span className="font-medium">Previous: {format(new Date(history.oldDate), 'MMM d, yyyy')} at {history.oldTime}</span>
                               <span className="text-muted-foreground">{format(new Date(history.timestamp), 'MMM d, yyyy h:mm a')}</span>
@@ -724,9 +722,9 @@ export function MeetingsPanel() {
       </div>
 
       <Dialog open={isMinutesOpen} onOpenChange={setIsMinutesOpen}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Add Meeting Minutes</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Add Meeting Minutes</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleUpdateMinutes} className="space-y-4">
             <div className="space-y-2">
@@ -740,16 +738,16 @@ export function MeetingsPanel() {
               />
             </div>
             <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => setIsMinutesOpen(false)}>Cancel</Button>
-              <Button type="submit">Save Minutes</Button>
+              <Button type="button" variant="outline" className="rounded-full h-11 px-6" onClick={() => setIsMinutesOpen(false)}>Cancel</Button>
+              <Button type="submit" className="rounded-full h-11 px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Save Minutes</Button>
             </div>
           </form>
         </DialogContent>
       </Dialog>
       <Dialog open={isRescheduleOpen} onOpenChange={setIsRescheduleOpen}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Reschedule Meeting</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Reschedule Meeting</DialogTitle>
             <DialogDescription>Select a new date and time for this meeting.</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleRescheduleSubmit} className="space-y-4">
@@ -783,8 +781,8 @@ export function MeetingsPanel() {
               />
             </div>
             <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" onClick={() => setIsRescheduleOpen(false)}>Cancel</Button>
-              <Button type="submit">Confirm Reschedule</Button>
+              <Button type="button" variant="outline" className="rounded-full h-11 px-6" onClick={() => setIsRescheduleOpen(false)}>Cancel</Button>
+              <Button type="submit" className="rounded-full h-11 px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Confirm Reschedule</Button>
             </div>
           </form>
         </DialogContent>

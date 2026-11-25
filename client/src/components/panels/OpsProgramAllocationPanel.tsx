@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Plus, Trash2, RefreshCw } from 'lucide-react';
+import { Plus, Trash2, RefreshCw, Layers, Building2, GraduationCap, UserCog, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -167,54 +165,81 @@ export function OpsProgramAllocationPanel() {
     return acc;
   }, {} as Record<string, Allocation[]>);
 
+  const SEL = 'h-11 rounded-full bg-white border-slate-200 shadow-sm text-sm px-4';
+  const ROW = 'flex items-start gap-3 rounded-2xl px-4 py-3 cursor-pointer border transition-colors';
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Program Allocations</h2>
-        <p className="text-muted-foreground text-sm mt-1">Manage which programs each active academic partner can enroll students into.</p>
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Program Allocations</h2>
+          <p className="text-muted-foreground text-sm mt-1.5 max-w-2xl">Manage which programs each active academic partner can enroll students into.</p>
+        </div>
+        {selectedCenter && (
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Button variant="outline" onClick={() => fetchAllocations(selectedCenter)} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50">
+              <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />Refresh
+            </Button>
+            <Button onClick={() => setOpen(true)} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
+              <Plus className="w-4 h-4" />Add Programs
+            </Button>
+          </div>
+        )}
       </div>
 
-      <div className="flex items-center gap-3">
+      {/* Partner selection */}
+      <div className="rounded-3xl bg-[#f4f6f3] dark:bg-muted/30 p-5 sm:p-6">
+        <label className="text-sm font-semibold mb-2 flex items-center gap-2">
+          <span className="w-8 h-8 rounded-full bg-white text-[#256c1d] flex items-center justify-center"><Building2 className="w-4 h-4" /></span>
+          Academic partner
+        </label>
         <Select value={selectedCenter} onValueChange={handleCenterChange}>
-          <SelectTrigger className="w-72">
-            <SelectValue placeholder="Select a academic partner" />
+          <SelectTrigger className={`w-full max-w-xl ${SEL}`}>
+            <SelectValue placeholder="Select an academic partner" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="rounded-2xl">
             {centers.map(c => (
               <SelectItem key={c.id} value={c.id}>{c.name} ({c.code})</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        {selectedCenter && (
-          <>
-            <Button variant="outline" size="sm" onClick={() => fetchAllocations(selectedCenter)} disabled={loading}>
-              <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
-            </Button>
-            <Button size="sm" onClick={() => setOpen(true)}>
-              <Plus className="w-4 h-4 mr-2" />Add Programs
-            </Button>
-          </>
-        )}
       </div>
+
+      {!selectedCenter && (
+        <div className="rounded-3xl border border-dashed border-slate-300 bg-white dark:bg-card py-14 text-center text-muted-foreground">
+          <span className="w-14 h-14 rounded-full bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Layers className="w-6 h-6" /></span>
+          <p className="font-medium text-foreground">Select an academic partner</p>
+          <p className="text-sm mt-1">Choose a partner above to see and manage its program allocations.</p>
+        </div>
+      )}
 
       {selectedCenter && (
         loading ? (
-          <div className="space-y-2">{[1,2,3].map(i => <div key={i} className="h-12 bg-muted rounded-xl animate-pulse" />)}</div>
+          <div className="space-y-4">{[1,2,3].map(i => <div key={i} className="h-24 bg-[#f4f6f3] rounded-3xl animate-pulse" />)}</div>
         ) : allocations.length === 0 ? (
-          <Card><CardContent className="py-10 text-center text-muted-foreground text-sm">
-            No programs allocated yet.
-          </CardContent></Card>
+          <div className="rounded-3xl border border-dashed border-slate-300 bg-white dark:bg-card py-14 text-center text-muted-foreground">
+            <span className="w-14 h-14 rounded-full bg-[#f4f6f3] flex items-center justify-center mx-auto mb-3"><Layers className="w-6 h-6" /></span>
+            <p className="font-medium text-foreground">No programs allocated yet</p>
+            <p className="text-sm mt-1 mb-5">Add programs so this partner can enroll students into them.</p>
+            <Button onClick={() => setOpen(true)} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-1.5" />Add Programs</Button>
+          </div>
         ) : (
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 border-b mb-4">
-              <CardTitle className="text-base">Allocated Programs ({allocations.length})</CardTitle>
-              <div className="flex items-center gap-2">
-                <Label className="text-xs text-muted-foreground whitespace-nowrap">Ops User:</Label>
+          <div className="space-y-5">
+            {/* Ops user assignment */}
+            <div className="rounded-3xl bg-white dark:bg-card p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_28px_-14px_rgba(16,24,40,0.10)]">
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0"><UserCog className="w-5 h-5" /></div>
+                <div>
+                  <h3 className="font-semibold text-base">Allocated programs <span className="text-muted-foreground font-normal">({allocations.length})</span></h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">Applications from this partner are reviewed by the ops user below.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2.5 flex-wrap">
                 <Select value={selectedOpsSubAdmin} onValueChange={setSelectedOpsSubAdmin}>
-                  <SelectTrigger className="w-[200px] h-8 text-xs">
+                  <SelectTrigger className={`w-[230px] ${SEL}`}>
                     <SelectValue placeholder="Select Ops User" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-2xl">
                     <SelectItem value="none">Default (Ops Team)</SelectItem>
                     {opsSubAdmins.map(admin => (
                       <SelectItem key={admin.id} value={admin.id}>{admin.name}</SelectItem>
@@ -222,41 +247,40 @@ export function OpsProgramAllocationPanel() {
                   </SelectContent>
                 </Select>
                 {selectedOpsSubAdmin !== originalOpsSubAdmin && (
-                  <Button 
-                    size="sm" 
-                    className="h-8 text-xs bg-green-600 hover:bg-green-700 text-white" 
-                    onClick={handleUpdateSubAdmin}
-                    disabled={savingOpsUser}
-                  >
+                  <Button onClick={handleUpdateSubAdmin} disabled={savingOpsUser} className="h-11 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold">
                     {savingOpsUser ? 'Saving...' : 'Save'}
                   </Button>
                 )}
               </div>
-            </CardHeader>
-            <CardContent className="space-y-6 pt-2">
-              {Object.entries(groupedAllocations).map(([uni, allocs]) => (
-                <div key={uni} className="space-y-3">
-                  <h3 className="font-semibold text-sm text-primary border-b pb-1">{uni}</h3>
-                  <div className="space-y-2">
-                    {allocs.map(a => (
-                      <div key={a.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/40">
-                        <div>
-                          <span className="font-medium text-sm">{a.program?.name}</span>
-                          <span className="text-muted-foreground text-xs ml-2">({a.program?.code})</span>
-                          {a.program?.courseType && (
-                            <Badge variant="outline" className="ml-2 text-[10px]">{a.program?.courseType}</Badge>
-                          )}
-                        </div>
-                        <Button variant="ghost" size="sm" className="text-error hover:text-error" onClick={() => handleRequestRemove(a.id)}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
+            </div>
+
+            {/* Grouped by university */}
+            {Object.entries(groupedAllocations).map(([uni, allocs]) => (
+              <div key={uni} className="rounded-3xl bg-white dark:bg-card overflow-hidden shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_28px_-14px_rgba(16,24,40,0.10)]">
+                <div className="flex items-center gap-3 px-5 py-4 bg-[#f4f6f3]">
+                  <span className="w-9 h-9 rounded-full bg-white flex items-center justify-center"><GraduationCap className="h-4 w-4 text-[#256c1d]" /></span>
+                  <h3 className="text-base font-semibold text-foreground">{uni}</h3>
+                  <span className="ml-auto text-xs text-muted-foreground">{allocs.length} program{allocs.length === 1 ? '' : 's'}</span>
                 </div>
-              ))}
-            </CardContent>
-          </Card>
+                <div className="divide-y divide-slate-100 dark:divide-white/10">
+                  {allocs.map(a => (
+                    <div key={a.id} className="flex items-center justify-between gap-3 px-5 py-4 hover:bg-[#f4f6f3] transition-colors">
+                      <div className="min-w-0 flex items-center gap-3 flex-wrap">
+                        <span className="font-semibold text-sm">{a.program?.name}</span>
+                        <span className="text-[11px] font-mono text-slate-600 bg-[#f1f3ef] px-2.5 py-0.5 rounded-full">{a.program?.code}</span>
+                        {a.program?.courseType && (
+                          <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#e3f7dd] text-[#1f6a17]">{a.program?.courseType}</span>
+                        )}
+                      </div>
+                      <Button variant="outline" size="icon" onClick={() => handleRequestRemove(a.id)} title="Request removal" className="h-10 w-10 rounded-full bg-white border-slate-200 text-rose-500 hover:bg-rose-50 hover:text-rose-600 shrink-0">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         )
       )}
 
@@ -272,72 +296,70 @@ export function OpsProgramAllocationPanel() {
           setSelectedUniversities(uIds);
         }
       }}>
-        <DialogContent className="max-w-3xl max-h-[80vh] flex flex-col">
-          <DialogHeader>
-            <DialogTitle>Allocate Programs</DialogTitle>
-            <DialogDescription>
-              Select one or more universities to view their programs, then choose which programs to allocate.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="grid grid-cols-2 gap-6 py-4 flex-1 overflow-hidden min-h-[300px]">
-            <div className="space-y-3 flex flex-col">
-              <Label className="text-sm font-semibold">1. Select Universities</Label>
-              <ScrollArea className="flex-1 border rounded-md p-4">
-                <div className="space-y-4">
-                  {universities.map(u => (
-                    <div key={u.id} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`uni-${u.id}`} 
-                        checked={selectedUniversities.includes(u.id)}
-                        onCheckedChange={() => toggleUniversity(u.id)}
-                      />
-                      <label htmlFor={`uni-${u.id}`} className="text-sm font-medium leading-none cursor-pointer">
-                        {u.name} ({u.code})
+        <DialogContent className="w-[96vw] sm:max-w-3xl max-h-[90vh] p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white flex flex-col" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-5 shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0"><Layers className="w-5 h-5" /></div>
+            <DialogHeader className="space-y-1 text-left">
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-left">Allocate Programs</DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground text-left">
+                Select one or more universities to view their programs, then choose which programs to allocate.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 px-6 sm:px-8 pb-4 flex-1 overflow-hidden min-h-[320px]">
+            <div className="space-y-3 flex flex-col min-h-0">
+              <Label className="text-sm font-semibold">1. Universities</Label>
+              <ScrollArea className="flex-1 max-h-[44vh] -mr-2 pr-2">
+                <div className="space-y-2">
+                  {universities.map(u => {
+                    const on = selectedUniversities.includes(u.id);
+                    return (
+                      <label key={u.id} htmlFor={`uni-${u.id}`} className={cn(ROW, 'items-center', on ? 'bg-[#eaf6e6] border-[#54b947]/40' : 'bg-white border-slate-200 hover:bg-[#f4f6f3]')}>
+                        <Checkbox id={`uni-${u.id}`} checked={on} onCheckedChange={() => toggleUniversity(u.id)} />
+                        <span className="text-sm font-medium flex-1">{u.name}</span>
+                        <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-white text-slate-500">{u.code}</span>
                       </label>
-                    </div>
-                  ))}
+                    );
+                  })}
                   {universities.length === 0 && (
-                    <p className="text-sm text-muted-foreground text-center py-4">No universities found.</p>
+                    <p className="text-sm text-muted-foreground text-center py-6">No universities found.</p>
                   )}
                 </div>
               </ScrollArea>
             </div>
-            
-            <div className="space-y-3 flex flex-col">
-              <Label className="text-sm font-semibold">2. Select Programs</Label>
-              <ScrollArea className="flex-1 border rounded-md p-4 bg-muted/10">
-                <div className="space-y-4">
-                  {availablePrograms.map(p => (
-                    <div key={p.id} className="flex items-start space-x-2">
-                      <Checkbox 
-                        id={`prog-${p.id}`} 
-                        checked={selectedPrograms.includes(p.id)}
-                        onCheckedChange={() => toggleProgram(p.id)}
-                        disabled={allocatedProgramIds.includes(p.id)}
-                      />
-                      <div className="grid gap-1.5 leading-none">
-                        <label htmlFor={`prog-${p.id}`} className={cn("text-sm font-medium cursor-pointer", allocatedProgramIds.includes(p.id) && "text-muted-foreground")}>
-                          {p.name} {allocatedProgramIds.includes(p.id) && <span className="text-xs font-normal text-muted-foreground ml-1">(Already allocated)</span>}
-                        </label>
-                        <p className="text-xs text-muted-foreground">Code: {p.code}</p>
-                      </div>
-                    </div>
-                  ))}
+
+            <div className="space-y-3 flex flex-col min-h-0">
+              <Label className="text-sm font-semibold">2. Programs</Label>
+              <ScrollArea className="flex-1 max-h-[44vh] -mr-2 pr-2">
+                <div className="space-y-2">
+                  {availablePrograms.map(p => {
+                    const done = allocatedProgramIds.includes(p.id);
+                    const on = selectedPrograms.includes(p.id);
+                    return (
+                      <label key={p.id} htmlFor={`prog-${p.id}`} className={cn(ROW, done ? 'bg-[#f4f6f3] border-transparent cursor-not-allowed' : on ? 'bg-[#eaf6e6] border-[#54b947]/40' : 'bg-white border-slate-200 hover:bg-[#f4f6f3]')}>
+                        <Checkbox id={`prog-${p.id}`} checked={on} onCheckedChange={() => toggleProgram(p.id)} disabled={done} className="mt-0.5" />
+                        <div className="min-w-0 flex-1">
+                          <p className={cn('text-sm font-medium', done && 'text-muted-foreground')}>{p.name}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">Code: {p.code}{done && <span className="ml-2 text-[#256c1d] font-medium">Already allocated</span>}</p>
+                        </div>
+                      </label>
+                    );
+                  })}
                   {selectedUniversities.length === 0 && (
-                    <p className="text-sm text-muted-foreground text-center py-4">Select a university first.</p>
+                    <p className="text-sm text-muted-foreground text-center py-6">Select a university first.</p>
                   )}
                   {selectedUniversities.length > 0 && availablePrograms.length === 0 && (
-                    <p className="text-sm text-muted-foreground text-center py-4">No available programs found for selected universities.</p>
+                    <p className="text-sm text-muted-foreground text-center py-6">No available programs found for selected universities.</p>
                   )}
                 </div>
               </ScrollArea>
             </div>
           </div>
-          
-          <DialogFooter className="mt-2">
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button onClick={handleAllocate} disabled={submitting || selectedPrograms.length === 0}>
+
+          <DialogFooter className="px-6 sm:px-8 py-5 border-t border-slate-100 gap-2 sm:gap-2 shrink-0 flex-col-reverse sm:flex-row">
+            <Button variant="ghost" onClick={() => setOpen(false)} className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">Cancel</Button>
+            <Button onClick={handleAllocate} disabled={submitting || selectedPrograms.length === 0} className="h-11 rounded-full px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold">
               {submitting ? 'Allocating...' : `Allocate (${selectedPrograms.length})`}
             </Button>
           </DialogFooter>
@@ -345,25 +367,28 @@ export function OpsProgramAllocationPanel() {
       </Dialog>
 
       <Dialog open={deleteRequestOpen} onOpenChange={setDeleteRequestOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Request Deletion</DialogTitle>
-            <DialogDescription>
-              Program allocations can only be removed after manager approval. Please provide a reason.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <Label>Reason for deletion</Label>
+        <DialogContent className="w-[95vw] sm:max-w-md p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-4">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><XCircle className="w-5 h-5" /></div>
+            <DialogHeader className="space-y-1 text-left">
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-left">Request Deletion</DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground text-left">
+                Program allocations can only be removed after manager approval. Please provide a reason.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+          <div className="px-6 sm:px-8 pb-5 space-y-1.5">
+            <Label className="text-sm font-semibold">Reason for deletion</Label>
             <textarea
-              className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 mt-1"
+              className="flex min-h-[100px] w-full rounded-2xl bg-[#f4f6f3] border border-transparent px-4 py-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:bg-white focus-visible:border-[#54b947] focus-visible:ring-4 focus-visible:ring-[#54b947]/20 resize-none"
               placeholder="E.g., Assigned by mistake, center no longer supports this program, etc."
               value={deleteRequestReason}
               onChange={e => setDeleteRequestReason(e.target.value)}
             />
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteRequestOpen(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={submitDeleteRequest} disabled={!deleteRequestReason.trim() || submittingDelete}>
+          <DialogFooter className="px-6 sm:px-8 py-5 border-t border-slate-100 gap-2 sm:gap-2 flex-col-reverse sm:flex-row">
+            <Button variant="ghost" onClick={() => setDeleteRequestOpen(false)} className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">Cancel</Button>
+            <Button onClick={submitDeleteRequest} disabled={!deleteRequestReason.trim() || submittingDelete} className="h-11 rounded-full px-8 bg-rose-600 hover:bg-rose-700 text-white font-semibold">
               {submittingDelete ? 'Submitting...' : 'Submit Request'}
             </Button>
           </DialogFooter>

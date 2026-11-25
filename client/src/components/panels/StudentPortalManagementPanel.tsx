@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { RefreshCw, MonitorSmartphone, Shield, UserX, Lock, VideoOff, Video, Unlock } from 'lucide-react';
+import { RefreshCw, Search, Lock } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { ListPagination } from '@/components/ui/list-pagination';
 
 export function StudentPortalManagementPanel() {
   const { user } = useAuth();
@@ -28,7 +27,7 @@ export function StudentPortalManagementPanel() {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -151,150 +150,112 @@ export function StudentPortalManagementPanel() {
     s.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const totalPages = Math.max(1, Math.ceil(filteredStudents.length / itemsPerPage));
   const paginatedStudents = filteredStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <Card className="border-none shadow-none">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Student Portal Management</CardTitle>
-            <CardDescription>Manage student portal access, credentials, and settings</CardDescription>
-          </div>
-          <Button variant="outline" size="sm" onClick={fetchStudents} disabled={loading}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Student Portal Management</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Manage student portal access, credentials, and settings</p>
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center mb-4 space-x-2">
-          <Input 
-            placeholder="Search students by name, email or enrollment..." 
+        <Button variant="outline" onClick={fetchStudents} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
+          <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          Refresh
+        </Button>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 p-4">
+        <div className="relative max-w-xl">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Input
+            placeholder="Search students by name, email or enrollment..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-sm"
+            className="pl-11 h-12 rounded-full bg-[#f4f6f3] border-transparent"
           />
         </div>
-        
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Student</TableHead>
-                <TableHead>Program</TableHead>
-                <TableHead>Portal Status</TableHead>
-                <TableHead>Last Login</TableHead>
-                <TableHead className="text-right">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                    <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2" />
-                    Loading students...
-                  </TableCell>
-                </TableRow>
-              ) : filteredStudents.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                    <MonitorSmartphone className="w-8 h-8 mx-auto mb-2 text-muted-foreground/50" />
-                    No students found
-                  </TableCell>
-                </TableRow>
-              ) : (
-                paginatedStudents.map(student => (
-                  <TableRow key={student.id}>
-                    <TableCell>
-                      <div className="font-medium">{student.name}</div>
-                      <div className="text-xs text-muted-foreground">{student.email}</div>
-                      {student.enrollmentNo && <div className="text-xs text-muted-foreground">{student.enrollmentNo}</div>}
-                    </TableCell>
-                    <TableCell>{student.program?.name || 'N/A'}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        {student.credentials ? (
-                          <Badge variant="default" className="bg-green-500 hover:bg-green-600">Active</Badge>
-                        ) : (
-                          <Badge variant="secondary">Inactive</Badge>
-                        )}
-                        {student.videoBlocked && (
-                          <Badge variant="destructive" title={student.videoBlockReason || undefined}>Videos blocked</Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground text-sm">
-                      {/* Placeholder for last login */}
-                      Not available
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        {canBlockVideos && (
-                          <Button
-                            size="sm"
-                            variant={student.videoBlocked ? "default" : "outline"}
-                            onClick={() => { setBlockTarget(student); setBlockReason(student.videoBlockReason || ''); }}
-                          >
-                            {student.videoBlocked ? <Video className="w-4 h-4 mr-2" /> : <VideoOff className="w-4 h-4 mr-2" />}
-                            {student.videoBlocked ? 'Unblock Videos' : 'Block Videos'}
-                          </Button>
-                        )}
-                        {canBlockVideos && (
-                          <Button size="sm" variant="outline" onClick={() => openUnlock(student)} title="Skip the unlock-gap wait for the student's next video">
-                            <Unlock className="w-4 h-4 mr-2" />
-                            Unlock Next Video
-                          </Button>
-                        )}
-                        <Button size="sm" variant={student.credentials ? "outline" : "default"} onClick={() => openManageDialog(student)}>
-                          <Shield className="w-4 h-4 mr-2" />
-                          Manage Access
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-          
-          {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
-              <div className="text-sm text-muted-foreground">
-                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} students
-              </div>
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </Button>
-                <div className="text-sm font-medium px-2">
-                  Page {currentPage} of {totalPages}
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Students</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{filteredStudents.length} found</span>}
+        </div>
+        <div className="p-4 sm:p-5">
+          {loading ? (
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-24 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
+          ) : filteredStudents.length === 0 ? (
+            <div className="text-center py-14 text-muted-foreground">
+              <p className="text-sm">No students found</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {paginatedStudents.map(student => (
+                <div key={student.id} className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-semibold text-slate-900">{student.name}</span>
+                      {student.credentials ? (
+                        <Badge className="rounded-full border-0 px-3 bg-[#dff3da] text-[#256c1d] hover:bg-[#dff3da]">Active</Badge>
+                      ) : (
+                        <Badge className="rounded-full border-0 px-3 bg-slate-200/70 text-slate-600 hover:bg-slate-200/70">Inactive</Badge>
+                      )}
+                      {student.videoBlocked && (
+                        <Badge className="rounded-full border-0 px-3 bg-red-100 text-red-700 hover:bg-red-100" title={student.videoBlockReason || undefined}>Videos blocked</Badge>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {student.email}{student.enrollmentNo ? ` · ${student.enrollmentNo}` : ''}
+                    </p>
+                    <p className="text-xs text-slate-600 mt-1.5">
+                      {student.program?.name || 'N/A'}
+                      <span className="text-muted-foreground"> · Last login: not available</span>
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 xl:justify-end">
+                    {canBlockVideos && (
+                      <Button
+                        className={student.videoBlocked
+                          ? 'h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold'
+                          : 'h-10 rounded-full px-5 bg-white border border-slate-200 text-slate-700 hover:bg-[#eaf6e6] font-semibold'}
+                        onClick={() => { setBlockTarget(student); setBlockReason(student.videoBlockReason || ''); }}
+                      >
+                        {student.videoBlocked ? 'Unblock Videos' : 'Block Videos'}
+                      </Button>
+                    )}
+                    {canBlockVideos && (
+                      <Button variant="outline" className="h-10 rounded-full px-5 bg-white border-slate-200 hover:bg-[#eaf6e6] font-semibold" onClick={() => openUnlock(student)} title="Skip the unlock-gap wait for the student's next video">
+                        Unlock Next Video
+                      </Button>
+                    )}
+                    <Button
+                      className={student.credentials
+                        ? 'h-10 rounded-full px-5 bg-white border border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold'
+                        : 'h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold'}
+                      onClick={() => openManageDialog(student)}
+                    >
+                      Manage Access
+                    </Button>
+                  </div>
                 </div>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
+              ))}
+              <ListPagination
+                total={filteredStudents.length}
+                page={currentPage}
+                pageSize={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(n) => { setItemsPerPage(n); setCurrentPage(1); }}
+              />
             </div>
           )}
         </div>
-      </CardContent>
+      </div>
 
       <Dialog open={!!blockTarget} onOpenChange={(o) => { if (!o) { setBlockTarget(null); setBlockReason(''); } }}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="wizard-form max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>{blockTarget?.videoBlocked ? 'Restore video lectures' : 'Block video lectures'}: {blockTarget?.name}</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">{blockTarget?.videoBlocked ? 'Restore video lectures' : 'Block video lectures'}: {blockTarget?.name}</DialogTitle>
             <DialogDescription>
               {blockTarget?.videoBlocked
                 ? 'The student will be able to watch their video lectures again (fee rules still apply).'
@@ -315,20 +276,20 @@ export function StudentPortalManagementPanel() {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setBlockTarget(null)} disabled={isSaving}>Cancel</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setBlockTarget(null)} disabled={isSaving}>Cancel</Button>
             {blockTarget?.videoBlocked ? (
-              <Button onClick={() => handleVideoBlock(false)} disabled={isSaving}>{isSaving ? 'Saving...' : 'Unblock Videos'}</Button>
+              <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => handleVideoBlock(false)} disabled={isSaving}>{isSaving ? 'Saving...' : 'Unblock Videos'}</Button>
             ) : (
-              <Button variant="destructive" onClick={() => handleVideoBlock(true)} disabled={isSaving}>{isSaving ? 'Saving...' : 'Block Videos'}</Button>
+              <Button className="h-11 px-6 rounded-full bg-red-600 hover:bg-red-700 text-white font-semibold" onClick={() => handleVideoBlock(true)} disabled={isSaving}>{isSaving ? 'Saving...' : 'Block Videos'}</Button>
             )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={!!unlockTarget} onOpenChange={(o) => { if (!o) setUnlockTarget(null); }}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="wizard-form max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Unlock next video: {unlockTarget?.name}</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Unlock next video: {unlockTarget?.name}</DialogTitle>
             <DialogDescription>Skips the unlock-gap wait for this student only. Other rules (fee lock, daily limit, admin block) still apply.</DialogDescription>
           </DialogHeader>
           <div className="py-2 text-sm space-y-2">
@@ -350,18 +311,18 @@ export function StudentPortalManagementPanel() {
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setUnlockTarget(null)} disabled={isSaving}>Close</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setUnlockTarget(null)} disabled={isSaving}>Close</Button>
             {unlockInfo?.nextLocked && (
-              <Button onClick={handleUnlockNext} disabled={isSaving}>{isSaving ? 'Unlocking...' : 'Unlock now'}</Button>
+              <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleUnlockNext} disabled={isSaving}>{isSaving ? 'Unlocking...' : 'Unlock now'}</Button>
             )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={manageDialogOpen} onOpenChange={setManageDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="wizard-form max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Portal Access: {selectedStudent?.name}</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Portal Access: {selectedStudent?.name}</DialogTitle>
             <DialogDescription>Set up or revoke portal login credentials.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
@@ -386,22 +347,21 @@ export function StudentPortalManagementPanel() {
           </div>
           <DialogFooter className="flex items-center justify-between sm:justify-between w-full">
             {selectedStudent?.credentials ? (
-              <Button variant="destructive" size="sm" onClick={handleRevokeAccess} disabled={isSaving}>
-                <UserX className="w-4 h-4 mr-2" />
+              <Button className="h-11 px-5 rounded-full bg-red-600 hover:bg-red-700 text-white font-semibold" onClick={handleRevokeAccess} disabled={isSaving}>
                 Revoke Access
               </Button>
             ) : (
               <div></div>
             )}
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setManageDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleSaveCredentials} disabled={isSaving || !password}>
+              <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setManageDialogOpen(false)}>Cancel</Button>
+              <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleSaveCredentials} disabled={isSaving || !password}>
                 {isSaving ? 'Saving...' : 'Save Credentials'}
               </Button>
             </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </Card>
+    </div>
   );
 }

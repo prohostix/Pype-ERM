@@ -41,14 +41,14 @@ export function SalesReportFilters({ value, onChange }: { value: ReportFilter; o
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Select value={value.month} onValueChange={(month) => onChange({ ...value, month })}>
-        <SelectTrigger className="h-9 w-44"><SelectValue placeholder="Month" /></SelectTrigger>
+        <SelectTrigger className="h-11 w-48 rounded-full bg-white border-slate-200 px-5 font-semibold"><SelectValue placeholder="Month" /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All months</SelectItem>
           {monthOptions.map((m) => <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>)}
         </SelectContent>
       </Select>
       <Select value={value.counselorId} onValueChange={(counselorId) => onChange({ ...value, counselorId })}>
-        <SelectTrigger className="h-9 w-52"><SelectValue placeholder="Counselor" /></SelectTrigger>
+        <SelectTrigger className="h-11 w-56 rounded-full bg-white border-slate-200 px-5 font-semibold"><SelectValue placeholder="Counselor" /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All counselors</SelectItem>
           {members.map((m) => <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>)}

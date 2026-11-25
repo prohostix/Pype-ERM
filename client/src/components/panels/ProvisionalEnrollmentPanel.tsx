@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { 
   Upload, 
   FileText, 
@@ -18,13 +17,26 @@ import {
   Calendar, 
   IndianRupee, 
   AlertCircle,
-  Sparkles
+  Sparkles,
+  User
 } from 'lucide-react';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { shrinkImage, TARGET_MAX_BYTES } from '@/lib/uploadFile';
 
 import { CS, numLocale } from '@/lib/currency';
+function Section({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) {
+  return (
+  <section className="space-y-4">
+    <div className="flex items-center gap-3">
+      <span className="w-9 h-9 rounded-full bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Icon className="w-4 h-4" /></span>
+      <h3 className="text-base font-semibold text-foreground">{title}</h3>
+    </div>
+    {children}
+  </section>
+  );
+}
+
 export function ProvisionalEnrollmentPanel() {
   const [programs, setPrograms] = useState<any[]>([]);
   const [sessions, setSessions] = useState<any[]>([]);
@@ -305,340 +317,316 @@ export function ProvisionalEnrollmentPanel() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-6xl mx-auto space-y-6">
+      {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold">Provisional Enrollment</h2>
-        <p className="text-muted-foreground text-sm mt-1">Quickly enroll a student with minimal details and send directly to Finance for receipt verification.</p>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">Provisional Enrollment</h2>
+        <p className="text-muted-foreground text-sm mt-1.5 max-w-2xl">Quickly enroll a student with minimal details and send directly to Finance for receipt verification.</p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Student & Academic Details</CardTitle>
-          <CardDescription>Select the university, program, session, and provide student payment information.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* University Selection (Excludes Academic Partners) */}
-          <div className="space-y-1">
-            <Label className="flex items-center gap-1.5 font-medium">
-              <Building2 className="w-4 h-4 text-muted-foreground" />
-              University
-            </Label>
-            <Select 
-              value={form.universityId} 
-              onValueChange={v => setForm(f => ({ ...f, universityId: v, programId: '', specialisation: '', sessionId: '' }))}
-            >
-              <SelectTrigger><SelectValue placeholder="All Universities" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Universities</SelectItem>
-                {universities.map((u: any) => (
-                  <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+      <div className="grid lg:grid-cols-5 gap-5 sm:gap-6 items-start">
+        {/* Left: details */}
+        <Card className="lg:col-span-3 rounded-3xl gap-0">
+          <CardContent className="p-6 sm:p-8 space-y-9">
+            <Section icon={GraduationCap} title="Academic details">
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5 text-[#256c1d]" /> University</Label>
+                  <Select
+                    value={form.universityId}
+                    onValueChange={v => setForm(f => ({ ...f, universityId: v, programId: '', specialisation: '', sessionId: '' }))}
+                  >
+                    <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue placeholder="All Universities" /></SelectTrigger>
+                    <SelectContent className="rounded-2xl">
+                      <SelectItem value="all">All Universities</SelectItem>
+                      {universities.map((u: any) => (
+                        <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-          {/* Program Selection */}
-          <div className="space-y-1">
-            <Label className="flex items-center gap-1.5 font-medium">
-              <GraduationCap className="w-4 h-4 text-muted-foreground" />
-              Program
-            </Label>
-            <Select 
-              value={form.programId} 
-              onValueChange={v => {
-                const p = eligiblePrograms.find(prog => prog.id === v);
-                setForm(f => ({ 
-                  ...f, 
-                  programId: v,
-                  specialisation: '', // the list of specialisations belongs to the program
-                  universityId: (f.universityId === 'all' && p?.university?.id) ? p.university.id : f.universityId,
-                }));
-              }}
-            >
-              <SelectTrigger><SelectValue placeholder="Select a program" /></SelectTrigger>
-              <SelectContent>
-                {filteredPrograms.map(p => (
-                  <SelectItem key={p.id} value={p.id}>
-                    {p.name} {p.university?.name && form.universityId === 'all' ? `(${p.university.name})` : ''}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold flex items-center gap-1.5"><GraduationCap className="w-3.5 h-3.5 text-[#256c1d]" /> Program</Label>
+                  <Select
+                    value={form.programId}
+                    onValueChange={v => {
+                      const p = eligiblePrograms.find(prog => prog.id === v);
+                      setForm(f => ({
+                        ...f,
+                        programId: v,
+                        specialisation: '', // the list of specialisations belongs to the program
+                        universityId: (f.universityId === 'all' && p?.university?.id) ? p.university.id : f.universityId,
+                      }));
+                    }}
+                  >
+                    <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue placeholder="Select a program" /></SelectTrigger>
+                    <SelectContent className="rounded-2xl">
+                      {filteredPrograms.map(p => (
+                        <SelectItem key={p.id} value={p.id}>
+                          {p.name} {p.university?.name && form.universityId === 'all' ? `(${p.university.name})` : ''}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-          {/* Specialisation (required when the program has any): only the selected program's own specialisations */}
-          {selectedProgram?.specialisations && selectedProgram.specialisations.length > 0 && (
-            <div className="space-y-1">
-              <Label className="flex items-center gap-1.5 font-medium">
-                <Sparkles className="w-4 h-4 text-muted-foreground" />
-                Specialisation <span className="text-destructive">*</span>
-              </Label>
-              <Select
-                value={form.specialisation}
-                onValueChange={v => setForm(f => ({ ...f, specialisation: v }))}
-              >
-                <SelectTrigger><SelectValue placeholder="Select a specialisation" /></SelectTrigger>
-                <SelectContent>
-                  {selectedProgram.specialisations.map((spec: string) => (
-                    <SelectItem key={spec} value={spec}>{spec}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          {/* University Sessions Selection (Optional) */}
-          <div className="space-y-1">
-            <Label className="flex items-center gap-1.5 font-medium">
-              <Calendar className="w-4 h-4 text-muted-foreground" />
-              Admission Session <span className="text-xs text-muted-foreground font-normal">(Optional)</span>
-            </Label>
-            <Select 
-              value={form.sessionId || 'none'} 
-              onValueChange={v => setForm(f => ({ ...f, sessionId: v === 'none' ? '' : v }))}
-              disabled={!targetUniId || availableSessions.length === 0}
-            >
-              <SelectTrigger>
-                <SelectValue 
-                  placeholder={
-                    !targetUniId 
-                      ? "Select a university to view sessions (optional)" 
-                      : availableSessions.length === 0 
-                        ? "No active sessions found for this university" 
-                        : "Select an admission session (optional)"
-                  } 
-                />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None / Not Specified</SelectItem>
-                {availableSessions.map(s => (
-                  <SelectItem key={s.id} value={s.id}>
-                    {s.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Program Fee Structure Card (Mentioning Fees) */}
-          {selectedProgram && (
-            <div className="rounded-xl border border-primary/20 bg-primary/5 dark:bg-primary/10 p-4 space-y-3 transition-all">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-primary/15 text-primary">
-                    <IndianRupee className="w-4 h-4" />
+                {/* Specialisation (required when the program has any): only the selected program's own specialisations */}
+                {selectedProgram?.specialisations && selectedProgram.specialisations.length > 0 && (
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-semibold flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#256c1d]" /> Specialisation <span className="text-rose-500">*</span>
+                    </Label>
+                    <Select
+                      value={form.specialisation}
+                      onValueChange={v => setForm(f => ({ ...f, specialisation: v }))}
+                    >
+                      <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue placeholder="Select a specialisation" /></SelectTrigger>
+                      <SelectContent className="rounded-2xl">
+                        {selectedProgram.specialisations.map((spec: string) => (
+                          <SelectItem key={spec} value={spec}>{spec}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-foreground">Program Fee Structure</h4>
-                    <p className="text-xs text-muted-foreground">Standard fees for {selectedProgram.name}</p>
+                )}
+
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#256c1d]" /> Admission session <span className="text-xs text-muted-foreground font-normal">(optional)</span>
+                  </Label>
+                  <Select
+                    value={form.sessionId || 'none'}
+                    onValueChange={v => setForm(f => ({ ...f, sessionId: v === 'none' ? '' : v }))}
+                    disabled={!targetUniId || availableSessions.length === 0}
+                  >
+                    <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4">
+                      <SelectValue
+                        placeholder={
+                          !targetUniId
+                            ? "Select a university to view sessions (optional)"
+                            : availableSessions.length === 0
+                              ? "No active sessions found for this university"
+                              : "Select an admission session (optional)"
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-2xl">
+                      <SelectItem value="none">None / Not Specified</SelectItem>
+                      {availableSessions.map(s => (
+                        <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </Section>
+
+            <Section icon={User} title="Student details">
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Student full name</Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" value={form.studentName} onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))} placeholder="John Doe" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-semibold">Email</Label>
+                    <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="email" value={form.studentEmail} onChange={e => setForm(f => ({ ...f, studentEmail: e.target.value }))} placeholder="john@example.com" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-semibold">Phone number</Label>
+                    <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" value={form.studentPhone} onChange={e => setForm(f => ({ ...f, studentPhone: e.target.value }))} placeholder="+91 9876543210" />
                   </div>
                 </div>
+              </div>
+            </Section>
+
+            <Section icon={IndianRupee} title="Payment">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <Label className="text-sm font-semibold">Initial payment amount ({CS()})</Label>
+                  {regFee > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setForm(f => ({ ...f, initialPaymentAmount: String(regFee) }))}
+                      className="text-[11px] text-[#256c1d] hover:underline font-semibold inline-flex items-center gap-1"
+                    >
+                      <Sparkles className="w-3 h-3" />
+                      Set to Registration Fee ({CS()}{regFee.toLocaleString(numLocale())})
+                    </button>
+                  )}
+                </div>
+                <Input
+                  className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"
+                  type="number"
+                  value={form.initialPaymentAmount}
+                  onChange={e => setForm(f => ({ ...f, initialPaymentAmount: e.target.value }))}
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+            </Section>
+          </CardContent>
+        </Card>
+
+        {/* Right: fees, receipt and submit */}
+        <div className="lg:col-span-2 space-y-5 sm:space-y-6 lg:sticky lg:top-24">
+          {/* Program fee structure */}
+          {selectedProgram ? (
+            <div className="rounded-3xl bg-[#0b1d14] text-white p-6 space-y-4 relative overflow-hidden">
+              <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(70% 60% at 50% 0%, rgba(84,185,71,.35), transparent 70%)' }} />
+              <div className="relative flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-medium text-emerald-100/70">Program fee structure</p>
+                  <p className="text-sm font-semibold mt-0.5">{selectedProgram.name}</p>
+                </div>
                 {billingCycleLabel && (
-                  <Badge variant="secondary" className="text-[11px] font-medium uppercase tracking-wide">
-                    {billingCycleLabel}
-                  </Badge>
+                  <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-white/10 text-emerald-100 uppercase tracking-wide shrink-0">{billingCycleLabel}</span>
                 )}
               </div>
 
               {selectedFeeStructure ? (
-                <>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1 text-xs">
-                    <div className="bg-background/80 dark:bg-background/50 border rounded-lg p-2.5">
-                      <span className="text-muted-foreground block text-[11px]">Registration Fee</span>
-                      <span className="font-semibold text-sm text-foreground">
-                        {CS()}{regFee.toLocaleString(numLocale())}
-                      </span>
-                    </div>
-
-                    <div className="bg-background/80 dark:bg-background/50 border rounded-lg p-2.5">
-                      <span className="text-muted-foreground block text-[11px]">Tuition Fee</span>
-                      <span className="font-semibold text-sm text-foreground">
-                        {CS()}{tuitionFee.toLocaleString(numLocale())}
-                      </span>
-                    </div>
-
-                    <div className="bg-background/80 dark:bg-background/50 border rounded-lg p-2.5">
-                      <span className="text-muted-foreground block text-[11px]">Exam Fee</span>
-                      <span className="font-semibold text-sm text-foreground">
-                        {CS()}{examFee.toLocaleString(numLocale())}
-                      </span>
-                    </div>
+                <div className="relative space-y-3">
+                  <div className="grid grid-cols-3 gap-2">
+                    {[['Registration', regFee], ['Tuition', tuitionFee], ['Exam', examFee]].map(([label, amt]) => (
+                      <div key={label as string} className="rounded-2xl bg-white/10 p-3">
+                        <span className="text-emerald-100/70 block text-[11px]">{label}</span>
+                        <span className="font-semibold text-sm">{CS()}{(amt as number).toLocaleString(numLocale())}</span>
+                      </div>
+                    ))}
                   </div>
-
                   {additionalFeesTotal > 0 && (
-                    <div className="text-xs text-muted-foreground flex justify-between px-1">
-                      <span>Additional charges / levies:</span>
-                      <span className="font-medium text-foreground">{CS()}{additionalFeesTotal.toLocaleString(numLocale())}</span>
+                    <div className="text-xs text-emerald-100/80 flex justify-between px-1">
+                      <span>Additional charges / levies</span>
+                      <span className="font-medium text-white">{CS()}{additionalFeesTotal.toLocaleString(numLocale())}</span>
                     </div>
                   )}
-
-                  <div className="flex items-center justify-between border-t border-primary/20 pt-2.5 px-1">
-                    <span className="text-xs font-medium text-muted-foreground">Total Program Fee</span>
-                    <span className="text-base font-bold text-emerald-600 dark:text-emerald-400">
-                      {CS()}{totalCourseFee.toLocaleString(numLocale())}
-                    </span>
+                  <div className="flex items-end justify-between pt-3 border-t border-white/15">
+                    <span className="text-xs font-medium text-emerald-100/70">Total program fee</span>
+                    <span className="text-2xl font-semibold text-[#8ae47e] tracking-tight">{CS()}{totalCourseFee.toLocaleString(numLocale())}</span>
                   </div>
-                </>
+                </div>
               ) : (
-                <div className="flex items-center gap-2 text-xs text-amber-700 dark:text-amber-400 bg-amber-50/60 dark:bg-amber-950/30 p-2.5 rounded-lg border border-amber-200 dark:border-amber-900">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>No fee structure configured for this program. You may still specify the initial payment amount below.</span>
+                <div className="relative flex items-start gap-2 text-xs text-amber-100 bg-amber-500/15 p-3 rounded-2xl">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <span>No fee structure configured for this program. You may still specify the initial payment amount.</span>
                 </div>
               )}
+            </div>
+          ) : (
+            <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-muted-foreground">
+              <span className="w-12 h-12 rounded-full bg-[#f4f6f3] flex items-center justify-center mx-auto mb-3"><IndianRupee className="w-5 h-5" /></span>
+              Select a program to see its fee structure.
             </div>
           )}
-          
-          {/* Student Contact Information */}
-          <div className="space-y-1">
-            <Label>Student Full Name</Label>
-            <Input value={form.studentName} onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))} placeholder="John Doe" />
-          </div>
 
-          <div className="space-y-1">
-            <Label>Email</Label>
-            <Input type="email" value={form.studentEmail} onChange={e => setForm(f => ({ ...f, studentEmail: e.target.value }))} placeholder="john@example.com" />
-          </div>
+          {/* Receipt upload */}
+          <Card className="rounded-3xl gap-0">
+            <CardContent className="p-6 space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <Label className="text-base font-semibold">Payment receipt</Label>
+                <span className="text-[11px] text-muted-foreground">Max 2 MB · images auto-compress</span>
+              </div>
 
-          <div className="space-y-1">
-            <Label>Phone Number</Label>
-            <Input value={form.studentPhone} onChange={e => setForm(f => ({ ...f, studentPhone: e.target.value }))} placeholder="+91 9876543210" />
-          </div>
+              <div
+                className={`rounded-2xl border-2 border-dashed p-5 text-center transition-all ${
+                  compressing
+                    ? 'border-[#54b947]/50 bg-[#eaf6e6]'
+                    : receiptFile
+                      ? 'border-[#54b947]/50 bg-[#f4fbf2]'
+                      : 'border-slate-300 hover:border-[#54b947] hover:bg-[#f4f6f3] cursor-pointer'
+                }`}
+                onClick={() => {
+                  if (!compressing && !submitting) {
+                    document.getElementById('receipt-upload')?.click();
+                  }
+                }}
+              >
+                <input
+                  id="receipt-upload"
+                  type="file"
+                  className="hidden"
+                  accept="image/*,.pdf"
+                  disabled={compressing || submitting}
+                  onChange={handleReceiptChange}
+                />
 
-          {/* Initial Payment Amount with Fee Hint */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label>Initial Payment Amount ({CS()})</Label>
-              {regFee > 0 && (
-                <button
-                  type="button"
-                  onClick={() => setForm(f => ({ ...f, initialPaymentAmount: String(regFee) }))}
-                  className="text-[11px] text-primary hover:underline font-medium inline-flex items-center gap-1"
-                >
-                  <Sparkles className="w-3 h-3" />
-                  Set to Registration Fee ({CS()}{regFee.toLocaleString(numLocale())})
-                </button>
-              )}
-            </div>
-            <Input 
-              type="number" 
-              value={form.initialPaymentAmount} 
-              onChange={e => setForm(f => ({ ...f, initialPaymentAmount: e.target.value }))} 
-              placeholder="0.00" 
-              min="0" 
-              step="0.01" 
-            />
-          </div>
-
-          {/* Receipt Upload Box */}
-          <div className="space-y-2 pt-2">
-            <div className="flex items-center justify-between">
-              <Label className="text-sm font-semibold">Payment Receipt</Label>
-              <span className="text-[11px] text-muted-foreground font-normal">
-                Max limit: 2 MB • Auto-compresses images
-              </span>
-            </div>
-
-            <div 
-              className={`border-2 border-dashed rounded-xl p-5 text-center transition-all ${
-                compressing 
-                  ? 'border-blue-400 bg-blue-50/50 dark:bg-blue-950/20' 
-                  : receiptFile 
-                    ? 'border-emerald-300 dark:border-emerald-800 bg-emerald-50/30 dark:bg-emerald-950/20' 
-                    : 'border-border hover:border-primary/50 hover:bg-muted/40 cursor-pointer'
-              }`}
-              onClick={() => {
-                if (!compressing && !submitting) {
-                  document.getElementById('receipt-upload')?.click();
-                }
-              }}
-            >
-              <input 
-                id="receipt-upload" 
-                type="file" 
-                className="hidden" 
-                accept="image/*,.pdf"
-                disabled={compressing || submitting}
-                onChange={handleReceiptChange}
-              />
-              
-              {compressing ? (
-                <div className="flex flex-col items-center justify-center py-3 space-y-2">
-                  <div className="p-3 bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 rounded-full animate-pulse">
-                    <Loader2 className="w-6 h-6 animate-spin" />
+                {compressing ? (
+                  <div className="flex flex-col items-center justify-center py-3 space-y-2">
+                    <div className="p-3 bg-white text-[#256c1d] rounded-full">
+                      <Loader2 className="w-6 h-6 animate-spin" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-[#256c1d]">Compressing receipt image...</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Optimizing quality to stay comfortably under 2 MB</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Compressing receipt image...</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">Optimizing quality to stay comfortably under 2 MB</p>
-                  </div>
-                </div>
-              ) : receiptFile ? (
-                <div className="flex flex-col items-center space-y-3 py-1">
-                  {receiptPreviewUrl ? (
-                    <div className="relative group">
-                      <img 
-                        src={receiptPreviewUrl} 
-                        alt="Receipt Preview" 
-                        className="h-28 w-auto max-w-full object-contain rounded-lg border bg-background shadow-sm" 
+                ) : receiptFile ? (
+                  <div className="flex flex-col items-center space-y-3 py-1">
+                    {receiptPreviewUrl ? (
+                      <img
+                        src={receiptPreviewUrl}
+                        alt="Receipt Preview"
+                        className="h-28 w-auto max-w-full object-contain rounded-xl border bg-white shadow-sm"
                       />
+                    ) : (
+                      <div className="p-3 bg-[#eaf6e6] text-[#256c1d] rounded-2xl">
+                        <FileText className="w-10 h-10" />
+                      </div>
+                    )}
+
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                      <span className="font-semibold text-xs sm:text-sm text-foreground truncate max-w-[200px]" title={receiptFile.name}>
+                        {receiptFile.name}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-[#e3f7dd] text-[#1f6a17] font-medium">
+                        <CheckCircle2 className="w-3 h-3" />
+                        {(receiptFile.size / (1024 * 1024)).toFixed(2)} MB
+                      </span>
                     </div>
-                  ) : (
-                    <div className="p-3 bg-primary/10 text-primary rounded-xl">
-                      <FileText className="w-10 h-10" />
+
+                    <div className="flex items-center gap-2 pt-1" onClick={(e) => e.stopPropagation()}>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-9 text-xs px-4 rounded-full bg-white border-slate-200"
+                        onClick={() => document.getElementById('receipt-upload')?.click()}
+                      >
+                        <RefreshCw className="w-3 h-3 mr-1.5" />
+                        Change file
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="h-9 text-xs px-4 rounded-full text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                        onClick={handleRemoveReceipt}
+                      >
+                        <X className="w-3.5 h-3.5 mr-1" />
+                        Remove
+                      </Button>
                     </div>
-                  )}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-3 space-y-2">
+                    <div className="p-3 bg-[#eaf6e6] text-[#256c1d] rounded-full">
+                      <Upload className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Click to upload payment receipt</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">JPG, PNG, or PDF up to 2 MB</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
 
-                  <div className="flex flex-wrap items-center justify-center gap-2">
-                    <span className="font-semibold text-xs sm:text-sm text-foreground truncate max-w-[220px]" title={receiptFile.name}>
-                      {receiptFile.name}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-medium border border-emerald-200 dark:border-emerald-800">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                      {(receiptFile.size / (1024 * 1024)).toFixed(2)} MB
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 pt-1" onClick={(e) => e.stopPropagation()}>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="h-7 text-xs px-2.5"
-                      onClick={() => document.getElementById('receipt-upload')?.click()}
-                    >
-                      <RefreshCw className="w-3 h-3 mr-1.5 text-muted-foreground" />
-                      Change File
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 text-xs px-2.5 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/40"
-                      onClick={handleRemoveReceipt}
-                    >
-                      <X className="w-3.5 h-3.5 mr-1" />
-                      Remove
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-2 space-y-2">
-                  <div className="p-3 bg-primary/10 text-primary rounded-full">
-                    <Upload className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Click to upload payment receipt</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      JPG, PNG, or PDF up to 2 MB (large images auto-compressed)
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <Button 
-            className="w-full mt-4" 
-            onClick={handleSubmit} 
+          <Button
+            className="w-full h-12 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm shadow-none"
+            onClick={handleSubmit}
             disabled={submitting || compressing}
           >
             {compressing ? (
@@ -658,9 +646,8 @@ export function ProvisionalEnrollmentPanel() {
               </>
             )}
           </Button>
-        </CardContent>
-      </Card>
-      
+        </div>
+      </div>
     </div>
   );
 }

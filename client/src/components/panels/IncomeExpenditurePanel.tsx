@@ -73,18 +73,18 @@ export function IncomeExpenditurePanel() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Income & Expenditure</h2>
-          <p className="text-muted-foreground text-sm mt-1">Monthly breakdown of all income and expenditure.</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Income & Expenditure</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Monthly breakdown of all income and expenditure.</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <input type="date" value={from} onChange={e => setFrom(e.target.value)}
-            className="h-8 px-2 text-sm rounded-lg border border-border bg-background" />
-          <span className="text-muted-foreground text-sm">to</span>
-          <input type="date" value={to} onChange={e => setTo(e.target.value)}
-            className="h-8 px-2 text-sm rounded-lg border border-border bg-background" />
-          <Button size="sm" onClick={fetchReport} disabled={loading}>
+          <div className="flex items-center gap-2 h-11 rounded-full border border-slate-200 bg-white px-4 text-sm">
+            <input type="date" value={from} onChange={e => setFrom(e.target.value)} aria-label="From date" className="bg-transparent outline-none text-slate-700" />
+            <span className="text-slate-400">to</span>
+            <input type="date" value={to} onChange={e => setTo(e.target.value)} aria-label="To date" className="bg-transparent outline-none text-slate-700" />
+          </div>
+          <Button onClick={fetchReport} disabled={loading} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
             <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Apply
           </Button>
         </div>
@@ -97,33 +97,33 @@ export function IncomeExpenditurePanel() {
             label="Total Income"
             value={fmt(data.totals?.income ?? 0)}
             icon={<TrendingUp className="w-5 h-5" />}
-            color="text-green-600 bg-green-50 dark:bg-green-900/20"
+            color="text-[#256c1d] bg-[#eaf6e6]"
             sub={`${data.monthly?.length ?? 0} months`}
           />
           <SummaryCard
             label="Total Expenditure"
             value={fmt(data.totals?.expenditure ?? 0)}
             icon={<TrendingDown className="w-5 h-5" />}
-            color="text-red-500 bg-red-50 dark:bg-red-900/20"
+            color="text-red-500 bg-red-50"
             sub="Salaries + Expenses"
           />
           <SummaryCard
             label="Net Surplus / Deficit"
             value={fmt(Math.abs(data.totals?.netProfit ?? 0))}
             icon={(data.totals?.netProfit ?? 0) >= 0 ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
-            color={(data.totals?.netProfit ?? 0) >= 0 ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'text-red-500 bg-red-50 dark:bg-red-900/20'}
+            color={(data.totals?.netProfit ?? 0) >= 0 ? 'text-[#256c1d] bg-[#eaf6e6]' : 'text-red-500 bg-red-50'}
             sub={`${data.totals?.profitMargin ?? 0}% margin`}
           />
         </div>
       )}
 
       {/* Bar Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Monthly Income vs Expenditure</CardTitle>
+      <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+        <CardHeader className="px-7">
+          <CardTitle className="text-lg font-semibold tracking-tight">Monthly Income vs Expenditure</CardTitle>
           <CardDescription>Side-by-side comparison per month</CardDescription>
         </CardHeader>
-        <CardContent className="h-72">
+        <CardContent className="h-72 px-7">
           {loading ? (
             <div className="h-full flex items-center justify-center">
               <RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" />
@@ -133,16 +133,16 @@ export function IncomeExpenditurePanel() {
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e8ece6" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} tickFormatter={v => fmt(v)} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '10px', fontSize: 12 }}
+                  contentStyle={{ backgroundColor: '#fff', border: '1px solid #e8ece6', borderRadius: '16px', fontSize: 12 }}
                   formatter={(v: number) => fmt(v)}
                 />
                 <Legend />
-                <Bar dataKey="Income" fill="hsl(var(--success))" radius={[4, 4, 0, 0]} barSize={20} />
-                <Bar dataKey="Expenditure" fill="hsl(var(--destructive))" radius={[4, 4, 0, 0]} barSize={20} />
+                <Bar dataKey="Income" fill="#54b947" radius={[8, 8, 0, 0]} barSize={20} />
+                <Bar dataKey="Expenditure" fill="#f2a29b" radius={[8, 8, 0, 0]} barSize={20} />
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -150,23 +150,23 @@ export function IncomeExpenditurePanel() {
       </Card>
 
       {/* Net trend line */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Net Surplus / Deficit Trend</CardTitle>
+      <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+        <CardHeader className="px-7">
+          <CardTitle className="text-lg font-semibold tracking-tight">Net Surplus / Deficit Trend</CardTitle>
           <CardDescription>Monthly net position (income minus expenditure)</CardDescription>
         </CardHeader>
-        <CardContent className="h-52">
+        <CardContent className="h-52 px-7">
           {chartData.length > 0 && (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e8ece6" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} tickFormatter={v => fmt(v)} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '10px', fontSize: 12 }}
+                  contentStyle={{ backgroundColor: '#fff', border: '1px solid #e8ece6', borderRadius: '16px', fontSize: 12 }}
                   formatter={(v: number) => fmt(v)}
                 />
-                <Line type="monotone" dataKey="Net" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} />
+                <Line type="monotone" dataKey="Net" stroke="#54b947" strokeWidth={2.5} dot={{ r: 4, fill: "#54b947" }} />
               </LineChart>
             </ResponsiveContainer>
           )}
@@ -175,51 +175,51 @@ export function IncomeExpenditurePanel() {
 
       {/* Monthly Table */}
       {data && (data.monthly || []).length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Monthly Statement</CardTitle>
+        <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5 overflow-hidden">
+          <CardHeader className="px-7">
+            <CardTitle className="text-lg font-semibold tracking-tight">Monthly Statement</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-muted/50 border-b border-border">
+                <thead className="bg-[#f4f6f3]">
                   <tr>
-                    <th className="text-left p-3 font-medium text-muted-foreground">Month</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Invoices</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Enrollments</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Total Income</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Salaries</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Expenses</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Total Exp.</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Net</th>
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Month</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Invoices</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Enrollments</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Total Income</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Salaries</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Expenses</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Total Exp.</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Net</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody className="divide-y divide-slate-100">
                   {(data.monthly || []).map(row => (
-                    <tr key={row.month} className="hover:bg-muted/30 transition-colors">
-                      <td className="p-3 font-medium">{fmtMonth(row.month)}</td>
-                      <td className="p-3 text-right text-muted-foreground">{fmt(row.income?.invoices ?? 0)}</td>
-                      <td className="p-3 text-right text-muted-foreground">{fmt(row.income?.enrollments ?? 0)}</td>
-                      <td className="p-3 text-right font-semibold text-green-600">{fmt(row.income?.total ?? 0)}</td>
-                      <td className="p-3 text-right text-muted-foreground">{fmt(row.expenditure?.salaries ?? 0)}</td>
-                      <td className="p-3 text-right text-muted-foreground">{fmt(row.expenditure?.expenses ?? 0)}</td>
-                      <td className="p-3 text-right font-semibold text-red-500">{fmt(row.expenditure?.total ?? 0)}</td>
-                      <td className={cn('p-3 text-right font-bold', (row.net ?? 0) >= 0 ? 'text-green-600' : 'text-red-500')}>
+                    <tr key={row.month} className="hover:bg-[#f7faf6] transition-colors">
+                      <td className="px-5 py-3.5 font-medium">{fmtMonth(row.month)}</td>
+                      <td className="px-5 py-3.5 text-right text-muted-foreground">{fmt(row.income?.invoices ?? 0)}</td>
+                      <td className="px-5 py-3.5 text-right text-muted-foreground">{fmt(row.income?.enrollments ?? 0)}</td>
+                      <td className="px-5 py-3.5 text-right font-semibold text-[#256c1d]">{fmt(row.income?.total ?? 0)}</td>
+                      <td className="px-5 py-3.5 text-right text-muted-foreground">{fmt(row.expenditure?.salaries ?? 0)}</td>
+                      <td className="px-5 py-3.5 text-right text-muted-foreground">{fmt(row.expenditure?.expenses ?? 0)}</td>
+                      <td className="px-5 py-3.5 text-right font-semibold text-red-500">{fmt(row.expenditure?.total ?? 0)}</td>
+                      <td className={cn('p-3 text-right font-bold', (row.net ?? 0) >= 0 ? 'text-[#256c1d]' : 'text-red-600')}>
                         {(row.net ?? 0) >= 0 ? '+' : ''}{fmt(row.net ?? 0)}
                       </td>
                     </tr>
                   ))}
                 </tbody>
-                <tfoot className="border-t-2 border-border bg-muted/30">
+                <tfoot className="bg-[#f4f6f3]">
                   <tr>
-                    <td className="p-3 font-bold">Total</td>
-                    <td className="p-3 text-right font-bold">{fmt(data.incomeBreakdown?.invoices ?? 0)}</td>
-                    <td className="p-3 text-right font-bold">{fmt(data.incomeBreakdown?.enrollments ?? 0)}</td>
-                    <td className="p-3 text-right font-bold text-green-600">{fmt(data.totals?.income ?? 0)}</td>
-                    <td className="p-3 text-right font-bold">{fmt(data.expenditureBreakdown?.salaries ?? 0)}</td>
-                    <td className="p-3 text-right font-bold">{fmt(data.expenditureBreakdown?.expenses ?? 0)}</td>
-                    <td className="p-3 text-right font-bold text-red-500">{fmt(data.totals?.expenditure ?? 0)}</td>
-                    <td className={cn('p-3 text-right font-bold text-lg', (data.totals?.netProfit ?? 0) >= 0 ? 'text-green-600' : 'text-red-500')}>
+                    <td className="px-5 py-3.5 font-bold">Total</td>
+                    <td className="px-5 py-3.5 text-right font-bold">{fmt(data.incomeBreakdown?.invoices ?? 0)}</td>
+                    <td className="px-5 py-3.5 text-right font-bold">{fmt(data.incomeBreakdown?.enrollments ?? 0)}</td>
+                    <td className="px-5 py-3.5 text-right font-bold text-[#256c1d]">{fmt(data.totals?.income ?? 0)}</td>
+                    <td className="px-5 py-3.5 text-right font-bold">{fmt(data.expenditureBreakdown?.salaries ?? 0)}</td>
+                    <td className="px-5 py-3.5 text-right font-bold">{fmt(data.expenditureBreakdown?.expenses ?? 0)}</td>
+                    <td className="px-5 py-3.5 text-right font-bold text-red-500">{fmt(data.totals?.expenditure ?? 0)}</td>
+                    <td className={cn('p-3 text-right font-bold text-lg', (data.totals?.netProfit ?? 0) >= 0 ? 'text-[#256c1d]' : 'text-red-600')}>
                       {(data.totals?.netProfit ?? 0) >= 0 ? '+' : ''}{fmt(data.totals?.netProfit ?? 0)}
                     </td>
                   </tr>
@@ -233,21 +233,21 @@ export function IncomeExpenditurePanel() {
       {/* Income & Expenditure Breakdown */}
       {data && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card>
-            <CardHeader><CardTitle className="text-base">Income Sources</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
-              <BreakdownRow label="Invoices" amount={data.incomeBreakdown?.invoices ?? 0} total={data.totals?.income ?? 0} color="bg-green-500" />
-              <BreakdownRow label="Enrollment Fees" amount={data.incomeBreakdown?.enrollments ?? 0} total={data.totals?.income ?? 0} color="bg-emerald-400" />
-              <BreakdownRow label="Payment Entries" amount={data.incomeBreakdown?.payments ?? 0} total={data.totals?.income ?? 0} color="bg-teal-400" />
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+            <CardHeader className="px-7"><CardTitle className="text-lg font-semibold tracking-tight">Income Sources</CardTitle></CardHeader>
+            <CardContent className="space-y-4 px-7">
+              <BreakdownRow label="Invoices" amount={data.incomeBreakdown?.invoices ?? 0} total={data.totals?.income ?? 0} color="bg-[#54b947]" />
+              <BreakdownRow label="Enrollment Fees" amount={data.incomeBreakdown?.enrollments ?? 0} total={data.totals?.income ?? 0} color="bg-[#8ae47e]" />
+              <BreakdownRow label="Payment Entries" amount={data.incomeBreakdown?.payments ?? 0} total={data.totals?.income ?? 0} color="bg-[#cfe9c9]" />
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader><CardTitle className="text-base">Expenditure Breakdown</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
-              <BreakdownRow label="Salaries (Payroll)" amount={data.expenditureBreakdown?.salaries ?? 0} total={data.totals?.expenditure ?? 0} color="bg-red-500" />
-              <BreakdownRow label="Expense Claims" amount={data.expenditureBreakdown?.expenses ?? 0} total={data.totals?.expenditure ?? 0} color="bg-orange-400" />
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+            <CardHeader className="px-7"><CardTitle className="text-lg font-semibold tracking-tight">Expenditure Breakdown</CardTitle></CardHeader>
+            <CardContent className="space-y-4 px-7">
+              <BreakdownRow label="Salaries (Payroll)" amount={data.expenditureBreakdown?.salaries ?? 0} total={data.totals?.expenditure ?? 0} color="bg-red-400" />
+              <BreakdownRow label="Expense Claims" amount={data.expenditureBreakdown?.expenses ?? 0} total={data.totals?.expenditure ?? 0} color="bg-amber-400" />
               {(data.expenditureBreakdown?.byCategory || []).slice(0, 4).map(c => (
-                <BreakdownRow key={c.id} label={`  └ ${c.id}`} amount={c.amount ?? 0} total={data.expenditureBreakdown?.expenses ?? 0} color="bg-orange-200" />
+                <BreakdownRow key={c.id} label={`  └ ${c.id}`} amount={c.amount ?? 0} total={data.expenditureBreakdown?.expenses ?? 0} color="bg-amber-200" />
               ))}
             </CardContent>
           </Card>
@@ -259,16 +259,14 @@ export function IncomeExpenditurePanel() {
 
 function SummaryCard({ label, value, icon, color, sub }: any) {
   return (
-    <Card>
-      <CardContent className="p-5 flex items-center gap-4">
-        <div className={cn('p-3 rounded-xl', color)}>{icon}</div>
-        <div>
-          <p className="text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
-          <p className="text-2xl font-bold">{value}</p>
-          <p className="text-xs text-muted-foreground">{sub}</p>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="rounded-3xl bg-white border border-slate-100 p-6 flex items-center justify-between gap-3">
+      <div className="min-w-0">
+        <p className="text-xs font-medium text-slate-500">{label}</p>
+        <p className="text-3xl font-semibold tracking-tight mt-1 truncate">{value}</p>
+        <p className="text-xs text-muted-foreground mt-0.5">{sub}</p>
+      </div>
+      <div className={cn('w-11 h-11 rounded-2xl shrink-0 flex items-center justify-center', color)}>{icon}</div>
+    </div>
   );
 }
 
@@ -280,7 +278,7 @@ function BreakdownRow({ label, amount, total, color }: { label: string; amount: 
         <span className="text-muted-foreground">{label}</span>
         <span className="font-semibold">{fmt(amount)} <span className="text-muted-foreground font-normal text-xs">({pct}%)</span></span>
       </div>
-      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+      <div className="h-2 bg-[#f1f2ef] rounded-full overflow-hidden">
         <div className={cn('h-full rounded-full', color)} style={{ width: `${pct}%` }} />
       </div>
     </div>

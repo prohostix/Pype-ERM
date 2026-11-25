@@ -76,7 +76,7 @@ export const DEPT_TYPE_META: Record<string, { label: string; icon: any; badgeCla
   operations: {
     label: 'Operations & Academics',
     icon: GraduationCap,
-    badgeClass: 'bg-blue-600 text-white',
+    badgeClass: 'bg-emerald-600 text-white',
     desc: 'Curriculum delivery, exams, admissions review, and academic scheduling',
   },
   finance: {
@@ -100,13 +100,13 @@ export const DEPT_TYPE_META: Record<string, { label: string; icon: any; badgeCla
   ceo: {
     label: 'Executive (CEO)',
     icon: Shield,
-    badgeClass: 'bg-indigo-600 text-white',
+    badgeClass: 'bg-green-600 text-white',
     desc: 'Executive governance, strategic reviews, and institutional approvals',
   },
   general_manager: {
     label: 'General Management',
     icon: Shield,
-    badgeClass: 'bg-indigo-500 text-white',
+    badgeClass: 'bg-green-500 text-white',
     desc: 'Cross-functional operational governance and institutional compliance',
   },
   org_admin: {
@@ -118,13 +118,13 @@ export const DEPT_TYPE_META: Record<string, { label: string; icon: any; badgeCla
   study_center: {
     label: 'Academic Partners & Centers',
     icon: School,
-    badgeClass: 'bg-cyan-600 text-white',
+    badgeClass: 'bg-teal-600 text-white',
     desc: 'External study centers, affiliated campus coordination, and partner seats',
   },
   collections: {
     label: 'Collections & Receivables',
     icon: Wallet,
-    badgeClass: 'bg-violet-600 text-white',
+    badgeClass: 'bg-lime-600 text-white',
     desc: 'Dedicated overdue fee recoveries, installment plans, and receipts',
   },
   custom: {
@@ -404,21 +404,21 @@ export function DepartmentsPanel() {
     return (
       <Card
         key={dept.id}
-        className="group relative rounded-2xl border border-border/80 bg-card hover:border-primary/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden"
+        className="group relative rounded-3xl gap-0 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between overflow-hidden"
       >
-        <CardHeader className="p-5 pb-3 relative z-10 space-y-3">
+        <CardHeader className="px-6 pt-6 pb-4 relative z-10 space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-base shadow-sm shrink-0 border border-primary/20 group-hover:scale-105 transition-transform">
-                <TypeIcon className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] dark:bg-emerald-500/10 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                <TypeIcon className="w-5 h-5" />
               </div>
 
               <div className="min-w-0">
-                <CardTitle className="text-base font-bold text-foreground leading-snug line-clamp-1 group-hover:text-primary transition-colors" title={dept.name}>
+                <CardTitle className="text-base font-semibold text-foreground leading-snug line-clamp-1" title={dept.name}>
                   {dept.name}
                 </CardTitle>
                 <div className="flex items-center gap-1.5 flex-wrap mt-1">
-                  <Badge className={cn("text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs border-none", meta.badgeClass)}>
+                  <Badge className={cn("text-[10px] font-semibold px-2.5 py-0.5 rounded-full border-none", meta.badgeClass)}>
                     {meta.label}
                   </Badge>
                 </div>
@@ -427,18 +427,14 @@ export function DepartmentsPanel() {
           </div>
         </CardHeader>
 
-        <CardContent className="px-5 pb-4 space-y-2.5 text-xs text-muted-foreground relative z-10 flex-1">
-          {/* Organization Pill */}
-          <div className="flex items-center gap-2 p-1.5 rounded-lg bg-muted/30">
-            <Building2 className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-            <span className="truncate font-medium text-foreground/90" title={orgName}>
-              {orgName}
-            </span>
+        <CardContent className="px-6 pb-5 space-y-2 text-xs text-muted-foreground relative z-10 flex-1">
+          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl bg-[#f4f6f3] dark:bg-muted/40">
+            <Building2 className="w-3.5 h-3.5 text-[#256c1d] shrink-0" />
+            <span className="truncate font-medium text-foreground/90" title={orgName}>{orgName}</span>
           </div>
 
-          {/* Manager Pill */}
-          <div className="flex items-center gap-2 p-1.5 rounded-lg bg-muted/30">
-            <UserCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+          <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl bg-[#f4f6f3] dark:bg-muted/40">
+            <UserCheck className="w-3.5 h-3.5 text-[#256c1d] shrink-0" />
             <span className="truncate text-xs font-medium" title={dept.manager?.name || 'Unassigned'}>
               Manager:{' '}
               <strong className="text-foreground">
@@ -447,11 +443,10 @@ export function DepartmentsPanel() {
             </span>
           </div>
 
-          {/* Features / Capabilities Tags if present */}
           {dept.features && dept.features.length > 0 && (
-            <div className="flex flex-wrap gap-1 pt-1">
+            <div className="flex flex-wrap gap-1.5 pt-1">
               {dept.features.slice(0, 3).map((f, idx) => (
-                <span key={idx} className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-muted/60 text-muted-foreground">
+                <span key={idx} className="text-[10px] font-medium px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-600 capitalize">
                   {f.replace(/_/g, ' ')}
                 </span>
               ))}
@@ -464,12 +459,12 @@ export function DepartmentsPanel() {
           )}
         </CardContent>
 
-        <div className="px-5 py-3 border-t bg-muted/15 flex items-center justify-between gap-2">
+        <div className="px-6 pb-6 flex items-center justify-between gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => handleEdit(dept)}
-            className="flex-1 h-8 rounded-xl text-xs font-semibold hover:bg-muted"
+            className="flex-1 h-10 rounded-full text-xs font-semibold bg-white border-slate-200 hover:bg-[#eaf6e6] hover:text-[#256c1d]"
           >
             <Edit className="w-3.5 h-3.5 mr-1.5" />
             Edit
@@ -478,7 +473,7 @@ export function DepartmentsPanel() {
             variant="outline"
             size="sm"
             onClick={() => handleDelete(dept)}
-            className="h-8 px-3 rounded-xl text-xs text-destructive hover:bg-destructive/10 hover:border-destructive/30"
+            className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 text-rose-500 hover:bg-rose-50 hover:text-rose-600"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </Button>
@@ -489,28 +484,23 @@ export function DepartmentsPanel() {
 
   return (
     <div className="space-y-6">
-      {/* Hero Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 bg-gradient-to-r from-card via-card/90 to-card/60 rounded-3xl border shadow-sm">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-primary/10 text-primary">
-              <Building className="w-5 h-5" />
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Department Architecture
-            </h1>
-            <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 text-xs font-semibold">
-              Institutional Divisions
-            </Badge>
-          </div>
-          <p className="text-sm text-muted-foreground">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
+        <div>
+          <h1 className="flex items-center gap-3 text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+            Department Architecture
+            <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-[#eaf6e6] dark:bg-emerald-500/10 text-[#256c1d] dark:text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#54b947]" /> Institutional divisions
+            </span>
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1.5 max-w-2xl">
             Structure operational divisions, faculty bodies, financial units, and leadership hierarchies by organization.
           </p>
         </div>
 
         <Button
           onClick={handleCreate}
-          className="shadow-sm hover:shadow-md transition-all rounded-xl px-5 bg-primary hover:bg-primary/90 gap-2 h-10"
+          className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>Create Department</span>
@@ -518,54 +508,54 @@ export function DepartmentsPanel() {
       </div>
 
       {/* KPI Metric Strip */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="rounded-2xl border bg-card/60 backdrop-blur shadow-xs">
-          <CardContent className="p-4 flex items-center justify-between">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
+        <Card className="rounded-3xl gap-0">
+          <CardContent className="p-6 flex items-center justify-between gap-4">
             <div className="space-y-0.5">
-              <p className="text-xs font-medium text-muted-foreground uppercase">Departments</p>
-              <p className="text-2xl font-black">{metrics.total}</p>
+              <p className="text-xs font-medium text-muted-foreground">Departments</p>
+              <p className="text-3xl font-semibold tracking-tight">{metrics.total}</p>
               <p className="text-[11px] text-muted-foreground">Active business divisions</p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center">
               <Building className="w-5 h-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border bg-card/60 backdrop-blur shadow-xs">
-          <CardContent className="p-4 flex items-center justify-between">
+        <Card className="rounded-3xl gap-0">
+          <CardContent className="p-6 flex items-center justify-between gap-4">
             <div className="space-y-0.5">
-              <p className="text-xs font-medium text-muted-foreground uppercase">Tenants Covered</p>
-              <p className="text-2xl font-black text-blue-600">{metrics.orgCount}</p>
+              <p className="text-xs font-medium text-muted-foreground">Tenants Covered</p>
+              <p className="text-3xl font-semibold tracking-tight text-emerald-600">{metrics.orgCount}</p>
               <p className="text-[11px] text-muted-foreground">Institutions with depts</p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center">
               <Building2 className="w-5 h-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border bg-card/60 backdrop-blur shadow-xs">
-          <CardContent className="p-4 flex items-center justify-between">
+        <Card className="rounded-3xl gap-0">
+          <CardContent className="p-6 flex items-center justify-between gap-4">
             <div className="space-y-0.5">
-              <p className="text-xs font-medium text-muted-foreground uppercase">Active Types</p>
-              <p className="text-2xl font-black text-violet-600">{metrics.typesCount}</p>
+              <p className="text-xs font-medium text-muted-foreground">Active Types</p>
+              <p className="text-3xl font-semibold tracking-tight text-lime-600">{metrics.typesCount}</p>
               <p className="text-[11px] text-muted-foreground">Functional frameworks</p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center">
               <Layers className="w-5 h-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl border bg-card/60 backdrop-blur shadow-xs">
-          <CardContent className="p-4 flex items-center justify-between">
+        <Card className="rounded-3xl gap-0">
+          <CardContent className="p-6 flex items-center justify-between gap-4">
             <div className="space-y-0.5">
-              <p className="text-xs font-medium text-muted-foreground uppercase">Managed Units</p>
-              <p className="text-2xl font-black text-emerald-600">{metrics.managedCount}</p>
+              <p className="text-xs font-medium text-muted-foreground">Managed Units</p>
+              <p className="text-3xl font-semibold tracking-tight text-emerald-600">{metrics.managedCount}</p>
               <p className="text-[11px] text-emerald-600 font-medium">With designated lead</p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center">
               <UserCheck className="w-5 h-5" />
             </div>
           </CardContent>
@@ -573,7 +563,7 @@ export function DepartmentsPanel() {
       </div>
 
       {/* Filter & Categorization Toolbar */}
-      <div className="p-4 rounded-2xl border bg-card/40 backdrop-blur space-y-3">
+      <div className="space-y-4">
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
           {/* Search Bar */}
           <div className="relative flex-1 max-w-md">
@@ -582,7 +572,7 @@ export function DepartmentsPanel() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by department name, type, organization, manager..."
-              className="pl-9 pr-8 h-10 rounded-xl bg-background text-xs"
+              className="pl-11 pr-9 h-11 rounded-full bg-white border-slate-200 shadow-sm text-sm"
             />
             {searchQuery && (
               <button
@@ -598,8 +588,8 @@ export function DepartmentsPanel() {
           <div className="flex flex-wrap items-center gap-2">
             {/* Filter by Organization */}
             <Select value={selectedOrgFilter} onValueChange={setSelectedOrgFilter}>
-              <SelectTrigger className="h-10 w-[180px] rounded-xl text-xs bg-background">
-                <Building2 className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
+              <SelectTrigger className="h-11 w-[200px] rounded-full text-sm bg-white border-slate-200 shadow-sm px-4">
+                <Building2 className="w-3.5 h-3.5 mr-1.5 text-emerald-500" />
                 <SelectValue placeholder="All Organizations" />
               </SelectTrigger>
               <SelectContent>
@@ -618,8 +608,8 @@ export function DepartmentsPanel() {
 
             {/* Filter by Type */}
             <Select value={selectedTypeFilter} onValueChange={setSelectedTypeFilter}>
-              <SelectTrigger className="h-10 w-[170px] rounded-xl text-xs bg-background">
-                <Layers className="w-3.5 h-3.5 mr-1.5 text-violet-500" />
+              <SelectTrigger className="h-11 w-[190px] rounded-full text-sm bg-white border-slate-200 shadow-sm px-4">
+                <Layers className="w-3.5 h-3.5 mr-1.5 text-lime-500" />
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
               <SelectContent>
@@ -637,32 +627,32 @@ export function DepartmentsPanel() {
             </Select>
 
             {/* Group By Mode Toggle */}
-            <div className="flex items-center rounded-xl border bg-background p-0.5">
+            <div className="flex items-center rounded-full border border-slate-200 bg-white shadow-sm p-1">
               <Button
                 variant={groupBy === 'organization' ? 'secondary' : 'ghost'}
                 size="sm"
                 onClick={() => setGroupBy('organization')}
-                className="h-8.5 px-3 rounded-lg text-xs font-semibold"
+                className="h-9 px-4 rounded-full text-xs font-semibold"
                 title="Group by Organization"
               >
-                <Building2 className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
+                <Building2 className="w-3.5 h-3.5 mr-1.5 text-emerald-500" />
                 <span>By Org</span>
               </Button>
               <Button
                 variant={groupBy === 'type' ? 'secondary' : 'ghost'}
                 size="sm"
                 onClick={() => setGroupBy('type')}
-                className="h-8.5 px-3 rounded-lg text-xs font-semibold"
+                className="h-9 px-4 rounded-full text-xs font-semibold"
                 title="Group by Functional Type"
               >
-                <Layers className="w-3.5 h-3.5 mr-1.5 text-violet-500" />
+                <Layers className="w-3.5 h-3.5 mr-1.5 text-lime-500" />
                 <span>By Type</span>
               </Button>
               <Button
                 variant={groupBy === 'none' ? 'secondary' : 'ghost'}
                 size="sm"
                 onClick={() => setGroupBy('none')}
-                className="h-8.5 px-3 rounded-lg text-xs font-semibold"
+                className="h-9 px-4 rounded-full text-xs font-semibold"
                 title="Flat All Departments Grid"
               >
                 <span>All Depts</span>
@@ -672,7 +662,7 @@ export function DepartmentsPanel() {
         </div>
 
         {/* Status Strip */}
-        <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border/50">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span>
             Showing <strong className="text-foreground">{filteredDepartments.length}</strong> of {departments.length} departments
           </span>
@@ -693,9 +683,9 @@ export function DepartmentsPanel() {
 
       {/* Main Content Area */}
       {filteredDepartments.length === 0 ? (
-        <Card className="rounded-3xl border-dashed">
+        <Card className="rounded-3xl border border-dashed border-slate-300 shadow-none">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-muted/60 flex items-center justify-center text-muted-foreground">
+            <div className="w-16 h-16 rounded-full bg-[#f4f6f3] flex items-center justify-center text-muted-foreground">
               <Building className="w-8 h-8" />
             </div>
             <div className="space-y-1">
@@ -711,7 +701,7 @@ export function DepartmentsPanel() {
                 setSelectedOrgFilter('all');
                 setSelectedTypeFilter('all');
               }}
-              className="rounded-xl mt-2"
+              className="rounded-full mt-2 bg-white border-slate-200 h-10 px-5"
             >
               Clear All Filters
             </Button>
@@ -719,23 +709,23 @@ export function DepartmentsPanel() {
         </Card>
       ) : groupBy === 'organization' ? (
         /* Categorized By Organization */
-        <div className="space-y-8">
+        <div className="space-y-10">
           {departmentsByOrganization.map((group) => {
             const org = organizations.find((o) => o.id === group.orgId);
             return (
               <div key={group.orgId} className="space-y-4">
                 {/* Organization Section Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-border/70">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center font-bold text-sm border border-blue-500/20">
+                    <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center font-bold text-sm border border-emerald-500/20">
                       <Building2 className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-bold text-foreground tracking-tight">
+                        <h3 className="text-lg font-semibold text-foreground tracking-tight">
                           {group.orgName}
                         </h3>
-                        <Badge variant="outline" className="bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20 text-xs font-bold">
+                        <Badge variant="outline" className="bg-[#e3f7dd] text-[#1f6a17] border-none rounded-full text-xs font-semibold px-2.5">
                           {group.departments.length} {group.departments.length === 1 ? 'Department' : 'Departments'}
                         </Badge>
                       </div>
@@ -750,7 +740,7 @@ export function DepartmentsPanel() {
                   {/* Types present in this organization */}
                   <div className="flex items-center gap-1.5 flex-wrap text-[11px]">
                     {Array.from(new Set(group.departments.map((d) => d.type))).map((t) => (
-                      <span key={t} className="px-2 py-0.5 rounded-md bg-muted/60 text-muted-foreground font-medium">
+                      <span key={t} className="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-600 font-medium">
                         {DEPT_TYPE_META[t]?.label || t}
                       </span>
                     ))}
@@ -758,7 +748,7 @@ export function DepartmentsPanel() {
                 </div>
 
                 {/* Departments Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 sm:gap-6">
                   {group.departments.map((dept) => renderDepartmentCard(dept))}
                 </div>
               </div>
@@ -767,23 +757,23 @@ export function DepartmentsPanel() {
         </div>
       ) : groupBy === 'type' ? (
         /* Categorized By Department Type */
-        <div className="space-y-8">
+        <div className="space-y-10">
           {departmentsByType.map((group) => {
             const TypeIcon = group.meta.icon;
             return (
               <div key={group.typeKey} className="space-y-4">
                 {/* Type Category Header */}
-                <div className="flex items-center justify-between pb-2.5 border-b border-border/70">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-600 flex items-center justify-center font-bold text-sm border border-violet-500/20">
+                    <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center font-bold text-sm border border-lime-500/20">
                       <TypeIcon className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-bold text-foreground tracking-tight">
+                        <h3 className="text-lg font-semibold text-foreground tracking-tight">
                           {group.meta.label}
                         </h3>
-                        <Badge variant="outline" className="bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-500/20 text-xs font-bold">
+                        <Badge variant="outline" className="bg-[#e3f7dd] text-[#1f6a17] border-none rounded-full text-xs font-semibold px-2.5">
                           {group.departments.length} {group.departments.length === 1 ? 'Division' : 'Divisions'}
                         </Badge>
                       </div>
@@ -795,7 +785,7 @@ export function DepartmentsPanel() {
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 sm:gap-6">
                   {group.departments.map((dept) => renderDepartmentCard(dept))}
                 </div>
               </div>
@@ -804,122 +794,137 @@ export function DepartmentsPanel() {
         </div>
       ) : (
         /* Flat Grid View */
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 sm:gap-6">
           {filteredDepartments.map((dept) => renderDepartmentCard(dept))}
         </div>
       )}
 
       {/* Create / Edit Department Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-md rounded-3xl p-6">
-          <DialogHeader className="space-y-1">
-            <DialogTitle className="text-xl font-bold">
-              {editingDept ? 'Edit Department' : 'Create New Department'}
-            </DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground">
-              {editingDept
-                ? 'Update division name, functional type, or assigned manager.'
-                : 'Define a new departmental unit under an institutional tenant.'}
-            </DialogDescription>
-          </DialogHeader>
+        <DialogContent className="w-[95vw] sm:max-w-xl p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] flex flex-col">
+          {/* Header */}
+          <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-5 shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+              {editingDept ? <Edit className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+            </div>
+            <DialogHeader className="space-y-1 text-left">
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground text-left">
+                {editingDept ? 'Edit Department' : 'Create New Department'}
+              </DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground text-left">
+                {editingDept
+                  ? 'Update division name, functional type, or assigned manager.'
+                  : 'Define a new departmental unit under an institutional tenant.'}
+              </DialogDescription>
+            </DialogHeader>
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 pt-2">
-            <div className="space-y-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="deptName" className="text-xs font-semibold">
-                  Department Name <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="deptName"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. Academic Operations"
-                  className="rounded-xl"
-                  required
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+            <div className="flex-1 overflow-y-auto px-6 sm:px-8 pb-4 space-y-7">
+              {/* Basics */}
+              <section className="space-y-4">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Basics</h3>
+                <div className="space-y-1.5">
+                  <Label htmlFor="deptName" className="text-sm font-semibold">
+                    Department name <span className="text-rose-500">*</span>
+                  </Label>
+                  <Input
+                    id="deptName"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g. Academic Operations"
+                    className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"
+                    required
+                  />
+                </div>
 
-              {/* Organization Selection */}
-              <div className="space-y-1.5">
-                <Label htmlFor="deptOrg" className="text-xs font-semibold">
-                  Organization <span className="text-destructive">*</span>
-                </Label>
-                <Select
-                  value={formData.organizationId}
-                  onValueChange={(val) => setFormData({ ...formData, organizationId: val, managerId: 'none' })}
-                >
-                  <SelectTrigger className="rounded-xl h-10 text-xs">
-                    <SelectValue placeholder="Select organization" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {organizations.map((org) => (
-                      <SelectItem key={org.id} value={org.id}>
-                        {org.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="deptOrg" className="text-sm font-semibold">
+                    Organization <span className="text-rose-500">*</span>
+                  </Label>
+                  <Select
+                    value={formData.organizationId}
+                    onValueChange={(val) => setFormData({ ...formData, organizationId: val, managerId: 'none' })}
+                  >
+                    <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4">
+                      <SelectValue placeholder="Select organization" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-2xl">
+                      {organizations.map((org) => (
+                        <SelectItem key={org.id} value={org.id}>{org.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </section>
 
-              {/* Functional Type Selection */}
-              <div className="space-y-1.5">
-                <Label htmlFor="deptType" className="text-xs font-semibold">
-                  Department Functional Type <span className="text-destructive">*</span>
-                </Label>
-                <Select
-                  value={formData.type}
-                  onValueChange={(val) => setFormData({ ...formData, type: val })}
-                >
-                  <SelectTrigger className="rounded-xl h-10 text-xs">
-                    <SelectValue placeholder="Select department type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(DEPT_TYPE_META).map(([key, meta]) => (
-                      <SelectItem key={key} value={key}>
-                        {meta.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* Functional type */}
+              <section className="space-y-3">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Functional type <span className="text-rose-500 normal-case">*</span>
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {Object.entries(DEPT_TYPE_META).map(([key, meta]) => {
+                    const Icon = meta.icon;
+                    const on = formData.type === key;
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        aria-pressed={on}
+                        onClick={() => setFormData({ ...formData, type: key })}
+                        className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-left border transition-colors ${on ? 'bg-[#eaf6e6] border-[#54b947]/50' : 'bg-white border-slate-200 hover:bg-[#f4f6f3]'}`}
+                      >
+                        <span className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${on ? 'bg-[#8ae47e] text-[#0b1d14]' : 'bg-[#f4f6f3] text-[#256c1d]'}`}>
+                          <Icon className="w-4 h-4" />
+                        </span>
+                        <span className="text-sm font-medium text-foreground leading-snug">{meta.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
 
-              {/* Manager Selection */}
-              <div className="space-y-1.5">
-                <Label htmlFor="deptManager" className="text-xs font-semibold">
-                  Assigned Manager (Optional)
-                </Label>
-                <Select
-                  value={formData.managerId}
-                  onValueChange={(val) => setFormData({ ...formData, managerId: val })}
-                >
-                  <SelectTrigger className="rounded-xl h-10 text-xs">
-                    <SelectValue placeholder="Select manager" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">No Manager Assigned</SelectItem>
-                    {eligibleManagers.map((u) => (
-                      <SelectItem key={u.id} value={u.id}>
-                        {u.name} ({u.designation || u.role})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* Management */}
+              <section className="space-y-4 pb-2">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Management</h3>
+                <div className="space-y-1.5">
+                  <Label htmlFor="deptManager" className="text-sm font-semibold">
+                    Assigned manager <span className="font-normal text-muted-foreground">(optional)</span>
+                  </Label>
+                  <Select
+                    value={formData.managerId}
+                    onValueChange={(val) => setFormData({ ...formData, managerId: val })}
+                  >
+                    <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4">
+                      <SelectValue placeholder="Select manager" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-2xl">
+                      <SelectItem value="none">No Manager Assigned</SelectItem>
+                      {eligibleManagers.map((u) => (
+                        <SelectItem key={u.id} value={u.id}>
+                          {u.name} ({u.designation || u.role})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </section>
             </div>
 
-            <DialogFooter className="pt-4 border-t gap-2 sm:gap-0">
+            <DialogFooter className="px-6 sm:px-8 py-5 border-t border-slate-100 gap-2 sm:gap-2 shrink-0 flex-col-reverse sm:flex-row">
               <Button
                 type="button"
-                variant="outline"
+                variant="ghost"
                 onClick={() => setIsDialogOpen(false)}
-                className="rounded-xl"
+                className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold"
                 disabled={formSubmitting}
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                className="rounded-xl bg-primary text-primary-foreground"
+                className="h-11 rounded-full px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold"
                 disabled={formSubmitting}
               >
                 {formSubmitting ? 'Saving...' : editingDept ? 'Update Department' : 'Create Department'}

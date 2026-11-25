@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { FileText, Search, Printer, Building2, User, Receipt, CheckCircle, AlertTriangle, TrendingUp, Download } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +10,7 @@ import { toast } from 'sonner';
 import html2pdf from 'html2pdf.js';
 
 import { CS, numLocale } from '@/lib/currency';
+import { ListPagination } from '@/components/ui/list-pagination';
 function numberToWords(amount: number): string {
   if (amount === 0) return 'Zero Rs. Only';
   
@@ -428,6 +428,10 @@ export function BillReceiptPanel() {
   const [receiptOpen, setReceiptOpen] = useState(false);
   const [loadingReceipt, setLoadingReceipt] = useState(false);
   const [orgName, setOrgName] = useState('Organisation');
+  const [page, setPage] = useState(1);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+  const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
     fetchInvoices();
@@ -469,7 +473,24 @@ export function BillReceiptPanel() {
     html2pdf().set(opt).from(content).save();
   };
 
+  // Payment date = latest recorded payment, falling back to the invoice's paidAt
+  const getPaymentDate = (inv: any): Date | null => {
+    const times = (Array.isArray(inv.payments) ? inv.payments : [])
+      .map((p: any) => new Date(p.receivedAt || p.createdAt).getTime())
+      .filter((t: number) => !isNaN(t));
+    if (times.length) return new Date(Math.max(...times));
+    return inv.paidAt ? new Date(inv.paidAt) : null;
+  };
+  const toLocalKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
   const filtered = invoices.filter(inv => {
+    if (dateFrom || dateTo) {
+      const pd = getPaymentDate(inv);
+      if (!pd) return false;
+      const key = toLocalKey(pd);
+      if (dateFrom && key < dateFrom) return false;
+      if (dateTo && key > dateTo) return false;
+    }
     const admNo =
       inv.student?.admissionNo ||
       inv.student?.enrollmentNo ||
@@ -487,48 +508,68 @@ export function BillReceiptPanel() {
     return matchStatus && matchSearch;
   });
 
+  const currentPage = Math.min(page, Math.max(1, Math.ceil(filtered.length / pageSize)));
+  const paged = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   const statusColors: Record<string, string> = {
-    paid: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+    paid: 'bg-[#dff3da] text-[#256c1d]',
     pending: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
     draft: 'bg-slate-100 text-slate-600',
-    partial: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+    partial: 'bg-sky-100 text-sky-700',
   };
 
   return (
-    <div className="space-y-4">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Receipt className="w-5 h-5 text-blue-500" />
-              Bills &amp; Receipts
-            </CardTitle>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2 w-4 h-4 text-muted-foreground" />
-                <Input placeholder="Search invoice, admission no, student..." className="pl-8 h-8 w-72 text-sm" value={search} onChange={e => setSearch(e.target.value)} />
-              </div>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="h-8 w-32 text-sm"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="paid">Paid</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="partial">Partial</SelectItem>
-                  <SelectItem value="draft">Draft</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Bills &amp; Receipts</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Search invoices and download payment receipts.</p>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 p-4 flex flex-col lg:flex-row gap-3 lg:items-center">
+        <div className="relative flex-1">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Input placeholder="Search invoice, admission no, student..." className="pl-11 h-12 rounded-full bg-[#f4f6f3] border-transparent text-sm focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20" value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} />
+        </div>
+        <div className={`flex items-center gap-2 rounded-full border px-4 h-12 text-sm ${dateFrom || dateTo ? 'bg-[#eaf6e6] border-[#8ae47e]' : 'bg-white border-slate-200'}`}>
+          <span className="text-xs font-semibold uppercase tracking-wide text-slate-500 whitespace-nowrap">Paid on</span>
+          <input type="date" value={dateFrom} max={dateTo || undefined} onChange={e => { setDateFrom(e.target.value); setPage(1); }} aria-label="Payment date from" className="bg-transparent outline-none text-slate-700 w-[8.5rem]" />
+          <span className="text-slate-400">→</span>
+          <input type="date" value={dateTo} min={dateFrom || undefined} onChange={e => { setDateTo(e.target.value); setPage(1); }} aria-label="Payment date to" className="bg-transparent outline-none text-slate-700 w-[8.5rem]" />
+          {(dateFrom || dateTo) && (
+            <button type="button" onClick={() => { setDateFrom(''); setDateTo(''); setPage(1); }} className="ml-1 text-xs font-semibold text-[#256c1d] hover:underline whitespace-nowrap">Clear</button>
+          )}
+        </div>
+        <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1); }}>
+          <SelectTrigger className={`h-12 sm:w-44 rounded-full px-5 text-sm font-semibold border ${statusFilter !== 'all' ? 'bg-[#8ae47e] border-[#8ae47e] text-[#0b1d14]' : 'bg-white border-slate-200 text-slate-600'}`}><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="paid">Paid</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="partial">Partial</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight flex items-center gap-2.5">
+            <span className="w-9 h-9 rounded-xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Receipt className="w-4 h-4" /></span>
+            Invoices
+          </h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{filtered.length} found</span>}
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="text-center py-12 text-muted-foreground">Loading invoices...</div>
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : filtered.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">No invoices found</div>
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Receipt className="w-6 h-6" /></div>
+              <p className="text-sm">No invoices found</p>
+            </div>
           ) : (
-            <div className="space-y-2">
-              {filtered.map(inv => {
+            <div className="space-y-3">
+              {paged.map(inv => {
                 const admissionNo =
                   inv.student?.admissionNo ||
                   inv.student?.enrollmentNo ||
@@ -538,21 +579,21 @@ export function BillReceiptPanel() {
                   '';
 
                 return (
-                  <div key={inv.id} className="flex items-center justify-between p-3.5 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                  <div key={inv.id} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${inv.center ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' : 'bg-blue-100 text-blue-600 dark:bg-blue-900/20'}`}>
+                      <div className={`w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center shrink-0`}>
                         {inv.center ? <Building2 className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
                       </div>
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-sm">{inv.invoiceNo}</span>
+                          <span className="font-semibold text-sm text-slate-900">{inv.invoiceNo}</span>
                           {admissionNo && (
-                            <Badge variant="secondary" className="text-[11px] font-mono font-medium px-2 py-0 h-5 bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800">
+                            <Badge variant="secondary" className="text-[11px] font-mono font-medium px-2 py-0 h-5 bg-white text-[#256c1d] border border-[#cfe9c9] rounded-full">
                               Adm: {admissionNo}
                             </Badge>
                           )}
                           {inv.center && (
-                            <Badge variant="outline" className="text-[10px] bg-amber-50 text-amber-800 border-amber-200 py-0 px-1.5 font-medium">
+                            <Badge variant="outline" className="text-[10px] bg-white text-slate-600 border-slate-200 rounded-full py-0 px-2 font-medium">
                               Academic Partner
                             </Badge>
                           )}
@@ -578,6 +619,12 @@ export function BillReceiptPanel() {
                               {admissionNo && <span className="text-[11px] font-mono text-slate-500 font-normal">({admissionNo})</span>}
                             </>
                           )}
+                          {getPaymentDate(inv) && (
+                            <>
+                              <span>•</span>
+                              <span className="text-[#256c1d] font-medium">Paid: {getPaymentDate(inv)!.toLocaleDateString('en-IN')}</span>
+                            </>
+                          )}
                           {inv.dueDate && (
                             <>
                               <span>•</span>
@@ -589,33 +636,34 @@ export function BillReceiptPanel() {
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="text-right">
-                        <div className="font-bold text-sm">{CS()}{(inv.total || inv.amount || 0).toLocaleString(numLocale())}</div>
-                        <Badge className={statusColors[inv.status] || ''}>{inv.status}</Badge>
+                        <div className="font-semibold text-base text-slate-900">{CS()}{(inv.total || inv.amount || 0).toLocaleString(numLocale())}</div>
+                        <span className={`inline-block mt-1 rounded-full px-3 py-0.5 text-[11px] font-semibold capitalize ${statusColors[inv.status] || 'bg-slate-100 text-slate-600'}`}>{inv.status}</span>
                       </div>
-                      <Button size="sm" variant="outline" className="gap-1.5 h-8" onClick={() => openReceipt(inv)}>
+                      <Button size="sm" variant="outline" className="gap-1.5 h-9 rounded-full px-4 text-xs font-semibold text-[#256c1d] border-[#cfe9c9] bg-white hover:bg-[#eaf6e6]" onClick={() => openReceipt(inv)}>
                         <Printer className="w-3.5 h-3.5" /> Receipt
                       </Button>
                     </div>
                   </div>
                 );
               })}
+              <ListPagination total={filtered.length} page={currentPage} pageSize={pageSize} onPageChange={setPage} onPageSizeChange={(n) => { setPageSize(n); setPage(1); }} />
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Receipt Dialog */}
       <Dialog open={receiptOpen} onOpenChange={setReceiptOpen}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
             <div className="flex items-center justify-between pr-8">
-              <DialogTitle>
+              <DialogTitle className="text-xl font-semibold tracking-tight">
                 {receipt?.centerDetails || (receipt?.center && receipt?.center !== 'Direct' && receipt?.center !== 'HEAD OFFICE')
                   ? `Academic Partner Bill Receipt`
                   : 'Payment Receipt'
                 }
               </DialogTitle>
-              <Button size="sm" onClick={handlePrint} className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white">
+              <Button size="sm" onClick={handlePrint} className="gap-1.5 h-10 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                 <Download className="w-3.5 h-3.5" /> Download PDF
               </Button>
             </div>

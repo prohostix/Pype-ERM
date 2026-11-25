@@ -69,8 +69,8 @@ export function StudentFeesTab({ student }: { student: any }) {
 
   if (data.payments.length === 0 && data.schedules.length === 0 && data.total === 0) {
     return (
-      <div className="text-center py-10 space-y-3">
-        <CreditCard className="w-10 h-10 mx-auto text-muted-foreground opacity-50" />
+      <div className="text-center py-12 space-y-3">
+        <span className="w-14 h-14 rounded-full bg-[#f4f6f3] flex items-center justify-center mx-auto"><CreditCard className="w-6 h-6 text-muted-foreground" /></span>
         <h4 className="text-base font-semibold">No Fee Records Found</h4>
         <p className="text-sm text-muted-foreground">This student does not have any fee records yet.</p>
       </div>
@@ -78,26 +78,26 @@ export function StudentFeesTab({ student }: { student: any }) {
   }
 
   const tile = (label: string, value: string, tone: string) => (
-    <div className={`rounded-xl border p-3 ${tone}`}>
-      <p className="text-[11px] uppercase tracking-wider font-semibold opacity-70">{label}</p>
-      <p className="text-lg font-bold mt-0.5">{value}</p>
+    <div className={`rounded-3xl p-5 ${tone}`}>
+      <p className="text-xs font-medium opacity-70">{label}</p>
+      <p className="text-2xl font-semibold tracking-tight mt-1">{value}</p>
     </div>
   );
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {tile(data.discount ? 'Total fee (after discount)' : 'Total fee', inr(data.total), 'bg-muted/30')}
-        {tile('Paid', inr(data.paid), 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-300 dark:border-emerald-900')}
-        {tile('Balance', inr(data.balance), data.balance > 0 ? 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/20 dark:text-amber-300 dark:border-amber-900' : 'bg-muted/30')}
-        {tile('Installments', String(data.schedules.length), 'bg-muted/30')}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        {tile(data.discount ? 'Total fee (after discount)' : 'Total fee', inr(data.total), 'bg-[#f4f6f3] dark:bg-muted/30')}
+        {tile('Paid', inr(data.paid), 'bg-[#e3f7dd] text-[#1f6a17] dark:bg-emerald-950/20 dark:text-emerald-300')}
+        {tile('Balance', inr(data.balance), data.balance > 0 ? 'bg-amber-50 text-amber-800 dark:bg-amber-950/20 dark:text-amber-300' : 'bg-[#f4f6f3] dark:bg-muted/30')}
+        {tile('Installments', String(data.schedules.length), 'bg-[#f4f6f3] dark:bg-muted/30')}
       </div>
       {!data.hasStructure && <p className="text-xs text-muted-foreground">No fee structure is set for this program, so the total comes from the installments.</p>}
 
       {data.schedules.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold mb-2">Installments</h4>
-          <div className="border rounded-md">
+          <h4 className="text-lg font-semibold mb-3">Installments</h4>
+          <div className="rounded-3xl bg-[#f4f6f3] dark:bg-muted/30 p-3">
             <Table>
               <TableHeader><TableRow><TableHead>Title</TableHead><TableHead>Due</TableHead><TableHead>Amount</TableHead><TableHead>Paid</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
               <TableBody>
@@ -111,7 +111,7 @@ export function StudentFeesTab({ student }: { student: any }) {
                       <TableCell>{inr(s.amount)}</TableCell>
                       <TableCell>{inr(paid)}</TableCell>
                       <TableCell>
-                        <Badge variant={status === 'paid' ? 'default' : status === 'overdue' ? 'destructive' : 'secondary'} className={status === 'paid' ? 'bg-green-500 hover:bg-green-600 uppercase' : 'uppercase'}>{status || 'pending'}</Badge>
+                        <Badge variant={status === 'paid' ? 'default' : status === 'overdue' ? 'destructive' : 'secondary'} className={status === 'paid' ? 'bg-[#e3f7dd] text-[#1f6a17] hover:bg-[#d6f0d0] border-0 rounded-full capitalize' : 'rounded-full capitalize'}>{status || 'pending'}</Badge>
                       </TableCell>
                     </TableRow>
                   );
@@ -123,11 +123,11 @@ export function StudentFeesTab({ student }: { student: any }) {
       )}
 
       <div>
-        <h4 className="text-sm font-semibold mb-2">Payments received ({data.payments.length})</h4>
+        <h4 className="text-lg font-semibold mb-3">Payments received ({data.payments.length})</h4>
         {data.payments.length === 0 ? (
           <p className="text-sm text-muted-foreground">No payment has been received yet.</p>
         ) : (
-          <div className="border rounded-md">
+          <div className="rounded-3xl bg-[#f4f6f3] dark:bg-muted/30 p-3">
             <Table>
               <TableHeader><TableRow><TableHead>Date</TableHead><TableHead>Invoice</TableHead><TableHead>Mode</TableHead><TableHead>Reference</TableHead><TableHead className="text-right">Amount</TableHead></TableRow></TableHeader>
               <TableBody>
@@ -181,13 +181,13 @@ export function StudentCommunicationTab({ studentId }: { studentId: string }) {
       {logs.map((l) => {
         const Icon = channelIcon(l.type);
         return (
-          <div key={l.id} className="flex gap-3 p-3 border rounded-lg bg-muted/20">
+          <div key={l.id} className="flex gap-3 p-4 rounded-2xl bg-[#f4f6f3] dark:bg-muted/30">
             <div className="p-2 h-fit bg-muted rounded-md"><Icon className="w-4 h-4 text-muted-foreground" /></div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-semibold text-sm truncate">{l.subject || l.category?.replace(/_/g, ' ') || 'Message'}</span>
-                <Badge variant="outline" className="uppercase text-[10px]">{l.type}</Badge>
-                <Badge variant={l.status === 'failed' ? 'destructive' : 'secondary'} className="uppercase text-[10px]">{l.status}</Badge>
+                <Badge variant="outline" className="capitalize text-[11px] rounded-full">{l.type}</Badge>
+                <Badge variant={l.status === 'failed' ? 'destructive' : 'secondary'} className="capitalize text-[11px] rounded-full">{l.status}</Badge>
               </div>
               {l.content && <p className="text-sm text-muted-foreground mt-1 line-clamp-3">{l.content}</p>}
               {l.status === 'failed' && l.errorMessage && <p className="text-xs text-destructive mt-1">{l.errorMessage}</p>}
@@ -248,7 +248,7 @@ export function StudentRemarksTab({ studentId }: { studentId: string }) {
             <div className="space-y-3">
               <h4 className="text-sm font-semibold">Staff notes</h4>
               {data.notes.map((n) => (
-                <div key={n.id} className="p-3 border rounded-lg bg-muted/20">
+                <div key={n.id} className="p-4 rounded-2xl bg-[#f4f6f3] dark:bg-muted/30">
                   <p className="text-sm whitespace-pre-wrap">{n.text}</p>
                   <div className="flex items-center justify-between mt-2">
                     <p className="text-xs text-muted-foreground">{n.authorName} · {fmtDate(n.createdAt, true)}</p>
@@ -262,8 +262,8 @@ export function StudentRemarksTab({ studentId }: { studentId: string }) {
             <div className="space-y-3">
               <h4 className="text-sm font-semibold">Recorded on enrollments</h4>
               {data.recorded.map((r, i) => (
-                <div key={i} className="p-3 border rounded-lg">
-                  <div className="flex items-center gap-2 mb-1"><Badge variant="secondary" className="text-[10px] uppercase">{r.source}</Badge>{r.program && <span className="text-xs text-muted-foreground">{r.program}</span>}</div>
+                <div key={i} className="p-4 rounded-2xl bg-[#f4f6f3] dark:bg-muted/30">
+                  <div className="flex items-center gap-2 mb-1"><Badge variant="secondary" className="text-[11px] capitalize rounded-full">{r.source}</Badge>{r.program && <span className="text-xs text-muted-foreground">{r.program}</span>}</div>
                   <p className="text-sm whitespace-pre-wrap">{r.text}</p>
                   <p className="text-xs text-muted-foreground mt-1">{fmtDate(r.at)}</p>
                 </div>
@@ -317,7 +317,7 @@ export function StudentCustomFilters({ studentId }: { studentId: string }) {
 
   return (
     <div>
-      <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
+      <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
         Custom filters<span className="h-px flex-1 bg-border" />
       </h3>
       {types.length > 0 && (
@@ -328,7 +328,7 @@ export function StudentCustomFilters({ studentId }: { studentId: string }) {
             const options = t.options;
             return (
               <div key={t.id} className="rounded-xl border bg-muted/20 px-3.5 py-3">
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-1.5">{t.name}</p>
+                <p className="text-[11px] capitalize rounded-full tracking-wider text-muted-foreground font-semibold mb-1.5">{t.name}</p>
                 <Select value={value} onValueChange={(v) => change(t.id, v)} disabled={!canEdit || busy === t.id}>
                   <SelectTrigger className="h-8 bg-background" style={colorOf(t, value) ? { borderColor: colorOf(t, value)!, boxShadow: `inset 3px 0 0 ${colorOf(t, value)}` } : undefined}><SelectValue /></SelectTrigger>
                   <SelectContent>

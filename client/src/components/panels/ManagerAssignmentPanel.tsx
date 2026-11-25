@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, UserCheck, UserX, Building, Building2, Crown, Users } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChevronDown, ChevronRight, UserCheck, UserX, Building, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
@@ -167,152 +166,129 @@ export function ManagerAssignmentPanel() {
 
   if (loading) {
     return (
-      <Card>
-        <CardContent className="p-8">
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-muted rounded-lg animate-pulse" />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <div className="space-y-3">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-20 bg-slate-100 rounded-3xl animate-pulse" />
+        ))}
+      </div>
     );
   }
 
-  return (
-    <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Crown className="w-5 h-5 text-primary" />
-            Manager Assignment — Hierarchy View
-          </CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Assign or change managers for departments and their sub-departments
-          </p>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {departments.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground">
-              <Building className="w-12 h-12 mx-auto mb-3 opacity-40" />
-              <p>No departments found</p>
-            </div>
-          )}
+  const ManagerLine = ({ name }: { name: string | null }) =>
+    name ? (
+      <div className="flex items-center gap-1.5 mt-1">
+        <UserCheck className="w-3.5 h-3.5 text-[#256c1d]" />
+        <span className="text-xs text-[#256c1d] font-semibold">{name}</span>
+      </div>
+    ) : (
+      <div className="flex items-center gap-1.5 mt-1">
+        <UserX className="w-3.5 h-3.5 text-slate-400" />
+        <span className="text-xs text-slate-500">No manager assigned</span>
+      </div>
+    );
 
+  return (
+    <div className="space-y-6 wizard-form">
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Manager Assignment — Hierarchy View</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Assign or change managers for departments and their sub-departments</p>
+      </div>
+
+      {departments.length === 0 ? (
+        <div className="rounded-3xl bg-white border border-slate-100 py-16 text-center text-muted-foreground">
+          <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Building className="w-6 h-6" /></div>
+          <p className="text-sm">No departments found</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
           {departments.map((dept) => {
             const isExpanded = expandedDepts.has(dept.id);
             const hasSubs = (dept.subDepartments?.length ?? 0) > 0;
             const managerName = getManagerName(dept.managerId);
 
             return (
-              <div key={dept.id} className="border rounded-xl overflow-hidden">
+              <div key={dept.id} className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
                 {/* Department row */}
-                <div className="flex items-center gap-3 p-4 bg-muted/30 hover:bg-muted/50 transition-colors">
-                  <button
-                    onClick={() => hasSubs && toggleExpand(dept.id)}
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                    disabled={!hasSubs}
-                  >
-                    {hasSubs ? (
-                      isExpanded ? (
-                        <ChevronDown className="w-4 h-4" />
-                      ) : (
-                        <ChevronRight className="w-4 h-4" />
-                      )
-                    ) : (
-                      <div className="w-4" />
-                    )}
-                  </button>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 sm:p-5">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <button
+                      onClick={() => hasSubs && toggleExpand(dept.id)}
+                      className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-colors ${hasSubs ? 'bg-[#f4f6f3] hover:bg-[#eaf6e6] text-slate-600' : 'text-transparent'}`}
+                      disabled={!hasSubs}
+                      aria-label={isExpanded ? 'Collapse' : 'Expand'}
+                    >
+                      {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                    </button>
 
-                  <Building className="w-4 h-4 text-primary shrink-0" />
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold">{dept.name}</span>
-                      <Badge
-                        className={`text-xs ${DEPT_TYPE_COLORS[dept.type] || 'bg-gray-100 text-gray-800'}`}
-                        variant="outline"
-                      >
-                        {dept.type}
-                      </Badge>
-                      {hasSubs && (
-                        <span className="text-xs text-muted-foreground">
-                          {dept.subDepartments!.length} sub-dept{dept.subDepartments!.length !== 1 ? 's' : ''}
-                        </span>
-                      )}
+                    <div className="w-11 h-11 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+                      <Building className="w-5 h-5" />
                     </div>
-                    <div className="flex items-center gap-1 mt-0.5">
-                      {managerName ? (
-                        <>
-                          <UserCheck className="w-3 h-3 text-green-600" />
-                          <span className="text-xs text-green-700 font-medium">{managerName}</span>
-                        </>
-                      ) : (
-                        <>
-                          <UserX className="w-3 h-3 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground">No manager assigned</span>
-                        </>
-                      )}
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-semibold text-slate-900">{dept.name}</span>
+                        <Badge
+                          className={`text-[10px] rounded-full border-0 px-2.5 ${DEPT_TYPE_COLORS[dept.type] || 'bg-slate-100 text-slate-700'}`}
+                          variant="outline"
+                        >
+                          {dept.type}
+                        </Badge>
+                        {hasSubs && (
+                          <span className="text-xs text-muted-foreground">
+                            {dept.subDepartments!.length} sub-dept{dept.subDepartments!.length !== 1 ? 's' : ''}
+                          </span>
+                        )}
+                      </div>
+                      <ManagerLine name={managerName} />
                     </div>
                   </div>
 
                   <Button
-                    size="sm"
                     variant={managerName ? 'outline' : 'default'}
-                    onClick={() =>
-                      openAssignDialog('department', dept.id, dept.name, dept.managerId)
-                    }
+                    className={managerName
+                      ? 'h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold'
+                      : 'h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold'}
+                    onClick={() => openAssignDialog('department', dept.id, dept.name, dept.managerId)}
                   >
-                    <Users className="w-3 h-3 mr-1" />
                     {managerName ? 'Change' : 'Assign'}
                   </Button>
                 </div>
 
                 {/* Sub-departments */}
                 {isExpanded && dept.subDepartments && dept.subDepartments.length > 0 && (
-                  <div className="border-t divide-y">
+                  <div className="bg-[#f4f6f3] p-3 sm:p-4 space-y-2">
                     {dept.subDepartments.map((sub) => {
                       const subManagerName = getManagerName(sub.managerId);
                       return (
                         <div
                           key={sub.id}
-                          className="flex items-center gap-3 p-3 pl-10 bg-background hover:bg-muted/20 transition-colors"
+                          className="flex flex-col sm:flex-row sm:items-center gap-3 p-3.5 sm:ml-10 rounded-2xl bg-white"
                         >
-                          <Building2 className="w-4 h-4 text-muted-foreground shrink-0" />
-
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium">{sub.name}</span>
-                              <Badge
-                                variant="outline"
-                                className={`text-xs ${sub.status === 'active' ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-600'}`}
-                              >
-                                {sub.status}
-                              </Badge>
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <div className="w-9 h-9 rounded-xl bg-[#f4f6f3] text-slate-600 flex items-center justify-center shrink-0">
+                              <Building2 className="w-4 h-4" />
                             </div>
-                            <div className="flex items-center gap-1 mt-0.5">
-                              {subManagerName ? (
-                                <>
-                                  <UserCheck className="w-3 h-3 text-green-600" />
-                                  <span className="text-xs text-green-700 font-medium">{subManagerName}</span>
-                                </>
-                              ) : (
-                                <>
-                                  <UserX className="w-3 h-3 text-muted-foreground" />
-                                  <span className="text-xs text-muted-foreground">No manager assigned</span>
-                                </>
-                              )}
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-sm font-semibold text-slate-900">{sub.name}</span>
+                                <Badge
+                                  variant="outline"
+                                  className={`text-[10px] rounded-full border-0 px-2.5 capitalize ${sub.status === 'active' ? 'bg-[#dff3da] text-[#256c1d]' : 'bg-slate-200/70 text-slate-600'}`}
+                                >
+                                  {sub.status}
+                                </Badge>
+                              </div>
+                              <ManagerLine name={subManagerName} />
                             </div>
                           </div>
 
                           <Button
-                            size="sm"
                             variant={subManagerName ? 'outline' : 'default'}
-                            onClick={() =>
-                              openAssignDialog('subdepartment', sub.id, sub.name, sub.managerId)
-                            }
+                            className={subManagerName
+                              ? 'h-9 rounded-full px-4 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold'
+                              : 'h-9 rounded-full px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold'}
+                            onClick={() => openAssignDialog('subdepartment', sub.id, sub.name, sub.managerId)}
                           >
-                            <Users className="w-3 h-3 mr-1" />
                             {subManagerName ? 'Change' : 'Assign'}
                           </Button>
                         </div>
@@ -323,17 +299,17 @@ export function ManagerAssignmentPanel() {
               </div>
             );
           })}
-        </CardContent>
-      </Card>
+        </div>
+      )}
 
       {/* Assign Manager Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Assign Manager</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Assign Manager</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
-            <div>
+            <div className="rounded-2xl bg-[#f4f6f3] p-4">
               <p className="text-sm text-muted-foreground">
                 {assignTarget?.type === 'department' ? 'Department' : 'Sub-Department'}:{' '}
                 <span className="font-semibold text-foreground">{assignTarget?.name}</span>
@@ -359,15 +335,15 @@ export function ManagerAssignmentPanel() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleAssign}>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleAssign}>
               {selectedManagerId === 'none' ? 'Remove Manager' : 'Assign Manager'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }

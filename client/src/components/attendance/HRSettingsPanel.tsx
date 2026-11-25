@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Settings, MapPin, Clock, Wifi, Save, Loader2, Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { MapPin, Clock, Wifi, Save, Loader2, Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,7 +47,7 @@ function DayOverrideRow({ day, override, onChange, onRemove }: {
 }) {
   return (
     <div className="grid grid-cols-[80px_1fr_1fr_1fr_32px] gap-2 items-end">
-      <div className="text-sm font-medium pt-6">{day.slice(0, 3)}</div>
+      <div className="text-sm font-semibold text-slate-700 pt-6">{day.slice(0, 3)}</div>
       <div>
         <Label className="text-xs">Check-In</Label>
         <Input type="time" value={override.checkInTime}
@@ -64,7 +64,7 @@ function DayOverrideRow({ day, override, onChange, onRemove }: {
           placeholder="—"
           onChange={e => onChange({ ...override, breakDurationMinutes: e.target.value ? Number(e.target.value) : undefined })} />
       </div>
-      <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10 mt-5" onClick={onRemove}>
+      <Button variant="ghost" size="icon" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50 mt-5" onClick={onRemove}>
         <Trash2 className="w-3.5 h-3.5" />
       </Button>
     </div>
@@ -135,43 +135,43 @@ function LocationCard({ loc, index, onChange, onRemove, onSetDefault, onSave, sa
   };
 
   return (
-    <Card className="border border-border/60">
-      <CardHeader className="py-3 px-4">
+    <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-5 gap-3">
+      <CardHeader className="px-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-primary" />
+            <span className="w-9 h-9 rounded-xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0"><MapPin className="w-4 h-4" /></span>
             <Input
               value={loc.name}
               onChange={e => onChange({ ...loc, name: e.target.value })}
-              className="h-7 text-sm font-semibold w-48 border-0 bg-transparent p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="h-9 text-base font-semibold w-52 border-0 bg-transparent px-1 focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder="Location name"
             />
-            {loc.isDefault && <Badge className="text-[10px] bg-primary/10 text-primary">Default</Badge>}
+            {loc.isDefault && <Badge className="text-[10px] rounded-full bg-[#dff3da] text-[#256c1d] border-0 px-2.5">Default</Badge>}
           </div>
           <div className="flex items-center gap-1">
             {!loc.isDefault && (
-              <Button variant="ghost" size="sm" className="text-xs h-7" onClick={onSetDefault}>Set Default</Button>
+              <Button variant="ghost" size="sm" className="text-xs h-9 rounded-full hover:bg-[#eaf6e6]" onClick={onSetDefault}>Set Default</Button>
             )}
-            <Button variant="ghost" size="sm" className="text-xs h-7" onClick={useMyLocation}>
+            <Button variant="ghost" size="sm" className="text-xs h-9 rounded-full hover:bg-[#eaf6e6]" onClick={useMyLocation}>
               <MapPin className="w-3 h-3 mr-1" />My Location
             </Button>
-            <Button variant="default" size="sm" className="text-xs h-7" onClick={onSave} disabled={saving}>
+            <Button size="sm" className="text-xs h-9 rounded-full px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={onSave} disabled={saving}>
               {saving ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Save className="w-3 h-3 mr-1" />} Save Location
             </Button>
-            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setExpanded(e => !e)}>
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full hover:bg-[#eaf6e6]" onClick={() => setExpanded(e => !e)}>
               {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </Button>
-            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:bg-destructive/10" onClick={onRemove}>
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={onRemove}>
               <Trash2 className="w-3.5 h-3.5" />
             </Button>
           </div>
         </div>
       </CardHeader>
       {expanded && (
-        <CardContent className="space-y-3 pt-0">
+        <CardContent className="space-y-3 px-5 pt-0">
           <div
             ref={mapRef}
-            className="w-full h-56 rounded-lg overflow-hidden border cursor-pointer"
+            className="w-full h-56 rounded-2xl overflow-hidden cursor-pointer"
             style={{ zIndex: 0 }}
             onMouseEnter={initMap}
             onClick={initMap}
@@ -210,7 +210,7 @@ function LocationCard({ loc, index, onChange, onRemove, onSetDefault, onSave, sa
             <input type="range" min="50" max="2000" step="10"
               value={loc.allowedRadius}
               onChange={e => updateRadius(Number(e.target.value))}
-              className="w-full mt-1 accent-primary" />
+              className="w-full mt-1 accent-[#54b947]" />
             <div className="flex justify-between text-[10px] text-muted-foreground">
               <span>50m</span><span>1000m</span><span>2000m</span>
             </div>
@@ -329,33 +329,30 @@ export function HRSettingsPanel() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Settings className="w-6 h-6 text-primary" />
-            Attendance Settings
-          </h2>
-          <p className="text-muted-foreground text-sm mt-1">Configure office hours, locations, and biometric integration</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Attendance Settings</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Configure office hours, locations, and biometric integration</p>
         </div>
-        <Button onClick={handleSave} disabled={saving}>
+        <Button onClick={handleSave} disabled={saving} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
           {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
           Save Settings
         </Button>
       </div>
 
       <Tabs defaultValue="hours">
-        <TabsList>
-          <TabsTrigger value="hours"><Clock className="w-3 h-3 mr-1" />Office Hours</TabsTrigger>
-          <TabsTrigger value="location"><MapPin className="w-3 h-3 mr-1" />Locations</TabsTrigger>
-          <TabsTrigger value="biometric"><Wifi className="w-3 h-3 mr-1" />Biometric</TabsTrigger>
+        <TabsList className="h-auto flex-wrap gap-1.5 bg-white p-2 rounded-3xl border border-slate-100 w-fit max-w-full">
+          <TabsTrigger value="hours" className="rounded-full px-5 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none"><Clock className="w-3 h-3 mr-1" />Office Hours</TabsTrigger>
+          <TabsTrigger value="location" className="rounded-full px-5 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none"><MapPin className="w-3 h-3 mr-1" />Locations</TabsTrigger>
+          <TabsTrigger value="biometric" className="rounded-full px-5 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none"><Wifi className="w-3 h-3 mr-1" />Biometric</TabsTrigger>
         </TabsList>
 
         {/* ── Office Hours ── */}
-        <TabsContent value="hours" className="space-y-4 mt-4">
-          <Card>
-            <CardHeader><CardTitle className="text-base">Default Working Hours</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
+        <TabsContent value="hours" className="space-y-6 mt-6">
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+            <CardHeader className="px-7"><CardTitle className="text-lg font-semibold tracking-tight">Default Working Hours</CardTitle></CardHeader>
+            <CardContent className="space-y-4 px-7">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>Check-In Time</Label>
@@ -379,17 +376,17 @@ export function HRSettingsPanel() {
                 <div className="flex flex-wrap gap-2">
                   {DAYS.map(day => (
                     <button key={day} type="button" onClick={() => toggleDay(day)}
-                      className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
+                      className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
                         settings.officeHours.workingDays.includes(day)
-                          ? 'bg-primary text-primary-foreground border-primary'
-                          : 'bg-background text-muted-foreground border-border hover:border-primary/50'
+                          ? 'bg-[#8ae47e] text-[#0b1d14] border-[#8ae47e]'
+                          : 'bg-white text-slate-600 border-slate-200 hover:bg-[#eaf6e6] hover:border-[#cfe9c9]'
                       }`}>
                       {day.slice(0, 3)}
                     </button>
                   ))}
                 </div>
               </div>
-              <div className="pt-2 border-t space-y-3">
+              <div className="pt-3 border-t border-slate-100 space-y-3">
                 <p className="text-sm font-semibold text-muted-foreground">Default Break Time</p>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
@@ -409,7 +406,7 @@ export function HRSettingsPanel() {
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4 pt-2 border-t">
+              <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-100">
                 <div>
                   <Label>Max Late Minutes / Month</Label>
                   <Input type="number" min="0" value={settings.latePolicy.maxLateMinutesPerMonth}
@@ -423,8 +420,8 @@ export function HRSettingsPanel() {
               </div>
 
               {/* Auto Punch-Out Half Day Rule */}
-              <div className="pt-3 border-t">
-                <div className="flex items-center justify-between gap-4 p-3.5 rounded-lg border bg-muted/20">
+              <div className="pt-3 border-t border-slate-100">
+                <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-[#f4f6f3]">
                   <div className="space-y-0.5 pr-2">
                     <Label className="text-sm font-semibold cursor-pointer" htmlFor="autoPunchOutHalfDay">
                       Mark Missing Punch-Out as Half Day
@@ -444,21 +441,21 @@ export function HRSettingsPanel() {
           </Card>
 
           {/* Per-day overrides */}
-          <Card>
-            <CardHeader>
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+            <CardHeader className="px-7">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-base">Per-Day Custom Hours</CardTitle>
+                  <CardTitle className="text-lg font-semibold tracking-tight">Per-Day Custom Hours</CardTitle>
                   <p className="text-xs text-muted-foreground mt-0.5">Override default hours for specific days</p>
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 px-7">
               {/* Add override buttons — only show days not yet overridden */}
               <div className="flex flex-wrap gap-2">
                 {DAYS.filter(d => settings.officeHours.workingDays.includes(d) && !overrideDays.includes(d)).map(day => (
                   <button key={day} type="button" onClick={() => addOverride(day)}
-                    className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border border-dashed border-primary/50 text-primary hover:bg-primary/5 transition-colors">
+                    className="flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-semibold border border-dashed border-[#8ae47e] text-[#256c1d] hover:bg-[#eaf6e6] transition-colors">
                     <Plus className="w-3 h-3" />{day.slice(0, 3)}
                   </button>
                 ))}
@@ -488,10 +485,10 @@ export function HRSettingsPanel() {
         </TabsContent>
 
         {/* ── Locations ── */}
-        <TabsContent value="location" className="space-y-4 mt-4">
+        <TabsContent value="location" className="space-y-6 mt-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-semibold">Office Locations</p>
+              <p className="font-semibold text-lg tracking-tight">Office Locations</p>
               <p className="text-xs text-muted-foreground">Employees can punch in from any of these locations</p>
             </div>
             <div className="flex items-center gap-3">
@@ -502,18 +499,18 @@ export function HRSettingsPanel() {
                 />
                 <span className="text-sm">Require location for check-in</span>
               </div>
-              <Button size="sm" onClick={addLocation}>
-                <Plus className="w-3.5 h-3.5 mr-1" />Add Location
+              <Button onClick={addLocation} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+                <Plus className="w-4 h-4 mr-1.5" />Add Location
               </Button>
             </div>
           </div>
 
           {locations.length === 0 ? (
-            <Card className="border-dashed">
-              <CardContent className="py-12 text-center text-muted-foreground">
-                <MapPin className="w-8 h-8 mx-auto mb-2 opacity-30" />
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
+              <CardContent className="py-14 text-center text-muted-foreground">
+                <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><MapPin className="w-6 h-6" /></div>
                 <p className="text-sm">No locations configured</p>
-                <Button size="sm" variant="outline" className="mt-3" onClick={addLocation}>
+                <Button variant="outline" className="mt-4 h-10 rounded-full px-5 border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]" onClick={addLocation}>
                   <Plus className="w-3.5 h-3.5 mr-1" />Add First Location
                 </Button>
               </CardContent>
@@ -537,11 +534,11 @@ export function HRSettingsPanel() {
         </TabsContent>
 
         {/* ── Biometric ── */}
-        <TabsContent value="biometric" className="space-y-4 mt-4">
-          <Card>
-            <CardHeader><CardTitle className="text-base">Biometric Device Integration</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-3 rounded-xl bg-muted/50">
+        <TabsContent value="biometric" className="space-y-6 mt-6">
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+            <CardHeader className="px-7"><CardTitle className="text-lg font-semibold tracking-tight">Biometric Device Integration</CardTitle></CardHeader>
+            <CardContent className="space-y-4 px-7">
+              <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-[#f4f6f3]">
                 <div>
                   <p className="text-sm font-medium">Enable Biometric Integration</p>
                   <p className="text-xs text-muted-foreground">Sync punch data from physical biometric devices</p>
@@ -584,9 +581,9 @@ export function HRSettingsPanel() {
                     <input type="range" min="1" max="60" step="1"
                       value={settings.biometric.syncInterval}
                       onChange={e => setSettings((p: any) => ({ ...p, biometric: { ...p.biometric, syncInterval: Number(e.target.value) } }))}
-                      className="w-full mt-2 accent-primary" />
+                      className="w-full mt-2 accent-[#54b947]" />
                   </div>
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-muted/50">
+                  <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-[#f4f6f3]">
                     <div>
                       <p className="text-sm font-medium">Fallback to Manual Punch</p>
                       <p className="text-xs text-muted-foreground">Allow app-based punch if biometric device is offline</p>
@@ -596,21 +593,21 @@ export function HRSettingsPanel() {
                       onCheckedChange={v => setSettings((p: any) => ({ ...p, biometric: { ...p.biometric, fallbackToManual: v } }))}
                     />
                   </div>
-                  <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-2">
+                  <div className="p-5 rounded-2xl bg-[#eaf6e6] space-y-2">
                     <p className="text-sm font-semibold flex items-center gap-2">
-                      <Wifi className="w-4 h-4 text-primary" />Integration Guide
+                      Integration Guide
                     </p>
-                    <code className="block text-xs bg-muted p-2 rounded font-mono break-all">
+                    <code className="block text-xs bg-white p-3 rounded-xl font-mono break-all">
                       POST /api/v1/attendance/biometric-sync
                     </code>
-                    <pre className="text-xs bg-muted p-2 rounded overflow-x-auto">{`{
+                    <pre className="text-xs bg-white p-3 rounded-xl overflow-x-auto">{`{
   "records": [
     { "employeeId": "<userId>", "punchTime": "2026-03-15T09:02:00Z", "punchType": "in", "deviceId": "DEVICE_001" }
   ]
 }`}</pre>
                     <div className="flex gap-2 flex-wrap mt-2">
                       {['ZKTeco','Hikvision','eSSL','Suprema','Any REST API'].map(b => (
-                        <Badge key={b} variant="outline" className="text-xs">{b}</Badge>
+                        <Badge key={b} variant="outline" className="text-xs rounded-full bg-white border-0">{b}</Badge>
                       ))}
                     </div>
                   </div>

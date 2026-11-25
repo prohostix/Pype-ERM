@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { RefreshCw, CheckSquare } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { ListPagination } from '@/components/ui/list-pagination';
 
 export function DeliveryConfirmationPanel() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
     fetchLogs();
@@ -38,59 +39,57 @@ export function DeliveryConfirmationPanel() {
     }
   };
 
+  const safePage = Math.min(page, Math.max(1, Math.ceil(logs.length / pageSize)));
+  const rows = logs.slice((safePage - 1) * pageSize, safePage * pageSize);
+
   return (
-    <Card className="border-none shadow-none">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Delivery Confirmation</CardTitle>
-            <CardDescription>Confirm receipt of documents by destination</CardDescription>
-          </div>
-          <Button variant="outline" size="sm" onClick={fetchLogs} disabled={loading}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
+    <div className="space-y-6">
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Delivery Confirmation</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Confirm receipt of documents by destination</p>
         </div>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-        ) : logs.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
-            <CheckSquare className="w-8 h-8 text-muted-foreground mb-2" />
-            <p className="text-muted-foreground">No pending deliveries to confirm</p>
-          </div>
-        ) : (
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Student</TableHead>
-                  <TableHead>Document Type</TableHead>
-                  <TableHead>Tracking #</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {logs.map((log) => (
-                  <TableRow key={log.id}>
-                    <TableCell>
-                      <div className="font-medium">{log.student?.name || 'N/A'}</div>
-                    </TableCell>
-                    <TableCell className="capitalize">{log.documentType.replace('_', ' ')}</TableCell>
-                    <TableCell>
-                      <div className="font-mono">{log.trackingNumber || 'N/A'}</div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button size="sm" onClick={() => markDelivered(log.id)}>Confirm Delivery</Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+        <Button variant="outline" onClick={fetchLogs} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
+          <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          Refresh
+        </Button>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Pending Deliveries</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{logs.length} pending</span>}
+        </div>
+        <div className="p-4 sm:p-5">
+          {loading ? (
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
+          ) : logs.length === 0 ? (
+            <div className="text-center py-14 text-sm text-muted-foreground">No pending deliveries to confirm</div>
+          ) : (
+            <div className="space-y-3">
+              {rows.map((log) => (
+                <div key={log.id} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                  <div className="min-w-0">
+                    <div className="font-semibold text-slate-900">{log.student?.name || 'N/A'}</div>
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
+                      <span className="rounded-full bg-white px-3 py-0.5 text-xs font-semibold text-slate-700 capitalize">{String(log.documentType || '').replace(/_/g, ' ')}</span>
+                      <span className="text-xs text-muted-foreground">Tracking: <span className="font-mono text-slate-700">{log.trackingNumber || 'N/A'}</span></span>
+                    </div>
+                  </div>
+                  <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => markDelivered(log.id)}>Confirm Delivery</Button>
+                </div>
+              ))}
+              <ListPagination
+                total={logs.length}
+                page={safePage}
+                pageSize={pageSize}
+                onPageChange={setPage}
+                onPageSizeChange={(n) => { setPageSize(n); setPage(1); }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

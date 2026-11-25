@@ -1,23 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react-hooks/set-state-in-effect */
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { 
-  Building2, 
-  Users, 
-  GraduationCap, 
-  TrendingUp, 
-  CreditCard, 
-  Activity, 
-  Clock, 
-  Layers, 
   ArrowUpRight, 
   ChevronRight, 
   RefreshCw, 
-  MapPin, 
-  CheckCircle2, 
-  BookOpen, 
-  ShieldCheck, 
   Lock
 } from 'lucide-react';
 import { 
@@ -203,7 +191,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
 
   // 4. Role & Workforce Distribution (Real staff from DB)
   const roleChartData = useMemo(() => {
-    const palette = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ec4899', '#06b6d4', '#64748b', '#6366f1'];
+    const palette = ['#54b947', '#0b1d14', '#256c1d', '#8ae47e', '#2f8a24', '#b8d8b0', '#64748b', '#54b947'];
     if (Array.isArray(metrics.roleDistribution) && metrics.roleDistribution.length > 0) {
       return metrics.roleDistribution.map((r: any, idx: number) => ({
         name: r.role.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
@@ -212,7 +200,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
       }));
     }
     return [
-      { name: 'Staff & Faculty', count: metrics.totalEmployees || 0, color: '#3b82f6' }
+      { name: 'Staff & Faculty', count: metrics.totalEmployees || 0, color: '#54b947' }
     ];
   }, [metrics.roleDistribution, metrics.totalEmployees]);
 
@@ -242,146 +230,73 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         {/* Overview Tab Content */}
         <TabsContent value="overview" className="space-y-8 mt-0 outline-none">
           {/* 1. Header Section */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-card via-card/90 to-card/60 p-6 sm:p-7 rounded-3xl border border-border/80 shadow-sm backdrop-blur-xl">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border border-primary/20 flex items-center justify-center font-black text-xl text-primary shadow-inner">
-                {orgName.substring(0, 2).toUpperCase()}
-              </div>
-              <div>
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold uppercase tracking-wider border border-emerald-500/20">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    Organization Active
-                  </span>
-                  <Badge variant="outline" className="text-[11px] font-semibold text-muted-foreground border-border/60">
-                    {licensePlan}
-                  </Badge>
-                  <span className="text-xs text-muted-foreground">• ID: {metrics.organization?.id?.slice(0, 8) || 'Tenant'}</span>
-                </div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">{orgName}</h1>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Academic operations, admissions velocity, fee cashflow, and workforce analytics across your branches.
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div className="flex items-center gap-4 min-w-0">
+              <div className="min-w-0">
+                <span className="block text-xs font-medium text-muted-foreground mb-1.5">
+                  Organization active · {licensePlan} · ID {metrics.organization?.id?.slice(0, 8) || 'Tenant'}
+                </span>
+                <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-foreground truncate">Welcome back, {orgName}</h1>
+                <p className="text-sm text-muted-foreground mt-1.5 max-w-2xl">
+                  Academic operations, admissions velocity, fee cashflow and workforce analytics across your branches.
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-2.5 shrink-0">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={fetchMetrics} 
+              <Button
+                variant="outline"
+                onClick={fetchMetrics}
                 disabled={loading}
-                className="h-9 px-3.5 gap-2 rounded-xl text-xs font-semibold shadow-xs"
+                className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50"
               >
-                <RefreshCw className={cn("w-3.5 h-3.5", loading && "animate-spin text-primary")} />
+                <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
                 Refresh
               </Button>
-              <Button 
-                size="sm"
+              <Button
                 onClick={() => handleNavigate('settings')}
-                className="h-9 px-4 rounded-xl text-xs font-bold gap-1.5 shadow-sm"
+                className="h-11 px-5 rounded-full text-sm font-semibold gap-1.5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm"
               >
-                Org Settings <ChevronRight className="w-3.5 h-3.5" />
+                Org Settings <ChevronRight className="w-4 h-4" />
               </Button>
             </div>
           </div>
 
-          {/* 2. Key Performance Indicators (6 KPI Scorecards) */}
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-            <MetricCard 
-              title="Students" 
-              value={metrics.totalStudents || 0} 
-              trend="Admissions Total" 
-              subtext="Enrolled Body"
-              icon={<GraduationCap className="w-5 h-5 text-blue-600 dark:text-blue-400" />}
-              gradient="from-blue-500/10 to-indigo-500/5 hover:border-blue-500/40"
-              onClick={() => handleNavigate('students')}
-            />
-            <MetricCard 
-              title="Revenue" 
-              value={formatINR(totalRevenueSum)} 
-              trend={`${metrics.totalInvoices || 0} Invoices`} 
-              subtext={`${metrics.totalPayments || 0} Receipts`}
-              icon={<CreditCard className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
-              gradient="from-indigo-500/10 to-violet-500/5 hover:border-indigo-500/40"
-              onClick={() => handleNavigate('payments')}
-            />
-            <MetricCard 
-              title="Workforce" 
-              value={metrics.totalEmployees || 0} 
-              trend={`${metrics.presentToday || 0} Present Today`} 
-              subtext={`${metrics.totalDepartments || 0} Depts`}
-              icon={<Users className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />}
-              gradient="from-emerald-500/10 to-teal-500/5 hover:border-emerald-500/40"
-              onClick={() => handleNavigate('users')}
-            />
-            <MetricCard 
-              title="Study Centers" 
-              value={metrics.totalCenters || 0} 
-              trend={`${metrics.activeCenters || metrics.totalCenters || 0} Active`} 
-              subtext="Academic Partners"
-              icon={<Building2 className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
-              gradient="from-amber-500/10 to-orange-500/5 hover:border-amber-500/40"
-              onClick={() => handleNavigate('centers')}
-            />
-            <MetricCard 
-              title="Branches" 
-              value={metrics.totalBranches ?? branchData.length} 
-              trend="Campuses" 
-              subtext="Regional Hubs"
-              icon={<MapPin className="w-5 h-5 text-sky-600 dark:text-sky-400" />}
-              gradient="from-sky-500/10 to-cyan-500/5 hover:border-sky-500/40"
-              onClick={() => handleNavigate('branches')}
-            />
-            <MetricCard 
-              title="Pending Reviews" 
-              value={pendingIntake} 
-              trend="Needs Review" 
-              subtext="Verification Queue"
-              icon={<Clock className="w-5 h-5 text-purple-600 dark:text-purple-400" />}
-              gradient="from-purple-500/10 to-pink-500/5 hover:border-purple-500/40"
-              onClick={() => handleNavigate('admission_review')}
-            />
+          {/* 2. Key Performance Indicators */}
+          <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+            <div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 divide-x divide-y 2xl:divide-y-0 divide-slate-100">
+              <MetricCard title="Students" value={metrics.totalStudents || 0} trend="Admissions Total" subtext="Enrolled Body" onClick={() => handleNavigate('students')} />
+              <MetricCard title="Revenue" value={formatINR(totalRevenueSum)} trend={`${metrics.totalInvoices || 0} Invoices`} subtext={`${metrics.totalPayments || 0} Receipts`} onClick={() => handleNavigate('payments')} />
+              <MetricCard title="Workforce" value={metrics.totalEmployees || 0} trend={`${metrics.presentToday || 0} Present Today`} subtext={`${metrics.totalDepartments || 0} Depts`} onClick={() => handleNavigate('users')} />
+              <MetricCard title="Study Centers" value={metrics.totalCenters || 0} trend={`${metrics.activeCenters || metrics.totalCenters || 0} Active`} subtext="Academic Partners" onClick={() => handleNavigate('centers')} />
+              <MetricCard title="Branches" value={metrics.totalBranches ?? branchData.length} trend="Campuses" subtext="Regional Hubs" onClick={() => handleNavigate('branches')} />
+              <MetricCard title="Pending Reviews" value={pendingIntake} trend="Needs Review" subtext="Verification Queue" onClick={() => handleNavigate('admission_review')} />
+            </div>
           </div>
 
           {/* 3. Primary Analytics Row: Enrollment Momentum & Monthly Fee Collections */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Chart 1: Admissions Velocity & Verification Momentum */}
-            <Card className="border border-border/80 shadow-md bg-card/60 backdrop-blur-xl rounded-3xl overflow-hidden hover:shadow-lg transition-all flex flex-col justify-between gap-0">
-              <CardHeader className="flex flex-row items-start justify-between p-6 sm:px-7 sm:py-6 border-b border-border/40">
+            <Card className="rounded-3xl overflow-hidden flex flex-col justify-between gap-0">
+              <CardHeader className="flex flex-row items-start justify-between px-6 sm:px-7 pt-6 sm:pt-7 pb-0">
                 <div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                      <TrendingUp className="w-4 h-4" />
-                    </div>
-                    <CardTitle className="text-lg font-bold">Admissions Momentum</CardTitle>
-                  </div>
+                  <CardTitle className="text-base sm:text-lg font-semibold">Admissions Momentum</CardTitle>
                   <CardDescription className="text-xs mt-1.5 leading-relaxed">
                     Monthly student intake and clearance trajectory for {orgName}
                   </CardDescription>
                 </div>
                 <div className="text-right shrink-0">
-                  <Badge variant="outline" className="bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30 text-xs font-bold px-2.5 py-1">
+                  <Badge variant="outline" className="bg-[#f4f6f3] text-slate-700 border-0 rounded-full text-xs font-semibold px-3 py-1">
                     {metrics.totalStudents || 0} Total Enrolled
                   </Badge>
                   <p className="text-[11px] text-muted-foreground mt-1">Peak: {totalEnrollmentsPeak}/mo</p>
                 </div>
               </CardHeader>
-              <CardContent className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-6">
+              <CardContent className="px-6 sm:px-7 pt-5 pb-6 sm:pb-7 flex-1 flex flex-col justify-between space-y-6">
                 <div className="h-[280px] w-full pt-2">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={enrollmentTrend} margin={{ top: 10, right: 15, left: -10, bottom: 0 }}>
-                      <defs>
-                        <linearGradient id="orgEnrollGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4}/>
-                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                        </linearGradient>
-                        <linearGradient id="orgVerifyGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.6} />
+                      <CartesianGrid strokeDasharray="4 6" vertical={false} stroke="hsl(var(--border))" opacity={0.6} />
                       <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
                       <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
                       <Tooltip 
@@ -396,38 +311,38 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
                         type="monotone" 
                         dataKey="enrollments" 
                         name="New Admissions"
-                        stroke="#3b82f6" 
+                        stroke="#54b947" 
                         strokeWidth={3} 
-                        fillOpacity={1} 
-                        fill="url(#orgEnrollGrad)" 
+                        fillOpacity={0.12} 
+                        fill="#54b947" 
                       />
                       <Area 
                         type="monotone" 
                         dataKey="completed" 
                         name="Active / Cleared"
-                        stroke="#10b981" 
+                        stroke="#256c1d" 
                         strokeWidth={2} 
-                        fillOpacity={1} 
-                        fill="url(#orgVerifyGrad)" 
+                        fillOpacity={0.08} 
+                        fill="#256c1d" 
                       />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3 pt-5 border-t border-border/40 text-center">
-                  <div className="p-3 sm:p-3.5 rounded-2xl bg-muted/40 border border-border/40">
+                <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="p-3 sm:p-3.5 rounded-2xl bg-[#f4f6f3] dark:bg-muted/40">
                     <p className="text-[11px] text-muted-foreground uppercase font-semibold tracking-wider">Total Admitted</p>
-                    <p className="text-base sm:text-lg font-black text-blue-600 dark:text-blue-400 mt-1">{metrics.totalStudents || 0}</p>
+                    <p className="text-base sm:text-lg font-semibold text-slate-900 mt-1">{metrics.totalStudents || 0}</p>
                   </div>
-                  <div className="p-3 sm:p-3.5 rounded-2xl bg-muted/40 border border-border/40">
+                  <div className="p-3 sm:p-3.5 rounded-2xl bg-[#f4f6f3] dark:bg-muted/40">
                     <p className="text-[11px] text-muted-foreground uppercase font-semibold tracking-wider">Active / Cleared</p>
-                    <p className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 mt-1">
+                    <p className="text-base sm:text-lg font-semibold text-slate-900 mt-1">
                       {verifiedCount}
                     </p>
                   </div>
-                  <div className="p-3 sm:p-3.5 rounded-2xl bg-muted/40 border border-border/40">
+                  <div className="p-3 sm:p-3.5 rounded-2xl bg-[#f4f6f3] dark:bg-muted/40">
                     <p className="text-[11px] text-muted-foreground uppercase font-semibold tracking-wider">Avg Run Rate</p>
-                    <p className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 mt-1">
+                    <p className="text-base sm:text-lg font-semibold text-slate-900 mt-1">
                       ~{avgMonthlyRunRate}/mo
                     </p>
                   </div>
@@ -436,37 +351,26 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
             </Card>
 
             {/* Chart 2: Monthly Cashflow & Revenue Collections */}
-            <Card className="border border-border/80 shadow-md bg-card/60 backdrop-blur-xl rounded-3xl overflow-hidden hover:shadow-lg transition-all flex flex-col justify-between gap-0">
-              <CardHeader className="flex flex-row items-start justify-between p-6 sm:px-7 sm:py-6 border-b border-border/40">
+            <Card className="rounded-3xl overflow-hidden flex flex-col justify-between gap-0">
+              <CardHeader className="flex flex-row items-start justify-between px-6 sm:px-7 pt-6 sm:pt-7 pb-0">
                 <div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-                      <CreditCard className="w-4 h-4" />
-                    </div>
-                    <CardTitle className="text-lg font-bold">Fee Collections &amp; Cashflow</CardTitle>
-                  </div>
+                  <CardTitle className="text-base sm:text-lg font-semibold">Fee Collections &amp; Cashflow</CardTitle>
                   <CardDescription className="text-xs mt-1.5 leading-relaxed">
                     Monthly fee payments received and reconciled into organization accounts
                   </CardDescription>
                 </div>
                 <div className="text-right shrink-0">
-                  <Badge variant="outline" className="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/30 text-xs font-bold px-2.5 py-1">
+                  <Badge variant="outline" className="bg-[#f4f6f3] text-slate-700 border-0 rounded-full text-xs font-semibold px-3 py-1">
                     {formatINR(totalRevenueSum)}
                   </Badge>
                   <p className="text-[11px] text-muted-foreground mt-1">{metrics.totalPayments || 0} Receipts</p>
                 </div>
               </CardHeader>
-              <CardContent className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-6">
+              <CardContent className="px-6 sm:px-7 pt-5 pb-6 sm:pb-7 flex-1 flex flex-col justify-between space-y-6">
                 <div className="h-[280px] w-full pt-2">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={revenueTrend} margin={{ top: 10, right: 15, left: 5, bottom: 0 }}>
-                      <defs>
-                        <linearGradient id="orgBarGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#6366f1" stopOpacity={0.9}/>
-                          <stop offset="100%" stopColor="#818cf8" stopOpacity={0.5}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.6} />
+                      <CartesianGrid strokeDasharray="4 6" vertical={false} stroke="hsl(var(--border))" opacity={0.6} />
                       <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
                       <YAxis 
                         axisLine={false} 
@@ -486,7 +390,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
                       <Bar 
                         dataKey="amount" 
                         name="Fee Collected" 
-                        fill="url(#orgBarGrad)" 
+                        fill="#54b947" 
                         radius={[8, 8, 0, 0]}
                         maxBarSize={50}
                       />
@@ -494,22 +398,22 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
                   </ResponsiveContainer>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3 pt-5 border-t border-border/40 text-center">
-                  <div className="p-3 sm:p-3.5 rounded-2xl bg-muted/40 border border-border/40">
+                <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="p-3 sm:p-3.5 rounded-2xl bg-[#f4f6f3] dark:bg-muted/40">
                     <p className="text-[11px] text-muted-foreground uppercase font-semibold tracking-wider">Recent Month</p>
-                    <p className="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400 mt-1">
+                    <p className="text-base sm:text-lg font-semibold text-slate-900 mt-1">
                       {formatINR(recentMonthRevenue)}
                     </p>
                   </div>
-                  <div className="p-3 sm:p-3.5 rounded-2xl bg-muted/40 border border-border/40">
+                  <div className="p-3 sm:p-3.5 rounded-2xl bg-[#f4f6f3] dark:bg-muted/40">
                     <p className="text-[11px] text-muted-foreground uppercase font-semibold tracking-wider">Invoices Issued</p>
-                    <p className="text-base sm:text-lg font-black text-slate-800 dark:text-slate-200 mt-1">
+                    <p className="text-base sm:text-lg font-semibold text-slate-900 mt-1">
                       {metrics.totalInvoices || 0}
                     </p>
                   </div>
-                  <div className="p-3 sm:p-3.5 rounded-2xl bg-muted/40 border border-border/40">
+                  <div className="p-3 sm:p-3.5 rounded-2xl bg-[#f4f6f3] dark:bg-muted/40">
                     <p className="text-[11px] text-muted-foreground uppercase font-semibold tracking-wider">Settlement Rate</p>
-                    <p className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 mt-1">
+                    <p className="text-base sm:text-lg font-semibold text-slate-900 mt-1">
                       {metrics.settlementRate !== undefined ? `${metrics.settlementRate}%` : '96%'}
                     </p>
                   </div>
@@ -521,15 +425,10 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
           {/* 4. Secondary Analytics Row: Branch Breakdown & Workforce Distribution */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Regional Branches Scale & Performance (2 Cols) */}
-            <Card className="lg:col-span-2 border border-border/80 shadow-md bg-card/60 backdrop-blur-xl rounded-3xl overflow-hidden hover:shadow-lg transition-all flex flex-col justify-between gap-0">
-              <CardHeader className="flex flex-row items-center justify-between p-6 sm:px-7 sm:py-6 border-b border-border/40">
+            <Card className="lg:col-span-2 rounded-3xl overflow-hidden flex flex-col justify-between gap-0">
+              <CardHeader className="flex flex-row items-center justify-between px-6 sm:px-7 pt-6 sm:pt-7 pb-0">
                 <div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                      <MapPin className="w-4 h-4" />
-                    </div>
-                    <CardTitle className="text-lg font-bold">Branch Locations &amp; Campus Scale</CardTitle>
-                  </div>
+                  <CardTitle className="text-base sm:text-lg font-semibold">Branch Locations &amp; Campus Scale</CardTitle>
                   <CardDescription className="text-xs mt-1.5">
                     Active student enrollment and employee allocation per branch campus
                   </CardDescription>
@@ -538,18 +437,18 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
                   variant="outline" 
                   size="sm" 
                   onClick={() => handleNavigate('branches')}
-                  className="h-8 text-xs font-bold gap-1 rounded-xl"
+                  className="h-10 text-sm font-semibold gap-1 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]"
                 >
                   Manage Branches <ChevronRight className="w-3.5 h-3.5" />
                 </Button>
               </CardHeader>
-              <CardContent className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-6">
+              <CardContent className="px-6 sm:px-7 pt-5 pb-6 sm:pb-7 flex-1 flex flex-col justify-between space-y-6">
                 {branchData.length > 0 ? (
                   <>
                     <div className="h-[260px] w-full pt-1">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={branchData} margin={{ top: 10, right: 15, left: -10, bottom: 0 }}>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.6} />
+                          <CartesianGrid strokeDasharray="4 6" vertical={false} stroke="hsl(var(--border))" opacity={0.6} />
                           <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
                           <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
                           <Tooltip 
@@ -570,22 +469,19 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
                             iconType="circle"
                             wrapperStyle={{ paddingBottom: '12px', fontSize: '12px' }}
                           />
-                          <Bar dataKey="students" name="Students" fill="#3b82f6" radius={[6, 6, 0, 0]} maxBarSize={36} />
-                          <Bar dataKey="staff" name="Staff & Faculty" fill="#8b5cf6" radius={[6, 6, 0, 0]} maxBarSize={36} />
+                          <Bar dataKey="students" name="Students" fill="#54b947" radius={[6, 6, 0, 0]} maxBarSize={36} />
+                          <Bar dataKey="staff" name="Staff & Faculty" fill="#0b1d14" radius={[6, 6, 0, 0]} maxBarSize={36} />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
 
-                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-5 border-t border-border/40 mt-2 px-1">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground mt-2 px-1">
                       <span>Primary Campus: <strong className="text-foreground font-semibold">{branchData[0]?.fullName} ({branchData[0]?.students} Students)</strong></span>
                       <span>Total Campuses: <strong className="text-foreground font-semibold">{branchData.length} Branches</strong></span>
                     </div>
                   </>
                 ) : (
                   <div className="py-12 flex flex-col items-center justify-center text-center space-y-3">
-                    <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-                      <MapPin className="w-6 h-6" />
-                    </div>
                     <div className="space-y-1">
                       <p className="text-sm font-bold text-foreground">Central Headquarters Operations</p>
                       <p className="text-xs text-muted-foreground max-w-sm">
@@ -596,7 +492,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
                       variant="outline" 
                       size="sm" 
                       onClick={() => handleNavigate('branches')}
-                      className="mt-2 text-xs font-semibold rounded-xl"
+                      className="mt-2 h-10 text-sm font-semibold rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]"
                     >
                       Configure Branch Campuses
                     </Button>
@@ -606,19 +502,14 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
             </Card>
 
             {/* Workforce Roles & Staff Distribution Donut (1 Col) */}
-            <Card className="border border-border/80 shadow-md bg-card/60 backdrop-blur-xl rounded-3xl overflow-hidden hover:shadow-lg transition-all flex flex-col justify-between gap-0">
-              <CardHeader className="p-6 sm:px-7 sm:py-6 border-b border-border/40">
-                <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                    <Users className="w-4 h-4" />
-                  </div>
-                  <CardTitle className="text-lg font-bold">Workforce Roles</CardTitle>
-                </div>
+            <Card className="rounded-3xl overflow-hidden flex flex-col justify-between gap-0">
+              <CardHeader className="px-6 sm:px-7 pt-6 sm:pt-7 pb-0">
+                <CardTitle className="text-base sm:text-lg font-semibold">Workforce Roles</CardTitle>
                 <CardDescription className="text-xs mt-1.5">
                   Distribution of faculty, sales, operations, and leadership
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-4">
+              <CardContent className="px-6 sm:px-7 pt-5 pb-6 sm:pb-7 flex-1 flex flex-col justify-between space-y-4">
                 <div className="h-[210px] w-full relative">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -670,15 +561,10 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
           {/* 5. Tertiary Analytics Row: Academic Programs & Live Organization Activity */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Top Academic Programs (2 Cols) */}
-            <Card className="lg:col-span-2 border border-border/80 shadow-md bg-card/60 backdrop-blur-xl rounded-3xl overflow-hidden flex flex-col gap-0">
-              <CardHeader className="flex flex-row items-center justify-between p-6 sm:px-7 sm:py-6 border-b border-border/40">
+            <Card className="lg:col-span-2 rounded-3xl overflow-hidden flex flex-col gap-0">
+              <CardHeader className="flex flex-row items-center justify-between px-6 sm:px-7 pt-6 sm:pt-7 pb-0">
                 <div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400">
-                      <BookOpen className="w-4 h-4" />
-                    </div>
-                    <CardTitle className="text-lg font-bold">Top Academic Programs</CardTitle>
-                  </div>
+                  <CardTitle className="text-base sm:text-lg font-semibold">Top Academic Programs</CardTitle>
                   <CardDescription className="text-xs mt-1.5">
                     Admissions demand and student enrollment density by program
                   </CardDescription>
@@ -687,31 +573,31 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
                   variant="outline" 
                   size="sm" 
                   onClick={() => handleNavigate('programs')}
-                  className="h-8 text-xs font-bold gap-1 rounded-xl"
+                  className="h-10 text-sm font-semibold gap-1 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]"
                 >
                   All Programs <ArrowUpRight className="w-3.5 h-3.5" />
                 </Button>
               </CardHeader>
-              <CardContent className="p-6 sm:p-7 space-y-4">
+              <CardContent className="px-6 sm:px-7 pt-5 pb-6 sm:pb-7 space-y-4">
                 {programData.length > 0 ? (
                   <div className="space-y-4">
                     {programData.map((prog: any, idx: number) => {
                       const totalStudents = metrics.totalStudents || 1;
                       const pct = Math.min(100, Math.round((prog.students / Math.max(1, totalStudents)) * 100));
                       return (
-                        <div key={idx} className="p-3.5 rounded-2xl bg-muted/30 border border-border/40 hover:bg-muted/50 transition-colors">
+                        <div key={idx} className="p-4 rounded-2xl bg-[#f4f6f3] dark:bg-muted/30 transition-colors">
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2.5">
-                              <Badge variant="outline" className="font-mono text-xs font-bold text-primary border-primary/30">
+                              <Badge variant="outline" className="font-mono text-xs font-semibold text-slate-700 bg-white border-0 rounded-full px-3">
                                 {prog.name}
                               </Badge>
                               <span className="text-xs font-bold text-foreground">{prog.fullName}</span>
                             </div>
                             <span className="text-xs font-extrabold text-foreground">{prog.students} Students ({pct}%)</span>
                           </div>
-                          <div className="w-full bg-muted/60 h-2 rounded-full overflow-hidden">
+                          <div className="w-full bg-white dark:bg-muted/60 h-2 rounded-full overflow-hidden">
                             <div 
-                              className="bg-gradient-to-r from-blue-500 to-indigo-600 h-full rounded-full transition-all duration-500" 
+                              className="bg-[#54b947] h-full rounded-full transition-all duration-500" 
                               style={{ width: `${pct}%` }} 
                             />
                           </div>
@@ -728,16 +614,11 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
             </Card>
 
             {/* Live Organization Audit & Telemetry (1 Col) */}
-            <Card className="border border-border/80 shadow-md bg-card/60 backdrop-blur-xl rounded-3xl overflow-hidden flex flex-col gap-0">
-              <CardHeader className="p-6 sm:px-7 sm:py-6 border-b border-border/40">
+            <Card className="rounded-3xl overflow-hidden flex flex-col gap-0">
+              <CardHeader className="px-6 sm:px-7 pt-6 sm:pt-7 pb-0">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400">
-                      <Activity className="w-4 h-4" />
-                    </div>
-                    <CardTitle className="text-lg font-bold">Live Activity Log</CardTitle>
-                  </div>
-                  <Badge variant="outline" className="text-[10px] font-bold text-muted-foreground px-2 py-0.5">
+                  <CardTitle className="text-base sm:text-lg font-semibold">Live Activity Log</CardTitle>
+                  <Badge variant="outline" className="text-[11px] font-semibold text-slate-600 bg-[#f4f6f3] border-0 rounded-full px-3 py-0.5">
                     Live Stream
                   </Badge>
                 </div>
@@ -745,65 +626,42 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
                   Real-time admissions, verification, and administrative actions
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-6 sm:p-7 space-y-4">
-                <div className="space-y-2.5 max-h-[220px] overflow-y-auto scrollbar-thin">
+              <CardContent className="px-6 sm:px-7 pt-5 pb-6 sm:pb-7 space-y-4">
+                <ol className="relative max-h-[250px] overflow-y-auto scrollbar-thin pr-1">
+                  <span aria-hidden="true" className="absolute left-[5px] top-2 bottom-2 w-px bg-slate-200 dark:bg-border" />
                   {recentAudits.length > 0 ? (
                     recentAudits.map((item: any, i: number) => {
-                      const isAdmission = item.entityType === 'Student';
-                      const isPayment = item.entityType === 'Fee Receipt';
                       const isUpdate = item.action?.toLowerCase().includes('update');
-
+                      const dot = item.entityType === 'Student' || item.entityType === 'Fee Receipt' || isUpdate ? 'bg-[#54b947]' : 'bg-slate-300';
                       return (
-                        <div key={item.id || i} className="p-2.5 rounded-xl bg-muted/30 border border-border/30 flex items-start gap-2.5 hover:bg-muted/50 transition-colors">
-                          <div className={cn(
-                            "w-2 h-2 rounded-full mt-1.5 shrink-0",
-                            isAdmission ? "bg-blue-500" : isPayment ? "bg-emerald-500" : isUpdate ? "bg-purple-500" : "bg-amber-500"
-                          )} />
-                          <div className="min-w-0 flex-1">
-                            <p className="text-xs font-bold text-foreground truncate">
-                              <span className="text-primary">{item.userName}</span>: {item.action}
-                            </p>
-                            <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-0.5">
-                              <span>{item.entityType}</span>
-                              <span>{timeAgo(item.timestamp)}</span>
-                            </div>
-                          </div>
-                        </div>
+                        <li key={item.id || i} className="relative pl-7 pb-4 last:pb-0">
+                          <span className={cn('absolute left-0 top-1.5 w-[11px] h-[11px] rounded-full ring-4 ring-card', dot)} />
+                          <p className="text-sm text-foreground leading-snug">
+                            <span className="font-semibold">{item.userName}</span>{' '}
+                            <span className="text-muted-foreground">{item.action}</span>
+                          </p>
+                          <p className="text-[11px] text-muted-foreground mt-0.5">{item.entityType} · {timeAgo(item.timestamp)}</p>
+                        </li>
                       );
                     })
                   ) : (
-                    <div className="py-6 text-center text-xs text-muted-foreground">
-                      No recent activities logged today.
-                    </div>
+                    <li className="py-6 text-center text-xs text-muted-foreground list-none">No recent activities logged today.</li>
                   )}
-                </div>
+                </ol>
 
-                {/* Organization Infrastructure Health Card */}
-                <div className="p-3.5 rounded-2xl bg-gradient-to-br from-card to-muted/40 border border-border/60 space-y-2 text-xs pt-3">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-muted-foreground flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Tenant Isolation
-                    </span>
-                    <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" /> Active &amp; Isolated
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-muted-foreground flex items-center gap-1.5">
-                      <Layers className="w-3.5 h-3.5 text-blue-500" /> Multi-Branch Isolation
-                    </span>
-                    <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400">
-                      Enforced
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-muted-foreground flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-purple-500" /> Last Synchronized
-                    </span>
-                    <span className="text-[11px] font-bold text-muted-foreground">
-                      {timeAgo(lastRefreshed)}
-                    </span>
-                  </div>
+                {/* Organization Infrastructure Health */}
+                <div className="rounded-2xl bg-[#f4f6f3] p-5 space-y-3">
+                  <p className="text-xs font-semibold text-slate-500">Tenant status</p>
+                  {[
+                    { label: 'Tenant Isolation', value: 'Active & Isolated' },
+                    { label: 'Multi-Branch Isolation', value: 'Enforced' },
+                    { label: 'Last Synchronized', value: timeAgo(lastRefreshed) },
+                  ].map(({ label, value }) => (
+                    <div key={label} className="flex items-center justify-between gap-3 text-sm">
+                      <span className="text-slate-600">{label}</span>
+                      <span className="text-xs font-semibold text-slate-900">{value}</span>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -907,41 +765,24 @@ function MetricCard({
   value, 
   trend, 
   subtext, 
-  icon, 
-  gradient,
   onClick
 }: { 
   title: string; 
   value: string | number; 
   trend?: string; 
   subtext?: string; 
-  icon: React.ReactNode; 
-  gradient: string;
   onClick?: () => void;
 }) {
   return (
-    <Card 
+    <button
+      type="button"
       onClick={onClick}
-      className={cn(
-        "relative overflow-hidden border border-border/80 shadow-sm bg-gradient-to-br transition-all duration-300 hover:shadow-md cursor-pointer hover:-translate-y-0.5",
-        gradient
-      )}
+      className="text-left p-5 sm:p-6 hover:bg-[#f7faf6] transition-colors flex flex-col min-w-0"
     >
-      <CardContent className="p-5">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{title}</p>
-          <div className="p-2 rounded-xl bg-card border border-border/40 shadow-xs">
-            {icon}
-          </div>
-        </div>
-        <div className="mt-3">
-          <p className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">{value}</p>
-          <div className="flex items-center justify-between text-xs mt-1.5 pt-1">
-            {trend && <span className="font-semibold text-primary">{trend}</span>}
-            {subtext && <span className="text-muted-foreground">{subtext}</span>}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      <p className="text-sm font-medium text-slate-500">{title}</p>
+      <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-2 truncate">{value}</p>
+      {trend && <p className="text-xs text-slate-600 mt-2 truncate">{trend}</p>}
+      {subtext && <p className="text-[11px] text-muted-foreground mt-0.5 truncate">{subtext}</p>}
+    </button>
   );
 }

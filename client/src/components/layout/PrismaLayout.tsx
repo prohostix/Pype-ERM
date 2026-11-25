@@ -1,3 +1,4 @@
+import { PageErrorBoundary } from '@/components/PageErrorBoundary';
 import { useState, useEffect } from 'react';
 import {
   Database,
@@ -90,6 +91,9 @@ export function PrismaLayout({
       localStorage.setItem('theme', 'light');
     }
   }, [isDarkMode]);
+
+  // Public pages (landing, sign-in) are light only, so leave dark mode behind when the app shell goes away.
+  useEffect(() => () => document.documentElement.classList.remove('dark'), []);
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
@@ -242,7 +246,7 @@ export function PrismaLayout({
   const activeTableItem = normalizedTables.find(t => !t.isSection && t.id === activeTable) || normalizedTables.find(t => !t.isSection);
 
   return (
-    <div className="h-screen flex bg-background font-sans overflow-hidden relative">
+    <div className="h-screen flex bg-[#f2f4f0] dark:bg-background font-sans overflow-hidden relative">
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div
@@ -253,12 +257,12 @@ export function PrismaLayout({
 
       {/* Premium Sidebar */}
       <aside className={cn(
-        "fixed inset-y-0 left-0 w-[250px] flex flex-col z-50 transition-all duration-300 lg:relative lg:translate-x-0 rounded-r-[40px] border-r-0 border-0",
-        "bg-gradient-to-b from-[#0a2718] via-[#06190f] to-[#04120a] text-slate-100 shadow-2xl shadow-emerald-950/20",
+        "fixed inset-y-0 left-0 w-[260px] flex flex-col z-50 transition-all duration-300 lg:relative lg:translate-x-0 lg:m-3 lg:h-[calc(100vh-1.5rem)] rounded-r-[28px] lg:rounded-[28px] border-0",
+        "bg-[#0b1d14] text-slate-100 shadow-[0_20px_50px_-20px_rgba(4,18,10,0.6)]",
         isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
       )}>
 
-        <div className="h-[80px] flex items-center px-5 gap-3 relative z-10 border-b border-emerald-900/30">
+        <div className="h-[80px] flex items-center px-5 gap-3 relative z-10">
           {/* Platform Branding */}
           <div className="flex flex-col items-center justify-center flex-shrink-0 min-w-[50px]">
             <img src="/erm-logo-white.png" alt="Pype ERM Logo" className="h-14 w-auto opacity-90" />
@@ -322,43 +326,22 @@ export function PrismaLayout({
                 key={table.id}
                 onClick={() => { onTableChange(table.id); setIsSidebarOpen(false); }}
                 className={cn(
-                  'min-h-[60px] py-3 w-[calc(100%_-_24px_+_2px)] ml-6 pl-6 flex items-center gap-3.5 group relative text-sm text-left rounded-l-full outline-none focus:outline-none focus-visible:ring-0 border-0',
+                  'min-h-[46px] py-2.5 mx-3 px-4 flex items-center gap-3 text-sm text-left rounded-full outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8ae47e]/60 border-0 transition-colors duration-200',
                   isActive
-                    ? 'bg-background text-foreground font-semibold z-20'
-                    : 'bg-transparent text-slate-300 hover:bg-white/10 hover:text-slate-100 hover:z-20'
+                    ? 'bg-[#8ae47e] text-[#0b1d14] font-semibold'
+                    : 'bg-transparent text-slate-300 hover:bg-white/10 hover:text-white'
                 )}
               >
-                {/* Top Curve */}
-                <svg className={cn(
-                  "absolute -right-[1px] -top-8 w-8 h-8 pointer-events-none",
-                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                )} style={{ fill: isActive ? 'hsl(var(--background))' : 'rgba(255,255,255,0.1)' }} viewBox="0 0 20 20">
-                  <path d="M 0 20 A 20 20 0 0 0 20 0 L 20 20 Z" />
-                </svg>
-
-                <div className={cn(
-                  "p-1.5 rounded-lg transition-all duration-300 shrink-0",
-                  isActive
-                    ? "bg-[#54b947] text-white shadow-md shadow-[#54b947]/30"
-                    : "bg-white/5 text-slate-400 group-hover:text-slate-100"
-                )}>
+                <span className={cn('shrink-0 [&>svg]:w-[18px] [&>svg]:h-[18px]', isActive ? 'text-[#0b1d14]' : 'text-slate-400')}>
                   {table.icon}
-                </div>
+                </span>
                 <span className="truncate">{table.label}</span>
-
-                {/* Bottom Curve */}
-                <svg className={cn(
-                  "absolute -right-[1px] -bottom-8 w-8 h-8 pointer-events-none",
-                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                )} style={{ fill: isActive ? 'hsl(var(--background))' : 'rgba(255,255,255,0.1)' }} viewBox="0 0 20 20">
-                  <path d="M 0 0 A 20 20 0 0 1 20 20 L 20 0 Z" />
-                </svg>
               </button>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-emerald-900/30 relative z-10">
+        <div className="p-4 relative z-10">
           <div className="flex items-center gap-3 px-2 py-2 mb-4">
             <div className="w-10 h-10 rounded-xl bg-[#54b947]/20 border border-[#54b947]/40 flex items-center justify-center text-[#8ae47e] font-bold shrink-0 shadow-sm">
               {userName?.charAt(0) || 'U'}
@@ -386,9 +369,8 @@ export function PrismaLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden relative min-w-0 bg-background">
-        <header className="h-14 sm:h-[72px] flex items-center px-4 lg:px-8 gap-3 sm:gap-4 bg-background/60 backdrop-blur-xl border-b border-border/40 sticky top-0 z-20 shadow-[0_4px_30px_rgba(0,0,0,0.03)] transition-all">
-          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+      <main className="flex-1 flex flex-col overflow-hidden relative min-w-0 bg-transparent">
+        <header className="h-14 sm:h-[72px] flex items-center px-4 lg:px-8 gap-3 sm:gap-4 bg-transparent sticky top-0 z-20 transition-all">
 
           <Button
             variant="ghost"
@@ -399,46 +381,44 @@ export function PrismaLayout({
             <Menu className="w-5 h-5" />
           </Button>
 
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-xl h-10 w-10 shrink-0 mr-1 transition-all group"
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              type="button"
+              className="h-11 w-11 shrink-0 rounded-full bg-white dark:bg-card shadow-sm border border-slate-200/70 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-muted-foreground hover:bg-slate-50 hover:border-slate-300 dark:hover:bg-muted hover:text-foreground transition-all group outline-none focus-visible:ring-2 focus-visible:ring-[#54b947]/50 "
               onClick={() => window.history.back()}
               title="Go Back"
+              aria-label="Go back"
             >
-              <ChevronRight className="w-5 h-5 rotate-180 group-hover:-translate-x-0.5 transition-transform" />
-            </Button>
-            <div className="hidden sm:flex items-center justify-center p-2.5 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 text-primary shadow-sm">
-              {activeTableItem?.icon}
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg font-bold text-foreground tracking-tight leading-none truncate">{activeTableItem?.label}</span>
-              <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-widest mt-1 hidden sm:block">Current Module</span>
+              <ChevronRight className="w-4 h-4 rotate-180 group-hover:-translate-x-0.5 transition-transform" />
+            </button>
+            <div className="flex flex-col min-w-0">
+              <span className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight leading-tight truncate">{activeTableItem?.label}</span>
+              <span className="text-xs text-muted-foreground hidden sm:block truncate">Hello, {userName || 'there'}</span>
             </div>
           </div>
 
-          <div className="ml-auto flex items-center gap-3 sm:gap-4">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-background/50 rounded-lg border border-border/50 shadow-sm backdrop-blur-md">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{schema}</span>
+          <div className="ml-auto flex items-center gap-2 sm:gap-3">
+            <div className="hidden md:flex items-center gap-2 h-11 px-4 rounded-full bg-white dark:bg-card shadow-sm border border-slate-200/70 dark:border-white/10">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#54b947] animate-pulse" />
+              <span className="text-xs font-medium text-slate-600 dark:text-muted-foreground capitalize">{schema}</span>
             </div>
 
-            <div className="h-8 w-px bg-border/50 mx-1 hidden sm:block" />
             {!['student', 'teacher'].includes(userRole || '') && (
               <PunchWidget compact={true} />
             )}
 
-            <NotificationBell userId={userId} organizationId={organizationId} />
+            <div className="flex items-center justify-center h-11 w-11 rounded-full bg-white dark:bg-card shadow-sm border border-slate-200/70 dark:border-white/10">
+              <NotificationBell userId={userId} organizationId={organizationId} />
+            </div>
 
             {/* Settings dropdown */}
             <div className="relative">
               <button
-                className="p-2 rounded-lg hover:bg-muted transition-colors"
+                className="h-11 w-11 rounded-full bg-white dark:bg-card shadow-sm border border-slate-200/70 dark:border-white/10 flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 dark:hover:bg-muted transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#54b947]/50 "
                 onClick={() => setIsSettingsOpen(o => !o)}
                 title="Settings"
               >
-                <Settings className="w-5 h-5 text-muted-foreground" />
+                <Settings className="w-[18px] h-[18px] text-slate-600 dark:text-muted-foreground" />
               </button>
               {isSettingsOpen && (
                 <>
@@ -492,12 +472,16 @@ export function PrismaLayout({
                 </>
               )}
             </div>
+
+            <div title={userName || 'User'} className="h-11 w-11 shrink-0 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold text-sm flex items-center justify-center shadow-sm transition-colors cursor-default">
+              {(userName?.charAt(0) || 'U').toUpperCase()}
+            </div>
           </div>
         </header>
 
-        <section className="flex-1 overflow-auto p-3 sm:p-4 lg:p-8 bg-background">
+        <section className="flex-1 overflow-auto p-3 sm:p-4 lg:p-8 lg:pt-2 bg-transparent">
           <div key={activeTable} className="max-w-[1600px] mx-auto animate-in fade-in zoom-in-[0.98] slide-in-from-bottom-4 duration-500 ease-out fill-mode-both">
-            {children}
+            <PageErrorBoundary>{children}</PageErrorBoundary>
           </div>
         </section>
       </main>

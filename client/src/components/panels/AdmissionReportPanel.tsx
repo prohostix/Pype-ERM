@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Download, RefreshCw, BarChart4 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { ReportHeader, ReportCard, ReportStats, RankList, ReportEmpty, ReportLoading, downloadCsv, REPORT_COLORS, reportTooltipStyle, reportGridStroke } from './ReportKit';
+import { toast } from 'sonner';
 import api from '@/lib/api';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
 export function AdmissionReportPanel() {
   const [loading, setLoading] = useState(false);
@@ -27,116 +25,100 @@ export function AdmissionReportPanel() {
     fetchReport();
   }, []);
 
+  const handleExport = () => {
+    if (!data) return;
+    const rows = [
+      ...(data.byUniversity || []).map((r: any) => ({ Section: 'By University', Name: r.name, Count: r.value })),
+      ...(data.byProgram || []).map((r: any) => ({ Section: 'By Program', Name: r.name, Count: r.value })),
+      ...(data.byBranch || []).map((r: any) => ({ Section: 'By Branch', Name: r.name, Count: r.value })),
+      ...(data.byCenter || []).map((r: any) => ({ Section: 'By Center', Name: r.name, Count: r.value })),
+      ...(data.bySource || []).map((r: any) => ({ Section: 'By Source', Name: r.name, Count: r.value })),
+      ...(data.byStatus || []).map((r: any) => ({ Section: 'By Status', Name: r.name, Count: r.value })),
+      ...(data.trends || []).map((r: any) => ({ Section: 'Monthly Trend', Name: r.name, Count: r.count })),
+    ];
+    if (!downloadCsv('admission_report.csv', rows)) toast.warning('No data to export');
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Admission Report</h2>
-          <p className="text-muted-foreground">Track organization-wide admissions, conversions, and pipeline metrics</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={fetchReport} disabled={loading}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-          <Button size="sm">
-            <Download className="w-4 h-4 mr-2" />
-            Export CSV
-          </Button>
-        </div>
-      </div>
+      <ReportHeader
+        title="Admission Report"
+        description="Track organization-wide admissions, conversions, and pipeline metrics"
+        loading={loading}
+        onRefresh={fetchReport}
+        onExport={handleExport}
+      />
 
       {!data && loading ? (
-        <div className="flex items-center justify-center p-12 border border-dashed rounded-lg">
-          <RefreshCw className="w-8 h-8 animate-spin text-muted-foreground" />
-        </div>
+        <ReportLoading />
       ) : !data ? (
-        <div className="flex flex-col items-center justify-center p-12 text-center border border-dashed rounded-lg">
-          <BarChart4 className="w-8 h-8 text-muted-foreground mb-4" />
-          <p className="text-muted-foreground">No data available.</p>
-        </div>
+        <div className="rounded-3xl bg-white border border-slate-100 py-16 text-center text-sm text-muted-foreground">No data available.</div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          
-          <Card className="col-span-1 lg:col-span-3">
-            <CardHeader>
-              <CardTitle>Total Admissions: {data.totalAdmissions}</CardTitle>
-              <CardDescription>Overall admissions count across the organization</CardDescription>
-            </CardHeader>
-          </Card>
+        <div className="space-y-4">
+          <ReportStats
+            items={[
+              { label: 'Total Admissions', value: data.totalAdmissions },
+              { label: 'This Month', value: data.summary?.thisMonth ?? 0, note: data.summary?.changePct == null ? 'No previous month to compare' : `${data.summary.changePct >= 0 ? '+' : ''}${data.summary.changePct}% vs last month`, tone: data.summary?.changePct == null ? undefined : data.summary.changePct >= 0 ? 'good' : 'bad' },
+              { label: 'Admitted', value: data.summary?.admitted ?? 0, tone: 'good' },
+              { label: 'Pending', value: data.summary?.pending ?? 0, tone: (data.summary?.pending ?? 0) > 0 ? 'warn' : undefined },
+              { label: 'Cancelled', value: data.summary?.cancelled ?? 0, tone: (data.summary?.cancelled ?? 0) > 0 ? 'bad' : undefined },
+            ]}
+          />
 
-          <Card className="col-span-1 lg:col-span-3">
-            <CardHeader>
-              <CardTitle>Monthly Admissions Trend (Last 6 Months)</CardTitle>
-            </CardHeader>
-            <CardContent className="h-[300px]">
-              {data.trends?.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={data.trends}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip cursor={{ fill: 'transparent' }} />
-                    <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="flex h-full items-center justify-center text-muted-foreground">No trend data</div>
-              )}
-            </CardContent>
-          </Card>
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
+            <ReportCard className="lg:col-span-2" title="Monthly Admissions Trend" subtitle="Last 6 months">
+              <div className="h-[300px]">
+                {data.trends?.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={data.trends}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={reportGridStroke} />
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                      <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
+                      <Tooltip cursor={{ fill: '#f4f6f3' }} contentStyle={reportTooltipStyle} />
+                      <Bar dataKey="count" name="Admissions" fill="#54b947" radius={[10, 10, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : <ReportEmpty message="No trend data" />}
+              </div>
+            </ReportCard>
 
-          <Card className="col-span-1 md:col-span-2 lg:col-span-1">
-            <CardHeader>
-              <CardTitle>Admissions by University</CardTitle>
-            </CardHeader>
-            <CardContent className="h-[300px]">
-              {data.byUniversity?.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={data.byUniversity}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {data.byUniversity.map((_entry: any, index: number) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="flex h-full items-center justify-center text-muted-foreground">No university data</div>
-              )}
-            </CardContent>
-          </Card>
+            <ReportCard title="Admissions by Status">
+              <div className="h-[300px]">
+                {data.byStatus?.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={data.byStatus} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={3} dataKey="value">
+                        {data.byStatus.map((_e: any, i: number) => <Cell key={i} fill={REPORT_COLORS[i % REPORT_COLORS.length]} />)}
+                      </Pie>
+                      <Tooltip contentStyle={reportTooltipStyle} />
+                      <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : <ReportEmpty message="No status data" />}
+              </div>
+            </ReportCard>
+          </div>
 
-          <Card className="col-span-1 md:col-span-2 lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Admissions by Program</CardTitle>
-            </CardHeader>
-            <CardContent className="h-[300px]">
-              {data.byProgram?.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={data.byProgram} layout="vertical" margin={{ left: 50 }}>
-                    <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                    <XAxis type="number" />
-                    <YAxis dataKey="name" type="category" width={150} tick={{ fontSize: 12 }} />
-                    <Tooltip cursor={{ fill: 'transparent' }} />
-                    <Bar dataKey="value" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="flex h-full items-center justify-center text-muted-foreground">No program data</div>
-              )}
-            </CardContent>
-          </Card>
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+            <ReportCard title="Admissions by University">
+              <RankList rows={data.byUniversity} empty="No university data" />
+            </ReportCard>
+            <ReportCard title="Admissions by Program">
+              <RankList rows={data.byProgram} empty="No program data" />
+            </ReportCard>
+          </div>
 
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
+            <ReportCard title="By Branch">
+              <RankList rows={data.byBranch} empty="No branch data" />
+            </ReportCard>
+            <ReportCard title="By Study Center" subtitle="Top 10">
+              <RankList rows={data.byCenter} empty="No center data" />
+            </ReportCard>
+            <ReportCard title="By Source">
+              <RankList rows={data.bySource} empty="No source data" />
+            </ReportCard>
+          </div>
         </div>
       )}
     </div>

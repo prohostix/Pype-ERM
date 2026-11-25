@@ -7,10 +7,10 @@ import { SalesReportFilters, DEFAULT_REPORT_FILTER, reportParams, type ReportFil
 import { ReportHeader, KpiTile, SectionCard, ProgressBar, EmptyState, LoadingRows, monthLabel, type Tone } from './SalesReportKit';
 
 const STAGE_STYLE: { color: string; tone: Tone; icon: any }[] = [
-  { color: 'hsl(var(--primary))', tone: 'primary', icon: Inbox },
-  { color: 'hsl(var(--info))', tone: 'info', icon: Phone },
-  { color: 'hsl(var(--warning))', tone: 'warning', icon: ThumbsUp },
-  { color: 'hsl(var(--success))', tone: 'success', icon: BadgeCheck },
+  { color: '#b8d8b0', tone: 'primary', icon: Inbox },
+  { color: '#8ae47e', tone: 'info', icon: Phone },
+  { color: '#54b947', tone: 'warning', icon: ThumbsUp },
+  { color: '#256c1d', tone: 'success', icon: BadgeCheck },
 ];
 
 export function SalesConversionReportPanel() {
@@ -69,11 +69,11 @@ export function SalesConversionReportPanel() {
                 <div className="h-[300px] w-full p-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <ReBarChart data={funnel} layout="vertical" margin={{ top: 5, right: 30, left: 30, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" opacity={0.2} horizontal vertical={false} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e8ece6" horizontal vertical={false} />
                       <XAxis type="number" hide />
                       <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600 }} width={90} />
-                      <ReTooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                      <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={34}>
+                      <ReTooltip cursor={{ fill: '#f4f6f3' }} contentStyle={{ backgroundColor: '#fff', border: '1px solid #e8ece6', borderRadius: '16px', fontSize: 12 }} />
+                      <Bar dataKey="value" radius={[0, 12, 12, 0]} barSize={34}>
                         {funnel.map((_e, i) => <Cell key={i} fill={STAGE_STYLE[i % STAGE_STYLE.length].color} />)}
                       </Bar>
                     </ReBarChart>
@@ -83,7 +83,7 @@ export function SalesConversionReportPanel() {
             </SectionCard>
 
             <SectionCard icon={Filter} title="Stage by stage" className="lg:col-span-2">
-              <ul className="divide-y divide-border/50">
+              <ul className="divide-y divide-slate-100">
                 {funnel.map((stage, i) => {
                   const prev = i === 0 ? stage.value : funnel[i - 1].value;
                   const st = STAGE_STYLE[i % STAGE_STYLE.length];
@@ -92,10 +92,9 @@ export function SalesConversionReportPanel() {
                     <li key={stage.name} className="px-5 py-3.5">
                       <div className="flex items-center justify-between gap-3">
                         <span className="flex items-center gap-2.5 text-sm font-medium">
-                          <st.icon className="w-4 h-4 text-muted-foreground" />
                           {stage.name}
                         </span>
-                        <span className="text-lg font-bold tabular-nums">{stage.value}</span>
+                        <span className="text-lg font-semibold tabular-nums text-slate-900">{stage.value}</span>
                       </div>
                       <div className="flex items-center gap-2.5 mt-2">
                         <ProgressBar value={total > 0 ? (stage.value / total) * 100 : 0} tone={st.tone} />

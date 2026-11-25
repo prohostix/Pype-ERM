@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Settings, Save, Link, FormInput } from 'lucide-react';
+import { Save } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -78,43 +78,34 @@ export function EnrollmentLinkConfigPanel() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 wizard-form">
       <div>
-        <h2 className="text-2xl font-bold">Enrollment Link Configuration</h2>
-        <p className="text-muted-foreground text-sm mt-1">Configure how sales users generate invite links and what fields are required from students.</p>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Enrollment Link Configuration</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Configure how sales users generate invite links and what fields are required from students.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="shadow-sm">
-            <CardHeader className="pb-4 border-b">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/30">
-                  <Link className="w-5 h-5" />
-                </div>
-                <div>
-                  <CardTitle className="text-lg">Invite Generation Flow</CardTitle>
-                  <CardDescription>Control steps for sales users</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-6 space-y-8">
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+            <CardHeader className="px-7"><div><CardTitle className="text-lg font-semibold tracking-tight">Invite Generation Flow</CardTitle>
+<CardDescription>Control steps for sales users</CardDescription></div></CardHeader>
+            <CardContent className="px-7 space-y-8">
               <div className="space-y-3">
-                <Label className="text-base font-semibold">University Selection Step</Label>
+                <Label className="text-sm font-semibold">University Selection Step</Label>
                 <RadioGroup 
                   value={config.universityStep} 
                   onValueChange={(val: any) => setConfig({ ...config, universityStep: val })}
-                  className="flex flex-col space-y-2"
+                  className="flex flex-col gap-2"
                 >
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="mandatory" id="uni-mandatory" />
                     <Label htmlFor="uni-mandatory" className="font-normal cursor-pointer">Mandatory (Required)</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="optional" id="uni-optional" />
                     <Label htmlFor="uni-optional" className="font-normal cursor-pointer">Optional (Can be skipped)</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="hidden" id="uni-hidden" />
                     <Label htmlFor="uni-hidden" className="font-normal cursor-pointer">Hidden (All universities available)</Label>
                   </div>
@@ -122,21 +113,21 @@ export function EnrollmentLinkConfigPanel() {
               </div>
 
               <div className="space-y-3">
-                <Label className="text-base font-semibold">Program Selection Step</Label>
+                <Label className="text-sm font-semibold">Program Selection Step</Label>
                 <RadioGroup 
                   value={config.programStep} 
                   onValueChange={(val: any) => setConfig({ ...config, programStep: val })}
-                  className="flex flex-col space-y-2"
+                  className="flex flex-col gap-2"
                 >
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="mandatory" id="prog-mandatory" />
                     <Label htmlFor="prog-mandatory" className="font-normal cursor-pointer">Mandatory (Required)</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="optional" id="prog-optional" />
                     <Label htmlFor="prog-optional" className="font-normal cursor-pointer">Optional (Can be skipped)</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="hidden" id="prog-hidden" />
                     <Label htmlFor="prog-hidden" className="font-normal cursor-pointer">Hidden (All programs available)</Label>
                   </div>
@@ -144,22 +135,22 @@ export function EnrollmentLinkConfigPanel() {
               </div>
 
               <div className="space-y-3">
-                <Label className="text-base font-semibold">Specialization Selection Step</Label>
+                <Label className="text-sm font-semibold">Specialization Selection Step</Label>
                 <p className="text-xs text-muted-foreground mb-2">Only appears if selected programs have specializations.</p>
                 <RadioGroup 
                   value={config.specializationStep} 
                   onValueChange={(val: any) => setConfig({ ...config, specializationStep: val })}
-                  className="flex flex-col space-y-2"
+                  className="flex flex-col gap-2"
                 >
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="mandatory" id="spec-mandatory" />
                     <Label htmlFor="spec-mandatory" className="font-normal cursor-pointer">Mandatory (Required)</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="optional" id="spec-optional" />
                     <Label htmlFor="spec-optional" className="font-normal cursor-pointer">Optional (Can be skipped)</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="hidden" id="spec-hidden" />
                     <Label htmlFor="spec-hidden" className="font-normal cursor-pointer">Hidden (Do not ask)</Label>
                   </div>
@@ -167,22 +158,22 @@ export function EnrollmentLinkConfigPanel() {
               </div>
 
               <div className="space-y-3">
-                <Label className="text-base font-semibold">Session Selection Step</Label>
+                <Label className="text-sm font-semibold">Session Selection Step</Label>
                 <p className="text-xs text-muted-foreground mb-2">Only appears if admission sessions exist.</p>
                 <RadioGroup 
                   value={config.sessionStep} 
                   onValueChange={(val: any) => setConfig({ ...config, sessionStep: val })}
-                  className="flex flex-col space-y-2"
+                  className="flex flex-col gap-2"
                 >
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="mandatory" id="sess-mandatory" />
                     <Label htmlFor="sess-mandatory" className="font-normal cursor-pointer">Mandatory (Required)</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="optional" id="sess-optional" />
                     <Label htmlFor="sess-optional" className="font-normal cursor-pointer">Optional (Can be skipped)</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-4 py-3">
                     <RadioGroupItem value="hidden" id="sess-hidden" />
                     <Label htmlFor="sess-hidden" className="font-normal cursor-pointer">Hidden (Use default session)</Label>
                   </div>
@@ -192,19 +183,10 @@ export function EnrollmentLinkConfigPanel() {
           </Card>
 
           <div className="space-y-6">
-            <Card className="shadow-sm">
-              <CardHeader className="pb-4 border-b">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-orange-50 text-orange-600 dark:bg-orange-950/30">
-                    <Settings className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg">Link Settings</CardTitle>
-                    <CardDescription>Configure invite expiration and limits</CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-6 space-y-6">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+              <CardHeader className="px-7"><div><CardTitle className="text-lg font-semibold tracking-tight">Link Settings</CardTitle>
+<CardDescription>Configure invite expiration and limits</CardDescription></div></CardHeader>
+              <CardContent className="px-7 space-y-6">
                 <div className="space-y-2">
                   <Label>Default Expiration (Days)</Label>
                   <Input 
@@ -218,7 +200,7 @@ export function EnrollmentLinkConfigPanel() {
                   <p className="text-xs text-muted-foreground">How many days until the invite link expires automatically.</p>
                 </div>
                 
-                <div className="flex items-center justify-between border rounded-lg p-4">
+                <div className="flex items-center justify-between gap-4 rounded-2xl bg-[#f4f6f3] p-4">
                   <div className="space-y-0.5">
                     <Label>Allow Multiple Uses</Label>
                     <p className="text-xs text-muted-foreground">If enabled, multiple students can apply using the same link.</p>
@@ -231,20 +213,11 @@ export function EnrollmentLinkConfigPanel() {
               </CardContent>
             </Card>
 
-            <Card className="shadow-sm">
-              <CardHeader className="pb-4 border-b">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-green-50 text-green-600 dark:bg-green-950/30">
-                    <FormInput className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg">Student Application Form</CardTitle>
-                    <CardDescription>Requirements for applicants</CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-6 space-y-4">
-                <div className="flex items-center justify-between border rounded-lg p-4">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+              <CardHeader className="px-7"><div><CardTitle className="text-lg font-semibold tracking-tight">Student Application Form</CardTitle>
+<CardDescription>Requirements for applicants</CardDescription></div></CardHeader>
+              <CardContent className="px-7 space-y-4">
+                <div className="flex items-center justify-between gap-4 rounded-2xl bg-[#f4f6f3] p-4">
                   <div className="space-y-0.5">
                     <Label>Require Documents</Label>
                     <p className="text-xs text-muted-foreground">Student must upload identity and academic documents.</p>
@@ -255,7 +228,7 @@ export function EnrollmentLinkConfigPanel() {
                   />
                 </div>
                 
-                <div className="flex items-center justify-between border rounded-lg p-4">
+                <div className="flex items-center justify-between gap-4 rounded-2xl bg-[#f4f6f3] p-4">
                   <div className="space-y-0.5">
                     <Label>Require Passport Photo</Label>
                     <p className="text-xs text-muted-foreground">Student must upload a profile photo.</p>
@@ -266,7 +239,7 @@ export function EnrollmentLinkConfigPanel() {
                   />
                 </div>
 
-                <div className="flex items-center justify-between border rounded-lg p-4">
+                <div className="flex items-center justify-between gap-4 rounded-2xl bg-[#f4f6f3] p-4">
                   <div className="space-y-0.5">
                     <Label>Require Consent / Declaration</Label>
                     <p className="text-xs text-muted-foreground">Student must agree to a declaration before submitting.</p>
@@ -278,10 +251,10 @@ export function EnrollmentLinkConfigPanel() {
                 </div>
 
                 {config.requireConsent && (
-                  <div className="space-y-2 border rounded-lg p-4 bg-muted/30">
+                  <div className="space-y-2 rounded-2xl bg-[#f4f6f3] p-4">
                     <Label>Consent / Declaration Text</Label>
                     <textarea
-                      className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex min-h-[100px] w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       value={config.consentText}
                       onChange={(e) => setConfig({ ...config, consentText: e.target.value })}
                       placeholder="e.g. I hereby declare that all information provided is true and correct to the best of my knowledge..."
@@ -294,8 +267,8 @@ export function EnrollmentLinkConfigPanel() {
         </div>
 
         <div className="flex justify-end pt-2">
-          <Button type="submit" disabled={saving} size="lg">
-            <Save className="w-5 h-5 mr-2" />
+          <Button type="submit" disabled={saving} className="h-11 px-7 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+            <Save className="w-4 h-4 mr-2" />
             {saving ? 'Saving...' : 'Save Configuration'}
           </Button>
         </div>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, FileText, Download, Printer, Search, Calendar, Users, X, RefreshCw, CheckSquare, ArrowUpDown, Building2, User } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -14,6 +13,7 @@ import { toast } from 'sonner';
 import html2pdf from 'html2pdf.js';
 
 import { CS, numLocale } from '@/lib/currency';
+import { ListPagination } from '@/components/ui/list-pagination';
 function numberToWords(amount: number): string {
   if (amount === 0) return 'Zero Rs. Only';
   
@@ -349,7 +349,7 @@ export function InvoicesPanel() {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -818,18 +818,18 @@ export function InvoicesPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Invoice Management</h2>
-          <p className="text-muted-foreground">Manage invoices and billing</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Invoice Management</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Manage invoices and billing</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
           <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Add Invoice</Button>
+            <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Invoice</Button>
           </DialogTrigger>
-          <DialogContent className={cn("max-h-[92vh] overflow-y-auto transition-all w-full", billingTarget === 'center' ? "sm:max-w-4xl md:max-w-5xl lg:max-w-6xl w-[95vw]" : "sm:max-w-2xl w-[90vw]")}>
+          <DialogContent className={cn("wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8 max-h-[92vh] overflow-y-auto transition-all w-full", billingTarget === 'center' ? "sm:max-w-4xl md:max-w-5xl lg:max-w-6xl w-[95vw]" : "sm:max-w-2xl w-[90vw]")}>
             <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Invoice' : 'Add New Invoice'}</DialogTitle>
+              <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Invoice' : 'Add New Invoice'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Billing Target */}
@@ -842,9 +842,9 @@ export function InvoicesPanel() {
                       setBillingTarget('center');
                       setFormData(prev => ({ ...prev, studentId: '' }));
                     }}
-                    className={`flex-1 py-2 px-4 rounded-md border text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                    className={`flex-1 py-2.5 px-4 rounded-full border text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
                       billingTarget === 'center'
-                        ? 'bg-primary text-primary-foreground border-primary'
+                        ? 'bg-[#8ae47e] text-[#0b1d14] border-[#8ae47e]'
                         : 'bg-background hover:bg-muted text-muted-foreground'
                     }`}
                   >
@@ -857,9 +857,9 @@ export function InvoicesPanel() {
                       setBillingTarget('student');
                       setFormData(prev => ({ ...prev, centerId: '' }));
                     }}
-                    className={`flex-1 py-2 px-4 rounded-md border text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                    className={`flex-1 py-2.5 px-4 rounded-full border text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
                       billingTarget === 'student'
-                        ? 'bg-primary text-primary-foreground border-primary'
+                        ? 'bg-[#8ae47e] text-[#0b1d14] border-[#8ae47e]'
                         : 'bg-background hover:bg-muted text-muted-foreground'
                     }`}
                   >
@@ -1270,23 +1270,29 @@ export function InvoicesPanel() {
               </div>
 
               <div className="flex gap-2 pt-2">
-                <Button type="submit" className="flex-1">Save Invoice</Button>
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                <Button type="submit" className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Save Invoice</Button>
+                <Button type="button" variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDialogOpen(false)}>Cancel</Button>
               </div>
             </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader><CardTitle>Invoices</CardTitle></CardHeader>
-        <CardContent>
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Invoices</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{invoices.filter(i => i?.id).length} total</span>}
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : invoices.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No invoices found</div>
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><FileText className="w-6 h-6" /></div>
+              <p className="text-sm">No invoices found</p>
+            </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {(() => {
                 const validInvoices = invoices.filter(inv => inv?.id);
 
@@ -1302,13 +1308,13 @@ export function InvoicesPanel() {
                   ? `Student: ${studentName}${centerName ? ` (${centerName})` : ''}`
                   : `Academic Partner: ${centerName || 'Direct'}${hasStudentItems ? ` (${itemCount} students)` : ''}`;
                 return (
-                  <div key={inv.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
+                  <div key={inv.id} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <FileText className="w-5 h-5 text-primary" />
+                      <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center shrink-0">
+                        <FileText className="w-5 h-5" />
                       </div>
                       <div>
-                        <div className="font-medium">{inv.invoiceNo}</div>
+                        <div className="font-semibold text-slate-900">{inv.invoiceNo}</div>
                         <div className="text-sm text-muted-foreground">
                           {billingDisplay} • Total: {CS()}{Number(inv.total || 0).toLocaleString(numLocale())}
                           {inv.dueDate && ` • Due: ${new Date(inv.dueDate).toLocaleDateString()}`}
@@ -1319,70 +1325,43 @@ export function InvoicesPanel() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="gap-1.5 h-8 text-xs font-semibold text-blue-600 border-blue-200 hover:bg-blue-50 hover:text-blue-700 dark:border-blue-800 dark:hover:bg-blue-950/40"
+                        className="gap-1.5 h-9 rounded-full px-4 text-xs font-semibold text-[#256c1d] border-[#cfe9c9] bg-white hover:bg-[#eaf6e6]"
                         onClick={() => openProforma(inv)}
                         title="Download / View Proforma Invoice"
                       >
-                        <FileText className="w-3.5 h-3.5 text-blue-600" />
+                        <FileText className="w-3.5 h-3.5" />
                         Proforma Invoice
                       </Button>
-                      <Badge>{inv.status}</Badge>
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(inv)}><Edit className="w-4 h-4" /></Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(inv.id)}><Trash2 className="w-4 h-4" /></Button>
+                      <span className={cn('rounded-full px-3 py-1 text-[11px] font-semibold capitalize', inv.status === 'paid' ? 'bg-[#dff3da] text-[#256c1d]' : inv.status === 'draft' ? 'bg-slate-200/70 text-slate-600' : inv.status === 'overdue' || inv.status === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700')}>{inv.status}</span>
+                      <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(inv)}><Edit className="w-4 h-4" /></Button>
+                      <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(inv.id)}><Trash2 className="w-4 h-4" /></Button>
                     </div>
                   </div>
                 );
               })}
               
-              {/* Pagination Controls */}
-              {(() => {
-                const validInvoices = invoices.filter(inv => inv?.id);
-                const totalPages = Math.max(1, Math.ceil(validInvoices.length / itemsPerPage));
-                if (totalPages <= 1) return null;
-                return (
-                  <div className="flex items-center justify-between p-4 border-t mt-4 rounded-md bg-slate-50 dark:bg-slate-900/20">
-                    <div className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, validInvoices.length)} of {validInvoices.length} invoices
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                      >
-                        Previous
-                      </Button>
-                      <div className="text-sm font-medium px-2">
-                        Page {currentPage} of {totalPages}
-                      </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        disabled={currentPage === totalPages}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })()}
+              <ListPagination
+                total={validInvoices.length}
+                page={currentPage}
+                pageSize={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(n) => { setItemsPerPage(n); setCurrentPage(1); }}
+              />
                   </>
                 );
               })()}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Proforma Invoice Dialog */}
       <Dialog open={proformaOpen} onOpenChange={setProformaOpen}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
             <div className="flex items-center justify-between pr-8">
-              <DialogTitle>Proforma Invoice</DialogTitle>
-              <Button size="sm" onClick={handleDownloadPdf} className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white">
+              <DialogTitle className="text-xl font-semibold tracking-tight">Proforma Invoice</DialogTitle>
+              <Button size="sm" onClick={handleDownloadPdf} className="gap-1.5 h-10 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                 <Download className="w-3.5 h-3.5" /> Download PDF
               </Button>
             </div>

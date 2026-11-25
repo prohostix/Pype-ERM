@@ -3,6 +3,28 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { AuthRequest } from '../middleware/auth.js';
 
+const tally = (items: string[]) => {
+  const m: Record<string, number> = {};
+  items.forEach(i => { m[i] = (m[i] || 0) + 1; });
+  return Object.keys(m).map(k => ({ name: k, value: m[k] })).sort((a, b) => b.value - a.value);
+};
+const titleCase = (v: string) => v.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+const reregState = (s: any): 'pending' | 'completed' | 'notStarted' => {
+  if (s.reregStatus && typeof s.reregStatus === 'object') {
+    const statuses = Object.values(s.reregStatus);
+    if (statuses.includes('pending')) return 'pending';
+    if (statuses.includes('completed')) return 'completed';
+  }
+  return 'notStarted';
+};
+const monthKey = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+const lastSixMonths = () => {
+  const today = new Date();
+  const keys: string[] = [];
+  for (let i = 5; i >= 0; i--) keys.push(monthKey(new Date(today.getFullYear(), today.getMonth() - i, 1)));
+  return keys;
+};
+
 // ─── Admission Report ────────────────────────────────────────────────────────
 export const getAdmissionReport = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { month, year } = req.query;
@@ -31,7 +53,9 @@ export const getAdmissionReport = asyncHandler(async (req: AuthRequest, res: Res
   const admissions = await prisma.student.findMany({
     where: studentWhere,
     include: {
-      university: { select: { id: true, name: true } }
+      university: { select: { id: true, name: true } },
+      branch: { select: { name: true } },
+      center: { select: { name: true } }
     }
   });
 
@@ -75,12 +99,31 @@ export const getAdmissionReport = asyncHandler(async (req: AuthRequest, res: Res
 
   const trendData = Object.keys(trends).map(k => ({ name: k, count: trends[k] }));
 
+  const thisKey = monthKey(today);
+  const lastKey = monthKey(new Date(today.getFullYear(), today.getMonth() - 1, 1));
+  const thisMonth = trends[thisKey] ?? 0;
+  const lastMonth = trends[lastKey] ?? 0;
+  const statusOf = (s: any) => (s.isPrevious ? 'completed' : (s.status || 'pending'));
+
   res.json({
     success: true,
     totalAdmissions: admissions.length,
     byUniversity: Object.keys(byUniversity).map(k => ({ name: k, value: byUniversity[k] })),
     byProgram: Object.keys(byProgram).map(k => ({ name: k, value: byProgram[k] })),
-    trends: trendData
+    trends: trendData,
+    summary: {
+      thisMonth,
+      lastMonth,
+      changePct: lastMonth > 0 ? Math.round(((thisMonth - lastMonth) / lastMonth) * 100) : null,
+      admitted: admissions.filter(s => statusOf(s) === 'admitted').length,
+      pending: admissions.filter(s => statusOf(s) === 'pending').length,
+      cancelled: admissions.filter(s => statusOf(s) === 'cancelled').length,
+      completed: admissions.filter(s => statusOf(s) === 'completed').length
+    },
+    byStatus: tally(admissions.map(s => titleCase(statusOf(s)))),
+    byBranch: tally(admissions.map(s => (s as any).branch?.name || 'Main Office')),
+    byCenter: tally(admissions.map(s => (s as any).center?.name || 'Direct')).slice(0, 10),
+    bySource: tally(admissions.map(s => titleCase(((s as any).source || 'Direct') as string)))
   });
 });
 
@@ -102,8 +145,19 @@ export const getEnrollmentReport = asyncHandler(async (req: AuthRequest, res: Re
 
   const enrollments = await prisma.enrollment.findMany({
     where: enrollmentWhere,
-    select: { status: true, id: true }
+    select: {
+      status: true, id: true, programId: true, studyCenterId: true, source: true, createdAt: true, enrolledAt: true,
+      isProvisional: true, isUpgrade: true
+    }
   });
+  const progIds = Array.from(new Set(enrollments.map(e => e.programId).filter(Boolean))) as string[];
+  const centerIds = Array.from(new Set(enrollments.map(e => e.studyCenterId).filter(Boolean))) as string[];
+  const [progRows, centerRows] = await Promise.all([
+    prisma.program.findMany({ where: { id: { in: progIds } }, select: { id: true, name: true } }),
+    prisma.studyCenter.findMany({ where: { id: { in: centerIds } }, select: { id: true, name: true } })
+  ]);
+  const progName: Record<string, string> = Object.fromEntries(progRows.map(p => [p.id, p.name]));
+  const centerName: Record<string, string> = Object.fromEntries(centerRows.map(c => [c.id, c.name]));
 
   const statusCounts: Record<string, number> = {
     'payment_pending': 0,
@@ -129,11 +183,35 @@ export const getEnrollmentReport = asyncHandler(async (req: AuthRequest, res: Re
     { name: 'Approved', value: statusCounts['approved'] }
   ];
 
+  const months = lastSixMonths();
+  const monthly: Record<string, number> = Object.fromEntries(months.map(m => [m, 0]));
+  enrollments.forEach(e => {
+    const k = monthKey(new Date(e.createdAt));
+    if (monthly[k] !== undefined) monthly[k]++;
+  });
+  const approvedRows = enrollments.filter(e => e.status === 'approved' && e.enrolledAt);
+  const avgDays = approvedRows.length
+    ? Math.round((approvedRows.reduce((sum, e) => sum + (new Date(e.enrolledAt as Date).getTime() - new Date(e.createdAt).getTime()), 0) / approvedRows.length / 86400000) * 10) / 10
+    : null;
+
   res.json({
     success: true,
     total: enrollments.length,
     statusCounts: Object.keys(statusCounts).map(k => ({ name: k, value: statusCounts[k] })),
-    funnel
+    funnel,
+    summary: {
+      approved: statusCounts['approved'] || 0,
+      rejected: statusCounts['rejected'] || 0,
+      inReview: enrollments.length - (statusCounts['approved'] || 0) - (statusCounts['rejected'] || 0),
+      approvalRate: enrollments.length ? Math.round(((statusCounts['approved'] || 0) / enrollments.length) * 100) : 0,
+      provisional: enrollments.filter(e => e.isProvisional).length,
+      upgrades: enrollments.filter(e => e.isUpgrade).length,
+      avgDaysToApprove: avgDays
+    },
+    trends: months.map(m => ({ name: m, count: monthly[m] })),
+    byProgram: tally(enrollments.map(e => progName[e.programId] || 'Unknown Program')).slice(0, 10),
+    byCenter: tally(enrollments.map(e => (e.studyCenterId ? centerName[e.studyCenterId] : '') || 'Direct')).slice(0, 10),
+    bySource: tally(enrollments.map(e => titleCase((e.source || 'Direct') as string)))
   });
 });
 
@@ -159,9 +237,10 @@ export const getUniversityReport = asyncHandler(async (req: AuthRequest, res: Re
     include: {
       students: { 
         where: studentsWhere,
-        select: { id: true } 
+        select: { id: true, status: true, isPrevious: true } 
       },
-      programs: { select: { id: true } }
+      programs: { select: { id: true } },
+      admissionSessions: { select: { id: true, status: true } }
     }
   });
 
@@ -171,13 +250,28 @@ export const getUniversityReport = asyncHandler(async (req: AuthRequest, res: Re
     code: u.code,
     totalStudents: u.students.length,
     totalPrograms: u.programs.length,
-    status: u.status
+    status: u.status,
+    country: (u as any).country || null,
+    admitted: u.students.filter(s => s.status === 'admitted' && !s.isPrevious).length,
+    pending: u.students.filter(s => s.status === 'pending' && !s.isPrevious).length,
+    completed: u.students.filter(s => s.isPrevious).length,
+    totalSessions: u.admissionSessions.length,
+    openSessions: u.admissionSessions.filter(x => x.status === 'open' || x.status === 'active').length
   }));
+
+  const totalStudents = universityData.reduce((n, u) => n + u.totalStudents, 0);
 
   res.json({
     success: true,
     totalUniversities: universities.length,
-    data: universityData
+    data: universityData,
+    summary: {
+      active: universities.filter(u => u.status === 'active').length,
+      totalStudents,
+      totalPrograms: universityData.reduce((n, u) => n + u.totalPrograms, 0),
+      avgStudents: universities.length ? Math.round(totalStudents / universities.length) : 0,
+      withoutStudents: universityData.filter(u => u.totalStudents === 0).length
+    }
   });
 });
 
@@ -201,8 +295,25 @@ export const getReRegistrationReport = asyncHandler(async (req: AuthRequest, res
 
   const students = await prisma.student.findMany({
     where: studentWhere,
-    select: { id: true, reregStatus: true }
+    select: { id: true, reregStatus: true, programId: true, branchId: true, status: true }
   });
+  const rrProgIds = Array.from(new Set(students.map(s => s.programId).filter(Boolean))) as string[];
+  const rrBranchIds = Array.from(new Set(students.map(s => s.branchId).filter(Boolean))) as string[];
+  const [rrProgs, rrBranches] = await Promise.all([
+    prisma.program.findMany({ where: { id: { in: rrProgIds } }, select: { id: true, name: true } }),
+    prisma.branch.findMany({ where: { id: { in: rrBranchIds } }, select: { id: true, name: true } })
+  ]);
+  const rrProgName: Record<string, string> = Object.fromEntries(rrProgs.map(p => [p.id, p.name]));
+  const rrBranchName: Record<string, string> = Object.fromEntries(rrBranches.map(b => [b.id, b.name]));
+  const groupBy = (keyOf: (s: any) => string) => {
+    const g: Record<string, { name: string; pending: number; completed: number; notStarted: number }> = {};
+    students.forEach(s => {
+      const k = keyOf(s);
+      if (!g[k]) g[k] = { name: k, pending: 0, completed: 0, notStarted: 0 };
+      g[k][reregState(s)]++;
+    });
+    return Object.values(g).sort((a, b) => (b.pending + b.completed + b.notStarted) - (a.pending + a.completed + a.notStarted));
+  };
 
   let pending = 0;
   let completed = 0;
@@ -231,6 +342,14 @@ export const getReRegistrationReport = asyncHandler(async (req: AuthRequest, res
       { name: 'Pending', value: pending },
       { name: 'Completed', value: completed },
       { name: 'Not Started', value: notStarted }
-    ]
+    ],
+    summary: {
+      pending,
+      completed,
+      notStarted,
+      completionRate: students.length ? Math.round((completed / students.length) * 100) : 0
+    },
+    byProgram: groupBy(s => rrProgName[s.programId] || 'Unknown Program').slice(0, 10),
+    byBranch: groupBy(s => (s.branchId ? rrBranchName[s.branchId] : '') || 'Main Office').slice(0, 10)
   });
 });

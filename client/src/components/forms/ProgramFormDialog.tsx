@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Plus, Trash2, Layers } from 'lucide-react';
+import { Plus, Trash2, Layers, GraduationCap, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -10,13 +10,13 @@ import { toast } from 'sonner';
 
 type CourseType = 'SkillCourse' | 'OnlineDegree' | 'BVocDegree' | 'CreditTransfer' | 'Yearly' | 'OneSitting';
 
-const COURSE_TYPES: { value: CourseType; label: string; color: string; bg: string }[] = [
-  { value: 'SkillCourse',     label: 'Skill Course',     color: '#7c3aed', bg: '#f5f3ff' },
-  { value: 'OnlineDegree',    label: 'Online Degree',    color: '#2563eb', bg: '#eff6ff' },
-  { value: 'BVocDegree',      label: 'B.Voc Degree',     color: '#0891b2', bg: '#ecfeff' },
-  { value: 'CreditTransfer',  label: 'Credit Transfer',  color: '#16a34a', bg: '#f0fdf4' },
-  { value: 'Yearly',          label: 'Yearly',           color: '#d97706', bg: '#fffbeb' },
-  { value: 'OneSitting',      label: 'One Sitting',      color: '#e11d48', bg: '#fff1f2' },
+const COURSE_TYPES: { value: CourseType; label: string }[] = [
+  { value: 'SkillCourse',     label: 'Skill Course' },
+  { value: 'OnlineDegree',    label: 'Online Degree' },
+  { value: 'BVocDegree',      label: 'B.Voc Degree' },
+  { value: 'CreditTransfer',  label: 'Credit Transfer' },
+  { value: 'Yearly',          label: 'Yearly' },
+  { value: 'OneSitting',      label: 'One Sitting' },
 ];
 
 const DURATION_OPTIONS = [
@@ -220,255 +220,268 @@ export function ProgramFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={(val) => { onOpenChange(val); if (!val) resetForm(); }}>
-      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{editingProgram ? 'Edit Program' : 'Add New Program'}</DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-5 py-1">
-          {/* Basic info */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <Label>Program Name *</Label>
-              <Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
-            </div>
-            <div className="space-y-1">
-              <Label>Program Code *</Label>
-              <Input value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value }))} required />
-            </div>
+      <DialogContent className="w-[96vw] sm:max-w-2xl p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] flex flex-col" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+        <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-5 shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+            {editingProgram ? <Edit className="w-5 h-5" /> : <GraduationCap className="w-5 h-5" />}
           </div>
+          <DialogHeader className="space-y-1 text-left">
+            <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground text-left">{editingProgram ? 'Edit Program' : 'Add New Program'}</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground text-left">Set the program details, fees and structure.</DialogDescription>
+          </DialogHeader>
+        </div>
 
-          <div className="space-y-1">
-            <Label>University *</Label>
-            <Select value={form.universityId} onValueChange={v => setForm(f => ({ ...f, universityId: v }))}>
-              <SelectTrigger><SelectValue placeholder="Select university" /></SelectTrigger>
-              <SelectContent>
-                {universities.map(u => (
-                  <SelectItem key={u.id || u.id} value={(u.id || u.id).toString()}>{u.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-1">
-            <Label>Sub-Department <span className="text-muted-foreground text-xs">(optional)</span></Label>
-            <Select value={form.subDepartmentId || 'none'} onValueChange={v => setForm(f => ({ ...f, subDepartmentId: v === 'none' ? '' : v }))}>
-              <SelectTrigger><SelectValue placeholder="Select sub-department" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                {subDepartments.map(sd => (
-                  <SelectItem key={sd.id} value={sd.id}>{sd.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Specialisations */}
-          <div className="space-y-2">
-            <Label>Specialisations <span className="text-muted-foreground text-xs">(optional — add multiple)</span></Label>
-            <div className="flex gap-2">
-              <Input
-                value={specInput}
-                onChange={e => setSpecInput(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') { e.preventDefault(); addSpecialisation(specInput); }
-                  if (e.key === ',') { e.preventDefault(); addSpecialisation(specInput); }
-                }}
-                placeholder="e.g. Computer Science, then press Enter"
-                className="flex-1"
-              />
-              <button type="button"
-                onClick={() => addSpecialisation(specInput)}
-                className="shrink-0 px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 text-sm font-medium hover:bg-indigo-100 border border-indigo-200">
-                Add
-              </button>
-            </div>
-            {form.specialisations.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-1">
-                {form.specialisations.map(s => (
-                  <span key={s} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-violet-100 text-violet-800">
-                    {s}
-                    <button type="button" onClick={() => removeSpecialisation(s)} className="text-violet-500 hover:text-violet-800 ml-0.5">&times;</button>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Fees */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t pt-4">
-            <div className="space-y-1">
-              <Label>Registration Fee</Label>
-              <Input type="number" min="0" value={form.registrationFee} onChange={e => setForm(f => ({ ...f, registrationFee: parseFloat(e.target.value) || 0 }))} />
-            </div>
-            <div className="space-y-1">
-              <Label>Tuition Fee</Label>
-              <Input type="number" min="0" value={form.tuitionFee} onChange={e => setForm(f => ({ ...f, tuitionFee: parseFloat(e.target.value) || 0 }))} />
-            </div>
-          </div>
-
-          {/* Syllabus */}
-          <div className="space-y-1 border-t pt-4">
-            <Label>Syllabus</Label>
-            <textarea
-              className="flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-              placeholder="Enter program syllabus..."
-              value={form.syllabus}
-              onChange={e => setForm(f => ({ ...f, syllabus: e.target.value }))}
-            />
-          </div>
-
-          {/* Course Type */}
-          <div className="space-y-2">
-            <Label>Course Type *</Label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {COURSE_TYPES.map(ct => (
-                <button key={ct.value} type="button"
-                  onClick={() => setForm(f => ({ ...f, courseType: ct.value }))}
-                  className={`rounded-lg border-2 px-3 py-2.5 text-left transition-all ${
-                    form.courseType === ct.value
-                      ? 'border-current'
-                      : 'border-slate-200 hover:border-slate-300'}`}
-                  style={form.courseType === ct.value
-                    ? { borderColor: ct.color, background: ct.bg }
-                    : {}}>
-                  <p className="text-xs font-semibold" style={{ color: form.courseType === ct.value ? ct.color : '#374151' }}>
-                    {ct.label}
-                  </p>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Credit Transfer Installments */}
-          {form.courseType === 'CreditTransfer' && (
-            <div className="space-y-4 border-t pt-4">
-              <div className="space-y-2">
-                <Label>Fee Structure Type</Label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button type="button" onClick={() => setForm(f => ({ ...f, billingCycle: 'one_time' }))} className={`rounded-lg border-2 px-3 py-2 text-sm font-medium transition-all ${form.billingCycle === 'one_time' ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-slate-200 text-slate-600 hover:border-slate-300'}`}>One-Time Payment</button>
-                  <button type="button" onClick={() => setForm(f => ({ ...f, billingCycle: 'installment' }))} className={`rounded-lg border-2 px-3 py-2 text-sm font-medium transition-all ${form.billingCycle === 'installment' ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-slate-200 text-slate-600 hover:border-slate-300'}`}>Installments</button>
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+          <div className="flex-1 overflow-y-auto px-6 sm:px-8 pb-4 space-y-8">
+            {/* Basics */}
+            <section className="space-y-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Basics</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Program name <span className="text-rose-500">*</span></Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Program code <span className="text-rose-500">*</span></Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 font-mono" value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value }))} required />
                 </div>
               </div>
-              
-              {form.billingCycle === 'installment' && (
-                <div className="space-y-3 rounded-xl border border-slate-200 p-4 bg-slate-50">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-slate-700">Installments Configuration</Label>
-                    <Button type="button" variant="outline" size="sm" onClick={addInstallment} className="h-8 gap-1"><Plus className="h-3.5 w-3.5" /> Add Installment</Button>
-                  </div>
-                  
-                  {installments.length === 0 ? (
-                    <p className="text-xs text-muted-foreground">No installments added yet.</p>
-                  ) : (
-                    <div className="space-y-2">
-                      {installments.map((inst, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
-                          <Input value={inst.name} onChange={e => updateInstallment(idx, 'name', e.target.value)} placeholder="Installment Name" className="flex-1" />
-                          <Input type="number" value={inst.amount} onChange={e => updateInstallment(idx, 'amount', parseFloat(e.target.value) || 0)} placeholder="Amount" className="w-24 sm:w-32" />
-                          <Input type="date" value={inst.dueDate} onChange={e => updateInstallment(idx, 'dueDate', e.target.value)} className="w-32 sm:w-40" />
-                          <Button type="button" variant="ghost" size="icon" onClick={() => removeInstallment(idx)} className="h-9 w-9 text-rose-500 hover:text-rose-600 hover:bg-rose-50 shrink-0"><Trash2 className="h-4 w-4" /></Button>
-                        </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">University <span className="text-rose-500">*</span></Label>
+                  <Select value={form.universityId} onValueChange={v => setForm(f => ({ ...f, universityId: v }))}>
+                    <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue placeholder="Select university" /></SelectTrigger>
+                    <SelectContent className="rounded-2xl">
+                      {universities.map(u => (
+                        <SelectItem key={u.id} value={u.id.toString()}>{u.name}</SelectItem>
                       ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Sub-department <span className="font-normal text-muted-foreground">(optional)</span></Label>
+                  <Select value={form.subDepartmentId || 'none'} onValueChange={v => setForm(f => ({ ...f, subDepartmentId: v === 'none' ? '' : v }))}>
+                    <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue placeholder="Select sub-department" /></SelectTrigger>
+                    <SelectContent className="rounded-2xl">
+                      <SelectItem value="none">None</SelectItem>
+                      {subDepartments.map(sd => (
+                        <SelectItem key={sd.id} value={sd.id}>{sd.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Specialisations <span className="font-normal text-muted-foreground">(optional, add several)</span></Label>
+                <div className="flex gap-2">
+                  <Input
+                    value={specInput}
+                    onChange={e => setSpecInput(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') { e.preventDefault(); addSpecialisation(specInput); }
+                      if (e.key === ',') { e.preventDefault(); addSpecialisation(specInput); }
+                    }}
+                    placeholder="e.g. Computer Science, then press Enter"
+                    className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 flex-1"
+                  />
+                  <button type="button"
+                    onClick={() => addSpecialisation(specInput)}
+                    className="shrink-0 px-5 h-11 rounded-full bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-[#eaf6e6] hover:text-[#256c1d] transition-colors">
+                    Add
+                  </button>
+                </div>
+                {form.specialisations.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {form.specialisations.map(s => (
+                      <span key={s} className="inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1 rounded-full text-xs font-medium bg-[#eaf6e6] text-[#1f6a17]">
+                        {s}
+                        <button type="button" onClick={() => removeSpecialisation(s)} className="w-5 h-5 rounded-full hover:bg-white flex items-center justify-center text-[#256c1d]">&times;</button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Course structure */}
+            <section className="space-y-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Course structure</h3>
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Course type <span className="text-rose-500">*</span></Label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  {COURSE_TYPES.map(ct => {
+                    const on = form.courseType === ct.value;
+                    return (
+                      <button key={ct.value} type="button" aria-pressed={on}
+                        onClick={() => setForm(f => ({ ...f, courseType: ct.value }))}
+                        className={`rounded-2xl px-4 py-3 text-left text-sm font-semibold border transition-colors ${on ? 'bg-[#eaf6e6] border-[#54b947]/50 text-[#1f6a17]' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]'}`}>
+                        {ct.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-sm font-semibold">Duration <span className="text-rose-500">*</span></Label>
+                <Select value={String(form.duration)} onValueChange={v => handleDurationChange(Number(v))}>
+                  <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue /></SelectTrigger>
+                  <SelectContent className="rounded-2xl">
+                    {DURATION_OPTIONS.map(d => (
+                      <SelectItem key={d.value} value={String(d.value)}>{d.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Semesters toggle */}
+              <div className="rounded-3xl bg-[#f4f6f3] p-5 space-y-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="w-10 h-10 rounded-full bg-white flex items-center justify-center"><Layers className="h-4 w-4 text-[#256c1d]" /></span>
+                    <div>
+                      <p className="text-sm font-semibold">Semester structure</p>
+                      <p className="text-xs text-muted-foreground">Optional, divide the program into semesters</p>
+                    </div>
+                  </div>
+                  <button type="button" aria-pressed={form.hasSemesters}
+                    onClick={() => handleToggleSemesters(!form.hasSemesters)}
+                    className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${form.hasSemesters ? 'bg-[#54b947]' : 'bg-slate-300'}`}>
+                    <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.hasSemesters ? 'translate-x-5' : ''}`} />
+                  </button>
+                </div>
+
+                {form.hasSemesters && (
+                  <div className="space-y-2">
+                    {semesters.map((s, idx) => (
+                      <div key={idx} className="flex items-center gap-2 bg-white rounded-2xl px-3 py-2">
+                        <span className="text-xs font-semibold text-slate-500 w-6 shrink-0 text-center">{s.number}</span>
+                        <Input
+                          className="h-9 rounded-full bg-[#f4f6f3] border-transparent text-xs px-3 flex-1"
+                          value={s.name}
+                          onChange={e => updateSemester(idx, 'name', e.target.value)}
+                          placeholder="Semester name" />
+                        <Select value={String(s.durationMonths)}
+                          onValueChange={v => updateSemester(idx, 'durationMonths', Number(v))}>
+                          <SelectTrigger className="h-9 rounded-full bg-[#f4f6f3] border-transparent text-xs px-3 w-28 shrink-0">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="rounded-2xl">
+                            {[3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(m => (
+                              <SelectItem key={m} value={String(m)}>{m} mo</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <button type="button" onClick={() => removeSemester(idx)}
+                          className="w-8 h-8 rounded-full text-rose-400 hover:text-rose-600 hover:bg-rose-50 shrink-0 flex items-center justify-center">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={addSemester}
+                      className="w-full text-xs font-semibold text-[#256c1d] hover:bg-[#eaf6e6] border border-dashed border-[#54b947]/50 rounded-full py-2.5 flex items-center justify-center gap-1 transition-colors">
+                      <Plus className="h-3.5 w-3.5" /> Add semester
+                    </button>
+                    {semesters.length > 0 && (
+                      <p className="text-xs text-muted-foreground text-right">
+                        Total: {semesters.reduce((a, s) => a + s.durationMonths, 0)} months
+                        {semesters.reduce((a, s) => a + s.durationMonths, 0) !== form.duration && (
+                          <span className="text-amber-600 ml-1">
+                            (program is {form.duration} months)
+                          </span>
+                        )}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Fees */}
+            <section className="space-y-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Fees</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Registration fee</Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="number" min="0" value={form.registrationFee} onChange={e => setForm(f => ({ ...f, registrationFee: parseFloat(e.target.value) || 0 }))} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Tuition fee</Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="number" min="0" value={form.tuitionFee} onChange={e => setForm(f => ({ ...f, tuitionFee: parseFloat(e.target.value) || 0 }))} />
+                </div>
+              </div>
+
+              {form.courseType === 'CreditTransfer' && (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold">Fee structure type</Label>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {([['one_time', 'One-Time Payment'], ['installment', 'Installments']] as const).map(([val, label]) => (
+                        <button key={val} type="button" aria-pressed={form.billingCycle === val} onClick={() => setForm(f => ({ ...f, billingCycle: val }))}
+                          className={`rounded-full px-4 py-2.5 text-sm font-semibold border transition-colors ${form.billingCycle === val ? 'bg-[#0b1d14] border-[#0b1d14] text-white' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]'}`}>{label}</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {form.billingCycle === 'installment' && (
+                    <div className="space-y-3 rounded-3xl bg-[#f4f6f3] p-5">
+                      <div className="flex items-center justify-between">
+                        <Label className="text-sm font-semibold">Installments</Label>
+                        <Button type="button" variant="outline" size="sm" onClick={addInstallment} className="h-9 px-4 rounded-full bg-white border-slate-200 gap-1 hover:bg-[#eaf6e6]"><Plus className="h-3.5 w-3.5" /> Add installment</Button>
+                      </div>
+
+                      {installments.length === 0 ? (
+                        <p className="text-xs text-muted-foreground">No installments added yet.</p>
+                      ) : (
+                        <div className="space-y-2">
+                          {installments.map((inst, idx) => (
+                            <div key={idx} className="flex flex-wrap sm:flex-nowrap items-center gap-2 bg-white rounded-2xl px-3 py-2">
+                              <Input value={inst.name} onChange={e => updateInstallment(idx, 'name', e.target.value)} placeholder="Installment name" className="h-9 rounded-full bg-[#f4f6f3] border-transparent text-xs px-3 flex-1 min-w-[140px]" />
+                              <Input type="number" value={inst.amount} onChange={e => updateInstallment(idx, 'amount', parseFloat(e.target.value) || 0)} placeholder="Amount" className="h-9 rounded-full bg-[#f4f6f3] border-transparent text-xs px-3 w-24 sm:w-32" />
+                              <Input type="date" value={inst.dueDate} onChange={e => updateInstallment(idx, 'dueDate', e.target.value)} className="h-9 rounded-full bg-[#f4f6f3] border-transparent text-xs px-3 w-36 sm:w-40" />
+                              <Button type="button" variant="ghost" size="icon" onClick={() => removeInstallment(idx)} className="h-8 w-8 rounded-full text-rose-500 hover:text-rose-600 hover:bg-rose-50 shrink-0"><Trash2 className="h-3.5 w-3.5" /></Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
               )}
-            </div>
-          )}
+            </section>
 
-          {/* Duration */}
-          <div className="space-y-1">
-            <Label>Duration *</Label>
-            <Select value={String(form.duration)} onValueChange={v => handleDurationChange(Number(v))}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {DURATION_OPTIONS.map(d => (
-                  <SelectItem key={d.value} value={String(d.value)}>{d.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Semesters toggle */}
-          <div className="rounded-xl border-2 border-dashed border-slate-200 p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Layers className="h-4 w-4 text-slate-500" />
-                <div>
-                  <p className="text-sm font-semibold">Semester Structure</p>
-                  <p className="text-xs text-muted-foreground">Optional — divide the program into semesters</p>
+            {/* Syllabus + status */}
+            <section className="space-y-4 pb-2">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">More</h3>
+              <div className="space-y-1.5">
+                <Label className="text-sm font-semibold">Syllabus</Label>
+                <textarea
+                  className="flex min-h-[120px] w-full rounded-2xl bg-[#f4f6f3] border border-transparent px-4 py-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:bg-white focus-visible:border-[#54b947] focus-visible:ring-4 focus-visible:ring-[#54b947]/20 resize-none"
+                  placeholder="Enter program syllabus..."
+                  value={form.syllabus}
+                  onChange={e => setForm(f => ({ ...f, syllabus: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Status</Label>
+                <div className="flex gap-2.5">
+                  {([['active', 'Active'], ['inactive', 'Inactive']] as const).map(([val, label]) => (
+                    <button key={val} type="button" aria-pressed={form.status === val} onClick={() => setForm(f => ({ ...f, status: val }))}
+                      className={`px-6 py-2.5 rounded-full text-sm font-semibold border transition-colors ${form.status === val ? 'bg-[#0b1d14] border-[#0b1d14] text-white' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]'}`}>{label}</button>
+                  ))}
                 </div>
               </div>
-              <button type="button"
-                onClick={() => handleToggleSemesters(!form.hasSemesters)}
-                className={`relative w-11 h-6 rounded-full transition-colors ${form.hasSemesters ? 'bg-indigo-600' : 'bg-slate-200'}`}>
-                <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.hasSemesters ? 'translate-x-5' : ''}`} />
-              </button>
-            </div>
-
-            {form.hasSemesters && (
-              <div className="space-y-2">
-                {semesters.map((s, idx) => (
-                  <div key={idx} className="flex items-center gap-2 bg-white border rounded-lg px-3 py-2">
-                    <span className="text-xs font-semibold text-slate-500 w-6 shrink-0">{s.number}</span>
-                    <Input
-                      className="h-7 text-xs flex-1"
-                      value={s.name}
-                      onChange={e => updateSemester(idx, 'name', e.target.value)}
-                      placeholder="Semester name" />
-                    <Select value={String(s.durationMonths)}
-                      onValueChange={v => updateSemester(idx, 'durationMonths', Number(v))}>
-                      <SelectTrigger className="h-7 text-xs w-28 shrink-0">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {[3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(m => (
-                          <SelectItem key={m} value={String(m)}>{m} mo</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <button type="button" onClick={() => removeSemester(idx)}
-                      className="text-red-400 hover:text-red-600 shrink-0">
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                ))}
-                <button type="button" onClick={addSemester}
-                  className="w-full text-xs text-indigo-600 hover:text-indigo-800 border border-dashed border-indigo-300 rounded-lg py-1.5 flex items-center justify-center gap-1">
-                  <Plus className="h-3 w-3" /> Add Semester
-                </button>
-                {semesters.length > 0 && (
-                  <p className="text-xs text-muted-foreground text-right">
-                    Total: {semesters.reduce((a, s) => a + s.durationMonths, 0)} months
-                    {semesters.reduce((a, s) => a + s.durationMonths, 0) !== form.duration && (
-                      <span className="text-amber-600 ml-1">
-                        (program is {form.duration} months)
-                      </span>
-                    )}
-                  </p>
-                )}
-              </div>
-            )}
+            </section>
           </div>
 
-          {/* Status */}
-          <div className="space-y-1">
-            <Label>Status</Label>
-            <Select value={form.status} onValueChange={v => setForm(f => ({ ...f, status: v }))}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex gap-2 pt-1">
-            <Button type="submit" className="flex-1">
+          <DialogFooter className="px-6 sm:px-8 py-5 border-t border-slate-100 gap-2 sm:gap-2 shrink-0 flex-col-reverse sm:flex-row">
+            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">Cancel</Button>
+            <Button type="submit" className="h-11 rounded-full px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold">
               {editingProgram ? 'Save Changes' : 'Create Program'}
             </Button>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          </div>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

@@ -85,12 +85,12 @@ export function UniversitySessionsDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-3xl max-h-[85vh] flex flex-col p-0 overflow-hidden">
+        <DialogContent className="w-[96vw] sm:max-w-3xl max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           {/* Header */}
-          <DialogHeader className="px-6 py-4 border-b bg-slate-50/70 dark:bg-slate-900/50 flex-shrink-0">
+          <DialogHeader className="px-6 sm:px-8 pt-7 pb-4 flex-shrink-0 space-y-4 text-left">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 border flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] flex items-center justify-center shrink-0 overflow-hidden">
                   {university.logo ? (
                     <img
                       src={api.getFileUrl(university.logo)}
@@ -98,19 +98,19 @@ export function UniversitySessionsDialog({
                       className="w-full h-full object-contain bg-white"
                     />
                   ) : (
-                    <Building2 className="w-5 h-5 text-primary" />
+                    <Building2 className="w-5 h-5 text-[#256c1d]" />
                   )}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <DialogTitle className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                    <DialogTitle className="text-2xl font-semibold tracking-tight text-left">
                       {university.name}
                     </DialogTitle>
-                    <Badge variant="outline" className="text-xs font-mono">
+                    <Badge variant="outline" className="text-[11px] font-mono rounded-full bg-[#f1f3ef] border-transparent text-slate-600">
                       {university.code}
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">
+                  <p className="text-sm text-muted-foreground mt-0.5">
                     Admission Sessions created against this university
                   </p>
                 </div>
@@ -118,9 +118,8 @@ export function UniversitySessionsDialog({
 
               {isOrgAdmin && (
                 <Button
-                  size="sm"
                   onClick={handleOpenCreate}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-sm shrink-0"
+                  className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold gap-1.5 shadow-none shrink-0"
                 >
                   <Plus className="w-4 h-4" />
                   Create Session
@@ -129,29 +128,29 @@ export function UniversitySessionsDialog({
             </div>
 
             {/* Search Input */}
-            <div className="pt-3">
+            <div>
               <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 w-4 h-4 text-muted-foreground" />
+                <Search className="absolute left-4 top-3.5 w-4 h-4 text-muted-foreground" />
                 <Input
                   placeholder="Search session by name or program..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-8 h-9 text-xs bg-white dark:bg-slate-950"
+                  className="pl-11 h-11 text-sm rounded-full bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
                 />
               </div>
             </div>
           </DialogHeader>
 
           {/* Sessions List */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-3">
+          <div className="flex-1 overflow-y-auto px-6 sm:px-8 py-5 space-y-3 border-t border-slate-100">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-16 text-muted-foreground space-y-2">
-                <Clock className="w-6 h-6 animate-spin text-primary" />
+                <Clock className="w-6 h-6 animate-spin text-[#256c1d]" />
                 <p className="text-sm">Loading sessions...</p>
               </div>
             ) : filteredSessions.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed rounded-xl bg-slate-50/50 dark:bg-slate-900/30">
-                <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 flex items-center justify-center mb-3">
+              <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-slate-300 rounded-3xl bg-white">
+                <div className="w-14 h-14 rounded-full bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mb-3">
                   <Calendar className="w-6 h-6" />
                 </div>
                 <h3 className="font-semibold text-base text-slate-800 dark:text-slate-200">
@@ -164,9 +163,8 @@ export function UniversitySessionsDialog({
                 </p>
                 {isOrgAdmin && !searchQuery && (
                   <Button
-                    size="sm"
                     onClick={handleOpenCreate}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-sm"
+                    className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold gap-1.5 shadow-none"
                   >
                     <Plus className="w-4 h-4" />
                     Create First Session
@@ -174,7 +172,7 @@ export function UniversitySessionsDialog({
                 )}
               </div>
             ) : (
-              <div className="divide-y border rounded-xl overflow-hidden bg-white dark:bg-slate-950">
+              <div className="divide-y divide-slate-100 rounded-3xl overflow-hidden bg-[#f4f6f3]/60">
                 {filteredSessions.map((session: any) => {
                   const startDateStr = session.startDate
                     ? new Date(session.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
@@ -189,32 +187,32 @@ export function UniversitySessionsDialog({
                   return (
                     <div
                       key={session.id}
-                      className="p-4 flex items-center justify-between gap-4 hover:bg-slate-50/80 dark:hover:bg-slate-900/40 transition-colors"
+                      className="px-5 py-4 flex items-center justify-between gap-4 bg-white hover:bg-[#f4f6f3] transition-colors"
                     >
                       <div className="space-y-1.5">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-sm text-slate-900 dark:text-slate-100">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold text-base text-slate-900 dark:text-slate-100">
                             {session.name}
                           </span>
                           <Badge
                             variant="outline"
-                            className={`text-[10px] px-1.5 py-0 h-5 font-medium ${
+                            className={`text-[11px] px-2.5 py-0 h-6 font-semibold rounded-full border-transparent capitalize ${
                               isApproved
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300'
+                                ? 'bg-[#e3f7dd] text-[#1f6a17]'
                                 : isPending
-                                ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300'
-                                : 'bg-slate-50 text-slate-600 border-slate-200'
+                                ? 'bg-amber-50 text-amber-700'
+                                : 'bg-slate-100 text-slate-600'
                             }`}
                           >
                             {session.status || 'Active'}
                           </Badge>
                           {session.program ? (
-                            <Badge variant="secondary" className="text-[10px] gap-1 h-5 px-1.5">
-                              <BookOpen className="w-3 h-3 text-indigo-500" />
+                            <Badge variant="secondary" className="text-[11px] gap-1 h-6 px-2.5 rounded-full bg-[#f1f3ef] text-slate-600 border-0">
+                              <BookOpen className="w-3 h-3 text-[#256c1d]" />
                               {session.program.name} ({session.program.code})
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="text-[10px] text-slate-500 h-5 px-1.5">
+                            <Badge variant="outline" className="text-[11px] text-slate-500 h-6 px-2.5 rounded-full border-slate-200">
                               University-Wide
                             </Badge>
                           )}
@@ -241,20 +239,20 @@ export function UniversitySessionsDialog({
                       </div>
 
                       {isOrgAdmin && (
-                        <div className="flex items-center gap-1 shrink-0">
+                        <div className="flex items-center gap-1.5 shrink-0">
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
-                            className="h-8 w-8 p-0 text-slate-500 hover:text-slate-800"
+                            className="h-9 w-9 p-0 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d]"
                             onClick={() => handleOpenEdit(session)}
                             title="Edit Session"
                           >
                             <Edit className="w-3.5 h-3.5" />
                           </Button>
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
-                            className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
+                            className="h-9 w-9 p-0 rounded-full bg-white border border-slate-200 text-rose-500 hover:text-rose-600 hover:bg-rose-50"
                             onClick={() => handleDeleteSession(session.id, session.name)}
                             title="Delete Session"
                           >

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Calendar as CalendarIcon, Edit } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -130,104 +131,118 @@ export function SessionFormDialog({
     }
   };
 
+  const allSelected = formData.subDepartmentIds.length === departments.length && departments.length > 0;
+
   return (
     <Dialog open={open} onOpenChange={(val) => { onOpenChange(val); if (!val) resetForm(); }}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{editingSession ? 'Edit Session' : 'Add New Session'}</DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label>Session Name</Label>
-            <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+      <DialogContent className="w-[95vw] sm:max-w-xl p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] flex flex-col">
+        <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-5 shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+            {editingSession ? <Edit className="w-5 h-5" /> : <CalendarIcon className="w-5 h-5" />}
           </div>
-          <div>
-            <Label>University (Optional)</Label>
-            <Select value={formData.universityId} onValueChange={v => setFormData({ ...formData, universityId: v === 'none' ? '' : v })}>
-              <SelectTrigger><SelectValue placeholder="Select university" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                {universities.map(u => (
-                  <SelectItem key={u.id || u.id} value={(u.id || u.id).toString()}>{u.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label className="block mb-2 font-medium">Departments (Sub-departments)</Label>
-            <div className="border rounded-lg p-3 space-y-2 max-h-48 overflow-y-auto">
-              <div className="flex items-center gap-2 pb-2 border-b">
-                <input
-                  type="checkbox"
-                  id="select-all-departments"
-                  checked={formData.subDepartmentIds.length === departments.length && departments.length > 0}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setFormData({ ...formData, subDepartmentIds: departments.map(d => d.id) });
-                    } else {
-                      setFormData({ ...formData, subDepartmentIds: [] });
-                    }
-                  }}
-                  className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"
-                />
-                <label htmlFor="select-all-departments" className="text-sm font-semibold cursor-pointer">
-                  Select All Departments
-                </label>
+          <DialogHeader className="space-y-1 text-left">
+            <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground text-left">{editingSession ? 'Edit Session' : 'Add New Session'}</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground text-left">Set the admission window, exam date and the departments it covers.</DialogDescription>
+          </DialogHeader>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+          <div className="flex-1 overflow-y-auto px-6 sm:px-8 pb-4 space-y-6">
+            <section className="space-y-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Basics</h3>
+              <div className="space-y-1.5">
+                <Label className="text-sm font-semibold">Session name</Label>
+                <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. July 2026 Intake" required />
               </div>
-              {departments.map((d) => (
-                <div key={d.id} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={`dept-${d.id}`}
-                    checked={formData.subDepartmentIds.includes(d.id)}
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      const nextIds = checked
-                        ? [...formData.subDepartmentIds, d.id]
-                        : formData.subDepartmentIds.filter(id => id !== d.id);
-                      setFormData({ ...formData, subDepartmentIds: nextIds });
-                    }}
-                    className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"
-                  />
-                  <label htmlFor={`dept-${d.id}`} className="text-sm cursor-pointer">
-                    {d.name} {d.parentDept?.name ? `(${d.parentDept.name})` : ''}
-                  </label>
+              <div className="space-y-1.5">
+                <Label className="text-sm font-semibold">University <span className="font-normal text-muted-foreground">(optional)</span></Label>
+                <Select value={formData.universityId} onValueChange={v => setFormData({ ...formData, universityId: v === 'none' ? '' : v })}>
+                  <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue placeholder="Select university" /></SelectTrigger>
+                  <SelectContent className="rounded-2xl">
+                    <SelectItem value="none">None</SelectItem>
+                    {universities.map(u => (
+                      <SelectItem key={u.id} value={u.id.toString()}>{u.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Dates</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Start date</Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="date" value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} required />
                 </div>
-              ))}
-            </div>
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">End date</Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="date" value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} required />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-sm font-semibold">Exam date <span className="font-normal text-muted-foreground">(optional)</span></Label>
+                <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="date" value={formData.examDate} onChange={(e) => setFormData({ ...formData, examDate: e.target.value })} />
+              </div>
+            </section>
+
+            <section className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Departments</h3>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, subDepartmentIds: allSelected ? [] : departments.map(d => d.id) })}
+                  className="text-xs font-semibold text-[#256c1d] hover:underline"
+                >
+                  {allSelected ? 'Clear all' : 'Select all'}
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
+                {departments.length === 0 && <p className="text-xs text-muted-foreground">No departments available.</p>}
+                {departments.map((d) => {
+                  const on = formData.subDepartmentIds.includes(d.id);
+                  return (
+                    <button
+                      key={d.id}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => setFormData({
+                        ...formData,
+                        subDepartmentIds: on ? formData.subDepartmentIds.filter(id => id !== d.id) : [...formData.subDepartmentIds, d.id],
+                      })}
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors ${on ? 'bg-[#8ae47e] border-[#8ae47e] text-[#0b1d14]' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]'}`}
+                    >
+                      {d.name}{d.parentDept?.name ? ` (${d.parentDept.name})` : ''}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {!isOps && (
+              <section className="space-y-3 pb-2">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Status</h3>
+                <div className="flex flex-wrap gap-2">
+                  {([['pending', 'Pending'], ['approved', 'Approved'], ['active', 'Active'], ['closed', 'Closed']] as const).map(([val, label]) => (
+                    <button
+                      key={val}
+                      type="button"
+                      aria-pressed={formData.status === val}
+                      onClick={() => setFormData({ ...formData, status: val })}
+                      className={`px-4 py-2 rounded-full text-xs font-semibold border transition-colors ${formData.status === val ? 'bg-[#0b1d14] border-[#0b1d14] text-white' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]'}`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <Label>Start Date</Label>
-              <Input type="date" value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} required />
-            </div>
-            <div>
-              <Label>End Date</Label>
-              <Input type="date" value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} required />
-            </div>
-          </div>
-          <div>
-            <Label>Exam Date (optional)</Label>
-            <Input type="date" value={formData.examDate} onChange={(e) => setFormData({ ...formData, examDate: e.target.value })} />
-          </div>
-          {!isOps && (
-            <div>
-              <Label>Status</Label>
-              <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="approved">Approved</SelectItem>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="closed">Closed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-          <div className="flex gap-2">
-            <Button type="submit" className="flex-1">Save</Button>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          </div>
+
+          <DialogFooter className="px-6 sm:px-8 py-5 border-t border-slate-100 gap-2 sm:gap-2 shrink-0 flex-col-reverse sm:flex-row">
+            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">Cancel</Button>
+            <Button type="submit" className="h-11 rounded-full px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold">Save</Button>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

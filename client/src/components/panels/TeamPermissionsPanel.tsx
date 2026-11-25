@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Shield, ShieldAlert, ShieldCheck, Search, Users, AlertCircle } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -285,56 +284,51 @@ export default function TeamPermissionsPanel() {
 
   return (
     <div className="space-y-6">
-      <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-md rounded-2xl overflow-hidden bg-card">
-        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-muted/30 border-b border-border/40 py-5 px-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-primary/10 rounded-xl">
-              <Shield className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <CardTitle className="text-xl font-bold">Team Permissions</CardTitle>
-              <p className="text-xs text-muted-foreground mt-0.5">Manage feature access for your subordinates.</p>
-            </div>
-          </div>
-          <div className="relative w-full sm:w-64">
-            <Search className="w-4 h-4 absolute left-3 top-2.5 text-muted-foreground" />
-            <Input
-              placeholder="Search team members..."
-              className="pl-9 h-9 rounded-full bg-background border-slate-200/60 dark:border-slate-800/60"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
-          </div>
-        </CardHeader>
-        <CardContent className="p-6">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Team Permissions</h2>
+          <p className="text-sm text-muted-foreground mt-1.5">Manage feature access for your subordinates.</p>
+        </div>
+        <div className="relative w-full sm:w-72">
+          <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Input
+            placeholder="Search team members..."
+            className="pl-11 h-11 rounded-full bg-white border-slate-200 focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Team Members</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{filtered.length} total</span>}
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="text-center py-16 text-muted-foreground bg-muted/10 rounded-2xl border border-dashed border-border/60">
-              <div className="flex justify-center mb-4">
-                <Users className="w-8 h-8 opacity-40 animate-pulse" />
-              </div>
-              Loading team...
-            </div>
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-24 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : filtered.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-muted-foreground rounded-2xl border border-dashed border-border/60 bg-muted/10">
-              <div className="p-4 bg-muted/30 rounded-full mb-4">
-                <Users className="w-8 h-8 opacity-40" />
+            <div className="flex flex-col items-center justify-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 bg-[#eaf6e6] text-[#256c1d] rounded-2xl mb-3 flex items-center justify-center">
+                <Users className="w-6 h-6" />
               </div>
               <p className="text-sm font-medium">No team members found.</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {filtered.map(emp => {
                 const isCustom = emp.permissions && emp.permissions.includes('__custom__');
                 return (
-                  <div key={emp.id} className="flex flex-col xl:flex-row xl:items-center justify-between p-6 border border-slate-200/60 dark:border-slate-800/60 rounded-xl hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 hover:bg-muted/20 transition-all duration-300 group bg-card gap-6">
+                  <div key={emp.id} className="group flex flex-col xl:flex-row xl:items-center justify-between gap-4 p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                     <div className="flex items-center gap-5">
-                      <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center font-bold text-xl text-primary flex-shrink-0">
+                      <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center font-semibold text-lg text-[#256c1d] flex-shrink-0">
                         {(emp.name || '?')[0].toUpperCase()}
                       </div>
                       <div className="flex-1">
-                        <div className="font-semibold text-base mb-1">{emp.name || 'Unknown'}</div>
+                        <div className="font-semibold text-base text-slate-900 mb-1">{emp.name || 'Unknown'}</div>
                         <div className="flex items-center flex-wrap gap-2 text-sm text-muted-foreground mb-1">
-                          <span className="px-2.5 py-0.5 bg-secondary text-secondary-foreground rounded-md text-xs capitalize font-medium">
+                          <span className="px-2.5 py-0.5 bg-white text-slate-700 rounded-full text-xs capitalize font-semibold">
                             {emp.role.replace(/_/g, ' ')}
                           </span>
                           <span className="opacity-50">•</span>
@@ -342,30 +336,30 @@ export default function TeamPermissionsPanel() {
                         </div>
                         <div className="mt-3">
                           {isCustom ? (
-                            <div className="flex items-center gap-1.5 text-amber-600 text-xs font-medium bg-amber-50 dark:bg-amber-900/20 px-2.5 py-1 rounded-md w-max border border-amber-200/50 dark:border-amber-900/50">
+                            <div className="flex items-center gap-1.5 text-amber-700 text-xs font-semibold bg-amber-100 px-3 py-1 rounded-full w-max">
                               <ShieldAlert className="w-3.5 h-3.5" /> Customized Access
                             </div>
                           ) : (
-                            <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs font-medium bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md w-max border border-slate-200 dark:border-slate-700">
+                            <div className="flex items-center gap-1.5 text-[#256c1d] text-xs font-semibold bg-[#dff3da] px-3 py-1 rounded-full w-max">
                               <ShieldCheck className="w-3.5 h-3.5" /> Role Default
                             </div>
                           )}
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 flex-wrap xl:justify-end opacity-60 group-hover:opacity-100 transition-opacity mt-4 xl:mt-0 pt-4 xl:pt-0 border-t border-border/50 xl:border-none">
+                    <div className="flex items-center gap-2 flex-wrap xl:justify-end">
                       {['ops_admin', 'ops_sub_admin'].includes(emp.role) && (
-                        <Button variant="outline" size="sm" onClick={() => handleManageSales(emp)} className="rounded-full shadow-sm px-4">
-                          <Users className="w-4 h-4 mr-1.5 text-blue-500" /> Assign Sales Users
+                        <Button variant="outline" size="sm" onClick={() => handleManageSales(emp)} className="h-10 rounded-full px-4 bg-white border-slate-200 hover:bg-[#eaf6e6]">
+                          <Users className="w-4 h-4 mr-1.5 text-[#256c1d]" /> Assign Sales Users
                         </Button>
                       )}
                       {['finance_admin', 'finance_sub_admin'].includes(emp.role) && (
-                        <Button variant="outline" size="sm" onClick={() => handleManageOps(emp)} className="rounded-full shadow-sm px-4">
-                          <Users className="w-4 h-4 mr-1.5 text-purple-500" /> Assign Operations Users
+                        <Button variant="outline" size="sm" onClick={() => handleManageOps(emp)} className="h-10 rounded-full px-4 bg-white border-slate-200 hover:bg-[#eaf6e6]">
+                          <Users className="w-4 h-4 mr-1.5 text-[#256c1d]" /> Assign Operations Users
                         </Button>
                       )}
-                      <Button variant="outline" size="sm" onClick={() => handleManage(emp)} className="rounded-full shadow-sm px-4">
-                        <Shield className="w-4 h-4 mr-1.5 text-primary" /> Manage Access
+                      <Button variant="outline" size="sm" onClick={() => handleManage(emp)} className="h-10 rounded-full px-4 bg-white border-slate-200 hover:bg-[#eaf6e6]">
+                        <Shield className="w-4 h-4 mr-1.5 text-[#256c1d]" /> Manage Access
                       </Button>
                     </div>
                   </div>
@@ -373,18 +367,18 @@ export default function TeamPermissionsPanel() {
               })}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-[450px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
-          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+        <DialogContent className="sm:max-w-[450px] wizard-form border-0 rounded-[2rem] bg-white overflow-hidden p-0 gap-0" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader className="bg-[#f4f6f3] p-6 border-b border-slate-100 m-0 space-y-0">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-primary/10 rounded-xl">
-                <ShieldAlert className="w-5 h-5 text-primary" />
+              <div className="w-11 h-11 bg-white rounded-2xl flex items-center justify-center">
+                <ShieldAlert className="w-5 h-5 text-[#256c1d]" />
               </div>
               <div className="text-left">
-                <DialogTitle className="text-xl font-bold">Edit Permissions</DialogTitle>
+                <DialogTitle className="text-xl font-semibold tracking-tight">Edit Permissions</DialogTitle>
                 <DialogDescription className="text-xs text-muted-foreground mt-0.5">
                   Control what {selectedUser?.name} can see and do.
                 </DialogDescription>
@@ -393,17 +387,17 @@ export default function TeamPermissionsPanel() {
           </DialogHeader>
           
           <div className="p-6">
-            <div className="bg-blue-50/50 dark:bg-blue-900/10 p-3 rounded-xl flex items-start gap-3 border border-blue-100 dark:border-blue-900/50 mb-4">
-              <AlertCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+            <div className="bg-[#eaf6e6] p-4 rounded-2xl flex items-start gap-3 mb-4">
+              <AlertCircle className="w-5 h-5 text-[#256c1d] shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-semibold text-blue-700 dark:text-blue-400">Custom Overrides</p>
-                <p className="text-blue-600/80 dark:text-blue-300/80 mt-0.5 text-xs">Unchecking a module hides it completely from their dashboard and menu.</p>
+                <p className="font-semibold text-[#256c1d]">Custom Overrides</p>
+                <p className="text-slate-600 mt-0.5 text-xs">Unchecking a module hides it completely from their dashboard and menu.</p>
               </div>
             </div>
 
-            <div className="space-y-2 mt-4 h-64 overflow-y-auto pr-2">
+            <div className="space-y-2 mt-4 h-64 overflow-y-auto pr-1">
               {getModalPermissions().map(perm => (
-                <div key={perm.id} className="flex items-center space-x-3 p-3 rounded-xl hover:bg-muted/50 transition-colors border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/60">
+                <div key={perm.id} className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                   <Checkbox 
                     id={`perm-${perm.id}`} 
                     checked={permissionsForm.includes(perm.id)}
@@ -416,13 +410,13 @@ export default function TeamPermissionsPanel() {
               ))}
             </div>
 
-            <DialogFooter className="flex items-center justify-between sm:justify-between mt-6 pt-4 border-t border-border/40">
+            <DialogFooter className="flex items-center justify-between sm:justify-between mt-6 pt-4 border-t border-slate-100">
               <Button variant="ghost" className="text-muted-foreground hover:text-foreground text-xs px-2" onClick={handleResetToDefault} disabled={saving}>
                 Reset to Defaults
               </Button>
               <div className="flex items-center gap-2">
-                <Button variant="outline" className="rounded-full px-5" onClick={() => setDialogOpen(false)} disabled={saving}>Cancel</Button>
-                <Button className="rounded-full px-5 shadow-sm" onClick={handleSave} disabled={saving}>
+                <Button variant="outline" className="h-11 rounded-full px-6" onClick={() => setDialogOpen(false)} disabled={saving}>Cancel</Button>
+                <Button className="h-11 rounded-full px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleSave} disabled={saving}>
                   {saving ? 'Saving...' : 'Save Permissions'}
                 </Button>
               </div>
@@ -433,14 +427,14 @@ export default function TeamPermissionsPanel() {
 
       {/* Sales Assignment Dialog */}
       <Dialog open={salesDialogOpen} onOpenChange={setSalesDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
-          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+        <DialogContent className="sm:max-w-[500px] wizard-form border-0 rounded-[2rem] bg-white overflow-hidden p-0 gap-0" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader className="bg-[#f4f6f3] p-6 border-b border-slate-100 m-0 space-y-0">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-blue-500/10 rounded-xl">
-                <Users className="w-5 h-5 text-blue-600 dark:text-blue-500" />
+              <div className="w-11 h-11 bg-white rounded-2xl flex items-center justify-center">
+                <Users className="w-5 h-5 text-[#256c1d]" />
               </div>
               <div className="text-left">
-                <DialogTitle className="text-xl font-bold">Assign Sales Users</DialogTitle>
+                <DialogTitle className="text-xl font-semibold tracking-tight">Assign Sales Users</DialogTitle>
                 <DialogDescription className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
                   Assign personnel exclusively to {selectedUser?.name}.
                 </DialogDescription>
@@ -449,22 +443,22 @@ export default function TeamPermissionsPanel() {
           </DialogHeader>
           
           <div className="p-6">
-            <div className="bg-blue-50/50 dark:bg-blue-900/10 p-3 rounded-xl flex items-start gap-3 border border-blue-100 dark:border-blue-900/50 mb-4">
-              <AlertCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+            <div className="bg-[#eaf6e6] p-4 rounded-2xl flex items-start gap-3 mb-4">
+              <AlertCircle className="w-5 h-5 text-[#256c1d] shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-semibold text-blue-700 dark:text-blue-400">Data Visibility</p>
-                <p className="text-blue-600/80 dark:text-blue-300/80 mt-0.5 text-xs">They will only see records from these assigned users or unassigned records.</p>
+                <p className="font-semibold text-[#256c1d]">Data Visibility</p>
+                <p className="text-slate-600 mt-0.5 text-xs">They will only see records from these assigned users or unassigned records.</p>
               </div>
             </div>
 
-            <div className="space-y-2 mt-4 h-64 overflow-y-auto pr-2">
+            <div className="space-y-2 mt-4 h-64 overflow-y-auto pr-1">
               {loadingSales ? (
                 <p className="text-center text-sm text-muted-foreground py-4">Loading sales personnel...</p>
               ) : availableSalesUsers.length === 0 ? (
                 <p className="text-center text-sm text-muted-foreground py-4">No sales users found.</p>
               ) : (
                 availableSalesUsers.map(user => (
-                  <div key={user.id} className="flex items-center space-x-3 p-3 rounded-xl hover:bg-muted/50 transition-colors border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/60">
+                  <div key={user.id} className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                     <Checkbox 
                       id={`sales-${user.id}`} 
                       checked={assignedSalesForm.includes(user.id)}
@@ -489,9 +483,9 @@ export default function TeamPermissionsPanel() {
               )}
             </div>
 
-            <DialogFooter className="mt-6 pt-4 border-t border-border/40">
-              <Button variant="outline" className="rounded-full px-5" onClick={() => setSalesDialogOpen(false)} disabled={saving}>Cancel</Button>
-              <Button className="rounded-full px-5 shadow-sm bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSaveSales} disabled={saving}>
+            <DialogFooter className="mt-6 pt-4 border-t border-slate-100">
+              <Button variant="outline" className="h-11 rounded-full px-6" onClick={() => setSalesDialogOpen(false)} disabled={saving}>Cancel</Button>
+              <Button className="h-11 rounded-full px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleSaveSales} disabled={saving}>
                 {saving ? 'Saving...' : 'Save Assignments'}
               </Button>
             </DialogFooter>
@@ -501,14 +495,14 @@ export default function TeamPermissionsPanel() {
 
       {/* Ops Assignment Dialog */}
       <Dialog open={opsDialogOpen} onOpenChange={setOpsDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
-          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+        <DialogContent className="sm:max-w-[500px] wizard-form border-0 rounded-[2rem] bg-white overflow-hidden p-0 gap-0" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader className="bg-[#f4f6f3] p-6 border-b border-slate-100 m-0 space-y-0">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-purple-500/10 rounded-xl">
-                <Users className="w-5 h-5 text-purple-600 dark:text-purple-500" />
+              <div className="w-11 h-11 bg-white rounded-2xl flex items-center justify-center">
+                <Users className="w-5 h-5 text-[#256c1d]" />
               </div>
               <div className="text-left">
-                <DialogTitle className="text-xl font-bold">Assign Operations Users</DialogTitle>
+                <DialogTitle className="text-xl font-semibold tracking-tight">Assign Operations Users</DialogTitle>
                 <DialogDescription className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
                   Assign operations personnel exclusively to {selectedUser?.name}.
                 </DialogDescription>
@@ -517,22 +511,22 @@ export default function TeamPermissionsPanel() {
           </DialogHeader>
           
           <div className="p-6">
-            <div className="bg-purple-50/50 dark:bg-purple-900/10 p-3 rounded-xl flex items-start gap-3 border border-purple-100 dark:border-purple-900/50 mb-4">
-              <AlertCircle className="w-5 h-5 text-purple-500 shrink-0 mt-0.5" />
+            <div className="bg-[#eaf6e6] p-4 rounded-2xl flex items-start gap-3 mb-4">
+              <AlertCircle className="w-5 h-5 text-[#256c1d] shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-semibold text-purple-700 dark:text-purple-400">Data Visibility</p>
-                <p className="text-purple-600/80 dark:text-purple-300/80 mt-0.5 text-xs">They will only see records from these assigned users or unassigned records.</p>
+                <p className="font-semibold text-[#256c1d]">Data Visibility</p>
+                <p className="text-slate-600 mt-0.5 text-xs">They will only see records from these assigned users or unassigned records.</p>
               </div>
             </div>
 
-            <div className="space-y-2 mt-4 h-64 overflow-y-auto pr-2">
+            <div className="space-y-2 mt-4 h-64 overflow-y-auto pr-1">
               {loadingOps ? (
                 <p className="text-center text-sm text-muted-foreground py-4">Loading operations personnel...</p>
               ) : allOpsUsers.length === 0 ? (
                 <p className="text-center text-sm text-muted-foreground py-4">No operations users found.</p>
               ) : (
                 allOpsUsers.map(user => (
-                  <div key={user.id} className="flex items-center space-x-3 p-3 rounded-xl hover:bg-muted/50 transition-colors border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/60">
+                  <div key={user.id} className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                     <Checkbox 
                       id={`ops-${user.id}`} 
                       checked={assignedOpsForm.includes(user.id)}
@@ -557,9 +551,9 @@ export default function TeamPermissionsPanel() {
               )}
             </div>
 
-            <DialogFooter className="mt-6 pt-4 border-t border-border/40">
-              <Button variant="outline" className="rounded-full px-5" onClick={() => setOpsDialogOpen(false)} disabled={saving}>Cancel</Button>
-              <Button className="rounded-full px-5 shadow-sm bg-purple-600 hover:bg-purple-700 text-white" onClick={handleSaveOps} disabled={saving}>
+            <DialogFooter className="mt-6 pt-4 border-t border-slate-100">
+              <Button variant="outline" className="h-11 rounded-full px-6" onClick={() => setOpsDialogOpen(false)} disabled={saving}>Cancel</Button>
+              <Button className="h-11 rounded-full px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleSaveOps} disabled={saving}>
                 {saving ? 'Saving...' : 'Save Assignments'}
               </Button>
             </DialogFooter>

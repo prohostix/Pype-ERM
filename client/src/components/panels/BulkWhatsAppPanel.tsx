@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MessageCircle, Send, Users, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
@@ -32,65 +30,62 @@ export function BulkWhatsAppPanel() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <Card className="border-none shadow-none">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <MessageCircle className="w-5 h-5 text-green-600" />
+    <div className="space-y-6 wizard-form">
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">WhatsApp Campaign</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Draft rich messages to send via WhatsApp API</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-start">
+        {/* Compose */}
+        <div className="lg:col-span-3 rounded-3xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-6 py-5 border-b border-slate-100">
+            <h3 className="text-lg font-semibold tracking-tight">Compose Message</h3>
+            <p className="text-sm text-muted-foreground mt-0.5">Use *bold*, _italic_ and ~strikethrough~ to format</p>
+          </div>
+          <div className="p-5 sm:p-6 space-y-5">
+            <div className="space-y-2">
+              <Label className="text-xs font-semibold text-slate-600">Message Content</Label>
+              <Textarea
+                placeholder="Type your message here... (*bold*, _italic_, ~strikethrough~)"
+                className="min-h-[200px] resize-none rounded-2xl bg-white border border-[#cbd5c8] p-4 text-sm focus:border-[#54b947]"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">{message.length} characters</p>
             </div>
-            <div>
-              <CardTitle>WhatsApp Campaign</CardTitle>
-              <CardDescription>Draft rich messages to send via WhatsApp API</CardDescription>
+
+            <div className="rounded-2xl border-2 border-dashed border-[#cfe9c9] bg-[#f4f6f3] p-4">
+              <Label className="flex items-center justify-center gap-2 text-sm font-semibold text-[#256c1d] cursor-pointer">
+                Attach Media (Optional)
+              </Label>
+              <Input type="file" className="hidden" />
             </div>
+
+            <Button onClick={handleSend} disabled={loading || !message} className="w-full h-12 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+              {loading ? 'Sending...' : 'Send WhatsApp Campaign'}
+            </Button>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label>Message Content</Label>
-            <Textarea 
-              placeholder="Type your message here... (*bold*, _italic_, ~strikethrough~)"
-              className="min-h-[150px] resize-none"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
+        </div>
+
+        {/* Recipients */}
+        <div className="lg:col-span-2 rounded-3xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-6 py-5 border-b border-slate-100">
+            <h3 className="text-lg font-semibold tracking-tight">Recipients</h3>
+            <p className="text-sm text-muted-foreground mt-0.5">Select target audience</p>
           </div>
-          
-          <div className="space-y-2 border p-3 rounded-md border-dashed">
-            <Label className="flex items-center gap-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
-              <ImageIcon className="w-4 h-4" />
-              Attach Media (Optional)
-            </Label>
-            <Input type="file" className="hidden" />
-          </div>
-          
-          <Button onClick={handleSend} disabled={loading || !message} className="w-full bg-green-600 hover:bg-green-700">
-            <Send className="w-4 h-4 mr-2" />
-            {loading ? 'Sending...' : 'Send WhatsApp Campaign'}
-          </Button>
-        </CardContent>
-      </Card>
-      
-      <Card className="border-none shadow-none bg-muted/30">
-        <CardHeader>
-          <CardTitle>Recipients</CardTitle>
-          <CardDescription>Select target audience</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="p-4 border rounded-lg bg-background flex flex-col items-center justify-center min-h-[200px] border-dashed">
-              <Users className="w-8 h-8 text-muted-foreground mb-2" />
-              <p className="text-sm font-medium mb-1">Select Filters</p>
-              <p className="text-xs text-muted-foreground text-center">Use the filter panel to select programs, branches, or specific student statuses to build your recipient list.</p>
-              
-              <div className="mt-4 p-3 bg-green-50 text-green-700 rounded-md w-full flex justify-between items-center">
-                <span className="font-semibold">Selected:</span>
-                <span className="font-bold text-lg">{recipientCount}</span>
-              </div>
+          <div className="p-5 sm:p-6 space-y-4">
+            <div className="rounded-2xl bg-[#f4f6f3] p-5 text-center">
+              <p className="text-sm font-semibold text-slate-900">Select Filters</p>
+              <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">Use the filter panel to select programs, branches, or specific student statuses to build your recipient list.</p>
+            </div>
+            <div className="rounded-2xl bg-[#eaf6e6] p-5 flex items-center justify-between">
+              <span className="text-sm font-semibold text-[#256c1d]">Selected</span>
+              <span className="text-3xl font-semibold tracking-tight text-slate-900">{recipientCount}</span>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

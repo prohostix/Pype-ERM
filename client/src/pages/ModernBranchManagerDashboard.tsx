@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Building2, TrendingUp, Users, BookOpen, MapPin, Target, Zap, ArrowUpRight, CheckCircle2, CalendarOff, ClipboardList, GraduationCap } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
@@ -167,156 +165,136 @@ function BranchOverview({ branch, metrics, leads, targets, loading, onNavigate }
   const convertedLeads = leads.filter((l: any) => l.status === 'converted').length;
   const conversionRate = totalLeads > 0 ? Math.round((convertedLeads / totalLeads) * 100) : 0;
   const activeTargets = targets.filter((t: any) => (t.achieved || 0) < t.target);
+  const v = (n: any) => (loading ? '…' : n);
+  const where = branch ? [branch.location, branch.city, branch.state].filter(Boolean).join(', ') : '';
+
+  const team = [
+    { title: 'Total headcount', value: v(metrics.totalEmployees || 0), sub: 'Active in branch', tab: 'my_team' },
+    { title: 'Present today', value: v(metrics.presentToday || 0), sub: 'Checked in', tab: 'attendance' },
+    { title: 'On leave', value: v(metrics.onLeave || 0), sub: 'Approved leave', tab: 'attendance' },
+    { title: 'Pending tasks', value: v(metrics.pendingTasks || 0), sub: metrics.overdueTasks ? `${metrics.overdueTasks} overdue` : 'On track', tab: 'tasks', bad: !!metrics.overdueTasks },
+  ];
+  const sales = [
+    { title: 'Total leads', value: v(totalLeads), sub: `${leads.filter((l: any) => l.status === 'new').length} new`, tab: 'leads' },
+    { title: 'Conversions', value: v(convertedLeads), sub: `${conversionRate}% rate`, tab: 'leads' },
+    { title: 'Active targets', value: v(activeTargets.length), sub: 'In progress', tab: 'targets' },
+    { title: 'Students', value: v(metrics.totalStudents || 0), sub: 'Enrolled', tab: 'students' },
+  ];
 
   return (
     <div className="space-y-6">
-      {/* Branch header */}
-      {branch && (
-        <Card className="border-none shadow-xl bg-gradient-to-r from-primary/10 to-primary/5">
-          <CardContent className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-primary/20">
-                <Building2 className="w-6 h-6 text-primary" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold">{branch.name}</h2>
-                <p className="text-sm text-muted-foreground">{branch.location}{branch.city ? `, ${branch.city}` : ''}{branch.state ? `, ${branch.state}` : ''}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <Badge variant="outline" className="font-mono">{branch.code}</Badge>
-              <Badge className={cn(branch.status === 'active' ? 'bg-success/10 text-success border-success/20' : 'bg-muted text-muted-foreground')}>
-                {branch.status}
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* HR & Team KPI row */}
-      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Team & Attendance</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <BranchMetric title="Total Headcount" value={loading ? '...' : (metrics.totalEmployees || 0)} sub="Active in branch" icon={<Users className="w-4 h-4" />} color="primary" onClick={() => onNavigate('my_team')} />
-        <BranchMetric title="Present Today" value={loading ? '...' : (metrics.presentToday || 0)} sub="Checked in" icon={<CheckCircle2 className="w-4 h-4" />} color="success" onClick={() => onNavigate('attendance')} />
-        <BranchMetric title="On Leave" value={loading ? '...' : (metrics.onLeave || 0)} sub="Approved leave" icon={<CalendarOff className="w-4 h-4" />} color="warning" onClick={() => onNavigate('attendance')} />
-        <BranchMetric title="Pending Tasks" value={loading ? '...' : (metrics.pendingTasks || 0)} sub={metrics.overdueTasks ? `${metrics.overdueTasks} overdue` : 'on track'} icon={<ClipboardList className="w-4 h-4" />} color="info" onClick={() => onNavigate('tasks')} />
+      {/* Header */}
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">{branch?.name || 'Branch Overview'}</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">{where || 'Team, sales and operations for your branch.'}</p>
+        </div>
+        {branch && (
+          <div className="flex items-center gap-2">
+            {branch.code && <span className="rounded-full bg-[#f4f6f3] px-3.5 py-1.5 text-xs font-semibold font-mono text-slate-700">{branch.code}</span>}
+            <span className={cn('rounded-full px-3.5 py-1.5 text-xs font-semibold capitalize', branch.status === 'active' ? 'bg-[#dff3da] text-[#256c1d]' : 'bg-slate-100 text-slate-600')}>{branch.status}</span>
+          </div>
+        )}
       </div>
 
-      {/* Sales KPI row */}
-      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mt-6">Sales & Targets</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <BranchMetric title="Total Leads" value={loading ? '...' : totalLeads} sub={`${leads.filter((l:any) => l.status === 'new').length} new`} icon={<TrendingUp className="w-4 h-4" />} color="primary" onClick={() => onNavigate('leads')} />
-        <BranchMetric title="Conversions" value={loading ? '...' : convertedLeads} sub={`${conversionRate}% rate`} icon={<Target className="w-4 h-4" />} color="success" onClick={() => onNavigate('leads')} />
-        <BranchMetric title="Active Targets" value={loading ? '...' : activeTargets.length} sub="in progress" icon={<Zap className="w-4 h-4" />} color="warning" onClick={() => onNavigate('targets')} />
-        <BranchMetric title="Students" value={loading ? '...' : (metrics.totalStudents || 0)} sub="Enrolled" icon={<GraduationCap className="w-4 h-4" />} color="info" onClick={() => onNavigate('students')} />
-      </div>
+      <StatStrip title="Team & attendance" items={team} onNavigate={onNavigate} />
+      <StatStrip title="Sales & targets" items={sales} onNavigate={onNavigate} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Sales snapshot */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-3">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 items-start">
+        {/* Sales pipeline */}
+        <div className="xl:col-span-2 rounded-3xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between gap-3">
             <div>
-              <CardTitle className="text-base">Sales Pipeline</CardTitle>
-              <CardDescription>Recent leads activity</CardDescription>
+              <h3 className="text-lg font-semibold tracking-tight">Sales pipeline</h3>
+              <p className="text-sm text-muted-foreground mt-0.5">Recent leads activity</p>
             </div>
-            <Button variant="ghost" size="sm" className="text-primary text-xs" onClick={() => onNavigate('leads')}>
-              View All <ArrowUpRight className="ml-1 w-3 h-3" />
-            </Button>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {loading ? [1,2,3].map(i => <div key={i} className="h-10 bg-muted rounded animate-pulse" />) :
-              leads.length === 0 ? <p className="text-sm text-muted-foreground text-center py-4">No leads yet</p> :
-              leads.slice(0, 4).map((l: any) => (
-                <div key={l.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
-                  <div>
-                    <p className="text-sm font-medium">{l.name || l.contactName || 'Lead'}</p>
-                    <p className="text-[10px] text-muted-foreground">{l.source || 'Direct'} · {new Date(l.createdAt).toLocaleDateString()}</p>
+            <Button variant="outline" onClick={() => onNavigate('leads')} className="h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold">View all</Button>
+          </div>
+          <div className="p-5 sm:p-6 space-y-2">
+            {loading ? [1, 2, 3].map((i) => <div key={i} className="h-14 rounded-2xl bg-slate-100 animate-pulse" />) :
+              leads.length === 0 ? <p className="text-sm text-muted-foreground text-center py-8">No leads yet</p> :
+              leads.slice(0, 5).map((l: any) => (
+                <div key={l.id} className="flex items-center justify-between gap-3 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors px-4 py-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-slate-900 truncate">{l.name || l.contactName || 'Lead'}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{l.source || 'Direct'} · {new Date(l.createdAt).toLocaleDateString()}</p>
                   </div>
-                  <Badge variant="outline" className="text-[10px] uppercase">{l.status}</Badge>
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold capitalize text-slate-700 shrink-0">{String(l.status || '').replace(/_/g, ' ')}</span>
                 </div>
-              ))
-            }
-          </CardContent>
-        </Card>
-
-        {/* Ops snapshot + punch */}
-        <div className="space-y-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-3">
-              <div>
-                <CardTitle className="text-base">Operations</CardTitle>
-                <CardDescription>Quick access</CardDescription>
-              </div>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {[
-                { label: 'Students', icon: <Users className="w-4 h-4" />, tab: 'students' },
-                { label: 'Academic Partners', icon: <MapPin className="w-4 h-4" />, tab: 'centers' },
-                { label: 'Programs', icon: <BookOpen className="w-4 h-4" />, tab: 'programs' },
-                { label: 'Universities', icon: <Building2 className="w-4 h-4" />, tab: 'universities' },
-              ].map(item => (
-                <button key={item.tab} onClick={() => onNavigate(item.tab)}
-                  className="flex items-center gap-2 p-3 rounded-xl border border-border bg-muted/20 hover:bg-muted/50 hover:border-primary/30 transition-all text-left">
-                  <div className="p-1.5 rounded-lg bg-background">{item.icon}</div>
-                  <span className="text-sm font-medium">{item.label}</span>
-                </button>
               ))}
-            </CardContent>
-          </Card>
+          </div>
+        </div>
+
+        {/* Operations */}
+        <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-6 py-5 border-b border-slate-100">
+            <h3 className="text-lg font-semibold tracking-tight">Operations</h3>
+            <p className="text-sm text-muted-foreground mt-0.5">Quick access</p>
+          </div>
+          <div className="p-5 sm:p-6 grid grid-cols-1 gap-2">
+            {[
+              { label: 'Students', tab: 'students' },
+              { label: 'Academic Partners', tab: 'centers' },
+              { label: 'Programs', tab: 'programs' },
+              { label: 'Universities', tab: 'universities' },
+            ].map((item) => (
+              <button key={item.tab} type="button" onClick={() => onNavigate(item.tab)}
+                className="flex items-center justify-between rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors px-4 py-3.5 text-left">
+                <span className="text-sm font-semibold text-slate-900">{item.label}</span>
+                <ArrowUpRight className="w-4 h-4 text-slate-400" />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Active targets */}
       {activeTargets.length > 0 && (
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-3">
-            <CardTitle className="text-base">Active Targets</CardTitle>
-            <Button variant="ghost" size="sm" className="text-primary text-xs" onClick={() => onNavigate('targets')}>
-              View All <ArrowUpRight className="ml-1 w-3 h-3" />
-            </Button>
-          </CardHeader>
-          <CardContent className="space-y-3">
+        <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between gap-3">
+            <h3 className="text-lg font-semibold tracking-tight">Active targets</h3>
+            <Button variant="outline" onClick={() => onNavigate('targets')} className="h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold">View all</Button>
+          </div>
+          <div className="p-5 sm:p-6 space-y-2">
             {activeTargets.slice(0, 3).map((t: any) => {
               const pct = t.target > 0 ? Math.min(100, Math.round((t.achieved / t.target) * 100)) : 0;
               const label = typeof t.employeeId === 'object' ? t.employeeId?.name
                 : typeof t.departmentId === 'object' ? t.departmentId?.name
                 : t.type || 'Target';
               return (
-                <div key={t.id} className="space-y-1">
-                  <div className="flex justify-between text-xs">
-                    <span className="font-medium">{label} · {t.period}</span>
-                    <span className="font-bold text-primary">{pct}%</span>
+                <div key={t.id} className="rounded-2xl bg-[#f4f6f3] px-4 py-3.5">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="font-semibold text-slate-900">{label} <span className="font-normal text-muted-foreground">· {t.period}</span></span>
+                    <span className="font-semibold text-[#256c1d] tabular-nums">{pct}%</span>
                   </div>
-                  <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-primary rounded-full" style={{ width: `${pct}%` }} />
+                  <div className="h-2.5 bg-white rounded-full overflow-hidden">
+                    <div className="h-full bg-[#54b947] rounded-full" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
               );
             })}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
     </div>
   );
 }
 
-function BranchMetric({ title, value, sub, icon, color, onClick }: any) {
-  const colorMap: any = {
-    primary: 'bg-primary/10 text-primary',
-    success: 'bg-success/10 text-success',
-    warning: 'bg-warning/10 text-warning',
-    info: 'bg-info/10 text-info',
-  };
+function StatStrip({ title, items, onNavigate }: { title: string; items: { title: string; value: any; sub: string; tab: string; bad?: boolean }[]; onNavigate: (tab: string) => void }) {
   return (
-    <Card className="cursor-pointer hover:border-primary/40 transition-all" onClick={onClick}>
-      <CardContent className="p-5">
-        <div className="flex items-center justify-between mb-3">
-          <div className={cn('p-2 rounded-xl', colorMap[color])}>{icon}</div>
-          <span className="text-[10px] text-muted-foreground font-medium">{sub}</span>
+    <section>
+      <h3 className="text-lg font-semibold tracking-tight mb-3">{title}</h3>
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="grid grid-cols-2 xl:grid-cols-4 divide-x divide-y xl:divide-y-0 divide-slate-100">
+          {items.map((k) => (
+            <button key={k.title} type="button" onClick={() => onNavigate(k.tab)} className="text-left p-5 sm:p-6 hover:bg-[#f7faf6] transition-colors">
+              <p className="text-sm font-medium text-slate-500">{k.title}</p>
+              <p className="text-3xl sm:text-4xl font-semibold tracking-tight mt-2 text-slate-900">{k.value}</p>
+              <p className={cn('text-xs mt-2', k.bad ? 'text-red-600 font-medium' : 'text-muted-foreground')}>{k.sub}</p>
+            </button>
+          ))}
         </div>
-        <p className="text-xs text-muted-foreground uppercase tracking-wide">{title}</p>
-        <p className="text-2xl font-bold mt-0.5">{value}</p>
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 }

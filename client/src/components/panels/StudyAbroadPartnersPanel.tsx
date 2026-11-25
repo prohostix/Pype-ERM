@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Globe2, RefreshCw, Plus, Ban, RotateCcw, MapPin, Pencil, KeyRound } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -190,41 +189,47 @@ export function StudyAbroadPartnersPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-3 flex-wrap">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2"><Globe2 className="w-6 h-6" />Study Abroad Partners</h2>
-          <p className="text-muted-foreground text-sm mt-1">Onboard and manage overseas-education partners.</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight flex items-center gap-3">
+            <span className="w-11 h-11 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Globe2 className="w-5 h-5" /></span>
+            Study Abroad Partners
+          </h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Onboard and manage overseas-education partners.</p>
         </div>
-        <div className="flex gap-2">
-          <select className="border rounded-md px-3 py-2 text-sm bg-background" value={filter} onChange={e => setFilter(e.target.value)}>
+        <div className="flex gap-2 flex-wrap">
+          <select className={cn('h-11 rounded-full px-4 text-sm font-semibold border outline-none', filter !== 'all' ? 'bg-[#8ae47e] border-[#8ae47e] text-[#0b1d14]' : 'bg-white border-slate-200 text-slate-600')} value={filter} onChange={e => setFilter(e.target.value)}>
             <option value="all">All statuses</option>
             {Object.entries(PARTNER_STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
           </select>
-          <Button variant="outline" size="sm" onClick={load} disabled={loading}>
+          <Button variant="outline" onClick={load} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh
           </Button>
-          {canCreate && <Button size="sm" onClick={() => setCreateOpen(true)}><Plus className="w-4 h-4 mr-2" />New Partner</Button>}
+          {canCreate && <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => setCreateOpen(true)}><Plus className="w-4 h-4 mr-2" />New Partner</Button>}
         </div>
       </div>
 
       {loading ? (
-        <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-24 bg-muted rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-28 bg-slate-100 rounded-3xl animate-pulse" />)}</div>
       ) : partners.length === 0 ? (
-        <Card><CardContent className="py-16 text-center text-muted-foreground">No study abroad partners found.</CardContent></Card>
+        <div className="rounded-3xl bg-white border border-slate-100 py-16 text-center text-muted-foreground">
+          <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Globe2 className="w-6 h-6" /></div>
+          <p className="text-sm">No study abroad partners found.</p>
+        </div>
       ) : (
         <div className="space-y-3">
           {partners.map(p => {
             const st = PARTNER_STATUS[p.status] || { label: p.status, className: 'bg-muted text-muted-foreground' };
             return (
-              <Card key={p.id} className="hover:border-primary/30 transition-colors">
-                <CardContent className="p-5 space-y-3">
+              <div key={p.id} className="rounded-3xl bg-white border border-slate-100 hover:border-[#8ae47e] transition-colors">
+                <div className="p-5 sm:p-6 space-y-3">
                   <div className="flex items-start justify-between gap-4 flex-wrap">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <Badge className={cn('text-[10px] uppercase font-bold', st.className)}>{st.label}</Badge>
-                        <Badge variant="outline" className="text-xs">{p.code}</Badge>
+                        <Badge className={cn('text-[10px] uppercase font-bold rounded-full px-2.5', st.className)}>{st.label}</Badge>
+                        <Badge variant="outline" className="text-xs rounded-full bg-[#f4f6f3] border-0 font-mono">{p.code}</Badge>
                       </div>
-                      <span className="font-semibold">{p.name}</span>
+                      <span className="font-semibold text-lg text-slate-900">{p.name}</span>
                       <div className="text-sm text-muted-foreground mt-1 flex flex-wrap gap-x-4">
                         {p.email && <span title="Login email">Login: <strong className="text-foreground">{p.email}</strong></span>}
                         {p.contact && <span>{p.contact}</span>}
@@ -232,24 +237,24 @@ export function StudyAbroadPartnersPanel() {
                         <span>Applications: <strong className="text-foreground">{p._count?.enrollments ?? 0}</strong></span>
                       </div>
                       <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                        <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
+                        <MapPin className="w-3.5 h-3.5 text-[#256c1d]" />
                         {p.destinationCountries.length === 0
                           ? <span className="text-xs text-muted-foreground">No countries allocated (all allowed)</span>
-                          : p.destinationCountries.map(c => <Badge key={c} variant="secondary" className="text-xs">{c}</Badge>)}
+                          : p.destinationCountries.map(c => <Badge key={c} variant="secondary" className="text-xs rounded-full bg-[#eaf6e6] text-[#256c1d] border-0">{c}</Badge>)}
                         {canEditCountries && (
-                          <button className="text-xs text-primary hover:underline ml-1" onClick={() => { setCountriesFor(p); setCountriesSel(p.destinationCountries.filter(c => countryOptions.includes(c))); }}>
+                          <button className="text-xs font-semibold text-[#256c1d] hover:underline ml-1" onClick={() => { setCountriesFor(p); setCountriesSel(p.destinationCountries.filter(c => countryOptions.includes(c))); }}>
                             Edit
                           </button>
                         )}
                       </div>
                     </div>
                     <div className="flex gap-2 flex-wrap">
-                      {canEdit && <Button size="sm" variant="outline" onClick={() => openEdit(p)}><Pencil className="w-4 h-4 mr-1" />Edit</Button>}
-                      {canReset && <Button size="sm" variant="outline" onClick={() => { setResetFor(p); setResetPasswordText(''); }}><KeyRound className="w-4 h-4 mr-1" />Login / password</Button>}
+                      {canEdit && <Button size="sm" variant="outline" className="h-9 rounded-full px-4 border-[#cfe9c9] text-[#256c1d] bg-white hover:bg-[#eaf6e6]" onClick={() => openEdit(p)}><Pencil className="w-4 h-4 mr-1" />Edit</Button>}
+                      {canReset && <Button size="sm" variant="outline" className="h-9 rounded-full px-4 border-[#cfe9c9] text-[#256c1d] bg-white hover:bg-[#eaf6e6]" onClick={() => { setResetFor(p); setResetPasswordText(''); }}><KeyRound className="w-4 h-4 mr-1" />Login / password</Button>}
                       {actionsFor(p).map(a => (
                         <Button
                           key={a.type} size="sm" variant="outline"
-                          className={a.tone === 'ok' ? 'text-success border-success/30 hover:bg-success/10' : 'text-destructive border-destructive/30 hover:bg-destructive/10'}
+                          className={cn('h-9 rounded-full px-4 bg-white', a.tone === 'ok' ? 'text-[#256c1d] border-[#cfe9c9] hover:bg-[#eaf6e6]' : 'text-red-600 border-red-200 hover:bg-red-50')}
                           onClick={() => { setAction({ type: a.type, partner: p }); setRemarks(''); }}
                         >
                           <a.icon className="w-4 h-4 mr-1" />{a.label}
@@ -257,8 +262,8 @@ export function StudyAbroadPartnersPanel() {
                       ))}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             );
           })}
         </div>
@@ -266,9 +271,9 @@ export function StudyAbroadPartnersPanel() {
 
       {/* Create */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>New Study Abroad Partner</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">New Study Abroad Partner</DialogTitle>
             <DialogDescription>The partner is active immediately. Their login is created with the email below and the details are emailed to them.</DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-3 py-2">
@@ -289,39 +294,39 @@ export function StudyAbroadPartnersPanel() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateOpen(false)}>Cancel</Button>
-            <Button onClick={submitCreate} disabled={saving || !form.name.trim() || !form.code.trim() || !form.email.trim() || (!!form.password && form.password.length < 8)}>Create</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setCreateOpen(false)}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={submitCreate} disabled={saving || !form.name.trim() || !form.code.trim() || !form.email.trim() || (!!form.password && form.password.length < 8)}>Create</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Login details, shown once */}
       <Dialog open={!!created} onOpenChange={o => !o && setCreated(null)}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Partner login details</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Partner login details</DialogTitle>
             <DialogDescription>
               Shown only once — the password is not stored in readable form. They have also been emailed to the partner.
             </DialogDescription>
           </DialogHeader>
-          <div className="rounded-lg border p-4 space-y-1 text-sm font-mono break-all">
+          <div className="rounded-2xl bg-[#f4f6f3] p-4 space-y-1 text-sm font-mono break-all">
             <div>Partner: {created?.name}</div>
             <div>Login URL: {loginUrl}</div>
             <div>Email: {created?.email}</div>
             <div>Password: {created?.password}{created?.generated ? '  (generated)' : ''}</div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => created && copyLogin(created)}>Copy login details</Button>
-            <Button onClick={() => setCreated(null)}>Done</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => created && copyLogin(created)}>Copy login details</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => setCreated(null)}>Done</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Set / reset the partner's password */}
       <Dialog open={!!resetFor} onOpenChange={o => !o && setResetFor(null)}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Login &amp; password</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Login &amp; password</DialogTitle>
             <DialogDescription>{resetFor?.name} signs in with <strong>{resetFor?.email}</strong>.</DialogDescription>
           </DialogHeader>
           <div className="space-y-2 py-2">
@@ -330,17 +335,17 @@ export function StudyAbroadPartnersPanel() {
             <p className="text-[11px] text-muted-foreground">The current password stops working immediately. The new details are shown once and emailed to the partner.</p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setResetFor(null)}>Cancel</Button>
-            <Button onClick={submitReset} disabled={!!resetPasswordText && resetPasswordText.length < 8}>Set password</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setResetFor(null)}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={submitReset} disabled={!!resetPasswordText && resetPasswordText.length < 8}>Set password</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Review actions */}
       <Dialog open={!!action} onOpenChange={o => !o && setAction(null)}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>{action ? ACTION_COPY[action.type].title : ''}</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">{action ? ACTION_COPY[action.type].title : ''}</DialogTitle>
             <DialogDescription>{action?.partner.name}</DialogDescription>
           </DialogHeader>
           <div className="space-y-2 py-2">
@@ -348,9 +353,9 @@ export function StudyAbroadPartnersPanel() {
             <Input value={remarks} onChange={e => setRemarks(e.target.value)} placeholder="Add a note…" />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setAction(null)}>Cancel</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setAction(null)}>Cancel</Button>
             <Button
-              variant={action && ACTION_COPY[action.type].destructive ? 'destructive' : 'default'}
+              className={cn('h-11 px-6 rounded-full font-semibold', action && ACTION_COPY[action.type].destructive ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14]')}
               onClick={runAction}
               disabled={!!action && ACTION_COPY[action.type].needsRemarks && !remarks.trim()}
             >Confirm</Button>
@@ -360,9 +365,9 @@ export function StudyAbroadPartnersPanel() {
 
       {/* Countries */}
       <Dialog open={!!countriesFor} onOpenChange={o => !o && setCountriesFor(null)}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Destination countries</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Destination countries</DialogTitle>
             <DialogDescription>{countriesFor?.name} can submit applications only for these countries. Leave empty to allow all.</DialogDescription>
           </DialogHeader>
           <div className="space-y-2 py-2">
@@ -370,17 +375,17 @@ export function StudyAbroadPartnersPanel() {
             <CountryPicker options={countryOptions} value={countriesSel} onChange={setCountriesSel} />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setCountriesFor(null)}>Cancel</Button>
-            <Button onClick={saveCountries}>Save</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setCountriesFor(null)}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={saveCountries}>Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Edit */}
       <Dialog open={!!editing} onOpenChange={o => !o && setEditing(null)}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Edit partner</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Edit partner</DialogTitle>
             <DialogDescription>{editing?.code} · registered {fmtDate(editing?.createdAt)}</DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-3 py-2">
@@ -393,8 +398,8 @@ export function StudyAbroadPartnersPanel() {
             ))}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
-            <Button onClick={saveEdit} disabled={!editForm.name.trim()}>Save</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setEditing(null)}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={saveEdit} disabled={!editForm.name.trim()}>Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

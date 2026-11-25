@@ -69,18 +69,18 @@ export function ProfitLossPanel() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Profit & Loss Account</h2>
-          <p className="text-muted-foreground text-sm mt-1">Financial performance summary for the selected period.</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Profit & Loss Account</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Financial performance summary for the selected period.</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <input type="date" value={from} onChange={e => setFrom(e.target.value)}
-            className="h-8 px-2 text-sm rounded-lg border border-border bg-background" />
-          <span className="text-muted-foreground text-sm">to</span>
-          <input type="date" value={to} onChange={e => setTo(e.target.value)}
-            className="h-8 px-2 text-sm rounded-lg border border-border bg-background" />
-          <Button size="sm" onClick={fetchReport} disabled={loading}>
+          <div className="flex items-center gap-2 h-11 rounded-full border border-slate-200 bg-white px-4 text-sm">
+            <input type="date" value={from} onChange={e => setFrom(e.target.value)} aria-label="From date" className="bg-transparent outline-none text-slate-700" />
+            <span className="text-slate-400">to</span>
+            <input type="date" value={to} onChange={e => setTo(e.target.value)} aria-label="To date" className="bg-transparent outline-none text-slate-700" />
+          </div>
+          <Button onClick={fetchReport} disabled={loading} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
             <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Apply
           </Button>
         </div>
@@ -88,20 +88,20 @@ export function ProfitLossPanel() {
 
       {/* P&L Statement Card */}
       {data && (
-        <Card className={cn('border-2', isProfit ? 'border-green-200 dark:border-green-800' : 'border-red-200 dark:border-red-800')}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              {isProfit
-                ? <TrendingUp className="w-5 h-5 text-green-600" />
-                : <TrendingDown className="w-5 h-5 text-red-500" />}
+        <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+          <CardHeader className="px-7">
+            <CardTitle className="flex items-center gap-3 flex-wrap text-lg font-semibold tracking-tight">
+              <span className={cn('w-10 h-10 rounded-2xl flex items-center justify-center', isProfit ? 'bg-[#eaf6e6] text-[#256c1d]' : 'bg-red-50 text-red-500')}>
+                {isProfit ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
+              </span>
               Profit & Loss Statement
-              <span className="text-sm font-normal text-muted-foreground ml-2">
+              <span className="text-sm font-normal text-muted-foreground">
                 {data.period?.from ? new Date(data.period.from).toLocaleDateString() : ''} – {data.period?.to ? new Date(data.period.to).toLocaleDateString() : ''}
               </span>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-0 divide-y divide-border">
+          <CardContent className="px-7">
+            <div className="space-y-0 divide-y divide-slate-100">
               {/* INCOME section */}
               <PLSection title="INCOME" isHeader />
               <PLRow label="Invoice Revenue" amount={data.incomeBreakdown?.invoices ?? 0} indent={1} />
@@ -120,16 +120,16 @@ export function ProfitLossPanel() {
 
               {/* NET */}
               <div className={cn(
-                'flex items-center justify-between p-4 rounded-xl mt-2',
-                isProfit ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'
+                'flex items-center justify-between p-5 rounded-2xl mt-3',
+                isProfit ? 'bg-[#eaf6e6]' : 'bg-red-50'
               )}>
                 <div>
-                  <p className={cn('text-lg font-bold', isProfit ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400')}>
+                  <p className={cn('text-lg font-bold', isProfit ? 'text-[#256c1d]' : 'text-red-600')}>
                     {isProfit ? 'Net Profit' : 'Net Loss'}
                   </p>
                   <p className="text-xs text-muted-foreground">Profit margin: {data.totals?.profitMargin ?? 0}%</p>
                 </div>
-                <p className={cn('text-3xl font-bold', isProfit ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400')}>
+                <p className={cn('text-3xl font-semibold tracking-tight', isProfit ? 'text-[#256c1d]' : 'text-red-600')}>
                   {isProfit ? '+' : '-'}{fmt(Math.abs(data.totals?.netProfit ?? 0))}
                 </p>
               </div>
@@ -139,11 +139,11 @@ export function ProfitLossPanel() {
       )}
 
       {/* Area Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Revenue vs Costs — Monthly Trend</CardTitle>
+      <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+        <CardHeader className="px-7">
+          <CardTitle className="text-lg font-semibold tracking-tight">Revenue vs Costs — Monthly Trend</CardTitle>
         </CardHeader>
-        <CardContent className="h-64">
+        <CardContent className="h-64 px-7">
           {loading ? (
             <div className="h-full flex items-center justify-center">
               <RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" />
@@ -153,25 +153,15 @@ export function ProfitLossPanel() {
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-                <defs>
-                  <linearGradient id="incomeGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--success))" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="hsl(var(--success))" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="costGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e8ece6" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} tickFormatter={v => fmt(v)} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '10px', fontSize: 12 }}
+                  contentStyle={{ backgroundColor: '#fff', border: '1px solid #e8ece6', borderRadius: '16px', fontSize: 12 }}
                   formatter={(v: number) => fmt(v)}
                 />
-                <Area type="monotone" dataKey="Revenue" stroke="hsl(var(--success))" fill="url(#incomeGrad)" strokeWidth={2} />
-                <Area type="monotone" dataKey="Costs" stroke="hsl(var(--destructive))" fill="url(#costGrad)" strokeWidth={2} />
+                <Area type="monotone" dataKey="Revenue" stroke="#54b947" fill="#54b947" fillOpacity={0.12} strokeWidth={2.5} />
+                <Area type="monotone" dataKey="Costs" stroke="#ef6f64" fill="#ef6f64" fillOpacity={0.1} strokeWidth={2.5} />
               </AreaChart>
             </ResponsiveContainer>
           )}
@@ -180,32 +170,32 @@ export function ProfitLossPanel() {
 
       {/* Monthly P&L table */}
       {data && (data.monthly || []).length > 0 && (
-        <Card>
-          <CardHeader><CardTitle>Monthly P&L Summary</CardTitle></CardHeader>
+        <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5 overflow-hidden">
+          <CardHeader className="px-7"><CardTitle className="text-lg font-semibold tracking-tight">Monthly P&L Summary</CardTitle></CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-muted/50 border-b border-border">
+                <thead className="bg-[#f4f6f3]">
                   <tr>
-                    <th className="text-left p-3 font-medium text-muted-foreground">Month</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Revenue</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Costs</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Net P&L</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">Margin</th>
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Month</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Revenue</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Costs</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Net P&L</th>
+                    <th className="text-right px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-slate-500">Margin</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody className="divide-y divide-slate-100">
                   {(data.monthly || []).map(row => {
                     const margin = (row.income?.total ?? 0) > 0 ? Math.round(((row.net ?? 0) / (row.income?.total ?? 1)) * 100) : 0;
                     return (
-                      <tr key={row.month} className="hover:bg-muted/30 transition-colors">
-                        <td className="p-3 font-medium">{fmtMonth(row.month)}</td>
-                        <td className="p-3 text-right text-green-600 font-medium">{fmt(row.income?.total ?? 0)}</td>
-                        <td className="p-3 text-right text-red-500 font-medium">{fmt(row.expenditure?.total ?? 0)}</td>
-                        <td className={cn('p-3 text-right font-bold', (row.net ?? 0) >= 0 ? 'text-green-600' : 'text-red-500')}>
+                      <tr key={row.month} className="hover:bg-[#f7faf6] transition-colors">
+                        <td className="px-5 py-3.5 font-medium">{fmtMonth(row.month)}</td>
+                        <td className="px-5 py-3.5 text-right text-[#256c1d] font-medium">{fmt(row.income?.total ?? 0)}</td>
+                        <td className="px-5 py-3.5 text-right text-red-600 font-medium">{fmt(row.expenditure?.total ?? 0)}</td>
+                        <td className={cn('px-5 py-3.5 text-right font-bold', (row.net ?? 0) >= 0 ? 'text-[#256c1d]' : 'text-red-600')}>
                           {(row.net ?? 0) >= 0 ? '+' : ''}{fmt(row.net ?? 0)}
                         </td>
-                        <td className={cn('p-3 text-right text-sm', margin >= 0 ? 'text-green-600' : 'text-red-500')}>
+                        <td className={cn('px-5 py-3.5 text-right text-sm', margin >= 0 ? 'text-[#256c1d]' : 'text-red-600')}>
                           {margin}%
                         </td>
                       </tr>
@@ -234,7 +224,7 @@ function PLRow({ label, amount, indent = 0, bold, positive, negative, muted }: {
 }) {
   return (
     <div className={cn(
-      'flex items-center justify-between py-2 px-1',
+      'flex items-center justify-between py-3 px-1',
       bold && 'font-semibold',
       muted && 'opacity-70'
     )}>
@@ -244,8 +234,8 @@ function PLRow({ label, amount, indent = 0, bold, positive, negative, muted }: {
       </span>
       <span className={cn(
         'text-sm tabular-nums',
-        positive && 'text-green-600 font-bold',
-        negative && 'text-red-500 font-bold',
+        positive && 'text-[#256c1d] font-semibold',
+        negative && 'text-red-600 font-semibold',
         !positive && !negative && 'text-foreground'
       )}>
         {fmt(amount)}

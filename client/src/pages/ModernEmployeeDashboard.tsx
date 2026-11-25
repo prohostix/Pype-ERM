@@ -1,21 +1,7 @@
+import { ComingSoonPanel } from '@/components/panels/ComingSoonPanel';
 import { useState, useEffect } from 'react';
-import { 
-  Clock, 
-  Calendar, 
-  Zap, 
-  MessageSquare, 
-  Bell, 
-  Star,
-  Trophy,
-  Target,
-  FileText,
-  User,
-  RefreshCw,
-  ArrowUpRight,
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { RefreshCw, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
@@ -112,111 +98,79 @@ export function ModernEmployeeDashboard({ initialTab, onNavigate }: { initialTab
   }).length;
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-            <User className="w-8 h-8" />
-          </div>
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      {activeTab === 'overview' && (
+      <div className="flex items-start justify-between flex-wrap gap-3">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              Welcome Back, {user?.name?.split(' ')[0] || 'there'}
-            </h1>
-            <p className="text-muted-foreground mt-1 text-sm">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Welcome back, {user?.name?.split(' ')[0] || 'there'}</h2>
+            <p className="text-muted-foreground text-sm mt-1.5">
               {pendingTaskCount > 0 ? `You have ${pendingTaskCount} task${pendingTaskCount > 1 ? 's' : ''} pending.` : 'All caught up for today.'}
             </p>
           </div>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={fetchAll} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
+              <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh
+            </Button>
+            <Button variant="outline" onClick={() => handleNavigate('notice-board')} className="h-11 px-5 rounded-full bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold">Notices</Button>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" onClick={fetchAll} disabled={loading}>
-            <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />
-            Refresh
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => handleNavigate('notice-board')}>
-            <Bell className="w-4 h-4 mr-2" />
-            Notices
-          </Button>
-        </div>
-      </div>
+      )}
 
       <Tabs value={activeTab} onValueChange={handleNavigate} className="space-y-6">
-        <div className="relative w-full max-w-full">
+        <div className="hidden">
           <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
-            <TabsList className="flex w-max space-x-1.5 bg-transparent p-1 h-auto border-b border-border/30">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Overview</TabsTrigger>
-          <TabsTrigger value="tasks" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">My Tasks</TabsTrigger>
-          <TabsTrigger value="leaves" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">My Leaves</TabsTrigger>
-          <TabsTrigger value="attendance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Attendance</TabsTrigger>
-          <TabsTrigger value="notice-board" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Notice Board</TabsTrigger>
-          <TabsTrigger value="announcements" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Announcements</TabsTrigger>
-          <TabsTrigger value="holidays" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Holiday List</TabsTrigger>
-          <TabsTrigger value="team" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">My Team</TabsTrigger>
-          {isSubDeptManager && <TabsTrigger value="my_subdept" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">My Sub-Dept</TabsTrigger>}
-          <TabsTrigger value="ld-portal" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">L&amp;D Portal</TabsTrigger>
-          <TabsTrigger value="escalations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Escalations</TabsTrigger>
-          {isCollectionsOverseer && <TabsTrigger value="collections" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Collections</TabsTrigger>}
-          <TabsTrigger value="meetings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Meetings</TabsTrigger>
+            <TabsList className="flex w-max space-x-1.5 bg-transparent p-1 h-auto">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">Overview</TabsTrigger>
+          <TabsTrigger value="tasks" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">My Tasks</TabsTrigger>
+          <TabsTrigger value="leaves" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">My Leaves</TabsTrigger>
+          <TabsTrigger value="attendance" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">Attendance</TabsTrigger>
+          <TabsTrigger value="notice-board" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">Notice Board</TabsTrigger>
+          <TabsTrigger value="announcements" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">Announcements</TabsTrigger>
+          <TabsTrigger value="holidays" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">Holiday List</TabsTrigger>
+          <TabsTrigger value="team" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">My Team</TabsTrigger>
+          {isSubDeptManager && <TabsTrigger value="my_subdept" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">My Sub-Dept</TabsTrigger>}
+          <TabsTrigger value="ld-portal" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">L&amp;D Portal</TabsTrigger>
+          <TabsTrigger value="escalations" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">Escalations</TabsTrigger>
+          {isCollectionsOverseer && <TabsTrigger value="collections" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">Collections</TabsTrigger>}
+          <TabsTrigger value="meetings" className="data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none rounded-full px-5 h-10 transition-colors text-sm font-semibold text-slate-600 hover:bg-[#f4f6f3]">Meetings</TabsTrigger>
         </TabsList>
           </div>
         </div>
 
         <TabsContent value="overview" className="space-y-6">
-          {/* Productivity Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <EmployeeMetric
-              title="Assigned Tasks"
-              value={loading ? '...' : pendingTaskCount}
-              icon={<Target className="w-5 h-5" />}
-              subtext={dueSoonCount > 0 ? `${dueSoonCount} due this week` : 'No urgent deadlines'}
-              color="primary"
-              onClick={() => handleNavigate('tasks')}
-            />
-            <EmployeeMetric
-              title="Efficiency Score"
-              value={metrics.efficiencyScore ? `${metrics.efficiencyScore}%` : 'N/A'}
-              icon={<Zap className="w-5 h-5" />}
-              subtext="Based on task completion"
-              color="success"
-              onClick={() => handleNavigate('tasks')}
-            />
-            <EmployeeMetric
-              title="Leaves Remaining"
-              value={loading ? '...' : `${remainingLeaves} Days`}
-              icon={<Calendar className="w-5 h-5" />}
-              subtext={`${usedDays} used of ${totalLeaveAllowance}`}
-              color="info"
-              onClick={() => handleNavigate('leaves')}
-            />
-            <EmployeeMetric
-              title="Work Hours"
-              value={loading ? '...' : (weekHours != null ? `${weekHours}h` : 'N/A')}
-              icon={<Clock className="w-5 h-5" />}
-              subtext="Current week"
-              color="warning"
-              onClick={() => handleNavigate('attendance')}
-            />
+          {/* Stat strip */}
+          <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+            <div className="grid grid-cols-2 xl:grid-cols-4 divide-x divide-y xl:divide-y-0 divide-slate-100">
+              {[
+                { title: 'Assigned tasks', value: loading ? '…' : pendingTaskCount, sub: dueSoonCount > 0 ? `${dueSoonCount} due this week` : 'No urgent deadlines', tab: 'tasks', warn: dueSoonCount > 0 },
+                { title: 'Efficiency score', value: metrics.efficiencyScore ? `${metrics.efficiencyScore}%` : 'N/A', sub: 'Based on task completion', tab: 'tasks' },
+                { title: 'Leaves remaining', value: loading ? '…' : `${remainingLeaves} days`, sub: `${usedDays} used of ${totalLeaveAllowance}`, tab: 'leaves' },
+                { title: 'Work hours', value: loading ? '…' : (weekHours != null ? `${weekHours}h` : 'N/A'), sub: 'Current week', tab: 'attendance' },
+              ].map((k) => (
+                <button key={k.title} type="button" onClick={() => handleNavigate(k.tab)} className="text-left p-5 sm:p-6 hover:bg-[#f7faf6] transition-colors">
+                  <p className="text-sm font-medium text-slate-500">{k.title}</p>
+                  <p className="text-3xl sm:text-4xl font-semibold tracking-tight mt-2 text-slate-900">{k.value}</p>
+                  <p className={cn('text-xs mt-2', k.warn ? 'text-amber-600 font-medium' : 'text-muted-foreground')}>{k.sub}</p>
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Live Task List */}
-            <Card className="lg:col-span-2 border-none shadow-xl bg-card/60 backdrop-blur-xl">
-              <CardHeader className="flex flex-row items-center justify-between">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 items-start">
+            {/* Priority tasks */}
+            <div className="xl:col-span-2 rounded-3xl bg-white border border-slate-100 overflow-hidden">
+              <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between gap-3">
                 <div>
-                  <CardTitle>Priority Tasks</CardTitle>
-                  <CardDescription>Your pending assignments</CardDescription>
+                  <h3 className="text-lg font-semibold tracking-tight">Priority tasks</h3>
+                  <p className="text-sm text-muted-foreground mt-0.5">Your pending assignments</p>
                 </div>
-                <Button variant="ghost" size="sm" className="text-primary font-bold" onClick={() => handleNavigate('tasks')}>
-                  View Board <ArrowUpRight className="ml-1 w-3 h-3" />
-                </Button>
-              </CardHeader>
-              <CardContent className="space-y-3">
+                <Button variant="outline" onClick={() => handleNavigate('tasks')} className="h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold">View board</Button>
+              </div>
+              <div className="p-5 sm:p-6 space-y-2">
                 {loading ? (
-                  [1,2,3].map(i => <div key={i} className="h-14 bg-muted rounded-xl animate-pulse" />)
+                  [1, 2, 3].map(i => <div key={i} className="h-16 rounded-2xl bg-slate-100 animate-pulse" />)
                 ) : tasks.length === 0 ? (
-                  <div className="py-8 text-center text-muted-foreground">
-                    <Target className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                    <p className="text-sm">No pending tasks</p>
-                  </div>
+                  <p className="py-10 text-center text-sm text-muted-foreground">No pending tasks</p>
                 ) : (
                   tasks.map((task: any) => (
                     <TaskItem
@@ -229,84 +183,59 @@ export function ModernEmployeeDashboard({ initialTab, onNavigate }: { initialTab
                     />
                   ))
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            {/* Rewards & Recognition */}
             <div className="space-y-4">
-              <Card className="border-none shadow-lg bg-gradient-to-br from-primary to-primary/80 text-white">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-white/20">
-                      <Trophy className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-sm">Performance Tier: Gold</h4>
-                      <p className="text-xs text-white/80 mt-0.5">Keep up the great work!</p>
-                    </div>
+              {/* Performance tier */}
+              <div className="rounded-3xl bg-white border border-slate-100 p-6">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-medium text-slate-500">Performance tier</p>
+                    <p className="text-2xl font-semibold tracking-tight mt-1">Gold</p>
                   </div>
-                  <div className="mt-6">
-                    <div className="flex justify-between text-[10px] font-bold uppercase mb-2">
-                      <span>Current Progress</span>
-                      <span>{pendingTaskCount > 0 ? `${Math.max(0, 10 - pendingTaskCount) * 100} / 1000 XP` : '1000 / 1000 XP'}</span>
-                    </div>
-                    <div className="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
-                      <div className="h-full bg-white rounded-full transition-all" style={{ width: `${Math.max(10, 100 - pendingTaskCount * 10)}%` }} />
-                    </div>
+                  <span className="rounded-full bg-[#dff3da] text-[#256c1d] px-3 py-1 text-xs font-semibold">Keep up the great work!</span>
+                </div>
+                <div className="mt-5">
+                  <div className="flex justify-between text-xs font-medium text-slate-500 mb-2">
+                    <span>Current progress</span>
+                    <span className="tabular-nums text-slate-900">{pendingTaskCount > 0 ? `${Math.max(0, 10 - pendingTaskCount) * 100} / 1000 XP` : '1000 / 1000 XP'}</span>
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="h-2.5 w-full bg-[#f4f6f3] rounded-full overflow-hidden">
+                    <div className="h-full bg-[#54b947] rounded-full transition-all" style={{ width: `${Math.max(10, 100 - pendingTaskCount * 10)}%` }} />
+                  </div>
+                </div>
+              </div>
 
-              <Card className="border-none shadow-xl bg-card/50 backdrop-blur-xl">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm">Quick Actions</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
+              {/* Quick actions */}
+              <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+                <div className="px-6 py-5 border-b border-slate-100">
+                  <h3 className="text-lg font-semibold tracking-tight">Quick actions</h3>
+                </div>
+                <div className="p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-2">
                   {[
-                    { label: 'Apply for Leave', tab: 'leaves', color: 'text-info' },
-                    { label: 'View Attendance', tab: 'attendance', color: 'text-warning' },
-                    { label: 'Notice Board', tab: 'notice-board', color: 'text-success' },
-                    { label: 'Announcements', tab: 'announcements', color: 'text-primary' },
-                    { label: 'My Team', tab: 'team', color: 'text-warning' },
-                    { label: 'Raise Escalation', tab: 'escalations', color: 'text-error' },
+                    { label: 'Apply for Leave', tab: 'leaves' },
+                    { label: 'View Attendance', tab: 'attendance' },
+                    { label: 'Notice Board', tab: 'notice-board' },
+                    { label: 'Announcements', tab: 'announcements' },
+                    { label: 'My Team', tab: 'team' },
+                    { label: 'Raise Escalation', tab: 'escalations' },
+                    { label: 'Pay Slips', tab: 'payslips' },
+                    { label: 'Holiday List', tab: 'holidays' },
+                    { label: 'L&D Portal', tab: 'ld-portal' },
                   ].map(item => (
                     <button
                       key={item.tab}
-                      className="w-full text-left text-sm px-3 py-2 rounded-lg hover:bg-muted transition-colors flex items-center justify-between"
+                      type="button"
+                      className="w-full text-left text-sm px-4 py-3 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors flex items-center justify-between"
                       onClick={() => handleNavigate(item.tab)}
                     >
-                      <span className={cn('font-medium', item.color)}>{item.label}</span>
-                      <ArrowUpRight className="w-3 h-3 text-muted-foreground" />
+                      <span className="font-semibold text-slate-900">{item.label}</span>
+                      <ArrowUpRight className="w-4 h-4 text-slate-400" />
                     </button>
                   ))}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Punch + Shortcuts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <ShortcutBtn
-                icon={<FileText className="w-5 h-5 text-primary" />}
-                title="Pay Slips"
-                onClick={() => handleNavigate('payslips')}
-              />
-              <ShortcutBtn
-                icon={<Calendar className="w-5 h-5 text-info" />}
-                title="Holiday List"
-                onClick={() => handleNavigate('holidays')}
-              />
-              <ShortcutBtn
-                icon={<MessageSquare className="w-5 h-5 text-success" />}
-                title="Announcements"
-                onClick={() => handleNavigate('announcements')}
-              />
-              <ShortcutBtn
-                icon={<Star className="w-5 h-5 text-warning" />}
-                title="L&D Portal"
-                onClick={() => handleNavigate('ld-portal')}
-              />
+                </div>
+              </div>
             </div>
           </div>
         </TabsContent>
@@ -346,49 +275,32 @@ export function ModernEmployeeDashboard({ initialTab, onNavigate }: { initialTab
         )}
 
         <TabsContent value="payslips">
-          <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
-            <CardHeader>
-              <CardTitle>Pay Slips</CardTitle>
-              <CardDescription>Your monthly salary statements</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="py-12 text-center text-muted-foreground">
-                <FileText className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                <p className="font-medium">Pay slips will appear here once payroll is processed.</p>
-                <p className="text-sm mt-1">Contact HR or Finance for your salary details.</p>
-              </div>
-            </CardContent>
-          </Card>
+          <ComingSoonPanel title="Pay Slips" description="Your monthly salary statements." note="Pay slips will appear here once payroll is processed. Contact HR or Finance for your salary details." />
         </TabsContent>
 
-        <TabsContent value="ld-portal">
-          <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
-            <CardHeader>
-              <CardTitle>Learning &amp; Development Portal</CardTitle>
-              <CardDescription>Courses, certifications and growth resources</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <TabsContent value="ld-portal" className="space-y-6">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Learning &amp; Development</h2>
+            <p className="text-muted-foreground text-sm mt-1.5">Courses, certifications and growth resources</p>
+          </div>
+          <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+            <div className="p-5 sm:p-6 space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {[
-                  { title: 'Onboarding Essentials', category: 'Mandatory', status: 'Completed', color: 'text-success' },
-                  { title: 'Communication Skills', category: 'Soft Skills', status: 'In Progress', color: 'text-warning' },
-                  { title: 'Data Privacy & Compliance', category: 'Compliance', status: 'Not Started', color: 'text-muted-foreground' },
+                  { title: 'Onboarding Essentials', category: 'Mandatory', status: 'Completed', pill: 'bg-[#dff3da] text-[#256c1d]' },
+                  { title: 'Communication Skills', category: 'Soft Skills', status: 'In Progress', pill: 'bg-amber-100 text-amber-700' },
+                  { title: 'Data Privacy & Compliance', category: 'Compliance', status: 'Not Started', pill: 'bg-slate-100 text-slate-600' },
                 ].map((course) => (
-                  <Card key={course.title} className="border border-border hover:border-primary/40 transition-all cursor-pointer">
-                    <CardContent className="p-4">
-                      <Badge variant="outline" className="text-[9px] mb-2">{course.category}</Badge>
-                      <h4 className="font-bold text-sm mb-1">{course.title}</h4>
-                      <p className={`text-xs font-medium ${course.color}`}>{course.status}</p>
-                    </CardContent>
-                  </Card>
+                  <div key={course.title} className="rounded-2xl bg-[#f4f6f3] p-5">
+                    <p className="text-xs font-medium text-slate-500">{course.category}</p>
+                    <h4 className="font-semibold text-slate-900 mt-1">{course.title}</h4>
+                    <span className={cn('inline-block rounded-full px-3 py-0.5 text-xs font-semibold mt-3', course.pill)}>{course.status}</span>
+                  </div>
                 ))}
               </div>
-              <div className="py-6 text-center text-muted-foreground border-t border-border">
-                <Star className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                <p className="text-sm">More courses will be assigned by HR. Check back regularly.</p>
-              </div>
-            </CardContent>
-          </Card>
+              <p className="pt-4 border-t border-slate-100 text-center text-sm text-muted-foreground">More courses will be assigned by HR. Check back regularly.</p>
+            </div>
+          </div>
         </TabsContent>
 
         <TabsContent value="escalations">
@@ -406,78 +318,25 @@ export function ModernEmployeeDashboard({ initialTab, onNavigate }: { initialTab
   );
 }
 
-function EmployeeMetric({ title, value, icon, subtext, color, onClick }: any) {
-  const colorMap: any = {
-    primary: 'bg-primary/10 text-primary',
-    success: 'bg-success/10 text-success',
-    info: 'bg-info/10 text-info',
-    warning: 'bg-warning/10 text-warning',
-  };
-
-  return (
-    <Card
-      className={cn('group transition-all duration-300 hover:border-primary/50 hover:-translate-y-1', onClick && 'cursor-pointer')}
-      onClick={onClick}
-    >
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className={cn('p-2.5 rounded-xl transition-transform group-hover:scale-110', colorMap[color])}>
-            {icon}
-          </div>
-          <Badge variant="outline" className="text-[9px] opacity-60">Live</Badge>
-        </div>
-        <div className="space-y-1">
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          <p className="text-3xl font-bold tracking-tight">{value}</p>
-          <p className="text-[10px] text-muted-foreground mt-0.5">{subtext}</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
 function TaskItem({ title, priority, due, progress, onClick }: any) {
-  const priorityColor: any = {
-    High: 'text-error border-error/20 bg-error/5',
-    Medium: 'text-warning border-warning/20 bg-warning/5',
-    Low: 'text-info border-info/20 bg-info/5',
+  const pill: any = {
+    High: 'bg-red-100 text-red-700',
+    Medium: 'bg-amber-100 text-amber-700',
+    Low: 'bg-[#dff3da] text-[#256c1d]',
   };
 
   return (
-    <div
-      className="p-4 rounded-xl border border-border group hover:border-primary/30 transition-all cursor-pointer"
-      onClick={onClick}
-    >
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className={cn('w-2 h-2 rounded-full', progress === 100 ? 'bg-success' : 'bg-primary')} />
-          <h5 className="text-sm font-bold text-foreground line-clamp-1">{title}</h5>
-        </div>
-        <Badge variant="outline" className={cn('text-[9px] font-bold uppercase py-0', priorityColor[priority])}>{priority}</Badge>
+    <button type="button" className="w-full text-left rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors px-4 py-3.5" onClick={onClick}>
+      <div className="flex items-center justify-between gap-3 mb-3">
+        <h5 className="text-sm font-semibold text-slate-900 line-clamp-1">{title}</h5>
+        <span className={cn('rounded-full px-3 py-0.5 text-xs font-semibold shrink-0', pill[priority])}>{priority}</span>
       </div>
       <div className="flex items-center justify-between gap-4">
-        <div className="h-1.5 flex-1 bg-muted rounded-full overflow-hidden">
-          <div className="h-full bg-primary rounded-full" style={{ width: `${progress}%` }} />
+        <div className="h-2 flex-1 bg-white rounded-full overflow-hidden">
+          <div className="h-full bg-[#54b947] rounded-full" style={{ width: `${progress}%` }} />
         </div>
-        <span className="text-[10px] text-muted-foreground whitespace-nowrap font-medium flex items-center gap-1">
-          <Clock className="w-3 h-3" />
-          {due}
-        </span>
+        <span className="text-xs text-muted-foreground whitespace-nowrap font-medium">{due}</span>
       </div>
-    </div>
-  );
-}
-
-function ShortcutBtn({ icon, title, onClick }: any) {
-  return (
-    <button
-      className="flex flex-col items-center justify-center p-6 rounded-2xl bg-card border border-border hover:border-primary/40 hover:bg-primary/5 transition-all group"
-      onClick={onClick}
-    >
-      <div className="p-3 rounded-xl bg-muted group-hover:bg-primary/10 group-hover:text-primary transition-all mb-3 group-hover:scale-110">
-        {icon}
-      </div>
-      <span className="text-xs font-bold text-foreground">{title}</span>
     </button>
   );
 }

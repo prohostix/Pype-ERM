@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Receipt, CheckCircle, XCircle } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 
 import { CS } from '@/lib/currency';
+import { cn } from '@/lib/utils';
+import { ListPagination } from '@/components/ui/list-pagination';
 export function ExpensesPanel() {
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   // Local date as YYYY-MM-DD, the format the date picker uses
   const toDateInput = (d: Date = new Date()) =>
     `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -110,18 +112,18 @@ export function ExpensesPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Expense Management</h2>
-          <p className="text-muted-foreground">Track and approve expense claims</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Expense Management</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Track and approve expense claims</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
           <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Add Expense</Button>
+            <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Expense</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="wizard-form max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
             <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Expense' : 'Add New Expense'}</DialogTitle>
+              <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Expense' : 'Add New Expense'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -154,67 +156,77 @@ export function ExpensesPanel() {
                 <Textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} rows={3} required />
               </div>
               <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                <Button type="submit" className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Save</Button>
+                <Button type="button" variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDialogOpen(false)}>Cancel</Button>
               </div>
             </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Expense Claims</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Expense Claims</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{expenses.length} total</span>}
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : expenses.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No expenses found</div>
-          ) : (
-            <div className="space-y-2">
-              {expenses.filter(expense => expense && (expense.id || expense.id)).map((expense) => {
-                const expenseId = expense.id || expense.id;
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Receipt className="w-6 h-6" /></div>
+              <p className="text-sm">No expenses found</p>
+            </div>
+          ) : (() => {
+            const valid = expenses.filter(expense => expense && expense.id);
+            const currentPage = Math.min(page, Math.max(1, Math.ceil(valid.length / pageSize)));
+            const paged = valid.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+            return (
+            <div className="space-y-3">
+              {paged.map((expense) => {
+                const expenseId = expense.id;
                 return (
-                  <div key={expenseId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Receipt className="w-6 h-6 text-primary" />
+                  <div key={expenseId} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center shrink-0">
+                        <Receipt className="w-5 h-5" />
                       </div>
-                      <div className="flex-1">
-                        <div className="font-medium">{CS()}{expense.amount} - {expense.category}</div>
-                        <div className="text-sm text-muted-foreground">{expense.description}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-slate-900">{CS()}{expense.amount} <span className="font-normal text-slate-500">·</span> <span className="capitalize">{expense.category}</span></div>
+                        <div className="text-sm text-slate-600 truncate">{expense.description}</div>
                         <div className="text-xs text-muted-foreground mt-1">
                           By: {expense.user?.name || expense.employeeId?.name || expense.employee?.name || 'Unknown'} • {expense.submittedAt ? new Date(expense.submittedAt).toLocaleDateString() : 'N/A'}
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge>{expense.status}</Badge>
+                      <span className={cn('rounded-full px-3 py-1 text-[11px] font-semibold capitalize', expense.status === 'approved' ? 'bg-[#dff3da] text-[#256c1d]' : expense.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700')}>{expense.status}</span>
                       {expense.status === 'pending' && (
                         <>
-                          <Button variant="ghost" size="sm" onClick={() => handleApprove(expenseId, 'approve')}>
-                            <CheckCircle className="w-4 h-4 text-success" />
+                          <Button variant="ghost" size="sm" title="Approve" className="rounded-full hover:bg-white" onClick={() => handleApprove(expenseId, 'approve')}>
+                            <CheckCircle className="w-4 h-4 text-[#256c1d]" />
                           </Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleApprove(expenseId, 'reject')}>
-                            <XCircle className="w-4 h-4 text-error" />
+                          <Button variant="ghost" size="sm" title="Reject" className="rounded-full hover:bg-red-50" onClick={() => handleApprove(expenseId, 'reject')}>
+                            <XCircle className="w-4 h-4 text-red-500" />
                           </Button>
                         </>
                       )}
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(expense)}>
+                      <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(expense)}>
                         <Edit className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(expenseId)}>
+                      <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(expenseId)}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
                 );
               })}
+              <ListPagination total={valid.length} page={currentPage} pageSize={pageSize} onPageChange={setPage} onPageSizeChange={(n) => { setPageSize(n); setPage(1); }} />
             </div>
-          )}
-        </CardContent>
-      </Card>
+            );
+          })()}
+        </div>
+      </div>
     </div>
   );
 }

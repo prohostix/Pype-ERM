@@ -37,7 +37,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
@@ -326,33 +325,30 @@ export function AcademicCentersPanel() {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* COMMON TOP HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Academic Centers & Programs</h2>
-          <p className="text-muted-foreground text-sm">
-            Manage physical & online centers, program offerings, and video access rules for online programs
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Academic Centers &amp; Programs</h2>
+          <p className="text-muted-foreground text-sm mt-1.5 max-w-2xl">
+            Manage physical &amp; online centers, program offerings, and video access rules for online programs
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* COMMON AREA: PROGRAM VIDEO ACCESS & FEE RULES BUTTON */}
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
           {canWrite && (
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => {
                 if (programs.length > 0 && !selectedProgramId) {
                   setSelectedProgramId(programs[0].id);
                 }
                 setProgramRulesModalOpen(true);
               }}
-              className="border-indigo-200 text-indigo-700 bg-indigo-50/60 hover:bg-indigo-100 hover:text-indigo-800 dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-300 dark:hover:bg-indigo-900/50 shadow-xs gap-2 font-medium transition-all"
+              className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50"
             >
-              <ShieldAlert className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-              Online Program Video & Fee Rules
+              <ShieldAlert className="w-4 h-4 text-[#256c1d]" />
+              Online Program Video &amp; Fee Rules
               {configuredProgramsCount > 0 && (
-                <Badge className="bg-indigo-600 hover:bg-indigo-600 text-[10px] h-4.5 px-1.5 py-0 font-bold">
-                  {configuredProgramsCount} Active
-                </Badge>
+                <span className="rounded-full bg-[#8ae47e] text-[#0b1d14] text-[11px] font-bold px-2 py-0.5">{configuredProgramsCount} active</span>
               )}
             </Button>
           )}
@@ -360,18 +356,18 @@ export function AcademicCentersPanel() {
           {canWrite && (
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
               <DialogTrigger asChild>
-                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-sm">
-                  <Plus className="w-4 h-4 mr-2" />Add Center
+                <Button className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
+                  <Plus className="w-4 h-4" />Add Center
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col overflow-hidden p-0 border-none shadow-2xl rounded-xl">
-                <DialogHeader className="bg-gradient-to-r from-blue-600/10 to-indigo-600/5 p-6 border-b shrink-0">
-                  <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-                    <Building className="w-6 h-6 text-blue-600" />
+              <DialogContent className="w-[96vw] sm:max-w-3xl max-h-[92vh] flex flex-col overflow-hidden p-0 border-0 rounded-[2rem] bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+                <DialogHeader className="px-6 sm:px-8 pt-7 pb-5 shrink-0 text-left">
+                  <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-4 text-left">
+                    <span className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Building className="w-5 h-5" /></span>
                     {editingId ? 'Edit Academic Center' : 'Add New Academic Center'}
                   </DialogTitle>
                 </DialogHeader>
-                <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto px-6 sm:px-8 py-5 border-t border-slate-100 custom-scrollbar">
                   <form onSubmit={handleSubmit} className="space-y-8">
                     {/* Basic Information Section */}
                     <div className="space-y-4">
@@ -379,14 +375,14 @@ export function AcademicCentersPanel() {
                         <span className="w-6 h-[1px] bg-border"></span>
                         Basic Information
                       </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-muted/20 p-5 rounded-xl border border-border/50">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#f4f6f3] p-5 rounded-3xl">
                         <div className="space-y-2 md:col-span-2">
                           <Label className="text-sm font-medium">Center Name <span className="text-rose-500">*</span></Label>
                           <Input 
                             value={formData.name} 
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
                             required 
-                            className="bg-background shadow-sm border-muted-foreground/20 focus-visible:ring-blue-500"
+                            className="bg-background shadow-sm border-muted-foreground/20 focus-visible:ring-emerald-500"
                             placeholder="e.g. Downtown Campus"
                           />
                         </div>
@@ -417,7 +413,7 @@ export function AcademicCentersPanel() {
                             value={formData.address} 
                             onChange={(e) => setFormData({ ...formData, address: e.target.value })} 
                             placeholder="Full address (optional for online centers)"
-                            className="bg-background shadow-sm border-muted-foreground/20 focus-visible:ring-blue-500 resize-none"
+                            className="bg-background shadow-sm border-muted-foreground/20 focus-visible:ring-emerald-500 resize-none"
                           />
                         </div>
                       </div>
@@ -505,7 +501,7 @@ export function AcademicCentersPanel() {
                                       key={program.id} 
                                       className={`flex items-start space-x-3 p-3 rounded-md cursor-pointer transition-all duration-200 border border-transparent ${
                                         formData.programIds.includes(program.id) 
-                                          ? 'bg-blue-50/50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' 
+                                          ? 'bg-emerald-50/50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800' 
                                           : 'hover:bg-muted'
                                       } ${isOriginal ? 'opacity-70 cursor-not-allowed' : ''}`}
                                     >
@@ -514,7 +510,7 @@ export function AcademicCentersPanel() {
                                         checked={formData.programIds.includes(program.id)}
                                         onCheckedChange={() => toggleProgram(program.id)}
                                         disabled={isOriginal}
-                                        className="mt-0.5 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                                        className="mt-0.5 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
                                       />
                                       <div className="space-y-0.5 leading-none">
                                         <p className="text-sm font-medium leading-tight flex items-center gap-2">
@@ -543,8 +539,8 @@ export function AcademicCentersPanel() {
                     </div>
                     
                     <div className="flex gap-3 pt-6 pb-2 border-t mt-8 justify-end items-center">
-                      <Button type="button" variant="ghost" onClick={() => setDialogOpen(false)} className="px-6 hover:bg-rose-50 hover:text-rose-600 transition-colors">Cancel</Button>
-                      <Button type="submit" className="px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md transition-all">
+                      <Button type="button" variant="ghost" onClick={() => setDialogOpen(false)} className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">Cancel</Button>
+                      <Button type="submit" className="h-11 rounded-full px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold">
                         {editingId ? 'Save Changes' : 'Create Center'}
                       </Button>
                     </div>
@@ -556,149 +552,120 @@ export function AcademicCentersPanel() {
         </div>
       </div>
 
-      {/* COMMON AREA SUMMARY BAR */}
-      <div className="bg-gradient-to-r from-indigo-50/70 via-blue-50/40 to-slate-50 dark:from-indigo-950/20 dark:via-blue-950/10 dark:to-slate-900/30 p-4 rounded-2xl border border-indigo-100 dark:border-indigo-950/60 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
-              <GraduationCap className="w-4 h-4" />
-            </div>
+      {/* COMMON AREA SUMMARY */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+        {[
+          { icon: GraduationCap, label: 'Online programs', value: `${onlinePrograms.length}`, hint: 'offerings' },
+          { icon: Clock, label: 'Daily viewing quotas', value: `${programsWithDailyLimit}`, hint: 'programs restricted' },
+          { icon: ShieldCheck, label: 'Fee-paid video locking', value: `${programsWithFeeLock}`, hint: 'programs gated' },
+        ].map(({ icon: Icon, label, value, hint }) => (
+          <div key={label} className="rounded-3xl bg-card p-6 flex items-center justify-between gap-4 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_28px_-14px_rgba(16,24,40,0.10)]">
             <div>
-              <span className="text-xs text-muted-foreground block leading-tight">Online Programs</span>
-              <span className="font-bold text-foreground">{onlinePrograms.length} Offerings</span>
+              <p className="text-xs font-medium text-muted-foreground">{label}</p>
+              <p className="text-3xl font-semibold tracking-tight mt-1">{value}</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">{hint}</p>
             </div>
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0"><Icon className="w-5 h-5" /></div>
           </div>
-
-          <Separator orientation="vertical" className="h-8 hidden sm:block" />
-
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-600/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
-              <Clock className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-xs text-muted-foreground block leading-tight">Daily Viewing Quotas</span>
-              <span className="font-bold text-foreground">{programsWithDailyLimit} Programs Restricted</span>
-            </div>
-          </div>
-
-          <Separator orientation="vertical" className="h-8 hidden sm:block" />
-
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-emerald-600/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-xs text-muted-foreground block leading-tight">Fee-Paid Video Locking</span>
-              <span className="font-bold text-foreground">{programsWithFeeLock} Programs Gated</span>
-            </div>
-          </div>
-        </div>
-
-        {canWrite && (
-          <Button 
-            variant="ghost" 
-            size="sm"
+        ))}
+      </div>
+      {canWrite && (
+        <div className="flex justify-end -mt-2">
+          <button
             onClick={() => {
-              if (programs.length > 0 && !selectedProgramId) {
-                setSelectedProgramId(programs[0].id);
-              }
+              if (programs.length > 0 && !selectedProgramId) setSelectedProgramId(programs[0].id);
               setProgramRulesModalOpen(true);
             }}
-            className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-100/50 dark:text-indigo-400 dark:hover:bg-indigo-950/60 font-semibold text-xs gap-1 self-start md:self-auto"
+            className="text-xs font-semibold text-[#256c1d] hover:underline"
           >
-            Configure Rules per Program &rarr;
-          </Button>
-        )}
-      </div>
+            Configure rules per program &rarr;
+          </button>
+        </div>
+      )}
 
       {/* CLEAN ACADEMIC CENTERS GRID (NO ACCESS RULES CLUTTER ON CARDS) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 sm:gap-6">
         {loading ? (
-          <div className="col-span-full flex flex-col justify-center items-center py-20 text-muted-foreground bg-card rounded-xl border border-border/50 shadow-sm">
-            <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="col-span-full flex flex-col justify-center items-center py-20 text-muted-foreground bg-card rounded-3xl">
+            <div className="w-10 h-10 border-4 border-[#54b947] border-t-transparent rounded-full animate-spin mb-4"></div>
             Loading academic centers...
           </div>
         ) : centers.length === 0 ? (
-          <div className="col-span-full flex flex-col justify-center items-center py-20 bg-card rounded-xl border border-border/50 shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-4">
-              <Building className="w-8 h-8 text-blue-500" />
+          <div className="col-span-full flex flex-col justify-center items-center py-20 bg-white dark:bg-card rounded-3xl border border-dashed border-slate-300">
+            <div className="w-14 h-14 rounded-full bg-[#eaf6e6] flex items-center justify-center mb-4">
+              <Building className="w-6 h-6 text-[#256c1d]" />
             </div>
             <h3 className="text-xl font-semibold mb-2">No Centers Found</h3>
             <p className="text-muted-foreground text-center max-w-md mb-6">
               You haven't added any academic centers yet. Create your first center to start assigning programs.
             </p>
             {canWrite && (
-              <Button onClick={() => setDialogOpen(true)} className="bg-blue-600 hover:bg-blue-700 text-white shadow-md">
+              <Button onClick={() => setDialogOpen(true)} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold shadow-none">
                 <Plus className="w-4 h-4 mr-2" /> Add Your First Center
               </Button>
             )}
           </div>
         ) : (
           centers.map((c) => (
-            <div 
-              key={c.id} 
-              className="group bg-card rounded-2xl border border-border/60 shadow-sm hover:shadow-xl hover:border-blue-500/30 transition-all duration-300 overflow-hidden flex flex-col"
+            <div
+              key={c.id}
+              className="group bg-card rounded-3xl hover:-translate-y-0.5 transition-all duration-300 overflow-hidden flex flex-col shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_28px_-14px_rgba(16,24,40,0.10)]"
             >
-              {/* Card Header (Gradient & Info) */}
-              <div className="relative p-6 pb-4 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-950/20">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-border/50 flex items-center justify-center shrink-0 text-blue-600">
-                    <Building className="w-6 h-6" />
+              <div className="p-6 pb-4">
+                <div className="flex justify-between items-start gap-3">
+                  <div className="flex items-start gap-3.5 min-w-0">
+                    <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+                      <Building className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-semibold line-clamp-1" title={c.name}>{c.name}</h3>
+                      <div className="flex items-center gap-1.5 flex-wrap mt-1.5">
+                        <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full capitalize ${c.status === 'active' ? 'bg-[#e3f7dd] text-[#1f6a17]' : 'bg-slate-100 text-slate-600'}`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${c.status === 'active' ? 'bg-[#54b947]' : 'bg-slate-400'}`} />{c.status}
+                        </span>
+                        <span className="text-[11px] font-medium px-2.5 py-1 rounded-full capitalize bg-[#f1f3ef] text-slate-600">{c.type}</span>
+                      </div>
+                    </div>
                   </div>
                   {canWrite && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-white/50 hover:bg-white dark:bg-slate-800/50 dark:hover:bg-slate-800">
-                          <MoreVertical className="h-4 w-4 text-muted-foreground" />
+                        <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3] shrink-0">
+                          <MoreVertical className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48 rounded-xl">
-                        <DropdownMenuItem onClick={() => handleEdit(c)} className="cursor-pointer gap-2">
+                      <DropdownMenuContent align="end" className="w-52 rounded-2xl p-1.5">
+                        <DropdownMenuItem onClick={() => handleEdit(c)} className="cursor-pointer gap-2.5 py-2.5 rounded-xl">
                           <Edit className="w-4 h-4" /> Edit Center
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDeleteClick(c.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2">
+                        <DropdownMenuItem onClick={() => handleDeleteClick(c.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2.5 py-2.5 rounded-xl">
                           <Trash2 className="w-4 h-4" /> Request Deletion
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   )}
                 </div>
-                <h3 className="text-xl font-bold line-clamp-1 mb-1">{c.name}</h3>
-                <div className="flex items-center gap-2">
-                  <Badge variant={c.status === 'active' ? 'default' : 'secondary'} className="rounded-full px-2.5 py-0.5 text-xs font-medium">
-                    <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${c.status === 'active' ? 'bg-white dark:bg-current' : 'bg-current opacity-50'}`}></span>
-                    {c.status.charAt(0).toUpperCase() + c.status.slice(1)}
-                  </Badge>
-                  <Badge variant="outline" className="rounded-full px-2.5 py-0.5 text-xs font-medium capitalize border-blue-200 text-blue-700 dark:border-blue-800 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20">
-                    {c.type}
-                  </Badge>
-                </div>
               </div>
 
-              {/* Card Body (Details) */}
-              <div className="p-6 pt-2 flex-1 flex flex-col gap-4">
-                <div className="flex items-start gap-3 text-sm text-muted-foreground bg-muted/30 p-3 rounded-lg border border-border/40">
-                  <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-muted-foreground/70" />
+              <div className="px-6 pb-5 flex-1">
+                <div className="flex items-start gap-3 text-sm text-muted-foreground bg-[#f4f6f3] dark:bg-muted/30 px-4 py-3 rounded-2xl">
+                  <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-[#256c1d]" />
                   <span className="line-clamp-2 leading-relaxed">
                     {c.address || 'No physical address provided (Virtual / Online Center)'}
                   </span>
                 </div>
               </div>
 
-              {/* Card Footer (Stats & Actions) */}
-              <div className="px-6 py-4 bg-muted/10 border-t border-border/50 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300">
-                  <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                    <Layers className="w-4 h-4" />
-                  </div>
+              <div className="px-6 pb-6 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5 text-sm font-semibold text-foreground">
+                  <span className="w-9 h-9 rounded-full bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Layers className="w-4 h-4" /></span>
                   {c.programIds ? c.programIds.length : 0} <span className="text-muted-foreground font-normal">Programs</span>
                 </div>
                 {canWrite && (
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => setActiveCenter(c)} 
-                    className="rounded-full text-xs h-8 border-border/60 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors"
+                  <Button
+                    variant="outline"
+                    onClick={() => setActiveCenter(c)}
+                    className="h-10 px-5 rounded-full bg-white border-slate-200 text-sm font-semibold hover:bg-[#eaf6e6] hover:text-[#256c1d]"
                   >
                     Manage Classes
                   </Button>
@@ -713,10 +680,10 @@ export function AcademicCentersPanel() {
       <Dialog open={programRulesModalOpen} onOpenChange={handleProgramRulesOpenChange}>
         <DialogContent className="w-[96vw] max-w-6xl lg:max-w-7xl max-h-[92vh] flex flex-col overflow-hidden p-0 border-none shadow-2xl rounded-2xl">
           {/* Modal Header */}
-          <DialogHeader className="bg-gradient-to-r from-indigo-600/10 via-blue-600/5 to-purple-600/10 p-6 border-b shrink-0">
+          <DialogHeader className="px-6 sm:px-8 pt-6 pb-5 border-b border-slate-100 shrink-0">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shrink-0">
+                <div className="w-11 h-11 rounded-xl bg-green-600 text-white flex items-center justify-center shadow-md shrink-0">
                   <ShieldAlert className="w-6 h-6" />
                 </div>
                 <div>
@@ -735,7 +702,7 @@ export function AcademicCentersPanel() {
                   variant="outline" 
                   size="sm" 
                   onClick={() => handleApplyToAllPrograms(activeSelectedProgram.id)}
-                  className="text-xs border-indigo-200 text-indigo-700 hover:bg-indigo-50 gap-1.5 self-start sm:self-auto shrink-0"
+                  className="text-xs border-green-200 text-green-700 hover:bg-green-50 gap-1.5 self-start sm:self-auto shrink-0"
                   title="Copy current program's rules across all online programs"
                 >
                   <Copy className="w-3.5 h-3.5" />
@@ -797,18 +764,18 @@ export function AcademicCentersPanel() {
                         onClick={() => setSelectedProgramId(prog.id)}
                         className={`w-full text-left p-3 rounded-xl border transition-all flex flex-col gap-1 relative ${
                           isSelected 
-                            ? 'bg-indigo-50/80 dark:bg-indigo-950/40 border-indigo-300 dark:border-indigo-800 shadow-2xs' 
+                            ? 'bg-green-50/80 dark:bg-green-950/40 border-green-300 dark:border-green-800 shadow-2xs' 
                             : 'bg-card hover:bg-muted/50 border-border/60'
                         }`}
                       >
                         {isSelected && (
-                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-indigo-600"></div>
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-green-600"></div>
                         )}
                         <div className="flex items-start justify-between gap-2">
-                          <span className={`text-xs font-bold line-clamp-1 ${isSelected ? 'text-indigo-900 dark:text-indigo-200' : 'text-foreground'}`}>
+                          <span className={`text-xs font-bold line-clamp-1 ${isSelected ? 'text-green-900 dark:text-green-200' : 'text-foreground'}`}>
                             {prog.name}
                           </span>
-                          <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${isSelected ? 'text-indigo-600 translate-x-0.5' : 'text-muted-foreground/40'}`} />
+                          <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-transform ${isSelected ? 'text-green-600 translate-x-0.5' : 'text-muted-foreground/40'}`} />
                         </div>
 
                         <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
@@ -819,8 +786,8 @@ export function AcademicCentersPanel() {
                         {/* Status Tags */}
                         <div className="flex flex-wrap items-center gap-1 mt-1 pt-1 border-t border-border/30 text-[10px]">
                           {conf.dailyClassLimitEnabled ? (
-                            <Badge variant="outline" className="text-[9px] py-0 px-1 border-blue-300 text-blue-700 dark:border-blue-800 dark:text-blue-300 bg-blue-50/60 font-semibold gap-0.5">
-                              <Clock className="w-2.5 h-2.5 text-blue-600" /> {conf.dailyClassLimit}/day
+                            <Badge variant="outline" className="text-[9px] py-0 px-1 border-emerald-300 text-emerald-700 dark:border-emerald-800 dark:text-emerald-300 bg-emerald-50/60 font-semibold gap-0.5">
+                              <Clock className="w-2.5 h-2.5 text-emerald-600" /> {conf.dailyClassLimit}/day
                             </Badge>
                           ) : (
                             <span className="text-muted-foreground/60 text-[9px]">No daily limit</span>
@@ -848,9 +815,9 @@ export function AcademicCentersPanel() {
               {activeSelectedProgram ? (
                 <>
                   {/* Selected Program Header */}
-                  <div className="p-4 rounded-xl bg-gradient-to-r from-indigo-50/50 to-blue-50/30 dark:from-indigo-950/20 dark:to-blue-950/10 border border-indigo-100 dark:border-indigo-900/50 space-y-1">
+                  <div className="p-4 rounded-2xl bg-[#eaf6e6] space-y-1">
                     <div className="flex items-center gap-2">
-                      <GraduationCap className="w-4 h-4 text-indigo-600" />
+                      <GraduationCap className="w-4 h-4 text-green-600" />
                       <h3 className="text-base font-bold text-foreground">{activeSelectedProgram.name}</h3>
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -863,7 +830,7 @@ export function AcademicCentersPanel() {
                     <div className="flex items-start justify-between gap-4">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-indigo-600" />
+                          <Clock className="w-4 h-4 text-green-600" />
                           <h4 className="text-sm font-semibold">Daily Class Viewing Limit</h4>
                         </div>
                         <p className="text-xs text-muted-foreground leading-relaxed">
@@ -895,7 +862,7 @@ export function AcademicCentersPanel() {
                           />
                         </div>
                         <div className="text-xs text-muted-foreground bg-background/60 p-3 rounded-lg border border-border/40">
-                          <span className="font-semibold text-foreground">Rule:</span> A student in this program can watch up to <span className="font-bold text-indigo-600 dark:text-indigo-400">{activeSelectedConfig.dailyClassLimit}</span> different lessons/day, including lessons they rewatch. Unlocks reset at 12:00 AM IST.
+                          <span className="font-semibold text-foreground">Rule:</span> A student in this program can watch up to <span className="font-bold text-green-600 dark:text-green-400">{activeSelectedConfig.dailyClassLimit}</span> different lessons/day, including lessons they rewatch. Unlocks reset at 12:00 AM IST.
                         </div>
                       </div>
                     )}
@@ -906,7 +873,7 @@ export function AcademicCentersPanel() {
                     <div className="flex items-start justify-between gap-4">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-violet-600" />
+                          <Clock className="w-4 h-4 text-lime-600" />
                           <h4 className="text-sm font-semibold">Next Video Unlock Gap</h4>
                         </div>
                         <p className="text-xs text-muted-foreground leading-relaxed">
@@ -937,7 +904,7 @@ export function AcademicCentersPanel() {
                             />
                           </div>
                           <div className="text-xs text-muted-foreground bg-background/60 p-3 rounded-lg border border-border/40">
-                            <span className="font-semibold text-foreground">Rule:</span> a video opens at 12:00 AM IST, <span className="font-bold text-violet-600 dark:text-violet-400">{activeSelectedConfig.unlockGapDays ?? 1}</span> day(s) after the day the previous video was completed. Videos must be taken in course order.
+                            <span className="font-semibold text-foreground">Rule:</span> a video opens at 12:00 AM IST, <span className="font-bold text-lime-600 dark:text-lime-400">{activeSelectedConfig.unlockGapDays ?? 1}</span> day(s) after the day the previous video was completed. Videos must be taken in course order.
                           </div>
                         </div>
                         <p className="text-xs text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 leading-relaxed">
@@ -1260,7 +1227,7 @@ export function AcademicCentersPanel() {
                 type="button" 
                 onClick={handleSaveProgramRules}
                 disabled={savingProgramRules}
-                className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white shadow-md gap-2 px-6"
+                className="bg-slate-900 hover:bg-slate-800 text-white rounded-full h-11 font-semibold gap-2 px-6"
               >
                 {savingProgramRules ? (
                   <>

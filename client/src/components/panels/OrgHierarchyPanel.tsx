@@ -60,7 +60,7 @@ export function OrgNode({
   const isFull = vacant <= 0;
 
   const boxColor = node.branchId
-    ? '#0891b2'  // cyan for branch-scoped positions
+    ? '#256c1d'  // brand green for branch-scoped positions
     : node.departmentId
       ? ROLE_COLORS[node.departmentId.type] || '#6366f1'
       : '#6366f1';
@@ -71,89 +71,104 @@ export function OrgNode({
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative group" style={{ minWidth: 190 }}>
-        <div className="rounded-xl border-2 bg-white shadow-md px-4 py-3 text-center transition-all hover:shadow-lg"
-          style={{ borderColor: boxColor, minWidth: 190 }}>
-
-          {/* Branch badge */}
-          {node.branch && (
-            <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 inline-flex items-center gap-1"
-              style={{ background: '#0891b222', color: '#0891b2' }}>
-              <Building2 className="h-2.5 w-2.5" />
-              {node.branch.name} [{node.branch.code}]
-            </span>
-          )}
-
-          {/* Dept badge */}
-          {node.departmentId && !node.branch && (
-            <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 inline-block"
-              style={{ background: boxColor + '22', color: boxColor }}>
-              {node.departmentId.name}
-            </span>
-          )}
-
-          {/* Sub-dept badge */}
-          {subDeptName && (
-            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full mb-1 inline-flex items-center gap-1 bg-slate-100 text-slate-600">
-              <Layers className="h-2.5 w-2.5" />{subDeptName}
-            </span>
-          )}
-
-          <p className="font-bold text-sm text-gray-800 leading-tight">{node.title}</p>
-
-          <div className="flex items-center justify-center gap-1 mt-1">
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${isFull ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
-              {filled}/{node.maxHeadcount} filled
-            </span>
+      <div className="relative group" style={{ width: 230 }}>
+        <div
+          className="relative overflow-hidden rounded-2xl border bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_28px_-14px_rgba(16,24,40,0.14)] text-left transition-all hover:-translate-y-0.5 hover:shadow-[0_16px_34px_-14px_rgba(16,24,40,0.22)]"
+          style={{ borderColor: boxColor + '33' }}
+        >
+          {/* Header: icon, title and where it belongs */}
+          <div className="flex items-start gap-3 px-4 pt-4 pb-3">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: boxColor + '1f', color: boxColor }}
+            >
+              {node.branch ? <Building2 className="h-5 w-5" /> : <Users className="h-5 w-5" />}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold text-sm text-foreground leading-snug break-words">{node.title}</p>
+              <div className="mt-1 flex flex-wrap gap-1">
+                {node.branch ? (
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full truncate max-w-full" style={{ background: boxColor + '1a', color: boxColor }}>
+                    {node.branch.name} · {node.branch.code}
+                  </span>
+                ) : node.departmentId ? (
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full truncate max-w-full" style={{ background: boxColor + '1a', color: boxColor }}>
+                    {node.departmentId.name}
+                  </span>
+                ) : null}
+                {subDeptName && (
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full inline-flex items-center gap-1 bg-[#f1f3ef] text-slate-600">
+                    <Layers className="h-2.5 w-2.5" />{subDeptName}
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
 
-          {filled > 0 && (
-            <div className="mt-2 space-y-1">
+          {/* Headcount */}
+          <div className="px-4 pb-3">
+            <div className="flex items-center justify-between text-[11px] mb-1.5">
+              <span className="text-muted-foreground">Headcount</span>
+              <span className={`font-semibold ${isFull ? 'text-[#1f6a17]' : 'text-amber-700'}`}>
+                {filled}/{node.maxHeadcount} filled
+              </span>
+            </div>
+            <div className="h-1.5 w-full rounded-full bg-[#f1f3ef] overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{ width: `${Math.min(100, node.maxHeadcount ? (filled / node.maxHeadcount) * 100 : 0)}%`, background: isFull ? '#54b947' : '#f59e0b' }}
+              />
+            </div>
+          </div>
+
+          {/* People */}
+          {(filled > 0 || vacant > 0) && (
+            <div className="border-t border-slate-100 px-3 py-3 space-y-1.5 bg-[#fafbf9]">
               {node.filledBy.map(u => (
-                <div key={u.id} className="flex items-center gap-1 bg-gray-50 rounded-lg px-2 py-1">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[9px] font-bold shrink-0"
+                <div key={u.id} className="flex items-center gap-2 rounded-full bg-white border border-slate-100 pl-1 pr-2.5 py-1">
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-semibold shrink-0"
                     style={{ background: ROLE_COLORS[u.role] || '#6366f1' }}>
                     {u.name.charAt(0)}
                   </div>
-                  <span className="text-xs text-gray-700 truncate flex-1">{u.name}</span>
+                  <span className="text-xs text-foreground/80 truncate flex-1">{u.name}</span>
                   {!isReadOnly && (
                     <button onClick={() => onUnassign?.(node, u.id)}
-                      className="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                      className="text-slate-400 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-opacity">
                       <Trash2 className="h-3 w-3" />
                     </button>
                   )}
                 </div>
               ))}
-            </div>
-          )}
 
-          {vacant > 0 && !isReadOnly && (
-            <button onClick={() => onAssign?.(node)}
-              className="mt-2 w-full flex items-center justify-center gap-1 text-xs border border-dashed rounded-lg py-1 text-gray-400 hover:text-indigo-600 hover:border-indigo-400 transition-colors">
-              <UserPlus className="h-3 w-3" />
-              {vacant} vacant {vacant === 1 ? 'slot' : 'slots'}
-            </button>
-          )}
-          {vacant > 0 && isReadOnly && (
-            <div className="mt-2 w-full flex items-center justify-center gap-1 text-xs border border-dashed rounded-lg py-1 text-gray-400">
-              <UserPlus className="h-3 w-3" />
-              {vacant} vacant {vacant === 1 ? 'slot' : 'slots'}
+              {vacant > 0 && !isReadOnly && (
+                <button onClick={() => onAssign?.(node)}
+                  className="w-full flex items-center justify-center gap-1.5 text-xs border border-dashed border-slate-300 rounded-full py-1.5 text-slate-500 hover:text-[#256c1d] hover:border-[#54b947] hover:bg-[#eaf6e6] transition-colors">
+                  <UserPlus className="h-3 w-3" />
+                  {vacant} vacant {vacant === 1 ? 'slot' : 'slots'}
+                </button>
+              )}
+              {vacant > 0 && isReadOnly && (
+                <div className="w-full flex items-center justify-center gap-1.5 text-xs border border-dashed border-slate-300 rounded-full py-1.5 text-slate-500">
+                  <UserPlus className="h-3 w-3" />
+                  {vacant} vacant {vacant === 1 ? 'slot' : 'slots'}
+                </div>
+              )}
             </div>
           )}
 
           {!isReadOnly && (
-            <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
               <button onClick={() => onEdit?.(node)}
-                className="w-6 h-6 bg-white border rounded-full shadow flex items-center justify-center hover:bg-indigo-50">
-                <Edit2 className="h-3 w-3 text-indigo-600" />
+                className="w-7 h-7 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center hover:bg-[#eaf6e6]" title="Edit">
+                <Edit2 className="h-3 w-3 text-[#256c1d]" />
               </button>
               <button onClick={() => onAddChild?.(node)}
-                className="w-6 h-6 bg-white border rounded-full shadow flex items-center justify-center hover:bg-green-50">
-                <Plus className="h-3 w-3 text-green-600" />
+                className="w-7 h-7 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center hover:bg-[#eaf6e6]" title="Add position below">
+                <Plus className="h-3 w-3 text-[#256c1d]" />
               </button>
               <button onClick={() => onDelete?.(node)}
-                className="w-6 h-6 bg-white border rounded-full shadow flex items-center justify-center hover:bg-red-50">
-                <Trash2 className="h-3 w-3 text-red-500" />
+                className="w-7 h-7 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center hover:bg-rose-50" title="Delete">
+                <Trash2 className="h-3 w-3 text-rose-500" />
               </button>
             </div>
           )}
@@ -162,8 +177,8 @@ export function OrgNode({
 
       {children.length > 0 && (
         <>
-          <div className="w-px bg-gray-300" style={{ height: 24 }} />
-          <button onClick={() => setExpanded(!expanded)} className="text-gray-400 hover:text-gray-600 mb-1">
+          <div className="w-px bg-slate-300" style={{ height: 24 }} />
+          <button onClick={() => setExpanded(!expanded)} className="text-slate-400 hover:text-slate-600 mb-1">
             {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </button>
           {expanded && (
@@ -175,15 +190,15 @@ export function OrgNode({
                     {/* top horizontal line */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2"
                       style={{
-                        width: `calc(100% - 190px)`,
+                        width: `calc(100% - 230px)`,
                         height: 1,
-                        background: '#d1d5db',
+                        background: '#cbd5e1',
                         top: 0,
                       }}
                     />
                     {children.map(child => (
                       <div key={child.id} className="flex flex-col items-center" style={{ padding: '0 20px' }}>
-                        <div className="w-px bg-gray-300" style={{ height: 20 }} />
+                        <div className="w-px bg-slate-300" style={{ height: 20 }} />
                         <OrgNode node={child} allNodes={allNodes} allUsers={allUsers} allDepts={allDepts}
                           onEdit={onEdit} onDelete={onDelete} onAssign={onAssign}
                           onUnassign={onUnassign} onAddChild={onAddChild} depth={depth + 1} />
@@ -208,14 +223,14 @@ export function OrgNode({
 function DeptNode({ dept, color }: { dept: { id: string; name: string; type: string }; color: string }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="w-px bg-gray-300" style={{ height: 24 }} />
-      <div className="rounded-xl border-2 bg-white shadow-sm px-4 py-3 text-center"
-        style={{ borderColor: color, minWidth: 160 }}>
+      <div className="w-px bg-slate-300" style={{ height: 24 }} />
+      <div className="rounded-2xl border bg-white shadow-sm px-4 py-3 text-center"
+        style={{ borderColor: color + '55', minWidth: 160 }}>
         <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 inline-block"
           style={{ background: color + '22', color }}>
           {dept.type}
         </span>
-        <p className="font-semibold text-sm text-gray-800 leading-tight">{dept.name}</p>
+        <p className="font-semibold text-sm text-foreground leading-tight">{dept.name}</p>
       </div>
     </div>
   );
@@ -230,7 +245,7 @@ function BranchSection({
   onAssign: (n: DesignationNode) => void; onUnassign: (n: DesignationNode, userId: string) => void;
   onAddChild: (parent: DesignationNode) => void; onAddBranchPosition: (branch: Branch) => void;
 }) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   // Designation nodes scoped to this branch whose parent is outside the branch (or has no parent)
   const branchRoots = allNodes.filter(n => {
@@ -273,31 +288,31 @@ function BranchSection({
   const mgr = branch.branchManagerId;
 
   return (
-    <div className="border-2 rounded-2xl p-5 bg-cyan-50/50" style={{ borderColor: '#0891b244' }}>
+    <div className="rounded-3xl p-6 bg-[#eaf6e6]">
       {/* Branch header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-cyan-600 flex items-center justify-center text-white">
+          <div className="w-11 h-11 rounded-2xl bg-[#eaf6e6] flex items-center justify-center text-[#256c1d]">
             <Building2 className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-base text-cyan-900">{branch.name}</span>
-              <span className="text-xs font-mono bg-cyan-100 text-cyan-700 px-2 py-0.5 rounded">
+              <span className="font-semibold text-lg text-foreground">{branch.name}</span>
+              <span className="text-xs font-mono bg-white text-slate-600 px-2.5 py-0.5 rounded-full">
                 {branch.code}
               </span>
             </div>
-            <div className="flex items-center gap-1 text-xs text-cyan-700 mt-0.5">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
               <MapPin className="h-3 w-3" />{branch.address}{branch.city ? `, ${branch.city}` : ''}
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button size="sm" variant="outline" className="text-xs h-7"
+          <Button size="sm" variant="outline" className="text-xs h-9 px-4 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]"
             onClick={() => onAddBranchPosition(branch)}>
             <Plus className="h-3 w-3 mr-1" /> Add Position
           </Button>
-          <button onClick={() => setExpanded(!expanded)} className="text-cyan-500 hover:text-cyan-700">
+          <button onClick={() => setExpanded(!expanded)} className="h-9 w-9 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-foreground">
             {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </button>
         </div>
@@ -310,27 +325,27 @@ function BranchSection({
             {/* ── Branch Manager node ── */}
             {mgr ? (
               <div className="relative group" style={{ minWidth: 200 }}>
-                <div className="rounded-xl border-2 bg-white shadow-md px-4 py-3 text-center"
-                  style={{ borderColor: '#0891b2', minWidth: 200 }}>
+                <div className="rounded-2xl border bg-white shadow-[0_10px_28px_-14px_rgba(16,24,40,0.14)] px-4 py-4 text-center"
+                  style={{ borderColor: '#256c1d40', minWidth: 200 }}>
                   <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 inline-flex items-center gap-1"
-                    style={{ background: '#0891b222', color: '#0891b2' }}>
+                    style={{ background: '#54b94720', color: '#256c1d' }}>
                     <Building2 className="h-2.5 w-2.5" /> Branch Manager
                   </span>
-                  <p className="font-bold text-sm text-gray-800">{mgr.name}</p>
+                  <p className="font-semibold text-sm text-foreground">{mgr.name}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {mgr.designation || (mgr.role || '').replace(/_/g, ' ')}
                   </p>
                   <div className="mt-2 flex items-center justify-center gap-1">
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
+                    <span className="text-xs bg-[#e3f7dd] text-[#1f6a17] px-2.5 py-0.5 rounded-full font-medium">
                       Controls {controlledDepts.length} dept{controlledDepts.length !== 1 ? 's' : ''}
                     </span>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="rounded-xl border-2 border-dashed px-4 py-3 text-center text-sm text-muted-foreground"
-                style={{ borderColor: '#0891b244', minWidth: 200 }}>
-                <Building2 className="h-5 w-5 mx-auto mb-1 text-cyan-400" />
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-white/60 px-4 py-3 text-center text-sm text-muted-foreground"
+                style={{ minWidth: 200 }}>
+                <Building2 className="h-5 w-5 mx-auto mb-1 text-slate-400" />
                 No branch manager assigned
               </div>
             )}
@@ -338,13 +353,13 @@ function BranchSection({
             {/* Connector down to dept row */}
             {controlledDepts.length > 0 && (
               <>
-                <div className="w-px bg-gray-300" style={{ height: 20 }} />
+                <div className="w-px bg-slate-300" style={{ height: 20 }} />
                 {/* Horizontal bar spanning all dept nodes */}
                 <div className="flex items-start justify-center">
                   {controlledDepts.map((dept) => (
                     <div key={dept.id} className="flex flex-col items-center" style={{ padding: '0 20px' }}>
                       {controlledDepts.length > 1 && (
-                        <div className="w-px bg-gray-300" style={{ height: 20 }} />
+                        <div className="w-px bg-slate-300" style={{ height: 20 }} />
                       )}
                       <DeptNode dept={dept} color={DEPT_COLORS[dept.type] || '#6366f1'} />
                     </div>
@@ -356,7 +371,7 @@ function BranchSection({
             {/* Designation nodes for this branch (below the dept row) */}
             {branchRoots.length > 0 && (
               <>
-                <div className="w-px bg-gray-300" style={{ height: 24 }} />
+                <div className="w-px bg-slate-300" style={{ height: 24 }} />
                 <div className="flex gap-10 justify-center pt-2">
                   {branchRoots.map(root => (
                     <OrgNode key={root.id} node={root} allNodes={allNodes} allUsers={allUsers} allDepts={allDepts}
@@ -368,11 +383,11 @@ function BranchSection({
             )}
 
             {branchRoots.length === 0 && controlledDepts.length === 0 && (
-              <div className="text-center py-6 text-sm text-muted-foreground border-2 border-dashed border-cyan-200 rounded-xl mt-4 w-full">
+              <div className="text-center py-8 text-sm text-muted-foreground border border-dashed border-slate-300 rounded-2xl mt-4 w-full bg-white/60">
                 No positions defined for this branch yet.
                 <br />
                 <button onClick={() => onAddBranchPosition(branch)}
-                  className="text-cyan-600 hover:underline text-xs mt-1 inline-flex items-center gap-1">
+                  className="text-[#256c1d] hover:underline text-xs mt-1 inline-flex items-center gap-1">
                   <Plus className="h-3 w-3" /> Add first position
                 </button>
               </div>
@@ -591,39 +606,47 @@ export function OrgHierarchyPanel() {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         <div>
-          <h2 className="text-xl font-bold">Organisation Chart</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">Organisation Chart</h2>
+          <p className="text-sm text-muted-foreground mt-1.5 max-w-2xl">
             Build the designation hierarchy. Branches have their own position trees.
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:flex sm:flex-row gap-2">
-          <Button size="sm" variant="outline" onClick={() => setSubDeptDialog(true)} className="w-full sm:w-auto">
-            <Layers className="h-4 w-4 mr-1" /> Sub-Dept
+        <div className="grid grid-cols-2 sm:flex sm:flex-row gap-2.5 shrink-0">
+          <Button variant="outline" onClick={() => setSubDeptDialog(true)} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50">
+            <Layers className="h-4 w-4" /> Sub-Dept
           </Button>
-          <Button size="sm" variant="outline" onClick={fetchAll} className="w-full sm:w-auto">
-            <RefreshCw className="h-4 w-4 mr-1" /> Refresh
+          <Button variant="outline" onClick={fetchAll} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50">
+            <RefreshCw className="h-4 w-4" /> Refresh
           </Button>
-          <Button size="sm" onClick={() => openCreate()} className="col-span-2 sm:col-span-1 w-full sm:w-auto">
-            <Plus className="h-4 w-4 mr-1" /> Add Position
+          <Button onClick={() => openCreate()} className="col-span-2 sm:col-span-1 h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
+            <Plus className="h-4 w-4" /> Add Position
           </Button>
         </div>
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-cyan-200 inline-block" /> Branch position</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-amber-200 inline-block" /> Vacant slots</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-green-200 inline-block" /> Fully filled</span>
-        <span className="flex items-center gap-1"><Edit2 className="h-3 w-3" /> Hover a box to edit/add child/delete</span>
+      <div className="flex flex-wrap gap-2 text-xs text-slate-600">
+        {[
+          { dot: 'bg-[#54b947]', label: 'Branch position' },
+          { dot: 'bg-amber-400', label: 'Vacant slots' },
+          { dot: 'bg-[#256c1d]', label: 'Fully filled' },
+        ].map(l => (
+          <span key={l.label} className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-3 py-1.5 shadow-sm">
+            <span className={`w-2 h-2 rounded-full ${l.dot}`} /> {l.label}
+          </span>
+        ))}
+        <span className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-3 py-1.5 shadow-sm">
+          <Edit2 className="h-3 w-3" /> Hover a box to edit, add a child or delete
+        </span>
       </div>
 
       {/* Global org chart */}
       {globalRoots.length > 0 && (
-        <div className="overflow-auto border rounded-xl bg-gray-50 p-4 sm:p-8">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-6 text-center">
-            Organisation — Head Office
+        <div className="overflow-auto rounded-3xl bg-[#eaf6e6] p-5 sm:p-8" style={{ backgroundImage: 'radial-gradient(rgba(37,108,29,.18) 1px, transparent 1px)', backgroundSize: '22px 22px' }}>
+          <p className="text-xs font-semibold text-slate-500 mb-6 text-center">
+            Organisation · Head Office
           </p>
           <div className="inline-flex gap-12 justify-center min-w-full pb-4">
             {globalRoots.map(root => (
@@ -636,7 +659,7 @@ export function OrgHierarchyPanel() {
       )}
 
       {globalRoots.length === 0 && allBranches.length === 0 && (
-        <div className="border-2 border-dashed rounded-xl p-16 text-center">
+        <div className="border border-dashed border-slate-300 rounded-3xl p-16 text-center bg-white">
           <Users className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
           <p className="text-muted-foreground mb-4">No positions defined yet.</p>
           <p className="text-sm text-muted-foreground mb-6">
@@ -652,8 +675,8 @@ export function OrgHierarchyPanel() {
       {/* Branch sections */}
       {allBranches.length > 0 && (
         <div className="space-y-4">
-          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-            Branch Hierarchies ({allBranches.length})
+          <p className="text-lg font-semibold text-foreground">
+            Branch Hierarchies <span className="text-sm font-medium text-muted-foreground">({allBranches.length})</span>
           </p>
           {allBranches.map(branch => (
             <BranchSection
@@ -675,20 +698,38 @@ export function OrgHierarchyPanel() {
 
       {/* Unassigned users */}
       {unassignedUsers.length > 0 && (
-        <div className="border rounded-xl p-4 bg-amber-50">
-          <p className="text-sm font-semibold text-amber-700 mb-2">
-            {unassignedUsers.length} people not yet placed in the chart
-          </p>
-          <div className="flex flex-wrap gap-2">
+        <div className="rounded-3xl bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_28px_-14px_rgba(16,24,40,0.10)] p-6 sm:p-7">
+          <div className="flex items-start justify-between gap-4 mb-5">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                <Users className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-foreground">
+                  {unassignedUsers.length} {unassignedUsers.length === 1 ? 'person' : 'people'} not yet placed in the chart
+                </h3>
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  Assign them to a position to add them to the hierarchy.
+                </p>
+              </div>
+            </div>
+            <span className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full bg-amber-50 text-amber-700">
+              {unassignedUsers.length} unassigned
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 max-h-72 overflow-y-auto pr-1">
             {unassignedUsers.map(u => (
-              <span key={u.id} className="text-xs bg-white border rounded-full px-3 py-1 flex items-center gap-1">
-                <span className="w-4 h-4 rounded-full inline-flex items-center justify-center text-white text-[9px] font-bold"
+              <div key={u.id} className="flex items-center gap-3 rounded-2xl bg-[#f4f6f3] px-3.5 py-3">
+                <span className="w-9 h-9 rounded-full inline-flex items-center justify-center text-white text-sm font-semibold shrink-0"
                   style={{ background: ROLE_COLORS[u.role] || '#6366f1' }}>
-                  {u.name.charAt(0)}
+                  {u.name.charAt(0).toUpperCase()}
                 </span>
-                {u.name}
-                <span className="text-gray-400">({(u.designation || u.role || '').replace(/_/g, ' ')})</span>
-              </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate" title={u.name}>{u.name}</p>
+                  <p className="text-xs text-muted-foreground truncate capitalize">{(u.designation || u.role || '').replace(/_/g, ' ')}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -696,160 +737,187 @@ export function OrgHierarchyPanel() {
 
       {/* ── Create / Edit Designation Dialog ── */}
       <Dialog open={designDialog} onOpenChange={setDesignDialog}>
-        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{editingNode ? 'Edit Position' : 'Add Position'}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3 py-2">
-            <div className="space-y-1">
-              <Label>Position Title *</Label>
-              <Input placeholder="e.g. CEO, Branch Manager, Sales Executive"
-                value={designForm.title}
-                onChange={e => setDesignForm(p => ({ ...p, title: e.target.value }))} />
+        <DialogContent className="w-[95vw] sm:max-w-2xl p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] flex flex-col">
+          {/* Header */}
+          <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-5 shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+              {editingNode ? <Edit2 className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <Label>Level (1 = top)</Label>
-                <Input type="number" min={1} value={designForm.level}
-                  onChange={e => setDesignForm(p => ({ ...p, level: e.target.value }))} />
+            <DialogHeader className="space-y-1 text-left">
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground text-left">
+                {editingNode ? 'Edit Position' : 'Add Position'}
+              </DialogTitle>
+              <p className="text-sm text-muted-foreground">
+                {editingNode ? 'Update this position and where it sits in the hierarchy.' : 'Define a position and where it sits in the hierarchy.'}
+              </p>
+            </DialogHeader>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-6 sm:px-8 pb-2 space-y-7">
+            {/* Basics */}
+            <section className="space-y-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Basics</h3>
+              <div className="space-y-1.5">
+                <Label className="text-sm font-semibold">Position title <span className="text-rose-500">*</span></Label>
+                <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" placeholder="e.g. CEO, Branch Manager, Sales Executive"
+                  value={designForm.title}
+                  onChange={e => setDesignForm(p => ({ ...p, title: e.target.value }))} />
               </div>
-              <div className="space-y-1">
-                <Label>Max Headcount</Label>
-                <Input type="number" min={1} value={designForm.maxHeadcount}
-                  onChange={e => setDesignForm(p => ({ ...p, maxHeadcount: e.target.value }))} />
-              </div>
-            </div>
-
-            {/* Branch selector */}
-            <div className="space-y-1">
-              <Label>Branch (leave empty for head office)</Label>
-              <Select value={designForm.branchId || '__none__'}
-                onValueChange={v => setDesignForm(p => ({ ...p, branchId: v === '__none__' ? '' : v }))}>
-                <SelectTrigger><SelectValue placeholder="Head office / global" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__none__">Head office / global</SelectItem>
-                  {allBranches.map(b => (
-                    <SelectItem key={b.id} value={b.id}>
-                      {b.name} [{b.code}] — {b.address}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <Label>Department</Label>
-              <Select value={designForm.departmentId || '__none__'}
-                onValueChange={v => setDesignForm(p => ({
-                  ...p, departmentId: v === '__none__' ? '' : v, subDepartmentId: '',
-                }))}>
-                <SelectTrigger><SelectValue placeholder="Select department..." /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__none__">None</SelectItem>
-                  {allDepts.map(d => <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {designForm.departmentId && (
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <Label>Sub-Department</Label>
-                  <button type="button"
-                    onClick={() => { setSubDeptForm({ name: '', parentDeptId: designForm.departmentId }); setSubDeptDialog(true); }}
-                    className="text-xs text-indigo-600 hover:underline flex items-center gap-1">
-                    <Plus className="h-3 w-3" /> New
-                  </button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Level <span className="font-normal text-muted-foreground">(1 = top)</span></Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="number" min={1} value={designForm.level}
+                    onChange={e => setDesignForm(p => ({ ...p, level: e.target.value }))} />
                 </div>
-                <Select value={designForm.subDepartmentId || '__none__'}
-                  onValueChange={v => setDesignForm(p => ({ ...p, subDepartmentId: v === '__none__' ? '' : v }))}>
-                  <SelectTrigger><SelectValue placeholder="Select sub-department..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none__">None</SelectItem>
-                    {filteredSubDepts.map(sd => (
-                      <SelectItem key={sd.id} value={sd.id}>{sd.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {filteredSubDepts.length === 0 && (
-                  <p className="text-xs text-muted-foreground">No sub-departments for this department yet.</p>
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Max headcount</Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="number" min={1} value={designForm.maxHeadcount}
+                    onChange={e => setDesignForm(p => ({ ...p, maxHeadcount: e.target.value }))} />
+                </div>
+              </div>
+            </section>
+
+            {/* Placement */}
+            <section className="space-y-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Placement</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Branch <span className="font-normal text-muted-foreground">(empty = head office)</span></Label>
+                  <Select value={designForm.branchId || '__none__'}
+                    onValueChange={v => setDesignForm(p => ({ ...p, branchId: v === '__none__' ? '' : v }))}>
+                    <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue placeholder="Head office / global" /></SelectTrigger>
+                    <SelectContent className="rounded-2xl">
+                      <SelectItem value="__none__">Head office / global</SelectItem>
+                      {allBranches.map(b => (
+                        <SelectItem key={b.id} value={b.id}>
+                          {b.name} [{b.code}] — {b.address}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Reports to</Label>
+                  <Select value={designForm.parentDesignationId || '__none__'}
+                    onValueChange={v => setDesignForm(p => ({ ...p, parentDesignationId: v === '__none__' ? '' : v }))}>
+                    <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue placeholder="None (top-level)" /></SelectTrigger>
+                    <SelectContent className="rounded-2xl">
+                      <SelectItem value="__none__">None (top-level)</SelectItem>
+                      {nodes
+                        .filter(n => n.id !== editingNode?.id)
+                        .map(n => (
+                          <SelectItem key={n.id} value={n.id}>
+                            {n.title}{n.branch ? ` [${n.branch.code}]` : ''}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Department</Label>
+                  <Select value={designForm.departmentId || '__none__'}
+                    onValueChange={v => setDesignForm(p => ({
+                      ...p, departmentId: v === '__none__' ? '' : v, subDepartmentId: '',
+                    }))}>
+                    <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue placeholder="Select department..." /></SelectTrigger>
+                    <SelectContent className="rounded-2xl">
+                      <SelectItem value="__none__">None</SelectItem>
+                      {allDepts.map(d => <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {designForm.departmentId && (
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm font-semibold">Sub-department</Label>
+                      <button type="button"
+                        onClick={() => { setSubDeptForm({ name: '', parentDeptId: designForm.departmentId }); setSubDeptDialog(true); }}
+                        className="text-xs font-semibold text-[#256c1d] hover:underline flex items-center gap-1">
+                        <Plus className="h-3 w-3" /> New
+                      </button>
+                    </div>
+                    <Select value={designForm.subDepartmentId || '__none__'}
+                      onValueChange={v => setDesignForm(p => ({ ...p, subDepartmentId: v === '__none__' ? '' : v }))}>
+                      <SelectTrigger className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"><SelectValue placeholder="Select sub-department..." /></SelectTrigger>
+                      <SelectContent className="rounded-2xl">
+                        <SelectItem value="__none__">None</SelectItem>
+                        {filteredSubDepts.map(sd => (
+                          <SelectItem key={sd.id} value={sd.id}>{sd.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {filteredSubDepts.length === 0 && (
+                      <p className="text-xs text-muted-foreground">No sub-departments for this department yet.</p>
+                    )}
+                  </div>
                 )}
               </div>
-            )}
+            </section>
 
-            {/* Multi-branch access checkboxes */}
-            <div className="space-y-1">
-              <Label>Accessible Branches (Multiple)</Label>
-              <div className="max-h-24 overflow-y-auto border rounded p-2 grid grid-cols-1 gap-1">
-                {allBranches.map(b => {
-                  const checked = designForm.allowedBranchIds.includes(b.id);
-                  return (
-                    <label key={b.id} className="flex items-center space-x-2 text-sm cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={e => {
-                          const updated = e.target.checked
-                            ? [...designForm.allowedBranchIds, b.id]
-                            : designForm.allowedBranchIds.filter(id => id !== b.id);
+            {/* Access */}
+            <section className="space-y-4 pb-2">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Access</h3>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Accessible branches <span className="font-normal text-muted-foreground">(select any)</span></Label>
+                <div className="flex flex-wrap gap-2 max-h-28 overflow-y-auto">
+                  {allBranches.length === 0 && <p className="text-xs text-muted-foreground">No branches yet.</p>}
+                  {allBranches.map(b => {
+                    const checked = designForm.allowedBranchIds.includes(b.id);
+                    return (
+                      <button
+                        key={b.id}
+                        type="button"
+                        aria-pressed={checked}
+                        onClick={() => {
+                          const updated = checked
+                            ? designForm.allowedBranchIds.filter(id => id !== b.id)
+                            : [...designForm.allowedBranchIds, b.id];
                           setDesignForm(p => ({ ...p, allowedBranchIds: updated }));
                         }}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <span>{b.name} [{b.code}]</span>
-                    </label>
-                  );
-                })}
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors ${checked ? 'bg-[#8ae47e] border-[#8ae47e] text-[#0b1d14]' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]'}`}
+                      >
+                        {b.name} [{b.code}]
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            {/* Multi-department access checkboxes */}
-            <div className="space-y-1">
-              <Label>Accessible Departments (Multiple)</Label>
-              <div className="max-h-24 overflow-y-auto border rounded p-2 grid grid-cols-1 gap-1">
-                {allDepts.map(d => {
-                  const checked = designForm.allowedDeptIds.includes(d.id);
-                  return (
-                    <label key={d.id} className="flex items-center space-x-2 text-sm cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={e => {
-                          const updated = e.target.checked
-                            ? [...designForm.allowedDeptIds, d.id]
-                            : designForm.allowedDeptIds.filter(id => id !== d.id);
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Accessible departments <span className="font-normal text-muted-foreground">(select any)</span></Label>
+                <div className="flex flex-wrap gap-2 max-h-28 overflow-y-auto">
+                  {allDepts.length === 0 && <p className="text-xs text-muted-foreground">No departments yet.</p>}
+                  {allDepts.map(d => {
+                    const checked = designForm.allowedDeptIds.includes(d.id);
+                    return (
+                      <button
+                        key={d.id}
+                        type="button"
+                        aria-pressed={checked}
+                        onClick={() => {
+                          const updated = checked
+                            ? designForm.allowedDeptIds.filter(id => id !== d.id)
+                            : [...designForm.allowedDeptIds, d.id];
                           setDesignForm(p => ({ ...p, allowedDeptIds: updated }));
                         }}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <span>{d.name}</span>
-                    </label>
-                  );
-                })}
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors ${checked ? 'bg-[#8ae47e] border-[#8ae47e] text-[#0b1d14]' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]'}`}
+                      >
+                        {d.name}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-
-            <div className="space-y-1">
-              <Label>Reports To (parent position)</Label>
-              <Select value={designForm.parentDesignationId || '__none__'}
-                onValueChange={v => setDesignForm(p => ({ ...p, parentDesignationId: v === '__none__' ? '' : v }))}>
-                <SelectTrigger><SelectValue placeholder="None (top-level)" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__none__">None (top-level)</SelectItem>
-                  {nodes
-                    .filter(n => n.id !== editingNode?.id)
-                    .map(n => (
-                      <SelectItem key={n.id} value={n.id}>
-                        {n.title}{n.branch ? ` [${n.branch.code}]` : ''}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-            </div>
+            </section>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDesignDialog(false)}>Cancel</Button>
-            <Button onClick={handleSaveDesignation} disabled={saving || !designForm.title}>
+
+          <DialogFooter className="px-6 sm:px-8 py-5 border-t border-slate-100 gap-2 sm:gap-2 shrink-0 flex-col-reverse sm:flex-row">
+            <Button variant="ghost" onClick={() => setDesignDialog(false)} className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">Cancel</Button>
+            <Button onClick={handleSaveDesignation} disabled={saving || !designForm.title} className="h-11 rounded-full px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold">
               {saving ? 'Saving...' : editingNode ? 'Save Changes' : 'Create Position'}
             </Button>
           </DialogFooter>
@@ -895,7 +963,7 @@ export function OrgHierarchyPanel() {
           <DialogHeader>
             <DialogTitle>Assign to "{assignTarget?.title}"
               {assignTarget?.branch && (
-                <span className="text-sm font-normal text-cyan-600 ml-2">
+                <span className="text-sm font-normal text-[#256c1d] ml-2">
                   [{assignTarget.branch.code}]
                 </span>
               )}

@@ -155,12 +155,12 @@ export interface Organization {
 
 // Deterministic gradient palettes for organization avatars
 const AVATAR_GRADIENTS = [
-  'from-blue-600 to-indigo-600 text-white',
+  'from-emerald-600 to-green-600 text-white',
   'from-emerald-600 to-teal-700 text-white',
-  'from-purple-600 to-violet-700 text-white',
+  'from-lime-600 to-lime-700 text-white',
   'from-amber-500 to-orange-600 text-white',
   'from-rose-600 to-pink-600 text-white',
-  'from-cyan-600 to-blue-600 text-white',
+  'from-teal-600 to-emerald-600 text-white',
   'from-fuchsia-600 to-rose-600 text-white',
   'from-slate-700 to-zinc-900 text-white',
 ];
@@ -646,52 +646,43 @@ export function OrganizationsPanel() {
 
   return (
     <div className="space-y-6">
-      {/* Hero Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-primary/10 text-primary">
-              <Building2 className="w-5 h-5" />
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Organizations & Institutional Tenants
-            </h1>
-            <Badge variant="outline" className="hidden sm:inline-flex bg-primary/5 text-primary border-primary/20 text-xs font-semibold">
-              Multi-Tenant Cluster
-            </Badge>
-          </div>
-          <p className="text-sm text-muted-foreground">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
+        <div>
+          <h1 className="flex items-center gap-3 text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+            Organizations
+            <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-[#eaf6e6] dark:bg-emerald-500/10 text-[#256c1d] dark:text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#54b947]" /> Multi-tenant cluster
+            </span>
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1.5 max-w-2xl">
             Configure tenant instances, license entitlements, dedicated login slugs, and institutional operational scale.
           </p>
         </div>
 
-        {/* Global Controls */}
-        <div className="flex items-center flex-wrap gap-2.5">
+        <div className="flex items-center gap-2.5 shrink-0 flex-wrap lg:flex-nowrap">
           <Button
             variant="outline"
-            size="sm"
             onClick={fetchOrganizations}
             disabled={refreshing}
-            className="h-9 gap-1.5"
+            className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50"
           >
-            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-primary' : 'text-muted-foreground'}`} />
+            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
             <span className="hidden sm:inline">Refresh</span>
           </Button>
 
           <Button
             variant="outline"
-            size="sm"
             onClick={handleExportCSV}
-            className="h-9 gap-1.5 hover:bg-muted"
+            className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50"
           >
-            <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+            <FileSpreadsheet className="w-4 h-4" />
             <span>Export CSV</span>
           </Button>
 
           <Button
             onClick={handleCreate}
-            size="sm"
-            className="h-9 gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm"
+            className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm"
           >
             <Plus className="w-4 h-4" />
             <span>New Organization</span>
@@ -700,16 +691,16 @@ export function OrganizationsPanel() {
       </div>
 
       {/* KPI Metric Summary Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
         {/* Total Organizations */}
-        <Card className="rounded-2xl border bg-card/60 backdrop-blur shadow-xs hover:shadow-md transition-all">
-          <CardContent className="p-4 flex items-center justify-between">
+        <Card className="rounded-3xl gap-0">
+          <CardContent className="p-6 flex items-center justify-between gap-4">
             <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <p className="text-xs font-medium text-muted-foreground">
                 Total Tenants
               </p>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-extrabold tracking-tight">{metrics.total}</span>
+                <span className="text-3xl font-semibold tracking-tight">{metrics.total}</span>
                 <span className="text-xs text-emerald-600 font-medium">
                   {metrics.activeRatio}% active
                 </span>
@@ -718,21 +709,21 @@ export function OrganizationsPanel() {
                 {metrics.active} active • {metrics.inactive + metrics.suspended} inactive
               </p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
               <Building2 className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
         {/* Total Enrolled Students */}
-        <Card className="rounded-2xl border bg-card/60 backdrop-blur shadow-xs hover:shadow-md transition-all">
-          <CardContent className="p-4 flex items-center justify-between">
+        <Card className="rounded-3xl gap-0">
+          <CardContent className="p-6 flex items-center justify-between gap-4">
             <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <p className="text-xs font-medium text-muted-foreground">
                 Students Enrolled
               </p>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400">
+                <span className="text-3xl font-semibold tracking-tight text-green-600 dark:text-green-400">
                   {metrics.totalStudents.toLocaleString()}
                 </span>
                 <span className="text-xs text-muted-foreground">students</span>
@@ -741,21 +732,21 @@ export function OrganizationsPanel() {
                 Active institutional students
               </p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-green-500/10 text-green-600 flex items-center justify-center shrink-0">
               <GraduationCap className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
         {/* Team Members & Staff */}
-        <Card className="rounded-2xl border bg-card/60 backdrop-blur shadow-xs hover:shadow-md transition-all">
-          <CardContent className="p-4 flex items-center justify-between">
+        <Card className="rounded-3xl gap-0">
+          <CardContent className="p-6 flex items-center justify-between gap-4">
             <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <p className="text-xs font-medium text-muted-foreground">
                 Platform Workforce
               </p>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-extrabold tracking-tight text-violet-600 dark:text-violet-400">
+                <span className="text-3xl font-semibold tracking-tight text-lime-600 dark:text-lime-400">
                   {metrics.totalUsers.toLocaleString()}
                 </span>
                 <span className="text-xs text-muted-foreground">staff</span>
@@ -764,21 +755,21 @@ export function OrganizationsPanel() {
                 Admins, faculties & operators
               </p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-violet-500/10 text-violet-600 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-lime-500/10 text-lime-600 flex items-center justify-center shrink-0">
               <Users className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
         {/* Campuses & Centers */}
-        <Card className="rounded-2xl border bg-card/60 backdrop-blur shadow-xs hover:shadow-md transition-all">
-          <CardContent className="p-4 flex items-center justify-between">
+        <Card className="rounded-3xl gap-0">
+          <CardContent className="p-6 flex items-center justify-between gap-4">
             <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <p className="text-xs font-medium text-muted-foreground">
                 Campuses & Centers
               </p>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-extrabold tracking-tight text-amber-600 dark:text-amber-400">
+                <span className="text-3xl font-semibold tracking-tight text-amber-600 dark:text-amber-400">
                   {metrics.totalCenters.toLocaleString()}
                 </span>
                 <span className="text-xs text-muted-foreground">sites</span>
@@ -795,7 +786,7 @@ export function OrganizationsPanel() {
       </div>
 
       {/* Filter, Search & Layout Control Toolbar */}
-      <div className="flex flex-col gap-3 p-4 rounded-2xl border bg-card/40 backdrop-blur">
+      <div className="flex flex-col gap-4">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           {/* Search Bar */}
           <div className="relative flex-1 max-w-md">
@@ -804,7 +795,7 @@ export function OrganizationsPanel() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, email, phone, slug or ID..."
-              className="pl-9 pr-8 h-10 rounded-xl bg-background border-border/80 text-sm"
+              className="pl-10 pr-8 h-11 rounded-full bg-white border-slate-200 shadow-sm text-sm"
             />
             {searchQuery && (
               <button
@@ -820,7 +811,7 @@ export function OrganizationsPanel() {
           <div className="flex flex-wrap items-center gap-2">
             {/* License Filter */}
             <Select value={licenseFilter} onValueChange={(val: any) => setLicenseFilter(val)}>
-              <SelectTrigger className="h-10 w-[150px] rounded-xl text-xs bg-background">
+              <SelectTrigger className="h-11 w-[170px] rounded-full text-sm bg-white border-slate-200 shadow-sm px-4">
                 <Shield className="w-3.5 h-3.5 mr-1 text-muted-foreground" />
                 <SelectValue placeholder="All Licenses" />
               </SelectTrigger>
@@ -835,7 +826,7 @@ export function OrganizationsPanel() {
 
             {/* Sort Dropdown */}
             <Select value={sortBy} onValueChange={(val: any) => setSortBy(val)}>
-              <SelectTrigger className="h-10 w-[160px] rounded-xl text-xs bg-background">
+              <SelectTrigger className="h-11 w-[180px] rounded-full text-sm bg-white border-slate-200 shadow-sm px-4">
                 <ArrowUpDown className="w-3.5 h-3.5 mr-1 text-muted-foreground" />
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
@@ -850,12 +841,12 @@ export function OrganizationsPanel() {
             </Select>
 
             {/* View Mode Toggle (Grid vs Table) */}
-            <div className="flex items-center rounded-xl border bg-background p-0.5">
+            <div className="flex items-center rounded-full border border-slate-200 bg-white shadow-sm p-1">
               <Button
                 variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('grid')}
-                className="h-8.5 px-3 rounded-lg text-xs"
+                className="h-9 px-4 rounded-full text-xs"
                 title="Card Grid View"
               >
                 <LayoutGrid className="w-3.5 h-3.5 mr-1.5" />
@@ -865,7 +856,7 @@ export function OrganizationsPanel() {
                 variant={viewMode === 'table' ? 'secondary' : 'ghost'}
                 size="sm"
                 onClick={() => setViewMode('table')}
-                className="h-8.5 px-3 rounded-lg text-xs"
+                className="h-9 px-4 rounded-full text-xs"
                 title="Table View"
               >
                 <List className="w-3.5 h-3.5 mr-1.5" />
@@ -876,25 +867,25 @@ export function OrganizationsPanel() {
         </div>
 
         {/* Status Filter Badges Strip */}
-        <div className="flex items-center justify-between pt-1 border-t border-border/50 text-xs text-muted-foreground">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
             <span className="font-medium mr-1 text-foreground/80">Status:</span>
             <button
               onClick={() => setStatusFilter('all')}
-              className={`px-3 py-1 rounded-full font-medium transition-all ${
+              className={`px-4 py-1.5 rounded-full font-medium transition-all ${
                 statusFilter === 'all'
-                  ? 'bg-foreground text-background shadow-xs'
-                  : 'bg-muted/60 hover:bg-muted text-muted-foreground'
+                  ? 'bg-[#0b1d14] text-white'
+                  : 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-600'
               }`}
             >
               All ({metrics.total})
             </button>
             <button
               onClick={() => setStatusFilter('active')}
-              className={`px-3 py-1 rounded-full font-medium inline-flex items-center gap-1.5 transition-all ${
+              className={`px-4 py-1.5 rounded-full font-medium inline-flex items-center gap-1.5 transition-all ${
                 statusFilter === 'active'
-                  ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20'
+                  ? 'bg-[#8ae47e] text-[#0b1d14]'
+                  : 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-600'
               }`}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -902,20 +893,20 @@ export function OrganizationsPanel() {
             </button>
             <button
               onClick={() => setStatusFilter('inactive')}
-              className={`px-3 py-1 rounded-full font-medium transition-all ${
+              className={`px-4 py-1.5 rounded-full font-medium transition-all ${
                 statusFilter === 'inactive'
-                  ? 'bg-slate-700 text-white shadow-xs'
-                  : 'bg-slate-500/10 text-slate-700 dark:text-slate-400 hover:bg-slate-500/20'
+                  ? 'bg-slate-700 text-white'
+                  : 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-600'
               }`}
             >
               Inactive ({metrics.inactive})
             </button>
             <button
               onClick={() => setStatusFilter('suspended')}
-              className={`px-3 py-1 rounded-full font-medium transition-all ${
+              className={`px-4 py-1.5 rounded-full font-medium transition-all ${
                 statusFilter === 'suspended'
-                  ? 'bg-rose-600 text-white shadow-xs'
-                  : 'bg-rose-500/10 text-rose-700 dark:text-rose-400 hover:bg-rose-500/20'
+                  ? 'bg-rose-600 text-white'
+                  : 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-600'
               }`}
             >
               Suspended ({metrics.suspended})
@@ -931,7 +922,7 @@ export function OrganizationsPanel() {
       {/* Main Content Area */}
       {filteredOrganizations.length === 0 ? (
         /* Empty State */
-        <Card className="rounded-3xl border-dashed">
+        <Card className="rounded-3xl border border-dashed border-slate-300 shadow-none">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center space-y-3">
             <div className="w-16 h-16 rounded-2xl bg-muted/60 flex items-center justify-center text-muted-foreground">
               <Building2 className="w-8 h-8" />
@@ -965,32 +956,20 @@ export function OrganizationsPanel() {
         </Card>
       ) : viewMode === 'grid' ? (
         /* Cards Grid View */
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
           {filteredOrganizations.map((org) => {
             const expiryInfo = getLicenseExpiryInfo(org.licenseExpiry);
             const licenseName = org.license?.name || (typeof org.licenseId === 'object' && org.licenseId?.name) || 'Standard Plan';
             const initials = getInitials(org.name);
-            const gradient = getGradientForOrg(org.name);
 
             return (
               <Card 
                 key={org.id} 
-                className="group relative rounded-3xl border border-border/80 bg-card hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 flex flex-col justify-between overflow-hidden"
+                className="group relative rounded-3xl gap-0 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between overflow-hidden"
               >
-                {/* Top Subtle Status Line */}
-                <div 
-                  className={`h-1.5 w-full ${
-                    org.status === 'active' 
-                      ? 'bg-gradient-to-r from-emerald-500 to-teal-400' 
-                      : org.status === 'suspended'
-                      ? 'bg-gradient-to-r from-rose-500 to-red-600'
-                      : 'bg-gradient-to-r from-slate-400 to-zinc-500'
-                  }`} 
-                />
-
                 <div>
                   {/* Card Header & Identity */}
-                  <CardHeader className="pb-3 pt-5 px-5 space-y-3">
+                  <CardHeader className="pb-3 pt-6 px-6 space-y-3">
                     <div className="flex items-start justify-between gap-3">
                       {/* Avatar & Title */}
                       <div className="flex items-center gap-3.5 min-w-0">
@@ -998,7 +977,7 @@ export function OrganizationsPanel() {
                           <img
                             src={api.getFileUrl(org.logo)}
                             alt={org.name}
-                            className="w-12 h-12 rounded-2xl object-contain bg-background border p-1 shadow-xs shrink-0"
+                            className="w-12 h-12 rounded-2xl object-contain bg-white p-1 shadow-sm shrink-0"
                             onError={(e) => {
                               (e.target as HTMLElement).style.display = 'none';
                               const fallback = (e.target as HTMLElement).nextElementSibling as HTMLElement;
@@ -1008,14 +987,14 @@ export function OrganizationsPanel() {
                         ) : null}
                         <div 
                           style={{ display: org.logo ? 'none' : 'flex' }}
-                          className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center font-bold text-base shadow-sm shrink-0 tracking-tight ring-2 ring-background`}
+                          className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] dark:bg-emerald-500/10 dark:text-emerald-400 flex items-center justify-center font-semibold text-base shrink-0 tracking-tight"
                         >
                           {initials}
                         </div>
 
                         <div className="min-w-0 space-y-0.5">
                           <CardTitle 
-                            className="text-base font-bold text-foreground leading-snug line-clamp-1 group-hover:text-primary transition-colors cursor-pointer"
+                            className="text-base font-semibold text-foreground leading-snug line-clamp-1 group-hover:text-[#256c1d] transition-colors cursor-pointer"
                             onClick={() => setSelectedOrgForView(org)}
                             title={org.name}
                           >
@@ -1025,7 +1004,7 @@ export function OrganizationsPanel() {
                             {org.customLoginSlug ? (
                               <button
                                 onClick={(e) => handleCopy(org.customLoginSlug!, 'Login slug', e)}
-                                className="inline-flex items-center gap-1 text-[11px] font-mono text-muted-foreground hover:text-foreground bg-muted/60 hover:bg-muted px-2 py-0.5 rounded-md transition-colors"
+                                className="inline-flex items-center gap-1 text-[11px] font-mono text-muted-foreground hover:text-foreground bg-[#f1f3ef] hover:bg-[#e8ebe5] px-2.5 py-0.5 rounded-full transition-colors"
                                 title="Click to copy custom slug"
                               >
                                 <Globe className="w-3 h-3 text-primary" />
@@ -1062,7 +1041,7 @@ export function OrganizationsPanel() {
 
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground">
+                            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground hover:bg-[#f4f6f3]">
                               <MoreVertical className="w-4 h-4" />
                             </Button>
                           </DropdownMenuTrigger>
@@ -1073,11 +1052,11 @@ export function OrganizationsPanel() {
                               View Deep Profile
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={(e) => handleEdit(org, e)} className="cursor-pointer text-xs">
-                              <Edit className="w-3.5 h-3.5 mr-2 text-indigo-500" />
+                              <Edit className="w-3.5 h-3.5 mr-2 text-green-500" />
                               Edit Configuration
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => setFeaturesOrgId(org.id)} className="cursor-pointer text-xs">
-                              <SlidersHorizontal className="w-3.5 h-3.5 mr-2 text-sky-600" />
+                              <SlidersHorizontal className="w-3.5 h-3.5 mr-2 text-teal-600" />
                               Manage Features
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={(e) => handleCopy(org.id, 'Organization ID', e)} className="cursor-pointer text-xs">
@@ -1089,7 +1068,7 @@ export function OrganizationsPanel() {
                                 onClick={(e) => handleCopy(`${window.location.origin}/login/${org.customLoginSlug}`, 'Portal URL', e)}
                                 className="cursor-pointer text-xs"
                               >
-                                <ExternalLink className="w-3.5 h-3.5 mr-2 text-blue-500" />
+                                <ExternalLink className="w-3.5 h-3.5 mr-2 text-emerald-500" />
                                 Copy Portal Link
                               </DropdownMenuItem>
                             )}
@@ -1125,15 +1104,15 @@ export function OrganizationsPanel() {
                   </CardHeader>
 
                   {/* Metrics Footprint Grid */}
-                  <div className="px-5 py-1">
-                    <div className="grid grid-cols-3 gap-2 p-2.5 rounded-2xl bg-muted/40 border border-border/50">
+                  <div className="px-6 py-1">
+                    <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-[#f4f6f3] dark:bg-muted/40">
                       {/* Students */}
                       <div className="text-center space-y-0.5">
                         <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
                           Students
                         </span>
                         <div className="flex items-center justify-center gap-1">
-                          <GraduationCap className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                          <GraduationCap className="w-3.5 h-3.5 text-green-500 shrink-0" />
                           <span className="text-xs font-bold text-foreground">
                             {org._count?.students || org._count?.enrollments || 0}
                           </span>
@@ -1141,12 +1120,12 @@ export function OrganizationsPanel() {
                       </div>
 
                       {/* Staff */}
-                      <div className="text-center space-y-0.5 border-l border-border/50">
+                      <div className="text-center space-y-0.5 border-l border-slate-200/80">
                         <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
                           Staff
                         </span>
                         <div className="flex items-center justify-center gap-1">
-                          <Users className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                          <Users className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                           <span className="text-xs font-bold text-foreground">
                             {org._count?.users || 0}
                           </span>
@@ -1154,7 +1133,7 @@ export function OrganizationsPanel() {
                       </div>
 
                       {/* Centers */}
-                      <div className="text-center space-y-0.5 border-l border-border/50">
+                      <div className="text-center space-y-0.5 border-l border-slate-200/80">
                         <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
                           Centers
                         </span>
@@ -1169,8 +1148,8 @@ export function OrganizationsPanel() {
                   </div>
 
                   {/* License & Expiry Strip */}
-                  <div className="px-5 py-2.5">
-                    <div className="flex items-center justify-between text-xs p-2 rounded-xl bg-background border border-border/60">
+                  <div className="px-6 py-3">
+                    <div className="flex items-center justify-between text-xs px-3.5 py-2.5 rounded-full bg-white border border-slate-200">
                       <div className="flex items-center gap-1.5 min-w-0">
                         <Shield className="w-3.5 h-3.5 text-primary shrink-0" />
                         <span className="font-semibold text-foreground truncate">
@@ -1198,7 +1177,7 @@ export function OrganizationsPanel() {
                   </div>
 
                   {/* Contact Coordinates */}
-                  <CardContent className="px-5 py-1 text-xs space-y-1.5 text-muted-foreground">
+                  <CardContent className="px-6 py-1 text-xs space-y-2 text-muted-foreground">
                     <div className="flex items-center justify-between group/email">
                       <div className="flex items-center gap-2 min-w-0">
                         <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
@@ -1241,7 +1220,7 @@ export function OrganizationsPanel() {
                 </div>
 
                 {/* Card Action Footer */}
-                <div className="px-5 py-3 mt-3 border-t bg-muted/15 flex items-center justify-between gap-2">
+                <div className="px-6 py-4 mt-3 flex items-center justify-between gap-2">
                   <div className="text-[11px] text-muted-foreground flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     <span>Onboarded: {formatDate(org.createdAt)}</span>
@@ -1252,7 +1231,7 @@ export function OrganizationsPanel() {
                       variant="outline"
                       size="sm"
                       onClick={() => setSelectedOrgForView(org)}
-                      className="h-8 px-2.5 rounded-xl text-xs font-medium hover:bg-primary/10 hover:text-primary hover:border-primary/30"
+                      className="h-9 px-4 rounded-full text-xs font-medium bg-white border-slate-200 hover:bg-[#eaf6e6] hover:text-[#256c1d] hover:border-[#54b947]/40"
                     >
                       <Eye className="w-3.5 h-3.5 mr-1" />
                       View
@@ -1261,7 +1240,7 @@ export function OrganizationsPanel() {
                       variant="outline"
                       size="sm"
                       onClick={(e) => handleEdit(org, e)}
-                      className="h-8 px-2.5 rounded-xl text-xs font-medium hover:bg-muted"
+                      className="h-9 px-4 rounded-full text-xs font-medium bg-white border-slate-200 hover:bg-slate-50"
                     >
                       <Edit className="w-3.5 h-3.5 mr-1" />
                       Edit
@@ -1274,9 +1253,9 @@ export function OrganizationsPanel() {
         </div>
       ) : (
         /* Dense Multi-Tenant Table View */
-        <Card className="rounded-2xl border overflow-hidden shadow-xs">
+        <Card className="rounded-3xl overflow-hidden p-3">
           <Table>
-            <TableHeader className="bg-muted/50">
+            <TableHeader className="[&_tr]:border-0 [&_th]:bg-[#f4f6f3] [&_th:first-child]:rounded-l-full [&_th:last-child]:rounded-r-full">
               <TableRow>
                 <TableHead className="w-[280px]">Organization</TableHead>
                 <TableHead>Status</TableHead>
@@ -1297,7 +1276,7 @@ export function OrganizationsPanel() {
                 const gradient = getGradientForOrg(org.name);
 
                 return (
-                  <TableRow key={org.id} className="hover:bg-muted/40 cursor-pointer" onClick={() => setSelectedOrgForView(org)}>
+                  <TableRow key={org.id} className="hover:bg-[#f4f6f3] border-0 cursor-pointer" onClick={() => setSelectedOrgForView(org)}>
                     {/* Organization Identity */}
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -1441,7 +1420,7 @@ export function OrganizationsPanel() {
           {featuresOrg && (
             <>
               <SheetHeader>
-                <SheetTitle className="flex items-center gap-2"><SlidersHorizontal className="w-5 h-5 text-sky-600" />Manage Features</SheetTitle>
+                <SheetTitle className="flex items-center gap-2"><SlidersHorizontal className="w-5 h-5 text-teal-600" />Manage Features</SheetTitle>
                 <SheetDescription>
                   Optional modules for <strong>{featuresOrg.name}</strong>. Changes apply immediately.
                 </SheetDescription>
@@ -1453,7 +1432,7 @@ export function OrganizationsPanel() {
                   return (
                     <div key={feature.key} className="rounded-xl border border-border/60 p-4 flex items-start justify-between gap-4">
                       <div className="flex items-start gap-3 min-w-0">
-                        <div className="w-9 h-9 rounded-lg bg-sky-600 text-white flex items-center justify-center shrink-0">
+                        <div className="w-9 h-9 rounded-lg bg-teal-600 text-white flex items-center justify-center shrink-0">
                           <Icon className="w-4 h-4" />
                         </div>
                         <div className="min-w-0">
@@ -1570,14 +1549,14 @@ export function OrganizationsPanel() {
                     Institutional Footprint
                   </h4>
                   <div className="grid grid-cols-3 gap-3">
-                    <div className="p-3 rounded-2xl bg-indigo-500/5 border border-indigo-500/20 text-center space-y-0.5">
-                      <span className="text-2xl font-black text-indigo-600 dark:text-indigo-400">
+                    <div className="p-3 rounded-2xl bg-green-500/5 border border-green-500/20 text-center space-y-0.5">
+                      <span className="text-2xl font-black text-green-600 dark:text-green-400">
                         {selectedOrgForView._count?.students || selectedOrgForView._count?.enrollments || 0}
                       </span>
                       <p className="text-xs font-medium text-muted-foreground">Students</p>
                     </div>
-                    <div className="p-3 rounded-2xl bg-violet-500/5 border border-violet-500/20 text-center space-y-0.5">
-                      <span className="text-2xl font-black text-violet-600 dark:text-violet-400">
+                    <div className="p-3 rounded-2xl bg-lime-500/5 border border-lime-500/20 text-center space-y-0.5">
+                      <span className="text-2xl font-black text-lime-600 dark:text-lime-400">
                         {selectedOrgForView._count?.users || 0}
                       </span>
                       <p className="text-xs font-medium text-muted-foreground">Team / Staff</p>

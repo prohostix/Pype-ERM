@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, CheckCircle, AlertCircle } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -9,9 +8,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import api from '@/lib/api';
+import { ListPagination } from '@/components/ui/list-pagination';
 
 export function ComplaintsPanel() {
   const [complaints, setComplaints] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -92,59 +94,55 @@ export function ComplaintsPanel() {
 
   const badgeStyle = "border-none rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm";
   const statusColors: any = {
-    open: `bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400 ${badgeStyle}`,
-    in_progress: `bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-400 ${badgeStyle}`,
-    resolved: `bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-400 ${badgeStyle}`,
-    closed: `bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400 ${badgeStyle}`
+    open: `bg-red-100 text-red-700 ${badgeStyle}`,
+    in_progress: `bg-amber-100 text-amber-700 ${badgeStyle}`,
+    resolved: `bg-[#dff3da] text-[#256c1d] ${badgeStyle}`,
+    closed: `bg-slate-200/70 text-slate-600 ${badgeStyle}`
   };
   const priorityColors: any = {
-    low: `bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-400 ${badgeStyle}`,
-    medium: `bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-400 ${badgeStyle}`,
-    high: `bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-400 ${badgeStyle}`
+    low: `bg-sky-100 text-sky-700 ${badgeStyle}`,
+    medium: `bg-amber-100 text-amber-700 ${badgeStyle}`,
+    high: `bg-red-100 text-red-700 ${badgeStyle}`
   };
 
+  const validComplaints = complaints.filter(c => c && c.id);
+  const currentPage = Math.min(page, Math.max(1, Math.ceil(validComplaints.length / pageSize)));
+  const pagedComplaints = validComplaints.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-primary/10 rounded-2xl">
-            <AlertCircle className="w-6 h-6 text-primary" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold">Complaints Management</h2>
-            <p className="text-muted-foreground text-sm mt-1">Track and resolve employee concerns</p>
-          </div>
+    <div className="space-y-6 wizard-form">
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Complaints Management</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Track and resolve employee concerns</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
           <DialogTrigger asChild>
-            <Button className="rounded-xl shadow-md h-10 px-4 transition-transform hover:scale-105 active:scale-95">
+            <Button className="rounded-full h-11 px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
               <Plus className="w-4 h-4 mr-2" /> File Complaint
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
-            <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3">
-              <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
-                <AlertCircle className="w-5 h-5" />
-              </div>
+          <DialogContent className="wizard-form max-w-lg border-0 rounded-[2rem] overflow-hidden p-0 bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+            <div className="bg-[#f4f6f3] p-6 border-b border-slate-100 flex items-center gap-3">
               <div>
-                <DialogTitle className="text-xl font-bold">{editingId ? 'Edit Complaint' : 'File New Complaint'}</DialogTitle>
+                <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Complaint' : 'File New Complaint'}</DialogTitle>
                 <p className="text-sm text-muted-foreground mt-0.5">Submit an issue for HR review.</p>
               </div>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Subject</Label>
-                <Input className="rounded-xl h-11 shadow-sm" value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} required placeholder="Brief description of the issue" />
+                <Label className="text-xs font-semibold text-slate-600">Subject</Label>
+                <Input className="rounded-xl h-11" value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} required placeholder="Brief description of the issue" />
               </div>
               <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Description</Label>
-                <Textarea className="rounded-xl shadow-sm resize-none" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={4} required placeholder="Provide detailed information..." />
+                <Label className="text-xs font-semibold text-slate-600">Description</Label>
+                <Textarea className="rounded-xl resize-none" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={4} required placeholder="Provide detailed information..." />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Category</Label>
+                  <Label className="text-xs font-semibold text-slate-600">Category</Label>
                   <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
-                    <SelectTrigger className="rounded-xl h-11 shadow-sm"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="rounded-xl h-11"><SelectValue /></SelectTrigger>
                     <SelectContent className="rounded-xl">
                       <SelectItem value="general">General</SelectItem>
                       <SelectItem value="harassment">Harassment</SelectItem>
@@ -156,9 +154,9 @@ export function ComplaintsPanel() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Priority</Label>
+                  <Label className="text-xs font-semibold text-slate-600">Priority</Label>
                   <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
-                    <SelectTrigger className="rounded-xl h-11 shadow-sm"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="rounded-xl h-11"><SelectValue /></SelectTrigger>
                     <SelectContent className="rounded-xl">
                       <SelectItem value="low">Low</SelectItem>
                       <SelectItem value="medium">Medium</SelectItem>
@@ -169,9 +167,9 @@ export function ComplaintsPanel() {
               </div>
               {editingId && (
                 <div className="space-y-2">
-                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Status</Label>
+                  <Label className="text-xs font-semibold text-slate-600">Status</Label>
                   <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                    <SelectTrigger className="rounded-xl h-11 shadow-sm"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="rounded-xl h-11"><SelectValue /></SelectTrigger>
                     <SelectContent className="rounded-xl">
                       <SelectItem value="open">Open</SelectItem>
                       <SelectItem value="in_progress">In Progress</SelectItem>
@@ -182,87 +180,88 @@ export function ComplaintsPanel() {
                 </div>
               )}
               <div className="pt-4 flex justify-end gap-2">
-                <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setDialogOpen(false)}>Cancel</Button>
-                <Button type="submit" className="rounded-xl px-6 shadow-md">Submit Complaint</Button>
+                <Button type="button" variant="ghost" className="rounded-full h-11 px-6" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                <Button type="submit" className="rounded-full h-11 px-7 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Submit Complaint</Button>
               </div>
             </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-xl rounded-2xl bg-card/60 backdrop-blur-xl overflow-hidden">
-        <CardHeader className="flex flex-row items-center justify-between p-5 sm:p-6 border-b border-border/40 bg-muted/20">
-          <CardTitle className="text-lg">Active Complaints</CardTitle>
-        </CardHeader>
-        <CardContent className="p-5 sm:p-6">
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Active Complaints</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{complaints.length} total</span>}
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
             <div className="space-y-3">
-              {[1, 2].map(i => <div key={i} className="h-28 bg-muted/40 rounded-2xl animate-pulse border border-border/50" />)}
+              {[1, 2].map(i => <div key={i} className="h-28 bg-slate-100 rounded-2xl animate-pulse" />)}
             </div>
           ) : complaints.length === 0 ? (
-            <div className="text-center py-16 px-4 rounded-2xl border-2 border-dashed border-border/60 bg-muted/10">
-              <div className="bg-muted/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <AlertCircle className="w-8 h-8 text-muted-foreground opacity-50" />
+            <div className="text-center py-14 px-4">
+              <div className="bg-[#eaf6e6] text-[#256c1d] w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <AlertCircle className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-foreground">No active complaints</h3>
+              <h3 className="text-lg font-semibold text-slate-900">No active complaints</h3>
               <p className="text-sm text-muted-foreground mt-1">All issues have been resolved or none have been reported.</p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {complaints.filter(c => c && (c.id || c.id)).map((c) => {
+            <div className="space-y-3">
+              {pagedComplaints.map((c) => {
                 const cid = c.id || c.id;
                 return (
-                  <div key={cid} className="group flex flex-col p-5 border border-slate-200/60 dark:border-slate-800/60 rounded-2xl bg-card/40 hover:bg-card/80 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300 gap-4 overflow-hidden relative">
+                  <div key={cid} className="group relative flex flex-col p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors gap-4 overflow-hidden">
                     {c.status === 'open' && (
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500 rounded-l-2xl" />
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500" />
                     )}
                     {c.status === 'in_progress' && (
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500 rounded-l-2xl" />
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-400" />
                     )}
                     {c.status === 'resolved' && (
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500 rounded-l-2xl" />
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#54b947]" />
                     )}
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 min-w-0">
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-3 mb-2">
-                          <h3 className="font-bold text-base text-foreground truncate">{c.subject}</h3>
+                          <h3 className="font-semibold text-base text-slate-900 truncate">{c.subject}</h3>
                           <div className="flex items-center gap-2">
-                            <Badge className={statusColors[c.status] || ''}>{c.status?.replace('_', ' ')}</Badge>
-                            <Badge className={priorityColors[c.priority] || ''}>{c.priority}</Badge>
+                            <Badge className={`rounded-full border-0 px-3 capitalize ${statusColors[c.status] || ''}`}>{c.status?.replace('_', ' ')}</Badge>
+                            <Badge className={`rounded-full border-0 px-3 capitalize ${priorityColors[c.priority] || ''}`}>{c.priority}</Badge>
                           </div>
                         </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed bg-muted/30 p-3 rounded-xl border border-border/40 mt-3 mb-3">
+                        <p className="text-sm text-slate-600 leading-relaxed bg-white p-3.5 rounded-2xl mt-3 mb-3">
                           {c.description}
                         </p>
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-medium text-muted-foreground">
-                          <span className="bg-background px-2.5 py-1 rounded-md border border-border/50 shadow-sm">
-                            <span className="uppercase tracking-widest font-bold opacity-70 mr-1.5">Category</span> {c.category}
+                          <span className="bg-white px-3 py-1 rounded-full">
+                            <span className="font-semibold opacity-70 mr-1.5">Category</span> {c.category}
                           </span>
                           {c.submittedAt && (
-                            <span className="bg-background px-2.5 py-1 rounded-md border border-border/50 shadow-sm">
+                            <span className="bg-white px-3 py-1 rounded-full">
                               {new Date(c.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </span>
                           )}
                           {c.user?.name && (
-                            <span className="bg-background px-2.5 py-1 rounded-md border border-border/50 shadow-sm flex items-center">
-                              <span className="uppercase tracking-widest font-bold opacity-70 mr-1.5">By</span>
+                            <span className="bg-white px-3 py-1 rounded-full flex items-center">
+                              <span className="font-semibold opacity-70 mr-1.5">By</span>
                               <span className="text-foreground">{c.user.name}</span>
                             </span>
                           )}
                         </div>
                       </div>
                       
-                      <div className="flex sm:flex-col items-center justify-end gap-2 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 w-full sm:w-auto mt-2 sm:mt-0">
+                      <div className="flex sm:flex-col items-center justify-end gap-2 shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
                         {c.status !== 'resolved' && c.status !== 'closed' && (
-                          <Button variant="outline" size="sm" className="h-9 w-full sm:w-auto rounded-xl shadow-sm border-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 gap-1.5 px-3" onClick={() => handleResolve(cid)}>
-                            <CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> Resolve
+                          <Button variant="outline" size="sm" className="h-10 w-full sm:w-auto rounded-full border-[#cfe9c9] bg-white hover:bg-[#eaf6e6] gap-1.5 px-4 text-[#256c1d] font-semibold" onClick={() => handleResolve(cid)}>
+                            Resolve
                           </Button>
                         )}
                         <div className="flex gap-2 w-full sm:w-auto">
-                          <Button variant="outline" size="sm" className="h-9 flex-1 sm:flex-none rounded-xl shadow-sm border-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 gap-1.5 px-3" onClick={() => handleEdit(c)}>
+                          <Button variant="outline" size="sm" className="h-10 flex-1 sm:flex-none rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6] gap-1.5 px-4" onClick={() => handleEdit(c)}>
                             <Edit className="w-3.5 h-3.5 text-muted-foreground" /> Edit
                           </Button>
-                          <Button variant="outline" size="sm" className="h-9 flex-1 sm:flex-none rounded-xl shadow-sm border-red-200 hover:bg-red-50 text-red-600 dark:hover:bg-red-900/20 gap-1.5 px-3" onClick={() => handleDelete(cid)}>
+                          <Button variant="outline" size="sm" className="h-10 flex-1 sm:flex-none rounded-full border-red-200 bg-white hover:bg-red-50 text-red-600 gap-1.5 px-4" onClick={() => handleDelete(cid)}>
                             <Trash2 className="w-3.5 h-3.5" />
                           </Button>
                         </div>
@@ -271,10 +270,11 @@ export function ComplaintsPanel() {
                   </div>
                 );
               })}
+              <ListPagination total={validComplaints.length} page={currentPage} pageSize={pageSize} onPageChange={setPage} onPageSizeChange={(n) => { setPageSize(n); setPage(1); }} />
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

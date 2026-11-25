@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { CheckCircle, XCircle, RefreshCw, DollarSign, FileText, ExternalLink, Key, Copy } from 'lucide-react';
+import { RefreshCw, DollarSign, FileText, ExternalLink, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -83,57 +82,57 @@ export function FinanceCenterVerificationPanel() {
     fees.reduce((sum, f) => sum + (f.amount || 0), 0);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Pending Payment Verification</h2>
-          <p className="text-muted-foreground text-sm mt-1">Verify authorisation fee payment for academic partners.</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Pending Payment Verification</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Verify authorisation fee payment for academic partners.</p>
         </div>
-        <Button variant="outline" size="sm" onClick={loadCenters} disabled={loading}>
+        <Button variant="outline" onClick={loadCenters} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
           <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh
         </Button>
       </div>
 
       {loading ? (
-        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-24 bg-muted rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-28 bg-slate-100 rounded-3xl animate-pulse" />)}</div>
       ) : centers.length === 0 ? (
-        <Card><CardContent className="py-16 text-center text-muted-foreground">
-          <DollarSign className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p>No centers pending payment verification.</p>
-        </CardContent></Card>
+        <div className="rounded-3xl bg-white border border-slate-100 py-16 text-center text-muted-foreground">
+          <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><DollarSign className="w-6 h-6" /></div>
+          <p className="text-sm">No centers pending payment verification.</p>
+        </div>
       ) : (
         <div className="space-y-4">
           {centers.map(c => (
-            <Card key={c.id} className="hover:border-primary/30 transition-colors">
-              <CardContent className="p-5">
-                <div className="flex items-start justify-between gap-4">
+            <div key={c.id} className="rounded-3xl bg-white border border-slate-100 hover:border-[#8ae47e] transition-colors">
+              <div className="p-5 sm:p-6">
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold">{c.name}</h4>
-                      <Badge variant="outline" className="text-[10px]">{c.code}</Badge>
+                      <h4 className="font-semibold text-lg text-slate-900">{c.name}</h4>
+                      <Badge variant="outline" className="text-[10px] rounded-full bg-[#f4f6f3] border-0 font-mono">{c.code}</Badge>
                     </div>
                     <p className="text-xs text-muted-foreground">{c.email} · {c.contact}</p>
                     {c.verifiedBy && (
                       <p className="text-xs text-muted-foreground mt-0.5">Docs verified by: {c.verifiedBy.name}</p>
                     )}
-                    <div className="mt-3 space-y-1">
+                    <div className="mt-4 space-y-2 rounded-2xl bg-[#f4f6f3] p-4">
                       {c.authFees.map(f => (
                         <div key={f.universityId} className="flex items-center justify-between text-xs">
                           <span className="text-muted-foreground">{f.universityName}</span>
                           {f.amount !== null ? (
                             <span className="font-semibold">&#8377;{f.amount.toLocaleString()}</span>
                           ) : (
-                            <Badge variant="destructive" className="text-[10px]">Fee not configured</Badge>
+                            <Badge variant="destructive" className="text-[10px] rounded-full">Fee not configured</Badge>
                           )}
                         </div>
                       ))}
-                      <div className="flex items-center justify-between text-sm font-bold pt-1 border-t border-border mt-1">
+                      <div className="flex items-center justify-between text-sm font-semibold pt-2 border-t border-slate-200 mt-1">
                         <span>Total</span>
                         <span>&#8377;{totalFee(c.authFees).toLocaleString()}</span>
                       </div>
                     </div>
                     {c.paymentProof ? (
-                      <div className="mt-3 p-3 rounded-lg bg-muted/50 border border-border">
+                      <div className="mt-3 p-4 rounded-2xl bg-[#eaf6e6]">
                         <p className="text-xs font-semibold mb-1 flex items-center gap-1">
                           <FileText className="w-3 h-3" /> Payment Proof
                         </p>
@@ -141,7 +140,7 @@ export function FinanceCenterVerificationPanel() {
                           href={`${SERVER_BASE}${c.paymentProof.url}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-primary flex items-center gap-1 hover:underline"
+                          className="text-xs font-semibold text-[#256c1d] flex items-center gap-1 hover:underline"
                         >
                           View Receipt <ExternalLink className="w-3 h-3" />
                         </a>
@@ -157,26 +156,26 @@ export function FinanceCenterVerificationPanel() {
                     )}
                   </div>
                   <div className="flex gap-2 shrink-0">
-                    <Button size="sm" variant="outline" className="text-destructive border-destructive/30 hover:bg-destructive/10"
+                    <Button variant="outline" className="h-10 rounded-full px-5 text-red-600 border-red-200 bg-white hover:bg-red-50"
                       onClick={() => { setDialog({ center: c, action: 'reject' }); setRemarks(''); }}>
-                      <XCircle className="w-4 h-4 mr-1" />Reject
+                      Reject
                     </Button>
-                    <Button size="sm" onClick={() => { setDialog({ center: c, action: 'approve' }); setRemarks(''); }}>
-                      <CheckCircle className="w-4 h-4 mr-1" />Approve
+                    <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => { setDialog({ center: c, action: 'approve' }); setRemarks(''); }}>
+                      Approve
                     </Button>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       )}
 
       {/* Approve / Reject dialog */}
       <Dialog open={!!dialog} onOpenChange={() => { setDialog(null); setRemarks(''); }}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">
               {dialog?.action === 'approve' ? 'Approve & Activate' : 'Reject'} — {dialog?.center.name}
             </DialogTitle>
           </DialogHeader>
@@ -195,11 +194,11 @@ export function FinanceCenterVerificationPanel() {
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setDialog(null); setRemarks(''); }}>Cancel</Button>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => { setDialog(null); setRemarks(''); }}>Cancel</Button>
             <Button
               onClick={handleAction}
               disabled={submitting}
-              variant={dialog?.action === 'reject' ? 'destructive' : 'default'}
+              className={cn('h-11 px-6 rounded-full font-semibold', dialog?.action === 'reject' ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14]')}
             >
               {submitting ? 'Processing...' : dialog?.action === 'approve' ? 'Approve & Activate' : 'Reject'}
             </Button>
@@ -209,10 +208,10 @@ export function FinanceCenterVerificationPanel() {
 
       {/* Credentials modal — shown once after approval */}
       <Dialog open={!!credentials} onOpenChange={() => setCredentials(null)}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Key className="w-5 h-5 text-primary" /> Academic Partner Login Credentials
+            <DialogTitle className="text-xl font-semibold tracking-tight">
+              Academic Partner Login Credentials
             </DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
@@ -223,7 +222,7 @@ export function FinanceCenterVerificationPanel() {
               <Label>Email / Username</Label>
               <div className="flex gap-2">
                 <Input readOnly value={credentials?.email || ''} />
-                <Button size="icon" variant="outline" onClick={() => { navigator.clipboard.writeText(credentials?.email || ''); toast.success('Email copied'); }}>
+                <Button size="icon" variant="outline" className="h-11 w-11 rounded-full shrink-0" onClick={() => { navigator.clipboard.writeText(credentials?.email || ''); toast.success('Email copied'); }}>
                   <Copy className="w-4 h-4" />
                 </Button>
               </div>
@@ -232,14 +231,14 @@ export function FinanceCenterVerificationPanel() {
               <Label>Password</Label>
               <div className="flex gap-2">
                 <Input readOnly value={credentials?.password || ''} />
-                <Button size="icon" variant="outline" onClick={() => { navigator.clipboard.writeText(credentials?.password || ''); toast.success('Password copied'); }}>
+                <Button size="icon" variant="outline" className="h-11 w-11 rounded-full shrink-0" onClick={() => { navigator.clipboard.writeText(credentials?.password || ''); toast.success('Password copied'); }}>
                   <Copy className="w-4 h-4" />
                 </Button>
               </div>
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={() => setCredentials(null)}>Done</Button>
+            <Button className="h-11 px-7 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => setCredentials(null)}>Done</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

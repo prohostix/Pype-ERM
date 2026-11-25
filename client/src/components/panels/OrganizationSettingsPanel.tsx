@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Building2, Upload, Save, Globe } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Upload, Save, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -161,7 +160,7 @@ export function OrganizationSettingsPanel() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-        <div className="w-8 h-8 border-4 border-indigo-500/30 border-t-indigo-600 rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-[#54b947]/30 border-t-[#54b947] rounded-full animate-spin" />
         <p className="text-muted-foreground font-medium">Loading settings...</p>
       </div>
     );
@@ -170,41 +169,31 @@ export function OrganizationSettingsPanel() {
   const logoUrl = api.getFileUrl(formData.logo);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 w-full">
-      <Card className="max-w-3xl mx-auto shadow-sm">
-        <CardHeader className="border-b px-6 py-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-              <Building2 className="w-6 h-6" />
-            </div>
-            <div>
-              <CardTitle className="text-xl">Organisation Settings</CardTitle>
-              <CardDescription className="mt-1">
-                Configure your institution's profile branding and logo settings
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        
-        <CardContent className="p-6 pt-8">
-        <form onSubmit={handleSubmit} className="space-y-8">
+    <div className="space-y-6 wizard-form max-w-4xl">
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Organisation Settings</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Configure your institution's profile branding and logo settings</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="rounded-3xl bg-white border border-slate-100 p-6 sm:p-8 space-y-8">
           {/* Logo Section */}
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-            <div className="w-28 h-28 rounded-xl border border-dashed border-border bg-muted/50 flex items-center justify-center overflow-hidden shrink-0 relative group transition-colors hover:border-primary/50">
+            <div className="w-28 h-28 rounded-3xl border-2 border-dashed border-[#cfe9c9] bg-[#f4f6f3] flex items-center justify-center overflow-hidden shrink-0 relative group transition-colors hover:border-[#8ae47e]">
               {logoUrl ? (
                 <img src={logoUrl} alt="Logo" className="w-full h-full object-contain p-2" />
               ) : (
-                <Globe className="w-10 h-10 text-muted-foreground group-hover:text-primary/70 transition-colors" />
+                <Globe className="w-10 h-10 text-[#256c1d]/60 group-hover:text-[#256c1d] transition-colors" />
               )}
             </div>
             <div className="space-y-2 text-center sm:text-left flex-1 pt-2">
-              <h3 className="text-sm font-medium">Institution Logo</h3>
+              <h3 className="text-base font-semibold">Institution Logo</h3>
               <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
                 Supported formats: PNG, JPG or WebP (max 2MB).<br />
                 <span className="text-xs">Recommended: Fits top navbar (Max {600}x{150}px)</span>
               </p>
               <Label htmlFor="logo-input" className="cursor-pointer">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-md border text-sm font-medium hover:bg-muted transition-colors">
+                <div className="inline-flex items-center gap-2 h-10 px-5 rounded-full border border-[#cfe9c9] bg-white text-[#256c1d] text-sm font-semibold hover:bg-[#eaf6e6] transition-colors">
                   <Upload className="w-4 h-4" /> {logoUrl ? 'Change Logo' : 'Upload Logo'}
                 </div>
               </Label>
@@ -213,7 +202,7 @@ export function OrganizationSettingsPanel() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-sm font-medium">General Details</h3>
+            <h3 className="text-base font-semibold">General Details</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-2">
                 <Label>Institution / Organisation Name</Label>
@@ -256,12 +245,14 @@ export function OrganizationSettingsPanel() {
             </div>
           </div>
 
-          <div className="space-y-4 pt-6 border-t">
-            <h3 className="text-sm font-medium">Preferences</h3>
+        </div>
+
+        <div className="rounded-3xl bg-white border border-slate-100 p-6 sm:p-8 space-y-4">
+            <h3 className="text-base font-semibold">Preferences</h3>
             <div className="space-y-2 max-w-lg">
               <Label>Enrollment Approval Flow</Label>
               <select
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex h-11 w-full rounded-xl border border-transparent bg-[#f4f6f3] px-3 py-2 text-sm outline-none focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 value={formData.enrollmentApprovalFlow}
                 onChange={e => setFormData({ ...formData, enrollmentApprovalFlow: e.target.value })}
               >
@@ -283,13 +274,13 @@ export function OrganizationSettingsPanel() {
             </div>
           </div>
 
-          <div className="space-y-3 pt-6 border-t">
-            <h3 className="text-sm font-medium">Currency</h3>
+        <div className="rounded-3xl bg-white border border-slate-100 p-6 sm:p-8 space-y-3">
+            <h3 className="text-base font-semibold">Currency</h3>
             <div className="flex flex-col sm:flex-row sm:items-end gap-3 max-w-xl">
               <div className="space-y-2 flex-1">
                 <Label>Currency used for all amounts</Label>
                 <select
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="flex h-11 w-full rounded-xl border border-transparent bg-[#f4f6f3] px-3 py-2 text-sm outline-none focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
                   value={currencyCode}
                   onChange={e => setCurrencyCodeState(e.target.value)}
                 >
@@ -298,7 +289,7 @@ export function OrganizationSettingsPanel() {
                   ))}
                 </select>
               </div>
-              <Button type="button" variant="outline" onClick={saveCurrency} disabled={savingCurrency || currencyCode === getCurrencyCode()}>
+              <Button type="button" variant="outline" className="h-11 px-5 rounded-full border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]" onClick={saveCurrency} disabled={savingCurrency || currencyCode === getCurrencyCode()}>
                 {savingCurrency ? 'Saving...' : 'Apply currency'}
               </Button>
             </div>
@@ -307,15 +298,13 @@ export function OrganizationSettingsPanel() {
             </p>
           </div>
 
-          <div className="flex justify-end pt-6 border-t">
-            <Button type="submit" disabled={saving}>
+          <div className="flex justify-end">
+            <Button type="submit" disabled={saving} className="h-11 px-7 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
               <Save className="w-4 h-4 mr-2" />
               {saving ? 'Saving...' : 'Save Settings'}
             </Button>
           </div>
-        </form>
-      </CardContent>
-    </Card>
+      </form>
     </div>
   );
 }

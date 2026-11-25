@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   getUsers,
+  getUserDepartmentCounts,
   getUser,
   createUser,
   updateUser,
@@ -19,6 +20,8 @@ router
   .route('/')
   .get(getUsers)
   .post(authorize('superadmin', 'org_admin', 'hr_admin', 'hr_sub_admin'), createUser);
+
+router.get('/stats/departments', getUserDepartmentCounts);
 
 router
   .route('/subordinates/team')

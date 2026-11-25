@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, Calendar, ExternalLink, MessageSquare, Key, Download, User, Users, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X, RotateCcw, Filter, ChevronDown, Check, UserCheck, XCircle, AlertCircle, AlertTriangle, CheckCircle2, UserX } from 'lucide-react';
+import { MoreHorizontal, Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, Calendar, ExternalLink, MessageSquare, Key, Download, User, Users, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X, RotateCcw, Filter, ChevronDown, Check, UserCheck, XCircle, AlertCircle, AlertTriangle, CheckCircle2, UserX } from 'lucide-react';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -544,13 +545,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     sortBy,
   ]);
 
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeFilter, filterStatuses, searchQuery, filterUniversityIds, filterSessionIds, filterBranchIds, filterSalesUsers, customFilters, sortBy, filterStartDate, filterEndDate, filterOverdue, filterProgramIds, filterSpecs, filterGenders]);
+  }, [itemsPerPage, activeFilter, filterStatuses, searchQuery, filterUniversityIds, filterSessionIds, filterBranchIds, filterSalesUsers, customFilters, sortBy, filterStartDate, filterEndDate, filterOverdue, filterProgramIds, filterSpecs, filterGenders]);
 
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
@@ -684,22 +687,22 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   };
 
   const STATUS_COLORS: Record<string, string> = {
-    active: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60',
-    document_review: 'bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-200/60 dark:border-blue-800/60',
-    provisional: 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/60 dark:border-amber-800/60',
-    pending: 'bg-orange-100/80 text-orange-700 dark:bg-orange-950/40 dark:text-orange-400 border border-orange-200/60 dark:border-orange-800/60',
-    completed: 'bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400 border border-purple-200/60 dark:border-purple-800/60',
-    payment_pending: 'bg-orange-100 text-orange-700 dark:bg-orange-950/40 dark:text-orange-400 border border-orange-200/60 dark:border-orange-800/60',
-    receipt_submitted: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-400 border border-cyan-200/60 dark:border-cyan-800/60',
-    dept_review: 'bg-violet-100 text-violet-700 dark:bg-violet-950/40 dark:text-violet-400 border border-violet-200/60 dark:border-violet-800/60',
-    finance_review: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-950/40 dark:text-yellow-400 border border-yellow-200/60 dark:border-yellow-800/60',
-    sales_admin_review: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60',
-    university_review: 'bg-sky-100 text-sky-700 dark:bg-sky-950/40 dark:text-sky-400 border border-sky-200/60 dark:border-sky-800/60',
-    enrolled: 'bg-teal-100 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400 border border-teal-200/60 dark:border-teal-800/60',
-    dropped: 'bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400 border border-rose-200/60 dark:border-rose-800/60',
-    inactive: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700',
-    rejected: 'bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400 border border-red-200/60 dark:border-red-800/60',
-    department_rejected: 'bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400 border border-red-200/60 dark:border-red-800/60',
+    active: 'bg-[#e3f7dd] text-[#1f6a17] border-0',
+    document_review: 'bg-[#eaf6e6] text-[#256c1d] border-0',
+    provisional: 'bg-amber-50 text-amber-700 border-0',
+    pending: 'bg-amber-50 text-amber-700 border-0',
+    completed: 'bg-[#e3f7dd] text-[#1f6a17] border-0',
+    payment_pending: 'bg-amber-50 text-amber-700 border-0',
+    receipt_submitted: 'bg-amber-50 text-amber-700 border-0',
+    dept_review: 'bg-[#eaf6e6] text-[#256c1d] border-0',
+    finance_review: 'bg-amber-50 text-amber-700 border-0',
+    sales_admin_review: 'bg-[#eaf6e6] text-[#256c1d] border-0',
+    university_review: 'bg-[#eaf6e6] text-[#256c1d] border-0',
+    enrolled: 'bg-[#e3f7dd] text-[#1f6a17] border-0',
+    dropped: 'bg-rose-50 text-rose-700 border-0',
+    inactive: 'bg-slate-100 text-slate-600 border-0',
+    rejected: 'bg-rose-50 text-rose-700 border-0',
+    department_rejected: 'bg-rose-50 text-rose-700 border-0',
   };
 
   const statusLabel = (s: string) => {
@@ -3097,15 +3100,28 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const paginatedStudents = filteredStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const renderStudentFormModalContent = () => (
-    <DialogContent className="max-w-3xl w-full sm:max-w-3xl h-[100dvh] sm:h-auto sm:max-h-[92vh] flex flex-col rounded-none sm:rounded-xl">
-      <DialogHeader className="pb-2 border-b">
-        <DialogTitle className="text-lg">{editingId || completingEnrollment ? 'Update Student Enrollment' : 'Add New Student Record'}</DialogTitle>
+    <DialogContent className="wizard-form w-full sm:max-w-3xl h-[100dvh] sm:h-auto sm:max-h-[92vh] p-0 gap-0 flex flex-col rounded-none sm:rounded-[2rem] border-0 bg-white overflow-hidden" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+      <DialogHeader className="px-6 sm:px-8 pt-7 pb-4 space-y-4 text-left shrink-0">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+            <currentStepInfo.icon className="w-5 h-5" />
+          </div>
+          <div className="min-w-0">
+            <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground text-left">{editingId || completingEnrollment ? 'Update Student Enrollment' : 'Add New Student Record'}</DialogTitle>
+            <p className="text-sm text-muted-foreground mt-0.5">Step {formStep + 1} of {stepsList.length} · {currentStepInfo.label}</p>
+          </div>
+        </div>
+
         {/* Step indicator */}
-        <div className="flex items-center gap-1 pt-2 overflow-x-auto pb-1">
-          {stepsList.map((step, i) => (
-            <button
-              key={i}
-              type="button"
+        <div className="flex items-center overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {stepsList.map((step, i) => {
+            const done = i < formStep;
+            const active = formStep === i;
+            return (
+              <div key={i} className="flex items-center shrink-0">
+                <button
+                  key={i}
+                  type="button"
               onClick={() => {
                 if (isNewStudentWizard && formStep === 0 && i > 0) {
                   const hasPhone = Boolean(formData.phone?.trim() && formData.phone.trim().replace(/\D/g, '').length >= 7);
@@ -3125,32 +3141,41 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 }
                 setFormStep(i);
               }}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all shrink-0 ${formStep === i
-                ? 'bg-primary text-primary-foreground shadow'
-                : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'
-                }`}
-            >
-              <step.icon className="w-3 h-3" />
-              {step.label}
-            </button>
-          ))}
+                  className="flex items-center gap-2 group"
+                >
+                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-colors ${active
+                    ? 'bg-[#0b1d14] text-white'
+                    : done
+                      ? 'bg-[#8ae47e] text-[#0b1d14]'
+                      : 'bg-[#f1f3ef] text-slate-500 group-hover:bg-[#e3f7dd]'
+                    }`}>
+                    {done ? <CheckCircle2 className="w-4 h-4" /> : i + 1}
+                  </span>
+                  <span className={`text-xs font-semibold whitespace-nowrap ${active ? 'text-foreground' : 'text-muted-foreground'}`}>{step.label}</span>
+                </button>
+                {i < stepsList.length - 1 && (
+                  <span className={`mx-3 h-px w-6 sm:w-8 ${done ? 'bg-[#54b947]' : 'bg-slate-200'}`} />
+                )}
+              </div>
+            );
+          })}
         </div>
       </DialogHeader>
 
       <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-        <div className="flex-1 overflow-y-auto pr-2 max-h-[60vh] space-y-4 py-3">
+        <div className="flex-1 overflow-y-auto px-6 sm:px-8 sm:max-h-[56vh] space-y-4 py-4 border-t border-slate-100">
 
           {/* ── STEP 0: STUDENT VERIFICATION (FOR NEW ENROLLMENTS) ── */}
           {currentStepType === 'verify' && (
             <div className="space-y-5 animate-in fade-in duration-200">
-              <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/70 dark:bg-blue-950/30 dark:border-blue-900">
+              <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/70 dark:bg-emerald-950/30 dark:border-emerald-900">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-lg">
+                  <div className="p-2 bg-emerald-100 dark:bg-emerald-900 text-emerald-600 dark:text-emerald-300 rounded-lg">
                     <UserCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-blue-900 dark:text-blue-200 text-sm">Step 1: Student Verification</h3>
-                    <p className="text-xs text-blue-700 dark:text-blue-400 mt-0.5">
+                    <h3 className="font-semibold text-emerald-900 dark:text-emerald-200 text-sm">Step 1: Student Verification</h3>
+                    <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">
                       Enter the phone number to check availability. If existing, student data is prefilled. If unique, continue with email.
                     </p>
                   </div>
@@ -3176,8 +3201,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                       </Badge>
                     )}
                     {!phoneCheck.loading && phoneCheck.checked && !phoneCheck.isAvailable && phoneCheck.studentData && (
-                      <Badge variant="outline" className="text-blue-700 bg-blue-50 dark:bg-blue-950/40 border-blue-300 text-[11px] font-semibold flex items-center gap-1">
-                        <UserCheck className="w-3 h-3 text-blue-600" /> Existing: {phoneCheck.studentData.name}
+                      <Badge variant="outline" className="text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 text-[11px] font-semibold flex items-center gap-1">
+                        <UserCheck className="w-3 h-3 text-emerald-600" /> Existing: {phoneCheck.studentData.name}
                       </Badge>
                     )}
                     {!phoneCheck.loading && phoneCheck.checked && !phoneCheck.isAvailable && !phoneCheck.studentData && (
@@ -4009,13 +4034,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         </div>
 
         {/* Footer buttons */}
-        <div className="flex items-center justify-between pt-3 border-t mt-3">
-          <Button type="button" variant="outline" onClick={() => setFormStep(Math.max(0, formStep - 1))} disabled={formStep === 0}>
+        <div className="flex items-center justify-between gap-3 px-6 sm:px-8 py-5 border-t border-slate-100 shrink-0">
+          <Button type="button" variant="outline" className="h-11 rounded-full px-5 bg-white border-slate-200 font-semibold" onClick={() => setFormStep(Math.max(0, formStep - 1))} disabled={formStep === 0}>
             ← Back
           </Button>
-          <div className="text-xs text-muted-foreground">Step {formStep + 1} of {stepsList.length}</div>
+          <div className="text-xs font-medium text-muted-foreground hidden sm:block">Step {formStep + 1} of {stepsList.length}</div>
           {formStep < maxStepIndex ? (
-            <Button type="submit" disabled={verifyingStudentCheck || (currentStepType === 'verify' && conflictBasis === 'prompt')}>
+            <Button type="submit" className="h-11 rounded-full px-7 bg-slate-900 hover:bg-slate-800 text-white font-semibold" disabled={verifyingStudentCheck || (currentStepType === 'verify' && conflictBasis === 'prompt')}>
               {verifyingStudentCheck ? (
                 <>
                   <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> Verifying...
@@ -4031,7 +4056,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
               )}
             </Button>
           ) : (
-            <Button type="submit" className="bg-primary" disabled={savingStudent}>
+            <Button type="submit" className="h-11 rounded-full px-7 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" disabled={savingStudent}>
               {savingStudent ? 'Saving...' : (editingId ? 'Update Student' : 'Save Student')}
             </Button>
           )}
@@ -4059,27 +4084,19 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   return (
     <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-3xl border border-slate-200/60 dark:border-slate-800/60 bg-gradient-to-br from-indigo-50 via-white to-sky-50 dark:from-indigo-950/30 dark:via-slate-900 dark:to-sky-950/20 px-6 py-6 shadow-sm">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-indigo-400/10 blur-3xl" />
-        <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-        <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-sky-500 text-white shadow-lg shadow-indigo-500/25">
-            <GraduationCap className="h-6 w-6" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Student Management</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 hidden sm:block mt-0.5">Records, bulk imports, communications and installment schedules in one place</p>
-          </div>
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">Student Management</h2>
+          <p className="text-sm text-muted-foreground hidden sm:block mt-1.5 max-w-2xl">Records, bulk imports, communications and installment schedules in one place</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 flex-shrink-0">
           {/* Export Excel Button */}
           <Button
             variant="outline"
-            size="sm"
             onClick={handleExportExcel}
             disabled={isExporting || filteredStudents.length === 0}
-            className="border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+            className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium shadow-sm hover:bg-slate-50"
             title="Download student records in Excel format"
           >
             <Download className={cn("w-4 h-4 sm:mr-2", isExporting && "animate-bounce")} />
@@ -4097,9 +4114,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
             <>
               <Button
                 variant="outline"
-                size="sm"
                 onClick={() => setReportDialogOpen(true)}
-                className="border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+                className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium shadow-sm hover:bg-slate-50"
                 title="Choose columns and build a custom student report"
               >
                 <FileText className="w-4 h-4 sm:mr-2" />
@@ -4112,19 +4128,18 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           {canWrite && (
             <>
               {/* Bulk Import Button */}
-              <Button variant="outline" size="sm" onClick={() => setBulkDialogOpen(true)}>
+              <Button variant="outline" onClick={() => setBulkDialogOpen(true)} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium shadow-sm hover:bg-slate-50">
                 <Upload className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Bulk Import</span>
               </Button>
 
               <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
                 <DialogTrigger asChild>
-                  <Button size="sm"><Plus className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Add Student</span></Button>
+                  <Button className="h-11 px-5 rounded-full text-sm font-semibold bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm"><Plus className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Add Student</span></Button>
                 </DialogTrigger>
                 {renderStudentFormModalContent()}
               </Dialog>
             </>
           )}
-        </div>
         </div>
       </div>
 
@@ -4134,56 +4149,96 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           {([
             { value: 'all', label: 'All Students', count: students.length, dot: 'bg-slate-400', ring: 'data-[state=active]:ring-slate-400/60', text: 'data-[state=active]:text-slate-900 dark:data-[state=active]:text-white' },
             { value: 'active', label: 'Active', count: statusCounts.active || 0, dot: 'bg-emerald-500', ring: 'data-[state=active]:ring-emerald-400/60', text: 'data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-300' },
-            { value: 'document_review', label: 'Doc Review', count: statusCounts.document_review || 0, dot: 'bg-blue-500', ring: 'data-[state=active]:ring-blue-400/60', text: 'data-[state=active]:text-blue-700 dark:data-[state=active]:text-blue-300' },
+            { value: 'document_review', label: 'Doc Review', count: statusCounts.document_review || 0, dot: 'bg-emerald-500', ring: 'data-[state=active]:ring-emerald-400/60', text: 'data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-300' },
             { value: 'provisional', label: 'Provisional', count: statusCounts.provisional || 0, dot: 'bg-amber-500', ring: 'data-[state=active]:ring-amber-400/60', text: 'data-[state=active]:text-amber-700 dark:data-[state=active]:text-amber-300' },
             { value: 'pending', label: 'Pending', count: statusCounts.pending || 0, dot: 'bg-orange-500', ring: 'data-[state=active]:ring-orange-400/60', text: 'data-[state=active]:text-orange-700 dark:data-[state=active]:text-orange-300' },
-            { value: 'completed', label: 'Completed', count: statusCounts.completed || 0, dot: 'bg-purple-500', ring: 'data-[state=active]:ring-purple-400/60', text: 'data-[state=active]:text-purple-700 dark:data-[state=active]:text-purple-300' },
+            { value: 'completed', label: 'Completed', count: statusCounts.completed || 0, dot: 'bg-lime-500', ring: 'data-[state=active]:ring-lime-400/60', text: 'data-[state=active]:text-lime-700 dark:data-[state=active]:text-lime-300' },
             { value: 'current', label: 'Current', count: statusCounts.current || 0, dot: 'bg-teal-500', ring: 'data-[state=active]:ring-teal-400/60', text: 'data-[state=active]:text-teal-700 dark:data-[state=active]:text-teal-300' },
           ] as const).map((t) => (
             <TabsTrigger
               key={t.value}
               value={t.value}
               className={cn(
-                'group flex-none rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2.5 shadow-sm transition-all',
-                'hover:border-slate-300 hover:shadow-md data-[state=active]:shadow-md data-[state=active]:ring-2 data-[state=active]:border-transparent',
-                t.ring, t.text
+                'group flex-none rounded-full border border-slate-200 bg-white px-4 py-2 shadow-none transition-colors hover:bg-slate-50',
+                'data-[state=active]:bg-[#0b1d14] data-[state=active]:border-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none'
               )}
             >
               <span className="flex items-center gap-2">
                 <span className={cn('h-2 w-2 rounded-full', t.dot)} />
                 <span className="text-xs font-semibold tracking-wide">{t.label}</span>
-                <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[11px] font-bold tabular-nums text-slate-600 dark:text-slate-300">{t.count}</span>
+                <span className="rounded-full bg-[#f1f3ef] group-data-[state=active]:bg-white/15 group-data-[state=active]:text-white px-2 py-0.5 text-[11px] font-bold tabular-nums text-slate-600">{t.count}</span>
               </span>
             </TabsTrigger>
           ))}
         </TabsList>
       </Tabs>
 
-      <Card className="border-none shadow-xl shadow-slate-200/40 dark:shadow-none bg-white dark:bg-slate-900/50 overflow-hidden rounded-3xl ring-1 ring-slate-200/60 dark:ring-slate-800/60 py-0 gap-0">
-        <CardHeader className="border-b border-slate-200/60 dark:border-slate-800/60 bg-white/70 dark:bg-slate-900/40 px-6 py-4">
+      <Card className="overflow-hidden rounded-3xl py-0 gap-0">
+        <CardHeader className="px-6 pt-6 pb-0">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <CardTitle className="flex items-center gap-3 text-lg font-bold text-slate-900 dark:text-slate-100">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-sky-500 text-white shadow-md shadow-indigo-500/20">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#eaf6e6] text-[#256c1d]">
                 <Users className="h-4 w-4" />
               </div>
               Student Directory
             </CardTitle>
-            <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300">
+            <span className="rounded-full bg-[#e3f7dd] px-3 py-1 text-xs font-semibold text-[#1f6a17]">
               {filteredStudents.length} of {students.length} students
             </span>
           </div>
         </CardHeader>
         <CardContent className="p-6">
-          {/* Filters Section */}
-          <div className="bg-slate-50/70 dark:bg-slate-900/40 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 mb-6">
+          {/* Toolbar: search + filters button (the filters themselves open in a modal) */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
+            <div className="relative flex-1 max-w-xl">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Input
+                placeholder="Search by name, email, roll no..."
+                className="pl-11 pr-9 h-11 rounded-full bg-white border-slate-200 shadow-sm text-sm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button type="button" onClick={() => setSearchQuery('')} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600" aria-label="Clear search">
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setFiltersOpen(true)}
+              className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50"
+            >
+              <Filter className="w-4 h-4" />
+              Filters
+              {isFiltered && (
+                <span className="min-w-[22px] text-center rounded-full bg-[#8ae47e] text-[#0b1d14] px-1.5 py-0.5 text-[11px] font-bold">{activeFilterCount}</span>
+              )}
+            </Button>
+            {isFiltered && (
+              <Button type="button" variant="ghost" onClick={handleResetFilters} className="h-11 px-4 rounded-full text-sm text-rose-600 hover:text-rose-700 hover:bg-rose-50 gap-1.5">
+                <RotateCcw className="w-4 h-4" /> Clear all
+              </Button>
+            )}
+          </div>
+
+          <Dialog open={filtersOpen} onOpenChange={setFiltersOpen}>
+            <DialogContent className="w-[95vw] sm:max-w-6xl p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] flex flex-col" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+              <DialogHeader className="px-6 sm:px-8 pt-7 pb-4 space-y-1 text-left shrink-0">
+                <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground text-left">Filters</DialogTitle>
+                <p className="text-sm text-muted-foreground">Narrow the student list by state, university, program, branch, session, date and more.</p>
+              </DialogHeader>
+              <div className="flex-1 overflow-y-auto px-6 sm:px-8 pb-4">
+          <div className="bg-[#f4f6f3] dark:bg-slate-900/40 p-5 sm:p-6 rounded-3xl">
             {/* Filter Header with Title, Count & Clear All Button */}
-            <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100 dark:border-slate-800/70">
+            <div className="flex items-center justify-between pb-4 mb-4">
               <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center bg-indigo-100 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-300 rounded-xl">
+                <div className="flex h-9 w-9 items-center justify-center bg-white text-[#256c1d] rounded-full">
                   <Filter className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
                     Filter & Search
                   </h4>
                   <p className="text-[11px] text-slate-400 font-normal">
@@ -4191,7 +4246,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   </p>
                 </div>
                 {isFiltered && (
-                  <Badge variant="secondary" className="ml-1 bg-blue-100/70 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                  <Badge variant="secondary" className="ml-1 bg-emerald-100/70 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 text-[10px] px-2 py-0.5 rounded-full font-bold">
                     {activeFilterCount} active
                   </Badge>
                 )}
@@ -4219,10 +4274,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   Search Students
                 </Label>
                 <div className="relative group/search mt-auto">
-                  <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 group-focus-within/search:text-blue-500 transition-colors" />
+                  <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 group-focus-within/search:text-emerald-500 transition-colors" />
                   <Input
                     placeholder="Name, email, roll no..."
-                    className="pl-9 pr-7 h-9 text-sm bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-900 transition-all rounded-xl"
+                    className="pl-9 pr-7 h-10 text-sm bg-white dark:bg-slate-900/50 border-transparent focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 transition-all rounded-full"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -4304,12 +4359,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
               {salesUsers.length > 0 && (
                 <MultiSelectFilter
                   label="Sales User"
-                  icon={<Users className="w-3 h-3 text-blue-500" />}
+                  icon={<Users className="w-3 h-3 text-emerald-500" />}
                   placeholder="All Sales Users"
                   options={salesUserOptions}
                   selected={filterSalesUsers}
                   onChange={setFilterSalesUsers}
-                  triggerClassName="bg-blue-50/30 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/30 hover:bg-blue-50/50"
+                  triggerClassName="bg-emerald-50/30 dark:bg-emerald-900/10 border-emerald-100 dark:border-emerald-900/30 hover:bg-emerald-50/50"
                 />
               )}
 
@@ -4343,20 +4398,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
             {filterTypes.length > 0 && (
               <div className="mt-4 pt-4 border-t border-slate-200/60 dark:border-slate-800/70">
                 <div className="mb-3 flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-violet-500" />
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">Custom Filters</span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-lime-500" />
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-lime-600 dark:text-lime-400">Custom Filters</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 xl:gap-5">
                   {filterTypes.map((t) => (
                     <MultiSelectFilter
                       key={t.id}
                       label={t.name}
-                      icon={<Filter className="w-3 h-3 text-violet-500" />}
+                      icon={<Filter className="w-3 h-3 text-lime-500" />}
                       placeholder={`All ${t.name}`}
                       options={customFilterOptions[t.id] || []}
                       selected={customFilters[t.id] || []}
                       onChange={(ids) => setCustomFilter(t.id, ids)}
-                      triggerClassName="bg-violet-50/30 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/30 hover:bg-violet-50/50"
+                      triggerClassName="bg-lime-50/30 dark:bg-lime-900/10 border-lime-100 dark:border-lime-900/30 hover:bg-lime-50/50"
                     />
                   ))}
                 </div>
@@ -4364,11 +4419,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
             )}
 
             {/* Row 2: Admission Date Range & Sort Toolbar */}
-            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="mt-5 pt-5 border-t border-white/70 dark:border-slate-800/80 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               {/* Date Range Section */}
               <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 flex-1">
                 <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 shrink-0">
-                  <CalendarDays className="w-3.5 h-3.5 text-blue-500" />
+                  <CalendarDays className="w-3.5 h-3.5 text-emerald-500" />
                   <span>Admission Date:</span>
                 </div>
 
@@ -4490,19 +4545,19 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   </button>
 
                   {filterStatuses.map(st => (
-                    <Badge key={st} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300 border border-blue-200/50">
-                      <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", STATE_DOT_COLORS[st] || 'bg-blue-500')} />
+                    <Badge key={st} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300 border border-emerald-200/50">
+                      <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", STATE_DOT_COLORS[st] || 'bg-emerald-500')} />
                       State: {statusLabel(st)}
-                      <button type="button" onClick={() => handleStatusesChange(filterStatuses.filter(s => s !== st))} className="hover:bg-blue-200/50 rounded p-0.5">
+                      <button type="button" onClick={() => handleStatusesChange(filterStatuses.filter(s => s !== st))} className="hover:bg-emerald-200/50 rounded p-0.5">
                         <X className="w-3 h-3" />
                       </button>
                     </Badge>
                   ))}
 
                   {(filterStartDate || filterEndDate) && (
-                    <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-300 border border-indigo-200/50">
+                    <Badge variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300 border border-green-200/50">
                       Admission: {filterStartDate || 'Any'} → {filterEndDate || 'Any'}
-                      <button type="button" onClick={() => { setFilterStartDate(''); setFilterEndDate(''); setFilterDatePreset('all'); }} className="hover:bg-indigo-200/50 rounded p-0.5">
+                      <button type="button" onClick={() => { setFilterStartDate(''); setFilterEndDate(''); setFilterDatePreset('all'); }} className="hover:bg-green-200/50 rounded p-0.5">
                         <X className="w-3 h-3" />
                       </button>
                     </Badge>
@@ -4537,9 +4592,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   ))}
 
                   {filterSalesUsers.map(suId => (
-                    <Badge key={suId} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-cyan-50 text-cyan-700 dark:bg-cyan-950/30 dark:text-cyan-300 border border-cyan-200/50">
+                    <Badge key={suId} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-teal-50 text-teal-700 dark:bg-teal-950/30 dark:text-teal-300 border border-teal-200/50">
                       Sales: {salesUsers.find((u: any) => u.id === suId)?.name || suId}
-                      <button type="button" onClick={() => setFilterSalesUsers(filterSalesUsers.filter(id => id !== suId))} className="hover:bg-cyan-200/50 rounded p-0.5">
+                      <button type="button" onClick={() => setFilterSalesUsers(filterSalesUsers.filter(id => id !== suId))} className="hover:bg-teal-200/50 rounded p-0.5">
                         <X className="w-3 h-3" />
                       </button>
                     </Badge>
@@ -4552,9 +4607,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                     </Badge>
                   ))}
                   {filterSpecs.map(v => (
-                    <Badge key={v} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-sky-50 text-sky-700 dark:bg-sky-950/30 dark:text-sky-300 border border-sky-200/50">
+                    <Badge key={v} variant="secondary" className="gap-1 pl-2 pr-1 py-0.5 rounded-lg text-xs bg-teal-50 text-teal-700 dark:bg-teal-950/30 dark:text-teal-300 border border-teal-200/50">
                       Specialisation: {v}
-                      <button type="button" onClick={() => setFilterSpecs(filterSpecs.filter(x => x !== v))} className="hover:bg-sky-200/50 rounded p-0.5"><X className="w-3 h-3" /></button>
+                      <button type="button" onClick={() => setFilterSpecs(filterSpecs.filter(x => x !== v))} className="hover:bg-teal-200/50 rounded p-0.5"><X className="w-3 h-3" /></button>
                     </Badge>
                   ))}
                   {filterGenders.map(v => (
@@ -4589,10 +4644,21 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
               </div>
             )}
           </div>
+              </div>
+              <div className="flex items-center justify-between gap-3 px-6 sm:px-8 py-5 border-t border-slate-100 shrink-0">
+                <Button type="button" variant="ghost" onClick={handleResetFilters} disabled={!isFiltered} className="h-11 rounded-full px-5 text-slate-600 hover:text-rose-600 font-semibold gap-1.5">
+                  <RotateCcw className="w-4 h-4" /> Clear all
+                </Button>
+                <Button type="button" onClick={() => setFiltersOpen(false)} className="h-11 rounded-full px-7 bg-slate-900 hover:bg-slate-800 text-white font-semibold">
+                  Show {filteredStudents.length.toLocaleString()} {filteredStudents.length === 1 ? 'student' : 'students'}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
 
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12 px-4 bg-white/40 dark:bg-slate-900/20 rounded-3xl border border-slate-100 dark:border-slate-800/40">
-              <RefreshCw className="w-8 h-8 text-blue-500 animate-spin mb-4" />
+              <RefreshCw className="w-8 h-8 text-emerald-500 animate-spin mb-4" />
               <p className="text-slate-600 dark:text-slate-400 font-medium">Loading student directory...</p>
             </div>
           ) : filteredStudents.length === 0 ? (
@@ -4604,26 +4670,53 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
               <p className="text-slate-500 dark:text-slate-400 text-sm max-w-sm text-center">Try adjusting your filters or search terms to find what you're looking for.</p>
             </div>
           ) : (
-            <div className="space-y-3">
-              {/* Select all row */}
+            <div className="space-y-1.5">
+              {/* Column header bar (aligned with the row columns) */}
+              <div className="hidden xl:grid grid-cols-[minmax(0,2.2fr)_minmax(0,1.3fr)_minmax(0,1.5fr)_auto] items-center gap-x-6 px-4 sm:px-5 py-2.5 rounded-full bg-[#f4f6f3] dark:bg-slate-800/60 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <div className="flex items-center gap-4">
+                  {isOrgAdmin ? (
+                    <button
+                      type="button"
+                      onClick={toggleSelectAll}
+                      className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-[#256c1d] transition-colors"
+                      title={selectedStudentIds.size === paginatedStudents.length ? 'Deselect all' : 'Select all on this page'}
+                      aria-label="Select all on this page"
+                    >
+                      {selectedStudentIds.size === paginatedStudents.length && paginatedStudents.length > 0
+                        ? <CheckSquare className="w-5 h-5 text-[#256c1d]" />
+                        : <Square className="w-5 h-5" />}
+                    </button>
+                  ) : (
+                    <span className="w-6 text-center">#</span>
+                  )}
+                  <span>Student</span>
+                  {selectedStudentIds.size > 0 && (
+                    <span className="normal-case tracking-normal rounded-full bg-[#e3f7dd] text-[#1f6a17] px-2.5 py-0.5 text-[11px] font-semibold">{selectedStudentIds.size} selected</span>
+                  )}
+                </div>
+                <span>Contact</span>
+                <span>Admission</span>
+                <span className="text-right pr-2">Actions</span>
+              </div>
+
+              {/* Select all (small screens) */}
               {isOrgAdmin && paginatedStudents.length > 0 && (
-                <div className="flex items-center gap-2 px-3 pb-2">
+                <div className="flex xl:hidden items-center gap-2 px-1">
                   <button
                     onClick={toggleSelectAll}
-                    className="flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors bg-white dark:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm"
+                    className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-[#256c1d] transition-colors bg-[#f4f6f3] px-3.5 py-2 rounded-full"
                   >
                     {selectedStudentIds.size === paginatedStudents.length
-                      ? <CheckSquare className="w-4 h-4 text-blue-600" />
+                      ? <CheckSquare className="w-4 h-4 text-[#256c1d]" />
                       : <Square className="w-4 h-4" />}
                     <span>{selectedStudentIds.size === paginatedStudents.length ? 'Deselect all' : 'Select all on page'}</span>
                   </button>
                   {selectedStudentIds.size > 0 && (
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 ml-auto border-0">
-                      {selectedStudentIds.size} selected
-                    </Badge>
+                    <span className="ml-auto rounded-full bg-[#e3f7dd] text-[#1f6a17] px-2.5 py-1 text-xs font-semibold">{selectedStudentIds.size} selected</span>
                   )}
                 </div>
               )}
+              <div className="divide-y divide-slate-200/70 dark:divide-slate-800 mt-1">
               {paginatedStudents.map((student, index) => {
                 const centerName = typeof student.centerId === 'object' ? student.centerId?.name : student.center?.name || '';
                 const programName = typeof student.programId === 'object' ? student.programId?.name : student.program?.name || '';
@@ -4637,154 +4730,134 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 const isSelected = selectedStudentIds.has(student.id);
 
                 return (
-                  <div key={student.id} className={`group flex flex-col xl:flex-row xl:items-center xl:justify-between p-4 bg-white dark:bg-slate-900 rounded-2xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${isSelected ? 'border-blue-400 shadow-blue-500/10 ring-4 ring-blue-50 dark:ring-blue-900/20 z-10 relative' : 'border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'}`}>
-                    <div className="flex items-start gap-4">
-                      {/* Row number / Checkbox */}
+                  <div
+                    key={student.id}
+                    className={`group grid grid-cols-1 xl:grid-cols-[minmax(0,2.2fr)_minmax(0,1.3fr)_minmax(0,1.5fr)_auto] items-center gap-x-6 gap-y-4 px-4 sm:px-5 py-5 rounded-xl transition-colors duration-200 ${isSelected ? 'bg-[#eaf6e6] ring-2 ring-[#54b947]/40' : 'bg-white dark:bg-slate-900 hover:bg-[#f4f6f3] dark:hover:bg-slate-800/60'}`}
+                  >
+                    {/* Student */}
+                    <div className="flex items-center gap-4 min-w-0">
                       {isOrgAdmin ? (
                         <button
                           onClick={() => toggleStudentSelection(student.id)}
-                          className="mt-2 w-6 h-6 flex items-center justify-center text-slate-300 hover:text-blue-500 transition-colors shrink-0"
+                          className="w-6 h-6 flex items-center justify-center text-slate-300 hover:text-[#256c1d] transition-colors shrink-0"
+                          aria-label={isSelected ? 'Deselect student' : 'Select student'}
                         >
-                          {isSelected
-                            ? <CheckSquare className="w-5 h-5 text-blue-600" />
-                            : <Square className="w-5 h-5" />}
+                          {isSelected ? <CheckSquare className="w-5 h-5 text-[#256c1d]" /> : <Square className="w-5 h-5" />}
                         </button>
                       ) : (
-                        <div className="mt-2 w-6 text-center text-xs font-bold text-slate-300 dark:text-slate-600 shrink-0">
+                        <div className="w-6 text-center text-xs font-semibold text-slate-300 dark:text-slate-600 shrink-0">
                           {(currentPage - 1) * itemsPerPage + index + 1}
                         </div>
                       )}
 
                       <div className="relative shrink-0">
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden border-2 ${isSelected ? 'border-blue-400 shadow-sm' : 'border-slate-100 dark:border-slate-800'} bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900`}>
+                        <div className="w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden bg-[#eaf6e6] dark:bg-emerald-500/10">
                           {student.photo ? (
-                            <img
-                              src={api.getFileUrl(student.photo)}
-                              alt={student.name}
-                              className="w-full h-full object-cover"
-                            />
+                            <img src={api.getFileUrl(student.photo)} alt={student.name} className="w-full h-full object-cover" />
                           ) : (
-                            <GraduationCap className={`w-6 h-6 ${isSelected ? 'text-blue-500' : 'text-slate-400'}`} />
+                            <span className="text-lg font-semibold text-[#256c1d]">{(student.name || '?').substring(0, 1).toUpperCase()}</span>
                           )}
                         </div>
                         {student.isPrevious && (
-                          <div className="absolute -bottom-2 -right-2 bg-amber-100 border-2 border-white dark:border-slate-900 rounded-full p-1" title="Previous Student">
+                          <div className="absolute -bottom-1.5 -right-1.5 bg-amber-100 border-2 border-white dark:border-slate-900 rounded-full p-1" title="Previous Student">
                             <History className="w-3 h-3 text-amber-600" />
                           </div>
                         )}
                       </div>
 
-                      <div className="flex-1 min-w-0 pr-4">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="text-[15px] font-bold text-slate-900 dark:text-slate-100 truncate">
-                            {student.name}
-                          </h4>
-                          <Badge className={`px-2 py-0.5 text-[10px] uppercase tracking-wider border-0 font-bold ${STATUS_COLORS[student.status] || 'bg-slate-100 text-slate-600 dark:bg-slate-800'}`}>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="text-base font-semibold text-slate-900 dark:text-slate-100 truncate">{student.name}</h4>
+                          <Badge className={`px-2.5 py-0.5 text-[11px] font-semibold rounded-full ${STATUS_COLORS[student.status] || 'bg-slate-100 text-slate-600 border-0'}`}>
                             {statusLabel(student.status)}
                           </Badge>
                         </div>
-
-                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-slate-500 dark:text-slate-400 mb-2">
-                          <span className="font-semibold text-slate-700 dark:text-slate-300">
-                            #{student.enrollmentNo || 'PENDING'}
-                          </span>
-                          <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
-                          {universityName && (
-                            <span className={`inline-flex max-w-[260px] items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${universityTag.tag}`} title={universityName}>
-                              <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${universityTag.dot}`} />
-                              {universityCodeText && <span className="font-bold tracking-wide">{universityCodeText}</span>}
-                              <span className="truncate opacity-90">{universityName}</span>
-                            </span>
-                          )}
-                          {branchName && (
-                            <>
-                              <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
-                              <span className="truncate max-w-[150px]">{branchName}</span>
-                            </>
-                          )}
-                        </div>
-
-                        <div className="flex flex-wrap items-center gap-3 text-[12px] font-medium">
-                          <a href={`mailto:${student.email}`} className="flex items-center gap-1.5 text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors bg-slate-50 dark:bg-slate-800/50 px-2 py-1 rounded-lg">
-                            <Mail className="w-3.5 h-3.5 text-slate-400" /> <span className="truncate max-w-[150px]">{student.email}</span>
-                          </a>
-                          {student.phone && (
-                            <a href={`tel:${student.phone}`} className="flex items-center gap-1.5 text-slate-500 hover:text-emerald-600 transition-colors bg-slate-50 dark:bg-slate-800/50 px-2 py-1 rounded-lg">
-                              <Phone className="w-3.5 h-3.5 text-slate-400" /> {student.phone}
-                            </a>
-                          )}
-                          {(() => {
-                            const { date: effectiveDate, isAdm } = getStudentEffectiveDate(student);
-                            if (!effectiveDate) return null;
-                            const hasDifferentRegDate = isAdm && student.createdAt && new Date(effectiveDate).toDateString() !== new Date(student.createdAt).toDateString();
-                            return (
-                              <div
-                                className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-lg border border-slate-200/50 dark:border-slate-700/50"
-                                title={isAdm 
-                                  ? `Admission Date: ${new Date(effectiveDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}${hasDifferentRegDate ? ` (Registered: ${new Date(student.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })})` : ''}`
-                                  : 'Registration Date'}
-                              >
-                                <CalendarDays className="w-3.5 h-3.5 text-blue-500/70" />
-                                <span>
-                                  {isAdm
-                                    ? `Adm: ${new Date(effectiveDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`
-                                    : `Reg: ${new Date(effectiveDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`}
-                                </span>
-                              </div>
-                            );
-                          })()}
-                          {salesUserName && (
-                            <div className="flex items-center gap-1.5 bg-blue-50/50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-lg border border-blue-100/50 dark:border-blue-900/30">
-                              <Users className="w-3.5 h-3.5 text-blue-500/70" />
-                              <span>{salesUserName}</span>
-                            </div>
-                          )}
-                        </div>
+                        <p className="text-sm text-muted-foreground mt-0.5 truncate">
+                          <span className="font-semibold text-slate-700 dark:text-slate-300">#{student.enrollmentNo || 'PENDING'}</span>
+                          {programName && <span> · {programName}</span>}
+                        </p>
                       </div>
                     </div>
 
-                    <div className="mt-4 xl:mt-0 pt-4 xl:pt-0 border-t xl:border-t-0 border-slate-100 dark:border-slate-800 flex items-center justify-end gap-1.5 xl:pl-4 xl:ml-auto shrink-0">
-                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300" onClick={() => setViewingProfileStudent(student)} title="View Profile">
+                    {/* Contact */}
+                    <div className="space-y-1.5 min-w-0 text-sm">
+                      <a href={`mailto:${student.email}`} className="flex items-center gap-2 text-slate-600 hover:text-[#256c1d] transition-colors min-w-0">
+                        <Mail className="w-3.5 h-3.5 shrink-0 text-slate-400" /><span className="truncate">{student.email}</span>
+                      </a>
+                      {student.phone && (
+                        <a href={`tel:${student.phone}`} className="flex items-center gap-2 text-slate-600 hover:text-[#256c1d] transition-colors">
+                          <Phone className="w-3.5 h-3.5 shrink-0 text-slate-400" />{student.phone}
+                        </a>
+                      )}
+                    </div>
+
+                    {/* Academic */}
+                    <div className="space-y-1.5 min-w-0">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {universityName && (
+                          <span className={`inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${universityTag.tag}`} title={universityName}>
+                            <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${universityTag.dot}`} />
+                            {universityCodeText && <span className="font-bold tracking-wide">{universityCodeText}</span>}
+                            <span className="truncate opacity-90">{universityName}</span>
+                          </span>
+                        )}
+                        {branchName && <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-600 truncate max-w-[140px]">{branchName}</span>}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                        {(() => {
+                          const { date: effectiveDate, isAdm } = getStudentEffectiveDate(student);
+                          if (!effectiveDate) return null;
+                          const label = new Date(effectiveDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+                          return (
+                            <span className="inline-flex items-center gap-1.5" title={isAdm ? 'Admission date' : 'Registration date'}>
+                              <CalendarDays className="w-3.5 h-3.5" />{isAdm ? 'Adm' : 'Reg'}: {label}
+                            </span>
+                          );
+                        })()}
+                        {salesUserName && <span className="inline-flex items-center gap-1.5"><Users className="w-3.5 h-3.5" />{salesUserName}</span>}
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center justify-end gap-1.5 xl:pl-2">
+                      <Button variant="outline" size="icon" className="w-10 h-10 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => setViewingProfileStudent(student)} title="View profile">
                         <Eye className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-amber-50 dark:hover:bg-amber-900/20 text-amber-600" onClick={() => handleOpenNotif(student)} title="Send Notification">
-                        <Bell className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-emerald-600" onClick={() => handleOpenWhatsApp(student)} title="WhatsApp Message">
-                        <MessageSquare className="w-4 h-4" />
-                      </Button>
-                      <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-1" />
-                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-indigo-600" onClick={() => handleOpenSchedule(student)} title="Payment Schedule">
-                        <CalendarDays className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-cyan-50 dark:hover:bg-cyan-900/20 text-cyan-600" onClick={() => handleOpenCredentials(student)} title="Credentials">
-                        <Key className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-violet-50 dark:hover:bg-violet-900/20 text-violet-600" onClick={() => handleOpenEnrollHistory(student)} title="History">
-                        <History className="w-4 h-4" />
-                      </Button>
-
-                      {(canWrite || canDelete) && <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-1" />}
-
                       {canWrite && (
-                        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-900 dark:hover:text-white" onClick={() => handleEdit(student)}>
+                        <Button variant="outline" size="icon" className="w-10 h-10 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => handleEdit(student)} title="Edit student">
                           <Edit className="w-4 h-4" />
                         </Button>
                       )}
-                      {canDelete && (
-                        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-400 hover:text-rose-600" onClick={() => handleDelete(student.id)}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      )}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="icon" className="w-10 h-10 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]" title="More actions">
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-56 rounded-2xl p-1.5">
+                          <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenNotif(student)}><Bell className="w-4 h-4" />Send notification</DropdownMenuItem>
+                          <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenWhatsApp(student)}><MessageSquare className="w-4 h-4" />WhatsApp message</DropdownMenuItem>
+                          <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenSchedule(student)}><CalendarDays className="w-4 h-4" />Payment schedule</DropdownMenuItem>
+                          <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenCredentials(student)}><Key className="w-4 h-4" />Login credentials</DropdownMenuItem>
+                          <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5" onClick={() => handleOpenEnrollHistory(student)}><History className="w-4 h-4" />Enrollment history</DropdownMenuItem>
+                          {canDelete && (
+                            <>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem className="rounded-xl cursor-pointer gap-2.5 py-2.5 text-rose-600 focus:text-rose-600 focus:bg-rose-50" onClick={() => handleDelete(student.id)}><Trash2 className="w-4 h-4" />Delete student</DropdownMenuItem>
+                            </>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
                 );
               })}
+              </div>
 
               {/* Bulk Floating Action Bar */}
               {isOrgAdmin && selectedStudentIds.size > 0 && (
                 <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-slate-900/95 backdrop-blur-md text-white rounded-full shadow-2xl px-6 py-3 border border-slate-700/50 ring-4 ring-slate-900/10 animate-in slide-in-from-bottom-10 fade-in duration-300">
-                  <div className="flex items-center justify-center bg-blue-500 text-white font-bold w-6 h-6 rounded-full text-xs">
+                  <div className="flex items-center justify-center bg-emerald-500 text-white font-bold w-6 h-6 rounded-full text-xs">
                     {selectedStudentIds.size}
                   </div>
                   <span className="text-sm font-medium mr-2">Selected</span>
@@ -4808,7 +4881,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   {filterTypes.length > 0 && (
                     <Button
                       size="sm"
-                      className="bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 hover:text-violet-200 border-0 gap-2 h-8 rounded-full transition-colors"
+                      className="bg-lime-500/20 hover:bg-lime-500/30 text-lime-300 hover:text-lime-200 border-0 gap-2 h-8 rounded-full transition-colors"
                       onClick={() => { setBulkFilterTypeId(filterTypes[0].id); setBulkFilterOptionId(''); setBulkFilterNote(''); setBulkFilterDialogOpen(true); }}
                     >
                       <Filter className="w-4 h-4" />
@@ -4817,7 +4890,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   )}
                   <Button
                     size="sm"
-                    className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 border-0 gap-2 h-8 rounded-full transition-colors"
+                    className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 hover:text-emerald-200 border-0 gap-2 h-8 rounded-full transition-colors"
                     onClick={handleExportExcel}
                     disabled={isExporting}
                     title="Export selected students to Excel"
@@ -4837,36 +4910,60 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
               )}
 
               {/* Pagination Controls */}
-              {totalPages > 1 && (
-                <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-800 mt-6 gap-4">
-                  <div className="text-sm font-medium text-slate-500">
-                    Showing <span className="text-slate-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="text-slate-900 dark:text-white">{Math.min(currentPage * itemsPerPage, filteredStudents.length)}</span> of <span className="text-slate-900 dark:text-white">{filteredStudents.length}</span> students
-                  </div>
-                  <div className="flex items-center bg-slate-50 dark:bg-slate-900/50 rounded-xl p-1 border border-slate-200/60 dark:border-slate-800/60">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                      disabled={currentPage === 1}
-                      className="rounded-lg h-8 px-3 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                    >
-                      Previous
-                    </Button>
-                    <div className="text-sm font-semibold px-4 text-slate-700 dark:text-slate-300">
-                      Page {currentPage} of {totalPages}
+              {filteredStudents.length > 10 && (() => {
+                // 1 … 4 5 [6] 7 8 … 20
+                const pages: (number | '…')[] = [];
+                const add = (n: number | '…') => { if (pages[pages.length - 1] !== n) pages.push(n); };
+                for (let n = 1; n <= totalPages; n++) {
+                  if (n === 1 || n === totalPages || Math.abs(n - currentPage) <= 1) add(n);
+                  else if (pages[pages.length - 1] !== '…') add('…');
+                }
+                const go = (n: number) => {
+                  setCurrentPage(Math.min(totalPages, Math.max(1, n)));
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+                const navBtn = 'h-9 min-w-9 px-3 rounded-full text-sm font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none';
+                return (
+                  <div className="flex flex-col lg:flex-row items-center justify-between gap-4 pt-6 mt-4 border-t border-slate-100 dark:border-slate-800">
+                    <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-slate-500">
+                      <span>
+                        Showing <span className="font-semibold text-slate-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}–{Math.min(currentPage * itemsPerPage, filteredStudents.length)}</span> of <span className="font-semibold text-slate-900 dark:text-white">{filteredStudents.length.toLocaleString()}</span> students
+                      </span>
+                      <span className="hidden sm:inline text-slate-300">|</span>
+                      <label className="flex items-center gap-2">
+                        Rows
+                        <select
+                          value={itemsPerPage}
+                          onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                          className="h-9 rounded-full border border-slate-200 bg-white px-3 text-sm text-slate-700"
+                        >
+                          {[10, 20, 50, 100].map(n => <option key={n} value={n}>{n}</option>)}
+                        </select>
+                      </label>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                      disabled={currentPage === totalPages}
-                      className="rounded-lg h-8 px-3 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                    >
-                      Next
-                    </Button>
+
+                    <nav className="flex items-center gap-1" aria-label="Pagination">
+                      <button type="button" className={`${navBtn} text-slate-600 hover:bg-[#f4f6f3]`} onClick={() => go(1)} disabled={currentPage === 1} aria-label="First page">«</button>
+                      <button type="button" className={`${navBtn} text-slate-600 hover:bg-[#f4f6f3]`} onClick={() => go(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+                      {pages.map((n, i) => n === '…' ? (
+                        <span key={`e${i}`} className="px-1 text-slate-400">…</span>
+                      ) : (
+                        <button
+                          key={n}
+                          type="button"
+                          onClick={() => go(n)}
+                          aria-current={n === currentPage ? 'page' : undefined}
+                          className={`${navBtn} tabular-nums ${n === currentPage ? 'bg-[#0b1d14] text-white' : 'text-slate-600 hover:bg-[#f4f6f3]'}`}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                      <button type="button" className={`${navBtn} text-slate-600 hover:bg-[#f4f6f3]`} onClick={() => go(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+                      <button type="button" className={`${navBtn} text-slate-600 hover:bg-[#f4f6f3]`} onClick={() => go(totalPages)} disabled={currentPage === totalPages} aria-label="Last page">»</button>
+                    </nav>
                   </div>
-                </div>
-              )}
+                );
+              })()}
             </div>
           )}
         </CardContent>
@@ -4874,190 +4971,197 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
       {/* Bulk Import Dialog */}
       <Dialog open={bulkDialogOpen} onOpenChange={setBulkDialogOpen}>
-        <DialogContent className="max-w-2xl w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] rounded-none sm:rounded-xl">
-          <DialogHeader>
-            <DialogTitle>Bulk Import Student Records</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="bulkIsPrevious"
-                checked={bulkIsPrevious}
-                onChange={(e) => setBulkIsPrevious(e.target.checked)}
-                className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-              />
-              <Label htmlFor="bulkIsPrevious" className="cursor-pointer">Mark all as Completed Students</Label>
+        <DialogContent className="w-full sm:max-w-2xl h-[100dvh] sm:h-auto sm:max-h-[92vh] p-0 gap-0 overflow-hidden rounded-none sm:rounded-[2rem] border-0 bg-white flex flex-col" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-5 shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+              <Upload className="w-5 h-5" />
             </div>
+            <DialogHeader className="space-y-1 text-left">
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground text-left">Bulk Import Student Records</DialogTitle>
+              <p className="text-sm text-muted-foreground">Upload a spreadsheet or paste CSV data to add many students at once.</p>
+            </DialogHeader>
+          </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="bulkUniversitySelect" className="text-sm font-semibold">Select Target University *</Label>
-              <Select value={bulkUniversityId} onValueChange={setBulkUniversityId}>
-                <SelectTrigger id="bulkUniversitySelect" className="w-full">
-                  <SelectValue placeholder="Choose university for these students..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {universities.filter(u => u && u.id).map((u) => (
-                    <SelectItem key={u.id} value={u.id}>
-                      {u.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="flex-1 overflow-y-auto px-6 sm:px-8 pb-4 space-y-7">
+            {/* Target */}
+            <section className="space-y-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Where the students go</h3>
 
-            {bulkUniversityId && (
               <div className="space-y-1.5">
-                <Label htmlFor="bulkProgramSelect" className="text-sm font-semibold">Select Target Program (Optional)</Label>
-                <Select value={bulkProgramId} onValueChange={setBulkProgramId}>
-                  <SelectTrigger id="bulkProgramSelect" className="w-full">
-                    <SelectValue placeholder="Override program for all students (optional)..." />
+                <Label htmlFor="bulkUniversitySelect" className="text-sm font-semibold">Target university <span className="text-rose-500">*</span></Label>
+                <Select value={bulkUniversityId} onValueChange={setBulkUniversityId}>
+                  <SelectTrigger id="bulkUniversitySelect" className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 w-full">
+                    <SelectValue placeholder="Choose university for these students..." />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Auto-detect from CSV</SelectItem>
-                    {programs.filter((p: any) => p && p.id && p.universityId === bulkUniversityId).map((p: any) => (
-                      <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
+                  <SelectContent className="rounded-2xl">
+                    {universities.filter(u => u && u.id).map((u) => (
+                      <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-            )}
 
-            {bulkUniversityId && (
-              <div className="space-y-1.5">
-                <Label htmlFor="bulkSessionSelect" className="text-sm font-semibold">Select Target Session (Optional)</Label>
-                <Select value={bulkSessionId} onValueChange={setBulkSessionId}>
-                  <SelectTrigger id="bulkSessionSelect" className="w-full">
-                    <SelectValue placeholder="Override session for all students (optional)..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Auto-detect from CSV</SelectItem>
-                    {sessions.filter((s: any) => s && s.id && (!s.universityId || s.universityId === bulkUniversityId)).map((s: any) => (
-                      <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
+              {(bulkUniversityId || branches.length > 0) && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {bulkUniversityId && (
+                    <div className="space-y-1.5">
+                      <Label htmlFor="bulkProgramSelect" className="text-sm font-semibold">Program <span className="font-normal text-muted-foreground">(optional)</span></Label>
+                      <Select value={bulkProgramId} onValueChange={setBulkProgramId}>
+                        <SelectTrigger id="bulkProgramSelect" className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 w-full">
+                          <SelectValue placeholder="Override program for all students..." />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-2xl">
+                          <SelectItem value="none">Auto-detect from CSV</SelectItem>
+                          {programs.filter((p: any) => p && p.id && p.universityId === bulkUniversityId).map((p: any) => (
+                            <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
 
-            {branches.length > 0 && (
-              <div className="space-y-1.5">
-                <Label htmlFor="bulkBranchSelect" className="text-sm font-semibold">Select Target Branch</Label>
-                <Select value={selectedBranchId} onValueChange={setSelectedBranchId}>
-                  <SelectTrigger id="bulkBranchSelect" className="w-full">
-                    <SelectValue placeholder="Choose branch to associate students with..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {branches.filter(b => b && b.id).map((b) => (
-                      <SelectItem key={b.id} value={b.id}>
-                        {b.name} ({b.code})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
+                  {bulkUniversityId && (
+                    <div className="space-y-1.5">
+                      <Label htmlFor="bulkSessionSelect" className="text-sm font-semibold">Session <span className="font-normal text-muted-foreground">(optional)</span></Label>
+                      <Select value={bulkSessionId} onValueChange={setBulkSessionId}>
+                        <SelectTrigger id="bulkSessionSelect" className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 w-full">
+                          <SelectValue placeholder="Override session for all students..." />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-2xl">
+                          <SelectItem value="none">Auto-detect from CSV</SelectItem>
+                          {sessions.filter((s: any) => s && s.id && (!s.universityId || s.universityId === bulkUniversityId)).map((s: any) => (
+                            <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
 
-            {['superadmin', 'org_admin', 'ceo', 'ops_admin'].includes(user?.role || '') && salesUsers.length > 0 && (
-              <div className="space-y-1.5">
-                <Label htmlFor="bulkSalesUserSelect" className="text-sm font-semibold">Assign Sales User (Optional)</Label>
-                <Select value={selectedSalesUserId} onValueChange={setSelectedSalesUserId}>
-                  <SelectTrigger id="bulkSalesUserSelect" className="w-full">
-                    <SelectValue placeholder="Select sales user (optional)..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">None (Assign to Organisation)</SelectItem>
-                    {salesUsers.filter((su: any) => su && su.id).map((su: any) => (
-                      <SelectItem key={su.id} value={su.id}>{su.name} ({su.role})</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  If left unassigned, students will belong generally to the organization.
-                </p>
-              </div>
-            )}
+                  {branches.length > 0 && (
+                    <div className="space-y-1.5">
+                      <Label htmlFor="bulkBranchSelect" className="text-sm font-semibold">Branch</Label>
+                      <Select value={selectedBranchId} onValueChange={setSelectedBranchId}>
+                        <SelectTrigger id="bulkBranchSelect" className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 w-full">
+                          <SelectValue placeholder="Choose branch..." />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-2xl">
+                          {branches.filter(b => b && b.id).map((b) => (
+                            <SelectItem key={b.id} value={b.id}>{b.name} ({b.code})</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
 
-            <div className="border border-dashed rounded-lg p-4 bg-slate-50 dark:bg-slate-900/50 space-y-3">
-              <div className="flex items-center justify-between">
-                <Label className="font-medium">Upload Excel / CSV File</Label>
+                  {['superadmin', 'org_admin', 'ceo', 'ops_admin'].includes(user?.role || '') && salesUsers.length > 0 && (
+                    <div className="space-y-1.5">
+                      <Label htmlFor="bulkSalesUserSelect" className="text-sm font-semibold">Sales user <span className="font-normal text-muted-foreground">(optional)</span></Label>
+                      <Select value={selectedSalesUserId} onValueChange={setSelectedSalesUserId}>
+                        <SelectTrigger id="bulkSalesUserSelect" className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 w-full">
+                          <SelectValue placeholder="Select sales user..." />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-2xl">
+                          <SelectItem value="none">None (Assign to Organisation)</SelectItem>
+                          {salesUsers.filter((su: any) => su && su.id).map((su: any) => (
+                            <SelectItem key={su.id} value={su.id}>{su.name} ({su.role})</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <label htmlFor="bulkIsPrevious" className={`flex items-center gap-3 rounded-2xl px-4 py-3 cursor-pointer border transition-colors ${bulkIsPrevious ? 'bg-[#eaf6e6] border-[#54b947]/40' : 'bg-white border-slate-200 hover:bg-[#f4f6f3]'}`}>
+                <input
+                  type="checkbox"
+                  id="bulkIsPrevious"
+                  checked={bulkIsPrevious}
+                  onChange={(e) => setBulkIsPrevious(e.target.checked)}
+                  className="w-4 h-4 rounded border-slate-300 accent-[#54b947]"
+                />
+                <span className="text-sm font-medium">Mark all as Completed Students</span>
+              </label>
+              <p className="text-xs text-muted-foreground -mt-2">If no sales user is chosen, students belong to the organisation in general.</p>
+            </section>
+
+            {/* File */}
+            <section className="space-y-4">
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Upload file</h3>
                 <Button
                   type="button"
                   variant="outline"
-                  size="sm"
                   onClick={handleDownloadTemplate}
-                  className="flex items-center gap-1.5 text-xs h-7"
+                  className="h-9 px-4 rounded-full bg-white border-slate-200 text-xs font-semibold gap-1.5 hover:bg-[#eaf6e6]"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  Download Template
+                  Download template
                 </Button>
               </div>
-              <input
-                type="file"
-                accept=".xlsx,.xls,.csv"
-                onChange={handleFileUpload}
-                className="block w-full text-sm text-slate-500
-                  file:mr-4 file:py-2 file:px-4
-                  file:rounded-md file:border-0
-                  file:text-sm file:font-semibold
-                  file:bg-primary file:text-primary-foreground
-                  hover:file:bg-primary/95
-                  cursor-pointer"
-              />
-              <p className="text-[11px] text-muted-foreground">
+
+              <label htmlFor="bulk-file-input" className="block rounded-3xl border-2 border-dashed border-slate-300 hover:border-[#54b947] hover:bg-[#f4f6f3] transition-colors cursor-pointer p-6 text-center">
+                <span className="w-12 h-12 rounded-full bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Upload className="w-5 h-5" /></span>
+                <span className="block text-sm font-semibold text-foreground">Click to choose an Excel or CSV file</span>
+                <span className="block text-xs text-muted-foreground mt-1">.xlsx, .xls or .csv</span>
+                <input
+                  id="bulk-file-input"
+                  type="file"
+                  accept=".xlsx,.xls,.csv"
+                  onChange={handleFileUpload}
+                  className="sr-only"
+                />
+              </label>
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
                 Supported: Excel (.xlsx, .xls) and CSV. Column order: <strong>name</strong>, <strong>email</strong>, <strong>phone</strong>, <strong>address</strong>, <strong>enrollmentNo</strong>, <strong>programs</strong>, <strong>university</strong>, <strong>dob</strong>, <strong>session</strong>. Academic partner is optional.
               </p>
-            </div>
+            </section>
 
-            <div>
-              <Label>Or Paste CSV Data</Label>
+            <section className="space-y-3">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Or paste CSV data</h3>
               <Textarea
                 rows={6}
                 value={bulkData}
                 onChange={(e) => setBulkData(e.target.value)}
                 placeholder={"name,email,phone,address,enrollmentNo,programs,university,dob,session\nJohn Doe,john@example.com,9876543210,Mumbai,PYPEER001,B.Tech CS,Delhi University,1999-05-15,2024-25"}
-                className="font-mono text-sm"
+                className="font-mono text-sm rounded-2xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 p-4 resize-none"
               />
-            </div>
+            </section>
 
             {/* Already existed students */}
             {bulkExisted.length > 0 && (
-              <div className="rounded-lg border border-yellow-500/40 bg-yellow-500/5 p-3 space-y-1.5">
-                <p className="text-sm font-semibold text-yellow-600 dark:text-yellow-400 flex items-center gap-1.5">
-                  ℹ️ Already Existed — Skipped ({bulkExisted.length})
+              <div className="rounded-2xl bg-amber-50 p-4 space-y-2">
+                <p className="text-sm font-semibold text-amber-800 flex items-center gap-1.5">
+                  Already existed · skipped ({bulkExisted.length})
                 </p>
                 <ul className="text-xs space-y-1 max-h-36 overflow-y-auto pr-1">
                   {bulkExisted.map((msg, i) => (
-                    <li key={i} className="text-muted-foreground border-l-2 border-yellow-500/30 pl-2 py-0.5">
-                      {msg}
-                    </li>
+                    <li key={i} className="text-amber-900/80 border-l-2 border-amber-300 pl-2 py-0.5">{msg}</li>
                   ))}
                 </ul>
-                <p className="text-xs text-muted-foreground pt-1">These students were not modified. Their existing records are safe.</p>
+                <p className="text-xs text-amber-800/70 pt-1">These students were not modified. Their existing records are safe.</p>
               </div>
             )}
 
             {/* Per-row import error details */}
             {bulkErrors.length > 0 && (
-              <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-3 space-y-1.5">
-                <p className="text-sm font-semibold text-destructive flex items-center gap-1.5">
-                  ❌ Import Errors ({bulkErrors.length})
+              <div className="rounded-2xl bg-rose-50 p-4 space-y-2">
+                <p className="text-sm font-semibold text-rose-700 flex items-center gap-1.5">
+                  Import errors ({bulkErrors.length})
                 </p>
                 <ul className="text-xs space-y-1 max-h-36 overflow-y-auto pr-1">
                   {bulkErrors.map((err, i) => (
-                    <li key={i} className="text-muted-foreground border-l-2 border-destructive/30 pl-2 py-0.5">
-                      {err}
-                    </li>
+                    <li key={i} className="text-rose-900/80 border-l-2 border-rose-300 pl-2 py-0.5">{err}</li>
                   ))}
                 </ul>
-                <p className="text-xs text-muted-foreground pt-1">Fix the rows above and re-upload to add them.</p>
+                <p className="text-xs text-rose-700/70 pt-1">Fix the rows above and re-upload to add them.</p>
               </div>
             )}
+          </div>
 
-            <div className="flex gap-2 pt-2">
-              <Button onClick={handleBulkImport} className="flex-1">Start Import Process</Button>
-              <Button variant="outline" onClick={() => { setBulkDialogOpen(false); setBulkErrors([]); setBulkExisted([]); }}>Close</Button>
-            </div>
+          <div className="flex items-center justify-end gap-2 px-6 sm:px-8 py-5 border-t border-slate-100 shrink-0 flex-col-reverse sm:flex-row">
+            <Button variant="ghost" onClick={() => { setBulkDialogOpen(false); setBulkErrors([]); setBulkExisted([]); }} className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">Close</Button>
+            <Button onClick={handleBulkImport} className="h-11 rounded-full px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold">Start Import Process</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -5242,7 +5346,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <History className="w-5 h-5 text-violet-500" />
+              <History className="w-5 h-5 text-lime-500" />
               Enrollment History — {enrollHistoryStudent?.name}
             </DialogTitle>
           </DialogHeader>
@@ -5335,9 +5439,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           </div>
                         )}
                         {enr.universityRemarks && (
-                          <div className="text-xs bg-blue-50 border border-blue-100 rounded p-2">
-                            <span className="font-semibold text-blue-700">University: </span>
-                            <span className="text-blue-600">{enr.universityRemarks}</span>
+                          <div className="text-xs bg-emerald-50 border border-emerald-100 rounded p-2">
+                            <span className="font-semibold text-emerald-700">University: </span>
+                            <span className="text-emerald-600">{enr.universityRemarks}</span>
                           </div>
                         )}
                       </div>
@@ -5511,7 +5615,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         <DialogContent className="max-w-md w-full rounded-xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <GraduationCap className="w-5 h-5 text-blue-600" />
+              <GraduationCap className="w-5 h-5 text-emerald-600" />
               Change University / Program
             </DialogTitle>
           </DialogHeader>
@@ -5562,7 +5666,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 Cancel
               </Button>
               <Button
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
                 onClick={handleBulkUpdateProgram}
                 disabled={bulkActionLoading || (!bulkActionUniversityId && !bulkActionProgramId)}
               >
@@ -5578,7 +5682,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       <Dialog open={bulkFilterDialogOpen} onOpenChange={setBulkFilterDialogOpen}>
         <DialogContent className="max-w-md w-full rounded-xl">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2"><Filter className="w-5 h-5 text-violet-600" />Set filter value</DialogTitle>
+            <DialogTitle className="flex items-center gap-2"><Filter className="w-5 h-5 text-lime-600" />Set filter value</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <p className="text-sm text-muted-foreground">

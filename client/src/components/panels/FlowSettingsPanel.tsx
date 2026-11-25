@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Workflow, GripVertical, ArrowUp, ArrowDown, Save, User, FileCheck, CheckCircle2 } from 'lucide-react';
+import { GripVertical, ArrowUp, ArrowDown, Save, User, FileCheck, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -117,35 +117,30 @@ export function FlowSettingsPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="p-3 bg-primary/10 rounded-2xl">
-          <Workflow className="w-6 h-6 text-primary" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Flow Settings</h2>
-          <p className="text-muted-foreground mt-1">
-            Configure automated flows and approval pipelines across the organization.
-          </p>
-        </div>
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Flow Settings</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">
+          Configure automated flows and approval pipelines across the organization.
+        </p>
       </div>
 
-      <Card>
-        <CardHeader>
+      <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+        <CardHeader className="px-7">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Student Enrollment Flow</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-lg font-semibold tracking-tight">Student Enrollment Flow</CardTitle>
+              <CardDescription className="mt-1">
                 Customize the step-by-step process for new student enrollments. Drag and drop or use arrows to rearrange the order.
               </CardDescription>
             </div>
             {hasChanges && (
-              <span className="text-sm font-medium text-amber-500 bg-amber-500/10 px-3 py-1 rounded-full animate-pulse">
+              <span className="text-xs font-semibold text-amber-700 bg-amber-100 px-3 py-1 rounded-full">
                 Unsaved changes
               </span>
             )}
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-7">
           <div className="space-y-3 relative">
             {steps.map((step, index) => {
               const Icon = step.icon;
@@ -162,14 +157,14 @@ export function FlowSettingsPanel() {
                   onDrop={(e) => handleDrop(e, index)}
                   onDragEnd={() => setDraggedIndex(null)}
                   className={cn(
-                    "flex items-center gap-4 p-4 rounded-xl border bg-card transition-all duration-200 relative",
-                    isDragged ? "opacity-40 border-dashed border-primary" : "hover:border-primary/50 hover:shadow-md",
-                    isFirst ? "opacity-80 bg-slate-50 dark:bg-slate-900/50" : "cursor-grab active:cursor-grabbing"
+                    "flex items-center gap-4 p-4 rounded-2xl bg-[#f4f6f3] transition-all duration-200 relative",
+                    isDragged ? "opacity-40 ring-2 ring-dashed ring-[#8ae47e]" : "hover:bg-[#eef5ec]",
+                    isFirst ? "opacity-80" : "cursor-grab active:cursor-grabbing"
                   )}
                 >
                   {/* Connecting Line (except for last item) */}
                   {!isLast && (
-                    <div className="absolute left-[39px] top-[48px] bottom-[-24px] w-[2px] bg-border z-0" />
+                    <div className="absolute left-[39px] top-[48px] bottom-[-24px] w-[2px] bg-[#cfe9c9] z-0" />
                   )}
 
                   <div className={cn(
@@ -179,13 +174,13 @@ export function FlowSettingsPanel() {
                     {!isFirst && <GripVertical className="w-5 h-5" />}
                   </div>
                   
-                  <div className={cn("p-3 rounded-xl z-10", step.bg, step.color)}>
-                    <Icon className="w-6 h-6" />
+                  <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center z-10">
+                    <Icon className="w-5 h-5" />
                   </div>
 
                   <div className="flex-1 z-10">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-muted text-muted-foreground">
+                      <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-white text-[#256c1d]">
                         Step {index + 1}
                       </span>
                       <h4 className="font-semibold text-base">{step.title}</h4>
@@ -193,7 +188,7 @@ export function FlowSettingsPanel() {
                     <p className="text-sm text-muted-foreground">{step.description}</p>
                   </div>
 
-                  <div className="text-sm font-medium px-3 py-1 bg-secondary/50 rounded-lg hidden sm:block z-10">
+                  <div className="text-xs font-semibold px-3 py-1.5 bg-white text-slate-600 rounded-full hidden sm:block z-10">
                     {step.role}
                   </div>
 
@@ -201,7 +196,7 @@ export function FlowSettingsPanel() {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-8 w-8 text-muted-foreground hover:text-primary"
+                      className="h-8 w-8 rounded-full text-muted-foreground hover:text-[#256c1d] hover:bg-white"
                       disabled={isFirst || index === 1}
                       onClick={(e) => { e.stopPropagation(); moveStep(index, 'up'); }}
                     >
@@ -210,7 +205,7 @@ export function FlowSettingsPanel() {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-8 w-8 text-muted-foreground hover:text-primary"
+                      className="h-8 w-8 rounded-full text-muted-foreground hover:text-[#256c1d] hover:bg-white"
                       disabled={isFirst || isLast}
                       onClick={(e) => { e.stopPropagation(); moveStep(index, 'down'); }}
                     >
@@ -222,11 +217,11 @@ export function FlowSettingsPanel() {
             })}
           </div>
         </CardContent>
-        <CardFooter className="bg-muted/30 border-t p-4 px-6 flex justify-end">
+        <CardFooter className="px-7 flex justify-end">
           <Button 
             onClick={handleSave} 
             disabled={!hasChanges || isSaving}
-            className="gap-2"
+            className="gap-2 h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
           >
             <Save className="w-4 h-4" />
             {isSaving ? 'Saving...' : 'Save Flow Order'}

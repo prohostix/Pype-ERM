@@ -232,26 +232,26 @@ export function CollectionsPanel() {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto p-4 md:p-6 animate-in fade-in duration-500">
+    <div className="space-y-6 wizard-form animate-in fade-in duration-500">
       
       {/* Title Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">Collections Dashboard</h2>
-          <p className="text-muted-foreground text-sm mt-1">Monitor outstanding receivables, follow up on pending student installments, and log collections activity.</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">Collections Dashboard</h2>
+          <p className="text-muted-foreground text-sm mt-1.5 max-w-2xl">Monitor outstanding receivables, follow up on pending student installments, and log collections activity.</p>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchMetrics} className="glass">
+        <Button variant="outline" onClick={fetchMetrics} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
           Refresh Data
         </Button>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-border overflow-x-auto gap-2 scrollbar-none pb-px">
+      <div className="flex overflow-x-auto gap-2 scrollbar-none rounded-3xl bg-white border border-slate-100 p-2 w-fit max-w-full">
         <button
           onClick={() => setActivePanelTab('overview')}
           className={cn(
-            "py-2.5 px-4 text-sm font-medium border-b-2 transition-all whitespace-nowrap",
-            activePanelTab === 'overview' ? "border-primary text-primary font-semibold" : "border-transparent text-muted-foreground hover:text-foreground"
+            "py-2.5 px-5 text-sm font-semibold rounded-full transition-colors whitespace-nowrap",
+            activePanelTab === 'overview' ? "bg-[#8ae47e] text-[#0b1d14]" : "text-slate-600 hover:bg-[#eaf6e6]"
           )}
         >
           Collections Overview
@@ -259,8 +259,8 @@ export function CollectionsPanel() {
         <button
           onClick={() => setActivePanelTab('students')}
           className={cn(
-            "py-2.5 px-4 text-sm font-medium border-b-2 transition-all whitespace-nowrap",
-            activePanelTab === 'students' ? "border-primary text-primary font-semibold" : "border-transparent text-muted-foreground hover:text-foreground"
+            "py-2.5 px-5 text-sm font-semibold rounded-full transition-colors whitespace-nowrap",
+            activePanelTab === 'students' ? "bg-[#8ae47e] text-[#0b1d14]" : "text-slate-600 hover:bg-[#eaf6e6]"
           )}
         >
           Students Status ({metrics?.studentStats?.total || 0})
@@ -269,8 +269,8 @@ export function CollectionsPanel() {
           <button
             onClick={() => setActivePanelTab('overseers')}
             className={cn(
-              "py-2.5 px-4 text-sm font-medium border-b-2 transition-all whitespace-nowrap",
-              activePanelTab === 'overseers' ? "border-primary text-primary font-semibold" : "border-transparent text-muted-foreground hover:text-foreground"
+              "py-2.5 px-5 text-sm font-semibold rounded-full transition-colors whitespace-nowrap",
+              activePanelTab === 'overseers' ? "bg-[#8ae47e] text-[#0b1d14]" : "text-slate-600 hover:bg-[#eaf6e6]"
             )}
           >
             Collection Agents ({overseers.length})
@@ -286,13 +286,12 @@ export function CollectionsPanel() {
           <div className="space-y-6">
             
             {/* Top Banner: Collection Target */}
-            <Card className="border-none bg-primary/5 backdrop-blur-md shadow-sm relative overflow-hidden">
-              <div className="absolute -right-12 -top-12 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-              <CardContent className="p-6">
+            <Card className="bg-[#eaf6e6] border border-[#cfe9c9] shadow-none py-0">
+              <CardContent className="p-6 sm:p-8">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-primary tracking-wider block mb-1">Collection Target</span>
-                    <div className="text-3xl font-extrabold text-foreground flex items-baseline gap-2">
+                    <span className="text-[11px] uppercase font-semibold text-[#256c1d] tracking-wider block mb-1">Collection Target</span>
+                    <div className="text-3xl font-semibold tracking-tight text-foreground flex items-baseline gap-2">
                       {CS()}{metrics?.targetStats?.achieved?.toLocaleString(numLocale()) || 0} 
                       <span className="text-sm font-semibold text-muted-foreground">/ {CS()}{metrics?.targetStats?.target?.toLocaleString(numLocale()) || 50000}</span>
                     </div>
@@ -300,11 +299,11 @@ export function CollectionsPanel() {
                   <div className="flex-1 max-w-md w-full">
                     <div className="flex justify-between text-xs font-semibold text-muted-foreground mb-2">
                       <span>Progress</span>
-                      <span className="text-primary">{Math.round(((metrics?.targetStats?.achieved || 0) / (metrics?.targetStats?.target || 50000)) * 100)}% Achieved</span>
+                      <span className="text-[#256c1d]">{Math.round(((metrics?.targetStats?.achieved || 0) / (metrics?.targetStats?.target || 50000)) * 100)}% Achieved</span>
                     </div>
-                    <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden shadow-inner">
+                    <div className="w-full bg-white h-3 rounded-full overflow-hidden">
                       <div 
-                        className="bg-primary h-full transition-all duration-1000 ease-out" 
+                        className="bg-[#54b947] h-full rounded-full transition-all duration-1000 ease-out" 
                         style={{ width: `${Math.min(100, Math.round(((metrics?.targetStats?.achieved || 0) / (metrics?.targetStats?.target || 50000)) * 100))}%` }} 
                       />
                     </div>
@@ -316,17 +315,17 @@ export function CollectionsPanel() {
             {/* KPI Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <Card 
-                className="border-border/50 bg-card/65 backdrop-blur-md shadow-sm hover:shadow-md transition-all cursor-pointer hover:ring-1 hover:ring-emerald-500/50 hover:border-emerald-500/50"
+                className="bg-white border border-slate-100 shadow-none hover:-translate-y-0.5 transition-all py-6 gap-4 cursor-pointer hover:ring-1 hover:ring-emerald-500/50 hover:border-emerald-500/50"
                 onClick={() => document.getElementById('today-settled')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
               >
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Today's Collections</span>
-                  <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                  <span className="text-[11px] uppercase font-semibold text-slate-500 tracking-wider block">Today's Collections</span>
+                  <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                  <div className="text-3xl font-semibold tracking-tight text-[#256c1d]">
                     {CS()}{metrics?.todayCollectingStats?.collectedAmount?.toLocaleString(numLocale()) || 0}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -336,17 +335,17 @@ export function CollectionsPanel() {
               </Card>
 
               <Card 
-                className="border-border/50 bg-card/65 backdrop-blur-md shadow-sm hover:shadow-md transition-all cursor-pointer hover:ring-1 hover:ring-primary/50 hover:border-primary/50"
+                className="bg-white border border-slate-100 shadow-none hover:-translate-y-0.5 transition-all py-6 gap-4 cursor-pointer hover:ring-1 hover:ring-primary/50 hover:border-primary/50"
                 onClick={() => document.getElementById('expected-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
               >
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Pending Collections</span>
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="text-[11px] uppercase font-semibold text-slate-500 tracking-wider block">Pending Collections</span>
+                  <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
                     <Clock className="w-4 h-4 text-primary" />
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-primary">
+                  <div className="text-3xl font-semibold tracking-tight text-[#256c1d]">
                     {CS()}{metrics?.paymentPendingStats?.outstandingAmount?.toLocaleString(numLocale()) || 0}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -356,17 +355,17 @@ export function CollectionsPanel() {
               </Card>
 
               <Card 
-                className="border-border/50 bg-card/65 backdrop-blur-md shadow-sm hover:shadow-md transition-all cursor-pointer hover:ring-1 hover:ring-amber-500/50 hover:border-amber-500/50"
+                className="bg-white border border-slate-100 shadow-none hover:-translate-y-0.5 transition-all py-6 gap-4 cursor-pointer hover:ring-1 hover:ring-amber-500/50 hover:border-amber-500/50"
                 onClick={() => document.getElementById('expected-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
               >
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Upcoming (7 Days)</span>
-                  <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center">
+                  <span className="text-[11px] uppercase font-semibold text-slate-500 tracking-wider block">Upcoming (7 Days)</span>
+                  <div className="w-10 h-10 rounded-2xl bg-amber-500/10 flex items-center justify-center">
                     <Bell className="w-4 h-4 text-amber-500" />
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-amber-500">
+                  <div className="text-3xl font-semibold tracking-tight text-amber-600">
                     {CS()}{metrics?.upcomingStats?.dueAmount?.toLocaleString(numLocale()) || 0}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -376,17 +375,17 @@ export function CollectionsPanel() {
               </Card>
 
               <Card 
-                className="border-border/50 bg-card/65 backdrop-blur-md shadow-sm hover:shadow-md transition-all cursor-pointer hover:ring-1 hover:ring-destructive/50 hover:border-destructive/50"
+                className="bg-white border border-slate-100 shadow-none hover:-translate-y-0.5 transition-all py-6 gap-4 cursor-pointer hover:ring-1 hover:ring-destructive/50 hover:border-destructive/50"
                 onClick={() => document.getElementById('expected-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
               >
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Overdue Amount</span>
-                  <div className="w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center">
+                  <span className="text-[11px] uppercase font-semibold text-slate-500 tracking-wider block">Overdue Amount</span>
+                  <div className="w-10 h-10 rounded-2xl bg-destructive/10 flex items-center justify-center">
                     <ShieldAlert className="w-4 h-4 text-destructive" />
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-destructive">
+                  <div className="text-3xl font-semibold tracking-tight text-red-600">
                     {CS()}{metrics?.paymentPendingStats?.overdueAmount?.toLocaleString(numLocale()) || 0}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 font-medium">
@@ -400,8 +399,8 @@ export function CollectionsPanel() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               
               {/* Today Collected */}
-              <Card id="today-settled" className="border-none bg-card/65 backdrop-blur-md shadow-sm flex flex-col scroll-mt-24">
-                <CardHeader className="border-b border-border/50 pb-4">
+              <Card id="today-settled" className="bg-white border border-slate-100 shadow-none flex flex-col scroll-mt-24 py-6 gap-4">
+                <CardHeader className="border-b border-slate-100 pb-5">
                   <CardTitle className="text-sm font-semibold flex items-center justify-between text-emerald-600 dark:text-emerald-400">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4" /> 
@@ -412,12 +411,12 @@ export function CollectionsPanel() {
                     </Badge>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-4 p-0 flex-1">
-                  <div className="max-h-[300px] overflow-y-auto custom-scrollbar px-6 pb-6">
+                <CardContent className="p-0 flex-1">
+                  <div className="max-h-[300px] overflow-y-auto custom-scrollbar px-6">
                     {metrics?.todayCollectingStats?.collectedSchedules?.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-8 text-center h-full">
-                        <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
-                          <CheckCircle2 className="w-6 h-6 text-muted-foreground/50" />
+                        <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] flex items-center justify-center mb-3">
+                          <CheckCircle2 className="w-6 h-6 text-[#256c1d]" />
                         </div>
                         <p className="text-sm font-medium text-foreground">No Collections Yet</p>
                         <p className="text-xs text-muted-foreground mt-1">No payments have been recorded for today.</p>
@@ -425,9 +424,9 @@ export function CollectionsPanel() {
                     ) : (
                       <div className="space-y-3">
                         {metrics?.todayCollectingStats?.collectedSchedules?.map((sc: any) => (
-                          <div key={sc.id} className="group flex justify-between items-center p-3 rounded-xl border border-border bg-background/50 hover:border-emerald-500/30 transition-colors">
+                          <div key={sc.id} className="group flex justify-between items-center p-3 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 font-bold text-sm">
+                              <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-[#256c1d] font-semibold text-sm">
                                 {sc.student?.name?.charAt(0)}
                               </div>
                               <div>
@@ -448,8 +447,8 @@ export function CollectionsPanel() {
               </Card>
  
               {/* Today Due */}
-              <Card id="today-due" className="border-none bg-card/65 backdrop-blur-md shadow-sm flex flex-col scroll-mt-24">
-                <CardHeader className="border-b border-border/50 pb-4">
+              <Card id="today-due" className="bg-white border border-slate-100 shadow-none flex flex-col scroll-mt-24 py-6 gap-4">
+                <CardHeader className="border-b border-slate-100 pb-5">
                   <CardTitle className="text-sm font-semibold flex items-center justify-between text-amber-600 dark:text-amber-500">
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4" /> 
@@ -460,12 +459,12 @@ export function CollectionsPanel() {
                     </Badge>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-4 p-0 flex-1">
-                  <div className="max-h-[300px] overflow-y-auto custom-scrollbar px-6 pb-6">
+                <CardContent className="p-0 flex-1">
+                  <div className="max-h-[300px] overflow-y-auto custom-scrollbar px-6">
                     {metrics?.todayCollectingStats?.dueSchedules?.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-8 text-center h-full">
-                        <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
-                          <CheckCircle2 className="w-6 h-6 text-muted-foreground/50" />
+                        <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] flex items-center justify-center mb-3">
+                          <CheckCircle2 className="w-6 h-6 text-[#256c1d]" />
                         </div>
                         <p className="text-sm font-medium text-foreground">All Clear</p>
                         <p className="text-xs text-muted-foreground mt-1">No pending installments scheduled for today.</p>
@@ -473,9 +472,9 @@ export function CollectionsPanel() {
                     ) : (
                       <div className="space-y-3">
                         {metrics?.todayCollectingStats?.dueSchedules?.map((sc: any) => (
-                          <div key={sc.id} className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl border border-border bg-background/50 hover:border-amber-500/30 transition-colors">
+                          <div key={sc.id} className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 font-bold text-sm">
+                              <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-amber-600 font-semibold text-sm">
                                 {sc.student?.name?.charAt(0)}
                               </div>
                               <div>
@@ -504,7 +503,7 @@ export function CollectionsPanel() {
             </div>
 
             {/* Upcoming & Overdue List */}
-            <Card id="expected-list" className="border-none bg-card/65 backdrop-blur-md shadow-md scroll-mt-24">
+            <Card id="expected-list" className="bg-white border border-slate-100 shadow-none scroll-mt-24 py-6">
               <CardHeader>
                 <CardTitle className="text-base">Expected & Overdue Payments List</CardTitle>
                 <CardDescription>Comprehensive timeline of all outstanding receivables</CardDescription>
@@ -518,45 +517,45 @@ export function CollectionsPanel() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse text-sm">
                       <thead>
-                        <tr className="border-b border-border text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                          <th className="pb-3 pr-4">Student & Details</th>
-                          <th className="pb-3 px-4">Milestone</th>
-                          <th className="pb-3 px-4">Amount</th>
-                          <th className="pb-3 px-4">Due Date</th>
-                          <th className="pb-3 px-4">Remarks</th>
-                          <th className="pb-3 px-4">Status</th>
-                          <th className="pb-3 pl-4 text-right">Actions</th>
+                        <tr className="bg-[#f4f6f3] text-xs font-semibold text-slate-500 uppercase tracking-wider [&>th:first-child]:rounded-l-2xl [&>th:last-child]:rounded-r-2xl">
+                          <th className="py-3.5 px-4">Student & Details</th>
+                          <th className="py-3.5 px-4">Milestone</th>
+                          <th className="py-3.5 px-4">Amount</th>
+                          <th className="py-3.5 px-4">Due Date</th>
+                          <th className="py-3.5 px-4">Remarks</th>
+                          <th className="py-3.5 px-4">Status</th>
+                          <th className="py-3.5 px-4 text-right">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-border/60">
+                      <tbody className="divide-y divide-slate-100">
                         {/* Overdue */}
                         {metrics?.expectedPaymentsStats?.overdueSchedules?.map((sc: any) => (
-                          <tr key={sc.id} className="hover:bg-background/20">
-                            <td className="py-3 px-4 pl-0">
-                              <span className="font-bold text-foreground block">{sc.student?.name}</span>
+                          <tr key={sc.id} className="hover:bg-[#f7faf6]">
+                            <td className="py-3.5 px-4">
+                              <span className="font-semibold text-slate-900 block">{sc.student?.name}</span>
                               <span className="text-[10px] text-muted-foreground">{sc.student?.enrollmentNo}</span>
                             </td>
-                            <td className="py-3 px-4">{sc.title}</td>
-                            <td className="py-3 px-4 font-semibold text-rose-500">{CS()}{sc.amount.toLocaleString(numLocale())}</td>
-                            <td className="py-3 px-4 text-destructive font-semibold">
+                            <td className="py-3.5 px-4">{sc.title}</td>
+                            <td className="py-3.5 px-4 font-semibold text-rose-500">{CS()}{sc.amount.toLocaleString(numLocale())}</td>
+                            <td className="py-3.5 px-4 text-destructive font-semibold">
                               {new Date(sc.dueDate).toLocaleDateString()}
-                              <span className="text-[9px] uppercase font-bold text-destructive bg-destructive/10 px-1 rounded ml-1.5">Overdue</span>
+                              <span className="text-[9px] uppercase font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded-full ml-1.5">Overdue</span>
                             </td>
-                            <td className="py-3 px-4 text-xs text-muted-foreground truncate max-w-[150px]">{sc.remarks || '-'}</td>
-                            <td className="py-3 px-4">
-                              <Badge variant="destructive">Overdue</Badge>
+                            <td className="py-3.5 px-4 text-xs text-muted-foreground truncate max-w-[150px]">{sc.remarks || '-'}</td>
+                            <td className="py-3.5 px-4">
+                              <span className="rounded-full bg-red-100 text-red-700 px-3 py-1 text-[11px] font-semibold">Overdue</span>
                             </td>
-                            <td className="py-3 pl-4 text-right space-x-1.5 whitespace-nowrap">
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleSendNotification(sc)} title="System Notify">
+                            <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
+                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleSendNotification(sc)} title="System Notify">
                                 <Bell className="w-3.5 h-3.5 text-amber-500" />
                               </Button>
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleSendWhatsApp(sc)} title="WhatsApp Notify">
+                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleSendWhatsApp(sc)} title="WhatsApp Notify">
                                 <MessageSquare className="w-3.5 h-3.5 text-emerald-500" />
                               </Button>
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleMarkPaid(sc)} title="Settle">
+                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleMarkPaid(sc)} title="Settle">
                                 <Check className="w-3.5 h-3.5 text-emerald-600" />
                               </Button>
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleOpenRemarks(sc)} title="Remarks">
+                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenRemarks(sc)} title="Remarks">
                                 <Edit className="w-3.5 h-3.5 text-primary" />
                               </Button>
                             </td>
@@ -565,29 +564,29 @@ export function CollectionsPanel() {
 
                         {/* Upcoming */}
                         {metrics?.upcomingStats?.schedules?.map((sc: any) => (
-                          <tr key={sc.id} className="hover:bg-background/20">
-                            <td className="py-3 px-4 pl-0">
-                              <span className="font-bold text-foreground block">{sc.student?.name}</span>
+                          <tr key={sc.id} className="hover:bg-[#f7faf6]">
+                            <td className="py-3.5 px-4">
+                              <span className="font-semibold text-slate-900 block">{sc.student?.name}</span>
                               <span className="text-[10px] text-muted-foreground">{sc.student?.enrollmentNo}</span>
                             </td>
-                            <td className="py-3 px-4">{sc.title}</td>
-                            <td className="py-3 px-4 font-semibold text-amber-600">{CS()}{sc.amount.toLocaleString(numLocale())}</td>
-                            <td className="py-3 px-4 font-medium text-amber-600">
+                            <td className="py-3.5 px-4">{sc.title}</td>
+                            <td className="py-3.5 px-4 font-semibold text-amber-600">{CS()}{sc.amount.toLocaleString(numLocale())}</td>
+                            <td className="py-3.5 px-4 font-medium text-amber-600">
                               {new Date(sc.dueDate).toLocaleDateString()}
-                              <span className="text-[9px] uppercase font-bold text-amber-600 bg-amber-500/10 px-1 rounded ml-1.5">Upcoming</span>
+                              <span className="text-[9px] uppercase font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-full ml-1.5">Upcoming</span>
                             </td>
-                            <td className="py-3 px-4 text-xs text-muted-foreground truncate max-w-[150px]">{sc.remarks || '-'}</td>
-                            <td className="py-3 px-4">
-                              <Badge variant="outline" className="border-amber-500 text-amber-500">Upcoming</Badge>
+                            <td className="py-3.5 px-4 text-xs text-muted-foreground truncate max-w-[150px]">{sc.remarks || '-'}</td>
+                            <td className="py-3.5 px-4">
+                              <span className="rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-[11px] font-semibold">Upcoming</span>
                             </td>
-                            <td className="py-3 pl-4 text-right space-x-1.5 whitespace-nowrap">
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleSendNotification(sc)} title="System Notify">
+                            <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
+                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleSendNotification(sc)} title="System Notify">
                                 <Bell className="w-3.5 h-3.5 text-amber-500" />
                               </Button>
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleMarkPaid(sc)} title="Settle">
+                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleMarkPaid(sc)} title="Settle">
                                 <Check className="w-3.5 h-3.5 text-emerald-600" />
                               </Button>
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleOpenRemarks(sc)} title="Remarks">
+                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenRemarks(sc)} title="Remarks">
                                 <Edit className="w-3.5 h-3.5 text-primary" />
                               </Button>
                             </td>
@@ -596,23 +595,23 @@ export function CollectionsPanel() {
 
                         {/* Future Pending */}
                         {metrics?.expectedPaymentsStats?.pendingSchedules?.map((sc: any) => (
-                          <tr key={sc.id} className="hover:bg-background/20">
-                            <td className="py-3 px-4 pl-0">
-                              <span className="font-bold text-foreground block">{sc.student?.name}</span>
+                          <tr key={sc.id} className="hover:bg-[#f7faf6]">
+                            <td className="py-3.5 px-4">
+                              <span className="font-semibold text-slate-900 block">{sc.student?.name}</span>
                               <span className="text-[10px] text-muted-foreground">{sc.student?.enrollmentNo}</span>
                             </td>
-                            <td className="py-3 px-4">{sc.title}</td>
-                            <td className="py-3 px-4 font-semibold text-foreground">{CS()}{sc.amount.toLocaleString(numLocale())}</td>
-                            <td className="py-3 px-4 text-muted-foreground">{new Date(sc.dueDate).toLocaleDateString()}</td>
-                            <td className="py-3 px-4 text-xs text-muted-foreground truncate max-w-[150px]">{sc.remarks || '-'}</td>
-                            <td className="py-3 px-4">
-                              <Badge variant="secondary">Pending</Badge>
+                            <td className="py-3.5 px-4">{sc.title}</td>
+                            <td className="py-3.5 px-4 font-semibold text-foreground">{CS()}{sc.amount.toLocaleString(numLocale())}</td>
+                            <td className="py-3.5 px-4 text-muted-foreground">{new Date(sc.dueDate).toLocaleDateString()}</td>
+                            <td className="py-3.5 px-4 text-xs text-muted-foreground truncate max-w-[150px]">{sc.remarks || '-'}</td>
+                            <td className="py-3.5 px-4">
+                              <span className="rounded-full bg-slate-200/70 text-slate-600 px-3 py-1 text-[11px] font-semibold">Pending</span>
                             </td>
-                            <td className="py-3 pl-4 text-right space-x-1.5 whitespace-nowrap">
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleMarkPaid(sc)} title="Settle">
+                            <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
+                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleMarkPaid(sc)} title="Settle">
                                 <Check className="w-3.5 h-3.5 text-emerald-600" />
                               </Button>
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleOpenRemarks(sc)} title="Remarks">
+                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenRemarks(sc)} title="Remarks">
                                 <Edit className="w-3.5 h-3.5 text-primary" />
                               </Button>
                             </td>
@@ -633,26 +632,26 @@ export function CollectionsPanel() {
             
             {/* Student Counts grid */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md text-center py-4">
-                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Total Enrolled</span>
-                <span className="text-3xl font-extrabold text-foreground mt-1">{metrics?.studentStats?.total || 0}</span>
+              <Card className="bg-white border border-slate-100 shadow-none text-center py-5">
+                <span className="text-[11px] uppercase font-semibold text-slate-500 tracking-wider block">Total Enrolled</span>
+                <span className="text-3xl font-semibold tracking-tight text-foreground mt-1">{metrics?.studentStats?.total || 0}</span>
               </Card>
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md text-center py-4">
-                <span className="text-[10px] uppercase font-bold text-emerald-500 tracking-wider block">Active</span>
-                <span className="text-3xl font-extrabold text-emerald-500 mt-1">{metrics?.studentStats?.statusCounts?.active || 0}</span>
+              <Card className="bg-white border border-slate-100 shadow-none text-center py-5">
+                <span className="text-[10px] uppercase font-bold text-[#256c1d] tracking-wider block">Active</span>
+                <span className="text-3xl font-semibold tracking-tight text-[#256c1d] mt-1">{metrics?.studentStats?.statusCounts?.active || 0}</span>
               </Card>
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md text-center py-4">
+              <Card className="bg-white border border-slate-100 shadow-none text-center py-5">
                 <span className="text-[10px] uppercase font-bold text-amber-500 tracking-wider block">Pending Review</span>
-                <span className="text-3xl font-extrabold text-amber-500 mt-1">{metrics?.studentStats?.statusCounts?.pending || 0}</span>
+                <span className="text-3xl font-semibold tracking-tight text-amber-500 mt-1">{metrics?.studentStats?.statusCounts?.pending || 0}</span>
               </Card>
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md text-center py-4">
-                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Inactive / Suspended</span>
-                <span className="text-3xl font-extrabold text-muted-foreground mt-1">{metrics?.studentStats?.statusCounts?.inactive || 0}</span>
+              <Card className="bg-white border border-slate-100 shadow-none text-center py-5">
+                <span className="text-[11px] uppercase font-semibold text-slate-500 tracking-wider block">Inactive / Suspended</span>
+                <span className="text-3xl font-semibold tracking-tight text-muted-foreground mt-1">{metrics?.studentStats?.statusCounts?.inactive || 0}</span>
               </Card>
             </div>
 
             {/* Students List Table */}
-            <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
+            <Card className="bg-white border border-slate-100 shadow-none py-6">
               <CardHeader>
                 <CardTitle className="text-base">Students Enrollment Status Directory</CardTitle>
                 <CardDescription>View status of academic students in this organization</CardDescription>
@@ -664,15 +663,15 @@ export function CollectionsPanel() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse text-sm">
                       <thead>
-                        <tr className="border-b border-border text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                          <th className="pb-3 pr-4">Student Name & Enrollment</th>
-                          <th className="pb-3 px-4">Student Contact</th>
-                          <th className="pb-3 px-4">Father Details</th>
-                          <th className="pb-3 px-4">Mother Details</th>
-                          <th className="pb-3 px-4">Admission Status</th>
+                        <tr className="bg-[#f4f6f3] text-xs font-semibold text-slate-500 uppercase tracking-wider [&>th:first-child]:rounded-l-2xl [&>th:last-child]:rounded-r-2xl">
+                          <th className="py-3.5 px-4">Student Name & Enrollment</th>
+                          <th className="py-3.5 px-4">Student Contact</th>
+                          <th className="py-3.5 px-4">Father Details</th>
+                          <th className="py-3.5 px-4">Mother Details</th>
+                          <th className="py-3.5 px-4">Admission Status</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-border/60">
+                      <tbody className="divide-y divide-slate-100">
                         {metrics?.studentStats?.total > 0 && (
                           (() => {
                             const uniqueStudents = metrics?.studentStats?.students || [];
@@ -682,31 +681,31 @@ export function CollectionsPanel() {
                             }
                             
                             return uniqueStudents.map((st: any) => (
-                              <tr key={st.id} className="hover:bg-background/20">
-                                <td className="py-3 pr-4">
-                                  <span className="font-bold text-foreground block">{st.name}</span>
+                              <tr key={st.id} className="hover:bg-[#f7faf6]">
+                                <td className="py-3.5 px-4">
+                                  <span className="font-semibold text-slate-900 block">{st.name}</span>
                                   <span className="text-[10px] text-muted-foreground font-mono">ENR: {st.enrollmentNo || 'N/A'}</span>
                                 </td>
-                                <td className="py-3 px-4">
+                                <td className="py-3.5 px-4">
                                   <span className="text-xs font-medium text-foreground block">{st.phone || 'N/A'}</span>
                                   <span className="text-[10px] text-muted-foreground block">{st.email}</span>
                                 </td>
-                                <td className="py-3 px-4">
+                                <td className="py-3.5 px-4">
                                   <span className="text-xs font-semibold text-foreground block">{st.fatherName || 'N/A'}</span>
                                   <span className="text-[10px] text-muted-foreground block">{st.fatherPhone || '-'}</span>
                                 </td>
-                                <td className="py-3 px-4">
+                                <td className="py-3.5 px-4">
                                   <span className="text-xs font-semibold text-foreground block">{st.motherName || 'N/A'}</span>
                                   <span className="text-[10px] text-muted-foreground block">{st.motherPhone || '-'}</span>
                                 </td>
-                                <td className="py-3 px-4">
+                                <td className="py-3.5 px-4">
                                   <Badge 
                                     variant={
                                       st.status === 'active' || st.status === 'ACTIVE' ? 'default' : 
                                       st.status === 'pending' || st.status === 'PENDING' ? 'outline' : 'secondary'
                                     }
                                     className={cn(
-                                      (st.status === 'active' || st.status === 'ACTIVE') && 'bg-emerald-500/10 text-emerald-500 border-none hover:bg-emerald-500/20'
+                                      (st.status === 'active' || st.status === 'ACTIVE') && 'bg-[#dff3da] text-[#256c1d] border-none hover:bg-[#dff3da]'
                                     )}
                                   >
                                     {st.status || 'Active'}
@@ -730,10 +729,10 @@ export function CollectionsPanel() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
             
             {/* LEFT: Add agents panel */}
-            <Card className="border-none bg-card/65 backdrop-blur-md shadow-md lg:col-span-2">
+            <Card className="bg-white border border-slate-100 shadow-none py-6 lg:col-span-2">
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <UserPlus className="w-5 h-5 text-primary" /> Add Collection Agents
+                  <UserPlus className="w-5 h-5 text-[#256c1d]" /> Add Collection Agents
                 </CardTitle>
                 <CardDescription>Select one or more users to grant access to the Collections Dashboard</CardDescription>
               </CardHeader>
@@ -741,10 +740,10 @@ export function CollectionsPanel() {
 
                 {/* Search */}
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Search by name, email or role..."
-                    className="pl-8"
+                    className="pl-9 h-11 rounded-full"
                     value={searchUserQuery}
                     onChange={(e) => setSearchUserQuery(e.target.value)}
                   />
@@ -755,7 +754,7 @@ export function CollectionsPanel() {
                   <div className="flex items-center justify-between px-1">
                     <button
                       onClick={toggleSelectAll}
-                      className="text-xs text-primary hover:underline font-medium"
+                      className="text-xs text-[#256c1d] hover:underline font-semibold"
                     >
                       {allFilteredSelected ? 'Deselect All' : `Select All (${filteredUsers.length})`}
                     </button>
@@ -768,7 +767,7 @@ export function CollectionsPanel() {
                 {/* User checkbox list */}
                 <div className="space-y-1.5 max-h-72 overflow-y-auto pr-1">
                   {filteredUsers.length === 0 ? (
-                    <p className="text-xs text-muted-foreground text-center py-4">
+                    <p className="text-xs text-muted-foreground text-center py-5">
                       {searchUserQuery ? 'No users match your search.' : 'All users are already agents.'}
                     </p>
                   ) : (
@@ -779,10 +778,10 @@ export function CollectionsPanel() {
                           key={u.id}
                           htmlFor={`agent-${u.id}`}
                           className={cn(
-                            "flex items-center gap-3 p-2.5 rounded-lg border cursor-pointer transition-colors",
+                            "flex items-center gap-3 p-3 rounded-2xl border cursor-pointer transition-colors",
                             isChecked
-                              ? "border-primary/40 bg-primary/5"
-                              : "border-border hover:bg-accent/50"
+                              ? "border-[#8ae47e] bg-[#eaf6e6]"
+                              : "border-transparent bg-[#f4f6f3] hover:bg-[#eef5ec]"
                           )}
                         >
                           <input
@@ -792,7 +791,7 @@ export function CollectionsPanel() {
                             onChange={() => toggleUserSelection(u.id)}
                             className="w-4 h-4 accent-primary rounded"
                           />
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-xs uppercase flex-shrink-0">
+                          <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center font-bold text-primary text-xs uppercase flex-shrink-0">
                             {u.name?.charAt(0)}
                           </div>
                           <div className="min-w-0 flex-1">
@@ -807,7 +806,7 @@ export function CollectionsPanel() {
 
                 {/* Add button */}
                 <Button
-                  className="w-full"
+                  className="w-full h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
                   onClick={handleAddOverseers}
                   disabled={overseerLoading || selectedUserIds.size === 0}
                 >
@@ -821,7 +820,7 @@ export function CollectionsPanel() {
             </Card>
 
             {/* RIGHT: Current agents list */}
-            <Card className="border-none bg-card/65 backdrop-blur-md shadow-md lg:col-span-3">
+            <Card className="bg-white border border-slate-100 shadow-none py-6 lg:col-span-3">
               <CardHeader>
                 <CardTitle className="text-base">Active Collection Agents ({overseers.length})</CardTitle>
                 <CardDescription>These users can oversee outstanding dues, upcoming schedules and student statuses</CardDescription>
@@ -832,9 +831,9 @@ export function CollectionsPanel() {
                 ) : (
                   <div className="space-y-2.5">
                     {overseers.map((ov: any) => (
-                      <div key={ov.id} className="flex justify-between items-center p-3.5 rounded-xl border border-border bg-background/50">
+                      <div key={ov.id} className="flex justify-between items-center p-3.5 rounded-2xl bg-[#f4f6f3]">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-sm uppercase">
+                          <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center font-semibold text-[#256c1d] text-sm uppercase">
                             {ov.name?.charAt(0)}
                           </div>
                           <div>
@@ -845,7 +844,7 @@ export function CollectionsPanel() {
                         <Button 
                           variant="ghost" 
                           size="icon" 
-                          className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                          className="h-9 w-9 rounded-full text-muted-foreground hover:text-red-600 hover:bg-red-50"
                           onClick={() => handleRemoveOverseer(ov.id)}
                           title="Remove agent"
                         >
@@ -863,9 +862,9 @@ export function CollectionsPanel() {
 
       {/* Remarks logger dialog */}
       <Dialog open={remarkDialogOpen} onOpenChange={setRemarkDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="wizard-form max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Log Dues Follow-up Notes</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Log Dues Follow-up Notes</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div>
@@ -886,8 +885,8 @@ export function CollectionsPanel() {
               />
             </div>
             <div className="flex gap-2">
-              <Button onClick={handleSaveRemarks} className="flex-1">Update Notes</Button>
-              <Button variant="outline" onClick={() => setRemarkDialogOpen(false)}>Cancel</Button>
+              <Button onClick={handleSaveRemarks} className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Update Notes</Button>
+              <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setRemarkDialogOpen(false)}>Cancel</Button>
             </div>
           </div>
         </DialogContent>

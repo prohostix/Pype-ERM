@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '../ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { toast } from 'sonner';
@@ -11,6 +9,7 @@ import { Tag, Plus, Loader2 } from 'lucide-react';
 import { api } from '../../lib/api';
 
 import { CS } from '@/lib/currency';
+import { ListPagination } from '@/components/ui/list-pagination';
 interface StudentDiscount {
   id: string;
   name: string;
@@ -37,7 +36,7 @@ export function DiscountsPanel() {
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   
   const [selectedStudent, setSelectedStudent] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
@@ -103,108 +102,77 @@ export function DiscountsPanel() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#54b947]" />
       </div>
     );
   }
 
+  const validDiscounts = discounts.filter(d => d?.id);
+  const pagedDiscounts = validDiscounts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Discounts</h2>
-          <p className="text-muted-foreground">Manage program fee discounts for students</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Discounts</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Manage program fee discounts for students</p>
         </div>
-        <Button onClick={() => setIsDialogOpen(true)} className="gap-2">
+        <Button onClick={() => setIsDialogOpen(true)} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold gap-2">
           <Plus className="w-4 h-4" />
           Apply Discount
         </Button>
       </div>
 
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Student</TableHead>
-                <TableHead>Enrollment No</TableHead>
-                <TableHead>Program</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Reason</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {(() => {
-                const totalPages = Math.max(1, Math.ceil(discounts.length / itemsPerPage));
-                const paginatedDiscounts = discounts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-                return (
-                  <>
-              {discounts.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                    <Tag className="w-12 h-12 mx-auto mb-3 opacity-20" />
-                    No active discounts found
-                  </TableCell>
-                </TableRow>
-              ) : (
-                paginatedDiscounts.map((discount) => (
-                  <TableRow key={discount.id}>
-                    <TableCell className="font-medium">{discount.name}</TableCell>
-                    <TableCell>{discount.enrollmentNo}</TableCell>
-                    <TableCell>{discount.program?.name}</TableCell>
-                    <TableCell className="font-semibold text-green-600">
-                      {CS()}{discount.discountAmount?.toLocaleString()}
-                    </TableCell>
-                    <TableCell>{discount.discountReason || '-'}</TableCell>
-                  </TableRow>
-                ))
-              )}
-                </>
-              );
-              })()}
-            </TableBody>
-          </Table>
-          
-          {/* Pagination Controls */}
-          {(() => {
-            const totalPages = Math.max(1, Math.ceil(discounts.length / itemsPerPage));
-            if (totalPages <= 1) return null;
-            return (
-              <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
-                <div className="text-sm text-muted-foreground">
-                  Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, discounts.length)} of {discounts.length} discounts
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
-                  >
-                    Previous
-                  </Button>
-                  <div className="text-sm font-medium px-2">
-                    Page {currentPage} of {totalPages}
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Active Discounts</h3>
+          <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{validDiscounts.length} total</span>
+        </div>
+        <div className="p-4 sm:p-5">
+          {validDiscounts.length === 0 ? (
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Tag className="w-6 h-6" /></div>
+              <p className="text-sm">No active discounts found</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {pagedDiscounts.map((discount) => (
+                <div key={discount.id} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center shrink-0">
+                      <Tag className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-semibold text-slate-900 truncate">{discount.name}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5 flex flex-wrap gap-x-3">
+                        <span className="font-mono">{discount.enrollmentNo}</span>
+                        {discount.program?.name && <span>{discount.program.name}</span>}
+                      </div>
+                      {discount.discountReason && <div className="text-xs text-slate-500 mt-1">“{discount.discountReason}”</div>}
+                    </div>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </Button>
+                  <div className="text-right">
+                    <div className="text-[11px] font-medium text-slate-500">Discount</div>
+                    <div className="text-lg font-semibold text-[#256c1d]">{CS()}{discount.discountAmount?.toLocaleString()}</div>
+                  </div>
                 </div>
-              </div>
-            );
-          })()}
-        </CardContent>
-      </Card>
+              ))}
+              <ListPagination
+                total={validDiscounts.length}
+                page={currentPage}
+                pageSize={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(n) => { setItemsPerPage(n); setCurrentPage(1); }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Apply Discount</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Apply Discount</DialogTitle>
             <DialogDescription>
               This discount will be deducted from the student's total program fee.
             </DialogDescription>
@@ -245,8 +213,8 @@ export function DiscountsPanel() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleApplyDiscount} disabled={submitting || !selectedStudent || !amount}>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleApplyDiscount} disabled={submitting || !selectedStudent || !amount}>
               {submitting ? 'Applying...' : 'Apply Discount'}
             </Button>
           </DialogFooter>

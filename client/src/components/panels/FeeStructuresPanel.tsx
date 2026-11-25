@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Save, Building2, BookOpen, Calculator, Calendar, Plus, Trash2, Handshake } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -295,33 +294,48 @@ export function FeeStructuresPanel() {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Fee Structure Management</h2>
-          <p className="text-muted-foreground text-sm mt-1">Configure program fees and billing structures step by step.</p>
-        </div>
+    <div className="space-y-6 wizard-form fee-form">
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Fee Structure Management</h2>
+        <p className="text-muted-foreground text-sm mt-1.5">Configure program fees and billing structures step by step.</p>
+      </div>
+
+      {/* Step indicator */}
+      <div className="flex flex-wrap items-center gap-2">
+        {['University', 'Session', 'Program', 'Configure'].map((label, i) => {
+          const cur = step < 2 ? 0 : step < 3 ? 1 : step < 4 ? 2 : 3;
+          const state = i < cur ? 'done' : i === cur ? 'active' : 'todo';
+          return (
+            <div key={label} className="flex items-center gap-2">
+              <span className={`inline-flex items-center gap-2 rounded-full pl-1.5 pr-4 py-1.5 text-sm font-semibold border ${state === 'active' ? 'bg-[#8ae47e] border-[#8ae47e] text-[#0b1d14]' : state === 'done' ? 'bg-[#eaf6e6] border-[#cfe9c9] text-[#256c1d]' : 'bg-white border-slate-200 text-slate-500'}`}>
+                <span className={`w-6 h-6 rounded-full text-xs flex items-center justify-center ${state === 'active' ? 'bg-white/70' : state === 'done' ? 'bg-white' : 'bg-slate-100'}`}>{state === 'done' ? '✓' : i + 1}</span>
+                {label}
+              </span>
+              {i < 3 && <span className="hidden sm:block w-4 h-px bg-slate-200" />}
+            </div>
+          );
+        })}
       </div>
 
       {loading ? (
-        <div className="flex justify-center p-12"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>
+        <div className="flex justify-center p-12"><div className="animate-spin h-8 w-8 border-4 border-[#54b947] border-t-transparent rounded-full" /></div>
       ) : (
         <>
           {step === 1 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>1. Select University</CardTitle>
-                <CardDescription>Choose a university to manage its programs' fee structures.</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+              <div className="px-6 sm:px-8 pt-7 pb-5">
+                <h3 className="text-xl font-semibold tracking-tight">1. Select University</h3>
+                <p className="text-sm text-muted-foreground mt-1">Choose a university to manage its programs' fee structures.</p>
+              </div>
+              <div className="px-6 sm:px-8 pb-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {universities.map(u => (
                     <button
                       key={u.id}
                       onClick={() => handleSelectUniv(u)}
-                      className="flex items-center gap-4 p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left"
+                      className="flex items-center gap-4 p-4 rounded-2xl border border-slate-100 bg-[#f4f6f3] hover:border-[#8ae47e] hover:bg-[#f7faf6] transition-all text-left"
                     >
-                      <div className="p-3 rounded-full bg-primary/10 text-primary">
+                      <div className="p-3 rounded-2xl bg-[#eaf6e6] text-[#256c1d]">
                         <Building2 className="w-6 h-6" />
                       </div>
                       <div>
@@ -339,17 +353,17 @@ export function FeeStructuresPanel() {
                   ))}
                   {universities.length === 0 && <p className="text-muted-foreground">No universities found.</p>}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {step === 1.5 && (
-            <Card>
-              <CardHeader>
+            <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+              <div className="px-6 sm:px-8 pt-7 pb-5">
                 <div className="flex items-center gap-3">
-                  <Button variant="ghost" size="icon" onClick={() => { setSelectedUniv(null); setSelectedPartner(null); setStep(1); }}><ArrowLeft className="w-5 h-5" /></Button>
+                  <Button variant="ghost" size="icon" className="rounded-full bg-white border border-slate-200 hover:bg-[#eaf6e6] shrink-0" onClick={() => { setSelectedUniv(null); setSelectedPartner(null); setStep(1); }}><ArrowLeft className="w-5 h-5" /></Button>
                   <div>
-                    <CardTitle>1.5 Select Academic Partner</CardTitle>
+                    <h3 className="text-xl font-semibold tracking-tight">1.5 Select Academic Partner</h3>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                       <span>{selectedUniv?.name}</span>
                       <Badge variant="outline" className="text-[9px] h-4 px-1.5 bg-purple-50 text-purple-700 border-purple-200">
@@ -359,8 +373,8 @@ export function FeeStructuresPanel() {
                     </div>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent>
+              </div>
+              <div className="px-6 sm:px-8 pb-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {((selectedUniv?.allocatedPartners && selectedUniv.allocatedPartners.length > 0)
                     ? selectedUniv.allocatedPartners
@@ -372,16 +386,16 @@ export function FeeStructuresPanel() {
                       <button
                         key={partner.id}
                         onClick={() => handleSelectPartner(partner)}
-                        className="flex items-center gap-4 p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left group"
+                        className="flex items-center gap-4 p-4 rounded-2xl border border-slate-100 bg-[#f4f6f3] hover:border-[#8ae47e] hover:bg-[#f7faf6] transition-all text-left group"
                       >
-                        <div className="p-3 rounded-full bg-purple-500/10 text-purple-600 group-hover:bg-purple-500/20 transition-colors">
+                        <div className="p-3 rounded-2xl bg-[#eaf6e6] text-[#256c1d]">
                           <Handshake className="w-6 h-6" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-semibold text-sm truncate">{partner.name}</p>
                           <div className="flex items-center gap-2 mt-1">
                             {partner.code && <p className="text-xs text-muted-foreground">{partner.code}</p>}
-                            <Badge variant="secondary" className="text-[10px]">
+                            <Badge variant="secondary" className="text-[10px] rounded-full bg-slate-200/70 text-slate-600 border-0 px-2.5">
                               {allocCount} {allocCount === 1 ? 'Program' : 'Programs'}
                             </Badge>
                           </div>
@@ -393,17 +407,17 @@ export function FeeStructuresPanel() {
                     <p className="text-muted-foreground col-span-3">No academic partners available for this university.</p>
                   )}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {step === 2 && (
-            <Card>
-              <CardHeader>
+            <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+              <div className="px-6 sm:px-8 pt-7 pb-5">
                 <div className="flex items-center gap-3">
-                  <Button variant="ghost" size="icon" onClick={() => setStep(selectedUniv?.isAcademicPartnerOnly ? 1.5 : 1)}><ArrowLeft className="w-5 h-5" /></Button>
+                  <Button variant="ghost" size="icon" className="rounded-full bg-white border border-slate-200 hover:bg-[#eaf6e6] shrink-0" onClick={() => setStep(selectedUniv?.isAcademicPartnerOnly ? 1.5 : 1)}><ArrowLeft className="w-5 h-5" /></Button>
                   <div>
-                    <CardTitle>2. Select Session</CardTitle>
+                    <h3 className="text-xl font-semibold tracking-tight">2. Select Session</h3>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1 flex-wrap">
                       <span>{selectedUniv?.name}</span>
                       {selectedPartner && (
@@ -418,15 +432,15 @@ export function FeeStructuresPanel() {
                     </div>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent>
+              </div>
+              <div className="px-6 sm:px-8 pb-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <button
                     onClick={() => handleSelectSession(null)}
-                    className="flex flex-col p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left h-full bg-slate-50"
+                    className="flex flex-col p-4 rounded-2xl border border-slate-100 bg-[#f4f6f3] hover:border-[#8ae47e] hover:bg-[#f7faf6] transition-all text-left h-full"
                   >
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="p-2 rounded-full bg-primary/10 text-primary">
+                      <div className="p-2.5 rounded-xl bg-[#eaf6e6] text-[#256c1d]">
                         <Calendar className="w-5 h-5" />
                       </div>
                       <div>
@@ -440,10 +454,10 @@ export function FeeStructuresPanel() {
                       <button
                         key={s.id}
                         onClick={() => handleSelectSession(s)}
-                        className="flex flex-col p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left h-full"
+                        className="flex flex-col p-4 rounded-2xl border border-slate-100 bg-[#f4f6f3] hover:border-[#8ae47e] hover:bg-[#f7faf6] transition-all text-left h-full"
                       >
                         <div className="flex items-center gap-3 mb-2">
-                          <div className="p-2 rounded-full bg-blue-500/10 text-blue-500">
+                          <div className="p-2.5 rounded-xl bg-[#eaf6e6] text-[#256c1d]">
                             <Calendar className="w-5 h-5" />
                           </div>
                           <div>
@@ -455,17 +469,17 @@ export function FeeStructuresPanel() {
                     );
                   })}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {step === 3 && (
-            <Card>
-              <CardHeader>
+            <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+              <div className="px-6 sm:px-8 pt-7 pb-5">
                 <div className="flex items-center gap-3">
-                  <Button variant="ghost" size="icon" onClick={() => setStep(2)}><ArrowLeft className="w-5 h-5" /></Button>
+                  <Button variant="ghost" size="icon" className="rounded-full bg-white border border-slate-200 hover:bg-[#eaf6e6] shrink-0" onClick={() => setStep(2)}><ArrowLeft className="w-5 h-5" /></Button>
                   <div>
-                    <CardTitle>3. Select Program</CardTitle>
+                    <h3 className="text-xl font-semibold tracking-tight">3. Select Program</h3>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1 flex-wrap">
                       <span>{selectedUniv?.name}</span>
                       {selectedPartner && (
@@ -480,8 +494,8 @@ export function FeeStructuresPanel() {
                     </div>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent>
+              </div>
+              <div className="px-6 sm:px-8 pb-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {progsForUniv.map(p => {
                     const exactFee = fees.find(f => {
@@ -498,10 +512,10 @@ export function FeeStructuresPanel() {
                       <button
                         key={p.id}
                         onClick={() => handleSelectProg(p)}
-                        className="flex flex-col p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left h-full"
+                        className="flex flex-col p-4 rounded-2xl border border-slate-100 bg-[#f4f6f3] hover:border-[#8ae47e] hover:bg-[#f7faf6] transition-all text-left h-full"
                       >
                         <div className="flex items-center gap-3 mb-2">
-                          <div className="p-2 rounded-full bg-blue-500/10 text-blue-500">
+                          <div className="p-2.5 rounded-xl bg-[#eaf6e6] text-[#256c1d]">
                             <BookOpen className="w-5 h-5" />
                           </div>
                           <div>
@@ -511,15 +525,15 @@ export function FeeStructuresPanel() {
                         </div>
                         <div className="mt-auto pt-4 flex justify-between items-center">
                           {exactFee ? (
-                            <Badge variant="default" className="text-[10px]">
+                            <Badge variant="default" className="text-[10px] rounded-full bg-[#8ae47e] text-[#0b1d14] hover:bg-[#8ae47e] border-0 px-2.5">
                               Configured
                             </Badge>
                           ) : fallbackFee ? (
-                            <Badge variant="outline" className="text-[10px] border-blue-500/30 text-blue-600 bg-blue-50/50 dark:bg-blue-950/30 dark:text-blue-400">
+                            <Badge variant="outline" className="text-[10px] border-[#cfe9c9] text-[#256c1d] bg-white rounded-full px-2.5">
                               Configured ({fallbackFee.sessionId ? (sessions.find((s: any) => s.id === (fallbackFee.sessionId?.id || fallbackFee.sessionId))?.name || 'Session') : 'Default'})
                             </Badge>
                           ) : (
-                            <Badge variant="secondary" className="text-[10px]">
+                            <Badge variant="secondary" className="text-[10px] rounded-full bg-slate-200/70 text-slate-600 border-0 px-2.5">
                               Not Configured
                             </Badge>
                           )}
@@ -529,17 +543,17 @@ export function FeeStructuresPanel() {
                   })}
                   {progsForUniv.length === 0 && <p className="text-muted-foreground">No programs found for this university.</p>}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {step === 3.5 && selectedProg && (
-            <Card>
-              <CardHeader>
+            <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+              <div className="px-6 sm:px-8 pt-7 pb-5">
                 <div className="flex items-center gap-3">
-                  <Button variant="ghost" size="icon" onClick={() => setStep(3)}><ArrowLeft className="w-5 h-5" /></Button>
+                  <Button variant="ghost" size="icon" className="rounded-full bg-white border border-slate-200 hover:bg-[#eaf6e6] shrink-0" onClick={() => setStep(3)}><ArrowLeft className="w-5 h-5" /></Button>
                   <div>
-                    <CardTitle>3.5 Select Specialisation</CardTitle>
+                    <h3 className="text-xl font-semibold tracking-tight">3.5 Select Specialisation</h3>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                       <span>{selectedProg.name} has multiple specialisations. Choose one to configure its fee structure.</span>
                       {selectedUniv?.isAcademicPartnerOnly && (
@@ -550,8 +564,8 @@ export function FeeStructuresPanel() {
                     </div>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent>
+              </div>
+              <div className="px-6 sm:px-8 pb-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {selectedProg.specialisations?.map((spec: string) => {
                     const exactFee = fees.find(f => {
@@ -567,30 +581,30 @@ export function FeeStructuresPanel() {
                       <button
                         key={spec}
                         onClick={() => handleToggleSpecialisation(spec)}
-                        className={`flex flex-col p-4 border rounded-xl transition-all text-left h-full ${selectedSpecialisations.includes(spec) ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'hover:border-primary hover:bg-primary/5'}`}
+                        className={`flex flex-col p-4 border rounded-2xl transition-all text-left h-full ${selectedSpecialisations.includes(spec) ? 'border-[#8ae47e] bg-[#eaf6e6] ring-1 ring-[#8ae47e]' : 'hover:border-[#8ae47e] hover:bg-[#f7faf6]'}`}
                       >
                         <div className="flex items-center gap-3 mb-2 w-full">
-                          <div className={`p-2 rounded-full ${selectedSpecialisations.includes(spec) ? 'bg-primary text-primary-foreground' : 'bg-blue-500/10 text-blue-500'}`}>
+                          <div className={`p-2.5 rounded-xl ${selectedSpecialisations.includes(spec) ? 'bg-[#8ae47e] text-[#0b1d14]' : 'bg-[#eaf6e6] text-[#256c1d]'}`}>
                             <BookOpen className="w-5 h-5" />
                           </div>
                           <div className="flex-1">
                             <p className="font-semibold text-sm line-clamp-1">{spec}</p>
                           </div>
                           {selectedSpecialisations.includes(spec) && (
-                            <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-[10px] font-bold">✓</div>
+                            <div className="w-5 h-5 rounded-full bg-[#256c1d] flex items-center justify-center text-white text-[10px] font-bold">✓</div>
                           )}
                         </div>
                         <div className="mt-auto pt-4 flex justify-between items-center w-full">
                           {exactFee ? (
-                            <Badge variant="default" className="text-[10px]">
+                            <Badge variant="default" className="text-[10px] rounded-full bg-[#8ae47e] text-[#0b1d14] hover:bg-[#8ae47e] border-0 px-2.5">
                               Configured
                             </Badge>
                           ) : fallbackFee ? (
-                            <Badge variant="outline" className="text-[10px] border-blue-500/30 text-blue-600 bg-blue-50/50 dark:bg-blue-950/30 dark:text-blue-400">
+                            <Badge variant="outline" className="text-[10px] border-[#cfe9c9] text-[#256c1d] bg-white rounded-full px-2.5">
                               Configured ({fallbackFee.sessionId ? (sessions.find((s: any) => s.id === (fallbackFee.sessionId?.id || fallbackFee.sessionId))?.name || 'Session') : 'Default'})
                             </Badge>
                           ) : (
-                            <Badge variant="secondary" className="text-[10px]">
+                            <Badge variant="secondary" className="text-[10px] rounded-full bg-slate-200/70 text-slate-600 border-0 px-2.5">
                               Not Configured
                             </Badge>
                           )}
@@ -601,8 +615,8 @@ export function FeeStructuresPanel() {
                   {(!selectedProg.specialisations || selectedProg.specialisations.length === 0) && <p className="text-muted-foreground">No specialisations found.</p>}
                 </div>
                 {selectedSpecialisations.length > 0 && (
-                  <div className="mt-6 flex justify-end border-t pt-4">
-                    <Button onClick={() => {
+                  <div className="mt-6 flex justify-end border-t border-slate-100 pt-5">
+                    <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => {
                       loadFeeForProgramAndSpecialisation(selectedProg, selectedSpecialisations[0]);
                       setStep(4);
                     }}>
@@ -610,16 +624,16 @@ export function FeeStructuresPanel() {
                     </Button>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {step === 4 && (
-            <Card className="border-primary/20 shadow-md">
-              <CardHeader className="bg-muted/30 border-b border-border pb-4">
+            <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+              <div className="px-6 sm:px-8 py-6 bg-[#f4f6f3] border-b border-slate-100">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Button variant="ghost" size="icon" onClick={() => {
+                    <Button variant="ghost" size="icon" className="rounded-full bg-white border border-slate-200 hover:bg-[#eaf6e6] shrink-0" onClick={() => {
                       if (selectedProg?.specialisations?.length > 0) {
                         setStep(3.5);
                       } else {
@@ -627,11 +641,11 @@ export function FeeStructuresPanel() {
                       }
                     }}><ArrowLeft className="w-5 h-5" /></Button>
                     <div>
-                      <CardTitle>4. Configure Fee Structure</CardTitle>
-                      <div className="text-primary font-medium mt-1 flex items-center gap-2 text-sm flex-wrap">
+                      <h3 className="text-xl font-semibold tracking-tight">4. Configure Fee Structure</h3>
+                      <div className="text-[#256c1d] font-medium mt-1 flex items-center gap-2 text-sm flex-wrap">
                         <span>{selectedProg?.name} ({selectedProg?.code}) {selectedSpecialisations.length > 0 ? `- ${selectedSpecialisations.join(', ')}` : ''}</span>
                         {selectedPartner && (
-                          <span className="text-foreground font-semibold bg-muted px-2 py-0.5 rounded text-xs">
+                          <span className="text-slate-700 font-semibold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full text-xs">
                             Partner: {selectedPartner.name}
                           </span>
                         )}
@@ -644,22 +658,22 @@ export function FeeStructuresPanel() {
                       </div>
                     </div>
                   </div>
-                  <Button onClick={handleSave} disabled={saving} className="gap-2">
+                  <Button onClick={handleSave} disabled={saving} className="gap-2 h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                     <Save className="w-4 h-4" /> Save Fee Structure
                   </Button>
                 </div>
-              </CardHeader>
-              <CardContent className="p-6">
+              </div>
+              <div className="px-6 sm:px-8 pb-8 pt-6">
 
                 {/* One Time Pricing Section */}
                 <div className="mb-10">
-                  <div className="flex items-center gap-2 mb-4 border-b pb-2">
-                    <Calculator className="w-5 h-5 text-primary" />
+                  <div className="flex items-center gap-2 mb-4 border-b border-slate-100 pb-3">
+                    <span className="w-9 h-9 rounded-xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Calculator className="w-4 h-4" /></span>
                     <h3 className="text-lg font-semibold">One-Time Payment Plan (Lump Sum)</h3>
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">Set the pricing for students who choose to pay the entire course fee upfront. This is usually discounted.</p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4 bg-muted/20 p-5 rounded-xl border border-border">
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4 bg-[#f4f6f3] p-5 rounded-2xl">
                     <div className="space-y-2">
                       <Label>Registration Fee</Label>
                       <Input type="number" value={formData.registrationFee} onChange={e => setFormData({ ...formData, registrationFee: e.target.value })} />
@@ -690,8 +704,8 @@ export function FeeStructuresPanel() {
 
                 {/* Installment Pricing Section */}
                 <div>
-                  <div className="flex items-center gap-2 mb-4 border-b pb-2">
-                    <Calculator className="w-5 h-5 text-blue-500" />
+                  <div className="flex items-center gap-2 mb-4 border-b border-slate-100 pb-3">
+                    <span className="w-9 h-9 rounded-xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Calculator className="w-4 h-4" /></span>
                     <h3 className="text-lg font-semibold">Installment Payment Plan</h3>
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">Set the pricing breakdown for students who pay in installments (per year or per semester).</p>
@@ -712,7 +726,7 @@ export function FeeStructuresPanel() {
                     </Select>
                   </div>
 
-                  <div className="mb-6 flex items-center space-x-2 bg-muted/30 p-4 rounded-lg border border-border">
+                  <div className="mb-6 flex items-center space-x-2 bg-[#f4f6f3] p-4 rounded-2xl">
                     <Checkbox
                       id="allowInitialFee"
                       checked={formData.allowInitialFee}
@@ -729,7 +743,7 @@ export function FeeStructuresPanel() {
                   </div>
 
                   {formData.billingCycle === 'installment' ? (
-                    <div className="space-y-3 rounded-xl border border-slate-200 p-4 bg-card shadow-sm">
+                    <div className="space-y-3 rounded-2xl bg-[#f4f6f3] p-4">
                       <div className="flex items-center justify-between">
                         <Label className="text-slate-700">Custom Installments</Label>
                         <Button type="button" variant="outline" size="sm" onClick={() => setInstallments([...installments, { name: `Installment ${installments.length + 1}`, amount: 0, dueDate: '' }])} className="h-8 gap-1"><Plus className="h-3.5 w-3.5" /> Add Installment</Button>
@@ -752,12 +766,12 @@ export function FeeStructuresPanel() {
                   ) : (
                     <div className="space-y-4">
                       {yearlyFees.map((yf, idx) => (
-                        <div key={idx} className="p-4 border rounded-xl bg-card shadow-sm flex flex-col gap-4">
-                          <div className="font-semibold text-primary">{yf.periodName}</div>
+                        <div key={idx} className="p-5 rounded-2xl bg-[#f4f6f3] flex flex-col gap-4">
+                          <div className="font-semibold text-[#256c1d]">{yf.periodName}</div>
                           <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
                             <div className="space-y-1">
                               <Label className="text-xs">Reg Fee</Label>
-                              <Input type="number" className="h-8" value={yf.registrationFee} onChange={e => {
+                              <Input type="number" value={yf.registrationFee} onChange={e => {
                                 const next = [...yearlyFees];
                                 next[idx].registrationFee = e.target.value;
                                 setYearlyFees(next);
@@ -765,7 +779,7 @@ export function FeeStructuresPanel() {
                             </div>
                             <div className="space-y-1">
                               <Label className="text-xs">Tuition Fee</Label>
-                              <Input type="number" className="h-8" value={yf.tuitionFee} onChange={e => {
+                              <Input type="number" value={yf.tuitionFee} onChange={e => {
                                 const next = [...yearlyFees];
                                 next[idx].tuitionFee = e.target.value;
                                 setYearlyFees(next);
@@ -773,7 +787,7 @@ export function FeeStructuresPanel() {
                             </div>
                             <div className="space-y-1">
                               <Label className="text-xs">Exam Fee</Label>
-                              <Input type="number" className="h-8" value={yf.examFee} onChange={e => {
+                              <Input type="number" value={yf.examFee} onChange={e => {
                                 const next = [...yearlyFees];
                                 next[idx].examFee = e.target.value;
                                 setYearlyFees(next);
@@ -781,7 +795,7 @@ export function FeeStructuresPanel() {
                             </div>
                             <div className="space-y-1">
                               <Label className="text-xs">Univ Fee</Label>
-                              <Input type="number" className="h-8" value={yf.universityFee} onChange={e => {
+                              <Input type="number" value={yf.universityFee} onChange={e => {
                                 const next = [...yearlyFees];
                                 next[idx].universityFee = e.target.value;
                                 setYearlyFees(next);
@@ -789,7 +803,7 @@ export function FeeStructuresPanel() {
                             </div>
                             <div className="space-y-1">
                               <Label className="text-xs">Commission (Flat)</Label>
-                              <Input type="number" className="h-8" value={yf.commissionRate} onChange={e => {
+                              <Input type="number" value={yf.commissionRate} onChange={e => {
                                 const next = [...yearlyFees];
                                 next[idx].commissionRate = e.target.value;
                                 setYearlyFees(next);
@@ -797,7 +811,7 @@ export function FeeStructuresPanel() {
                             </div>
                             <div className="space-y-1">
                               <Label className="text-xs">Due Date</Label>
-                              <Input type="date" className="h-8" value={yf.dueDate || ''} onChange={e => {
+                              <Input type="date" value={yf.dueDate || ''} onChange={e => {
                                 const next = [...yearlyFees];
                                 next[idx].dueDate = e.target.value;
                                 setYearlyFees(next);
@@ -813,8 +827,8 @@ export function FeeStructuresPanel() {
                   )}
                 </div>
 
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
         </>
       )}

@@ -1,3 +1,4 @@
+import { PageLoader } from '@/components/ui/page-loader';
 import { useState, useEffect, type ReactElement } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
@@ -114,9 +115,7 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
   // While fetching department type, don't render anything yet to avoid flash
   if (useDepartmentDashboard && deptLoading) {
     return (
-      <div className="flex items-center justify-center h-64 text-muted-foreground">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-      </div>
+      <PageLoader label="Loading your dashboard" />
     );
   }
 

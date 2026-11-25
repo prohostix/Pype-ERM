@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Edit, Save, RefreshCw, Plus, Zap, Trash2 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Calendar, Edit, Save, RefreshCw, Plus, Zap, Trash2, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { ListPagination } from '@/components/ui/list-pagination';
 
 interface LeaveAllocation {
   id?: string;
@@ -50,6 +50,8 @@ export function LeaveAllocationPanel() {
   const [editingUserId, setEditingUserId] = useState('');
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const [form, setForm] = useState({
     sickLeave: 0, casualLeave: 0, earnedLeave: 0, complementaryLeave: 0, wfh: 0
@@ -143,19 +145,21 @@ export function LeaveAllocationPanel() {
     const name = a.user?.name || '';
     return name.toLowerCase().includes(search.toLowerCase());
   });
+  const currentPage = Math.min(page, Math.max(1, Math.ceil(filtered.length / pageSize)));
+  const pagedAllocs = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const remaining = (total: number, used?: number) => Math.max(0, (total || 0) - (used || 0));
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-3">
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Leave Allocations</h2>
-          <p className="text-muted-foreground text-sm mt-1">Manage sick, casual, earned & complementary leave per employee</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Leave Allocations</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Manage sick, casual, earned & complementary leave per employee</p>
         </div>
         <div className="flex gap-2 flex-wrap">
           <select
-            className="border rounded-md px-3 py-1.5 text-sm bg-background"
+            className="h-11 rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 outline-none focus:border-[#54b947]"
             value={month}
             onChange={e => setMonth(Number(e.target.value))}
           >
@@ -167,44 +171,47 @@ export function LeaveAllocationPanel() {
             ].map(m => <option key={m.m} value={m.m}>{m.name}</option>)}
           </select>
           <select
-            className="border rounded-md px-3 py-1.5 text-sm bg-background"
+            className="h-11 rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 outline-none focus:border-[#54b947]"
             value={year}
             onChange={e => setYear(Number(e.target.value))}
           >
             {[2024, 2025, 2026, 2027].map(y => <option key={y} value={y}>{y}</option>)}
           </select>
-          <Button variant="outline" size="sm" onClick={fetchAll}>
-            <RefreshCw className="w-4 h-4 mr-1" /> Refresh
+          <Button variant="outline" onClick={fetchAll} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
+            <RefreshCw className="w-4 h-4 mr-2" /> Refresh
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setBulkDialogOpen(true)}>
-            <Zap className="w-4 h-4 mr-1" /> Bulk Init
+          <Button variant="outline" onClick={() => setBulkDialogOpen(true)} className="h-11 px-5 rounded-full bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]">
+            <Zap className="w-4 h-4 mr-2" /> Bulk Init
           </Button>
-          <Button size="sm" onClick={() => openEdit()}>
-            <Plus className="w-4 h-4 mr-1" /> Add
+          <Button onClick={() => openEdit()} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+            <Plus className="w-4 h-4 mr-2" /> Add
           </Button>
         </div>
       </div>
 
-      <Input placeholder="Search employee..." value={search} onChange={e => setSearch(e.target.value)} className="max-w-xs" />
+      <div className="rounded-3xl bg-white border border-slate-100 p-4">
+        <div className="relative max-w-md">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Input placeholder="Search employee..." value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} className="pl-11 h-12 rounded-full bg-[#f4f6f3] border-transparent" />
+        </div>
+      </div>
 
       {loading ? (
-        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-28 bg-slate-100 rounded-3xl animate-pulse" />)}</div>
       ) : filtered.length === 0 ? (
-        <Card>
-          <CardContent className="py-16 text-center text-muted-foreground">
-            <Calendar className="w-10 h-10 mx-auto mb-3 opacity-30" />
-            <p>No leave allocations for {year}</p>
-            <p className="text-xs mt-1">Use "Bulk Init" to set up all employees at once</p>
-          </CardContent>
-        </Card>
+        <div className="rounded-3xl bg-white border border-slate-100 py-16 text-center text-muted-foreground">
+          <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Calendar className="w-6 h-6" /></div>
+          <p className="text-sm">No leave allocations for {year}</p>
+          <p className="text-xs mt-1">Use "Bulk Init" to set up all employees at once</p>
+        </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map(alloc => {
+          {pagedAllocs.map(alloc => {
             const user = alloc.user || null;
             const uid = alloc.userId;
 
             // Probation calculation
-            let probationBadge = <Badge variant="outline" className="text-xs">Probation Info Missing</Badge>;
+            let probationBadge = <Badge variant="outline" className="text-xs rounded-full bg-white border-0 text-slate-500">Probation Info Missing</Badge>;
             if (user && (user as any).employeeProfileDetail) {
               const profile = (user as any).employeeProfileDetail;
               if (profile.probationEndDate) {
@@ -213,50 +220,50 @@ export function LeaveAllocationPanel() {
                 if (probationEnd > today) {
                   const diffTime = Math.abs(probationEnd.getTime() - today.getTime());
                   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                  probationBadge = <Badge variant="warning" className="bg-amber-100 text-amber-700 hover:bg-amber-200 text-xs">Probation ({diffDays} days left)</Badge>;
+                  probationBadge = <Badge variant="warning" className="bg-amber-100 text-amber-700 hover:bg-amber-100 text-xs rounded-full border-0">Probation ({diffDays} days left)</Badge>;
                 } else {
-                  probationBadge = <Badge variant="success" className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-xs">Probation Completed</Badge>;
+                  probationBadge = <Badge variant="success" className="bg-[#dff3da] text-[#256c1d] hover:bg-[#dff3da] text-xs rounded-full border-0">Probation Completed</Badge>;
                 }
               } else if (profile.joinDate) {
                  // Has join date but no probation end date
-                 probationBadge = <Badge variant="outline" className="text-xs">No Probation End Date</Badge>;
+                 probationBadge = <Badge variant="outline" className="text-xs rounded-full bg-white border-0 text-slate-500">No Probation End Date</Badge>;
               }
             }
 
             return (
-              <Card key={uid} className="hover:border-primary/30 transition-colors">
-                <CardContent className="p-4">
+              <div key={uid} className="rounded-3xl bg-white border border-slate-100 hover:border-[#8ae47e] transition-colors">
+                <div className="p-5 sm:p-6">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 flex-wrap mb-2">
-                        <span className="font-semibold">{user?.name || 'Employee'}</span>
-                        <Badge variant="outline" className="text-xs capitalize">{user?.role?.replace(/_/g, ' ')}</Badge>
-                        {user?.designation && <Badge variant="outline" className="text-xs">{user.designation}</Badge>}
+                        <span className="font-semibold text-lg text-slate-900">{user?.name || 'Employee'}</span>
+                        <Badge variant="outline" className="text-xs capitalize rounded-full bg-[#f4f6f3] border-0">{user?.role?.replace(/_/g, ' ')}</Badge>
+                        {user?.designation && <Badge variant="outline" className="text-xs rounded-full bg-[#f4f6f3] border-0">{user.designation}</Badge>}
                         {probationBadge}
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
+                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-sm">
                         {[
-                          { label: 'Sick', total: alloc.sickLeave, used: alloc.usedSick, color: 'text-red-500' },
-                          { label: 'Casual', total: alloc.casualLeave, used: alloc.usedCasual, color: 'text-blue-500' },
-                          { label: 'Earned', total: alloc.earnedLeave, used: alloc.usedEarned, color: 'text-green-500' },
-                          { label: 'Comp.', total: alloc.complementaryLeave, used: alloc.usedComplementary, color: 'text-purple-500' },
-                          { label: 'WFH', total: (alloc as any).wfh || 0, used: (alloc as any).usedWfh || 0, color: 'text-pink-500' },
+                          { label: 'Sick', total: alloc.sickLeave, used: alloc.usedSick, color: 'text-red-600' },
+                          { label: 'Casual', total: alloc.casualLeave, used: alloc.usedCasual, color: 'text-sky-600' },
+                          { label: 'Earned', total: alloc.earnedLeave, used: alloc.usedEarned, color: 'text-[#256c1d]' },
+                          { label: 'Comp.', total: alloc.complementaryLeave, used: alloc.usedComplementary, color: 'text-violet-600' },
+                          { label: 'WFH', total: (alloc as any).wfh || 0, used: (alloc as any).usedWfh || 0, color: 'text-orange-600' },
                         ].map(({ label, total, used, color }) => (
-                          <div key={label}>
-                            <p className="text-xs text-muted-foreground">{label}</p>
-                            <p className={`font-semibold ${color}`}>{remaining(total, used)}<span className="text-muted-foreground font-normal text-xs">/{total}</span></p>
+                          <div key={label} className="rounded-2xl bg-[#f4f6f3] p-3.5">
+                            <p className="text-xs font-medium text-slate-500">{label}</p>
+                            <p className={`text-xl font-semibold tracking-tight ${color}`}>{remaining(total, used)}<span className="text-muted-foreground font-normal text-xs">/{total}</span></p>
                           </div>
                         ))}
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <Button size="sm" variant="outline" onClick={() => openEdit(alloc)} title="Edit Allocation">
+                      <Button size="sm" variant="outline" className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => openEdit(alloc)} title="Edit Allocation">
                         <Edit className="w-3.5 h-3.5" />
                       </Button>
                       <Button
                         size="sm"
                         variant="outline"
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 border-red-200 dark:border-red-900/50"
+                        className="h-10 w-10 p-0 rounded-full bg-white text-red-500 hover:text-red-600 hover:bg-red-50 border-red-200"
                         onClick={() => handleDelete(uid, user?.name || 'Employee')}
                         title="Delete Allocation"
                       >
@@ -264,18 +271,19 @@ export function LeaveAllocationPanel() {
                       </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             );
           })}
+          <ListPagination total={filtered.length} page={currentPage} pageSize={pageSize} onPageChange={setPage} onPageSizeChange={(n) => { setPageSize(n); setPage(1); }} />
         </div>
       )}
 
       {/* Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="wizard-form max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Leave Allocation — {month}/{year}</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Leave Allocation — {month}/{year}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 pt-2">
             {!allocations.find(a => a.userId === editingUserId) && (
@@ -308,8 +316,8 @@ export function LeaveAllocationPanel() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave} disabled={saving}>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDialogOpen(false)}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleSave} disabled={saving}>
               <Save className="w-4 h-4 mr-1" />{saving ? 'Saving...' : 'Save'}
             </Button>
           </DialogFooter>
@@ -318,9 +326,9 @@ export function LeaveAllocationPanel() {
 
       {/* Bulk Init Dialog */}
       <Dialog open={bulkDialogOpen} onOpenChange={setBulkDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="wizard-form max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Bulk Initialize Leave — {month}/{year}</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Bulk Initialize Leave — {month}/{year}</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
             Sets default leave balances for all active employees{myBranchId ? ` in your branch${myBranchName ? ` (${myBranchName})` : ''}` : ''} who don't have an allocation yet for {month}/{year}.
@@ -342,8 +350,8 @@ export function LeaveAllocationPanel() {
             ))}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setBulkDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleBulkInit} disabled={saving}>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setBulkDialogOpen(false)}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleBulkInit} disabled={saving}>
               <Zap className="w-4 h-4 mr-1" />{saving ? 'Initializing...' : myBranchId ? 'Initialize Branch' : 'Initialize All'}
             </Button>
           </DialogFooter>

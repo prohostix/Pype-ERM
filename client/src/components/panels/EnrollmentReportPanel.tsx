@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Download, RefreshCw, BarChart4 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { ReportHeader, ReportCard, ReportStats, RankList, ReportEmpty, ReportLoading, downloadCsv, REPORT_COLORS, reportTooltipStyle, reportGridStroke } from './ReportKit';
+import { toast } from 'sonner';
 import api from '@/lib/api';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
 export function EnrollmentReportPanel() {
   const [loading, setLoading] = useState(false);
@@ -27,100 +25,111 @@ export function EnrollmentReportPanel() {
     fetchReport();
   }, []);
 
+  const handleExport = () => {
+    if (!data) return;
+    const rows = [
+      ...(data.statusCounts || []).map((r: any) => ({ Section: 'By Status', Name: r.name, Count: r.value })),
+      ...(data.byProgram || []).map((r: any) => ({ Section: 'By Program', Name: r.name, Count: r.value })),
+      ...(data.byCenter || []).map((r: any) => ({ Section: 'By Center', Name: r.name, Count: r.value })),
+      ...(data.bySource || []).map((r: any) => ({ Section: 'By Source', Name: r.name, Count: r.value })),
+      ...(data.trends || []).map((r: any) => ({ Section: 'Monthly Trend', Name: r.name, Count: r.count })),
+    ];
+    if (!downloadCsv('enrollment_report.csv', rows)) toast.warning('No data to export');
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Enrollment Report</h2>
-          <p className="text-muted-foreground">Track enrollment statuses and pipeline metrics</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={fetchReport} disabled={loading}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-          <Button size="sm">
-            <Download className="w-4 h-4 mr-2" />
-            Export CSV
-          </Button>
-        </div>
-      </div>
+      <ReportHeader
+        title="Enrollment Report"
+        description="Track enrollment statuses and pipeline metrics"
+        loading={loading}
+        onRefresh={fetchReport}
+        onExport={handleExport}
+      />
 
       {!data && loading ? (
-        <div className="flex items-center justify-center p-12 border border-dashed rounded-lg">
-          <RefreshCw className="w-8 h-8 animate-spin text-muted-foreground" />
-        </div>
+        <ReportLoading />
       ) : !data ? (
-        <div className="flex flex-col items-center justify-center p-12 text-center border border-dashed rounded-lg">
-          <BarChart4 className="w-8 h-8 text-muted-foreground mb-4" />
-          <p className="text-muted-foreground">No data available.</p>
-        </div>
+        <div className="rounded-3xl bg-white border border-slate-100 py-16 text-center text-sm text-muted-foreground">No data available.</div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          
-          <Card className="col-span-1 lg:col-span-3">
-            <CardHeader>
-              <CardTitle>Total Enrollments: {data.total}</CardTitle>
-              <CardDescription>Overall enrollments across all statuses</CardDescription>
-            </CardHeader>
-          </Card>
+        <div className="space-y-4">
+          <ReportStats
+            items={[
+              { label: 'Total Enrollments', value: data.total },
+              { label: 'Approved', value: data.summary?.approved ?? 0, note: `${data.summary?.approvalRate ?? 0}% approval rate`, tone: 'good' },
+              { label: 'In Review', value: data.summary?.inReview ?? 0, tone: (data.summary?.inReview ?? 0) > 0 ? 'warn' : undefined },
+              { label: 'Rejected', value: data.summary?.rejected ?? 0, tone: (data.summary?.rejected ?? 0) > 0 ? 'bad' : undefined },
+              { label: 'Avg. Days to Approve', value: data.summary?.avgDaysToApprove ?? '—' },
+            ]}
+          />
 
-          <Card className="col-span-1 md:col-span-2 lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Enrollment Pipeline</CardTitle>
-            </CardHeader>
-            <CardContent className="h-[300px]">
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
+            <ReportCard className="lg:col-span-2" title="Monthly Enrollments" subtitle="Last 6 months">
+              <div className="h-[300px]">
+                {data.trends?.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={data.trends}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={reportGridStroke} />
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                      <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
+                      <Tooltip cursor={{ fill: '#f4f6f3' }} contentStyle={reportTooltipStyle} />
+                      <Bar dataKey="count" name="Enrollments" fill="#54b947" radius={[10, 10, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : <ReportEmpty message="No trend data" />}
+              </div>
+            </ReportCard>
+
+            <ReportCard title="Enrollments by Status">
+              <div className="h-[300px]">
+                {data.statusCounts?.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={data.statusCounts} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={3} dataKey="value">
+                        {data.statusCounts.map((_e: any, i: number) => <Cell key={i} fill={REPORT_COLORS[i % REPORT_COLORS.length]} />)}
+                      </Pie>
+                      <Tooltip contentStyle={reportTooltipStyle} />
+                      <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : <ReportEmpty message="No status data" />}
+              </div>
+            </ReportCard>
+          </div>
+
+          <ReportCard title="Enrollment Pipeline">
+            <div className="h-[260px]">
               {data.funnel?.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={data.funnel}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip cursor={{ fill: 'transparent' }} />
-                    <Bar dataKey="value" fill="#8884d8" radius={[4, 4, 0, 0]}>
-                      {data.funnel.map((_entry: any, index: number) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
+                  <BarChart data={data.funnel} layout="vertical" margin={{ left: 40 }}>
+                    <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={reportGridStroke} />
+                    <XAxis type="number" axisLine={false} tickLine={false} />
+                    <YAxis dataKey="name" type="category" width={140} tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <Tooltip cursor={{ fill: '#f4f6f3' }} contentStyle={reportTooltipStyle} />
+                    <Bar dataKey="value" radius={[0, 10, 10, 0]}>
+                      {data.funnel.map((_e: any, i: number) => <Cell key={i} fill={REPORT_COLORS[i % REPORT_COLORS.length]} />)}
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
-              ) : (
-                <div className="flex h-full items-center justify-center text-muted-foreground">No pipeline data</div>
-              )}
-            </CardContent>
-          </Card>
+              ) : <ReportEmpty message="No pipeline data" />}
+            </div>
+          </ReportCard>
 
-          <Card className="col-span-1 md:col-span-2 lg:col-span-1">
-            <CardHeader>
-              <CardTitle>Enrollments by Status</CardTitle>
-            </CardHeader>
-            <CardContent className="h-[300px]">
-              {data.statusCounts?.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={data.statusCounts}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {data.statusCounts.map((_entry: any, index: number) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="flex h-full items-center justify-center text-muted-foreground">No status data</div>
-              )}
-            </CardContent>
-          </Card>
-
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
+            <ReportCard title="By Program" subtitle="Top 10">
+              <RankList rows={data.byProgram} empty="No program data" />
+            </ReportCard>
+            <ReportCard title="By Study Center" subtitle="Top 10">
+              <RankList rows={data.byCenter} empty="No center data" />
+            </ReportCard>
+            <ReportCard title="By Source">
+              <RankList rows={data.bySource} empty="No source data" />
+              <div className="grid grid-cols-2 gap-3 mt-4">
+                <div className="rounded-2xl bg-[#f4f6f3] p-4"><p className="text-xs text-slate-500">Provisional</p><p className="text-2xl font-semibold text-slate-900 mt-1">{data.summary?.provisional ?? 0}</p></div>
+                <div className="rounded-2xl bg-[#f4f6f3] p-4"><p className="text-xs text-slate-500">Upgrades</p><p className="text-2xl font-semibold text-slate-900 mt-1">{data.summary?.upgrades ?? 0}</p></div>
+              </div>
+            </ReportCard>
+          </div>
         </div>
       )}
     </div>

@@ -1,14 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Download, Users, GraduationCap, Building2, UserCheck, Loader2, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer } from 'recharts';
+import { ListPagination } from '@/components/ui/list-pagination';
+import { ReportHeader, ReportCard, ReportStats, RankList, ReportLoading, REPORT_COLORS, reportTooltipStyle, reportGridStroke } from './ReportKit';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658'];
 
 export function StudentReportPanel() {
   const [students, setStudents] = useState<any[]>([]);
@@ -21,7 +20,7 @@ export function StudentReportPanel() {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // Reset to first page when filters change
   useEffect(() => {
@@ -72,11 +71,10 @@ export function StudentReportPanel() {
     });
   }, [students, searchTerm, statusFilter, programFilter]);
 
-  const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
   const paginatedStudents = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredStudents.slice(start, start + itemsPerPage);
-  }, [filteredStudents, currentPage]);
+  }, [filteredStudents, currentPage, itemsPerPage]);
 
   // Aggregate Data for Charts
   const programData = useMemo(() => {
@@ -109,6 +107,36 @@ export function StudentReportPanel() {
       count: counts[key] 
     }));
   }, [filteredStudents]);
+
+  const tally = (keyOf: (s: any) => string) => {
+    const m: Record<string, number> = {};
+    filteredStudents.forEach(s => { const k = keyOf(s); m[k] = (m[k] || 0) + 1; });
+    return Object.keys(m).map(k => ({ name: k, value: m[k] })).sort((a, b) => b.value - a.value);
+  };
+  const title = (v: string) => v.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const byBranch = useMemo(() => tally(s => s.branch?.name || 'Main Office'), [filteredStudents]);
+  const byCenter = useMemo(() => tally(s => s.center?.name || 'Direct').slice(0, 10), [filteredStudents]);
+  const byUniversity = useMemo(() => tally(s => s.university?.name || 'Unknown').slice(0, 10), [filteredStudents]);
+  const byGender = useMemo(() => tally(s => title(s.gender || 'Not specified')), [filteredStudents]);
+  const bySource = useMemo(() => tally(s => title(s.source || 'Direct')), [filteredStudents]);
+  const joinTrend = useMemo(() => {
+    const today = new Date();
+    const months: { name: string; count: number; key: string }[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      months.push({ key: `${d.getFullYear()}-${d.getMonth()}`, name: d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }), count: 0 });
+    }
+    filteredStudents.forEach(s => {
+      if (!s.joinDate) return;
+      const d = new Date(s.joinDate);
+      const m = months.find(x => x.key === `${d.getFullYear()}-${d.getMonth()}`);
+      if (m) m.count++;
+    });
+    return months;
+  }, [filteredStudents]);
+  const thisMonthJoins = joinTrend[joinTrend.length - 1]?.count ?? 0;
+  const lastMonthJoins = joinTrend[joinTrend.length - 2]?.count ?? 0;
+  const withEnrollmentNo = filteredStudents.filter(s => !!s.enrollmentNo).length;
 
   const handleExportCSV = async () => {
     try {
@@ -144,267 +172,177 @@ export function StudentReportPanel() {
     }
   };
 
+  const fieldCls = 'h-11 rounded-full bg-white border-slate-200 px-5 font-semibold';
+  const statusPill = (student: any) =>
+    student.isPrevious ? 'bg-violet-100 text-violet-700'
+      : student.status === 'admitted' ? 'bg-[#dff3da] text-[#256c1d]'
+      : student.status === 'cancelled' ? 'bg-red-100 text-red-700'
+      : 'bg-amber-100 text-amber-700';
+
   return (
-    <Card className="border-none shadow-none bg-transparent">
-      <CardHeader className="px-0">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <CardTitle>Student Report</CardTitle>
-            <CardDescription>Comprehensive analytics and reporting for students</CardDescription>
-          </div>
-          <Button onClick={handleExportCSV} className="w-full md:w-auto gap-2">
-            <Download className="w-4 h-4" />
-            Export CSV
-          </Button>
+    <div className="space-y-6 wizard-form">
+      <ReportHeader
+        title="Student Report"
+        description="Comprehensive analytics and reporting for students"
+        onExport={handleExportCSV}
+      />
+
+      {/* Filters */}
+      <div className="rounded-3xl bg-white border border-slate-100 p-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Input
+            placeholder="Search students..."
+            className="pl-11 h-11 rounded-full bg-[#f4f6f3] border-transparent"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-      </CardHeader>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className={fieldCls + (statusFilter !== 'all' ? ' !bg-[#8ae47e] !border-[#8ae47e] !text-[#0b1d14]' : '')}>
+            <SelectValue placeholder="Filter by Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="admitted">Admitted</SelectItem>
+            <SelectItem value="cancelled">Cancelled</SelectItem>
+            <SelectItem value="completed">Completed</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={programFilter} onValueChange={setProgramFilter}>
+          <SelectTrigger className={fieldCls + (programFilter !== 'all' ? ' !bg-[#8ae47e] !border-[#8ae47e] !text-[#0b1d14]' : '')}>
+            <SelectValue placeholder="Filter by Program" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Programs</SelectItem>
+            {uniquePrograms.map(p => (
+              <SelectItem key={p} value={p}>{p}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-      <CardContent className="px-0 space-y-6">
-        {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search students..."
-              className="pl-8"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="Filter by Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="admitted">Admitted</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-            </SelectContent>
-          </Select>
+      {loading ? (
+        <ReportLoading />
+      ) : (
+        <>
+          <ReportStats
+            items={[
+              { label: 'Total Students', value: filteredStudents.length },
+              { label: 'Active (Admitted)', value: filteredStudents.filter(s => s.status === 'admitted' && !s.isPrevious).length, tone: 'good' },
+              { label: 'Completed', value: filteredStudents.filter(s => s.isPrevious).length },
+              { label: 'Pending', value: filteredStudents.filter(s => s.status === 'pending' && !s.isPrevious).length, tone: 'warn' },
+              { label: 'Joined This Month', value: thisMonthJoins, note: lastMonthJoins > 0 ? `${thisMonthJoins >= lastMonthJoins ? '+' : ''}${Math.round(((thisMonthJoins - lastMonthJoins) / lastMonthJoins) * 100)}% vs last month` : 'No previous month to compare' },
+              { label: 'With Enrollment No.', value: withEnrollmentNo, note: filteredStudents.length ? `${Math.round((withEnrollmentNo / filteredStudents.length) * 100)}% of students` : undefined },
+            ]}
+          />
 
-          <Select value={programFilter} onValueChange={setProgramFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="Filter by Program" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Programs</SelectItem>
-              {uniquePrograms.map(p => (
-                <SelectItem key={p} value={p}>{p}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {loading ? (
-          <div className="flex items-center justify-center p-12">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-          </div>
-        ) : (
-          <>
-            {/* Summary Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card>
-                <CardContent className="p-6 flex items-center gap-4">
-                  <div className="p-3 bg-blue-100 text-blue-600 rounded-lg dark:bg-blue-900/50 dark:text-blue-400">
-                    <Users className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Total Students</p>
-                    <p className="text-2xl font-bold">{filteredStudents.length}</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6 flex items-center gap-4">
-                  <div className="p-3 bg-green-100 text-green-600 rounded-lg dark:bg-green-900/50 dark:text-green-400">
-                    <UserCheck className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Active (Admitted)</p>
-                    <p className="text-2xl font-bold">
-                      {filteredStudents.filter(s => s.status === 'admitted' && !s.isPrevious).length}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6 flex items-center gap-4">
-                  <div className="p-3 bg-purple-100 text-purple-600 rounded-lg dark:bg-purple-900/50 dark:text-purple-400">
-                    <GraduationCap className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Completed</p>
-                    <p className="text-2xl font-bold">
-                      {filteredStudents.filter(s => s.isPrevious).length}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6 flex items-center gap-4">
-                  <div className="p-3 bg-orange-100 text-orange-600 rounded-lg dark:bg-orange-900/50 dark:text-orange-400">
-                    <Building2 className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Pending</p>
-                    <p className="text-2xl font-bold">
-                      {filteredStudents.filter(s => s.status === 'pending' && !s.isPrevious).length}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Charts */}
-            {filteredStudents.length > 0 && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Students by Program</CardTitle>
-                  </CardHeader>
-                  <CardContent className="h-[300px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={programData}
-                          cx="50%"
-                          cy="50%"
-                          labelLine={false}
-                          label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                          outerRadius={80}
-                          fill="#8884d8"
-                          dataKey="value"
-                        >
-                          {programData.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <RechartsTooltip />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Students by Status</CardTitle>
-                  </CardHeader>
-                  <CardContent className="h-[300px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={statusData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="name" />
-                        <YAxis allowDecimals={false} />
-                        <RechartsTooltip />
-                        <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-
-            {/* Data Table */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Student Directory</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-md border overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b bg-muted/50 text-left">
-                        <th className="p-3 font-medium">Name</th>
-                        <th className="p-3 font-medium">Contact</th>
-                        <th className="p-3 font-medium">Program</th>
-                        <th className="p-3 font-medium">Branch</th>
-                        <th className="p-3 font-medium">Status</th>
-                        <th className="p-3 font-medium">Join Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredStudents.length === 0 ? (
-                        <tr>
-                          <td colSpan={6} className="p-8 text-center text-muted-foreground">
-                            No students found matching the selected filters.
-                          </td>
-                        </tr>
-                      ) : (
-                        paginatedStudents.map((student) => (
-                          <tr key={student.id} className="border-b last:border-0 hover:bg-muted/50">
-                            <td className="p-3 font-medium">{student.name}</td>
-                            <td className="p-3">
-                              <div className="text-xs">{student.email}</div>
-                              <div className="text-xs text-muted-foreground">{student.phone}</div>
-                            </td>
-                            <td className="p-3 text-muted-foreground">{student.program?.name || '-'}</td>
-                            <td className="p-3 text-muted-foreground">{student.branch?.name || 'Main Office'}</td>
-                            <td className="p-3">
-                              {student.isPrevious ? (
-                                <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
-                                  Completed
-                                </span>
-                              ) : (
-                                <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
-                                  student.status === 'admitted' 
-                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                                    : student.status === 'cancelled'
-                                    ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                                    : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
-                                }`}>
-                                  {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
-                                </span>
-                              )}
-                            </td>
-                            <td className="p-3 text-muted-foreground">
-                              {new Date(student.joinDate).toLocaleDateString()}
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
+          {/* Charts */}
+          {filteredStudents.length > 0 && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <ReportCard title="Students by Program">
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={programData} cx="50%" cy="50%" innerRadius={55} outerRadius={90} paddingAngle={3} dataKey="value">
+                        {programData.map((_, index) => (
+                          <Cell key={`cell-${index}`} fill={REPORT_COLORS[index % REPORT_COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <RechartsTooltip contentStyle={reportTooltipStyle} />
+                      <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-between pt-4 pb-2 border-t mt-4">
-                    <div className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} students
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                      >
-                        Previous
-                      </Button>
-                      <div className="text-sm font-medium px-2">
-                        Page {currentPage} of {totalPages}
+              </ReportCard>
+
+              <ReportCard title="Students by Status">
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={statusData} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={reportGridStroke} />
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                      <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
+                      <RechartsTooltip cursor={{ fill: '#f4f6f3' }} contentStyle={reportTooltipStyle} />
+                      <Bar dataKey="count" fill="#54b947" radius={[10, 10, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </ReportCard>
+            </div>
+          )}
+
+          {filteredStudents.length > 0 && (
+            <>
+              <ReportCard title="New Students per Month" subtitle="Last 6 months, based on join date">
+                <div className="h-[260px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={joinTrend}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={reportGridStroke} />
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                      <YAxis allowDecimals={false} axisLine={false} tickLine={false} />
+                      <RechartsTooltip cursor={{ fill: '#f4f6f3' }} contentStyle={reportTooltipStyle} />
+                      <Bar dataKey="count" name="New students" fill="#54b947" radius={[10, 10, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </ReportCard>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <ReportCard title="By Branch"><RankList rows={byBranch} /></ReportCard>
+                <ReportCard title="By University" subtitle="Top 10"><RankList rows={byUniversity} /></ReportCard>
+                <ReportCard title="By Study Center" subtitle="Top 10"><RankList rows={byCenter} /></ReportCard>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <ReportCard title="By Gender"><RankList rows={byGender} /></ReportCard>
+                <ReportCard title="By Source"><RankList rows={bySource} /></ReportCard>
+              </div>
+            </>
+          )}
+
+          {/* Student directory */}
+          <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+            <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+              <h3 className="text-lg font-semibold tracking-tight">Student Directory</h3>
+              <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{filteredStudents.length} students</span>
+            </div>
+            <div className="p-4 sm:p-5">
+              {filteredStudents.length === 0 ? (
+                <div className="py-14 text-center text-sm text-muted-foreground">No students found matching the selected filters.</div>
+              ) : (
+                <div className="space-y-3">
+                  {paginatedStudents.map((student) => (
+                    <div key={student.id} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-900">{student.name}</div>
+                        <div className="text-xs text-muted-foreground mt-0.5">{student.email}{student.phone ? ` · ${student.phone}` : ''}</div>
+                        <div className="text-xs text-slate-600 mt-1.5">
+                          {student.program?.name || '-'} · {student.branch?.name || 'Main Office'}
+                        </div>
                       </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        disabled={currentPage === totalPages}
-                      >
-                        Next
-                      </Button>
+                      <div className="flex items-center gap-3 md:justify-end">
+                        <span className="text-xs text-muted-foreground">Joined {new Date(student.joinDate).toLocaleDateString()}</span>
+                        <span className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize ${statusPill(student)}`}>
+                          {student.isPrevious ? 'Completed' : student.status}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </>
-        )}
-      </CardContent>
-    </Card>
+                  ))}
+                  <ListPagination
+                    total={filteredStudents.length}
+                    page={Math.min(currentPage, Math.max(1, Math.ceil(filteredStudents.length / itemsPerPage)))}
+                    pageSize={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                    onPageSizeChange={(n) => { setItemsPerPage(n); setCurrentPage(1); }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 }

@@ -386,38 +386,38 @@ export function CommunicationSettingsPanel() {
   }
 
   return (
-    <div className="space-y-6 max-w-5xl">
+    <div className="space-y-6 wizard-form comm-form">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Organization Communication Settings</h2>
-          <p className="text-muted-foreground text-sm">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Organization Communication Settings</h2>
+          <p className="text-muted-foreground text-sm mt-1.5 max-w-3xl">
             Configure custom SMTP outgoing mail and Gupshup WhatsApp Enterprise templates for student and staff notifications.
           </p>
         </div>
-        <Button onClick={handleSaveAll} disabled={saving} className="self-start sm:self-auto">
+        <Button onClick={handleSaveAll} disabled={saving} className="self-start h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
           <Save className="w-4 h-4 mr-2" />
           {saving ? 'Saving...' : 'Save Settings'}
         </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full sm:w-[680px] grid-cols-4">
-          <TabsTrigger value="smtp" className="flex items-center gap-2">
+        <TabsList className="h-auto flex-wrap gap-1.5 bg-white p-2 rounded-3xl border border-slate-100 w-fit max-w-full">
+          <TabsTrigger value="smtp" className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">
             <Mail className="w-4 h-4" />
             <span>SMTP Server</span>
-            {smtp.enabled && <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-600 text-[10px] px-1.5 py-0 h-4">Active</Badge>}
+            {smtp.enabled && <Badge variant="secondary" className="bg-[#dff3da] text-[#256c1d] text-[10px] px-2 py-0 h-4 rounded-full">Active</Badge>}
           </TabsTrigger>
-          <TabsTrigger value="email_templates" className="flex items-center gap-2">
+          <TabsTrigger value="email_templates" className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">
             <Palette className="w-4 h-4" />
             <span>Email Templates</span>
           </TabsTrigger>
-          <TabsTrigger value="whatsapp" className="flex items-center gap-2">
+          <TabsTrigger value="whatsapp" className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">
             <MessageSquare className="w-4 h-4" />
             <span>WhatsApp</span>
-            {whatsapp.enabled && <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-600 text-[10px] px-1.5 py-0 h-4">Active</Badge>}
+            {whatsapp.enabled && <Badge variant="secondary" className="bg-[#dff3da] text-[#256c1d] text-[10px] px-2 py-0 h-4 rounded-full">Active</Badge>}
           </TabsTrigger>
-          <TabsTrigger value="audit_logs" className="flex items-center gap-2">
+          <TabsTrigger value="audit_logs" className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">
             <History className="w-4 h-4" />
             <span>Delivery & Audit</span>
             {logStats.failed > 0 && (
@@ -430,11 +430,11 @@ export function CommunicationSettingsPanel() {
 
         {/* ─────────────────── SMTP TAB ─────────────────── */}
         <TabsContent value="smtp" className="space-y-6">
-          <Card>
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-6">
             <CardHeader className="flex flex-row items-center justify-between pb-4">
               <div>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Mail className="w-5 h-5 text-blue-600" />
+                <CardTitle className="text-lg font-semibold tracking-tight flex items-center gap-2">
+                  <Mail className="w-5 h-5 text-[#256c1d]" />
                   Custom SMTP Outgoing Mail Server
                 </CardTitle>
                 <CardDescription>
@@ -454,7 +454,7 @@ export function CommunicationSettingsPanel() {
 
             <CardContent className="space-y-6">
               {/* Presets bar */}
-              <div className="p-3.5 bg-muted/40 rounded-xl border flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="p-3.5 bg-[#f4f6f3] rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs">
                 <span className="font-medium text-foreground flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-primary" />
                   Quick Server Presets:
@@ -618,10 +618,10 @@ export function CommunicationSettingsPanel() {
 
         {/* ─────────────────── BRANDED EMAIL TEMPLATES TAB ─────────────────── */}
         <TabsContent value="email_templates" className="space-y-6">
-          <Card>
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-6">
             <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4">
               <div>
-                <CardTitle className="text-lg flex items-center gap-2">
+                <CardTitle className="text-lg font-semibold tracking-tight flex items-center gap-2">
                   <Palette className="w-5 h-5 text-indigo-600" />
                   Institutional Email Branding & Live Preview
                 </CardTitle>
@@ -804,10 +804,10 @@ export function CommunicationSettingsPanel() {
         {/* ─────────────────── GUPSHUP WHATSAPP TAB ─────────────────── */}
         <TabsContent value="whatsapp" className="space-y-6">
           {/* Card 1: API Credentials */}
-          <Card>
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-6">
             <CardHeader className="flex flex-row items-center justify-between pb-4">
               <div>
-                <CardTitle className="text-lg flex items-center gap-2">
+                <CardTitle className="text-lg font-semibold tracking-tight flex items-center gap-2">
                   <MessageSquare className="w-5 h-5 text-emerald-600" />
                   Gupshup API Credentials
                 </CardTitle>
@@ -898,11 +898,11 @@ export function CommunicationSettingsPanel() {
           </Card>
 
           {/* Card 2: Notification Templates (HSM) */}
-          <Card>
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-6">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-lg flex items-center gap-2">
+                  <CardTitle className="text-lg font-semibold tracking-tight flex items-center gap-2">
                     <Layers className="w-5 h-5 text-purple-600" />
                     WhatsApp Notification Templates (HSM)
                   </CardTitle>
@@ -1078,51 +1078,51 @@ export function CommunicationSettingsPanel() {
         <TabsContent value="audit_logs" className="space-y-6">
           {/* Top Stat Metrics */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
-              <CardContent className="p-4 flex items-center justify-between">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
+              <CardContent className="p-5 flex items-center justify-between">
                 <div>
                   <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Dispatched</div>
-                  <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-1">{logStats.total}</div>
+                  <div className="text-3xl font-semibold tracking-tight text-slate-900 mt-1">{logStats.total}</div>
                   <div className="text-[11px] text-slate-500 mt-0.5">All outgoing channels</div>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center text-blue-600">
+                <div className="w-11 h-11 rounded-2xl bg-[#eaf6e6] flex items-center justify-center text-[#256c1d]">
                   <Send className="w-5 h-5" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
-              <CardContent className="p-4 flex items-center justify-between">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
+              <CardContent className="p-5 flex items-center justify-between">
                 <div>
                   <div className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Delivered / Sent</div>
-                  <div className="text-2xl font-bold text-emerald-600 mt-1">{logStats.sent}</div>
+                  <div className="text-3xl font-semibold tracking-tight text-[#256c1d] mt-1">{logStats.sent}</div>
                   <div className="text-[11px] text-slate-500 mt-0.5">
                     {logStats.total > 0 ? `${Math.round((logStats.sent / logStats.total) * 100)}% success rate` : 'No dispatches yet'}
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center text-emerald-600">
+                <div className="w-11 h-11 rounded-2xl bg-[#eaf6e6] flex items-center justify-center text-[#256c1d]">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className={`border shadow-sm ${logStats.failed > 0 ? 'border-rose-300 dark:border-rose-900 bg-rose-50/20' : 'border-slate-200 dark:border-slate-800'}`}>
-              <CardContent className="p-4 flex items-center justify-between">
+            <Card className={`rounded-3xl shadow-none py-0 border ${logStats.failed > 0 ? 'border-rose-200 bg-rose-50' : 'bg-white border-slate-100'}`}>
+              <CardContent className="p-5 flex items-center justify-between">
                 <div>
                   <div className="text-xs font-semibold text-rose-600 uppercase tracking-wider">Failed Messages</div>
-                  <div className="text-2xl font-bold text-rose-600 mt-1">{logStats.failed}</div>
+                  <div className="text-3xl font-semibold tracking-tight text-rose-600 mt-1">{logStats.failed}</div>
                   <div className="text-[11px] text-rose-500 font-medium mt-0.5">
                     {logStats.failed > 0 ? 'Action required: Click Resend below' : 'All messages healthy'}
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/50 flex items-center justify-center text-rose-600">
+                <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-rose-600">
                   <AlertCircle className="w-5 h-5" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
-              <CardContent className="p-4 flex items-center justify-between">
+            <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-0">
+              <CardContent className="p-5 flex items-center justify-between">
                 <div>
                   <div className="text-xs font-semibold text-purple-600 uppercase tracking-wider">Channels</div>
                   <div className="text-lg font-bold text-slate-800 dark:text-slate-200 mt-1">
@@ -1130,7 +1130,7 @@ export function CommunicationSettingsPanel() {
                   </div>
                   <div className="text-[11px] text-slate-500 mt-0.5">SMTP & Gupshup</div>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/50 flex items-center justify-center text-purple-600">
+                <div className="w-11 h-11 rounded-2xl bg-[#eaf6e6] flex items-center justify-center text-[#256c1d]">
                   <Layers className="w-5 h-5" />
                 </div>
               </CardContent>
@@ -1138,12 +1138,12 @@ export function CommunicationSettingsPanel() {
           </div>
 
           {/* Logs Main Card */}
-          <Card>
-            <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <Card className="rounded-3xl bg-white border border-slate-100 shadow-none pt-6 pb-0 overflow-hidden">
+            <CardHeader className="pb-5 border-b border-slate-100">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <History className="w-5 h-5 text-blue-600" />
+                  <CardTitle className="text-lg font-semibold tracking-tight flex items-center gap-2">
+                    <History className="w-5 h-5 text-[#256c1d]" />
                     Delivery Logs & Real-time Audit
                   </CardTitle>
                   <CardDescription className="text-xs">
@@ -1425,7 +1425,7 @@ export function CommunicationSettingsPanel() {
       {/* Selected Log Details Modal */}
       {selectedLog && (
         <Dialog open={Boolean(selectedLog)} onOpenChange={(open) => !open && setSelectedLog(null)}>
-          <DialogContent className="max-w-xl">
+          <DialogContent className="wizard-form comm-form max-w-xl rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-base">
                 <Info className="w-4 h-4 text-blue-600" />

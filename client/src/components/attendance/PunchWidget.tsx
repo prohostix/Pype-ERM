@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { MapPin, Clock, CheckCircle2, LogIn, LogOut, Loader2, AlertCircle, Camera } from 'lucide-react';
+import { MapPin, Clock, CheckCircle2, LogIn, LogOut, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -264,7 +264,14 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
 
   return (
     <>
-      {user?.requiresAttendance === false ? (
+      {user?.requiresAttendance === false && compact ? (
+        <div className="flex items-center h-11 rounded-full bg-white dark:bg-card border border-slate-200/70 dark:border-white/10 px-4">
+          <span className="text-xs sm:text-sm font-medium text-slate-600 dark:text-muted-foreground whitespace-nowrap">
+            <span className="sm:hidden">No punch needed</span>
+            <span className="hidden sm:inline">Attendance marking is not required.</span>
+          </span>
+        </div>
+      ) : user?.requiresAttendance === false ? (
         <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
             <p className="text-sm text-muted-foreground font-medium">Attendance marking is not required.</p>
@@ -279,21 +286,26 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
           </CardContent>
         </Card>
       ) : compact ? (
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:flex flex-col items-end">
-             <span className="text-sm font-bold tabular-nums">
-               {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
-             </span>
-             <span className="text-[10px] text-muted-foreground leading-none">
-               {currentTime.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })}
-             </span>
+        <div className="flex items-center gap-3 h-11 rounded-full bg-white dark:bg-card shadow-sm border border-slate-200/70 dark:border-white/10 hover:border-slate-300 transition-colors p-1 sm:pl-1.5 sm:pr-1">
+          <div className="hidden sm:flex items-center gap-2.5 pl-0.5">
+            <span className="w-8 h-8 rounded-full bg-[#eaf6e6] dark:bg-emerald-500/10 text-[#256c1d] dark:text-emerald-400 flex items-center justify-center shrink-0">
+              <Clock className="w-4 h-4" />
+            </span>
+            <div className="flex flex-col leading-none">
+              <span className="text-sm font-semibold tabular-nums text-foreground whitespace-nowrap">
+                {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
+              </span>
+              <span className="text-[11px] text-muted-foreground mt-1 whitespace-nowrap">
+                {currentTime.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })}
+              </span>
+            </div>
+            <span className="w-px h-6 bg-slate-200 dark:bg-white/10 ml-1" />
           </div>
-          <div className="flex items-center gap-2">
-            {!hasPunchedIn ? (
+          {!hasPunchedIn ? (
             <Button
               size="sm"
               onClick={() => openPunchMap('in')}
-              className="h-9 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1.5 shadow-sm text-xs font-semibold"
+              className="h-9 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] gap-1.5 focus-visible:ring-2 focus-visible:ring-[#54b947]/50 focus-visible:ring-offset-1 text-xs font-semibold shadow-none"
             >
               <LogIn className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Punch In</span>
@@ -302,23 +314,23 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
             <Button
               size="sm"
               onClick={() => openPunchMap('out')}
-              variant="destructive"
-              className="h-9 px-3 rounded-lg bg-rose-600 hover:bg-rose-700 text-white flex items-center gap-1.5 shadow-sm text-xs font-semibold"
+              className="h-9 px-5 rounded-full bg-[#0b1d14] hover:bg-[#13301f] text-white gap-1.5 focus-visible:ring-2 focus-visible:ring-[#54b947]/50 focus-visible:ring-offset-1 text-xs font-semibold shadow-none"
             >
-              <LogOut className="w-3.5 h-3.5" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#8ae47e] animate-pulse" />
               <span className="hidden sm:inline">Punch Out</span>
+              <LogOut className="w-3.5 h-3.5 sm:hidden" />
+              {workingDuration() && <span className="hidden md:inline text-[#8ae47e] font-medium tabular-nums">· {workingDuration()}</span>}
             </Button>
           ) : (
             <Button
               size="sm"
               disabled
-              className="h-9 px-3 rounded-lg text-muted-foreground flex items-center gap-1.5 text-xs font-semibold bg-muted"
+              className="h-9 px-5 rounded-full bg-[#eaf6e6] dark:bg-emerald-500/10 text-[#256c1d] dark:text-emerald-400 gap-1.5 text-xs font-semibold shadow-none opacity-100"
             >
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+              <CheckCircle2 className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Punched Out</span>
             </Button>
           )}
-        </div>
         </div>
       ) : (
         <Card className="overflow-hidden border-none shadow-xl bg-card/60 backdrop-blur-xl">
@@ -414,75 +426,69 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
 
       {/* Map Dialog */}
       <Dialog open={mapOpen} onOpenChange={(o) => { if (!punching) setMapOpen(o); }}>
-        <DialogContent className="max-w-lg p-0 overflow-y-auto max-h-[95vh] sm:max-h-none" data-no-fullscreen="true">
-          <DialogHeader className="p-4 pb-0">
-            <DialogTitle className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-primary" />
+        <DialogContent className="wizard-form max-w-lg p-0 overflow-y-auto max-h-[95vh] sm:max-h-none rounded-[2rem] border-0 bg-white" data-no-fullscreen="true" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader className="p-6 pb-3 text-left">
+            <DialogTitle className="text-xl font-semibold tracking-tight">
               {punchType === 'in' ? 'Punch In' : 'Punch Out'} — Confirm Location
             </DialogTitle>
+            <p className="text-sm text-muted-foreground">Check that the pin is where you are before you confirm.</p>
           </DialogHeader>
 
           {locating ? (
             <div className="flex flex-col items-center justify-center h-64 gap-3">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#54b947]" />
               <p className="text-sm text-muted-foreground">Getting your location...</p>
             </div>
           ) : location ? (
             <>
               {/* Leaflet Map */}
-              <div ref={mapRef} className="w-full h-48 sm:h-64" style={{ zIndex: 0 }} />
+              <div className="px-6">
+                <div ref={mapRef} className="w-full h-48 sm:h-60 rounded-3xl overflow-hidden border border-slate-100" style={{ zIndex: 0 }} />
+              </div>
 
-              {/* Location info */}
-              <div className="p-4 space-y-3">
-                <div className="flex items-start gap-2 p-3 rounded-xl bg-muted/50">
-                  <MapPin className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-xs font-semibold">Your Location</p>
-                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{location.address}</p>
-                    <p className="text-[10px] text-muted-foreground mt-1 font-mono">
-                      {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
-                    </p>
-                  </div>
+              <div className="p-6 space-y-4">
+                <div className="rounded-2xl bg-[#f4f6f3] px-4 py-3.5">
+                  <p className="text-xs font-medium text-slate-500">Your location</p>
+                  <p className="text-sm font-semibold text-slate-900 mt-1 line-clamp-2">{location.address}</p>
+                  <p className="text-xs text-muted-foreground mt-1 font-mono">
+                    {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
+                  </p>
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="w-3 h-3" />
-                    {punchType === 'in' ? 'Check-in' : 'Check-out'} time:{' '}
-                    <span className="font-bold text-foreground">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <p className="text-sm text-muted-foreground">
+                    {punchType === 'in' ? 'Check-in' : 'Check-out'} time{' '}
+                    <span className="font-semibold text-slate-900">
                       {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
                     </span>
-                  </span>
+                  </p>
                   {user?.requireSelfiePunchIn && (
-                    <Badge variant="secondary" className="text-[10px] gap-1 font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                      <Camera className="w-3 h-3" /> Selfie required
-                    </Badge>
+                    <span className="rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-xs font-semibold">Selfie required</span>
                   )}
                 </div>
 
-                <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1" onClick={() => setMapOpen(false)} disabled={punching}>
+                <div className="flex gap-3">
+                  <Button variant="outline" className="flex-1 h-12 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => setMapOpen(false)} disabled={punching}>
                     Cancel
                   </Button>
-                  <Button className="flex-1" onClick={handlePunch} disabled={punching}>
+                  <Button className="flex-1 h-12 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handlePunch} disabled={punching}>
                     {punching ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</>
                     ) : user?.requireSelfiePunchIn && !capturedPhoto ? (
-                      <><Camera className="w-4 h-4 mr-2" />Take Selfie to {punchType === 'in' ? 'Punch In' : 'Punch Out'}</>
+                      <>Take selfie to {punchType === 'in' ? 'punch in' : 'punch out'}</>
                     ) : (
-                      <><CheckCircle2 className="w-4 h-4 mr-2" />Confirm {punchType === 'in' ? 'Punch In' : 'Punch Out'}</>
+                      <>Confirm {punchType === 'in' ? 'punch in' : 'punch out'}</>
                     )}
                   </Button>
                 </div>
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-64 gap-3 p-4">
-              <AlertCircle className="w-8 h-8 text-destructive" />
+            <div className="flex flex-col items-center justify-center h-64 gap-4 p-6">
               <p className="text-sm text-center text-muted-foreground">
                 Location access denied. Please enable GPS in your browser settings.
               </p>
-              <Button variant="outline" onClick={() => setMapOpen(false)}>Close</Button>
+              <Button variant="outline" className="h-11 px-6 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => setMapOpen(false)}>Close</Button>
             </div>
           )}
         </DialogContent>
@@ -490,18 +496,18 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
 
       {/* Webcam Dialog */}
       <Dialog open={webcamOpen} onOpenChange={setWebcamOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Take a Selfie to Punch {punchType === 'in' ? 'In' : 'Out'}</DialogTitle>
+        <DialogContent className="wizard-form sm:max-w-md rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+          <DialogHeader className="text-left">
+            <DialogTitle className="text-xl font-semibold tracking-tight">Take a selfie to punch {punchType === 'in' ? 'in' : 'out'}</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center space-y-4">
             {!capturedPhoto ? (
               <>
-                <div className="w-full aspect-video rounded-lg overflow-hidden bg-black relative">
+                <div className="w-full aspect-video rounded-3xl overflow-hidden bg-[#0b1d14] relative">
                   {camError ? (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4 text-center text-white text-sm">
                       <p>{camError}</p>
-                      <Button size="sm" variant="secondary" onClick={() => { setCamError(null); setCamKey(k => k + 1); }}>
+                      <Button size="sm" className="h-10 px-5 rounded-full bg-white text-[#0b1d14] hover:bg-[#eaf6e6] font-semibold" onClick={() => { setCamError(null); setCamKey(k => k + 1); }}>
                         Try again
                       </Button>
                     </div>
@@ -530,22 +536,22 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
                   />
                   )}
                 </div>
-                <Button className="w-full" onClick={handleCapturePhoto} disabled={!!camError}>
-                  Capture Photo
+                <Button className="w-full h-12 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleCapturePhoto} disabled={!!camError}>
+                  Capture photo
                 </Button>
               </>
             ) : (
               <>
-                <div className="w-full aspect-video rounded-lg overflow-hidden border">
+                <div className="w-full aspect-video rounded-3xl overflow-hidden border border-slate-100">
                   <img src={capturedPhoto} alt="Selfie" className="w-full h-full object-cover" />
                 </div>
-                <div className="flex gap-2 w-full">
-                  <Button variant="outline" className="flex-1" onClick={() => setCapturedPhoto(null)}>
+                <div className="flex gap-3 w-full">
+                  <Button variant="outline" className="flex-1 h-12 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => setCapturedPhoto(null)}>
                     Retake
                   </Button>
-                  <Button className="flex-1" onClick={handlePunch} disabled={punching}>
+                  <Button className="flex-1 h-12 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handlePunch} disabled={punching}>
                     {punching ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                    Confirm Punch
+                    Confirm punch
                   </Button>
                 </div>
               </>

@@ -1,20 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable react-refresh/only-export-components */
 import { useState, useEffect } from 'react';
-import { 
-  DollarSign, 
-  CreditCard, 
-  TrendingUp, 
-  ArrowUpRight, 
-  ArrowDownRight,
-  AlertCircle,
-  AlertTriangle,
-  CheckCircle,
-  RefreshCw,
-  Wallet,
-  FileText,
-  Users,
-} from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { InvoicesPanel } from '@/components/panels/InvoicesPanel';
 import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
 import { ExpensesPanel } from '@/components/panels/ExpensesPanel';
@@ -39,6 +26,7 @@ import { ProfitLossPanel } from '@/components/panels/ProfitLossPanel';
 import { FinanceSalaryApprovalPanel } from '@/components/panels/FinanceSalaryApprovalPanel';
 import { FinanceSalesTargetsPanel } from '@/components/panels/FinanceSalesTargetsPanel';
 import { FinancePayrollHistoryPanel } from '@/components/panels/FinancePayrollHistoryPanel';
+import { ComingSoonPanel } from '@/components/panels/ComingSoonPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
 import { PaymentGatewayPanel } from '@/components/panels/PaymentGatewayPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
@@ -94,7 +82,7 @@ export function ModernFinanceDashboard({ initialTab, onNavigate }: { initialTab?
       case 'payroll_batches': return <PayrollBatchesPanel />;
       case 'salary_approval': return <FinanceSalaryApprovalPanel />;
       case 'payroll_history': return <FinancePayrollHistoryPanel />;
-      case 'incentive_approval': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Incentive Approval Module Coming Soon</div>;
+      case 'incentive_approval': return <ComingSoonPanel title="Incentive Approval" description="Review and approve sales incentives before they are paid out." note="Incentive approvals aren't available yet. You'll be able to review and release incentives from this page once it launches." />;
 
       case 'students': return <StudentsPanel />;
       case 'admissions': return <AdmissionSessionsPanel />;
@@ -107,13 +95,13 @@ export function ModernFinanceDashboard({ initialTab, onNavigate }: { initialTab?
       case 'income_expense': return <IncomeExpenditurePanel />;
       case 'profit_loss': return <ProfitLossPanel />;
       case 'collection_report': return <CollectionReportPanel />;
-      case 'fee_pending_report': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Fee Pending Report Coming Soon</div>;
-      case 'incentive_report': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Incentive Report Coming Soon</div>;
+      case 'fee_pending_report': return <ComingSoonPanel title="Fee Pending Report" description="See which students have fees outstanding, and how much." note="The fee pending report isn't available yet. For now, the Student Payments Log shows each student's total fee, amount received and balance due." />;
+      case 'incentive_report': return <ComingSoonPanel title="Incentive Report" description="Track incentives earned and paid out to the sales team." note="The incentive report isn't available yet. You'll be able to review earned and paid incentives from this page once it launches." />;
       case 'leaves': return <LeavesPanel />;
       case 'my_leave_request': return <LeavesPanel isMyPortal />;
       case 'my_attendance': return <AttendancePanel isMyPortal={true} />;
       case 'notice_board': return <NoticeBoardPanel />;
-      case 'pay_slips': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Pay Slips Coming Soon</div>;
+      case 'pay_slips': return <ComingSoonPanel title="Pay Slips" description="Your monthly salary statements." note="Pay slips aren't available yet. They will appear here once payroll is processed." />;
       
       default: return <div className="p-8 text-center text-muted-foreground">Module under construction</div>;
     }
@@ -221,99 +209,100 @@ function OverviewContent({ onNavigate }: any) {
   };
 
   if (loading || !data) {
-    return <div className="space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 bg-muted rounded-xl animate-pulse" />)}</div>;
+    return <div className="space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 bg-slate-100 rounded-3xl animate-pulse" />)}</div>;
   }
 
   const { metrics, lists, charts, alerts } = data;
 
   return (
     <div className="space-y-6">
-      {/* Filters */}
-      <div className="flex flex-wrap gap-4 items-center justify-between bg-card p-4 rounded-xl border">
+      {/* Header + filters */}
+      <div className="flex flex-wrap gap-4 items-start justify-between">
         <div>
-          
-          <h2 className="text-xl font-bold">Finance Overview</h2>
-          <p className="text-sm text-muted-foreground">Monitor collections, expenses, and targets.</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Finance Overview</h2>
+          <p className="text-sm text-muted-foreground mt-1.5">Monitor collections, expenses, and targets.</p>
         </div>
-        <div className="flex gap-4 items-center">
-          <select 
-            value={branchFilter} 
+        <div className="flex flex-wrap gap-2 items-center">
+          <select
+            value={branchFilter}
             onChange={e => setBranchFilter(e.target.value)}
-            className="h-10 px-3 rounded-md border bg-background text-sm"
+            className="h-11 px-5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-700 outline-none focus:border-[#54b947]"
           >
             <option value="all">All Branches</option>
             {branches.map(b => (
               <option key={b.id} value={b.id}>{b.name}</option>
             ))}
           </select>
-          
-          <select 
-            value={dateRange} 
+          <select
+            value={dateRange}
             onChange={e => setDateRange(e.target.value)}
-            className="h-10 px-3 rounded-md border bg-background text-sm"
+            className="h-11 px-5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-700 outline-none focus:border-[#54b947]"
           >
             <option value="today">Today</option>
             <option value="this_week">This Week</option>
             <option value="this_month">This Month</option>
             <option value="all">All Time</option>
           </select>
-          <Button onClick={fetchDashboardData} variant="outline" size="icon">
+          <Button onClick={fetchDashboardData} variant="outline" size="icon" className="h-11 w-11 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className="w-4 h-4" />
           </Button>
         </div>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
-        <FinanceMetric title="Total Receivables" value={`${CS()}${(metrics.totalReceivables / 1000).toFixed(1)}K`} icon={<DollarSign className="w-5 h-5"/>} color="primary" onClick={() => onNavigate('invoices')} />
-        <FinanceMetric title="Total Collected" value={`${CS()}${(metrics.totalCollected / 1000).toFixed(1)}K`} icon={<CreditCard className="w-5 h-5"/>} color="success" onClick={() => onNavigate('payments')} />
-        <FinanceMetric title="Cash & Bank Bal" value={`${CS()}${(metrics.cashAndBankBalance / 1000).toFixed(1)}K`} icon={<Wallet className="w-5 h-5"/>} color="info" />
-        <FinanceMetric title="Operational Exp" value={`${CS()}${(metrics.operationalExpenses / 1000).toFixed(1)}K`} icon={<TrendingUp className="w-5 h-5"/>} color="warning" onClick={() => onNavigate('expenses')} />
-        
-        <FinanceMetric title="Univ Fee Pending" value={`${CS()}${(metrics.universityFeePending / 1000).toFixed(1)}K`} icon={<AlertCircle className="w-5 h-5"/>} color="warning" onClick={() => onNavigate('university_fee')} />
-        <FinanceMetric title="Incentive Pending" value={`${CS()}${(metrics.incentivePending / 1000).toFixed(1)}K`} icon={<Users className="w-5 h-5"/>} color="primary" onClick={() => onNavigate('incentive_approval')} />
-        <FinanceMetric title="Payroll Pending" value={`${CS()}${(metrics.payrollPending / 1000).toFixed(1)}K`} icon={<FileText className="w-5 h-5"/>} color="error" onClick={() => onNavigate('payroll')} />
-        <FinanceMetric title="My Target" value={`${CS()}${(metrics.myTargetValue / 1000).toFixed(1)}K`} icon={<CheckCircle className="w-5 h-5"/>} color="success" onClick={() => onNavigate('my_target')} />
+      {/* Summary strip */}
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-y divide-slate-100 [&>*:nth-child(-n+2)]:border-t-0">
+          <FinanceMetric title="Total Receivables" value={`${CS()}${(metrics.totalReceivables / 1000).toFixed(1)}K`} onClick={() => onNavigate('invoices')} />
+          <FinanceMetric title="Total Collected" value={`${CS()}${(metrics.totalCollected / 1000).toFixed(1)}K`} onClick={() => onNavigate('payments')} />
+          <FinanceMetric title="Cash & Bank Bal" value={`${CS()}${(metrics.cashAndBankBalance / 1000).toFixed(1)}K`} />
+          <FinanceMetric title="Operational Exp" value={`${CS()}${(metrics.operationalExpenses / 1000).toFixed(1)}K`} onClick={() => onNavigate('expenses')} />
+          <FinanceMetric title="Univ Fee Pending" value={`${CS()}${(metrics.universityFeePending / 1000).toFixed(1)}K`} onClick={() => onNavigate('university_fee')} />
+          <FinanceMetric title="Incentive Pending" value={`${CS()}${(metrics.incentivePending / 1000).toFixed(1)}K`} onClick={() => onNavigate('incentive_approval')} />
+          <FinanceMetric title="Payroll Pending" value={`${CS()}${(metrics.payrollPending / 1000).toFixed(1)}K`} onClick={() => onNavigate('payroll')} />
+          <FinanceMetric title="My Target" value={`${CS()}${(metrics.myTargetValue / 1000).toFixed(1)}K`} onClick={() => onNavigate('my_target')} />
+        </div>
       </div>
 
-      {/* Alerts Widget */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <AlertCard title="Overdue Student Fees" count={alerts.overdueStudentFees} icon={<AlertCircle />} type="error" />
-        <AlertCard title="University Fee Due" count={alerts.universityFeeDue} icon={<AlertTriangle />} type="warning" />
-        <AlertCard title="Incentive Pending" count={alerts.incentivePending} icon={<Users />} type="primary" />
+      {/* Alerts */}
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+          <AlertCard title="Overdue Student Fees" count={alerts.overdueStudentFees} type="error" />
+          <AlertCard title="University Fee Due" count={alerts.universityFeeDue} type="warning" />
+          <AlertCard title="Incentive Pending" count={alerts.incentivePending} type="primary" />
+        </div>
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Card className="lg:col-span-2 shadow-xl border-none">
-          <CardHeader>
-            <CardTitle>Collection Overview</CardTitle>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+        <Card className="lg:col-span-2 rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+          <CardHeader className="px-7">
+            <CardTitle className="text-lg font-semibold tracking-tight">Collection Overview</CardTitle>
           </CardHeader>
-          <CardContent className="h-[300px]">
+          <CardContent className="h-[300px] px-7">
              <ResponsiveContainer width="100%" height="100%">
                <BarChart data={charts.collectionOverview}>
-                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e8ece6" />
                  <XAxis dataKey="name" axisLine={false} tickLine={false} />
                  <YAxis axisLine={false} tickLine={false} />
                  <Tooltip />
-                 <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4,4,0,0]} barSize={40} />
+                 <Bar dataKey="value" fill="#54b947" radius={[10,10,0,0]} barSize={40} />
                </BarChart>
              </ResponsiveContainer>
           </CardContent>
         </Card>
         
-        <Card className="shadow-xl border-none">
-          <CardHeader>
-            <CardTitle>Branch-wise Collection</CardTitle>
+        <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+          <CardHeader className="px-7">
+            <CardTitle className="text-lg font-semibold tracking-tight">Branch-wise Collection</CardTitle>
           </CardHeader>
-          <CardContent className="h-[300px]">
+          <CardContent className="h-[300px] px-7">
              <ResponsiveContainer width="100%" height="100%">
                <BarChart data={charts.branchWiseCollection} layout="vertical" margin={{left: 20}}>
-                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e8ece6" />
                  <XAxis type="number" hide />
                  <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={100} />
                  <Tooltip />
-                 <Bar dataKey="value" fill="hsl(var(--success))" radius={[0,4,4,0]} barSize={20} />
+                 <Bar dataKey="value" fill="#8ae47e" radius={[0,10,10,0]} barSize={20} />
                </BarChart>
              </ResponsiveContainer>
           </CardContent>
@@ -322,51 +311,51 @@ function OverviewContent({ onNavigate }: any) {
 
       {/* Tables Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Collections</CardTitle>
+        <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+          <CardHeader className="px-7">
+            <CardTitle className="text-lg font-semibold tracking-tight">Recent Collections</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-7">
             {lists.recentCollections.length > 0 ? (
               <div className="space-y-3">
                 {lists.recentCollections.map((c: any) => (
-                  <div key={c.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                  <div key={c.id} className="flex justify-between items-center p-4 bg-[#f4f6f3] rounded-2xl">
                     <div>
                       <p className="font-medium text-sm">{c.student?.name || c.invoice?.student?.name || 'Unknown'}</p>
                       <p className="text-xs text-muted-foreground">{new Date(c.createdAt).toLocaleDateString()}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-success">{CS()}{c.amount}</p>
-                      <Badge variant="outline" className="text-[10px] uppercase">{c.paymentMode || c.method || 'PAID'}</Badge>
+                      <p className="font-semibold text-[#256c1d]">{CS()}{c.amount}</p>
+                      <Badge variant="outline" className="text-[10px] uppercase rounded-full bg-white border-slate-200">{c.paymentMode || c.method || 'PAID'}</Badge>
                     </div>
                   </div>
                 ))}
               </div>
-            ) : <p className="text-sm text-muted-foreground text-center py-4">No recent collections</p>}
+            ) : <p className="text-sm text-muted-foreground text-center py-8 rounded-2xl bg-[#f4f6f3]">No recent collections</p>}
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Expenses</CardTitle>
+        <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+          <CardHeader className="px-7">
+            <CardTitle className="text-lg font-semibold tracking-tight">Recent Expenses</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-7">
             {lists.recentExpenses.length > 0 ? (
               <div className="space-y-3">
                 {lists.recentExpenses.map((e: any) => (
-                  <div key={e.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                  <div key={e.id} className="flex justify-between items-center p-4 bg-[#f4f6f3] rounded-2xl">
                     <div>
                       <p className="font-medium text-sm">{e.category}</p>
                       <p className="text-xs text-muted-foreground">{e.employee?.user?.name || e.user?.name || 'Unknown'}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-error">{CS()}{e.amount}</p>
-                      <Badge variant="outline" className="text-[10px] uppercase">{e.status}</Badge>
+                      <p className="font-semibold text-red-600">{CS()}{e.amount}</p>
+                      <Badge variant="outline" className="text-[10px] uppercase rounded-full bg-white border-slate-200">{e.status}</Badge>
                     </div>
                   </div>
                 ))}
               </div>
-            ) : <p className="text-sm text-muted-foreground text-center py-4">No recent expenses</p>}
+            ) : <p className="text-sm text-muted-foreground text-center py-8 rounded-2xl bg-[#f4f6f3]">No recent expenses</p>}
           </CardContent>
         </Card>
       </div>
@@ -374,59 +363,33 @@ function OverviewContent({ onNavigate }: any) {
   );
 }
 
-function AlertCard({ title, count, icon, type }: { title: string, count: number, icon: any, type: string }) {
-  const typeMap: any = {
-    error: 'bg-error/10 text-error border-error/20',
-    warning: 'bg-warning/10 text-warning border-warning/20',
-    info: 'bg-info/10 text-info border-info/20',
-    primary: 'bg-primary/10 text-primary border-primary/20',
+function AlertCard({ title, count, type }: { title: string, count: number, type: string }) {
+  const numMap: any = {
+    error: 'text-red-600',
+    warning: 'text-amber-600',
+    info: 'text-sky-600',
+    primary: 'text-slate-900',
   };
   return (
-    <div className={cn("p-4 rounded-xl border flex flex-col gap-2 cursor-pointer hover:shadow-md transition-shadow", typeMap[type])}>
-      <div className="flex items-center justify-between">
-        <div className="p-2 rounded-lg bg-background/50">
-          {icon}
-        </div>
-        <span className="text-2xl font-black">{count}</span>
-      </div>
-      <p className="text-sm font-semibold">{title}</p>
+    <div className="p-5 sm:p-6 flex items-center justify-between gap-3">
+      <p className="text-sm font-medium text-slate-500">{title}</p>
+      <p className={cn('text-3xl font-semibold tracking-tight', numMap[type] || numMap.primary)}>{count}</p>
     </div>
   );
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function FinanceMetric({ title, value, sub, trend, trendType, icon, color, onClick }: any) {
-  const colorMap: any = {
-    primary: 'text-primary bg-primary/10',
-    success: 'text-success bg-success/10',
-    warning: 'text-warning bg-warning/10',
-    info: 'text-info bg-info/10',
-  };
+function FinanceMetric({ title, value, sub, onClick }: any) {
   return (
-    <Card
-      className={cn('group transition-all duration-300 hover:border-primary/50', onClick && 'cursor-pointer')}
+    <button
+      type="button"
+      className={cn('text-left p-5 sm:p-6 flex flex-col transition-colors', onClick ? 'hover:bg-[#f7faf6] cursor-pointer' : 'cursor-default')}
       onClick={onClick}
     >
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className={cn('p-2.5 rounded-xl transition-transform group-hover:scale-110', colorMap[color])}>
-            {icon}
-          </div>
-          <div className={cn(
-            'flex items-center text-xs font-bold px-2 py-1 rounded-full',
-            trendType === 'up' ? 'bg-success/10 text-success' : trendType === 'down' ? 'bg-error/10 text-error' : 'bg-warning/10 text-warning'
-          )}>
-            {trendType === 'up' ? <ArrowUpRight className="w-3 h-3 mr-1" /> : <ArrowDownRight className="w-3 h-3 mr-1" />}
-            {trend}
-          </div>
-        </div>
-        <div className="space-y-1">
-          <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{title}</p>
-          <p className="text-3xl font-bold tracking-tight text-foreground">{value}</p>
-          <p className="text-xs text-muted-foreground pt-1">{sub}</p>
-        </div>
-      </CardContent>
-    </Card>
+      <p className="text-sm font-medium text-slate-500">{title}</p>
+      <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-2">{value}</p>
+      {sub && <p className="text-xs text-muted-foreground mt-2">{sub}</p>}
+    </button>
   );
 }

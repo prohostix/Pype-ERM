@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, DollarSign } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -10,6 +9,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 
 import { CS, numLocale } from '@/lib/currency';
+import { ListPagination } from '@/components/ui/list-pagination';
 export function PaymentsPanel() {
   const [payments, setPayments] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
@@ -18,7 +18,7 @@ export function PaymentsPanel() {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [students, setStudents] = useState<any[]>([]);
@@ -137,18 +137,18 @@ export function PaymentsPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Payment Management</h2>
-          <p className="text-muted-foreground">Track and manage payment entries</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Payment Management</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Track and manage payment entries</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
           <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Add Payment</Button>
+            <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Payment</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="wizard-form max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
             <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Payment' : 'Add New Payment'}</DialogTitle>
+              <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Payment' : 'Add New Payment'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -286,38 +286,42 @@ export function PaymentsPanel() {
               </div>
 
               <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                <Button type="submit" className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Save</Button>
+                <Button type="button" variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDialogOpen(false)}>Cancel</Button>
               </div>
             </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Payments</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Payments</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{payments.filter(p => p?.id).length} total</span>}
+        </div>
+        <div className="p-4 sm:p-5">
           {loading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : payments.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No payments found</div>
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><DollarSign className="w-6 h-6" /></div>
+              <p className="text-sm">No payments found</p>
+            </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {(() => {
                 const validPayments = payments.filter(p => p?.id);
                 const paginatedPayments = validPayments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
                 return (
                   <>
               {paginatedPayments.map((payment) => (
-                <div key={payment.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
+                <div key={payment.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/30 flex items-center justify-center">
-                      <DollarSign className="w-6 h-6 text-emerald-600" />
+                    <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center shrink-0">
+                      <DollarSign className="w-5 h-5" />
                     </div>
                     <div className="flex-1">
-                      <div className="font-semibold text-sm">{CS()}{payment.amount.toLocaleString(numLocale())}</div>
+                      <div className="font-semibold text-base text-slate-900">{CS()}{payment.amount.toLocaleString(numLocale())}</div>
                       <div className="text-xs text-muted-foreground mt-0.5">
                         {payment.method?.toUpperCase()} • {payment.referenceNo || 'No reference'} • {payment.receivedAt ? new Date(payment.receivedAt).toLocaleDateString('en-GB').replace(/\//g, '-') : ''}
                       </div>
@@ -332,53 +336,26 @@ export function PaymentsPanel() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm" onClick={() => handleEdit(payment)}><Edit className="w-4 h-4" /></Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleDelete(payment.id)}><Trash2 className="w-4 h-4" /></Button>
+                    <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(payment)}><Edit className="w-4 h-4" /></Button>
+                    <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(payment.id)}><Trash2 className="w-4 h-4" /></Button>
                   </div>
                 </div>
               ))}
               
-              {/* Pagination Controls */}
-              {(() => {
-                const validPayments = payments.filter(p => p?.id);
-                const totalPages = Math.max(1, Math.ceil(validPayments.length / itemsPerPage));
-                if (totalPages <= 1) return null;
-                return (
-                  <div className="flex items-center justify-between p-4 border-t mt-4 rounded-md bg-slate-50 dark:bg-slate-900/20">
-                    <div className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, validPayments.length)} of {validPayments.length} payments
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                      >
-                        Previous
-                      </Button>
-                      <div className="text-sm font-medium px-2">
-                        Page {currentPage} of {totalPages}
-                      </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        disabled={currentPage === totalPages}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })()}
+              <ListPagination
+                total={validPayments.length}
+                page={currentPage}
+                pageSize={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(n) => { setItemsPerPage(n); setCurrentPage(1); }}
+              />
                   </>
                 );
               })()}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

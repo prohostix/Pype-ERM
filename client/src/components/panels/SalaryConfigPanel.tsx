@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, Edit, Save, RefreshCw, Plus, Trash2, Clock, CheckCircle, AlertCircle, Calendar } from 'lucide-react';
+import { DollarSign, Edit, Save, RefreshCw, Plus, Trash2, Clock, CheckCircle, AlertCircle, Search, Calendar } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 
 import { CS } from '@/lib/currency';
+import { ListPagination } from '@/components/ui/list-pagination';
 interface SalaryCycle {
   type: 'monthly_day' | 'custom_range';
   startDay: number;
@@ -67,6 +68,8 @@ export function SalaryConfigPanel() {
   const [form, setForm] = useState<any>(EMPTY_CONFIG);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const [salaryCycle, setSalaryCycle] = useState<SalaryCycle>({
     type: 'monthly_day',
@@ -213,6 +216,8 @@ export function SalaryConfigPanel() {
     const name = c.user?.name || '';
     return name.toLowerCase().includes(search.toLowerCase());
   });
+  const currentPage = Math.min(page, Math.max(1, Math.ceil(filtered.length / pageSize)));
+  const pagedConfigs = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const gross = (f: any) =>
     (f.basicSalary || 0) + Object.values(f.allowances as Record<string, number>).reduce((s, v) => s + (v || 0), 0);
@@ -220,32 +225,29 @@ export function SalaryConfigPanel() {
     gross(f) - Object.values(f.deductions as Record<string, number>).reduce((s, v) => s + (v || 0), 0);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 wizard-form fee-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Salary Configuration</h2>
-          <p className="text-muted-foreground text-sm mt-1">Set base salary, allowances, deductions and late deduction rate per employee</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Salary Configuration</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Set base salary, allowances, deductions and late deduction rate per employee</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={fetchAll}>
-            <RefreshCw className="w-4 h-4 mr-1" /> Refresh
+          <Button variant="outline" onClick={fetchAll} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
+            <RefreshCw className="w-4 h-4 mr-2" /> Refresh
           </Button>
-          <Button size="sm" onClick={() => openEdit()}>
-            <Plus className="w-4 h-4 mr-1" /> Add Config
+          <Button onClick={() => openEdit()} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+            <Plus className="w-4 h-4 mr-2" /> Add Config
           </Button>
         </div>
       </div>
 
       {/* Salary Cycle / Calculation Date Range */}
-      <Card className="border border-border/80 shadow-sm bg-card rounded-xl overflow-hidden">
-        <div className="p-5 border-b border-border/50 bg-muted/20">
+      <Card className="rounded-3xl bg-white border border-slate-100 shadow-none overflow-hidden py-0 gap-0">
+        <div className="p-5 sm:p-6 border-b border-slate-100">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
-                <Calendar className="w-5 h-5" />
-              </div>
               <div>
-                <h3 className="text-base font-semibold leading-tight">Salary Calculation Period (Date From – To)</h3>
+                <h3 className="text-lg font-semibold tracking-tight leading-tight">Salary Calculation Period (Date From – To)</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   Set the organization-wide pay cycle dates used to calculate attendance, late deductions, and payroll.
                 </p>
@@ -254,10 +256,9 @@ export function SalaryConfigPanel() {
 
             <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
               <Button 
-                size="sm" 
                 onClick={handleSaveCycle} 
                 disabled={cycleSaving}
-                className="shadow-sm"
+                className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
               >
                 <Save className="w-4 h-4 mr-1.5" />
                 {cycleSaving ? 'Saving...' : 'Save Salary Dates'}
@@ -266,20 +267,20 @@ export function SalaryConfigPanel() {
           </div>
         </div>
 
-        <CardContent className="p-5 space-y-4">
+        <CardContent className="p-5 sm:p-6 space-y-5">
           {/* Cycle Type Selector & Presets */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-border/40">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mr-1">Format:</Label>
-              <div className="inline-flex rounded-lg bg-muted p-1 border border-border/50">
+              <Label className="text-xs font-semibold text-slate-600 mr-1">Format</Label>
+              <div className="inline-flex rounded-full bg-[#f4f6f3] p-1">
                 <button
                   type="button"
                   onClick={() => setSalaryCycle(prev => ({ ...prev, type: 'monthly_day' }))}
                   className={cn(
-                    "px-3 py-1 text-xs font-medium rounded-md transition-all",
+                    "px-4 py-1.5 text-xs font-semibold rounded-full transition-all",
                     salaryCycle.type === 'monthly_day'
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "bg-[#8ae47e] text-[#0b1d14]"
+                      : "text-slate-600 hover:text-slate-900"
                   )}
                 >
                   Monthly Day Cycle
@@ -288,10 +289,10 @@ export function SalaryConfigPanel() {
                   type="button"
                   onClick={() => setSalaryCycle(prev => ({ ...prev, type: 'custom_range' }))}
                   className={cn(
-                    "px-3 py-1 text-xs font-medium rounded-md transition-all",
+                    "px-4 py-1.5 text-xs font-semibold rounded-full transition-all",
                     salaryCycle.type === 'custom_range'
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "bg-[#8ae47e] text-[#0b1d14]"
+                      : "text-slate-600 hover:text-slate-900"
                   )}
                 >
                   Custom Date Range
@@ -306,7 +307,7 @@ export function SalaryConfigPanel() {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="h-7 text-xs px-2.5 py-0"
+                  className="h-9 text-xs px-4 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]"
                   onClick={() => setSalaryCycle(prev => ({ ...prev, startDay: 26, endDay: 25, cycleMode: 'previous_to_current' }))}
                 >
                   26th — 25th (Standard)
@@ -315,7 +316,7 @@ export function SalaryConfigPanel() {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="h-7 text-xs px-2.5 py-0"
+                  className="h-9 text-xs px-4 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]"
                   onClick={() => setSalaryCycle(prev => ({ ...prev, startDay: 1, endDay: 30, cycleMode: 'same_month' }))}
                 >
                   1st — End of Month
@@ -324,7 +325,7 @@ export function SalaryConfigPanel() {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="h-7 text-xs px-2.5 py-0"
+                  className="h-9 text-xs px-4 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]"
                   onClick={() => setSalaryCycle(prev => ({ ...prev, startDay: 21, endDay: 20, cycleMode: 'previous_to_current' }))}
                 >
                   21st — 20th
@@ -350,7 +351,7 @@ export function SalaryConfigPanel() {
                       const val = e.target.value === '' ? 1 : Math.min(31, Math.max(1, Number(e.target.value)));
                       setSalaryCycle(prev => ({ ...prev, startDay: val }));
                     }}
-                    className="h-9 pr-12 font-medium"
+                    className="pr-12 font-medium"
                     placeholder="26"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
@@ -374,7 +375,7 @@ export function SalaryConfigPanel() {
                       const val = e.target.value === '' ? 25 : Math.min(31, Math.max(1, Number(e.target.value)));
                       setSalaryCycle(prev => ({ ...prev, endDay: val }));
                     }}
-                    className="h-9 pr-12 font-medium"
+                    className="pr-12 font-medium"
                     placeholder="25"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
@@ -390,7 +391,7 @@ export function SalaryConfigPanel() {
                   value={salaryCycle.cycleMode} 
                   onValueChange={(val: any) => setSalaryCycle(prev => ({ ...prev, cycleMode: val }))}
                 >
-                  <SelectTrigger className="h-9">
+                  <SelectTrigger>
                     <SelectValue placeholder="Select rule" />
                   </SelectTrigger>
                   <SelectContent>
@@ -413,8 +414,7 @@ export function SalaryConfigPanel() {
                   type="date" 
                   value={salaryCycle.customStartDate || ''}
                   onChange={e => setSalaryCycle(prev => ({ ...prev, customStartDate: e.target.value }))}
-                  className="h-9"
-                />
+                  />
                 <p className="text-[11px] text-muted-foreground">First day of attendance & salary calculation</p>
               </div>
 
@@ -424,15 +424,14 @@ export function SalaryConfigPanel() {
                   type="date" 
                   value={salaryCycle.customEndDate || ''}
                   onChange={e => setSalaryCycle(prev => ({ ...prev, customEndDate: e.target.value }))}
-                  className="h-9"
-                />
+                  />
                 <p className="text-[11px] text-muted-foreground">Final day included in this salary cycle</p>
               </div>
             </div>
           )}
 
           {/* Active Preview Banner */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-lg bg-primary/5 border border-primary/15 text-xs text-primary">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-2xl bg-[#eaf6e6] text-xs text-[#256c1d]">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 flex-shrink-0" />
               <span>
@@ -446,46 +445,49 @@ export function SalaryConfigPanel() {
         </CardContent>
       </Card>
 
-      <Input placeholder="Search employee..." value={search} onChange={e => setSearch(e.target.value)} className="max-w-xs" />
+      <div className="rounded-3xl bg-white border border-slate-100 p-4">
+        <div className="relative max-w-md">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Input placeholder="Search employee..." value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} className="pl-11 h-12 rounded-full bg-[#f4f6f3] border-transparent" />
+        </div>
+      </div>
 
       {loading ? (
-        <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-28 bg-slate-100 rounded-3xl animate-pulse" />)}</div>
       ) : filtered.length === 0 ? (
-        <Card>
-          <CardContent className="py-16 text-center text-muted-foreground">
-            <DollarSign className="w-10 h-10 mx-auto mb-3 opacity-30" />
-            <p>No salary configs yet</p>
-            <p className="text-xs mt-1">Click "Add Config" to set up an employee's salary</p>
-          </CardContent>
-        </Card>
+        <div className="rounded-3xl bg-white border border-slate-100 py-16 text-center text-muted-foreground">
+          <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><DollarSign className="w-6 h-6" /></div>
+          <p className="text-sm">No salary configs yet</p>
+          <p className="text-xs mt-1">Click "Add Config" to set up an employee's salary</p>
+        </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map(config => {
+          {pagedConfigs.map(config => {
             const user = config.user || null;
             const uid = user?.id || config.userId;
             const grossAmt = config.basicSalary + Object.values(config.allowances).reduce((s, v) => s + (v || 0), 0);
             const netAmt = grossAmt - Object.values(config.deductions).reduce((s, v) => s + (v || 0), 0);
             return (
-              <Card key={uid} className="hover:border-primary/30 transition-colors">
-                <CardContent className="p-4">
+              <div key={uid} className="rounded-3xl bg-white border border-slate-100 hover:border-[#8ae47e] transition-colors">
+                <div className="p-5 sm:p-6">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span className="font-semibold">{user?.name || 'Employee'}</span>
-                        <Badge variant="outline" className="text-xs capitalize">{user?.role?.replace(/_/g, ' ')}</Badge>
-                        {user?.designation && <Badge variant="outline" className="text-xs">{user.designation}</Badge>}
+                        <span className="font-semibold text-lg text-slate-900">{user?.name || 'Employee'}</span>
+                        <Badge variant="outline" className="text-xs capitalize rounded-full bg-[#f4f6f3] border-0">{user?.role?.replace(/_/g, ' ')}</Badge>
+                        {user?.designation && <Badge variant="outline" className="text-xs rounded-full bg-[#f4f6f3] border-0">{user.designation}</Badge>}
                         {config.approvalStatus === 'pending_approval' && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700">
                             <Clock className="w-3 h-3" />Pending Finance Approval
                           </span>
                         )}
                         {config.approvalStatus === 'approved' && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#dff3da] text-[#256c1d]">
                             <CheckCircle className="w-3 h-3" />Approved
                           </span>
                         )}
                         {config.approvalStatus === 'rejected' && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-red-100 text-red-700">
                             <AlertCircle className="w-3 h-3" />Rejected
                           </span>
                         )}
@@ -495,50 +497,52 @@ export function SalaryConfigPanel() {
                         <p className="text-xs text-red-500 mb-2 flex items-center gap-1">
                           <AlertCircle className="w-3 h-3" />{config.rejectedRemarks}
                         </p>
-                      )}                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
-                        <div>
-                          <p className="text-xs text-muted-foreground">Basic</p>
+                      )}
+                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-sm">
+                        <div className="rounded-2xl bg-[#f4f6f3] p-3.5">
+                          <p className="text-xs font-medium text-slate-500">Basic</p>
                           <p className="font-semibold">{CS()}{config.basicSalary.toLocaleString()}</p>
                         </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Gross</p>
-                          <p className="font-semibold text-blue-600">{CS()}{grossAmt.toLocaleString()}</p>
+                        <div className="rounded-2xl bg-[#f4f6f3] p-3.5">
+                          <p className="text-xs font-medium text-slate-500">Gross</p>
+                          <p className="font-semibold text-slate-900">{CS()}{grossAmt.toLocaleString()}</p>
                         </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Net</p>
-                          <p className="font-semibold text-green-600">{CS()}{netAmt.toLocaleString()}</p>
+                        <div className="rounded-2xl bg-[#f4f6f3] p-3.5">
+                          <p className="text-xs font-medium text-slate-500">Net</p>
+                          <p className="font-semibold text-[#256c1d]">{CS()}{netAmt.toLocaleString()}</p>
                         </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Late/min</p>
-                          <p className="font-semibold text-orange-600">{CS()}{config.lateDeductionPerMinute || 0}</p>
+                        <div className="rounded-2xl bg-[#f4f6f3] p-3.5">
+                          <p className="text-xs font-medium text-slate-500">Late/min</p>
+                          <p className="font-semibold text-slate-900">{CS()}{config.lateDeductionPerMinute || 0}</p>
                         </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground">Early/min</p>
-                          <p className="font-semibold text-amber-600">{CS()}{config.earlyExitDeductionPerMinute ?? config.lateDeductionPerMinute ?? 0}</p>
+                        <div className="rounded-2xl bg-[#f4f6f3] p-3.5">
+                          <p className="text-xs font-medium text-slate-500">Early/min</p>
+                          <p className="font-semibold text-slate-900">{CS()}{config.earlyExitDeductionPerMinute ?? config.lateDeductionPerMinute ?? 0}</p>
                         </div>
                       </div>
                     </div>
                     <div className="flex gap-2 shrink-0">
-                      <Button size="sm" variant="outline" onClick={() => openEdit(config)}>
+                      <Button size="sm" variant="outline" className="h-10 w-10 p-0 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => openEdit(config)}>
                         <Edit className="w-3.5 h-3.5" />
                       </Button>
-                      <Button size="sm" variant="ghost" className="text-destructive" onClick={() => handleDelete(uid)}>
+                      <Button size="sm" variant="ghost" className="h-10 w-10 p-0 rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(uid)}>
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             );
           })}
+          <ListPagination total={filtered.length} page={currentPage} pageSize={pageSize} onPageChange={setPage} onPageSizeChange={(n) => { setPageSize(n); setPage(1); }} />
         </div>
       )}
 
       {/* Edit/Create Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="wizard-form fee-form max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
           <DialogHeader>
-            <DialogTitle>Salary Configuration</DialogTitle>
+            <DialogTitle className="text-xl font-semibold tracking-tight">Salary Configuration</DialogTitle>
           </DialogHeader>
           <div className="space-y-5 pt-2">
             {/* Employee selector (only when creating new) */}
@@ -616,7 +620,7 @@ export function SalaryConfigPanel() {
               </div>
             </div>
 
-            <div className="space-y-3 p-4 bg-muted/30 rounded-lg border border-border">
+            <div className="space-y-3 p-4 bg-[#f4f6f3] rounded-2xl">
               <Label className="font-semibold text-base">Unpaid Leave Deduction Rule</Label>
               <Select 
                 value={form.unpaidLeaveRule?.type || 'standard'} 
@@ -666,26 +670,26 @@ export function SalaryConfigPanel() {
             </div>
 
             {/* Live preview */}
-            <div className="p-3 rounded-xl bg-muted/50 grid grid-cols-3 gap-3 text-sm">
+            <div className="p-4 rounded-2xl bg-[#eaf6e6] grid grid-cols-3 gap-3 text-sm">
               <div>
                 <p className="text-xs text-muted-foreground">Gross</p>
-                <p className="font-bold text-blue-600">{CS()}{gross(form).toLocaleString()}</p>
+                <p className="font-semibold text-slate-900">{CS()}{gross(form).toLocaleString()}</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Deductions</p>
-                <p className="font-bold text-red-500">
+                <p className="font-semibold text-red-600">
                   {CS()}{Object.values(form.deductions as Record<string, number>).reduce((s, v) => s + (v || 0), 0).toLocaleString()}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Net</p>
-                <p className="font-bold text-green-600">{CS()}{net(form).toLocaleString()}</p>
+                <p className="font-semibold text-[#256c1d]">{CS()}{net(form).toLocaleString()}</p>
               </div>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSave} disabled={saving}>
+            <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDialogOpen(false)}>Cancel</Button>
+            <Button className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={handleSave} disabled={saving}>
               <Save className="w-4 h-4 mr-1" />
               {saving ? 'Saving...' : 'Save Config'}
             </Button>

@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, ArrowLeft, Layers, MoreVertical, BookOpen, Users, VideoOff, Video, FolderOpen } from 'lucide-react';
+import { Plus, Edit, Trash2, ArrowLeft, Layers, MoreVertical, BookOpen, Users, VideoOff, Video, FolderOpen, Search } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import api from '@/lib/api';
@@ -178,153 +177,151 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
     return <AcademicBatchesPanel academicClass={activeClass} isOnline={center.type === 'online'} onBack={() => setActiveClass(null)} />;
   }
 
+  const isOnline = center.type === 'online';
+  const SHELL = 'w-[96vw] p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] flex flex-col';
+  const FONT = { fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" } as const;
+
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
-      {/* Header Area */}
-      <div className="bg-card border border-border/60 rounded-2xl p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={onBack} className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
-            <ArrowLeft className="w-5 h-5" />
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
+        <div className="flex items-center gap-4 min-w-0">
+          <Button variant="outline" size="icon" onClick={onBack} className="h-11 w-11 shrink-0 rounded-full bg-white border-slate-200 shadow-sm hover:bg-[#eaf6e6]" aria-label="Back">
+            <ArrowLeft className="w-4 h-4" />
           </Button>
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <Badge variant="outline" className="text-xs uppercase bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-800">
-                Inside Center
-              </Badge>
-              <h2 className="text-2xl font-bold">{center.name}</h2>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight truncate">{center.name}</h2>
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#e3f7dd] text-[#1f6a17]">{isOnline ? 'Online center' : 'Offline center'}</span>
             </div>
-            <p className="text-sm text-muted-foreground pl-1 flex items-center gap-2">
-              <Layers className="w-4 h-4" /> Manage Academic Classes & Batches
+            <p className="text-sm text-muted-foreground mt-1 flex items-center gap-2">
+              <Layers className="w-4 h-4" /> Manage Academic Classes &amp; Batches
             </p>
           </div>
         </div>
         {canWrite && (
-          <Button onClick={() => setDialogOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-md">
-            <Plus className="w-4 h-4 mr-2" /> Add Class
+          <Button onClick={() => setDialogOpen(true)} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto">
+            <Plus className="w-4 h-4" /> Add Class
           </Button>
         )}
       </div>
 
-      {/* Classes Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Classes grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 sm:gap-6">
         {loading ? (
-          <div className="col-span-full flex flex-col justify-center items-center py-20 text-muted-foreground bg-card rounded-xl border border-border/50 shadow-sm">
-            <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="col-span-full flex flex-col justify-center items-center py-20 text-muted-foreground bg-card rounded-3xl">
+            <div className="w-8 h-8 border-4 border-[#54b947] border-t-transparent rounded-full animate-spin mb-4"></div>
             Loading academic classes...
           </div>
         ) : classes.length === 0 ? (
-          <div className="col-span-full flex flex-col justify-center items-center py-20 bg-card rounded-xl border border-border/50 shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center mb-4">
-              <BookOpen className="w-8 h-8 text-indigo-500" />
+          <div className="col-span-full flex flex-col justify-center items-center py-20 bg-white dark:bg-card rounded-3xl border border-dashed border-slate-300">
+            <div className="w-14 h-14 rounded-full bg-[#eaf6e6] flex items-center justify-center mb-4">
+              <BookOpen className="w-6 h-6 text-[#256c1d]" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">No Classes Found</h3>
-            <p className="text-muted-foreground text-center max-w-md mb-6">
+            <h3 className="text-xl font-semibold mb-1.5">No classes found</h3>
+            <p className="text-muted-foreground text-center max-w-md mb-6 text-sm">
               There are no academic classes created in this center yet.
             </p>
             {canWrite && (
-              <Button onClick={() => setDialogOpen(true)} variant="outline" className="border-indigo-200 text-indigo-700 hover:bg-indigo-50">
+              <Button onClick={() => setDialogOpen(true)} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold shadow-none">
                 <Plus className="w-4 h-4 mr-2" /> Create First Class
               </Button>
             )}
           </div>
         ) : (
-          classes.map((c) => (
-            <div 
-              key={c.id} 
-              className="group bg-card rounded-xl border border-border/60 shadow-sm hover:shadow-md hover:border-indigo-500/30 transition-all duration-300 overflow-hidden flex flex-col"
-            >
-              <div className="relative p-5 border-b border-border/50 bg-gradient-to-br from-indigo-50/50 to-transparent dark:from-indigo-950/20">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-lg font-bold line-clamp-1 flex-1 pr-2">{c.name}</h3>
-                  {canWrite && (
-                    <div className="flex items-center gap-1">
-                      {center.type !== 'online' && (
-                        <Button variant="outline" size="sm" onClick={() => setActiveClass(c)} className="rounded-full text-xs h-7 border-border/60 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 transition-colors">
-                          Batches
-                        </Button>
-                      )}
+          classes.map((c) => {
+            const principals: any[] = c.incharges?.length ? c.incharges : (c.incharge ? [c.incharge] : []);
+            const assigned = (c.programIds || []).map((pid: string) => programs.find(p => p.id === pid)).filter(Boolean);
+            return (
+              <div
+                key={c.id}
+                className="group bg-card rounded-3xl hover:-translate-y-0.5 transition-all duration-300 overflow-hidden flex flex-col shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_28px_-14px_rgba(16,24,40,0.10)]"
+              >
+                <div className="p-6 pb-4">
+                  <div className="flex justify-between items-start gap-3">
+                    <div className="flex items-start gap-3.5 min-w-0">
+                      <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+                        <BookOpen className="w-5 h-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="text-lg font-semibold line-clamp-1" title={c.name}>{c.name}</h3>
+                        <div className="flex items-center gap-1.5 flex-wrap mt-1.5">
+                          <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full capitalize ${c.status === 'active' ? 'bg-[#e3f7dd] text-[#1f6a17]' : 'bg-slate-100 text-slate-600'}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${c.status === 'active' ? 'bg-[#54b947]' : 'bg-slate-400'}`} />{c.status}
+                          </span>
+                          <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#f1f3ef] text-slate-600">{isOnline ? 'Online class' : 'Offline class'}</span>
+                        </div>
+                      </div>
+                    </div>
+                    {canWrite && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                            <MoreVertical className="h-4 w-4 text-muted-foreground" />
+                          <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3] shrink-0">
+                            <MoreVertical className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-40 rounded-xl">
-                          <DropdownMenuItem onClick={() => handleEdit(c)} className="cursor-pointer gap-2">
+                        <DropdownMenuContent align="end" className="w-52 rounded-2xl p-1.5">
+                          <DropdownMenuItem onClick={() => handleEdit(c)} className="cursor-pointer gap-2.5 py-2.5 rounded-xl">
                             <Edit className="w-4 h-4" /> Edit Class
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleDeleteClick(c.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2">
+                          <DropdownMenuItem onClick={() => handleDeleteClick(c.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2.5 py-2.5 rounded-xl">
                             <Trash2 className="w-4 h-4" /> Request Deletion
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 mt-2">
-                  <Badge variant={c.status === 'active' ? 'default' : 'secondary'} className="text-[10px] uppercase tracking-wider px-2 py-0.5">
-                    {c.status}
-                  </Badge>
-                  <Badge variant="outline" className={`text-[10px] uppercase tracking-wider px-2 py-0.5 font-bold ${center.type === 'online' ? 'border-sky-500/30 text-sky-600 bg-sky-500/10' : 'border-emerald-500/30 text-emerald-600 bg-emerald-500/10'}`}>
-                    {center.type === 'online' ? 'Online Class' : 'Offline Class'}
-                  </Badge>
-                </div>
-              </div>
-              <div className="p-5 flex-1 bg-muted/10 space-y-4">
-                {(() => {
-                  const principals: any[] = c.incharges?.length ? c.incharges : (c.incharge ? [c.incharge] : []);
-                  if (principals.length === 0) return null;
-                  return (
+
+                <div className="px-6 pb-5 flex-1 space-y-4">
+                  {principals.length > 0 && (
                     <div>
-                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                        {principals.length > 1 ? 'Principals In-charge' : 'Principal In-charge'}
-                      </p>
+                      <p className="text-[11px] font-medium text-muted-foreground mb-2">{principals.length > 1 ? 'Principals in-charge' : 'Principal in-charge'}</p>
                       <div className="flex flex-wrap gap-2">
-                        {principals.map((p: any) => (
-                          <div key={p.id} className="flex items-center gap-2 text-sm font-medium">
-                            <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">
-                              {p.name.charAt(0)}
-                            </div>
-                            {p.name}
-                          </div>
+                        {principals.map((pr: any) => (
+                          <span key={pr.id} className="inline-flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-[#f4f6f3] dark:bg-muted/30 text-sm font-medium">
+                            <span className="w-6 h-6 rounded-full bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center text-xs font-bold">{pr.name.charAt(0)}</span>
+                            {pr.name}
+                          </span>
                         ))}
                       </div>
                     </div>
-                  );
-                })()}
-
-                <div>
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Assigned Programs</p>
-                  {c.programIds && c.programIds.length > 0 ? (
-                    <div className="flex flex-wrap gap-1.5">
-                      {c.programIds.map((pid: string) => {
-                        const prog = programs.find(p => p.id === pid);
-                        return prog ? (
-                          <Badge key={pid} variant="secondary" className="font-normal border-border/50 bg-background hover:bg-muted">
-                            {prog.name}
-                          </Badge>
-                        ) : null;
-                      })}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground italic">No programs assigned.</p>
                   )}
+
+                  <div>
+                    <p className="text-[11px] font-medium text-muted-foreground mb-2">Assigned programs</p>
+                    {assigned.length > 0 ? (
+                      <div className="flex flex-wrap gap-1.5">
+                        {assigned.map((prog: any) => (
+                          <span key={prog.id} className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#eaf6e6] text-[#1f6a17]">{prog.name}</span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground italic">No programs assigned.</p>
+                    )}
+                  </div>
                 </div>
 
                 {canWrite && (
-                  <Button variant="outline" size="sm" className="w-full" onClick={() => setContentClass(c)}>
-                    <FolderOpen className="w-4 h-4 mr-2" /> Faculty Content
-                  </Button>
-                )}
-
-                {center.type === 'online' && canWrite && (
-                  <Button variant="outline" size="sm" className="w-full" onClick={() => openStudents(c)}>
-                    <Users className="w-4 h-4 mr-2" /> Students &amp; Video Access
-                  </Button>
+                  <div className="px-6 pb-6 flex flex-wrap gap-2">
+                    {!isOnline && (
+                      <Button variant="outline" onClick={() => setActiveClass(c)} className="h-10 px-5 rounded-full bg-white border-slate-200 text-sm font-semibold gap-1.5 hover:bg-[#eaf6e6] hover:text-[#256c1d]">
+                        <Layers className="w-4 h-4" /> Batches
+                      </Button>
+                    )}
+                    <Button variant="outline" onClick={() => setContentClass(c)} className="h-10 px-5 rounded-full bg-white border-slate-200 text-sm font-semibold gap-1.5 hover:bg-[#eaf6e6] hover:text-[#256c1d]">
+                      <FolderOpen className="w-4 h-4" /> Faculty Content
+                    </Button>
+                    {isOnline && (
+                      <Button variant="outline" onClick={() => openStudents(c)} className="h-10 px-5 rounded-full bg-white border-slate-200 text-sm font-semibold gap-1.5 hover:bg-[#eaf6e6] hover:text-[#256c1d]">
+                        <Users className="w-4 h-4" /> Students &amp; Video Access
+                      </Button>
+                    )}
+                  </div>
                 )}
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
@@ -332,16 +329,26 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
 
       {/* Students & video access (online classes) */}
       <Dialog open={!!studentsClass} onOpenChange={(o) => { if (!o) { setStudentsClass(null); setBlockTarget(null); } }}>
-        <DialogContent className="sm:max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Students: {studentsClass?.name}</DialogTitle>
-          </DialogHeader>
-          <Input
-            placeholder="Search by name, email or enrollment no..."
-            value={studentSearch}
-            onChange={(e) => setStudentSearch(e.target.value)}
-          />
-          <div className="max-h-[420px] overflow-y-auto space-y-1">
+        <DialogContent className={`${SHELL} sm:max-w-2xl`} style={FONT}>
+          <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-4 shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0"><Users className="w-5 h-5" /></div>
+            <DialogHeader className="space-y-1 text-left">
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-left">Students: {studentsClass?.name}</DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground text-left">Block or restore access to online class videos for each student.</DialogDescription>
+            </DialogHeader>
+          </div>
+          <div className="px-6 sm:px-8 pb-3 shrink-0">
+            <div className="relative">
+              <Search className="absolute left-4 top-3.5 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by name, email or enrollment no..."
+                value={studentSearch}
+                onChange={(e) => setStudentSearch(e.target.value)}
+                className="pl-11 h-11 rounded-full bg-[#f4f6f3] border-transparent text-sm focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20"
+              />
+            </div>
+          </div>
+          <div className="flex-1 overflow-y-auto px-6 sm:px-8 pb-6 space-y-2">
             {loadingStudents ? (
               <p className="p-8 text-center text-sm text-muted-foreground">Loading students...</p>
             ) : (() => {
@@ -351,19 +358,19 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
               );
               if (rows.length === 0) return <p className="p-8 text-center text-sm text-muted-foreground">No students found for this class.</p>;
               return rows.map(st => (
-                <div key={st.id} className="flex items-center gap-3 p-3 rounded-lg border border-border/50">
+                <div key={st.id} className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-[#f4f6f3] dark:bg-muted/30">
+                  <div className="w-10 h-10 rounded-full bg-white text-[#256c1d] flex items-center justify-center font-semibold shrink-0">{(st.name || '?').charAt(0).toUpperCase()}</div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{st.name}</p>
+                    <p className="text-sm font-semibold truncate">{st.name}</p>
                     <p className="text-xs text-muted-foreground truncate">{st.enrollmentNo || 'No enrollment no'} · {st.program?.name || 'N/A'}</p>
                   </div>
-                  {st.videoBlocked && <Badge variant="destructive" className="text-[10px] shrink-0" title={st.videoBlockReason || undefined}>Videos blocked</Badge>}
+                  {st.videoBlocked && <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 shrink-0" title={st.videoBlockReason || undefined}>Videos blocked</span>}
                   <Button
-                    size="sm"
                     variant={st.videoBlocked ? 'default' : 'outline'}
-                    className="shrink-0"
+                    className={cn('h-9 px-4 rounded-full text-xs font-semibold shrink-0 gap-1.5', st.videoBlocked ? 'bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14]' : 'bg-white border-slate-200 hover:bg-rose-50 hover:text-rose-600')}
                     onClick={() => { setBlockTarget(st); setBlockReason(st.videoBlockReason || ''); }}
                   >
-                    {st.videoBlocked ? <Video className="w-4 h-4 mr-1.5" /> : <VideoOff className="w-4 h-4 mr-1.5" />}
+                    {st.videoBlocked ? <Video className="w-3.5 h-3.5" /> : <VideoOff className="w-3.5 h-3.5" />}
                     {st.videoBlocked ? 'Unblock' : 'Block videos'}
                   </Button>
                 </div>
@@ -374,138 +381,140 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
       </Dialog>
 
       <Dialog open={!!blockTarget} onOpenChange={(o) => { if (!o) { setBlockTarget(null); setBlockReason(''); } }}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>{blockTarget?.videoBlocked ? 'Restore video lectures' : 'Block video lectures'}: {blockTarget?.name}</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground">
-            {blockTarget?.videoBlocked
-              ? 'The student will be able to watch their online class videos again (fee rules still apply).'
-              : 'The student can still sign in and see fees and profile, but every online class video is locked until you unblock them.'}
-          </p>
-          {!blockTarget?.videoBlocked && (
-            <div className="space-y-2">
-              <Label>Reason (shown to the student)</Label>
-              <Textarea rows={3} value={blockReason} onChange={(e) => setBlockReason(e.target.value)} maxLength={300} placeholder="e.g. Pending dues, disciplinary action…" className="resize-none" />
+        <DialogContent className={`${SHELL} sm:max-w-md`} style={FONT}>
+          <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-4 shrink-0">
+            <div className={cn('w-12 h-12 rounded-2xl flex items-center justify-center shrink-0', blockTarget?.videoBlocked ? 'bg-[#eaf6e6] text-[#256c1d]' : 'bg-rose-50 text-rose-600')}>
+              {blockTarget?.videoBlocked ? <Video className="w-5 h-5" /> : <VideoOff className="w-5 h-5" />}
             </div>
-          )}
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setBlockTarget(null)} disabled={savingBlock}>Cancel</Button>
-            {blockTarget?.videoBlocked ? (
-              <Button onClick={() => handleVideoBlock(false)} disabled={savingBlock}>{savingBlock ? 'Saving...' : 'Unblock Videos'}</Button>
-            ) : (
-              <Button variant="destructive" onClick={() => handleVideoBlock(true)} disabled={savingBlock}>{savingBlock ? 'Saving...' : 'Block Videos'}</Button>
+            <DialogHeader className="space-y-1 text-left">
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-left">{blockTarget?.videoBlocked ? 'Restore video lectures' : 'Block video lectures'}</DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground text-left">{blockTarget?.name}</DialogDescription>
+            </DialogHeader>
+          </div>
+          <div className="px-6 sm:px-8 pb-5 space-y-4">
+            <p className="text-sm text-muted-foreground">
+              {blockTarget?.videoBlocked
+                ? 'The student will be able to watch their online class videos again (fee rules still apply).'
+                : 'The student can still sign in and see fees and profile, but every online class video is locked until you unblock them.'}
+            </p>
+            {!blockTarget?.videoBlocked && (
+              <div className="space-y-1.5">
+                <Label className="text-sm font-semibold">Reason <span className="font-normal text-muted-foreground">(shown to the student)</span></Label>
+                <Textarea rows={3} value={blockReason} onChange={(e) => setBlockReason(e.target.value)} maxLength={300} placeholder="e.g. Pending dues, disciplinary action…" className="resize-none rounded-2xl bg-[#f4f6f3] border-transparent px-4 py-3 focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20" />
+              </div>
             )}
           </div>
+          <DialogFooter className="px-6 sm:px-8 py-5 border-t border-slate-100 gap-2 sm:gap-2 flex-col-reverse sm:flex-row">
+            <Button variant="ghost" onClick={() => setBlockTarget(null)} disabled={savingBlock} className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">Cancel</Button>
+            {blockTarget?.videoBlocked ? (
+              <Button onClick={() => handleVideoBlock(false)} disabled={savingBlock} className="h-11 rounded-full px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold">{savingBlock ? 'Saving...' : 'Unblock Videos'}</Button>
+            ) : (
+              <Button onClick={() => handleVideoBlock(true)} disabled={savingBlock} className="h-11 rounded-full px-8 bg-rose-600 hover:bg-rose-700 text-white font-semibold">{savingBlock ? 'Saving...' : 'Block Videos'}</Button>
+            )}
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Create / Edit Modal */}
       <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-        <DialogContent className="sm:max-w-md p-0 overflow-hidden border-none shadow-2xl rounded-xl">
-          <DialogHeader className="bg-gradient-to-r from-indigo-600/10 to-blue-600/5 p-6 border-b shrink-0">
-            <DialogTitle className="text-xl font-bold flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-indigo-600" />
-              {editingId ? 'Edit Academic Class' : 'Create Academic Class'}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="p-6 overflow-y-auto max-h-[70vh] custom-scrollbar">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Class Name <span className="text-rose-500">*</span></Label>
-                <Input 
-                  value={formData.name} 
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
-                  required 
+        <DialogContent className={`${SHELL} sm:max-w-lg`} style={FONT}>
+          <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-5 shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+              {editingId ? <Edit className="w-5 h-5" /> : <BookOpen className="w-5 h-5" />}
+            </div>
+            <DialogHeader className="space-y-1 text-left">
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-left">{editingId ? 'Edit Academic Class' : 'Create Academic Class'}</DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground text-left">{center.name}</DialogDescription>
+            </DialogHeader>
+          </div>
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+            <div className="flex-1 overflow-y-auto px-6 sm:px-8 pb-4 space-y-6">
+              <div className="space-y-1.5">
+                <Label className="text-sm font-semibold">Class name <span className="text-rose-500">*</span></Label>
+                <Input
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
                   placeholder="e.g. Science Batch A"
-                  className="bg-background shadow-sm border-muted-foreground/20 focus-visible:ring-indigo-500"
+                  className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Status</Label>
-                <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                  <SelectTrigger className="bg-background shadow-sm border-muted-foreground/20"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label className="text-sm font-medium">Principals In-charge</Label>
-                  <Badge variant="secondary">{formData.inchargeIds.length} Selected</Badge>
+                <Label className="text-sm font-semibold">Status</Label>
+                <div className="flex gap-2.5">
+                  {([['active', 'Active'], ['inactive', 'Inactive']] as const).map(([val, label]) => (
+                    <button key={val} type="button" aria-pressed={formData.status === val} onClick={() => setFormData({ ...formData, status: val })}
+                      className={cn('px-6 py-2.5 rounded-full text-sm font-semibold border transition-colors', formData.status === val ? 'bg-[#0b1d14] border-[#0b1d14] text-white' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]')}>{label}</button>
+                  ))}
                 </div>
-                <div className="bg-muted/20 border border-border/50 rounded-lg p-3 max-h-[180px] overflow-y-auto custom-scrollbar space-y-2">
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label className="text-sm font-semibold">Principals in-charge</Label>
+                  <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#e3f7dd] text-[#1f6a17]">{formData.inchargeIds.length} selected</span>
+                </div>
+                <div className="flex flex-wrap gap-2 max-h-[160px] overflow-y-auto custom-scrollbar">
                   {faculties.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-2">No faculty available.</p>
+                    <p className="text-sm text-muted-foreground py-2">No faculty available.</p>
                   ) : (
-                    faculties.map((f: any) => (
-                      <label key={f.id} className="flex items-center gap-3 cursor-pointer text-sm">
-                        <Checkbox
-                          checked={formData.inchargeIds.includes(f.id)}
-                          onCheckedChange={(checked) =>
-                            setFormData({
-                              ...formData,
-                              inchargeIds: checked
-                                ? [...formData.inchargeIds, f.id]
-                                : formData.inchargeIds.filter((id) => id !== f.id),
-                            })
-                          }
-                        />
-                        {f.name}
-                      </label>
-                    ))
+                    faculties.map((f: any) => {
+                      const on = formData.inchargeIds.includes(f.id);
+                      return (
+                        <button
+                          key={f.id}
+                          type="button"
+                          aria-pressed={on}
+                          onClick={() => setFormData({ ...formData, inchargeIds: on ? formData.inchargeIds.filter((id) => id !== f.id) : [...formData.inchargeIds, f.id] })}
+                          className={cn('px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors', on ? 'bg-[#8ae47e] border-[#8ae47e] text-[#0b1d14]' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]')}
+                        >
+                          {f.name}
+                        </button>
+                      );
+                    })
                   )}
                 </div>
               </div>
-              <div className="space-y-3 pt-2">
+
+              <div className="space-y-3 pb-2">
                 <div className="flex items-center justify-between">
-                  <Label className="text-sm font-medium">Clubbed Programs</Label>
-                  <Badge variant="secondary">{formData.programIds.length} Selected</Badge>
+                  <Label className="text-sm font-semibold">Clubbed programs</Label>
+                  <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#e3f7dd] text-[#1f6a17]">{formData.programIds.length} selected</span>
                 </div>
-                <div className="bg-muted/20 border border-border/50 rounded-lg p-3 max-h-[250px] overflow-y-auto custom-scrollbar space-y-2">
+                <div className="space-y-2 max-h-[240px] overflow-y-auto custom-scrollbar">
                   {programs.length === 0 ? (
                     <p className="text-sm text-muted-foreground text-center py-4">
                       No programs are assigned to {center.name}. Assign programs to the center first.
                     </p>
                   ) : (
-                    programs.map(program => (
-                      <label 
-                        key={program.id} 
-                        className={`flex items-start space-x-3 p-2 rounded-md cursor-pointer transition-all duration-200 border border-transparent ${
-                          formData.programIds.includes(program.id) 
-                            ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800' 
-                            : 'hover:bg-background border-border/50'
-                        }`}
-                      >
-                        <Checkbox 
-                          id={`prog-${program.id}`}
-                          checked={formData.programIds.includes(program.id)}
-                          onCheckedChange={() => toggleProgram(program.id)}
-                          className="mt-0.5 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-600"
-                        />
-                        <div className="space-y-0.5 leading-none">
-                          <p className="text-sm font-medium leading-tight">{program.name}</p>
-                          {program.code && <p className="text-xs text-muted-foreground">Code: {program.code}</p>}
-                        </div>
-                      </label>
-                    ))
+                    programs.map(program => {
+                      const on = formData.programIds.includes(program.id);
+                      return (
+                        <label
+                          key={program.id}
+                          className={cn('flex items-start gap-3 rounded-2xl px-4 py-3 cursor-pointer border transition-colors', on ? 'bg-[#eaf6e6] border-[#54b947]/40' : 'bg-white border-slate-200 hover:bg-[#f4f6f3]')}
+                        >
+                          <Checkbox id={`prog-${program.id}`} checked={on} onCheckedChange={() => toggleProgram(program.id)} className="mt-0.5" />
+                          <div className="space-y-0.5 leading-none">
+                            <p className="text-sm font-medium leading-tight">{program.name}</p>
+                            {program.code && <p className="text-xs text-muted-foreground">Code: {program.code}</p>}
+                          </div>
+                        </label>
+                      );
+                    })
                   )}
                 </div>
               </div>
-              <div className="flex gap-3 pt-4 justify-end border-t border-border/50 mt-4">
-                <Button type="button" variant="ghost" onClick={() => setDialogOpen(false)}>Cancel</Button>
-                <Button type="submit" className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white shadow-md">
-                  {editingId ? 'Save Changes' : 'Create Class'}
-                </Button>
-              </div>
-            </form>
-          </div>
+            </div>
+            <DialogFooter className="px-6 sm:px-8 py-5 border-t border-slate-100 gap-2 sm:gap-2 shrink-0 flex-col-reverse sm:flex-row">
+              <Button type="button" variant="ghost" onClick={() => setDialogOpen(false)} className="h-11 rounded-full px-6 text-slate-600 hover:text-slate-900 font-semibold">Cancel</Button>
+              <Button type="submit" className="h-11 rounded-full px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold">
+                {editingId ? 'Save Changes' : 'Create Class'}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
-
-
     </div>
   );
 }

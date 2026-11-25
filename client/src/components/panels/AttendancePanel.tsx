@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 import { AttendanceCalendar } from '@/components/attendance/AttendanceCalendar';
 import { toast } from 'sonner';
+import { ListPagination } from '@/components/ui/list-pagination';
 
 interface AttendancePanelProps {
   isMyPortal?: boolean;
@@ -44,6 +45,9 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
   const [dateFilter, setDateFilter] = useState<string>(new Date().toISOString().split('T')[0]);
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc' | 'late'>('desc');
   const [statusFilter, setStatusFilter] = useState<string>(initialFilter);
+  const [recPage, setRecPage] = useState(1);
+  const [recPageSize, setRecPageSize] = useState(10);
+  useEffect(() => { setRecPage(1); }, [dateFilter, statusFilter, sortOrder, attendance.length]);
 
   const [formData, setFormData] = useState<any>({
     employeeId: '',
@@ -337,13 +341,13 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
   };
 
   const getStatusBadge = (status: string) => {
-    const baseStyle = "border-none rounded-full px-2.5 uppercase text-[10px] font-bold tracking-wider shadow-sm";
+    const baseStyle = "border-none rounded-full px-2.5 uppercase text-[10px] font-semibold tracking-wider";
     const variants: any = {
-      present: `bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-400 ${baseStyle}`,
-      absent: `bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400 ${baseStyle}`,
-      late: `bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-400 ${baseStyle}`,
-      half_day: `bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-400 ${baseStyle}`,
-      leave: `bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-400 ${baseStyle}`
+      present: `bg-[#dff3da] text-[#256c1d] ${baseStyle}`,
+      absent: `bg-red-100 text-red-700 ${baseStyle}`,
+      late: `bg-amber-100 text-amber-700 ${baseStyle}`,
+      half_day: `bg-sky-100 text-sky-700 ${baseStyle}`,
+      leave: `bg-slate-200/70 text-slate-600 ${baseStyle}`
     };
     return <Badge className={variants[status] || baseStyle}>{status?.replace('_', ' ')}</Badge>;
   };
@@ -353,23 +357,23 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
     return api.getFileUrl(url);
   };
 
+  const validRecordCount = attendance.filter(rec => rec && rec.id).length;
+  const safePage = Math.min(recPage, Math.max(1, Math.ceil(validRecordCount / recPageSize)));
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-primary/10 rounded-2xl">
-            <Calendar className="w-6 h-6 text-primary" />
-          </div>
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+        <div>
           <div>
-            <h2 className="text-2xl font-bold">Attendance {canViewAll ? 'Management' : 'Records'}</h2>
-            <p className="text-muted-foreground text-sm mt-1">{canViewAll ? 'Track and manage employee attendance.' : 'Your personal attendance history.'}</p>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Attendance {canViewAll ? 'Management' : 'Records'}</h2>
+            <p className="text-muted-foreground text-sm mt-1.5">{canViewAll ? 'Track and manage employee attendance.' : 'Your personal attendance history.'}</p>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {canViewAll && viewMode === 'calendar' && (
-            <div className="flex items-center gap-2 bg-muted/40 border border-slate-200/50 dark:border-slate-800/50 rounded-xl p-1.5 shadow-sm">
-              <div className="bg-background rounded-lg p-1.5 shadow-sm">
-                <Users className="w-4 h-4 text-primary" />
+            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-full pl-2 pr-1 h-11">
+              <div className="bg-[#eaf6e6] rounded-full p-1.5">
+                <Users className="w-4 h-4 text-[#256c1d]" />
               </div>
               <Select value={selectedEmployeeId} onValueChange={setSelectedEmployeeId}>
                 <SelectTrigger className="h-8 border-none bg-transparent shadow-none focus:ring-0 w-[180px] text-xs font-bold px-2">
@@ -387,19 +391,19 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
           )}
 
           {canViewAll && user?.role !== 'ceo' && user?.role !== 'general_manager' && user?.role !== 'branch_manager' && (
-            <Button variant="outline" size="sm" onClick={() => setExportDialogOpen(true)} className="rounded-xl border-slate-200/60 shadow-sm h-10 px-4 gap-2 text-xs font-semibold">
-              <Download className="w-4 h-4 text-primary" /> Download Report
+            <Button variant="outline" onClick={() => setExportDialogOpen(true)} className="rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6] h-11 px-5 gap-2 text-sm font-semibold">
+              <Download className="w-4 h-4 text-[#256c1d]" /> Download Report
             </Button>
           )}
 
           <Dialog open={exportDialogOpen} onOpenChange={setExportDialogOpen}>
-            <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0 max-h-[90vh] flex flex-col">
-              <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3 shrink-0">
-                <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
+            <DialogContent className="max-w-md wizard-form border-0 rounded-[2rem] overflow-hidden p-0 bg-white max-h-[90vh] flex flex-col" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+              <div className="bg-[#f4f6f3] p-6 border-b border-slate-100 flex items-center gap-3 shrink-0">
+                <div className="w-11 h-11 bg-white rounded-2xl text-[#256c1d] flex items-center justify-center">
                   <FileSpreadsheet className="w-5 h-5" />
                 </div>
                 <div>
-                  <DialogTitle className="text-xl">Download Report</DialogTitle>
+                  <DialogTitle className="text-xl font-semibold tracking-tight">Download Report</DialogTitle>
                   <p className="text-sm text-muted-foreground mt-0.5">Export attendance records to Excel.</p>
                 </div>
               </div>
@@ -458,17 +462,17 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
           {isHR && (
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
               <DialogTrigger asChild>
-                <Button className="rounded-xl shadow-md h-10 px-4 transition-transform hover:scale-105 active:scale-95">
+                <Button className="rounded-full h-11 px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                   <Plus className="w-4 h-4 mr-2" /> Mark Attendance
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0 max-h-[90vh] flex flex-col">
-                <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3 shrink-0">
-                  <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
+              <DialogContent className="max-w-md wizard-form border-0 rounded-[2rem] overflow-hidden p-0 bg-white max-h-[90vh] flex flex-col" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+                <div className="bg-[#f4f6f3] p-6 border-b border-slate-100 flex items-center gap-3 shrink-0">
+                  <div className="w-11 h-11 bg-white rounded-2xl text-[#256c1d] flex items-center justify-center">
                     <Calendar className="w-5 h-5" />
                   </div>
                   <div>
-                    <DialogTitle className="text-xl">{editingId ? 'Edit Attendance' : 'Mark Attendance'}</DialogTitle>
+                    <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Attendance' : 'Mark Attendance'}</DialogTitle>
                     <p className="text-sm text-muted-foreground mt-0.5">Manually record or edit an employee's punch.</p>
                   </div>
                 </div>
@@ -544,8 +548,8 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                     <Input className="rounded-xl h-11" value={formData.notes} onChange={(e) => setFormData({...formData, notes: e.target.value})} placeholder="Optional notes" />
                   </div>
                   <div className="pt-2 flex justify-end gap-2">
-                    <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setDialogOpen(false)}>Cancel</Button>
-                    <Button type="submit" className="rounded-xl px-6">Save Record</Button>
+                    <Button type="button" variant="ghost" className="rounded-full h-11 px-6" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                    <Button type="submit" className="rounded-full h-11 px-7 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Save Record</Button>
                   </div>
                 </form>
               </DialogContent>
@@ -565,99 +569,81 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
           isHR={isHR}
         />
       ) : (
-        <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-xl rounded-2xl bg-card/60 backdrop-blur-xl overflow-hidden">
-          <CardHeader className="flex flex-row items-center justify-between p-5 sm:p-6 border-b border-border/40 bg-muted/20">
+        <Card className="rounded-3xl bg-white border border-slate-100 shadow-none overflow-hidden py-0 gap-0">
+          <CardHeader className="flex flex-row items-center justify-between p-5 sm:p-6 border-b border-slate-100">
             <div className="flex items-center gap-4">
-              <CardTitle className="text-lg">Attendance Records</CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-tight">Attendance Records</CardTitle>
               {viewMode === 'list' && (
                 <div className="flex items-center gap-2 flex-wrap">
-                  <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20 font-bold shadow-sm rounded-full px-3">
+                  <Badge variant="outline" className="bg-amber-100 text-amber-700 border-0 font-semibold rounded-full px-3">
                     Late: {attendance.filter(r => r.isLate || r.status === 'late' || (r.lateMinutes || 0) > 0).length} {canViewAll && dateFilter ? 'Users' : 'Records'}
                   </Badge>
-                  <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/20 font-bold shadow-sm rounded-full px-3">
+                  <Badge variant="outline" className="bg-[#f4f6f3] text-slate-600 border-0 font-semibold rounded-full px-3">
                     Early Exit: {attendance.filter(r => r.isEarlyExit || (r.earlyExitMinutes || 0) > 0).length} {canViewAll && dateFilter ? 'Users' : 'Records'}
                   </Badge>
                 </div>
               )}
             </div>
-            <Button variant="outline" size="sm" onClick={() => setViewMode('calendar')} className="gap-2 rounded-xl border-slate-200/60 shadow-sm h-9 text-xs font-semibold px-4 transition-transform hover:scale-105">
-              <Calendar className="w-4 h-4 text-primary" /> Calendar View
+            <Button variant="outline" onClick={() => setViewMode('calendar')} className="gap-2 rounded-full bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] h-10 text-sm font-semibold px-5">
+              <Calendar className="w-4 h-4" /> Calendar View
             </Button>
           </CardHeader>
           
           {canViewAll && dateFilter && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-5 sm:p-6 pb-0 border-b border-border/40 bg-muted/10">
-              <Card className="relative overflow-hidden border border-primary/20 shadow-sm rounded-2xl bg-gradient-to-br from-primary/10 via-background to-background group hover:shadow-md transition-all">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <Users className="w-12 h-12 text-primary" />
-                </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-5 sm:p-6 border-b border-slate-100">
+              <Card className="relative overflow-hidden rounded-3xl bg-[#f4f6f3] border-0 shadow-none py-0 gap-0">
                 <CardContent className="p-5">
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                  <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-2">
                     <Users className="w-3.5 h-3.5" /> Total Strength
                   </p>
-                  <p className="text-3xl font-black text-foreground mt-2">{employees.length}</p>
+                  <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-2">{employees.length}</p>
                 </CardContent>
               </Card>
 
-              <Card className="relative overflow-hidden border border-green-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-green-500/10 via-background to-background group hover:shadow-md transition-all">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <CheckCircle2 className="w-12 h-12 text-green-500" />
-                </div>
+              <Card className="relative overflow-hidden rounded-3xl bg-[#f4f6f3] border-0 shadow-none py-0 gap-0">
                 <CardContent className="p-5">
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                  <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-green-600" /> Present
                   </p>
-                  <p className="text-3xl font-black text-foreground mt-2">{attendance.filter(r => r.status === 'present').length}</p>
+                  <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-2">{attendance.filter(r => r.status === 'present').length}</p>
                 </CardContent>
               </Card>
 
-              <Card className="relative overflow-hidden border border-red-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-red-500/10 via-background to-background group hover:shadow-md transition-all">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <XCircle className="w-12 h-12 text-red-500" />
-                </div>
+              <Card className="relative overflow-hidden rounded-3xl bg-[#f4f6f3] border-0 shadow-none py-0 gap-0">
                 <CardContent className="p-5">
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                  <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-2">
                     <XCircle className="w-3.5 h-3.5 text-red-600" /> Absent
                   </p>
-                  <p className="text-3xl font-black text-foreground mt-2">{attendance.filter(r => r.status === 'absent').length}</p>
+                  <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-2">{attendance.filter(r => r.status === 'absent').length}</p>
                 </CardContent>
               </Card>
 
-              <Card className="relative overflow-hidden border border-purple-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-purple-500/10 via-background to-background group hover:shadow-md transition-all">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <CalendarOff className="w-12 h-12 text-purple-500" />
-                </div>
+              <Card className="relative overflow-hidden rounded-3xl bg-[#f4f6f3] border-0 shadow-none py-0 gap-0">
                 <CardContent className="p-5">
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                  <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-2">
                     <CalendarOff className="w-3.5 h-3.5 text-purple-600" /> On Leave
                   </p>
-                  <p className="text-3xl font-black text-foreground mt-2">{attendance.filter(r => r.status === 'leave').length}</p>
+                  <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-2">{attendance.filter(r => r.status === 'leave').length}</p>
                 </CardContent>
               </Card>
 
-              <Card className="relative overflow-hidden border border-yellow-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-yellow-500/10 via-background to-background group hover:shadow-md transition-all">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <Clock className="w-12 h-12 text-yellow-500" />
-                </div>
+              <Card className="relative overflow-hidden rounded-3xl bg-[#f4f6f3] border-0 shadow-none py-0 gap-0">
                 <CardContent className="p-5">
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                  <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-2">
                     <Clock className="w-3.5 h-3.5 text-yellow-600" /> Late Comers
                   </p>
-                  <p className="text-3xl font-black text-foreground mt-2">
+                  <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-2">
                     {attendance.filter(r => r.isLate || r.status === 'late' || (r.lateMinutes || 0) > 0).length}
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="relative overflow-hidden border border-amber-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-amber-500/10 via-background to-background group hover:shadow-md transition-all">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <LogOut className="w-12 h-12 text-amber-500" />
-                </div>
+              <Card className="relative overflow-hidden rounded-3xl bg-[#f4f6f3] border-0 shadow-none py-0 gap-0">
                 <CardContent className="p-5">
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                  <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-2">
                     <LogOut className="w-3.5 h-3.5 text-amber-600" /> Early Exits
                   </p>
-                  <p className="text-3xl font-black text-foreground mt-2">
+                  <p className="text-3xl font-semibold tracking-tight text-slate-900 mt-2">
                     {attendance.filter(r => r.isEarlyExit || (r.earlyExitMinutes || 0) > 0).length}
                   </p>
                 </CardContent>
@@ -667,17 +653,17 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
 
           <CardContent className="p-5 sm:p-6">
             {/* Filter bar */}
-            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-4 mb-6 p-4 rounded-2xl bg-muted/40 border border-slate-200/50 dark:border-slate-800/50 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-4 mb-6 p-4 rounded-2xl bg-[#f4f6f3]">
               <div className="flex items-center gap-3">
-                <div className="bg-background p-2 rounded-xl shadow-sm border border-border/50">
-                  <Calendar className="w-4 h-4 text-primary" />
+                <div className="bg-white p-2 rounded-full">
+                  <Calendar className="w-4 h-4 text-[#256c1d]" />
                 </div>
                 <div className="flex items-center gap-2">
                   <input
                     type="date"
                     value={dateFilter}
                     onChange={(e) => handleDateFilterChange(e.target.value)}
-                    className="border border-border/50 rounded-xl px-3 py-1.5 text-sm bg-background shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20 h-9"
+                    className="border border-transparent rounded-full px-4 py-1.5 text-sm bg-white focus:outline-none focus:ring-4 focus:ring-[#54b947]/20 h-10"
                   />
                   {dateFilter && (
                     <button
@@ -692,9 +678,9 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
               
               <div className="flex items-center gap-4 w-full sm:w-auto">
                 <div className="flex items-center gap-2 flex-1 sm:flex-initial">
-                  <span className="text-xs text-muted-foreground font-semibold uppercase tracking-wider hidden md:inline">Status</span>
+                  <span className="text-xs text-slate-500 font-semibold hidden md:inline">Status</span>
                   <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
-                    <SelectTrigger className="h-9 rounded-xl border-border/50 bg-background w-full sm:w-[130px] text-xs shadow-sm font-medium">
+                    <SelectTrigger className="h-10 rounded-full border-transparent bg-white px-4 w-full sm:w-[140px] text-xs font-semibold">
                       <SelectValue placeholder="All Statuses" />
                     </SelectTrigger>
                     <SelectContent className="rounded-xl">
@@ -708,9 +694,9 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                   </Select>
                 </div>
                 <div className="flex items-center gap-2 flex-1 sm:flex-initial">
-                  <span className="text-xs text-muted-foreground font-semibold uppercase tracking-wider hidden md:inline">Sort</span>
+                  <span className="text-xs text-slate-500 font-semibold hidden md:inline">Sort</span>
                   <Select value={sortOrder} onValueChange={(val: any) => setSortOrder(val)}>
-                    <SelectTrigger className="h-9 rounded-xl border-border/50 bg-background w-full sm:w-[140px] text-xs shadow-sm font-medium">
+                    <SelectTrigger className="h-10 rounded-full border-transparent bg-white px-4 w-full sm:w-[150px] text-xs font-semibold">
                       <SelectValue placeholder="Sort" />
                     </SelectTrigger>
                     <SelectContent className="rounded-xl">
@@ -726,14 +712,14 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
             {/* List */}
             {loading ? (
               <div className="space-y-3">
-                {[1,2,3].map(i => <div key={i} className="h-20 bg-muted/40 rounded-2xl animate-pulse border border-border/50" />)}
+                {[1,2,3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />)}
               </div>
             ) : attendance.length === 0 ? (
-              <div className="text-center py-16 px-4 rounded-2xl border-2 border-dashed border-border/60 bg-muted/10">
-                <div className="bg-muted/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Calendar className="w-8 h-8 text-muted-foreground opacity-50" />
+              <div className="text-center py-14 px-4">
+                <div className="bg-[#eaf6e6] text-[#256c1d] w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <Calendar className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-foreground">No records found</h3>
+                <h3 className="text-lg font-semibold text-slate-900">No records found</h3>
                 <p className="text-sm text-muted-foreground mt-1">There are no attendance records matching your current filters.</p>
               </div>
             ) : (
@@ -751,11 +737,12 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                     const dateB = new Date(b.date).getTime();
                     return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
                   })
+                  .slice((safePage - 1) * recPageSize, safePage * recPageSize)
                   .map((record) => {
                   const recId = record.id;
                   const empName = record.employeeId?.name || record.employee?.name || record.user?.name || 'Unknown';
                   return (
-                    <div key={recId} className="group flex flex-col sm:flex-row sm:items-center justify-between p-5 border border-slate-200/60 dark:border-slate-800/60 rounded-2xl bg-card/40 hover:bg-card/80 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300 gap-4 overflow-hidden relative">
+                    <div key={recId} className="group relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                       {record.isLate ? (
                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500 rounded-l-2xl" />
                       ) : record.isEarlyExit ? (
@@ -763,28 +750,28 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                       ) : null}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-3">
-                          <div className="font-bold text-base text-foreground truncate">{empName}</div>
+                          <div className="font-semibold text-base text-slate-900 truncate">{empName}</div>
                           {getStatusBadge(record.status)}
                           {record.isLate && (record.lateMinutes || 0) > 0 && (
-                            <Badge variant="outline" className="border-yellow-500/40 text-yellow-600 bg-yellow-500/10 text-[10px] font-bold rounded-full">
+                            <Badge variant="outline" className="border-0 text-amber-700 bg-amber-100 text-[10px] font-semibold rounded-full">
                               Late: {record.lateMinutes}m
                             </Badge>
                           )}
                           {record.isEarlyExit && (record.earlyExitMinutes || 0) > 0 && (
-                            <Badge variant="outline" className="border-amber-500/40 text-amber-600 bg-amber-500/10 text-[10px] font-bold rounded-full">
+                            <Badge variant="outline" className="border-0 text-slate-600 bg-white text-[10px] font-semibold rounded-full">
                               Early Exit: {record.earlyExitMinutes}m
                             </Badge>
                           )}
                         </div>
                         
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium">
-                          <div className="flex items-center text-muted-foreground bg-muted/40 px-2.5 py-1.5 rounded-lg border border-border/40 shadow-sm">
+                          <div className="flex items-center text-slate-600 bg-white px-3 py-1.5 rounded-full">
                             <Calendar className="w-3.5 h-3.5 mr-1.5 text-foreground/70" />
                             {new Date(record.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
                           </div>
                           
                           <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-1.5 bg-primary/5 text-primary px-2.5 py-1.5 rounded-lg border border-primary/10 shadow-sm">
+                            <div className="flex items-center gap-1.5 bg-white text-[#256c1d] px-3 py-1.5 rounded-full">
                               <span className="opacity-70 text-[10px] uppercase tracking-wider font-bold">In</span>
                               <span>{record.checkIn ? new Date(record.checkIn).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit', hour12: true}) : '--'}</span>
                               {record.checkInPhoto && (
@@ -794,7 +781,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                               )}
                             </div>
                             <span className="text-muted-foreground/50">→</span>
-                            <div className="flex items-center gap-1.5 bg-primary/5 text-primary px-2.5 py-1.5 rounded-lg border border-primary/10 shadow-sm">
+                            <div className="flex items-center gap-1.5 bg-white text-[#256c1d] px-3 py-1.5 rounded-full">
                               <span className="opacity-70 text-[10px] uppercase tracking-wider font-bold">Out</span>
                               <span>{record.checkOut ? new Date(record.checkOut).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit', hour12: true}) : '--'}</span>
                               {record.checkOutPhoto && (
@@ -806,19 +793,19 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                           </div>
                         </div>
                         {record.notes && (
-                          <div className="mt-4 text-sm text-muted-foreground bg-muted/30 p-3 rounded-xl border border-border/30 italic">
+                          <div className="mt-4 text-sm text-slate-600 bg-white p-3 rounded-2xl italic">
                             "{record.notes}"
                           </div>
                         )}
                       </div>
                       
                       {isHR && (
-                        <div className="flex items-center justify-end gap-2 shrink-0 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-                          <Button variant="outline" size="sm" className="h-9 rounded-xl shadow-sm border-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 gap-1.5 px-3" onClick={() => handleEdit(record)}>
+                        <div className="flex items-center justify-end gap-2 shrink-0">
+                          <Button variant="outline" size="sm" className="h-9 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6] gap-1.5 px-4" onClick={() => handleEdit(record)}>
                             <Edit className="w-3.5 h-3.5 text-muted-foreground" /> Edit
                           </Button>
                           {recId && !isMockRecordId(recId) && (
-                            <Button variant="outline" size="sm" className="h-9 rounded-xl shadow-sm border-red-200 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 hover:text-red-700 gap-1.5 px-3" onClick={() => handleDelete(recId)}>
+                            <Button variant="outline" size="sm" className="h-9 rounded-full border-red-200 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 gap-1.5 px-4" onClick={() => handleDelete(recId)}>
                               <Trash2 className="w-3.5 h-3.5" /> Delete
                             </Button>
                           )}
@@ -827,6 +814,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                     </div>
                   );
                 })}
+                <ListPagination total={validRecordCount} page={safePage} pageSize={recPageSize} onPageChange={setRecPage} onPageSizeChange={(n) => { setRecPageSize(n); setRecPage(1); }} />
               </div>
             )}
           </CardContent>

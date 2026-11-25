@@ -131,21 +131,21 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-2xl font-bold">{title}</h2>
-          <p className="text-muted-foreground">Set and track performance targets</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">{title}</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Set and track performance targets</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
           {canManage && (
           <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Add Target</Button>
+            <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Target</Button>
           </DialogTrigger>
           )}
-          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogContent className="wizard-form max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
             <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Target' : 'Add New Target'}</DialogTitle>
+              <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Target' : 'Add New Target'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -218,57 +218,60 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                 <Input type="number" min="0" value={formData.incentive} onChange={(e) => setFormData({ ...formData, incentive: e.target.value })} placeholder="e.g. 5000" />
               </div>
               <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                <Button type="submit" className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Save</Button>
+                <Button type="button" variant="outline" className="h-11 px-6 rounded-full" onClick={() => setDialogOpen(false)}>Cancel</Button>
               </div>
             </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader><CardTitle>Targets</CardTitle></CardHeader>
-        <CardContent>
+      <Card className="rounded-3xl bg-white border border-slate-100 shadow-none py-7 gap-5">
+        <CardHeader className="px-7"><CardTitle className="text-lg font-semibold tracking-tight">Targets</CardTitle></CardHeader>
+        <CardContent className="px-7">
           {loading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-24 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
           ) : targets.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No targets found</div>
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Target className="w-6 h-6" /></div>
+              <p className="text-sm">No targets found</p>
+            </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {targets.filter(t => t && (t.id || t.id)).map((t) => {
                 const tid = t.id || t.id;
                 const pct = t.target ? Math.min(100, ((t.achieved || 0) / t.target) * 100) : 0;
                 const empName = typeof t.employeeId === 'object' ? t.employeeId?.name : '';
                 const deptName = typeof t.departmentId === 'object' ? t.departmentId?.name : '';
                 return (
-                  <div key={tid} className="p-4 border rounded-lg hover:bg-muted/50">
+                  <div key={tid} className="p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Target className="w-5 h-5 text-primary" />
+                        <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center shrink-0">
+                          <Target className="w-5 h-5" />
                         </div>
                         <div>
-                          <div className="font-medium">{empName || deptName || 'General Target'}</div>
+                          <div className="font-semibold text-slate-900">{empName || deptName || 'General Target'}</div>
                           <div className="text-sm text-muted-foreground">{t.type} • {t.period}</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         {canManage && (
                           <>
-                            <Button variant="ghost" size="sm" onClick={() => handleEdit(t)}><Edit className="w-4 h-4" /></Button>
-                            <Button variant="ghost" size="sm" onClick={() => handleDelete(tid)}><Trash2 className="w-4 h-4" /></Button>
+                            <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(t)}><Edit className="w-4 h-4" /></Button>
+                            <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(tid)}><Trash2 className="w-4 h-4" /></Button>
                           </>
                         )}
                       </div>
                     </div>
                     <div className="space-y-1.5">
                       <div className="flex justify-between text-sm items-center">
-                        <span className="font-semibold text-slate-300">
+                        <span className="font-semibold text-slate-900">
                           {t.type === 'revenue' ? `${CS()}${(t.achieved || 0).toLocaleString(numLocale())}` : t.achieved || 0} / {t.type === 'revenue' ? `${CS()}${(t.target).toLocaleString(numLocale())}` : t.target}
                         </span>
                         <div className="text-right flex items-center gap-2">
                           {t.incentive > 0 && (
-                            <span className="text-xs bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full font-bold">
+                            <span className="text-xs bg-[#dff3da] text-[#256c1d] px-2.5 py-0.5 rounded-full font-semibold">
                               Incentive: {CS()}{t.incentive.toLocaleString(numLocale())}
                             </span>
                           )}
@@ -278,7 +281,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                       <Progress value={pct} />
                       <div className="text-xs text-muted-foreground pt-0.5">
                         {t.achieved >= t.target ? (
-                          <span className="text-emerald-500 font-bold">✓ Target Completed!</span>
+                          <span className="text-[#256c1d] font-semibold">✓ Target Completed!</span>
                         ) : (
                           <span>
                             {t.type === 'revenue' ? (

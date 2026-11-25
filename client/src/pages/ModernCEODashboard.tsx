@@ -2,10 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import {
   ArrowUpRight,
-  Target,
   AlertTriangle,
   CheckCircle,
-  RefreshCw,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -180,25 +178,6 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {activeTab === 'overview' && (
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">Executive Overview</h1>
-            <p className="text-muted-foreground mt-1">Real-time institutional performance and strategic metrics.</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={() => { fetchAll(); setRefreshKey((k) => k + 1); }} disabled={loadingMetrics}>
-              <RefreshCw className={cn('w-4 h-4 mr-2', loadingMetrics && 'animate-spin')} />
-              Refresh
-            </Button>
-            <Button variant="default" onClick={() => handleNavigate('kpi-kra')}>
-              <Target className="w-4 h-4 mr-2" />
-              KPI / KRA Report
-            </Button>
-          </div>
-        </div>
-      )}
-
       <Tabs value={activeTab} onValueChange={handleNavigate} className="space-y-6">
         <div className="hidden">
           <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">

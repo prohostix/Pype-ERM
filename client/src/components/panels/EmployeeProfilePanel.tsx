@@ -59,10 +59,10 @@ interface ProfileData {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const KPI_STATUS_COLORS: Record<string, string> = {
-  on_track: 'bg-blue-100 text-blue-700',
-  at_risk: 'bg-yellow-100 text-yellow-700',
-  achieved: 'bg-green-100 text-green-700',
-  missed: 'bg-red-100 text-red-700',
+  on_track: 'bg-[#eaf6e6] text-[#256c1d]',
+  at_risk: 'bg-amber-50 text-amber-700',
+  achieved: 'bg-[#e3f7dd] text-[#1f6a17]',
+  missed: 'bg-rose-50 text-rose-700',
 };
 
 function StarRating({ value, onChange }: { value?: number; onChange?: (v: number) => void }) {
@@ -84,9 +84,9 @@ function StarRating({ value, onChange }: { value?: number; onChange?: (v: number
 
 function SectionTitle({ icon: Icon, title }: { icon: any; title: string }) {
   return (
-    <div className="flex items-center gap-2 mb-4">
-      <div className="p-1.5 rounded-lg bg-primary/10 text-primary"><Icon className="w-4 h-4" /></div>
-      <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">{title}</h3>
+    <div className="flex items-center gap-3 mb-4">
+      <div className="w-9 h-9 rounded-full bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Icon className="w-4 h-4" /></div>
+      <h3 className="font-semibold text-base text-foreground">{title}</h3>
     </div>
   );
 }
@@ -376,32 +376,33 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
       if (kpiKraDirty && !window.confirm('You have unsaved KPI/KRA changes. Close without saving?')) return;
       onClose();
     }}>
-      <SheetContent side="right" className="w-full sm:max-w-3xl overflow-y-auto p-0">
+      <SheetContent side="right" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }} className="w-full sm:max-w-3xl overflow-y-auto p-0 border-0 bg-white sm:rounded-l-[2rem]">
         {/* Profile Header */}
-        <div className="bg-gradient-to-r from-primary/10 to-primary/5 px-6 py-5 border-b">
-          <SheetHeader>
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+        <div className="px-6 sm:px-8 pt-8 pb-5">
+          <SheetHeader className="p-0">
+            <div className="flex items-center gap-4 pr-10">
+              <div className="w-16 h-16 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center text-2xl font-semibold shrink-0">
                 {user?.name?.charAt(0)?.toUpperCase() || '?'}
               </div>
               <div className="flex-1 min-w-0">
-                <SheetTitle className="text-xl font-bold truncate">{user?.name || 'Employee Profile'}</SheetTitle>
-                <p className="text-sm text-muted-foreground mt-0.5">{user?.designation || user?.role?.replace(/_/g, ' ')}</p>
-                <div className="flex items-center gap-2 mt-1 flex-wrap">
+                <SheetTitle className="text-2xl font-semibold tracking-tight truncate">{user?.name || 'Employee Profile'}</SheetTitle>
+                <p className="text-sm text-muted-foreground mt-0.5 capitalize">{user?.designation || user?.role?.replace(/_/g, ' ')}</p>
+                <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                   {user?.departmentId?.name && (
-                    <Badge variant="outline" className="text-xs"><Building2 className="w-3 h-3 mr-1" />{user.departmentId.name}</Badge>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#f1f3ef] text-slate-600"><Building2 className="w-3 h-3" />{user.departmentId.name}</span>
                   )}
-                  <Badge className={cn('text-xs', user?.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600')}>
+                  <span className={cn('inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full capitalize', user?.status === 'active' ? 'bg-[#e3f7dd] text-[#1f6a17]' : 'bg-slate-100 text-slate-600')}>
+                    <span className={cn('w-1.5 h-1.5 rounded-full', user?.status === 'active' ? 'bg-[#54b947]' : 'bg-slate-400')} />
                     {user?.status?.replace('_', ' ')}
-                  </Badge>
+                  </span>
                   {profile?.employmentType && (
-                    <Badge variant="outline" className="text-xs capitalize">{profile.employmentType.replace('_', ' ')}</Badge>
+                    <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-600 capitalize">{profile.employmentType.replace('_', ' ')}</span>
                   )}
                 </div>
               </div>
-              <Button size="sm" variant="ghost" onClick={fetchProfile} disabled={loading}>
+              <button onClick={fetchProfile} disabled={loading} title="Refresh" className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d] transition-colors shrink-0 disabled:opacity-50">
                 <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
-              </Button>
+              </button>
             </div>
           </SheetHeader>
         </div>
@@ -412,26 +413,26 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
           </div>
         ) : (
           <Tabs value={tab} onValueChange={setTab} className="flex flex-col h-full">
-            <TabsList className="flex-wrap h-auto gap-1 mx-6 mt-4 justify-start bg-transparent border-b rounded-none pb-0">
+            <TabsList className="flex-wrap h-auto gap-1.5 mx-6 sm:mx-8 mt-1 justify-start bg-transparent p-0">
               {['overview', 'personal', 'employment', 'salary', 'payroll_history', 'kpi', 'kra', 'review', 'documents'].map(t => (
-                <TabsTrigger key={t} value={t} className="capitalize rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">
+                <TabsTrigger key={t} value={t} className="capitalize rounded-full px-4 h-9 text-xs font-semibold bg-[#f4f6f3] text-slate-600 hover:bg-[#eaf6e6] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none">
                   {t === 'kpi' ? 'KPI' : t === 'kra' ? 'KRA' : t === 'payroll_history' ? 'Payroll History' : t === 'documents' ? 'Documents' : t.charAt(0).toUpperCase() + t.slice(1)}
                 </TabsTrigger>
               ))}
             </TabsList>
 
-            <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+            <div className="flex-1 overflow-y-auto px-6 sm:px-8 py-6 space-y-5">
 
               {/* ── OVERVIEW ── */}
               <TabsContent value="overview" className="space-y-4 mt-0">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Card><CardContent className="pt-4 space-y-2">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Contact</p>
+                  <Card className="bg-[#f4f6f3] shadow-none"><CardContent className="p-5 space-y-2">
+                    <p className="text-xs font-medium text-muted-foreground">Contact</p>
                     <div className="flex items-center gap-2 text-sm"><Mail className="w-4 h-4 text-muted-foreground" />{user?.email}</div>
                     {user?.phone && <div className="flex items-center gap-2 text-sm"><Phone className="w-4 h-4 text-muted-foreground" />{user.phone}</div>}
                   </CardContent></Card>
-                  <Card><CardContent className="pt-4 space-y-2">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Employment</p>
+                  <Card className="bg-[#f4f6f3] shadow-none"><CardContent className="p-5 space-y-2">
+                    <p className="text-xs font-medium text-muted-foreground">Employment</p>
                     <div className="flex items-center gap-2 text-sm"><Briefcase className="w-4 h-4 text-muted-foreground" />{profile?.employeeCode || user?.userId || '—'}</div>
                     {profile?.joinDate && <div className="flex items-center gap-2 text-sm"><Calendar className="w-4 h-4 text-muted-foreground" />Joined {new Date(profile.joinDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div>}
                   </CardContent></Card>
@@ -439,9 +440,9 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
 
                 {/* KPI Summary */}
                 {kpis.length > 0 && (
-                  <Card>
-                    <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Target className="w-4 h-4" />KPI Summary</CardTitle></CardHeader>
-                    <CardContent className="space-y-3">
+                  <Card className="bg-[#f4f6f3] shadow-none">
+                    <CardHeader className="px-5 pt-5 pb-2"><CardTitle className="text-sm flex items-center gap-2"><Target className="w-4 h-4" />KPI Summary</CardTitle></CardHeader>
+                    <CardContent className="px-5 pb-5 pt-1 space-y-3">
                       {kpis.map((kpi, i) => {
                         const pct = Math.min(100, Math.round((kpi.achieved / kpi.target) * 100));
                         return (
@@ -450,8 +451,8 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                               <span className="font-medium">{kpi.title}</span>
                               <span className="text-muted-foreground">{kpi.achieved}/{kpi.target} {kpi.unit}</span>
                             </div>
-                            <div className="h-2 bg-muted rounded-full overflow-hidden">
-                              <div className={cn('h-full rounded-full', pct >= 100 ? 'bg-green-500' : pct >= 60 ? 'bg-blue-500' : 'bg-yellow-500')} style={{ width: `${pct}%` }} />
+                            <div className="h-2 bg-white rounded-full overflow-hidden">
+                              <div className={cn('h-full rounded-full', pct >= 100 ? 'bg-green-500' : pct >= 60 ? 'bg-emerald-500' : 'bg-yellow-500')} style={{ width: `${pct}%` }} />
                             </div>
                           </div>
                         );
@@ -462,9 +463,9 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
 
                 {/* KRA Summary */}
                 {kras.length > 0 && (
-                  <Card>
-                    <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Award className="w-4 h-4" />KRA Summary · Avg Rating: {avgKraRating}</CardTitle></CardHeader>
-                    <CardContent>
+                  <Card className="bg-[#f4f6f3] shadow-none">
+                    <CardHeader className="px-5 pt-5 pb-2"><CardTitle className="text-sm flex items-center gap-2"><Award className="w-4 h-4" />KRA Summary · Avg Rating: {avgKraRating}</CardTitle></CardHeader>
+                    <CardContent className="px-5 pb-5 pt-1">
                       <div className="space-y-2">
                         {kras.map((kra, i) => (
                           <div key={i} className="flex items-center justify-between py-1.5 border-b last:border-0">
@@ -482,15 +483,15 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
 
                 {/* Review info */}
                 {(profile?.overallRating || profile?.nextReviewDate) && (
-                  <Card>
-                    <CardContent className="pt-4 flex items-center justify-between">
+                  <Card className="bg-[#f4f6f3] shadow-none">
+                    <CardContent className="p-5 flex items-center justify-between">
                       <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Overall Rating</p>
+                        <p className="text-xs font-medium text-muted-foreground mb-1">Overall Rating</p>
                         <StarRating value={profile.overallRating} />
                       </div>
                       {profile.nextReviewDate && (
                         <div className="text-right">
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Next Review</p>
+                          <p className="text-xs font-medium text-muted-foreground mb-1">Next Review</p>
                           <p className="text-sm font-medium">{new Date(profile.nextReviewDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                         </div>
                       )}
@@ -503,12 +504,12 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
               <TabsContent value="documents" className="space-y-4 mt-0">
                 <SectionTitle icon={Building2} title="Employee Documents" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <Card>
-                    <CardHeader className="pb-2"><CardTitle className="text-sm">Job Description (JD)</CardTitle></CardHeader>
-                    <CardContent className="space-y-2">
+                  <Card className="bg-[#f4f6f3] shadow-none">
+                    <CardHeader className="px-5 pt-5 pb-2"><CardTitle className="text-sm">Job Description (JD)</CardTitle></CardHeader>
+                    <CardContent className="px-5 pb-5 pt-1 space-y-2">
                       {documentsForm.jdFile ? (
                         <div className="flex items-center justify-between p-2 border rounded text-sm">
-                          <a href={documentsForm.jdFile} target="_blank" rel="noreferrer" className="text-primary hover:underline truncate">View JD Document</a>
+                          <a href={documentsForm.jdFile} target="_blank" rel="noreferrer" className="text-[#256c1d] hover:underline truncate">View JD Document</a>
                           <Button variant="ghost" size="sm" onClick={() => setDocumentsForm({...documentsForm, jdFile: ''})}><Trash2 className="w-4 h-4 text-red-500"/></Button>
                         </div>
                       ) : (
@@ -520,12 +521,12 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                     </CardContent>
                   </Card>
                   
-                  <Card>
-                    <CardHeader className="pb-2"><CardTitle className="text-sm">Offer Letter</CardTitle></CardHeader>
-                    <CardContent className="space-y-2">
+                  <Card className="bg-[#f4f6f3] shadow-none">
+                    <CardHeader className="px-5 pt-5 pb-2"><CardTitle className="text-sm">Offer Letter</CardTitle></CardHeader>
+                    <CardContent className="px-5 pb-5 pt-1 space-y-2">
                       {documentsForm.offerLetterFile ? (
                         <div className="flex items-center justify-between p-2 border rounded text-sm">
-                          <a href={documentsForm.offerLetterFile} target="_blank" rel="noreferrer" className="text-primary hover:underline truncate">View Offer Letter</a>
+                          <a href={documentsForm.offerLetterFile} target="_blank" rel="noreferrer" className="text-[#256c1d] hover:underline truncate">View Offer Letter</a>
                           <Button variant="ghost" size="sm" onClick={() => setDocumentsForm({...documentsForm, offerLetterFile: ''})}><Trash2 className="w-4 h-4 text-red-500"/></Button>
                         </div>
                       ) : (
@@ -537,12 +538,12 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                     </CardContent>
                   </Card>
                   
-                  <Card>
-                    <CardHeader className="pb-2"><CardTitle className="text-sm">SOP</CardTitle></CardHeader>
-                    <CardContent className="space-y-2">
+                  <Card className="bg-[#f4f6f3] shadow-none">
+                    <CardHeader className="px-5 pt-5 pb-2"><CardTitle className="text-sm">SOP</CardTitle></CardHeader>
+                    <CardContent className="px-5 pb-5 pt-1 space-y-2">
                       {documentsForm.sopFile ? (
                         <div className="flex items-center justify-between p-2 border rounded text-sm">
-                          <a href={documentsForm.sopFile} target="_blank" rel="noreferrer" className="text-primary hover:underline truncate">View SOP Document</a>
+                          <a href={documentsForm.sopFile} target="_blank" rel="noreferrer" className="text-[#256c1d] hover:underline truncate">View SOP Document</a>
                           <Button variant="ghost" size="sm" onClick={() => setDocumentsForm({...documentsForm, sopFile: ''})}><Trash2 className="w-4 h-4 text-red-500"/></Button>
                         </div>
                       ) : (
@@ -554,7 +555,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                     </CardContent>
                   </Card>
                 </div>
-                <div className="flex justify-end pt-4"><Button onClick={saveDocuments} disabled={saving}>{saving ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />} Save Documents</Button></div>
+                <div className="flex justify-end pt-4"><Button onClick={saveDocuments} disabled={saving} className="rounded-full h-11 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-none">{saving ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />} Save Documents</Button></div>
               </TabsContent>
 
               {/* ── PERSONAL ── */}
@@ -584,7 +585,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                   <div><Label>Phone</Label><Input value={personalForm.emergencyPhone} onChange={e => setPersonalForm({ ...personalForm, emergencyPhone: e.target.value })} /></div>
                   <div><Label>Relation</Label><Input value={personalForm.emergencyRelation} onChange={e => setPersonalForm({ ...personalForm, emergencyRelation: e.target.value })} placeholder="Spouse, Parent..." /></div>
                 </div>
-                <Button onClick={savePersonal} disabled={saving} className="w-full"><Save className="w-4 h-4 mr-2" />Save Personal Info</Button>
+                <Button onClick={savePersonal} disabled={saving} className="w-full rounded-full h-11 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-none"><Save className="w-4 h-4 mr-2" />Save Personal Info</Button>
               </TabsContent>
 
               {/* ── EMPLOYMENT ── */}
@@ -610,12 +611,12 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                   <div><Label>Probation End Date</Label><Input type="date" value={employmentForm.probationEndDate} onChange={e => setEmploymentForm({ ...employmentForm, probationEndDate: e.target.value })} /></div>
                   <div><Label>Work Location</Label><Input value={employmentForm.workLocation} onChange={e => setEmploymentForm({ ...employmentForm, workLocation: e.target.value })} placeholder="Head Office, Remote..." /></div>
                 </div>
-                <Button onClick={saveEmployment} disabled={saving} className="w-full"><Save className="w-4 h-4 mr-2" />Save Employment Info</Button>
+                <Button onClick={saveEmployment} disabled={saving} className="w-full rounded-full h-11 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-none"><Save className="w-4 h-4 mr-2" />Save Employment Info</Button>
               </TabsContent>
 
               {/* ── SALARY ── */}
               <TabsContent value="salary" className="space-y-4 mt-0">
-                <div className="flex items-start gap-2 p-3 rounded-lg border border-blue-200 bg-blue-50 text-blue-800 text-xs">
+                <div className="flex items-start gap-2 p-3 rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs">
                   <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
                   <span>Note: Salary is configured in the <b>Salary Configuration</b> panel (HR &rarr; Salary Config). This tab only shows the configured salary.</span>
                 </div>
@@ -634,7 +635,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                   const net = gross - sum(deductions);
                   const inr = (n: any) => `${CS()}${(Number(n) || 0).toLocaleString()}`;
                   const rule = sc.unpaidLeaveRule || { type: 'standard' };
-                  const statusClass = sc.approvalStatus === 'approved' ? 'bg-green-100 text-green-700'
+                  const statusClass = sc.approvalStatus === 'approved' ? 'bg-[#e3f7dd] text-[#1f6a17]'
                     : sc.approvalStatus === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700';
                   const Row = ({ label, value }: { label: string; value: any }) => (
                     <div className="flex justify-between text-sm py-1.5 border-b border-border/40 last:border-0">
@@ -648,7 +649,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                         <Badge className={cn('capitalize', statusClass)}>{String(sc.approvalStatus || 'pending_approval').replace('_', ' ')}</Badge>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Card><CardContent className="pt-4">
+                        <Card className="bg-[#f4f6f3] shadow-none"><CardContent className="p-5">
                           <Row label="Basic (monthly)" value={inr(sc.basicSalary)} />
                           <Row label="HRA" value={inr(allowances.hra)} />
                           <Row label="DA" value={inr(allowances.da)} />
@@ -656,7 +657,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                           <Row label="Medical" value={inr(allowances.medical)} />
                           <Row label="Other allowance" value={inr(allowances.other)} />
                         </CardContent></Card>
-                        <Card><CardContent className="pt-4">
+                        <Card className="bg-[#f4f6f3] shadow-none"><CardContent className="p-5">
                           <Row label="PF" value={inr(deductions.pf)} />
                           <Row label="ESI" value={inr(deductions.esi)} />
                           <Row label="TDS" value={inr(deductions.tds)} />
@@ -687,7 +688,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                   <div><Label>PAN Number</Label><Input value={salaryForm.panNumber} onChange={e => setSalaryForm({ ...salaryForm, panNumber: e.target.value })} /></div>
                 </div>
 
-                <Button onClick={saveSalary} disabled={saving} className="w-full"><Save className="w-4 h-4 mr-2" />Save Bank Details</Button>
+                <Button onClick={saveSalary} disabled={saving} className="w-full rounded-full h-11 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-none"><Save className="w-4 h-4 mr-2" />Save Bank Details</Button>
               </TabsContent>
 
                 {/* ── PAYROLL HISTORY ── */}
@@ -700,7 +701,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                     </div>
                   ) : (
                     payrolls.map((p: any) => (
-                      <Card key={p.id}>
+                      <Card key={p.id} className="bg-[#f4f6f3] shadow-none">
                         <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                           <div>
                             <div className="flex items-center gap-2 mb-1">
@@ -715,7 +716,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                           </div>
                           <div className="flex gap-2">
                             {/* Expand or Download Payslip button placeholder */}
-                            <Button size="sm" variant="outline">
+                            <Button size="sm" variant="outline" className="rounded-full bg-white border-slate-200">
                               View Details
                             </Button>
                           </div>
@@ -730,7 +731,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
               <TabsContent value="kpi" className="space-y-4 mt-0">
                 <div className="flex items-center justify-between">
                   <SectionTitle icon={Target} title={`KPIs (${kpis.length})`} />
-                  <Button size="sm" onClick={openAddKpi}><Plus className="w-4 h-4 mr-1" />Add KPI</Button>
+                  <Button size="sm" onClick={openAddKpi} className="rounded-full h-9 px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold shadow-none"><Plus className="w-4 h-4 mr-1" />Add KPI</Button>
                 </div>
                 {kpis.length === 0 ? (
                   <div className="border-2 border-dashed rounded-xl p-10 text-center text-muted-foreground">
@@ -742,7 +743,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                     {kpis.map((kpi, i) => {
                       const pct = Math.min(100, Math.round((kpi.achieved / kpi.target) * 100));
                       return (
-                        <Card key={i}>
+                        <Card key={i} className="bg-[#f4f6f3] shadow-none">
                           <CardContent className="p-4">
                             <div className="flex items-start justify-between mb-2">
                               <div>
@@ -757,8 +758,8 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
-                              <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                                <div className={cn('h-full rounded-full', pct >= 100 ? 'bg-green-500' : pct >= 60 ? 'bg-blue-500' : 'bg-yellow-500')} style={{ width: `${pct}%` }} />
+                              <div className="flex-1 h-2 bg-white rounded-full overflow-hidden">
+                                <div className={cn('h-full rounded-full', pct >= 100 ? 'bg-green-500' : pct >= 60 ? 'bg-emerald-500' : 'bg-yellow-500')} style={{ width: `${pct}%` }} />
                               </div>
                               <span className="text-xs font-bold min-w-[80px] text-right">{kpi.achieved}/{kpi.target} {kpi.unit} ({pct}%)</span>
                             </div>
@@ -768,14 +769,14 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                     })}
                   </div>
                 )}
-                {kpis.length > 0 && <Button onClick={saveKPIs} disabled={saving} className="w-full"><Save className="w-4 h-4 mr-2" />Save KPIs</Button>}
+                {kpis.length > 0 && <Button onClick={saveKPIs} disabled={saving} className="w-full rounded-full h-11 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-none"><Save className="w-4 h-4 mr-2" />Save KPIs</Button>}
               </TabsContent>
 
               {/* ── KRA ── */}
               <TabsContent value="kra" className="space-y-4 mt-0">
                 <div className="flex items-center justify-between">
                   <SectionTitle icon={Award} title={`KRAs (${kras.length})`} />
-                  <Button size="sm" onClick={openAddKra}><Plus className="w-4 h-4 mr-1" />Add KRA</Button>
+                  <Button size="sm" onClick={openAddKra} className="rounded-full h-9 px-4 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold shadow-none"><Plus className="w-4 h-4 mr-1" />Add KRA</Button>
                 </div>
                 {totalKraWeightage !== 100 && kras.length > 0 && (
                   <div className="flex items-center gap-2 p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-700 text-sm">
@@ -791,7 +792,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                 ) : (
                   <div className="space-y-3">
                     {kras.map((kra, i) => (
-                      <Card key={i}>
+                      <Card key={i} className="bg-[#f4f6f3] shadow-none">
                         <CardContent className="p-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
@@ -815,7 +816,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                     ))}
                   </div>
                 )}
-                {kras.length > 0 && <Button onClick={saveKRAs} disabled={saving} className="w-full"><Save className="w-4 h-4 mr-2" />Save KRAs</Button>}
+                {kras.length > 0 && <Button onClick={saveKRAs} disabled={saving} className="w-full rounded-full h-11 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-none"><Save className="w-4 h-4 mr-2" />Save KRAs</Button>}
               </TabsContent>
 
               {/* ── REVIEW ── */}
@@ -833,7 +834,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                   <Label>Review Remarks</Label>
                   <Textarea rows={4} value={reviewForm.reviewRemarks} onChange={e => setReviewForm({ ...reviewForm, reviewRemarks: e.target.value })} placeholder="Performance summary, achievements, areas of improvement..." />
                 </div>
-                <Button onClick={saveReview} disabled={saving} className="w-full"><Save className="w-4 h-4 mr-2" />Save Review</Button>
+                <Button onClick={saveReview} disabled={saving} className="w-full rounded-full h-11 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-none"><Save className="w-4 h-4 mr-2" />Save Review</Button>
               </TabsContent>
 
             </div>
@@ -842,57 +843,121 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
 
         {/* KPI Dialog */}
         <Dialog open={kpiDialog} onOpenChange={setKpiDialog}>
-          <DialogContent className="max-w-md">
-            <DialogHeader><DialogTitle>{kpiIdx !== null ? 'Edit KPI' : 'Add KPI'}</DialogTitle></DialogHeader>
+          <DialogContent className="w-[95vw] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] flex flex-col">
+            <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-5 shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+                <Target className="w-5 h-5" />
+              </div>
+              <DialogHeader className="space-y-1 text-left">
+                <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground text-left">{kpiIdx !== null ? 'Edit KPI' : 'Add KPI'}</DialogTitle>
+                <p className="text-sm text-muted-foreground">Track a measurable target for this employee.</p>
+              </DialogHeader>
+            </div>
+
             {editKpi && (
-              <div className="space-y-3 py-2">
-                <div><Label>Title *</Label><Input value={editKpi.title} onChange={e => setEditKpi({ ...editKpi, title: e.target.value })} /></div>
-                <div><Label>Description</Label><Input value={editKpi.description || ''} onChange={e => setEditKpi({ ...editKpi, description: e.target.value })} /></div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                  <div><Label>Target</Label><Input type="number" value={editKpi.target} onChange={e => setEditKpi({ ...editKpi, target: Number(e.target.value) })} /></div>
-                  <div><Label>Achieved</Label><Input type="number" value={editKpi.achieved} onChange={e => setEditKpi({ ...editKpi, achieved: Number(e.target.value) })} /></div>
-                  <div><Label>Unit</Label><Input value={editKpi.unit} onChange={e => setEditKpi({ ...editKpi, unit: e.target.value })} placeholder="%, ₹, count" /></div>
+              <div className="flex-1 overflow-y-auto px-6 sm:px-8 pb-4 space-y-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Title <span className="text-rose-500">*</span></Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" value={editKpi.title} onChange={e => setEditKpi({ ...editKpi, title: e.target.value })} placeholder="e.g. Monthly admissions" />
                 </div>
-                <div><Label>Period</Label><Input value={editKpi.period} onChange={e => setEditKpi({ ...editKpi, period: e.target.value })} placeholder="Q1 2025, FY 2025..." /></div>
-                <div><Label>Status</Label>
-                  <Select value={editKpi.status} onValueChange={v => setEditKpi({ ...editKpi, status: v as KPI['status'] })}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="on_track">On Track</SelectItem>
-                      <SelectItem value="at_risk">At Risk</SelectItem>
-                      <SelectItem value="achieved">Achieved</SelectItem>
-                      <SelectItem value="missed">Missed</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Description</Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" value={editKpi.description || ''} onChange={e => setEditKpi({ ...editKpi, description: e.target.value })} placeholder="What this KPI measures" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-semibold">Target</Label>
+                    <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="number" value={editKpi.target} onChange={e => setEditKpi({ ...editKpi, target: Number(e.target.value) })} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-semibold">Achieved</Label>
+                    <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="number" value={editKpi.achieved} onChange={e => setEditKpi({ ...editKpi, achieved: Number(e.target.value) })} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-semibold">Unit</Label>
+                    <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" value={editKpi.unit} onChange={e => setEditKpi({ ...editKpi, unit: e.target.value })} placeholder="%, ₹, count" />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Period <span className="text-rose-500">*</span></Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" value={editKpi.period} onChange={e => setEditKpi({ ...editKpi, period: e.target.value })} placeholder="Q1 2025, FY 2025..." />
+                </div>
+                <div className="space-y-2 pb-2">
+                  <Label className="text-sm font-semibold">Status</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {([
+                      ['on_track', 'On track'],
+                      ['at_risk', 'At risk'],
+                      ['achieved', 'Achieved'],
+                      ['missed', 'Missed'],
+                    ] as const).map(([val, label]) => (
+                      <button
+                        key={val}
+                        type="button"
+                        aria-pressed={editKpi.status === val}
+                        onClick={() => setEditKpi({ ...editKpi, status: val as KPI['status'] })}
+                        className={cn('px-4 py-2 rounded-full text-xs font-semibold border transition-colors', editKpi.status === val ? 'bg-[#8ae47e] border-[#8ae47e] text-[#0b1d14]' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3]')}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setKpiDialog(false)}>Cancel</Button>
-              <Button onClick={saveKpiDialog} disabled={!editKpi?.title || !editKpi?.period}>Save</Button>
+
+            <DialogFooter className="px-6 sm:px-8 py-5 border-t border-slate-100 gap-2 sm:gap-2 shrink-0 flex-col-reverse sm:flex-row">
+              <Button variant="ghost" onClick={() => setKpiDialog(false)} className="rounded-full h-11 px-6 text-slate-600 hover:text-slate-900 font-semibold">Cancel</Button>
+              <Button onClick={saveKpiDialog} disabled={!editKpi?.title || !editKpi?.period} className="rounded-full h-11 px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-none">Save</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
 
         {/* KRA Dialog */}
         <Dialog open={kraDialog} onOpenChange={setKraDialog}>
-          <DialogContent className="max-w-md">
-            <DialogHeader><DialogTitle>{kraIdx !== null ? 'Edit KRA' : 'Add KRA'}</DialogTitle></DialogHeader>
+          <DialogContent className="w-[95vw] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] flex flex-col">
+            <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-5 shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
+                <Award className="w-5 h-5" />
+              </div>
+              <DialogHeader className="space-y-1 text-left">
+                <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground text-left">{kraIdx !== null ? 'Edit KRA' : 'Add KRA'}</DialogTitle>
+                <p className="text-sm text-muted-foreground">Define a key result area and rate how it is going.</p>
+              </DialogHeader>
+            </div>
+
             {editKra && (
-              <div className="space-y-3 py-2">
-                <div><Label>Key Result Area *</Label><Input value={editKra.area} onChange={e => setEditKra({ ...editKra, area: e.target.value })} placeholder="e.g. Customer Satisfaction, Revenue Growth" /></div>
-                <div><Label>Description</Label><Input value={editKra.description || ''} onChange={e => setEditKra({ ...editKra, description: e.target.value })} /></div>
-                <div><Label>Weightage (%)</Label><Input type="number" min={1} max={100} value={editKra.weightage} onChange={e => setEditKra({ ...editKra, weightage: Number(e.target.value) })} /></div>
-                <div>
-                  <Label className="mb-2 block">Rating (1–5)</Label>
-                  <StarRating value={editKra.rating} onChange={v => setEditKra({ ...editKra, rating: v })} />
+              <div className="flex-1 overflow-y-auto px-6 sm:px-8 pb-4 space-y-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Key result area <span className="text-rose-500">*</span></Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" value={editKra.area} onChange={e => setEditKra({ ...editKra, area: e.target.value })} placeholder="e.g. Customer Satisfaction, Revenue Growth" />
                 </div>
-                <div><Label>Remarks</Label><Textarea rows={2} value={editKra.remarks || ''} onChange={e => setEditKra({ ...editKra, remarks: e.target.value })} /></div>
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-semibold">Description</Label>
+                  <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" value={editKra.description || ''} onChange={e => setEditKra({ ...editKra, description: e.target.value })} placeholder="What this area covers" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-semibold">Weightage (%)</Label>
+                    <Input className="h-11 rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4" type="number" min={1} max={100} value={editKra.weightage} onChange={e => setEditKra({ ...editKra, weightage: Number(e.target.value) })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold block">Rating (1–5)</Label>
+                    <div className="h-11 flex items-center px-4 rounded-xl bg-[#f4f6f3]">
+                      <StarRating value={editKra.rating} onChange={v => setEditKra({ ...editKra, rating: v })} />
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-1.5 pb-2">
+                  <Label className="text-sm font-semibold">Remarks</Label>
+                  <Textarea rows={3} className="rounded-xl bg-[#f4f6f3] border-transparent focus:bg-white focus:border-[#54b947] focus:ring-4 focus:ring-[#54b947]/20 text-sm px-4 py-3 resize-none" value={editKra.remarks || ''} onChange={e => setEditKra({ ...editKra, remarks: e.target.value })} />
+                </div>
               </div>
             )}
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setKraDialog(false)}>Cancel</Button>
-              <Button onClick={saveKraDialog} disabled={!editKra?.area}>Save</Button>
+
+            <DialogFooter className="px-6 sm:px-8 py-5 border-t border-slate-100 gap-2 sm:gap-2 shrink-0 flex-col-reverse sm:flex-row">
+              <Button variant="ghost" onClick={() => setKraDialog(false)} className="rounded-full h-11 px-6 text-slate-600 hover:text-slate-900 font-semibold">Cancel</Button>
+              <Button onClick={saveKraDialog} disabled={!editKra?.area} className="rounded-full h-11 px-8 bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-none">Save</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

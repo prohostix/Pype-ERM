@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
-import { AlertCircle, Plus, RefreshCw, Trash2, Edit2 } from 'lucide-react';
+import { AlertCircle, Plus, RefreshCw, Trash2, Edit2, Fingerprint } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -95,23 +93,23 @@ export function BiometricDevicesPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold tracking-tight">Biometric Devices</h2>
-        <div className="flex space-x-2">
-          <Button variant="outline" onClick={fetchDevices} disabled={loading}>
+      <div className="flex justify-between items-start flex-wrap gap-3">
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Biometric Devices</h2>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={fetchDevices} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
             <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => handleOpenDialog()}>
+              <Button onClick={() => handleOpenDialog()} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Device
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
               <DialogHeader>
-                <DialogTitle>{editingDevice ? 'Edit Device' : 'Add New Device'}</DialogTitle>
+                <DialogTitle className="text-xl font-semibold tracking-tight">{editingDevice ? 'Edit Device' : 'Add New Device'}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
@@ -139,7 +137,7 @@ export function BiometricDevicesPanel() {
                     placeholder="192.168.1.100"
                   />
                 </div>
-                <Button onClick={handleSave} className="w-full">
+                <Button onClick={handleSave} className="w-full h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
                   Save Device
                 </Button>
               </div>
@@ -149,68 +147,59 @@ export function BiometricDevicesPanel() {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 text-red-600 rounded-md flex items-center">
+        <div className="p-4 bg-red-50 text-red-600 rounded-2xl flex items-center">
           <AlertCircle className="w-5 h-5 mr-2" />
           {error}
         </div>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Registered Devices</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Serial Number</TableHead>
-                <TableHead>IP Address</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Last Active</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">Loading devices...</TableCell>
-                </TableRow>
-              ) : devices.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                    No biometric devices registered.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                devices.map((device) => (
-                  <TableRow key={device.id}>
-                    <TableCell className="font-medium">{device.name}</TableCell>
-                    <TableCell>{device.serialNumber}</TableCell>
-                    <TableCell>{device.ipAddress || 'N/A'}</TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 text-xs rounded-full ${device.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                        {device.status}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      {device.lastActive ? new Date(device.lastActive).toLocaleString() : 'Never'}
-                    </TableCell>
-                    <TableCell className="text-right space-x-2">
-                      <Button variant="ghost" size="sm" onClick={() => handleOpenDialog(device)}>
-                        <Edit2 className="w-4 h-4 text-blue-600" />
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(device.id)}>
-                        <Trash2 className="w-4 h-4 text-red-600" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">Registered Devices</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{devices.length} total</span>}
+        </div>
+        <div className="p-4 sm:p-5">
+          {loading ? (
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
+          ) : devices.length === 0 ? (
+            <div className="text-center py-14 text-muted-foreground">
+              <div className="w-14 h-14 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center mx-auto mb-3"><Fingerprint className="w-6 h-6" /></div>
+              <p className="text-sm">No biometric devices registered.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {devices.map((device) => (
+                <div key={device.id} className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div className="w-11 h-11 rounded-2xl bg-white text-[#256c1d] flex items-center justify-center shrink-0">
+                      <Fingerprint className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-semibold text-slate-900 truncate">{device.name}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5 flex flex-wrap gap-x-3">
+                        <span>SN: <span className="font-mono text-slate-700">{device.serialNumber}</span></span>
+                        <span>IP: {device.ipAddress || 'N/A'}</span>
+                        <span>Last active: {device.lastActive ? new Date(device.lastActive).toLocaleString() : 'Never'}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize ${device.status === 'active' ? 'bg-[#dff3da] text-[#256c1d]' : 'bg-slate-200/70 text-slate-600'}`}>
+                      {device.status}
+                    </span>
+                    <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleOpenDialog(device)}>
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(device.id)}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

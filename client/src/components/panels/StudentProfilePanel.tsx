@@ -21,9 +21,10 @@ import {
   Star,
   MessageSquare,
   StickyNote,
-  Hash
+  Hash,
+  Calendar
 } from 'lucide-react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -160,112 +161,162 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-sm text-muted-foreground min-w-0">
-          <Button variant="outline" size="icon" onClick={onBack} className="h-8 w-8 shrink-0">
+          <Button variant="outline" size="icon" onClick={onBack} className="h-10 w-10 shrink-0 rounded-full bg-white border-slate-200 shadow-sm hover:bg-[#eaf6e6]">
             <ArrowLeft className="w-4 h-4" />
           </Button>
-          <span>Students</span><span>/</span><span className="font-medium text-foreground truncate">{student.name}</span>
+          <span>Students</span><span>/</span><span className="font-semibold text-foreground truncate text-base">{student.name}</span>
         </div>
         {completed ? (
-          <Badge className="bg-emerald-600 text-white px-3 py-1 uppercase font-bold tracking-wider">Completed</Badge>
+          <Badge className="bg-[#e3f7dd] text-[#1f6a17] border-0 px-3.5 py-1.5 rounded-full text-xs font-semibold">Completed</Badge>
         ) : (
-          <Badge variant="secondary" className="px-3 py-1 uppercase">{student.status}</Badge>
+          <Badge variant="secondary" className="px-3.5 py-1.5 rounded-full text-xs font-semibold capitalize bg-[#f1f3ef] text-slate-600 border-0">{String(student.status || "").replace(/_/g, " ")}</Badge>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left Column: Summary Card */}
-        <Card className="md:col-span-1 overflow-hidden shadow-sm border-border bg-card self-start">
-          <div className="h-20 bg-gradient-to-r from-primary/25 via-primary/10 to-transparent" />
-          <CardContent className="pt-0 pb-6">
-            <div className="flex flex-col items-center text-center -mt-12">
-              <Avatar className="w-24 h-24 border-4 border-background shadow-lg">
-                <AvatarImage src={photoUrl} />
-                <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
+      <div className="space-y-6">
+        {/* Profile header */}
+        <Card className="rounded-3xl gap-0 py-0">
+          <CardContent className="p-5">
+            {/* Identity */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <Avatar className="w-14 h-14 rounded-2xl shrink-0">
+                <AvatarImage src={photoUrl} className="rounded-2xl object-cover" />
+                <AvatarFallback className="rounded-2xl bg-[#eaf6e6] text-[#256c1d] text-xl font-semibold">
                   {(student.name || '?').substring(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <h3 className="text-xl font-bold mt-3">{student.name}</h3>
-              <p className="text-sm font-medium text-muted-foreground mt-1 inline-flex items-center gap-1">
-                <Hash className="w-3.5 h-3.5" />{student.enrollmentNo || 'Enrollment no. pending'}
-              </p>
-              {student.admissionNo && <p className="text-xs text-muted-foreground mt-0.5">Admission No: {student.admissionNo}</p>}
-              <div className="flex items-center justify-center gap-2 mt-2 text-sm text-slate-600 dark:text-slate-400">
-                <GraduationCap className="w-4 h-4 shrink-0" />
-                <span>{programName}</span>
-              </div>
-              {student.videoBlocked && (
-                <Badge variant="destructive" className="mt-3 text-[10px] uppercase" title={student.videoBlockReason || ''}>Videos blocked</Badge>
-              )}
-            </div>
 
-            <div className="mt-6 space-y-2.5">
-              {[
-                { icon: Mail, label: 'Email', value: student.email || 'Not provided' },
-                { icon: Phone, label: 'Phone', value: student.phone || 'Not provided' },
-                { icon: MapPin, label: 'Address', value: student.address || 'Not provided' },
-              ].map(({ icon: Icon, label, value }) => (
-                <div key={label} className="flex items-center gap-3 rounded-xl border bg-muted/30 px-3 py-2.5 min-w-0">
-                  <div className="p-2 rounded-lg bg-background border shrink-0"><Icon className="w-4 h-4 text-muted-foreground" /></div>
-                  <div className="min-w-0">
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</p>
-                    <p className="text-sm font-medium truncate" title={String(value)}>{value}</p>
-                  </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <h3 className="text-xl font-semibold tracking-tight truncate">{student.name}</h3>
+                  {student.videoBlocked && (
+                    <Badge variant="destructive" className="text-[10px] uppercase rounded-full" title={student.videoBlockReason || ''}>Videos blocked</Badge>
+                  )}
                 </div>
-              ))}
+                <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#f1f3ef] text-slate-700">
+                    <Hash className="w-3.5 h-3.5" />{student.enrollmentNo || 'Enrollment no. pending'}
+                  </span>
+                  {student.admissionNo && (
+                    <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#f1f3ef] text-slate-600">Admission No: {student.admissionNo}</span>
+                  )}
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#e3f7dd] text-[#1f6a17]">
+                    <GraduationCap className="w-3.5 h-3.5" />{programName}
+                  </span>
+                </div>
+              </div>
+
+              {(() => {
+                const st = String(student.status || '').toLowerCase();
+                const tone = ['active', 'enrolled', 'completed'].includes(st)
+                  ? { pill: 'bg-[#e3f7dd] text-[#1f6a17]', dot: 'bg-[#54b947]' }
+                  : ['dropped', 'rejected', 'department_rejected'].includes(st)
+                    ? { pill: 'bg-rose-50 text-rose-700', dot: 'bg-rose-500' }
+                    : ['inactive'].includes(st)
+                      ? { pill: 'bg-slate-100 text-slate-600', dot: 'bg-slate-400' }
+                      : { pill: 'bg-amber-50 text-amber-700', dot: 'bg-amber-500' };
+                return (
+                  <div className="sm:text-right shrink-0">
+                    <span className={`inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-1.5 rounded-full capitalize ${tone.pill}`}>
+                      <span className={`w-2 h-2 rounded-full ${tone.dot}`} />{String(student.status || '—').replace(/_/g, ' ')}
+                    </span>
+                  </div>
+                );
+              })()}
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5 mt-2.5">
+            <div className="my-4 h-px bg-slate-100 dark:bg-white/10" />
+
+            {/* Details, grouped */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-5 md:divide-x md:divide-slate-100 dark:md:divide-white/10">
               {[
-                { label: 'University', value: universityName },
-                { label: 'Branch', value: branchName },
-                { label: 'Session', value: student.session?.name || 'N/A' },
-                { label: 'Admitted on', value: fmt(joined) },
-              ].map(({ label, value }) => (
-                <div key={label} className="rounded-xl border px-3 py-2.5 min-w-0">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</p>
-                  <p className="text-sm font-semibold mt-0.5 truncate" title={String(value)}>{value}</p>
+                {
+                  title: 'Contact',
+                  rows: [
+                    { icon: Mail, label: 'Email', value: student.email || 'Not provided', href: student.email ? `mailto:${student.email}` : undefined },
+                    { icon: Phone, label: 'Phone', value: student.phone || 'Not provided', href: student.phone ? `tel:${student.phone}` : undefined },
+                    { icon: MapPin, label: 'Address', value: student.address || 'Not provided' },
+                  ],
+                },
+                {
+                  title: 'Academic',
+                  rows: [
+                    { icon: Building2, label: 'University', value: universityName },
+                    { icon: Building2, label: 'Branch', value: branchName },
+                  ],
+                },
+                {
+                  title: 'Admission',
+                  rows: [
+                    { icon: Calendar, label: 'Admitted on', value: fmt(joined) },
+                    { icon: Calendar, label: 'Session', value: student.session?.name || 'N/A' },
+                  ],
+                },
+              ].map((group, gi) => (
+                <div key={group.title} className={gi > 0 ? 'md:pl-8 min-w-0' : 'min-w-0'}>
+                  <h4 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-3">{group.title}</h4>
+                  <div className="space-y-2.5">
+                    {group.rows.map(({ icon: Icon, label, value, href }: any) => {
+                      const inner = (
+                        <>
+                          <div className="w-8 h-8 rounded-xl bg-[#f4f6f3] dark:bg-muted/40 flex items-center justify-center shrink-0"><Icon className="w-3.5 h-3.5 text-[#256c1d]" /></div>
+                          <div className="min-w-0">
+                            <p className="text-[10px] text-muted-foreground font-medium leading-none">{label}</p>
+                            <p className="text-[13px] font-semibold truncate mt-0.5" title={String(value)}>{value}</p>
+                          </div>
+                        </>
+                      );
+                      return href ? (
+                        <a key={label} href={href} className="flex items-center gap-3 min-w-0 hover:text-[#256c1d] transition-colors">{inner}</a>
+                      ) : (
+                        <div key={label} className="flex items-center gap-3 min-w-0">{inner}</div>
+                      );
+                    })}
+                  </div>
                 </div>
               ))}
             </div>
           </CardContent>
         </Card>
 
-        {/* Right Column: Tabs */}
-        <div className="md:col-span-2">
-          <Card className="shadow-sm border-border bg-card h-full">
-            <Tabs defaultValue="personal" className="w-full">
-              <CardHeader className="border-b p-3 sm:p-4">
-                <TabsList className="w-full justify-start h-auto bg-transparent p-0 gap-1.5 overflow-x-auto rounded-none">
-                  <TabsTrigger value="personal" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+        {/* Details: section navigation + content */}
+        <Tabs defaultValue="personal" orientation="vertical" className="grid lg:grid-cols-[250px_minmax(0,1fr)] gap-5 sm:gap-6 items-start">
+          <Card className="rounded-3xl gap-0 py-0 lg:sticky lg:top-24">
+            <CardContent className="p-3 sm:p-4">
+              <TabsList className="w-full h-auto bg-transparent p-0 gap-1 rounded-none flex flex-row lg:flex-col items-stretch justify-start overflow-x-auto lg:overflow-visible">
+                  <TabsTrigger value="personal" className="flex-none lg:w-full justify-start gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-[#f4f6f3] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none whitespace-nowrap">
                     <User className="w-4 h-4" /> Personal
                   </TabsTrigger>
-                  <TabsTrigger value="enrollments" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                  <TabsTrigger value="enrollments" className="flex-none lg:w-full justify-start gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-[#f4f6f3] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none whitespace-nowrap">
                     <GraduationCap className="w-4 h-4" /> Enrollments <span className="opacity-70">({enrollments.length})</span>
                   </TabsTrigger>
-                  <TabsTrigger value="documents" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                  <TabsTrigger value="documents" className="flex-none lg:w-full justify-start gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-[#f4f6f3] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none whitespace-nowrap">
                     <FileText className="w-4 h-4" /> Documents
                   </TabsTrigger>
-                  <TabsTrigger value="fees" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                  <TabsTrigger value="fees" className="flex-none lg:w-full justify-start gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-[#f4f6f3] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none whitespace-nowrap">
                     <Wallet className="w-4 h-4" /> Fees
                   </TabsTrigger>
-                  <TabsTrigger value="university" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                  <TabsTrigger value="university" className="flex-none lg:w-full justify-start gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-[#f4f6f3] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none whitespace-nowrap">
                     <Building2 className="w-4 h-4" /> University
                   </TabsTrigger>
-                  <TabsTrigger value="portal" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                  <TabsTrigger value="portal" className="flex-none lg:w-full justify-start gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-[#f4f6f3] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none whitespace-nowrap">
                     <KeyRound className="w-4 h-4" /> Portal access
                   </TabsTrigger>
-                  <TabsTrigger value="progress" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                  <TabsTrigger value="progress" className="flex-none lg:w-full justify-start gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-[#f4f6f3] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none whitespace-nowrap">
                     <Star className="w-4 h-4" /> Progress
                   </TabsTrigger>
-                  <TabsTrigger value="communication" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                  <TabsTrigger value="communication" className="flex-none lg:w-full justify-start gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-[#f4f6f3] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none whitespace-nowrap">
                     <MessageSquare className="w-4 h-4" /> Messages
                   </TabsTrigger>
-                  <TabsTrigger value="remarks" className="gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm whitespace-nowrap">
+                  <TabsTrigger value="remarks" className="flex-none lg:w-full justify-start gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-[#f4f6f3] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none whitespace-nowrap">
                     <StickyNote className="w-4 h-4" /> Remarks
                   </TabsTrigger>
                 </TabsList>
-              </CardHeader>
-              <CardContent className="p-5 sm:p-6">
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-3xl gap-0 py-0 min-w-0">
+            <CardContent className="p-5 sm:p-6 sm:pt-6">
 
                 {/* Personal Details Tab */}
                 <TabsContent value="personal" className="space-y-8 mt-0">
@@ -318,21 +369,21 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                     {student.documents && Array.isArray(student.documents) && student.documents.length > 0 ? (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {student.documents.map((doc: any, index: number) => (
-                          <div key={index} className="flex items-center gap-3 p-3 border border-border rounded-lg bg-muted/30">
-                            <FileText className="w-8 h-8 text-primary" />
+                          <div key={index} className="flex items-center gap-3 p-4 rounded-2xl bg-[#f4f6f3] dark:bg-muted/30">
+                            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0"><FileText className="w-5 h-5 text-[#256c1d]" /></div>
                             <div className="overflow-hidden">
                               <p className="text-sm font-semibold truncate">{doc.name || 'Document'}</p>
-                              <p className="text-xs text-muted-foreground uppercase">{doc.type || 'Unknown Type'}</p>
+                              <p className="text-xs text-muted-foreground capitalize">{doc.type || 'Unknown Type'}</p>
                             </div>
-                            <Button variant="ghost" size="sm" className="ml-auto" onClick={() => window.open(api.getFileUrl(doc.url), '_blank')}>
+                            <Button variant="outline" size="sm" className="ml-auto h-9 px-4 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]" onClick={() => window.open(api.getFileUrl(doc.url), '_blank')}>
                               View
                             </Button>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className="text-center py-10 space-y-3">
-                        <FileText className="w-10 h-10 mx-auto text-muted-foreground opacity-50" />
+                      <div className="text-center py-12 space-y-3">
+                        <span className="w-14 h-14 rounded-full bg-[#f4f6f3] flex items-center justify-center mx-auto"><FileText className="w-6 h-6 text-muted-foreground" /></span>
                         <h4 className="text-base font-semibold">No Documents Found</h4>
                         <p className="text-sm text-muted-foreground">The student has not uploaded any documents yet.</p>
                       </div>
@@ -344,25 +395,25 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                 <TabsContent value="portal" className="mt-0">
                   <div className="space-y-6">
                     <div className="flex flex-col gap-2">
-                      <h3 className="text-lg font-bold">Portal Access Credentials</h3>
+                      <h3 className="text-xl font-semibold">Portal access credentials</h3>
                       <p className="text-sm text-muted-foreground">
                         Students can log in to the student portal using these credentials to view their progress, download documents, and check fee statuses.
                       </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="border rounded-lg p-4 space-y-4 bg-muted/20">
+                      <div className="rounded-3xl p-6 space-y-5 bg-[#f4f6f3] dark:bg-muted/30">
                         <div>
-                          <p className="text-xs text-muted-foreground uppercase font-semibold mb-1">Portal Login URL</p>
+                          <p className="text-xs text-muted-foreground font-medium mb-1.5">Portal Login URL</p>
                           <div className="flex items-center gap-2">
-                            <code className="text-sm bg-muted px-2 py-1 rounded select-all">
+                            <code className="text-sm bg-white px-3 py-1.5 rounded-full select-all">
                               {typeof window !== 'undefined' ? window.location.origin.replace('admin', 'student') + '/student-portal' : 'https://portal.example.com'}
                             </code>
                           </div>
                         </div>
 
                         <div>
-                          <p className="text-xs text-muted-foreground uppercase font-semibold mb-1">Login Email</p>
+                          <p className="text-xs text-muted-foreground font-medium mb-1.5">Login Email</p>
                           <div className="flex items-center gap-2">
                             <Mail className="w-4 h-4 text-muted-foreground" />
                             <span className="font-medium select-all">{student.email}</span>
@@ -370,7 +421,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                         </div>
 
                         <div>
-                          <p className="text-xs text-muted-foreground uppercase font-semibold mb-1">Current Password</p>
+                          <p className="text-xs text-muted-foreground font-medium mb-1.5">Current Password</p>
                           <div className="flex items-center gap-2">
                             <Key className="w-4 h-4 text-muted-foreground" />
                             {student.credentials?.password ? (
@@ -396,16 +447,16 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                         </div>
                       </div>
                       
-                      <div className="flex flex-col justify-center space-y-4 border rounded-lg p-6 bg-muted/10">
+                      <div className="flex flex-col justify-center space-y-4 rounded-3xl p-6 bg-rose-50/60 dark:bg-rose-500/5">
                         <div className="text-center space-y-2 mb-2">
-                          <RefreshCw className="w-8 h-8 text-muted-foreground mx-auto" />
-                          <h4 className="font-semibold">Reset Password</h4>
+                          <span className="w-12 h-12 rounded-full bg-white flex items-center justify-center mx-auto"><RefreshCw className="w-5 h-5 text-rose-500" /></span>
+                          <h4 className="font-semibold text-base">Reset password</h4>
                           <p className="text-sm text-muted-foreground">Generate a new random password for this student. The old password will immediately become invalid.</p>
                         </div>
                         <Button 
                           onClick={handleResetPassword} 
                           disabled={isResetting} 
-                          className="w-full"
+                          className="w-full h-11 rounded-full bg-rose-600 hover:bg-rose-700 text-white font-semibold"
                           variant="destructive"
                         >
                           {isResetting ? 'Resetting...' : 'Generate New Password'}
@@ -430,9 +481,9 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
 
                 {/* All Enrollments & Upgrades Tab */}
                 <TabsContent value="enrollments" className="space-y-4 mt-0">
-                  <div className="flex items-center justify-between pb-2 border-b">
+                  <div className="flex items-center justify-between gap-3 pb-1">
                     <div>
-                      <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">Student Program Enrollments</h3>
+                      <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Program enrollments</h3>
                       <p className="text-xs text-muted-foreground">All academic programs, completed courses, and upgrades linked to this student profile.</p>
                     </div>
                     {student.isPrevious && (
@@ -448,7 +499,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                       <p className="text-xs">Loading student enrollments...</p>
                     </div>
                   ) : enrollments.length === 0 ? (
-                    <div className="py-8 text-center text-muted-foreground text-sm border rounded-xl border-dashed">
+                    <div className="py-12 text-center text-muted-foreground text-sm border rounded-3xl border-dashed border-slate-300">
                       No enrollment history records found.
                     </div>
                   ) : (
@@ -464,11 +515,11 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                         const passedTerms = acTerms.filter((t: any) => t.isSaved && (t.resultStatus === 'Passed' || t.resultStatus === 'Pass'));
 
                         return (
-                          <div key={enr.id} className="p-4 rounded-2xl border bg-card hover:border-primary/40 transition-all shadow-sm space-y-3">
+                          <div key={enr.id} className="p-5 sm:p-6 rounded-3xl bg-[#f4f6f3] dark:bg-muted/30 space-y-4">
                             <div className="flex items-start justify-between gap-3 flex-wrap">
                               <div>
                                 <div className="flex items-center gap-2 flex-wrap mb-1">
-                                  <h4 className="font-bold text-slate-900 dark:text-slate-100 text-base">
+                                  <h4 className="font-semibold text-slate-900 dark:text-slate-100 text-lg">
                                     {enr.program?.name || 'Program'}
                                   </h4>
                                   {idx === 0 && !isCompletedProgram && enr.status !== 'dropped' && (
@@ -477,11 +528,11 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                                     </Badge>
                                   )}
                                   {isCompletedProgram ? (
-                                    <Badge className="bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                                    <Badge className="bg-[#8ae47e] text-[#0b1d14] text-[11px] font-semibold rounded-full border-0">
                                       🎓 Completed
                                     </Badge>
                                   ) : isUpgrade ? (
-                                    <Badge className="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                                    <Badge className="bg-[#8ae47e] text-[#0b1d14] text-[11px] font-semibold rounded-full border-0">
                                       🎓 Upgrade
                                     </Badge>
                                   ) : enr.status === 'dropped' ? (
@@ -489,7 +540,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                                       ⚠️ Dropped
                                     </Badge>
                                   ) : (
-                                    <Badge variant="outline" className="text-[10px] uppercase font-bold">
+                                    <Badge variant="outline" className="text-[11px] font-semibold rounded-full capitalize bg-white">
                                       {enr.status?.replace(/_/g, ' ')}
                                     </Badge>
                                   )}
@@ -517,7 +568,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
 
                             {/* Dropped Alert Banner */}
                             {enr.status === 'dropped' && (
-                              <div className="flex items-start gap-2.5 p-3 rounded-lg bg-rose-50/80 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-xs text-rose-800 dark:text-rose-300">
+                              <div className="flex items-start gap-2.5 p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/30 text-xs text-rose-800 dark:text-rose-300">
                                 <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
                                 <div className="flex-1 space-y-0.5">
                                   <p className="font-semibold text-rose-900 dark:text-rose-200">
@@ -539,32 +590,32 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                               </div>
                             )}
 
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-muted/30 rounded-xl text-xs">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-white dark:bg-card rounded-2xl text-xs">
                               <div>
-                                <span className="text-muted-foreground uppercase text-[10px] font-semibold block">Center</span>
-                                <span className="font-medium">{enr.studyCenter?.name || 'Main Branch'}</span>
+                                <span className="text-muted-foreground text-[11px] font-medium block mb-0.5">Center</span>
+                                <span className="font-semibold text-sm">{enr.studyCenter?.name || 'Main Branch'}</span>
                               </div>
                               <div>
-                                <span className="text-muted-foreground uppercase text-[10px] font-semibold block">Payment Plan</span>
-                                <span className="font-medium capitalize">{enr.paymentPlan || 'Standard'}</span>
+                                <span className="text-muted-foreground text-[11px] font-medium block mb-0.5">Payment Plan</span>
+                                <span className="font-semibold text-sm capitalize">{enr.paymentPlan || 'Standard'}</span>
                               </div>
                               <div>
-                                <span className="text-muted-foreground uppercase text-[10px] font-semibold block">Initial Fee</span>
-                                <span className="font-medium">{enr.initialPaymentAmount ? `${CS()}${enr.initialPaymentAmount}` : 'N/A'}</span>
+                                <span className="text-muted-foreground text-[11px] font-medium block mb-0.5">Initial Fee</span>
+                                <span className="font-semibold text-sm">{enr.initialPaymentAmount ? `${CS()}${enr.initialPaymentAmount}` : 'N/A'}</span>
                               </div>
                               <div>
-                                <span className="text-muted-foreground uppercase text-[10px] font-semibold block">Review Stage</span>
-                                <span className="font-medium capitalize">{enr.status?.replace(/_/g, ' ')}</span>
+                                <span className="text-muted-foreground text-[11px] font-medium block mb-0.5">Review Stage</span>
+                                <span className="font-semibold text-sm capitalize">{enr.status?.replace(/_/g, ' ')}</span>
                               </div>
                             </div>
 
                             {/* Academic Semester Progress Breakdown */}
                             {acTerms.length > 0 && (
-                              <div className="mt-3 pt-3 border-t border-border/60 space-y-2.5">
+                              <div className="mt-2 space-y-3">
                                 <div className="flex items-center justify-between">
                                   <div className="flex items-center gap-2">
                                     <BookOpen className="w-4 h-4 text-primary" />
-                                    <span className="text-xs font-bold text-foreground uppercase tracking-wide">
+                                    <span className="text-sm font-semibold text-foreground">
                                       Academic Progress ({acTerms.length} Terms)
                                     </span>
                                   </div>
@@ -577,7 +628,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                                   {acTerms.map((term: any) => {
                                     const isPassed = term.resultStatus === 'Passed' || term.resultStatus === 'Pass';
                                     return (
-                                      <div key={term.term} className="p-2.5 rounded-xl border bg-muted/20 text-xs space-y-1">
+                                      <div key={term.term} className="p-3 rounded-2xl bg-white dark:bg-card text-xs space-y-1.5">
                                         <div className="flex items-center justify-between">
                                           <span className="font-bold text-foreground">Semester {term.term}</span>
                                           <Badge variant={isPassed ? 'default' : 'secondary'} className={isPassed ? 'bg-emerald-600 text-white text-[9px]' : 'text-[9px]'}>
@@ -591,17 +642,17 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                                         {(term.resultStatusDoc || term.resultProof || term.reRegistrationDoc || term.examRegistrationDoc) && (
                                           <div className="flex items-center gap-2 pt-1 border-t border-border/30">
                                             {(term.resultStatusDoc || term.resultProof) && (
-                                              <a href={api.getFileUrl(term.resultStatusDoc || term.resultProof)} target="_blank" rel="noreferrer" className="text-[10px] text-blue-600 hover:underline flex items-center gap-0.5">
+                                              <a href={api.getFileUrl(term.resultStatusDoc || term.resultProof)} target="_blank" rel="noreferrer" className="text-[10px] text-emerald-600 hover:underline flex items-center gap-0.5">
                                                 <Eye className="w-3 h-3" /> Marksheet
                                               </a>
                                             )}
                                             {(term.reRegistrationDoc || term.reRegistrationProof) && (
-                                              <a href={api.getFileUrl(term.reRegistrationDoc || term.reRegistrationProof)} target="_blank" rel="noreferrer" className="text-[10px] text-blue-600 hover:underline flex items-center gap-0.5">
+                                              <a href={api.getFileUrl(term.reRegistrationDoc || term.reRegistrationProof)} target="_blank" rel="noreferrer" className="text-[10px] text-emerald-600 hover:underline flex items-center gap-0.5">
                                                 <Eye className="w-3 h-3" /> Re-Reg
                                               </a>
                                             )}
                                             {(term.examRegistrationDoc || term.examRegistrationProof) && (
-                                              <a href={api.getFileUrl(term.examRegistrationDoc || term.examRegistrationProof)} target="_blank" rel="noreferrer" className="text-[10px] text-blue-600 hover:underline flex items-center gap-0.5">
+                                              <a href={api.getFileUrl(term.examRegistrationDoc || term.examRegistrationProof)} target="_blank" rel="noreferrer" className="text-[10px] text-emerald-600 hover:underline flex items-center gap-0.5">
                                                 <Eye className="w-3 h-3" /> Exam
                                               </a>
                                             )}
@@ -615,7 +666,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                             )}
 
                             {enr.departmentRemarks && (
-                              <div className="p-2.5 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 text-xs text-red-700 dark:text-red-300">
+                              <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-red-950/20 text-xs text-red-700 dark:text-red-300">
                                 <strong>Operations Remarks: </strong>{enr.departmentRemarks}
                               </div>
                             )}
@@ -627,9 +678,9 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                 </TabsContent>
 
               </CardContent>
-            </Tabs>
+
           </Card>
-        </div>
+        </Tabs>
       </div>
 
       {/* Enrollment Dropout Confirmation Dialog */}
@@ -761,9 +812,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
-        {title}<span className="h-px flex-1 bg-border" />
-      </h3>
+      <h3 className="text-base font-semibold text-foreground mb-3">{title}</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{children}</div>
     </div>
   );
@@ -772,9 +821,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Field({ label, value, capitalize, wide }: { label: string; value?: string | null; capitalize?: boolean; wide?: boolean }) {
   const empty = !value || !String(value).trim() || value === 'N/A';
   return (
-    <div className={`rounded-xl border bg-muted/20 px-3.5 py-3 ${wide ? 'sm:col-span-2' : ''}`}>
-      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</p>
-      <p className={`mt-1 text-sm font-medium break-words ${capitalize ? 'capitalize' : ''} ${empty ? 'text-muted-foreground/60' : ''}`}>{empty ? 'Not provided' : value}</p>
+    <div className={`rounded-2xl bg-[#f4f6f3] dark:bg-muted/30 px-4 py-3 ${wide ? 'sm:col-span-2' : ''}`}>
+      <p className="text-[11px] text-muted-foreground font-medium">{label}</p>
+      <p className={`mt-1 text-sm font-semibold break-words ${capitalize ? 'capitalize' : ''} ${empty ? 'text-muted-foreground/60' : ''}`}>{empty ? 'Not provided' : value}</p>
     </div>
   );
 }

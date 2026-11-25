@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Save, RefreshCw, CheckCircle, Search } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Save, RefreshCw, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { ListPagination } from '@/components/ui/list-pagination';
 
 export function EnrollmentNumberUpdatePanel() {
   const [students, setStudents] = useState<any[]>([]);
@@ -22,7 +20,7 @@ export function EnrollmentNumberUpdatePanel() {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -93,232 +91,121 @@ export function EnrollmentNumberUpdatePanel() {
   const filteredPending = students.filter(applyFilters);
   const filteredUpdated = updatedStudents.filter(applyFilters);
 
+  const sel = 'h-11 rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 outline-none focus:border-[#54b947]';
+  const activeList = activeTab === 'pending' ? filteredPending : filteredUpdated;
+  const pageCount = Math.max(1, Math.ceil(activeList.length / itemsPerPage));
+  const safePage = Math.min(currentPage, pageCount);
+  const pageRows = activeList.slice((safePage - 1) * itemsPerPage, safePage * itemsPerPage);
+
   return (
-    <Card className="border-none shadow-none">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Enrollment Number Update</CardTitle>
-            <CardDescription>Assign official university enrollment numbers to admitted students</CardDescription>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={fetchStudents} disabled={loading}>
-              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
-            {activeTab === 'pending' && (
-              <Button size="sm" onClick={saveUpdates} disabled={saving || Object.keys(updates).length === 0}>
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
-              </Button>
-            )}
-          </div>
+    <div className="space-y-6 wizard-form">
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Enrollment Number Update</h2>
+          <p className="text-muted-foreground text-sm mt-1.5">Assign official university enrollment numbers to admitted students</p>
         </div>
-      </CardHeader>
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-            <TabsList>
-              <TabsTrigger value="pending">Pending Update ({filteredPending.length})</TabsTrigger>
-              <TabsTrigger value="updated">Updated ({filteredUpdated.length})</TabsTrigger>
-            </TabsList>
-            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-              <div className="relative w-full sm:w-64">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search students..."
-                  className="pl-8"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              <select 
-                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                value={centerFilter}
-                onChange={e => setCenterFilter(e.target.value)}
-              >
-                <option value="all">All Centers</option>
-                {centers.map(c => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-              <select 
-                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                value={programFilter}
-                onChange={e => setProgramFilter(e.target.value)}
-              >
-                <option value="all">All Programs</option>
-                {programs.map(p => (
-                  <option key={p} value={p}>{p}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+        <div className="flex gap-2 flex-wrap">
+          <Button variant="outline" onClick={fetchStudents} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6]">
+            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+          {activeTab === 'pending' && (
+            <Button onClick={saveUpdates} disabled={saving || Object.keys(updates).length === 0} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+              <Save className="w-4 h-4 mr-2" />
+              {saving ? 'Saving...' : 'Save Changes'}
+            </Button>
+          )}
+        </div>
+      </div>
 
-          {(() => {
-            const totalPendingPages = Math.max(1, Math.ceil(filteredPending.length / itemsPerPage));
-            const paginatedPending = filteredPending.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-            return (
-          <TabsContent value="pending" className="m-0">
-            {loading ? (
-              <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : filteredPending.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
-                <CheckCircle className="w-8 h-8 text-green-500 mb-2" />
-                <p className="text-muted-foreground">{students.length === 0 ? 'All admitted students have enrollment numbers!' : 'No students found matching your search.'}</p>
-              </div>
-            ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Student</TableHead>
-                      <TableHead>Program / Batch</TableHead>
-                      <TableHead>Center</TableHead>
-                      <TableHead className="w-[300px]">Enrollment Number</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedPending.map((student) => (
-                      <TableRow key={student.id}>
-                        <TableCell>
-                          <div className="font-medium">{student.name}</div>
-                          <div className="text-xs text-muted-foreground">{student.email}</div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="mb-1">{student.program?.name || 'N/A'}{student.specialisation ? ` - ${student.specialisation}` : ''}</Badge>
-                          <div className="text-xs text-muted-foreground">{student.session?.name}</div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm">{student.center?.name || 'Direct'}</div>
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            placeholder="Enter Enrollment No."
-                            value={updates[student.id] !== undefined ? updates[student.id] : (student.enrollmentNo || '')}
-                            onChange={(e) => handleUpdateChange(student.id, e.target.value)}
-                            className="h-8 max-w-[250px]"
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                {/* Pagination Controls */}
-                {totalPendingPages > 1 && (
-                  <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
-                    <div className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredPending.length)} of {filteredPending.length} students
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                      >
-                        Previous
-                      </Button>
-                      <div className="text-sm font-medium px-2">
-                        Page {currentPage} of {totalPendingPages}
-                      </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.min(totalPendingPages, p + 1))}
-                        disabled={currentPage === totalPendingPages}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </TabsContent>
-          );
-          })()}
-
-          {(() => {
-            const totalUpdatedPages = Math.max(1, Math.ceil(filteredUpdated.length / itemsPerPage));
-            const paginatedUpdated = filteredUpdated.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-            return (
-          <TabsContent value="updated" className="m-0">
-            {loading ? (
-              <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : filteredUpdated.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
-                <p className="text-muted-foreground">{updatedStudents.length === 0 ? 'No students have been updated yet.' : 'No students found matching your search.'}</p>
-              </div>
-            ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Student</TableHead>
-                      <TableHead>Program / Batch</TableHead>
-                      <TableHead>Center</TableHead>
-                      <TableHead>Enrollment Number</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedUpdated.map((student) => (
-                      <TableRow key={student.id}>
-                        <TableCell>
-                          <div className="font-medium">{student.name}</div>
-                          <div className="text-xs text-muted-foreground">{student.email}</div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="mb-1">{student.program?.name || 'N/A'}{student.specialisation ? ` - ${student.specialisation}` : ''}</Badge>
-                          <div className="text-xs text-muted-foreground">{student.session?.name}</div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm">{student.center?.name || 'Direct'}</div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="font-semibold text-primary">{student.enrollmentNo}</div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                {/* Pagination Controls */}
-                {totalUpdatedPages > 1 && (
-                  <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
-                    <div className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredUpdated.length)} of {filteredUpdated.length} students
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                      >
-                        Previous
-                      </Button>
-                      <div className="text-sm font-medium px-2">
-                        Page {currentPage} of {totalUpdatedPages}
-                      </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setCurrentPage(p => Math.min(totalUpdatedPages, p + 1))}
-                        disabled={currentPage === totalUpdatedPages}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </TabsContent>
-          );
-          })()}
+      <div className="rounded-3xl bg-white border border-slate-100 p-4 space-y-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="h-auto bg-[#f4f6f3] p-1.5 rounded-full gap-1 w-fit max-w-full">
+            <TabsTrigger value="pending" className="rounded-full px-5 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Pending Update ({filteredPending.length})</TabsTrigger>
+            <TabsTrigger value="updated" className="rounded-full px-5 py-2 text-sm font-semibold text-slate-600 data-[state=active]:bg-[#8ae47e] data-[state=active]:text-[#0b1d14] data-[state=active]:shadow-none">Updated ({filteredUpdated.length})</TabsTrigger>
+          </TabsList>
         </Tabs>
-      </CardContent>
-    </Card>
+        <div className="flex flex-col lg:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              type="search"
+              placeholder="Search students..."
+              className="pl-11 h-11 rounded-full bg-[#f4f6f3] border-transparent"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <select className={sel + (centerFilter !== 'all' ? ' !bg-[#8ae47e] !border-[#8ae47e] !text-[#0b1d14]' : '')} value={centerFilter} onChange={e => setCenterFilter(e.target.value)}>
+            <option value="all">All Centers</option>
+            {centers.map(c => (<option key={c} value={c}>{c}</option>))}
+          </select>
+          <select className={sel + (programFilter !== 'all' ? ' !bg-[#8ae47e] !border-[#8ae47e] !text-[#0b1d14]' : '')} value={programFilter} onChange={e => setProgramFilter(e.target.value)}>
+            <option value="all">All Programs</option>
+            {programs.map(p => (<option key={p} value={p}>{p}</option>))}
+          </select>
+        </div>
+      </div>
+
+      <div className="rounded-3xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">
+          <h3 className="text-lg font-semibold tracking-tight">{activeTab === 'pending' ? 'Pending Update' : 'Updated Students'}</h3>
+          {!loading && <span className="rounded-full bg-[#eaf6e6] text-[#256c1d] text-xs font-semibold px-3 py-1">{activeList.length} students</span>}
+        </div>
+        <div className="p-4 sm:p-5">
+          {loading ? (
+            <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />)}</div>
+          ) : activeList.length === 0 ? (
+            <div className="text-center py-14 text-muted-foreground">
+              <p className="text-sm">
+                {activeTab === 'pending'
+                  ? (students.length === 0 ? 'All admitted students have enrollment numbers!' : 'No students found matching your search.')
+                  : (updatedStudents.length === 0 ? 'No students have been updated yet.' : 'No students found matching your search.')}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {pageRows.map((student) => (
+                <div key={student.id} className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-[#f4f6f3] hover:bg-[#eef5ec] transition-colors">
+                  <div className="min-w-0">
+                    <div className="font-semibold text-slate-900">{student.name}</div>
+                    <div className="text-xs text-muted-foreground">{student.email}</div>
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
+                      <span className="rounded-full bg-white px-3 py-0.5 text-xs font-semibold text-slate-700">
+                        {student.program?.name || 'N/A'}{student.specialisation ? ` - ${student.specialisation}` : ''}
+                      </span>
+                      {student.session?.name && <span className="text-xs text-muted-foreground">{student.session.name}</span>}
+                      <span className="text-xs text-muted-foreground">· {student.center?.name || 'Direct'}</span>
+                    </div>
+                  </div>
+                  <div className="lg:w-72 shrink-0">
+                    {activeTab === 'pending' ? (
+                      <Input
+                        placeholder="Enter Enrollment No."
+                        value={updates[student.id] !== undefined ? updates[student.id] : (student.enrollmentNo || '')}
+                        onChange={(e) => handleUpdateChange(student.id, e.target.value)}
+                        className="h-11 rounded-xl bg-white border border-[#cbd5c8] focus:border-[#54b947]"
+                      />
+                    ) : (
+                      <div className="rounded-xl bg-white px-4 py-3 text-sm">
+                        <span className="block text-[11px] font-medium text-slate-500">Enrollment No.</span>
+                        <span className="font-semibold text-slate-900">{student.enrollmentNo}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <ListPagination
+                total={activeList.length}
+                page={safePage}
+                pageSize={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={(n) => { setItemsPerPage(n); setCurrentPage(1); }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
