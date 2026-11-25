@@ -22,6 +22,7 @@ import {
 } from '../controllers/enrollmentReviewController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
+import { pageAction, enrollmentInBranch } from '../access/pageGuard.js';
 
 const router = express.Router();
 
@@ -46,11 +47,11 @@ router.put('/:id/provisional-complete', authorize('center_admin', 'org_admin', '
 
 // Dept/Sub-dept manager review routes
 // Branch managers, the CEO and the General Manager can view applications under review but cannot approve or reject them.
-router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), getDeptReviewEnrollments);
-router.put('/review/:id/approve', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), approveDeptEnrollment);
-router.put('/review/:id/reject', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), rejectDeptEnrollment);
+router.get('/review', pageAction('admission_review', 'view', ['ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager']), getDeptReviewEnrollments);
+router.put('/review/:id/approve', pageAction('admission_review', 'approve', ['ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'], { inBranch: enrollmentInBranch }), approveDeptEnrollment);
+router.put('/review/:id/reject', pageAction('admission_review', 'approve', ['ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'], { inBranch: enrollmentInBranch }), rejectDeptEnrollment);
 router.put('/review/:id/resubmit-upgrade', authorize('sales_admin', 'sales_sub_admin', 'employee', 'center_admin', 'org_admin'), resubmitUpgradeEnrollment);
-router.put('/review/:id/documents/:docIndex/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), updateEnrollmentDocumentStatus);
-router.put('/review/:id/photo/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'), updateEnrollmentPhotoStatus);
+router.put('/review/:id/documents/:docIndex/status', pageAction('admission_review', 'edit', ['ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'], { inBranch: enrollmentInBranch }), updateEnrollmentDocumentStatus);
+router.put('/review/:id/photo/status', pageAction('admission_review', 'edit', ['ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager', 'branch_manager'], { inBranch: enrollmentInBranch }), updateEnrollmentPhotoStatus);
 
 export default router;

@@ -96,8 +96,8 @@ router.route('/sessions').get(getAdmissionSessions).post(authorize('org_admin', 
 router.route('/sessions/:id')
   .get(getAdmissionSession)
   .put(authorize('org_admin', 'superadmin', 'ops_admin', 'ceo', 'general_manager'), updateAdmissionSession)
-  .delete(authorize('org_admin', 'superadmin', 'ops_admin', 'ceo', 'general_manager'), deleteAdmissionSession);
-router.put('/sessions/:id/approve', authorize('finance_admin', 'finance_sub_admin'), approveAdmissionSession);
+  .delete(pageAction('admission_sessions', 'delete', ['org_admin', 'superadmin', 'ops_admin', 'ceo', 'general_manager']), deleteAdmissionSession);
+router.put('/sessions/:id/approve', pageAction('admission_sessions', 'approve', ['finance_admin', 'finance_sub_admin']), approveAdmissionSession);
 
 // Internal Marks — study centers enter marks, ops has read-only
 router.route('/marks').get(getInternalMarks).post(authorize('center_admin', 'ops_admin', 'org_admin', 'superadmin'), createInternalMark);
@@ -133,6 +133,7 @@ import {
   getUniversityReport,
   getReRegistrationReport
 } from '../controllers/opsReportController.js';
+import { pageAction } from '../access/pageGuard.js';
 
 router.get('/reports/admissions', authorize('ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'), getAdmissionReport);
 router.get('/reports/enrollments', authorize('ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'), getEnrollmentReport);

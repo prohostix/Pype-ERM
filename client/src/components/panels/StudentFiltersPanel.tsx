@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { confirmDialog } from '@/lib/confirm';
+import { useAuth } from '@/hooks/useAuth';
 
 interface FilterOption { id: string; label: string; color?: string | null; isArchived: boolean; studentCount: number }
 interface FilterType { id: string; name: string; isActive: boolean; options: FilterOption[] }
@@ -26,7 +27,15 @@ const errorOf = (e: any, fallback: string) => e?.response?.data?.message || fall
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
 /** Org admin: define the custom dropdown filters used in the student directory. */
+/** What the signed-in user may change here (the server enforces it). */
+const useFilterAccess = () => {
+  const { user } = useAuth();
+  const may = (action: 'create' | 'edit' | 'delete') => user?.access?.student_filters?.[action]?.allowed ?? true;
+  return { mayCreate: may('create'), mayEdit: may('edit'), mayDelete: may('delete') };
+};
+
 export function StudentFiltersPanel() {
+  const { mayCreate } = useFilterAccess();
   const [types, setTypes] = useState<FilterType[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -70,7 +79,7 @@ export function StudentFiltersPanel() {
             Create your own dropdown filters, for example <span className="font-medium text-foreground">Follow-up stage: Hot, Warm, Cold</span>. Staff set a value on each student, the filter appears in the student directory, and every change is kept in the student's history.
           </p>
         </div>
-        <Button onClick={() => openCreate()} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto"><Plus className="w-4 h-4" />New filter</Button>
+        {mayCreate && <Button onClick={() => openCreate()} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto"><Plus className="w-4 h-4" />New filter</Button>}
       </div>
 
       {/* Stats */}
@@ -120,6 +129,14 @@ function StatTile({ icon: Icon, label, value, hint }: { icon: any; label: string
 }
 
 function EmptyState({ onCreate }: { onCreate: (p?: { name: string; options: string[] }) => void }) {
+  const { mayCreate } = useFilterAccess();
+  if (!mayCreate) {
+    return (
+      <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center">
+        <h3 className="text-lg font-semibold">No student filters yet</h3>
+      </div>
+    );
+  }
   return (
     <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-8 sm:p-12 text-center">
       <div className="mx-auto w-14 h-14 rounded-full bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Filter className="w-6 h-6" /></div>
@@ -173,6 +190,7 @@ function FilterListItem({ type, active, onSelect }: { type: FilterType; active: 
 }
 
 function FilterDetail({ type, onChanged, onDeleted }: { type: FilterType; onChanged: () => void; onDeleted: () => void }) {
+  const { mayEdit, mayDelete } = useFilterAccess();
   const [renaming, setRenaming] = useState(false);
   const [name, setName] = useState(type.name);
   const [label, setLabel] = useState('');
@@ -211,7 +229,7 @@ function FilterDetail({ type, onChanged, onDeleted }: { type: FilterType; onChan
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <h3 className="text-2xl font-semibold tracking-tight truncate">{type.name}</h3>
-                <button className="text-muted-foreground hover:text-foreground" onClick={() => setRenaming(true)} title="Rename filter"><Pencil className="w-4 h-4" /></button>
+                {mayEdit && <button className="text-muted-foreground hover:text-foreground" onClick={() => setRenaming(true)} title="Rename filter"><Pencil className="w-4 h-4" /></button>}
               </div>
               <p className="text-sm text-muted-foreground mt-0.5">{plural(live.length, 'option')} · {plural(tagged, 'student')} tagged</p>
             </div>
@@ -219,9 +237,9 @@ function FilterDetail({ type, onChanged, onDeleted }: { type: FilterType; onChan
           <div className="flex items-center gap-3 shrink-0">
             <label className="flex items-center gap-2 text-sm">
               <span className={cn('font-medium', type.isActive ? 'text-[#256c1d]' : 'text-muted-foreground')}>{type.isActive ? 'On' : 'Off'}</span>
-              <Switch checked={type.isActive} onCheckedChange={(v) => run(() => api.put(`/student-filters/${type.id}`, { isActive: v }))} />
+              <Switch checked={type.isActive} disabled={!mayEdit} onCheckedChange={(v) => run(() => api.put(`/student-filters/${type.id}`, { isActive: v }))} />
             </label>
-            {tagged === 0 && (
+            {mayDelete && tagged === 0 && (
               <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-destructive" title="Delete filter"
                 onClick={async () => (await confirmDialog({ title: 'Delete filter?', message: `Delete the filter "${type.name}"?`, confirmText: 'Delete', tone: 'danger' })) && run(() => api.deleteWithoutApproval(`/student-filters/${type.id}`), 'Filter deleted').then((ok) => ok && onDeleted())}>
                 <Trash2 className="w-4 h-4" />
@@ -249,12 +267,14 @@ function FilterDetail({ type, onChanged, onDeleted }: { type: FilterType; onChan
         {live.map((o) => <OptionRow key={o.id} option={o} max={max} run={run} />)}
 
         {/* Add */}
-        <div className="flex items-center gap-2 pt-3">
-          <ColorDot color={color || COLORS[live.length % COLORS.length]} onPick={setColor} />
-          <Input placeholder="Add an option and press Enter" value={label} maxLength={80} className="h-11 rounded-full bg-[#f4f6f3] border-transparent px-5"
-            onChange={(e) => setLabel(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') addOption(); }} />
-          <Button onClick={addOption} disabled={!label.trim()} className="h-11 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold"><Plus className="w-4 h-4 mr-1" />Add</Button>
-        </div>
+        {mayEdit && (
+          <div className="flex items-center gap-2 pt-3">
+            <ColorDot color={color || COLORS[live.length % COLORS.length]} onPick={setColor} />
+            <Input placeholder="Add an option and press Enter" value={label} maxLength={80} className="h-11 rounded-full bg-[#f4f6f3] border-transparent px-5"
+              onChange={(e) => setLabel(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') addOption(); }} />
+            <Button onClick={addOption} disabled={!label.trim()} className="h-11 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold"><Plus className="w-4 h-4 mr-1" />Add</Button>
+          </div>
+        )}
 
         {archived.length > 0 && (
           <div className="pt-4">
@@ -289,6 +309,7 @@ function ColorDot({ color, onPick }: { color: string; onPick: (c: string) => voi
 }
 
 function OptionRow({ option, max, run }: { option: FilterOption; max: number; run: (fn: () => Promise<any>, ok?: string) => Promise<boolean> }) {
+  const { mayEdit, mayDelete } = useFilterAccess();
   const [editing, setEditing] = useState(false);
   const [label, setLabel] = useState(option.label);
   const color = option.color || FALLBACK;
@@ -298,7 +319,7 @@ function OptionRow({ option, max, run }: { option: FilterOption; max: number; ru
     <div className={cn('group relative rounded-2xl bg-[#f4f6f3] dark:bg-muted/30 px-4 py-3 flex items-center gap-3 overflow-hidden', option.isArchived && 'opacity-60')}>
       {/* usage bar behind the row */}
       <div className="absolute inset-y-0 left-0 opacity-[0.08] pointer-events-none" style={{ width: `${(option.studentCount / max) * 100}%`, backgroundColor: color }} />
-      <ColorDot color={color} onPick={(c) => run(() => api.put(`/student-filters/options/${option.id}`, { color: c }))} />
+      <span className={cn('flex', !mayEdit && 'pointer-events-none')}><ColorDot color={color} onPick={(c) => run(() => api.put(`/student-filters/options/${option.id}`, { color: c }))} /></span>
       {editing ? (
         <div className="flex items-center gap-1 flex-1 relative">
           <Input autoFocus value={label} maxLength={80} className="h-9 rounded-full bg-white border-transparent px-4" onChange={(e) => setLabel(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') save(); }} />
@@ -313,12 +334,12 @@ function OptionRow({ option, max, run }: { option: FilterOption; max: number; ru
           </span>
           <span className="text-xs text-muted-foreground tabular-nums relative">{plural(option.studentCount, 'student')}</span>
           <div className="flex items-center gap-0.5 relative sm:opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition">
-            <button className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-white" title="Rename" onClick={() => setEditing(true)}><Pencil className="w-3.5 h-3.5" /></button>
-            <button className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-white" title={option.isArchived ? 'Restore' : 'Archive'}
+            {mayEdit && <button className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-white" title="Rename" onClick={() => setEditing(true)}><Pencil className="w-3.5 h-3.5" /></button>}
+            {mayEdit && <button className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-white" title={option.isArchived ? 'Restore' : 'Archive'}
               onClick={() => run(() => api.put(`/student-filters/options/${option.id}`, { isArchived: !option.isArchived }))}>
               {option.isArchived ? <ArchiveRestore className="w-3.5 h-3.5" /> : <Archive className="w-3.5 h-3.5" />}
-            </button>
-            {option.studentCount === 0 && (
+            </button>}
+            {mayDelete && option.studentCount === 0 && (
               <button className="p-2 rounded-full text-muted-foreground hover:text-rose-600 hover:bg-white" title="Delete"
                 onClick={() => run(() => api.deleteWithoutApproval(`/student-filters/options/${option.id}`))}><Trash2 className="w-3.5 h-3.5" /></button>
             )}

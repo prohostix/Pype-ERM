@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { can, resolveAccess, type Override } from '../src/access/resolve.js';
 import { FEATURES } from '../src/access/catalog.js';
+import { decidePageAction } from '../src/access/pageRules.js';
 import { decideStudentAction, hidesStudentFees, isGrantedStudentUser, restrictStudent } from '../src/access/studentRules.js';
 import { changeError, needsRow } from '../src/access/changes.js';
 import { hasPaymentsScreen, invoiceBranchWhere, isGrantedReader } from '../src/access/invoiceRules.js';
@@ -204,4 +205,23 @@ test('a granted user is not sent fees or passwords', () => {
   const seen = JSON.stringify(restrictStudent(record, { hideFees: true, hideCredentials: true }));
   for (const secret of ['credentials', 'invoices', 'paymentSchedules', 'paymentPlan', 'feeStructures', 'payment', 'initialPaymentAmount']) assert.ok(!seen.includes(secret), secret);
   assert.ok(seen.includes('photoStatus') && seen.includes('enrolled'));
+});
+
+test('new pages default to the roles whose screens include them', () => {
+  const of = (user: object, key: string) => allowed({ id: 'u', ...user }, [], key);
+  assert.deepEqual(of({ role: 'org_admin' }, 'student_filters'), ['view', 'create', 'edit', 'delete']);
+  assert.deepEqual(of({ role: 'ops_admin' }, 'student_filters'), []);
+  assert.deepEqual(of({ role: 'ceo' }, 'admission_review'), ['view']);
+  assert.deepEqual(of({ role: 'ops_admin' }, 'admission_review'), ['view', 'edit', 'approve']);
+  assert.deepEqual(of({ role: 'finance_admin' }, 'admission_sessions'), ['view', 'approve']);
+  assert.deepEqual(of({ role: 'ceo' }, 'admission_sessions'), ['view', 'delete']);
+  for (const key of ['student_filters', 'admission_review', 'admission_sessions']) assert.deepEqual(allowed(hr, [], key), [], key);
+});
+
+test('a granted page action is limited to the settings', () => {
+  const access = resolveAccess(hr, [row('view', 'allow', { featureKey: 'admission_review' })]);
+  const legacy = ['ops_admin', 'employee'];
+  assert.equal(decidePageAction(access, 'admission_review', 'view', 'employee', legacy).allowed, true);
+  assert.equal(decidePageAction(access, 'admission_review', 'approve', 'employee', legacy).allowed, false);
+  assert.equal(decidePageAction(resolveAccess(hr, []), 'admission_review', 'approve', 'employee', legacy).allowed, true);
 });

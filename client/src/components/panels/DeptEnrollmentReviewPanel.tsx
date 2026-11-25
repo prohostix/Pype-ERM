@@ -88,6 +88,11 @@ export function DeptEnrollmentReviewPanel() {
   const { user } = useAuth();
   // Branch managers, the CEO and the General Manager can look at applications but not approve or reject them.
   const readOnly = ['branch_manager', 'ceo', 'general_manager'].includes(user?.role || '');
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayEdit = user?.access?.admission_review?.edit?.allowed ?? !readOnly;
+  const mayApprove = user?.access?.admission_review?.approve?.allowed ?? !readOnly;
+  // Someone given this page checks documents through the review requests, which keep them to their branch
+  const granted = user?.access?.admission_review?.view?.byDefault === false;
   const [tab, setTab] = useState<'pending' | 'completed'>('pending');
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(false);
@@ -180,7 +185,7 @@ export function DeptEnrollmentReviewPanel() {
 
   const handleDocAction = async (studentId: string, enrollmentId: string, docIndex: number, status: string) => {
     try {
-      if (studentId) {
+      if (studentId && !granted) {
         await api.put(`/students/${studentId}/documents/${docIndex}/status`, { status });
       } else {
         await api.put(`/enrollment/review/${enrollmentId}/documents/${docIndex}/status`, { status });
@@ -213,7 +218,7 @@ export function DeptEnrollmentReviewPanel() {
 
   const handlePhotoAction = async (studentId: string, enrollmentId: string, status: string) => {
     try {
-      if (studentId) {
+      if (studentId && !granted) {
         await api.put(`/students/${studentId}/photo/status`, { status });
       } else {
         await api.put(`/enrollment/review/${enrollmentId}/photo/status`, { status });
@@ -450,7 +455,7 @@ export function DeptEnrollmentReviewPanel() {
                     <Button variant="outline" className="h-10 px-5 rounded-full bg-white border-slate-200 hover:bg-[#eaf6e6] hover:text-[#256c1d] font-semibold" onClick={() => setViewStudent(e)}>
                       <Eye className="w-4 h-4 mr-1" />View
                     </Button>
-                    {tab === 'pending' && !readOnly && (
+                    {tab === 'pending' && mayApprove && (
                       <>
                         <Button
                           className={cn("h-10 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold shadow-none", !canApprove && "opacity-50 cursor-not-allowed")}
@@ -608,7 +613,7 @@ export function DeptEnrollmentReviewPanel() {
                       </div>
                     )}
                   </div>
-                  {tab === 'pending' && !readOnly && (viewStudent.student?.photo || viewStudent.photo) && (!(viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) || (viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) === 'pending') && (
+                  {tab === 'pending' && mayEdit && (viewStudent.student?.photo || viewStudent.photo) && (!(viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) || (viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) === 'pending') && (
                     <div className="flex gap-1 w-full mt-1">
                       <button
                         onClick={() => handlePhotoAction(viewStudent.student?.id, viewStudent.id, 'approved')}
@@ -776,7 +781,7 @@ export function DeptEnrollmentReviewPanel() {
                               <p className="text-xs text-muted-foreground truncate">{doc.name || 'Click to preview'}</p>
                             </div>
                           </button>
-                          {tab === 'pending' && !readOnly && (!doc.status || doc.status === 'pending') && (
+                          {tab === 'pending' && mayEdit && (!doc.status || doc.status === 'pending') && (
                             <div className="flex border-t border-white divide-x divide-white overflow-hidden rounded-b-2xl">
                               <button
                                 onClick={() => handleDocAction(viewStudent.student?.id, viewStudent.id, i, 'approved')}
@@ -811,7 +816,7 @@ export function DeptEnrollmentReviewPanel() {
             <DialogTitle className="flex items-center justify-between">
               <span>{previewDoc?.type || 'Document Preview'}</span>
               <div className="flex items-center gap-2 mr-6">
-                {viewStudent && tab === 'pending' && !readOnly && previewDoc?.index !== -1 && (!previewDoc?.status || previewDoc?.status === 'pending') && (
+                {viewStudent && tab === 'pending' && mayEdit && previewDoc?.index !== -1 && (!previewDoc?.status || previewDoc?.status === 'pending') && (
                   <>
                     <Button
                       size="sm"

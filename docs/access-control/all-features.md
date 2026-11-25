@@ -11,14 +11,14 @@ Also not listed: dashboards and overview pages, AI Reports, "coming soon" screen
 | Page | Actions found | Panels that have it | Access Control |
 |---|---|---|---|
 | Students | view, create, edit, delete, import, send, download | Branch Manager, CEO / General Manager, Collections, Finance, Operations, Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
-| Student Filters | view, create, edit, delete | Org Admin | Not yet |
+| Student Filters | view, create, edit, delete | Org Admin | Connected |
 | Student Portal Management | view, edit | Operations | Not yet |
-| Admission Review | view, edit, approve | Branch Manager, CEO / General Manager, Operations, Org Admin | Not yet |
+| Admission Review | view, edit, approve | Branch Manager, CEO / General Manager, Operations, Org Admin | Connected |
 | Generate Student Link | view, create, edit | Branch Manager, CEO / General Manager, Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Not yet |
 | Provisional Enrollment | view, create | Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Not yet |
 | Admission Pipeline | view, edit, approve | Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Not yet |
 | Admission Approval (Sales) | view, approve | Sales Admin | Not yet |
-| Admission Sessions | view, delete, approve | Branch Manager, CEO / General Manager, Finance, Org Admin | Not yet |
+| Admission Sessions | view, delete, approve | Branch Manager, CEO / General Manager, Finance, Org Admin | Connected |
 
 ## 2. Academics and partners
 

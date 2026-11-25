@@ -2,6 +2,8 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { enrollmentBranchWhere, type PageRequest } from '../access/pageGuard.js';
+import { restrictEnrollment, restrictStudent } from '../access/studentRules.js';
 
 export const getPendingReviews = asyncHandler(async (req: AuthRequest, res: Response) => {
   const enrollments = await prisma.enrollment.findMany({ where: { organizationId: req.user.organizationId, status: 'document_review' }, include: { program: true, studyCenter: true } });
@@ -11,7 +13,7 @@ export const getPendingReviews = asyncHandler(async (req: AuthRequest, res: Resp
 /** Application statuses waiting for Operations: the Admission Review pending tab and the overview count */
 export const OPS_PENDING_STATUSES = ['payment_pending', 'receipt_submitted', 'submitted', 'document_review', 'dept_review', 'ops_upgrade_verification'];
 
-export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getDeptReviewEnrollments = asyncHandler(async (req: PageRequest, res: Response) => {
   const { tab } = req.query; // 'pending' | 'completed'
 
   let statusFilter: any;
@@ -81,6 +83,12 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
     }
   }
 
+  // Someone given this page sees only their branch, whatever their role would otherwise match
+  if (req.ownBranchOnly) {
+    delete baseWhere.OR;
+    baseWhere.AND = [enrollmentBranchWhere(req.user.branchId)];
+  }
+
   const enrollments = await prisma.enrollment.findMany({
     where: baseWhere,
     include: {
@@ -128,11 +136,22 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
     });
   }
 
+  // Someone given this page is not sent fees unless they can view invoices.
+  // Login passwords are not sent to them either
+  if (req.ownBranchOnly) {
+    const hideFees = !req.access?.invoices?.view?.allowed;
+    enhancedEnrollments = enhancedEnrollments.map((e: any) => ({
+      ...(hideFees ? restrictEnrollment(e) : e),
+      student: e.student && restrictStudent(e.student, { hideFees, hideCredentials: true }),
+    }));
+  }
+
   res.json({ success: true, count: enhancedEnrollments.length, data: enhancedEnrollments });
 });
 
 export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
   let whereClause: any = { id: req.params.id };
+  if (req.user.role !== 'superadmin') whereClause.organizationId = req.user.organizationId;
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
@@ -223,6 +242,7 @@ export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: 
 
 export const rejectDeptEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
   let whereClause: any = { id: req.params.id };
+  if (req.user.role !== 'superadmin') whereClause.organizationId = req.user.organizationId;
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
@@ -354,6 +374,7 @@ export const updateEnrollmentDocumentStatus = asyncHandler(async (req: AuthReque
   const { status, remarks } = req.body;
   
   let whereClause: any = { id };
+  if (req.user.role !== 'superadmin') whereClause.organizationId = req.user.organizationId;
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
@@ -408,6 +429,7 @@ export const updateEnrollmentPhotoStatus = asyncHandler(async (req: AuthRequest,
   const { status } = req.body;
 
   let whereClause: any = { id };
+  if (req.user.role !== 'superadmin') whereClause.organizationId = req.user.organizationId;
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];

@@ -263,3 +263,16 @@ Group by group, in the order of [all-features.md](all-features.md).
 | Bulk changes | Refused for permissions that come from an override; import adds new students only |
 | View blocked | Page and its changes refused. The student list request stays readable because other screens use it |
 
+### Student Filters, Admission Review, Admission Sessions (connected)
+
+| Page | Data a user given the page sees |
+|---|---|
+| Student Filters | Organization-wide: filters are settings, not branch records |
+| Admission Sessions | Organization-wide: sessions have no branch |
+| Admission Review | Own branch (student or sales person), without passwords; fees only with invoice access |
+
+Also fixed: admission review approve, reject, document and photo actions, and session update, delete and approve, now check the organization.
+
+### Waiting for a decision
+
+Generate Student Link, Provisional Enrollment, Admission Pipeline and Admission Approval list records belonging to a sales person. Decide what a user given these pages should see. Student Portal Management follows them.

@@ -495,8 +495,20 @@ export const getAdmissionSessions = asyncHandler(async (req: AuthRequest, res: R
   });
   res.json({ success: true, count: sessions.length, data: sessions });
 });
+/** The session named in the URL, only within the caller's organization */
+const ownSession = (req: AuthRequest) => ({
+  id: req.params.id,
+  ...(req.user.role !== 'superadmin' && { organizationId: req.user.organizationId })
+});
+
+const sessionMissing = async (req: AuthRequest, res: Response): Promise<boolean> => {
+  if (await prisma.admissionSession.findFirst({ where: ownSession(req), select: { id: true } })) return false;
+  res.status(404).json({ success: false, message: 'Session not found' });
+  return true;
+};
+
 export const getAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const session = await prisma.admissionSession.findUnique({ where: { id: req.params.id } });
+  const session = await prisma.admissionSession.findFirst({ where: ownSession(req) });
   res.json({ success: true, data: session });
 });
 export const createAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -535,17 +547,21 @@ export const updateAdmissionSession = asyncHandler(async (req: AuthRequest, res:
     if (program) data.universityId = program.universityId;
   }
   
+  if (await sessionMissing(req, res)) return;
+  delete data.organizationId;
   const session = await prisma.admissionSession.update({ where: { id: req.params.id }, data });
   res.json({ success: true, data: session });
 });
 export const deleteAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
   const sessionId = req.params.id;
+  if (await sessionMissing(req, res)) return;
   // Nullify sessionId on any enrollments referencing this session before deleting
   await prisma.enrollment.updateMany({ where: { sessionId }, data: { sessionId: null as any } });
   await prisma.admissionSession.delete({ where: { id: sessionId } });
   res.json({ success: true, data: {} });
 });
 export const approveAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (await sessionMissing(req, res)) return;
   const session = await prisma.admissionSession.update({ where: { id: req.params.id }, data: { status: 'approved', approvedBy: req.user.id, approvedAt: new Date() } });
   res.json({ success: true, data: session });
 });

@@ -12,8 +12,9 @@ import { confirmDialog } from '@/lib/confirm';
 
 export function AdmissionSessionsPanel() {
   const { user } = useAuth();
-  const canWrite = ['org_admin', 'superadmin', 'ops_admin', 'ceo'].includes(user?.role || '');
-  const isFinance = ['finance_admin', 'finance_sub_admin'].includes(user?.role || '');
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const canWrite = user?.access?.admission_sessions?.delete?.allowed ?? ['org_admin', 'superadmin', 'ops_admin', 'ceo'].includes(user?.role || '');
+  const isFinance = user?.access?.admission_sessions?.approve?.allowed ?? ['finance_admin', 'finance_sub_admin'].includes(user?.role || '');
   const [sessions, setSessions] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
   const [universities, setUniversities] = useState<any[]>([]);

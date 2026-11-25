@@ -76,6 +76,41 @@ export const FEATURES: Feature[] = [
     },
   },
   {
+    key: 'student_filters',
+    label: 'Student Filters',
+    group: 'Students and admissions',
+    actions: ['view', 'create', 'edit', 'delete'],
+    defaultActions: (user) => (['superadmin', 'org_admin'].includes(user.role) ? ['view', 'create', 'edit', 'delete'] : []),
+  },
+  {
+    key: 'admission_review',
+    label: 'Admission Review',
+    group: 'Students and admissions',
+    actions: ['view', 'edit', 'approve'],
+    // Branch managers, the CEO and the General Manager can look but not decide
+    defaultActions: (user) => {
+      if (['ceo', 'general_manager', 'branch_manager'].includes(user.role)) return ['view'];
+      if (['superadmin', 'org_admin'].includes(user.role)) return ['view', 'edit', 'approve'];
+      if (user.isBranchManager && !['student', 'faculty'].includes(user.role)) return ['view', 'edit', 'approve'];
+      const operations = ['ops_admin', 'ops_sub_admin'].includes(user.role)
+        || (user.role === 'employee' && Boolean(user.subDepartmentId) && user.departmentType === 'operations');
+      return operations ? ['view', 'edit', 'approve'] : [];
+    },
+  },
+  {
+    key: 'admission_sessions',
+    label: 'Admission Sessions',
+    group: 'Students and admissions',
+    actions: ['view', 'delete', 'approve'],
+    defaultActions: (user) => {
+      const sees = ['executive', 'branch', 'org_admin', 'finance', 'superadmin'].includes(screensOf(user));
+      if (!sees) return [];
+      const deletes: Action[] = ['superadmin', 'org_admin', 'ceo'].includes(user.role) ? ['delete'] : [];
+      const approvals: Action[] = ['finance_admin', 'finance_sub_admin'].includes(user.role) ? ['approve'] : [];
+      return ['view', ...deletes, ...approvals];
+    },
+  },
+  {
     key: 'invoices',
     label: 'Invoices',
     group: 'Finance',

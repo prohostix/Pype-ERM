@@ -3,6 +3,9 @@
 // for someone who was given a page their role's dashboard does not have.
 import type { ReactElement } from 'react';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
+import { StudentFiltersPanel } from '@/components/panels/StudentFiltersPanel';
+import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
+import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
 import { InvoicesPanel } from '@/components/panels/InvoicesPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
 import { canDo, type UserAccess } from '@/lib/access';
@@ -11,6 +14,9 @@ interface AccessPage { key: string; label: string; menuIds: string[]; render: ()
 
 const PAGES: AccessPage[] = [
   { key: 'students', label: 'Students', menuIds: ['students', 'enrolled_students', 'student_status', 'team_enrolled_students'], render: () => <StudentsPanel /> },
+  { key: 'student_filters', label: 'Student Filters', menuIds: ['student_filters'], render: () => <StudentFiltersPanel /> },
+  { key: 'admission_review', label: 'Admission Review', menuIds: ['admission_review', 'enrollment_review'], render: () => <DeptEnrollmentReviewPanel /> },
+  { key: 'admission_sessions', label: 'Admission Sessions', menuIds: ['sessions', 'admissions'], render: () => <AdmissionSessionsPanel /> },
   { key: 'invoices', label: 'Invoices', menuIds: ['invoices'], render: () => <InvoicesPanel /> },
   { key: 'bill_receipts', label: 'Bill & Receipts', menuIds: ['bill_receipts'], render: () => <BillReceiptPanel /> },
 ];

@@ -1,35 +1,16 @@
 /** How an Org Admin's settings apply to the Students page. Pure, so it can be tested without a database. */
 import { Action } from './catalog.js';
 import { Access } from './resolve.js';
+import { decidePageAction, isGrantedPage } from './pageRules.js';
 
-/**
- * Someone given the Students page although their role's screens do not include it. Server routes
- * also accept some such roles for other workflows, so for these users only the page settings count.
- */
-export const isGrantedStudentUser = (access: Access): boolean => {
-  const page = access.students;
-  if (!page || page.view?.byDefault || !page.view?.allowed) return false;
-  return Object.values(page).some((action) => action?.override === 'allow');
-};
+export const isGrantedStudentUser = (access: Access): boolean => isGrantedPage(access, 'students');
 
 /** Student fees and payments are hidden from granted users who have no access to invoices. */
 export const hidesStudentFees = (access: Access): boolean =>
   isGrantedStudentUser(access) && !access.invoices?.view?.allowed;
 
-/**
- * May the user do this? `legacyRoles` are the roles the route accepted before per-user access and
- * still decides for anyone without a setting. `ownBranchOnly` is set when the permission comes
- * from an Org Admin.
- */
-export const decideStudentAction = (access: Access, action: Action, role: string, legacyRoles: string[]): { allowed: boolean; ownBranchOnly: boolean } => {
-  const page = access.students;
-  const setting = page?.[action];
-  const refused = { allowed: false, ownBranchOnly: false };
-  if (page?.view?.override === 'deny' || setting?.override === 'deny') return refused;
-  if (isGrantedStudentUser(access)) return setting?.allowed ? { allowed: true, ownBranchOnly: true } : refused;
-  if (setting?.override === 'allow' && setting.allowed) return { allowed: true, ownBranchOnly: !setting.byDefault };
-  return { allowed: legacyRoles.includes(role), ownBranchOnly: false };
-};
+export const decideStudentAction = (access: Access, action: Action, role: string, legacyRoles: string[]) =>
+  decidePageAction(access, 'students', action, role, legacyRoles);
 
 const FEE_KEYS = ['paymentPlan', 'initialPaymentAmount', 'initialPaymentDate', 'receiptUrl', 'provisionalReceiptUrl'];
 const omit = (value: any, keys: string[]) =>
