@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ProgramDetailPanel } from './ProgramDetailPanel';
 import { ProgramFormDialog } from '../forms/ProgramFormDialog';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 
 type CourseType = 'SkillCourse' | 'OnlineDegree' | 'BVocDegree' | 'CreditTransfer' | 'Yearly' | 'OneSitting';
 
@@ -49,6 +50,9 @@ function formatDuration(months: number) {
 export function ProgramsPanel() {
   const { user } = useAuth();
   const isOrgAdmin = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const mayCreate = mayOn(user, 'programs', 'create', isOrgAdmin);
+  const mayEdit = mayOn(user, 'programs', 'edit', isOrgAdmin);
+  const mayDelete = mayOn(user, 'programs', 'delete', isOrgAdmin);
   
   const [universities, setUniversities] = useState<University[]>([]);
   const [loadingUnis, setLoadingUnis] = useState(false);
@@ -150,8 +154,8 @@ export function ProgramsPanel() {
         </div>
         <Button
           onClick={() => { setEditingProgram(null); setDialogOpen(true); }}
-          disabled={!isOrgAdmin || !selectedUniversityId}
-          className={`h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto ${!isOrgAdmin ? 'hidden' : ''}`}
+          disabled={!mayCreate || !selectedUniversityId}
+          className={`h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto ${!mayCreate ? 'hidden' : ''}`}
           title={!selectedUniversityId ? 'Select a university first to add programs' : undefined}
         >
           <Plus className="w-4 h-4" />Add Program
@@ -295,7 +299,7 @@ export function ProgramsPanel() {
                   ? 'Get started by creating a new academic program for this university.'
                   : 'Try adjusting your search terms or course type filter.'}
               </p>
-              {isOrgAdmin && programs.length === 0 && (
+              {mayCreate && programs.length === 0 && (
                 <Button
                   className="mt-5 h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
                   onClick={() => { setEditingProgram(null); setDialogOpen(true); }}
@@ -370,10 +374,10 @@ export function ProgramsPanel() {
                               {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                             </button>
                           )}
-                          {isOrgAdmin && (
+                          {(mayEdit || mayDelete) && (
                             <>
-                              <button onClick={() => handleEdit(p)} title="Edit program" className="h-10 w-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d]"><Edit className="w-4 h-4" /></button>
-                              <button onClick={() => handleDelete(p.id)} title="Delete program" className="h-10 w-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-rose-500 hover:bg-rose-50"><Trash2 className="w-4 h-4" /></button>
+                              {mayEdit && <button onClick={() => handleEdit(p)} title="Edit program" className="h-10 w-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d]"><Edit className="w-4 h-4" /></button>}
+                              {mayDelete && <button onClick={() => handleDelete(p.id)} title="Delete program" className="h-10 w-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-rose-500 hover:bg-rose-50"><Trash2 className="w-4 h-4" /></button>}
                             </>
                           )}
                         </div>

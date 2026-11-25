@@ -64,6 +64,14 @@ import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
 import { BranchesPanel } from '@/components/panels/BranchesPanel';
 import { OrgHierarchyPanel } from '@/components/panels/OrgHierarchyPanel';
 import { ManagerAssignmentPanel } from '@/components/panels/ManagerAssignmentPanel';
+import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
+import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
+import { OpsProgramAllocationPanel } from '@/components/panels/OpsProgramAllocationPanel';
+import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
+import { SalesCentersPanel } from '@/components/panels/SalesCentersPanel';
+import { AcademicCentersPanel } from '@/components/panels/AcademicCentersPanel';
+import { FacultiesPanel } from '@/components/panels/FacultiesPanel';
+import { StudyAbroadPartnersPanel } from '@/components/panels/StudyAbroadPartnersPanel';
 
 interface AccessPage { key: string; label: string; menuIds: string[]; render?: () => ReactElement; exceptRoles?: string[]; onlyRoles?: string[] }
 
@@ -128,6 +136,14 @@ const PAGES: AccessPage[] = [
   { key: 'branches', label: 'Branches', menuIds: ['branches'], render: () => <BranchesPanel /> },
   { key: 'org_chart', label: 'Org Chart', menuIds: ['org-chart'], render: () => <OrgHierarchyPanel /> },
   { key: 'managers', label: 'Managers', menuIds: ['managers'], render: () => <ManagerAssignmentPanel /> },
+  { key: 'universities', label: 'Universities', menuIds: ['universities', 'university_details', 'university_details_res'], render: () => <UniversitiesPanel /> },
+  { key: 'programs', label: 'Programs', menuIds: ['programs', 'course_details', 'course_details_res'], render: () => <ProgramsPanel /> },
+  { key: 'program_allocation', label: 'Program Allocation', menuIds: ['program_allocations'], render: () => <OpsProgramAllocationPanel /> },
+  { key: 'academic_partners', label: 'Academic Partners', menuIds: ['centers', 'study_centers'], render: () => <StudyCentersPanel /> },
+  { key: 'partners_sales', label: 'Academic Partners (Sales view)', menuIds: ['branch_centers_sales'], render: () => <SalesCentersPanel /> },
+  { key: 'academic_centers', label: 'Academic Centers', menuIds: ['academic_centers'], render: () => <AcademicCentersPanel /> },
+  { key: 'faculties', label: 'Faculties', menuIds: ['faculties'], render: () => <FacultiesPanel /> },
+  { key: 'study_abroad', label: 'Study Abroad Partners', menuIds: ['study_abroad_partners'], render: () => <StudyAbroadPartnersPanel /> },
 ];
 
 const ALL_PAGES: AccessPage[] = [...PAGES, ...BLOCK_ONLY_PAGES];

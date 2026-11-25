@@ -47,6 +47,7 @@ import { toast } from 'sonner';
 import { AcademicClassesPanel } from './AcademicClassesPanel';
 
 import { CS } from '@/lib/currency';
+import { mayOn } from '@/lib/access';
 export interface ProgramAccessConfig {
   dailyClassLimitEnabled: boolean;
   dailyClassLimit: number;
@@ -79,6 +80,9 @@ export const DEFAULT_PROGRAM_CONFIG: ProgramAccessConfig = {
 export function AcademicCentersPanel() {
   const { user } = useAuth();
   const canWrite = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const mayCreate = mayOn(user, 'academic_centers', 'create', canWrite);
+  const mayEdit = mayOn(user, 'academic_centers', 'edit', canWrite);
+  const mayDelete = mayOn(user, 'academic_centers', 'delete', canWrite);
   const [centers, setCenters] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
   const [universities, setUniversities] = useState<any[]>([]);
@@ -334,7 +338,7 @@ export function AcademicCentersPanel() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-          {canWrite && (
+          {mayEdit && (
             <Button
               variant="outline"
               onClick={() => {
@@ -353,13 +357,15 @@ export function AcademicCentersPanel() {
             </Button>
           )}
 
-          {canWrite && (
+          {(mayCreate || mayEdit) && (
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-              <DialogTrigger asChild>
-                <Button className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
-                  <Plus className="w-4 h-4" />Add Center
-                </Button>
-              </DialogTrigger>
+              {mayCreate && (
+                <DialogTrigger asChild>
+                  <Button className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
+                    <Plus className="w-4 h-4" />Add Center
+                  </Button>
+                </DialogTrigger>
+              )}
               <DialogContent className="w-[96vw] sm:max-w-3xl max-h-[92vh] flex flex-col overflow-hidden p-0 border-0 rounded-[2rem] bg-white" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
                 <DialogHeader className="px-6 sm:px-8 pt-7 pb-5 shrink-0 text-left">
                   <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-4 text-left">
@@ -569,7 +575,7 @@ export function AcademicCentersPanel() {
           </div>
         ))}
       </div>
-      {canWrite && (
+      {mayEdit && (
         <div className="flex justify-end -mt-2">
           <button
             onClick={() => {
@@ -599,7 +605,7 @@ export function AcademicCentersPanel() {
             <p className="text-muted-foreground text-center max-w-md mb-6">
               You haven't added any academic centers yet. Create your first center to start assigning programs.
             </p>
-            {canWrite && (
+            {mayCreate && (
               <Button onClick={() => setDialogOpen(true)} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold shadow-none">
                 <Plus className="w-4 h-4 mr-2" /> Add Your First Center
               </Button>
@@ -627,7 +633,7 @@ export function AcademicCentersPanel() {
                       </div>
                     </div>
                   </div>
-                  {canWrite && (
+                  {(mayEdit || mayDelete) && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3] shrink-0">
@@ -635,12 +641,16 @@ export function AcademicCentersPanel() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-52 rounded-2xl p-1.5">
-                        <DropdownMenuItem onClick={() => handleEdit(c)} className="cursor-pointer gap-2.5 py-2.5 rounded-xl">
-                          <Edit className="w-4 h-4" /> Edit Center
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDeleteClick(c.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2.5 py-2.5 rounded-xl">
-                          <Trash2 className="w-4 h-4" /> Request Deletion
-                        </DropdownMenuItem>
+                        {mayEdit && (
+                          <DropdownMenuItem onClick={() => handleEdit(c)} className="cursor-pointer gap-2.5 py-2.5 rounded-xl">
+                            <Edit className="w-4 h-4" /> Edit Center
+                          </DropdownMenuItem>
+                        )}
+                        {mayDelete && (
+                          <DropdownMenuItem onClick={() => handleDeleteClick(c.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2.5 py-2.5 rounded-xl">
+                            <Trash2 className="w-4 h-4" /> Request Deletion
+                          </DropdownMenuItem>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   )}
@@ -661,7 +671,7 @@ export function AcademicCentersPanel() {
                   <span className="w-9 h-9 rounded-full bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center"><Layers className="w-4 h-4" /></span>
                   {c.programIds ? c.programIds.length : 0} <span className="text-muted-foreground font-normal">Programs</span>
                 </div>
-                {canWrite && (
+                {mayEdit && (
                   <Button
                     variant="outline"
                     onClick={() => setActiveCenter(c)}

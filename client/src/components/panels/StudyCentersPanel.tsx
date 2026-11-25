@@ -9,10 +9,14 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 
 export function StudyCentersPanel() {
   const { user } = useAuth();
   const canWrite = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const mayCreate = mayOn(user, 'academic_partners', 'create', canWrite);
+  const mayEdit = mayOn(user, 'academic_partners', 'edit', canWrite);
+  const mayDelete = mayOn(user, 'academic_partners', 'delete', canWrite);
   const [centers, setCenters] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -128,11 +132,13 @@ export function StudyCentersPanel() {
           <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Academic Partner Management</h2>
           <p className="text-muted-foreground text-sm mt-1.5">Manage academic partners and locations</p>
         </div>
-        {canWrite && (
+        {(mayCreate || mayEdit) && (
           <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-            <DialogTrigger asChild>
-              <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Academic Partner</Button>
-            </DialogTrigger>
+            {mayCreate && (
+              <DialogTrigger asChild>
+                <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Academic Partner</Button>
+              </DialogTrigger>
+            )}
           <DialogContent className="wizard-form max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] border-0 bg-white p-6 sm:p-8" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
             <DialogHeader>
               <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Academic Partner' : 'Add New Academic Partner'}</DialogTitle>
@@ -217,13 +223,15 @@ export function StudyCentersPanel() {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize ${c.status === 'active' ? 'bg-[#dff3da] text-[#256c1d]' : c.status === 'pending' ? 'bg-amber-100 text-amber-700' : c.status === 'suspended' ? 'bg-red-100 text-red-700' : 'bg-slate-200/70 text-slate-600'}`}>{c.status}</span>
-                      {canWrite && (
+                      {(canWrite || mayEdit || mayDelete) && (
                         <>
-                          <Button variant="outline" size="sm" className="rounded-full border-[#cfe9c9] bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenCredentials(c)} title="View/Edit Credentials">
-                            <Key className="w-4 h-4 text-[#256c1d]" />
-                          </Button>
-                          <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(c)}><Edit className="w-4 h-4" /></Button>
-                          <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(cid)}><Trash2 className="w-4 h-4" /></Button>
+                          {canWrite && (
+                            <Button variant="outline" size="sm" className="rounded-full border-[#cfe9c9] bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenCredentials(c)} title="View/Edit Credentials">
+                              <Key className="w-4 h-4 text-[#256c1d]" />
+                            </Button>
+                          )}
+                          {mayEdit && <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(c)}><Edit className="w-4 h-4" /></Button>}
+                          {mayDelete && <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(cid)}><Trash2 className="w-4 h-4" /></Button>}
                         </>
                       )}
                     </div>

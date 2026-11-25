@@ -10,10 +10,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 
 export function FacultiesPanel() {
   const { user } = useAuth();
   const canWrite = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const mayCreate = mayOn(user, 'faculties', 'create', canWrite);
+  const mayEdit = mayOn(user, 'faculties', 'edit', canWrite);
+  const mayDelete = mayOn(user, 'faculties', 'delete', canWrite);
   const [faculties, setFaculties] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -115,11 +119,13 @@ export function FacultiesPanel() {
           <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Faculty Management</h2>
           <p className="text-muted-foreground text-sm mt-1.5">Manage faculty members and their details</p>
         </div>
-        {canWrite && (
+        {(mayCreate || mayEdit) && (
           <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-            <DialogTrigger asChild>
-              <Button className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto"><Plus className="w-4 h-4" />Add Faculty</Button>
-            </DialogTrigger>
+            {mayCreate && (
+              <DialogTrigger asChild>
+                <Button className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto"><Plus className="w-4 h-4" />Add Faculty</Button>
+              </DialogTrigger>
+            )}
             <DialogContent className="w-[95vw] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-[2rem] border-0 bg-white max-h-[92vh] flex flex-col" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
               <div className="flex items-start gap-4 px-6 sm:px-8 pt-7 pb-5 shrink-0">
                 <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
@@ -222,7 +228,7 @@ export function FacultiesPanel() {
         <div className="rounded-3xl border border-dashed border-slate-300 bg-white dark:bg-card py-16 text-center">
           <span className="w-14 h-14 rounded-full bg-[#f4f6f3] flex items-center justify-center mx-auto mb-3"><UserCheck className="w-6 h-6 text-muted-foreground" /></span>
           <p className="font-medium text-foreground">No faculty members found</p>
-          {canWrite && <p className="text-sm text-muted-foreground mt-1">Add a faculty member to get started.</p>}
+          {mayCreate && <p className="text-sm text-muted-foreground mt-1">Add a faculty member to get started.</p>}
         </div>
       ) : visible.length === 0 ? (
         <div className="rounded-3xl border border-dashed border-slate-300 bg-white py-14 text-center text-sm text-muted-foreground">No faculty match your search or filter.</div>
@@ -243,10 +249,10 @@ export function FacultiesPanel() {
                       </span>
                     </div>
                   </div>
-                  {canWrite && (
+                  {(mayEdit || mayDelete) && (
                     <div className="flex gap-1.5 shrink-0">
-                      <button onClick={() => handleEdit(f)} title="Edit faculty" className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d] transition-colors"><Edit className="w-3.5 h-3.5" /></button>
-                      <button onClick={() => handleDelete(f.id)} title="Delete faculty" className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center text-rose-500 hover:bg-rose-50 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                      {mayEdit && <button onClick={() => handleEdit(f)} title="Edit faculty" className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d] transition-colors"><Edit className="w-3.5 h-3.5" /></button>}
+                      {mayDelete && <button onClick={() => handleDelete(f.id)} title="Delete faculty" className="w-9 h-9 rounded-full border border-slate-200 bg-white flex items-center justify-center text-rose-500 hover:bg-rose-50 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>}
                     </div>
                   )}
                 </div>

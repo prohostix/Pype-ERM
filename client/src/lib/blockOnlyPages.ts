@@ -2,14 +2,6 @@
 export interface BlockedPageMenu { key: string; label: string; menuIds: string[]; exceptRoles?: string[]; onlyRoles?: string[] }
 
 export const BLOCK_ONLY_PAGES: BlockedPageMenu[] = [
-  { key: 'universities', label: 'Universities', menuIds: ['universities', 'university_details', 'university_details_res'] },
-  { key: 'programs', label: 'Programs', menuIds: ['programs', 'course_details', 'course_details_res'] },
-  { key: 'program_allocation', label: 'Program Allocation', menuIds: ['program_allocations'] },
-  { key: 'academic_partners', label: 'Academic Partners', menuIds: ['centers', 'study_centers'] },
-  { key: 'partners_sales', label: 'Academic Partners (Sales view)', menuIds: ['branch_centers_sales'] },
-  { key: 'academic_centers', label: 'Academic Centers', menuIds: ['academic_centers'] },
-  { key: 'faculties', label: 'Faculties', menuIds: ['faculties'] },
-  { key: 'study_abroad', label: 'Study Abroad Partners', menuIds: ['study_abroad_partners'] },
   { key: 'university_submission', label: 'University Submission', menuIds: ['university_submission'] },
   { key: 'enrollment_numbers', label: 'Enrollment Number Update', menuIds: ['enrollment_number_update'] },
   { key: 're_registration', label: 'Re-registration', menuIds: ['re_registration'] },

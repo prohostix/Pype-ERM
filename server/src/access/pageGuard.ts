@@ -150,7 +150,7 @@ export const paymentInBranch = async (req: PageRequest, branchId: string): Promi
   }));
 };
 
-type Model = 'studyCenter' | 'walletTopUp' | 'enrollment' | 'paymentLink' | 'paymentSchedule' | 'target' | 'branch' | 'department' | 'designation';
+type Model = 'studyCenter' | 'walletTopUp' | 'enrollment' | 'paymentLink' | 'paymentSchedule' | 'target' | 'branch' | 'department' | 'designation' | 'university' | 'program';
 
 /** The record named in the URL belongs to the caller's organization. */
 export const ownedBy = (model: Model) => async (req: PageRequest): Promise<boolean> =>

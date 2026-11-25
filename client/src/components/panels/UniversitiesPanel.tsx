@@ -16,6 +16,7 @@ import { UniversityDetailPanel } from './UniversityDetailPanel';
 import { toast } from 'sonner';
 import { uploadFormFile } from '@/lib/uploadFile';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 
 interface Branch { id: string; name: string; code: string; }
 interface University {
@@ -29,6 +30,12 @@ interface University {
 export function UniversitiesPanel() {
   const { user } = useAuth();
   const isOrgAdmin = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const mayCreate = mayOn(user, 'universities', 'create', isOrgAdmin);
+  const mayEdit = mayOn(user, 'universities', 'edit', isOrgAdmin);
+  const mayDelete = mayOn(user, 'universities', 'delete', isOrgAdmin);
+  const mayAddProgram = mayOn(user, 'programs', 'create', isOrgAdmin);
+  // The enrollment form and branch settings are part of creating and editing
+  const mayManage = mayCreate || mayEdit;
 
   const [universities, setUniversities] = useState<University[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -89,7 +96,7 @@ export function UniversitiesPanel() {
   useEffect(() => {
     fetchUniversities();
     fetchCountries();
-    if (isOrgAdmin) fetchBranches();
+    if (mayManage) fetchBranches();
   }, []);
 
   const fetchUniversities = async () => {
@@ -205,7 +212,7 @@ export function UniversitiesPanel() {
           <p className="text-muted-foreground text-sm mt-1.5">Manage affiliated universities and institutions</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-          {isOrgAdmin && (
+          {mayCreate && (
             <DialogTrigger asChild>
               <Button className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm"><Plus className="w-4 h-4" />Add University</Button>
             </DialogTrigger>
@@ -219,8 +226,8 @@ export function UniversitiesPanel() {
               <div className="flex gap-1.5" role="tablist">
                 {([
                   ['details', 'Details', true],
-                  ['form', 'Enrollment Form', isOrgAdmin],
-                  ['access', 'Branch Access', isOrgAdmin && branches.length > 0],
+                  ['form', 'Enrollment Form', mayManage],
+                  ['access', 'Branch Access', mayManage && branches.length > 0],
                 ] as const).filter(t => t[2]).map(([key, label]) => (
                   <button
                     key={key}
@@ -338,7 +345,7 @@ export function UniversitiesPanel() {
               </div>
 
               {/* Enrollment Form Config */}
-              {isOrgAdmin && (
+              {mayManage && (
                 <div className={dialogTab === 'form' ? 'space-y-5' : 'hidden'}>
                   <div>
                     <h3 className="font-semibold text-slate-800 dark:text-slate-200">Mandatory Form Fields</h3>
@@ -425,7 +432,7 @@ export function UniversitiesPanel() {
               )}
 
               {/* ── Branch Access ── */}
-              {isOrgAdmin && branches.length > 0 && (
+              {mayManage && branches.length > 0 && (
                 <div className={`rounded-xl border-2 border-dashed border-teal-200 bg-teal-50/40 p-4 space-y-3 ${dialogTab === 'access' ? '' : 'hidden'}`}>
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-lg bg-teal-600 flex items-center justify-center">
@@ -642,18 +649,22 @@ export function UniversitiesPanel() {
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full capitalize ${u.status === 'active' ? 'bg-[#e3f7dd] text-[#1f6a17]' : 'bg-slate-100 text-slate-600'}`}><span className={`w-1.5 h-1.5 rounded-full ${u.status === 'active' ? 'bg-[#54b947]' : 'bg-slate-400'}`} />{u.status}</span>
-              {isOrgAdmin && (
+              {(mayEdit || mayDelete || mayAddProgram) && (
                 <>
                   <div className="h-5 border-l mx-1 border-slate-200"></div>
-                  <Button variant="outline" size="sm" className="h-9 px-4 rounded-full bg-white border-slate-200 text-slate-700 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => setAddProgramUniId(u.id)} title="Add Program">
-                    <BookOpen className="w-3.5 h-3.5 mr-1" /> Program
-                  </Button>
-                  <Button variant="outline" size="sm" className="h-9 px-4 rounded-full bg-white border-slate-200 text-slate-700 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => setManageSessionsUni(u)} title="Sessions">
-                    <Calendar className="w-3.5 h-3.5 mr-1" /> Session
-                  </Button>
+                  {mayAddProgram && (
+                    <Button variant="outline" size="sm" className="h-9 px-4 rounded-full bg-white border-slate-200 text-slate-700 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => setAddProgramUniId(u.id)} title="Add Program">
+                      <BookOpen className="w-3.5 h-3.5 mr-1" /> Program
+                    </Button>
+                  )}
+                  {isOrgAdmin && (
+                    <Button variant="outline" size="sm" className="h-9 px-4 rounded-full bg-white border-slate-200 text-slate-700 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => setManageSessionsUni(u)} title="Sessions">
+                      <Calendar className="w-3.5 h-3.5 mr-1" /> Session
+                    </Button>
+                  )}
                   <div className="h-5 border-l mx-1 border-slate-200"></div>
-                  <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => handleEdit(u)} title="Edit"><Edit className="w-3.5 h-3.5" /></Button>
-                  <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white border-slate-200 text-rose-500 hover:bg-rose-50 hover:text-rose-600" onClick={() => handleDelete(u.id)} title="Delete"><Trash2 className="w-3.5 h-3.5" /></Button>
+                  {mayEdit && <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#eaf6e6] hover:text-[#256c1d]" onClick={() => handleEdit(u)} title="Edit"><Edit className="w-3.5 h-3.5" /></Button>}
+                  {mayDelete && <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white border-slate-200 text-rose-500 hover:bg-rose-50 hover:text-rose-600" onClick={() => handleDelete(u.id)} title="Delete"><Trash2 className="w-3.5 h-3.5" /></Button>}
                 </>
               )}
             </div>
@@ -699,7 +710,7 @@ export function UniversitiesPanel() {
         );
       })()}
 
-      {isOrgAdmin && (
+      {(isOrgAdmin || mayAddProgram) && (
         <>
           <ProgramFormDialog
             open={!!addProgramUniId}

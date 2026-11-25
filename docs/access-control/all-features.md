@@ -24,14 +24,14 @@ Also not listed: dashboards and overview pages, AI Reports, "coming soon" screen
 
 | Page | Actions found | Panels that have it | Access Control |
 |---|---|---|---|
-| Universities | view, create, edit, delete | Branch Manager, CEO / General Manager, Operations, Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Block only |
-| Programs | view, delete | Branch Manager, CEO / General Manager, Operations, Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Block only |
-| Program Allocation | view, create, edit | Operations, Org Admin | Block only |
-| Academic Partners | view, create, edit, delete | Branch Manager, CEO / General Manager, Operations, Org Admin | Block only |
-| Academic Partners (Sales view) | view | Branch Manager, CEO / General Manager | Block only |
-| Academic Centers | view, create, edit, delete | Org Admin | Block only |
-| Faculties | view, create, edit, delete | Org Admin | Block only |
-| Study Abroad Partners | view | Org Admin | Block only |
+| Universities | view, create, edit, delete | Branch Manager, CEO / General Manager, Operations, Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
+| Programs | view, delete | Branch Manager, CEO / General Manager, Operations, Org Admin, Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
+| Program Allocation | view, create, edit | Operations, Org Admin | Connected |
+| Academic Partners | view, create, edit, delete | Branch Manager, CEO / General Manager, Operations, Org Admin | Connected |
+| Academic Partners (Sales view) | view | Branch Manager, CEO / General Manager | Connected |
+| Academic Centers | view, create, edit, delete | Org Admin | Connected |
+| Faculties | view, create, edit, delete | Org Admin | Connected |
+| Study Abroad Partners | view | Org Admin | Connected |
 
 ## 3. University work
 

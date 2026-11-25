@@ -308,6 +308,14 @@ const CONNECTED: Record<string, (user: AccessUser) => Action[]> = {
   branches: forRoles(),
   org_chart: forRoles([[...HR_ADMINS, ...EXECUTIVES], ['view', 'create', 'edit', 'delete']]),
   managers: forRoles([HR_ADMINS, ['view', 'edit', 'delete']]),
+  universities: (user) => (isSales(user) ? ['view'] : forRoles([[...EXECUTIVES, 'branch_manager', ...OPERATIONS], ['view']])(user)),
+  programs: (user) => (isSales(user) ? ['view'] : forRoles([[...EXECUTIVES, 'branch_manager', ...OPERATIONS], ['view']])(user)),
+  program_allocation: forRoles([OPERATIONS, ['view', 'create', 'edit', 'delete']]),
+  academic_partners: forRoles([[...EXECUTIVES, 'branch_manager', ...OPERATIONS], ['view']]),
+  partners_sales: forRoles([[...EXECUTIVES, 'branch_manager'], ['view']]),
+  academic_centers: forRoles(),
+  faculties: forRoles(),
+  study_abroad: forRoles(),
 };
 
 export const FEATURES: Feature[] = [

@@ -43,6 +43,7 @@ import {
 } from '../controllers/salesReportController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { pageAction, anyPageAction, enrollmentInBranch, inviteInBranch } from '../access/pageGuard.js';
+import { staffAndPartnersOnly } from '../access/partnerSecrets.js';
 
 const router = express.Router();
 
@@ -73,9 +74,9 @@ router.get('/sessions-by-university', getSessionsByUniversity);
 router.get('/team-performance', getTeamPerformance);
 
 // My study centers (via invite links — self + subordinates)
-router.get('/my-centers', getMyCenters);
-router.get('/my-centers/admissions', getMyCenterAdmissions);
-router.get('/my-centers/:centerId', getMyCenterDetail);
+router.get('/my-centers', staffAndPartnersOnly, pageAction('partners_sales', 'view', null), getMyCenters);
+router.get('/my-centers/admissions', staffAndPartnersOnly, pageAction('partners_sales', 'view', null), getMyCenterAdmissions);
+router.get('/my-centers/:centerId', staffAndPartnersOnly, pageAction('partners_sales', 'view', null), getMyCenterDetail);
 
 // Sales-led Student applications & Direct enrollment
 router.get('/student-applications', pageAction('admission_pipeline', 'view', null), getSalesEnrollmentPipeline);

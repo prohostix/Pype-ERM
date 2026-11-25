@@ -68,7 +68,8 @@ export const convertLead = asyncHandler(async (req: AuthRequest, res: Response) 
 });
 
 import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
-import type { PageRequest } from '../access/pageGuard.js';
+import { partnerBranchWhere, type PageRequest } from '../access/pageGuard.js';
+import { withoutPortalLogins } from '../access/partnerSecrets.js';
 
 // Targets
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -305,28 +306,38 @@ export const getTeamPerformance = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 // Study Centers
-export const getMyCenters = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const centers = await prisma.studyCenter.findMany({ where: { organizationId: req.user.organizationId } });
-  res.json({ success: true, data: centers });
+/** Someone given this page sees their branch's partners */
+const reachablePartners = (req: PageRequest) => ({
+  organizationId: req.user.organizationId,
+  ...(req.ownBranchOnly && partnerBranchWhere(req.user.branchId)),
 });
-export const getMyCenterAdmissions = asyncHandler(async (req: AuthRequest, res: Response) => {
+
+export const getMyCenters = asyncHandler(async (req: PageRequest, res: Response) => {
+  const centers = await prisma.studyCenter.findMany({ where: reachablePartners(req) });
+  res.json({ success: true, data: withoutPortalLogins(req.user, centers) });
+});
+export const getMyCenterAdmissions = asyncHandler(async (req: PageRequest, res: Response) => {
   const centers = await prisma.studyCenter.findMany({
-    where: { organizationId: req.user.organizationId },
+    where: reachablePartners(req),
     select: { id: true }
   });
   const centerIds = centers.map((c: any) => c.id);
   const students = await prisma.student.findMany({
-    where: { centerId: { in: centerIds } },
+    where: { centerId: { in: centerIds }, ...(req.ownBranchOnly && req.user.branchId && { branchId: req.user.branchId }) },
     orderBy: { createdAt: 'desc' },
     include: {
       program: { select: { id: true, name: true } }
     }
   });
-  res.json({ success: true, count: students.length, data: students });
+  res.json({ success: true, count: students.length, data: withoutPortalLogins(req.user, students) });
 });
-export const getMyCenterDetail = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const center = await prisma.studyCenter.findUnique({ where: { id: req.params.centerId } });
-  res.json({ success: true, data: center });
+export const getMyCenterDetail = asyncHandler(async (req: PageRequest, res: Response) => {
+  const center = await prisma.studyCenter.findFirst({ where: { id: req.params.centerId, ...reachablePartners(req) } });
+  if (!center) {
+    res.status(404).json({ success: false, message: 'Study center not found' });
+    return;
+  }
+  res.json({ success: true, data: withoutPortalLogins(req.user, [center])[0] });
 });
 
 // Programs

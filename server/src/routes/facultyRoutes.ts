@@ -1,16 +1,18 @@
 import express from 'express';
 import { getFaculties, getFacultyById, createFaculty, updateFaculty, deleteFaculty } from '../controllers/facultyController.js';
-import { protect, authorize } from '../middleware/auth.js';
+import { protect } from '../middleware/auth.js';
+import { pageAction } from '../access/pageGuard.js';
+import type { Action } from '../access/catalog.js';
 
 const router = express.Router();
 
 router.use(protect);
-router.use(authorize('org_admin'));
+const may = (action: Action) => pageAction('faculties', action, ['org_admin']);
 
-router.get('/', getFaculties);
-router.get('/:id', getFacultyById);
-router.post('/', createFaculty);
-router.put('/:id', updateFaculty);
-router.delete('/:id', deleteFaculty);
+router.get('/', may('view'), getFaculties);
+router.get('/:id', may('view'), getFacultyById);
+router.post('/', may('create'), createFaculty);
+router.put('/:id', may('edit'), updateFaculty);
+router.delete('/:id', may('delete'), deleteFaculty);
 
 export default router;

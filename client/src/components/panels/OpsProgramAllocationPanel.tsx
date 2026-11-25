@@ -9,6 +9,8 @@ import { Label } from '@/components/ui/label';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 interface Center { id: string; name: string; code: string; }
 interface University { id: string; name: string; code: string; }
@@ -16,6 +18,10 @@ interface Program { id: string; name: string; code: string; courseType?: string;
 interface Allocation { id: string; programId: string; program: Program; allocatedAt: string; opsSubAdminId?: string; }
 
 export function OpsProgramAllocationPanel() {
+  const { user } = useAuth();
+  const mayCreate = mayOn(user, 'program_allocation', 'create', true);
+  const mayEdit = mayOn(user, 'program_allocation', 'edit', true);
+  const mayDelete = mayOn(user, 'program_allocation', 'delete', true);
   const [centers, setCenters] = useState<Center[]>([]);
   const [selectedCenter, setSelectedCenter] = useState('');
   const [allocations, setAllocations] = useState<Allocation[]>([]);
@@ -180,9 +186,11 @@ export function OpsProgramAllocationPanel() {
             <Button variant="outline" onClick={() => fetchAllocations(selectedCenter)} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50">
               <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />Refresh
             </Button>
-            <Button onClick={() => setOpen(true)} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
-              <Plus className="w-4 h-4" />Add Programs
-            </Button>
+            {mayCreate && (
+              <Button onClick={() => setOpen(true)} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm">
+                <Plus className="w-4 h-4" />Add Programs
+              </Button>
+            )}
           </div>
         )}
       </div>
@@ -221,7 +229,9 @@ export function OpsProgramAllocationPanel() {
             <span className="w-14 h-14 rounded-full bg-[#f4f6f3] flex items-center justify-center mx-auto mb-3"><Layers className="w-6 h-6" /></span>
             <p className="font-medium text-foreground">No programs allocated yet</p>
             <p className="text-sm mt-1 mb-5">Add programs so this partner can enroll students into them.</p>
-            <Button onClick={() => setOpen(true)} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-1.5" />Add Programs</Button>
+            {mayCreate && (
+              <Button onClick={() => setOpen(true)} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-1.5" />Add Programs</Button>
+            )}
           </div>
         ) : (
           <div className="space-y-5">
@@ -246,7 +256,7 @@ export function OpsProgramAllocationPanel() {
                     ))}
                   </SelectContent>
                 </Select>
-                {selectedOpsSubAdmin !== originalOpsSubAdmin && (
+                {mayEdit && selectedOpsSubAdmin !== originalOpsSubAdmin && (
                   <Button onClick={handleUpdateSubAdmin} disabled={savingOpsUser} className="h-11 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold">
                     {savingOpsUser ? 'Saving...' : 'Save'}
                   </Button>
@@ -272,9 +282,11 @@ export function OpsProgramAllocationPanel() {
                           <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#e3f7dd] text-[#1f6a17]">{a.program?.courseType}</span>
                         )}
                       </div>
-                      <Button variant="outline" size="icon" onClick={() => handleRequestRemove(a.id)} title="Request removal" className="h-10 w-10 rounded-full bg-white border-slate-200 text-rose-500 hover:bg-rose-50 hover:text-rose-600 shrink-0">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      {mayDelete && (
+                        <Button variant="outline" size="icon" onClick={() => handleRequestRemove(a.id)} title="Request removal" className="h-10 w-10 rounded-full bg-white border-slate-200 text-rose-500 hover:bg-rose-50 hover:text-rose-600 shrink-0">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
                     </div>
                   ))}
                 </div>

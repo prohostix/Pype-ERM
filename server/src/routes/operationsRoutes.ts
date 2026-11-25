@@ -58,38 +58,55 @@ const router = express.Router();
 router.use(protect);
 
 // Countries — each organization keeps its own list; anyone who can see universities can read it
-router.route('/countries').get(getCountries).post(authorize('org_admin', 'superadmin'), createCountry);
+const ORG_ADMINS = ['org_admin', 'superadmin'];
+const university = { inOrganization: ownedBy('university') };
+const program = { inOrganization: ownedBy('program') };
+const partner = { inOrganization: ownedBy('studyCenter'), inBranch: partnerInBranch };
+/** For partner requests outside per-user access: the record must still be in the organization */
+const ownPartner = async (req: PageRequest, res: Response, next: NextFunction) => {
+  try {
+    if (req.user.role !== 'superadmin' && !(await ownedBy('studyCenter')(req))) {
+      res.status(404).json({ success: false, message: 'Study center not found' });
+      return;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+router.route('/countries').get(getCountries).post(pageAction('universities', 'create', ORG_ADMINS), createCountry);
 
 // Universities — write access restricted to org_admin / superadmin only
-router.route('/universities').get(getUniversities).post(authorize('org_admin', 'superadmin'), createUniversity);
+router.route('/universities').get(getUniversities).post(pageAction('universities', 'create', ORG_ADMINS), createUniversity);
 router.route('/universities/:id')
   .get(getUniversity)
-  .put(authorize('org_admin', 'superadmin'), updateUniversity)
-  .delete(authorize('org_admin', 'superadmin'), deleteUniversity);
-router.put('/universities/:id/activate', authorize('org_admin', 'superadmin'), activateUniversity);
+  .put(pageAction('universities', 'edit', ORG_ADMINS, university), updateUniversity)
+  .delete(pageAction('universities', 'delete', ORG_ADMINS, university), deleteUniversity);
+router.put('/universities/:id/activate', pageAction('universities', 'edit', ORG_ADMINS, university), activateUniversity);
 
 // Programs — write access restricted to org_admin / superadmin only
-router.route('/programs').get(getPrograms).post(authorize('org_admin', 'superadmin'), createProgram);
+router.route('/programs').get(getPrograms).post(pageAction('programs', 'create', ORG_ADMINS), createProgram);
 router.route('/programs/:id')
   .get(getProgram)
-  .put(authorize('org_admin', 'superadmin'), updateProgram)
-  .delete(authorize('org_admin', 'superadmin'), deleteProgram);
-router.put('/programs/:id/activate', authorize('org_admin', 'superadmin'), activateProgram);
+  .put(pageAction('programs', 'edit', ORG_ADMINS, program), updateProgram)
+  .delete(pageAction('programs', 'delete', ORG_ADMINS, program), deleteProgram);
+router.put('/programs/:id/activate', pageAction('programs', 'edit', ORG_ADMINS, program), activateProgram);
 
 // Onboarding — document verification (must be before /centers/:id to avoid route conflict)
 router.get('/centers/pending-verification', authorize('ops_admin', 'ops_sub_admin', 'employee'), getPendingVerificationCenters);
-router.put('/centers/:id/verify', authorize('ops_admin', 'ops_sub_admin', 'employee'), verifyCenter);
+router.put('/centers/:id/verify', authorize('ops_admin', 'ops_sub_admin', 'employee'), ownPartner, verifyCenter);
 
 // Study Centers
 router.route('/centers')
-  .get(getStudyCenters)
-  .post(authorize('org_admin', 'superadmin'), createStudyCenter);
+  .get(staffAndPartnersOnly, getStudyCenters)
+  .post(pageAction('academic_partners', 'create', ORG_ADMINS), createStudyCenter);
 router.route('/centers/:id')
-  .get(getStudyCenter)
-  .put(authorize('org_admin', 'superadmin'), updateStudyCenter)
-  .delete(authorize('org_admin', 'superadmin'), deleteStudyCenter);
-router.put('/centers/:id/approve', authorize('ops_admin', 'finance_admin', 'finance_sub_admin'), approveStudyCenter);
-router.put('/centers/:id/suspend', authorize('org_admin', 'superadmin'), suspendStudyCenter);
+  .get(staffAndPartnersOnly, getStudyCenter)
+  .put(pageAction('academic_partners', 'edit', ORG_ADMINS, partner), updateStudyCenter)
+  .delete(pageAction('academic_partners', 'delete', ORG_ADMINS, partner), deleteStudyCenter);
+router.put('/centers/:id/approve', authorize('ops_admin', 'finance_admin', 'finance_sub_admin'), ownPartner, approveStudyCenter);
+router.put('/centers/:id/suspend', authorize('org_admin', 'superadmin'), ownPartner, suspendStudyCenter);
 
 // Admission Sessions
 router.route('/sessions').get(getAdmissionSessions).post(authorize('org_admin', 'superadmin', 'ops_admin', 'ceo', 'general_manager'), createAdmissionSession);
@@ -112,10 +129,10 @@ router.route('/announcements/:id')
 
 // Onboarding — program allocation
 router.route('/centers/:id/allocations')
-  .get(authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin', 'finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'), getProgramAllocations)
-  .post(authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), allocateProgram);
-router.put('/centers/:id/ops-sub-admin', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), updateCenterOpsSubAdmin);
-router.delete('/centers/:id/allocations/:allocId', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), removeAllocation);
+  .get(pageAction('program_allocation', 'view', ['ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin', 'finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'], partner), getProgramAllocations)
+  .post(pageAction('program_allocation', 'create', ['ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'], partner), allocateProgram);
+router.put('/centers/:id/ops-sub-admin', pageAction('program_allocation', 'edit', ['ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'], partner), updateCenterOpsSubAdmin);
+router.delete('/centers/:id/allocations/:allocId', pageAction('program_allocation', 'delete', ['ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'], partner), removeAllocation);
 
 // Program detail & materials
 router.get('/programs/:programId/detail', getProgramDetail);
@@ -134,6 +151,9 @@ import {
   getReRegistrationReport
 } from '../controllers/opsReportController.js';
 import { pageAction } from '../access/pageGuard.js';
+import type { Response, NextFunction } from 'express';
+import { ownedBy, partnerInBranch, type PageRequest } from '../access/pageGuard.js';
+import { staffAndPartnersOnly } from '../access/partnerSecrets.js';
 
 router.get('/reports/admissions', pageAction('admission_report', 'view', ['ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin']), getAdmissionReport);
 router.get('/reports/enrollments', pageAction('enrollment_report', 'view', ['ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin']), getEnrollmentReport);

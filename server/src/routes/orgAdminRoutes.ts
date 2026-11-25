@@ -26,7 +26,7 @@ const STRUCTURE_ADMINS = ['org_admin', 'superadmin', 'hr_admin', 'hr_sub_admin',
 const branch = { inOrganization: ownedBy('branch') };
 const designation = { inOrganization: ownedBy('designation') };
 
-router.get('/branches', anyPageAction(['branches', 'employees', 'users', 'org_chart'], 'view', BRANCH_READERS), getBranches);
+router.get('/branches', anyPageAction(['branches', 'employees', 'users', 'org_chart', 'universities'], 'view', BRANCH_READERS), getBranches);
 router.get('/designations', anyPageAction(['org_chart', 'branch_hierarchy', 'users'], 'view', STRUCTURE_ADMINS), getDesignations);
 router.post('/designations', pageAction('org_chart', 'create', STRUCTURE_ADMINS), createDesignation);
 router.patch('/designations/:id', pageAction('org_chart', 'edit', STRUCTURE_ADMINS, designation), updateDesignation);

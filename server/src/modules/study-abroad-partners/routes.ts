@@ -10,6 +10,7 @@ import { protect, authorize } from '../../middleware/auth.js';
 import * as c from './controller.js';
 import * as a from './applications.js';
 import { requireStudyAbroadEnabled } from './featureGate.js';
+import { pageAction } from '../../access/pageGuard.js';
 
 const router = express.Router();
 router.use(protect);
@@ -51,9 +52,9 @@ router.put('/applications/:id/withdraw', authorize(...ORG), a.withdrawApplicatio
 router.post('/applications/:id/release-commission', authorize(...ORG), a.releaseCommission);
 
 // ── Partner management (static paths above must stay before /partners/:id) ──
-router.get('/partners', authorize(...ORG), c.listPartners);
+router.get('/partners', pageAction('study_abroad', 'view', [...ORG]), c.listPartners);
 router.post('/partners', authorize(...ORG), c.createPartner);
-router.get('/partners/:id', authorize(...ORG), c.getPartner);
+router.get('/partners/:id', pageAction('study_abroad', 'view', [...ORG]), c.getPartner);
 router.put('/partners/:id', authorize(...ORG), c.updatePartner);
 router.put('/partners/:id/countries', authorize(...ORG), c.setPartnerCountries);
 router.put('/partners/:id/reset-password', authorize(...ORG), c.resetPartnerPassword);

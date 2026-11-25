@@ -369,3 +369,17 @@ Users, Departments, Branches, Org Chart, Managers.
 | Remaining risk | Branches or Managers lets them make someone else a manager, which gives that person more screens. Saving such access asks the Org Admin to confirm |
 
 Also fixed for everyone: department, branch and position requests did not check the organization, and some responses included password hashes. All responses now drop password hashes.
+
+## Academics and partners (connected 25 Nov 2026)
+
+Universities, Programs, Program Allocation, Academic Partners, Academic Partners (Sales view), Academic Centers, Faculties, Study Abroad Partners (view only).
+
+| Rule for someone acting on given access | Behaviour |
+|---|---|
+| Universities, Programs, Academic Centers, Faculties, Study Abroad Partners | Organization-wide: these have no branch |
+| Programs | Fees are saved only if they may also change Fee Structures |
+| Academic Partners, Program Allocation | With a branch: partners referred by, or with students of, that branch |
+| Partner portal login | Not sent to them and not changeable; status is not changeable |
+| Remaining risk | Creating a partner or faculty member lets them set up that login |
+
+Also fixed for everyone: any signed-in user could read partner portal passwords; student and faculty logins can no longer read partner records; partner, university, program and allocation requests check the organization.
