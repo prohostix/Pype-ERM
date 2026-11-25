@@ -470,16 +470,56 @@ export const getStudentEnrollmentOverview = asyncHandler(async (req: AuthRequest
   res.json({ success: true, data: enrollments });
 });
 
+// One page of activity logs: ?page=&limit=&search=&action=&until=
 export const getActivityLogs = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const logs = await prisma.auditLog.findMany({
-    where: { organizationId: req.user.organizationId },
-    include: {
-      user: { select: { id: true, name: true, email: true, role: true } }
-    },
-    orderBy: { timestamp: 'desc' },
-    take: 500
+  const page = Math.max(1, parseInt(String(req.query.page || '1'), 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit || '10'), 10) || 10));
+  const search = String(req.query.search || '').trim();
+  const action = String(req.query.action || '').trim();
+  // Later pages pass back the first page's time, so new activity does not shift rows between pages
+  const requested = new Date(String(req.query.until || ''));
+  const until = Number.isNaN(requested.getTime()) ? new Date() : requested;
+
+  const scope = { organizationId: req.user.organizationId, timestamp: { lte: until } };
+  const contains = { contains: search, mode: 'insensitive' as const };
+  const where: any = {
+    ...scope,
+    ...(action && { action: { equals: action, mode: 'insensitive' as const } }),
+    ...(search && {
+      OR: [
+        { user: { is: { OR: [{ name: contains }, { email: contains }] } } },
+        { entityType: contains },
+        { entityId: contains },
+      ],
+    }),
+  };
+
+  const [logs, total, overall, actions] = await Promise.all([
+    prisma.auditLog.findMany({
+      where,
+      // Only what the screen shows: the stored old and new values can be large
+      select: {
+        id: true, timestamp: true, action: true, entityType: true, entityId: true,
+        user: { select: { id: true, name: true, email: true, role: true } },
+      },
+      orderBy: [{ timestamp: 'desc' }, { id: 'desc' }],
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    prisma.auditLog.count({ where }),
+    prisma.auditLog.count({ where: scope }),
+    // The action filter buttons are only needed with the first page
+    page === 1 ? prisma.auditLog.groupBy({ by: ['action'], where: scope, orderBy: { action: 'asc' } }) : null,
+  ]);
+
+  res.json({
+    success: true,
+    data: logs,
+    total,
+    overall,
+    until: until.toISOString(),
+    ...(actions && { actions: actions.map((a) => a.action) }),
   });
-  res.json({ success: true, count: logs.length, data: logs });
 });
 
 export const getSalesCounts = asyncHandler(async (req: AuthRequest, res: Response) => {

@@ -370,6 +370,30 @@ const getSavedFilters = (key: string): SavedStudentFilters => {
   }
 };
 
+// Student statuses that only mean "the application is still in progress"
+const IN_PROGRESS_STATUSES = ['pending', 'provisional', 'payment_pending', 'receipt_submitted', 'document_review'];
+
+/**
+ * The status to show for a student. Approval steps move the enrollment, not the student record,
+ * so until the student leaves the application stage the latest enrollment holds the real status.
+ */
+const displayStatus = (student: any): string => {
+  const own = (student?.status || 'pending').toLowerCase();
+  if (!IN_PROGRESS_STATUSES.includes(own) || !Array.isArray(student?.enrollments)) return own;
+  const latest = student.enrollments.reduce(
+    (found: any, e: any) => (!found || new Date(e.createdAt || 0) > new Date(found.createdAt || 0) ? e : found),
+    null,
+  );
+  return (latest?.status || own).toLowerCase();
+};
+
+/** Provisional applications pass through several provisional_* steps; the Provisional filter covers them all. */
+const matchesState = (student: any, state: string): boolean => {
+  const status = displayStatus(student);
+  const wanted = state.toLowerCase();
+  return status === wanted || (wanted === 'provisional' && status.startsWith('provisional_'));
+};
+
 export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completingEnrollment, hideList }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean; completingEnrollment?: any; hideList?: boolean } = {}) {
   const { user } = useAuth();
   const canWrite = ['org_admin', 'superadmin', 'center_admin'].includes(user?.role || '');
@@ -443,11 +467,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   const [activeFilter, setActiveFilter] = useState<string>(() => {
     const saved = getSavedFilters(storageKey);
-    return saved.activeFilter || 'all';
+    return saved.activeFilter && saved.activeFilter !== 'current' ? saved.activeFilter : 'all';
   });
   const [filterStatuses, setFilterStatuses] = useState<string[]>(() => {
     const saved = getSavedFilters(storageKey);
-    return Array.isArray(saved.filterStatuses) ? saved.filterStatuses : [];
+    return Array.isArray(saved.filterStatuses) ? saved.filterStatuses.filter((st: string) => st !== 'current') : [];
   });
   const [searchQuery, setSearchQuery] = useState(() => {
     const saved = getSavedFilters(storageKey);
@@ -703,6 +727,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     inactive: 'bg-slate-100 text-slate-600 border-0',
     rejected: 'bg-rose-50 text-rose-700 border-0',
     department_rejected: 'bg-rose-50 text-rose-700 border-0',
+    ops_rejected: 'bg-rose-50 text-rose-700 border-0',
+    provisional_finance_pending: 'bg-amber-50 text-amber-700 border-0',
+    provisional_finance_verified: 'bg-[#eaf6e6] text-[#256c1d] border-0',
+    provisional_finance_rejected: 'bg-rose-50 text-rose-700 border-0',
   };
 
   const statusLabel = (s: string) => {
@@ -739,7 +767,6 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     { value: 'provisional', label: 'Provisional' },
     { value: 'pending', label: 'Pending' },
     { value: 'completed', label: 'Completed / Graduated' },
-    { value: 'current', label: 'Current (Non-graduated)' },
     { value: 'previous', label: 'Completed (Previous Students)' },
     { value: 'payment_pending', label: 'Fee / Payment Pending' },
     { value: 'receipt_submitted', label: 'Receipt Submitted' },
@@ -757,17 +784,16 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const statusCounts = useMemo(() => {
     const counts: Record<string, number> = {
       all: students.length,
-      current: 0,
       previous: 0,
       completed: 0,
     };
     students.forEach(s => {
       if (!s) return;
-      if (!s.isPrevious) counts.current = (counts.current || 0) + 1;
       if (s.isPrevious) counts.previous = (counts.previous || 0) + 1;
-      const st = (s.status || 'pending').toLowerCase();
+      const st = displayStatus(s);
       counts[st] = (counts[st] || 0) + 1;
     });
+    counts.provisional = students.filter(s => s && matchesState(s, 'provisional')).length;
     // Ensure completed count reflects all completed/graduated students (status === 'completed' or isPrevious)
     counts.completed = students.filter(s => s && ((s.status || '').toLowerCase() === 'completed' || s.isPrevious)).length;
     return counts;
@@ -778,8 +804,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     const list = [...ALL_STUDENT_STATES];
 
     students.forEach(s => {
-      if (s && s.status) {
-        const lower = s.status.toLowerCase();
+      if (s) {
+        const lower = displayStatus(s);
         if (!knownKeys.has(lower)) {
           knownKeys.add(lower);
           list.push({
@@ -794,12 +820,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       let count = 0;
       if (item.value === 'all') {
         count = students.length;
-      } else if (item.value === 'current') {
-        count = students.filter(s => s && !s.isPrevious).length;
       } else if (item.value === 'previous' || item.value === 'completed') {
         count = students.filter(s => s && ((s.status || '').toLowerCase() === 'completed' || s.isPrevious)).length;
       } else {
-        count = students.filter(s => s && (s.status || '').toLowerCase() === item.value).length;
+        count = students.filter(s => s && matchesState(s, item.value)).length;
       }
       return { ...item, count };
     });
@@ -2317,7 +2341,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           'Email': s.email || '',
           'Phone': s.phone || '',
           'Alt Phone': s.altPhone || '',
-          'Status': s.status ? (s.status.charAt(0).toUpperCase() + s.status.slice(1)) : '',
+          'Status': statusLabel(displayStatus(s)),
           'University': universityName,
           'Program': programName,
           'Specialisation': s.specialisation || '',
@@ -2796,7 +2820,6 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     provisional: 'bg-amber-500',
     pending: 'bg-orange-500',
     completed: 'bg-purple-500',
-    current: 'bg-emerald-600',
     previous: 'bg-purple-600',
     payment_pending: 'bg-orange-500',
     receipt_submitted: 'bg-cyan-500',
@@ -2972,19 +2995,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     // Status / State filter (multi-select)
     if (filterStatuses.length > 0) {
       const matchesStatus = filterStatuses.some((st) => {
-        if (st === 'current') return !s.isPrevious;
         if (st === 'previous') return !!s.isPrevious;
         if (st === 'completed') return (s.status || '').toLowerCase() === 'completed' || !!s.isPrevious;
-        return (s.status || '').toLowerCase() === st.toLowerCase();
+        return matchesState(s, st);
       });
       if (!matchesStatus) return false;
     } else {
       // Fallback to activeFilter if filterStatuses is empty but activeFilter is set to specific tab
-      if (activeFilter === 'current' && s.isPrevious) return false;
       if (activeFilter === 'previous' && !s.isPrevious) return false;
       if (activeFilter === 'completed' && (s.status || '').toLowerCase() !== 'completed' && !s.isPrevious) return false;
-      if (activeFilter !== 'all' && activeFilter !== 'current' && activeFilter !== 'previous' && activeFilter !== 'completed' && activeFilter !== 'custom') {
-        if ((s.status || '').toLowerCase() !== activeFilter.toLowerCase()) return false;
+      if (activeFilter !== 'all' && activeFilter !== 'previous' && activeFilter !== 'completed' && activeFilter !== 'custom') {
+        if (!matchesState(s, activeFilter)) return false;
       }
     }
 
@@ -4153,7 +4174,6 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
             { value: 'provisional', label: 'Provisional', count: statusCounts.provisional || 0, dot: 'bg-amber-500', ring: 'data-[state=active]:ring-amber-400/60', text: 'data-[state=active]:text-amber-700 dark:data-[state=active]:text-amber-300' },
             { value: 'pending', label: 'Pending', count: statusCounts.pending || 0, dot: 'bg-orange-500', ring: 'data-[state=active]:ring-orange-400/60', text: 'data-[state=active]:text-orange-700 dark:data-[state=active]:text-orange-300' },
             { value: 'completed', label: 'Completed', count: statusCounts.completed || 0, dot: 'bg-lime-500', ring: 'data-[state=active]:ring-lime-400/60', text: 'data-[state=active]:text-lime-700 dark:data-[state=active]:text-lime-300' },
-            { value: 'current', label: 'Current', count: statusCounts.current || 0, dot: 'bg-teal-500', ring: 'data-[state=active]:ring-teal-400/60', text: 'data-[state=active]:text-teal-700 dark:data-[state=active]:text-teal-300' },
           ] as const).map((t) => (
             <TabsTrigger
               key={t.value}
@@ -4768,8 +4788,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <h4 className="text-base font-semibold text-slate-900 dark:text-slate-100 truncate">{student.name}</h4>
-                          <Badge className={`px-2.5 py-0.5 text-[11px] font-semibold rounded-full ${STATUS_COLORS[student.status] || 'bg-slate-100 text-slate-600 border-0'}`}>
-                            {statusLabel(student.status)}
+                          <Badge className={`px-2.5 py-0.5 text-[11px] font-semibold rounded-full ${STATUS_COLORS[displayStatus(student)] || 'bg-slate-100 text-slate-600 border-0'}`}>
+                            {statusLabel(displayStatus(student))}
                           </Badge>
                         </div>
                         <p className="text-sm text-muted-foreground mt-0.5 truncate">
