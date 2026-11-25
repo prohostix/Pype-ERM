@@ -12,6 +12,9 @@ import { format } from 'date-fns';
 
 import { CS, numLocale } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
+import { Allowed } from '@/components/ui/allowed';
 type Mode = 'view' | 'verify' | 'reject';
 
 // statusHistory may be an array or (from older writes) an object of entries.
@@ -25,6 +28,9 @@ const formatINR = (n: number | null | undefined) =>
   n == null ? '—' : `${CS()}${Number(n).toLocaleString(numLocale())}`;
 
 export function ProvisionalFinancePanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayApprove = mayOn(user, 'provisional_verifications', 'approve', true);
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -290,13 +296,13 @@ export function ProvisionalFinancePanel() {
               </div>
               <DialogFooter>
                 <Button variant="outline" className="h-11 rounded-full px-6" onClick={() => setMode('view')} disabled={submitting}>Back to receipt</Button>
-                <Button
+                <Allowed when={mayApprove}><Button
                   className="h-11 rounded-full px-6 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"
                   disabled={submitting || !(Number(amount) > 0)}
                   onClick={handleVerify}
                 >
                   {submitting ? 'Verifying…' : 'Confirm & Verify'}
-                </Button>
+                </Button></Allowed>
               </DialogFooter>
             </>
           )}
@@ -325,9 +331,9 @@ export function ProvisionalFinancePanel() {
               </div>
               <DialogFooter>
                 <Button variant="outline" className="h-11 rounded-full px-6" onClick={() => setMode('view')} disabled={submitting}>Back to receipt</Button>
-                <Button className="h-11 rounded-full px-6 bg-red-600 hover:bg-red-700 text-white font-semibold" disabled={submitting || !remarks.trim()} onClick={handleReject}>
+                <Allowed when={mayApprove}><Button className="h-11 rounded-full px-6 bg-red-600 hover:bg-red-700 text-white font-semibold" disabled={submitting || !remarks.trim()} onClick={handleReject}>
                   {submitting ? 'Rejecting…' : 'Reject Receipt'}
-                </Button>
+                </Button></Allowed>
               </DialogFooter>
             </>
           )}

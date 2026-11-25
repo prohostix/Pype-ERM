@@ -14,13 +14,14 @@ import { cn } from '@/lib/utils';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { confirmDialog, promptDialog } from '@/lib/confirm';
 import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 export function ExpensesPanel() {
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const mayCreate = user?.access?.expenses?.create?.allowed ?? true;
-  const mayEdit = user?.access?.expenses?.edit?.allowed ?? true;
-  const mayDelete = user?.access?.expenses?.delete?.allowed ?? true;
-  const mayApprove = user?.access?.expenses?.approve?.allowed ?? true;
+  const mayCreate = mayOn(user, 'expenses', 'create', true);
+  const mayEdit = mayOn(user, 'expenses', 'edit', true);
+  const mayDelete = mayOn(user, 'expenses', 'delete', true);
+  const mayApprove = mayOn(user, 'expenses', 'approve', true);
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);

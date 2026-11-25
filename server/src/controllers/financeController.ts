@@ -654,7 +654,7 @@ export const approveExpense = asyncHandler(async (req: PageRequest, res: Respons
 import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
 import { invoiceScope, type AccessRequest } from '../access/guard.js';
 import { can } from '../access/resolve.js';
-import type { PageRequest } from '../access/pageGuard.js';
+import { partnerBranchWhere, withoutPasswords, type PageRequest } from '../access/pageGuard.js';
 import { invoiceBranchWhere } from '../access/invoiceRules.js';
 import { studentBranchWhere } from '../access/studentRules.js';
 
@@ -680,8 +680,11 @@ export const getTarget = asyncHandler(async (req: AuthRequest, res: Response) =>
   }
   res.json({ success: true, data: target });
 });
-export const createTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const target = await prisma.target.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+export const createTarget = asyncHandler(async (req: PageRequest, res: Response) => {
+  const target = await prisma.target.create({
+    // A user given this page creates targets for their own branch
+    data: { ...req.body, ...(req.ownBranchOnly && { branchId: req.user.branchId }), organizationId: req.user.organizationId }
+  });
   await handleTargetRollup(target.id, req.user.organizationId);
   await syncParentTargets(req.user.organizationId);
   res.status(201).json({ success: true, data: target });
@@ -698,7 +701,7 @@ export const updateTarget = asyncHandler(async (req: AuthRequest, res: Response)
   if (targetAmount !== undefined) updateData.targetAmount = Number(targetAmount);
   if (period !== undefined) updateData.period = period;
   if (employeeId !== undefined) updateData.employeeId = employeeId;
-  if (branchId !== undefined) updateData.branchId = branchId || null;
+  if (branchId !== undefined && !(req as PageRequest).ownBranchOnly) updateData.branchId = branchId || null;
   const target = await prisma.target.update({ where: { id: req.params.id }, data: updateData });
   await handleTargetRollup(target.id, req.user.organizationId);
   await syncParentTargets(req.user.organizationId);
@@ -943,9 +946,11 @@ export const updateAuthFee = asyncHandler(async (req: AuthRequest, res: Response
 });
 
 // Centers
-export const getPendingPaymentCenters = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const centers = await prisma.studyCenter.findMany({ where: { organizationId: req.user.organizationId, status: 'pending_payment' } });
-  res.json({ success: true, data: centers });
+export const getPendingPaymentCenters = asyncHandler(async (req: PageRequest, res: Response) => {
+  const centers = await prisma.studyCenter.findMany({
+    where: { organizationId: req.user.organizationId, status: 'pending_payment', ...(req.ownBranchOnly && partnerBranchWhere(req.user.branchId)) }
+  });
+  res.json({ success: true, data: withoutPasswords(req, centers as any[]) });
 });
 export const financeVerifyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
   const center = await prisma.studyCenter.update({ where: { id: req.params.id }, data: { status: 'active', financeApprovedBy: req.user.id, financeApprovedAt: new Date() } });
@@ -1191,11 +1196,23 @@ export const getFinanceSalesUsers = asyncHandler(async (req: AuthRequest, res: R
   res.json({ success: true, data: users });
 });
 
-export const getUniversityCommissions = asyncHandler(async (req: AuthRequest, res: Response) => {
+/** The student belongs to the caller's organization, and to their branch if they were given the page */
+const studentIsReachable = async (req: PageRequest, studentId: string): Promise<boolean> =>
+  Boolean(await prisma.student.findFirst({
+    where: {
+      id: studentId,
+      ...(req.user.role !== 'superadmin' && { organizationId: req.user.organizationId }),
+      ...(req.ownBranchOnly && studentBranchWhere(req.user.branchId))
+    },
+    select: { id: true }
+  }));
+
+export const getUniversityCommissions = asyncHandler(async (req: PageRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   const students = await prisma.student.findMany({
     where: {
       organizationId,
+      ...(req.ownBranchOnly && studentBranchWhere(req.user.branchId)),
     },
     include: {
       program: {
@@ -1215,15 +1232,20 @@ export const getUniversityCommissions = asyncHandler(async (req: AuthRequest, re
     }
   });
 
-  res.json({ success: true, data: students });
+  res.json({ success: true, data: withoutPasswords(req, students as any[]) });
 });
 
-export const recordUniversityCommission = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const recordUniversityCommission = asyncHandler(async (req: PageRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   const { studentId, universityId, amountReceived, notes, status } = req.body;
 
   if (!studentId || !universityId || amountReceived === undefined) {
     res.status(400).json({ success: false, message: 'Missing required fields' });
+    return;
+  }
+
+  if (!(await studentIsReachable(req, studentId))) {
+    res.status(404).json({ success: false, message: 'Student not found' });
     return;
   }
 
@@ -1242,11 +1264,12 @@ export const recordUniversityCommission = asyncHandler(async (req: AuthRequest, 
   res.status(201).json({ success: true, data: commission });
 });
 
-export const getUniversityPayments = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getUniversityPayments = asyncHandler(async (req: PageRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   const students = await prisma.student.findMany({
     where: {
       organizationId,
+      ...(req.ownBranchOnly && studentBranchWhere(req.user.branchId)),
     },
     include: {
       program: {
@@ -1266,15 +1289,20 @@ export const getUniversityPayments = asyncHandler(async (req: AuthRequest, res: 
     }
   });
 
-  res.json({ success: true, data: students });
+  res.json({ success: true, data: withoutPasswords(req, students as any[]) });
 });
 
-export const recordUniversityPayment = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const recordUniversityPayment = asyncHandler(async (req: PageRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   const { studentId, universityId, amountPaid, notes, status } = req.body;
 
   if (!studentId || !universityId || amountPaid === undefined) {
     res.status(400).json({ success: false, message: 'Missing required fields' });
+    return;
+  }
+
+  if (!(await studentIsReachable(req, studentId))) {
+    res.status(404).json({ success: false, message: 'Student not found' });
     return;
   }
 

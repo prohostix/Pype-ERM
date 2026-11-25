@@ -25,6 +25,7 @@ import { visibleDocTypes } from '@/lib/enrollmentDocs';
 import { CS } from '@/lib/currency';
 import type { AccessAction } from '@/lib/access';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 interface MultiSelectFilterOption {
   value: string;
   label: string;
@@ -400,7 +401,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
   const byRole = ['org_admin', 'superadmin', 'center_admin'].includes(user?.role || '');
-  const may = (action: AccessAction, fallback: boolean) => user?.access?.students?.[action]?.allowed ?? fallback;
+  const may = (action: AccessAction, fallback: boolean) => mayOn(user, 'students', action, fallback);
   const canCreate = may('create', byRole);
   const canEdit = may('edit', byRole);
   const canImport = may('import', byRole);

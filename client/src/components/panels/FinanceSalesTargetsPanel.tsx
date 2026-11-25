@@ -9,6 +9,9 @@ import { toast } from 'sonner';
 
 import { CS } from '@/lib/currency';
 import { confirmDialog } from '@/lib/confirm';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
+import { Allowed } from '@/components/ui/allowed';
 interface SalesUser {
   id: string;
   name: string;
@@ -43,6 +46,11 @@ const progressColor = (pct: number) => {
 };
 
 export function FinanceSalesTargetsPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayCreate = mayOn(user, 'sales_targets', 'create', true);
+  const mayEdit = mayOn(user, 'sales_targets', 'edit', true);
+  const mayDelete = mayOn(user, 'sales_targets', 'delete', true);
   const [users, setUsers] = useState<SalesUser[]>([]);
   const [targets, setTargets] = useState<SalesTarget[]>([]);
   const [loading, setLoading] = useState(true);
@@ -161,10 +169,10 @@ export function FinanceSalesTargetsPanel() {
             <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />
             Refresh
           </Button>
-          <Button onClick={openCreate} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+          <Allowed when={mayCreate}><Button onClick={openCreate} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
             <Plus className="w-4 h-4 mr-2" />
             Assign Target
-          </Button>
+          </Button></Allowed>
         </div>
       </div>
 
@@ -310,12 +318,12 @@ export function FinanceSalesTargetsPanel() {
                       </div>
                     </div>
                     <div className="flex gap-1 shrink-0">
-                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-full hover:bg-white" onClick={() => openEdit(t)}>
+                      <Allowed when={mayEdit}><Button size="icon" variant="ghost" className="h-9 w-9 rounded-full hover:bg-white" onClick={() => openEdit(t)}>
                         <Edit2 className="w-3.5 h-3.5" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(t.id)}>
+                      </Button></Allowed>
+                      <Allowed when={mayDelete}><Button size="icon" variant="ghost" className="h-9 w-9 rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(t.id)}>
                         <Trash2 className="w-3.5 h-3.5" />
-                      </Button>
+                      </Button></Allowed>
                     </div>
                   </div>
                 );

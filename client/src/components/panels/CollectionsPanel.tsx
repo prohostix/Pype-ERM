@@ -23,7 +23,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 
 import { CS, numLocale } from '@/lib/currency';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
+import { Allowed } from '@/components/ui/allowed';
 export function CollectionsPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayEdit = mayOn(user, 'collections', 'edit', true);
+  const maySend = mayOn(user, 'collections', 'send', true);
   const [loading, setLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(true);
   const [activePanelTab, setActivePanelTab] = useState<'overview' | 'students' | 'overseers'>('overview');
@@ -485,12 +492,12 @@ export function CollectionsPanel() {
                             <div className="flex items-center justify-between sm:justify-end gap-4">
                               <span className="font-bold text-amber-600 text-sm">{CS()}{sc.amount.toLocaleString(numLocale())}</span>
                               <div className="flex gap-1.5 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Button variant="secondary" size="icon" className="w-8 h-8 rounded-full hover:bg-amber-500/10 hover:text-amber-600" onClick={() => handleSendNotification(sc)} title="System Reminder">
+                                <Allowed when={maySend}><Button variant="secondary" size="icon" className="w-8 h-8 rounded-full hover:bg-amber-500/10 hover:text-amber-600" onClick={() => handleSendNotification(sc)} title="System Reminder">
                                   <Bell className="w-3.5 h-3.5" />
-                                </Button>
-                                <Button variant="secondary" size="icon" className="w-8 h-8 rounded-full hover:bg-emerald-500/10 hover:text-emerald-600" onClick={() => handleMarkPaid(sc)} title="Mark Settled">
+                                </Button></Allowed>
+                                <Allowed when={mayEdit}><Button variant="secondary" size="icon" className="w-8 h-8 rounded-full hover:bg-emerald-500/10 hover:text-emerald-600" onClick={() => handleMarkPaid(sc)} title="Mark Settled">
                                   <Check className="w-3.5 h-3.5" />
-                                </Button>
+                                </Button></Allowed>
                               </div>
                             </div>
                           </div>
@@ -546,18 +553,18 @@ export function CollectionsPanel() {
                               <span className="rounded-full bg-red-100 text-red-700 px-3 py-1 text-[11px] font-semibold">Overdue</span>
                             </td>
                             <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
-                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleSendNotification(sc)} title="System Notify">
+                              <Allowed when={maySend}><Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleSendNotification(sc)} title="System Notify">
                                 <Bell className="w-3.5 h-3.5 text-amber-500" />
-                              </Button>
-                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleSendWhatsApp(sc)} title="WhatsApp Notify">
+                              </Button></Allowed>
+                              <Allowed when={maySend}><Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleSendWhatsApp(sc)} title="WhatsApp Notify">
                                 <MessageSquare className="w-3.5 h-3.5 text-emerald-500" />
-                              </Button>
-                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleMarkPaid(sc)} title="Settle">
+                              </Button></Allowed>
+                              <Allowed when={mayEdit}><Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleMarkPaid(sc)} title="Settle">
                                 <Check className="w-3.5 h-3.5 text-emerald-600" />
-                              </Button>
-                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenRemarks(sc)} title="Remarks">
+                              </Button></Allowed>
+                              <Allowed when={mayEdit}><Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenRemarks(sc)} title="Remarks">
                                 <Edit className="w-3.5 h-3.5 text-primary" />
-                              </Button>
+                              </Button></Allowed>
                             </td>
                           </tr>
                         ))}
@@ -580,15 +587,15 @@ export function CollectionsPanel() {
                               <span className="rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-[11px] font-semibold">Upcoming</span>
                             </td>
                             <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
-                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleSendNotification(sc)} title="System Notify">
+                              <Allowed when={maySend}><Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleSendNotification(sc)} title="System Notify">
                                 <Bell className="w-3.5 h-3.5 text-amber-500" />
-                              </Button>
-                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleMarkPaid(sc)} title="Settle">
+                              </Button></Allowed>
+                              <Allowed when={mayEdit}><Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleMarkPaid(sc)} title="Settle">
                                 <Check className="w-3.5 h-3.5 text-emerald-600" />
-                              </Button>
-                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenRemarks(sc)} title="Remarks">
+                              </Button></Allowed>
+                              <Allowed when={mayEdit}><Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenRemarks(sc)} title="Remarks">
                                 <Edit className="w-3.5 h-3.5 text-primary" />
-                              </Button>
+                              </Button></Allowed>
                             </td>
                           </tr>
                         ))}
@@ -608,12 +615,12 @@ export function CollectionsPanel() {
                               <span className="rounded-full bg-slate-200/70 text-slate-600 px-3 py-1 text-[11px] font-semibold">Pending</span>
                             </td>
                             <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
-                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleMarkPaid(sc)} title="Settle">
+                              <Allowed when={mayEdit}><Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleMarkPaid(sc)} title="Settle">
                                 <Check className="w-3.5 h-3.5 text-emerald-600" />
-                              </Button>
-                              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenRemarks(sc)} title="Remarks">
+                              </Button></Allowed>
+                              <Allowed when={mayEdit}><Button variant="outline" size="icon" className="w-8 h-8 rounded-full border-slate-200 bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenRemarks(sc)} title="Remarks">
                                 <Edit className="w-3.5 h-3.5 text-primary" />
-                              </Button>
+                              </Button></Allowed>
                             </td>
                           </tr>
                         ))}
@@ -885,7 +892,7 @@ export function CollectionsPanel() {
               />
             </div>
             <div className="flex gap-2">
-              <Button onClick={handleSaveRemarks} className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Update Notes</Button>
+              <Allowed when={mayEdit}><Button onClick={handleSaveRemarks} className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">Update Notes</Button></Allowed>
               <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setRemarkDialogOpen(false)}>Cancel</Button>
             </div>
           </div>

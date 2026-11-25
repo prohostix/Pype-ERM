@@ -11,6 +11,7 @@ import { api } from '../../lib/api';
 import { CS } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 interface StudentDiscount {
   id: string;
   name: string;
@@ -31,7 +32,7 @@ interface StudentOption {
 export function DiscountsPanel() {
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const mayCreate = user?.access?.discounts?.create?.allowed ?? true;
+  const mayCreate = mayOn(user, 'discounts', 'create', true);
   const [discounts, setDiscounts] = useState<StudentDiscount[]>([]);
   const [students, setStudents] = useState<StudentOption[]>([]);
   const [loading, setLoading] = useState(true);

@@ -296,3 +296,11 @@ Also fixed: link regeneration, sales admin approval and rejection, and receipt u
 | Data for users given a page | Own branch; fee structures are organization-wide |
 
 Also fixed: fee structures and payment targets check the organization, and the payment list no longer sends student portal passwords.
+
+### Finance, second part (connected)
+
+Pending Payments, Provisional Verifications, Finance Enrollments, Wallet Top-up, Student Payment Log, Payment Gateway, University Fee, University Commissions, Finance Sales Target and Collections.
+
+- Users given a page see their branch only. A partner belongs to a branch when its referrer or a student does.
+- Only an Org Admin setting hides a menu or button; a role default of "no" alone does not (collections overseers keep their page).
+- Fixed: partner finance verification, wallet top-up decisions, finance enrollment decisions, receipt verification, payment links, installment updates and university payments now check the organization; a rejected wallet top-up must be pending.

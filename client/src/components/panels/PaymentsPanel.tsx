@@ -12,12 +12,13 @@ import { toast } from 'sonner';
 import { CS, numLocale } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
 import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 export function PaymentsPanel() {
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const mayCreate = user?.access?.payments?.create?.allowed ?? true;
-  const mayEdit = user?.access?.payments?.edit?.allowed ?? true;
-  const mayDelete = user?.access?.payments?.delete?.allowed ?? true;
+  const mayCreate = mayOn(user, 'payments', 'create', true);
+  const mayEdit = mayOn(user, 'payments', 'edit', true);
+  const mayDelete = mayOn(user, 'payments', 'delete', true);
   const [payments, setPayments] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);

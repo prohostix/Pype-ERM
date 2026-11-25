@@ -9,12 +9,13 @@ import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { SessionFormDialog } from '../forms/SessionFormDialog';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 
 export function AdmissionSessionsPanel() {
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const canWrite = user?.access?.admission_sessions?.delete?.allowed ?? ['org_admin', 'superadmin', 'ops_admin', 'ceo'].includes(user?.role || '');
-  const isFinance = user?.access?.admission_sessions?.approve?.allowed ?? ['finance_admin', 'finance_sub_admin'].includes(user?.role || '');
+  const canWrite = mayOn(user, 'admission_sessions', 'delete', ['org_admin', 'superadmin', 'ops_admin', 'ceo'].includes(user?.role || ''));
+  const isFinance = mayOn(user, 'admission_sessions', 'approve', ['finance_admin', 'finance_sub_admin'].includes(user?.role || ''));
   const [sessions, setSessions] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
   const [universities, setUniversities] = useState<any[]>([]);

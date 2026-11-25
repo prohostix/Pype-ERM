@@ -9,6 +9,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 interface University { id: string; name: string; code: string; }
 interface Program { id: string; name: string; code: string; universityId: string; courseType: string; specialisations?: string[]; }
@@ -35,8 +36,8 @@ const STATUS_DOT: Record<string, string> = { pending: 'bg-[#54b947]', used: 'bg-
 export function SalesInvitePanel() {
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const mayCreate = user?.access?.invite_links?.create?.allowed ?? true;
-  const mayEdit = user?.access?.invite_links?.edit?.allowed ?? true;
+  const mayCreate = mayOn(user, 'invite_links', 'create', true);
+  const mayEdit = mayOn(user, 'invite_links', 'edit', true);
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'used' | 'expired'>('all');
   const [invites, setInvites] = useState<Invite[]>([]);
   const [universities, setUniversities] = useState<University[]>([]);

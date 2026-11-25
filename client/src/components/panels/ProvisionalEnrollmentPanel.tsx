@@ -26,6 +26,7 @@ import { shrinkImage, TARGET_MAX_BYTES } from '@/lib/uploadFile';
 
 import { CS, numLocale } from '@/lib/currency';
 import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 function Section({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) {
   return (
   <section className="space-y-4">
@@ -41,7 +42,7 @@ function Section({ icon: Icon, title, children }: { icon: React.ElementType; tit
 export function ProvisionalEnrollmentPanel() {
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const mayCreate = user?.access?.provisional_enrollment?.create?.allowed ?? true;
+  const mayCreate = mayOn(user, 'provisional_enrollment', 'create', true);
   const [programs, setPrograms] = useState<any[]>([]);
   const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);

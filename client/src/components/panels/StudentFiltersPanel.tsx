@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { confirmDialog } from '@/lib/confirm';
 import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 interface FilterOption { id: string; label: string; color?: string | null; isArchived: boolean; studentCount: number }
 interface FilterType { id: string; name: string; isActive: boolean; options: FilterOption[] }
@@ -30,7 +31,7 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 /** What the signed-in user may change here (the server enforces it). */
 const useFilterAccess = () => {
   const { user } = useAuth();
-  const may = (action: 'create' | 'edit' | 'delete') => user?.access?.student_filters?.[action]?.allowed ?? true;
+  const may = (action: 'create' | 'edit' | 'delete') => mayOn(user, 'student_filters', action, true);
   return { mayCreate: may('create'), mayEdit: may('edit'), mayDelete: may('delete') };
 };
 

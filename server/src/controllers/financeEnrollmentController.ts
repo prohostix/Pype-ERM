@@ -5,8 +5,9 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { provisionStudentAfterApproval } from '../utils/studentProvisioning.js';
 import { enqueueNotification } from '../utils/notificationQueue.js';
 import { appendHistory } from '../utils/statusHistory.js';
+import { enrollmentBranchWhere, withoutPasswords, type PageRequest } from '../access/pageGuard.js';
 
-export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getAllEnrollments = asyncHandler(async (req: PageRequest, res: Response) => {
   const { status, search } = req.query as Record<string, string>;
 
   const where: any = { organizationId: req.user.organizationId };
@@ -38,6 +39,11 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
     } else {
       where.OR = branchCondition.OR;
     }
+  }
+
+  // Someone given this page sees only their branch
+  if (req.ownBranchOnly) {
+    where.AND = [...(where.AND || []), enrollmentBranchWhere(req.user.branchId)];
   }
 
   // Create a where clause for the summary that excludes the current status filter
@@ -86,10 +92,10 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
     return acc;
   }, { payment_pending: 0, receipt_submitted: 0, document_review: 0, finance_review: 0, enrolled: 0, rejected: 0, department_rejected: 0 });
 
-  res.status(200).json({ success: true, count: enrollments.length, data: enrollments, summary: summaryMap });
+  res.status(200).json({ success: true, count: enrollments.length, data: withoutPasswords(req, enrollments as any[]), summary: summaryMap });
 });
 
-export const getFinanceEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getFinanceEnrollments = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId, status: 'finance_review' };
   
   // Enforce branch isolation for finance users
@@ -104,12 +110,14 @@ export const getFinanceEnrollments = asyncHandler(async (req: AuthRequest, res: 
     ];
   }
 
+  if (req.ownBranchOnly) where.AND = [enrollmentBranchWhere(req.user.branchId)];
+
   const enrollments = await prisma.enrollment.findMany({
     where,
     include: { program: true, studyCenter: true, student: true },
     orderBy: { createdAt: 'asc' }
   });
-  res.json({ success: true, count: enrollments.length, data: enrollments });
+  res.json({ success: true, count: enrollments.length, data: withoutPasswords(req, enrollments as any[]) });
 });
 
 export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -537,7 +545,7 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
   res.json({ success: true, data: finalEnrollment || updatedEnrollment });
 });
 
-export const getProvisionalEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getProvisionalEnrollments = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId, isProvisional: true, status: 'provisional_finance_pending' };
 
   // Branch-level isolation for finance users
@@ -552,12 +560,14 @@ export const getProvisionalEnrollments = asyncHandler(async (req: AuthRequest, r
     ];
   }
 
+  if (req.ownBranchOnly) where.AND = [enrollmentBranchWhere(req.user.branchId)];
+
   const enrollments = await prisma.enrollment.findMany({
     where,
     include: { program: true, studyCenter: true, student: true, salesUser: { select: { id: true, name: true } } },
     orderBy: { createdAt: 'asc' }
   });
-  res.json({ success: true, count: enrollments.length, data: enrollments });
+  res.json({ success: true, count: enrollments.length, data: withoutPasswords(req, enrollments as any[]) });
 });
 
 // Loads a pending provisional enrollment and applies the branch check shared by

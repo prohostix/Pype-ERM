@@ -10,6 +10,9 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 
 import { CS } from '@/lib/currency';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
+import { Allowed } from '@/components/ui/allowed';
 interface TopUp {
   id: string;
   studyCenterId: { name?: string } | string;
@@ -28,6 +31,9 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export function WalletTopUpsPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayApprove = mayOn(user, 'wallet_topups', 'approve', true);
   const [topUps, setTopUps] = useState<TopUp[]>([]);
   const [loading, setLoading] = useState(false);
   const [rejectDialog, setRejectDialog] = useState<{ open: boolean; id: string }>({ open: false, id: '' });
@@ -112,12 +118,12 @@ export function WalletTopUpsPanel() {
                 </div>
                 {t.status === 'pending' && (
                   <div className="flex gap-2">
-                    <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => handleApprove(t.id)}>
+                    <Allowed when={mayApprove}><Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => handleApprove(t.id)}>
                       Approve
-                    </Button>
-                    <Button variant="outline" className="h-10 rounded-full px-5 text-red-600 border-red-200 bg-white hover:bg-red-50" onClick={() => { setRejectDialog({ open: true, id: t.id }); setRemarks(''); }}>
+                    </Button></Allowed>
+                    <Allowed when={mayApprove}><Button variant="outline" className="h-10 rounded-full px-5 text-red-600 border-red-200 bg-white hover:bg-red-50" onClick={() => { setRejectDialog({ open: true, id: t.id }); setRemarks(''); }}>
                       Reject
-                    </Button>
+                    </Button></Allowed>
                   </div>
                 )}
               </div>

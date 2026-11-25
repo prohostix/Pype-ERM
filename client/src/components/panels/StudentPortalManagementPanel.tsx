@@ -10,13 +10,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { mayOn } from '@/lib/access';
 
 export function StudentPortalManagementPanel() {
   const { user } = useAuth();
   // Only org admins can block or restore a student's videos
   const canBlockVideos = ['org_admin', 'superadmin'].includes(user?.role || '');
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const mayEdit = user?.access?.student_portal_management?.edit?.allowed ?? true;
+  const mayEdit = mayOn(user, 'student_portal_management', 'edit', true);
   const [blockTarget, setBlockTarget] = useState<any>(null);
   const [blockReason, setBlockReason] = useState('');
   // Unlock-gap override: skip the wait for a student's next video

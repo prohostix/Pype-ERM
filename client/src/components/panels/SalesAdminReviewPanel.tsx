@@ -12,10 +12,11 @@ import { ListPagination } from '@/components/ui/list-pagination';
 
 import { CS } from '@/lib/currency';
 import { confirmDialog } from '@/lib/confirm';
+import { mayOn } from '@/lib/access';
 export function SalesAdminReviewPanel() {
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const mayApprove = user?.access?.admission_approval?.approve?.allowed ?? true;
+  const mayApprove = mayOn(user, 'admission_approval', 'approve', true);
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');

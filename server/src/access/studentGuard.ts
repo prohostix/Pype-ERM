@@ -111,6 +111,24 @@ export const studentUpdate = (legacyRoles: string[]) => {
   };
 };
 
+/** A reminder can also be sent from Collections by someone given that page. */
+export const studentNotify = (legacyRoles: string[]) => {
+  const otherwise = studentAction('send', legacyRoles);
+  return async (req: StudentRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const page = req.access!.collections;
+      if (!isGrantedPage(req.access!, 'collections') || !page?.send?.allowed) { await otherwise(req, res, next); return; }
+      if (!(await inBranch(req, req.params.id, req.user.branchId))) {
+        res.status(404).json({ success: false, message: 'Student not found' });
+        return;
+      }
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+};
+
 /** For reading one student's details: granted users stay inside their branch. */
 export const studentRead = async (req: StudentRequest, res: Response, next: NextFunction): Promise<void> => {
   try {

@@ -10,6 +10,9 @@ import { toast } from 'sonner';
 
 import { CS } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
+import { Allowed } from '@/components/ui/allowed';
 // Inline SVG QR-like placeholder using a canvas-free approach
 function QRDisplay({ value }: { value: string }) {
   // Generate a deterministic "pattern" using string hash for visual representation
@@ -37,6 +40,9 @@ function QRDisplay({ value }: { value: string }) {
 }
 
 export function PaymentGatewayPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayCreate = mayOn(user, 'payment_gateway', 'create', true);
   const [links, setLinks] = useState<any[]>([]);
   const [students, setStudents] = useState<any[]>([]);
   const [schedules, setSchedules] = useState<any[]>([]);
@@ -139,9 +145,9 @@ export function PaymentGatewayPanel() {
           <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Payment Gateway Links</h2>
           <p className="text-muted-foreground text-sm mt-1.5">Generate and share payment links for student fees.</p>
         </div>
-        <Button onClick={() => setCreateOpen(true)} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
+        <Allowed when={mayCreate}><Button onClick={() => setCreateOpen(true)} className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold">
           <Plus className="w-4 h-4 mr-2" />Generate Link
-        </Button>
+        </Button></Allowed>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -291,9 +297,9 @@ export function PaymentGatewayPanel() {
               </Select>
             </div>
             <div className="flex gap-2 pt-2">
-              <Button onClick={handleCreate} disabled={creating} className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold gap-1.5">
+              <Allowed when={mayCreate}><Button onClick={handleCreate} disabled={creating} className="flex-1 h-11 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold gap-1.5">
                 <Link2 className="w-4 h-4" /> {creating ? 'Generating...' : 'Generate Link'}
-              </Button>
+              </Button></Allowed>
               <Button variant="outline" className="h-11 px-6 rounded-full" onClick={() => setCreateOpen(false)}>Cancel</Button>
             </div>
           </div>

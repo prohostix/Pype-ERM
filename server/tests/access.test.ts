@@ -261,3 +261,14 @@ test('an expense approval can be given without other changes', () => {
   assert.deepEqual(decidePageAction(access, 'expenses', 'approve', 'employee', changers), { allowed: true, ownBranchOnly: true });
   assert.equal(decidePageAction(access, 'expenses', 'delete', 'employee', changers).allowed, false);
 });
+
+test('remaining finance pages default to finance roles', () => {
+  const of = (user: object, key: string) => allowed({ id: 'u', ...user }, [], key);
+  assert.deepEqual(of({ role: 'finance_admin' }, 'wallet_topups'), ['view', 'approve']);
+  assert.deepEqual(of({ role: 'finance' }, 'student_payment_log'), ['view']);
+  assert.deepEqual(of({ role: 'ceo' }, 'university_commissions'), ['view']);
+  assert.deepEqual(of({ role: 'ceo' }, 'finance_enrollments'), ['view']);
+  assert.deepEqual(of({ role: 'finance_sub_admin' }, 'sales_targets'), ['view', 'create', 'edit', 'delete']);
+  assert.deepEqual(of({ role: 'collections_admin' }, 'collections'), ['view', 'edit', 'send']);
+  for (const key of ['pending_payments', 'provisional_verifications', 'wallet_topups', 'payment_gateway', 'university_fee', 'collections']) assert.deepEqual(allowed(hr, [], key), [], key);
+});

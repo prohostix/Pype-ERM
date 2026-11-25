@@ -2,11 +2,13 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { partnerBranchWhere, type PageRequest } from '../access/pageGuard.js';
 
-export const getWalletTopUps = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getWalletTopUps = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
   if (req.query.status) where.status = req.query.status as string;
   else where.status = 'pending';
+  if (req.ownBranchOnly) where.studyCenter = partnerBranchWhere(req.user.branchId);
 
   const topUps = await prisma.walletTopUp.findMany({
     where,
@@ -56,6 +58,12 @@ export const approveWalletTopUp = asyncHandler(async (req: AuthRequest, res: Res
 
 export const rejectWalletTopUp = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { remarks } = req.body;
+
+  const pending = await prisma.walletTopUp.findUnique({ where: { id: req.params.id }, select: { status: true } });
+  if (!pending || pending.status !== 'pending') {
+    res.status(404).json({ success: false, message: 'Top-up request invalid or not pending' });
+    return;
+  }
 
   const topUp = await prisma.walletTopUp.update({
     where: { id: req.params.id },

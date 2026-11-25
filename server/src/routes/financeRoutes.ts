@@ -87,7 +87,9 @@ import {
 } from '../controllers/payrollController.js';
 import { protect, authorize, type AuthRequest } from '../middleware/auth.js';
 import { requireAccess, requireAccessOrPaymentsSummary } from '../access/guard.js';
-import { pageAction, expenseInBranch, paymentInBranch } from '../access/pageGuard.js';
+import {
+  pageAction, expenseInBranch, paymentInBranch, enrollmentInBranch, linkInBranch, ownedBy, partnerInBranch, targetInBranch, topUpInBranch,
+} from '../access/pageGuard.js';
 
 const router = express.Router();
 
@@ -117,7 +119,8 @@ router.put('/invoices/:id/approve', requireAccess(['invoices', 'approve']), appr
 // Payments
 router.route('/payments')
   .get(pageAction('payments', 'view', null), getPayments)
-  .post(pageAction('payments', 'create', FINANCE_CHANGERS), createPayment);
+  // The Student Payment Log records receipts through the same request
+  .post(pageAction('payments', 'create', FINANCE_CHANGERS, { alsoAllows: ['student_payment_log', 'create'] }), createPayment);
 router.route('/payments/:id')
   .get(pageAction('payments', 'view', null, { inBranch: paymentInBranch }), getPayment)
   .put(pageAction('payments', 'edit', FINANCE_CHANGERS, { inBranch: paymentInBranch }), updatePayment)
@@ -134,11 +137,11 @@ router.route('/expenses/:id')
 router.put('/expenses/:id/approve', pageAction('expenses', 'approve', FINANCE_CHANGERS, { inBranch: expenseInBranch }), approveExpense);
 
 // Targets
-router.route('/targets').get(getTargets).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), createTarget);
+router.route('/targets').get(pageAction('sales_targets', 'view', null), getTargets).post(pageAction('sales_targets', 'create', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin']), createTarget);
 router.route('/targets/:id')
-  .get(getTarget)
-  .put(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updateTarget)
-  .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deleteTarget);
+  .get(pageAction('sales_targets', 'view', null, { inBranch: targetInBranch }), getTarget)
+  .put(pageAction('sales_targets', 'edit', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inBranch: targetInBranch }), updateTarget)
+  .delete(pageAction('sales_targets', 'delete', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inBranch: targetInBranch }), deleteTarget);
 
 // Fee Structures (many forms read the list, so reading stays open)
 router.route('/fees').get(getFeeStructures).post(pageAction('fee_structures', 'create', FINANCE_CHANGERS), createFeeStructure);
@@ -152,28 +155,28 @@ router.route('/auth-fees').get(authorize('finance_admin', 'finance_sub_admin', '
 router.put('/auth-fees/:id', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updateAuthFee);
 
 // Study Center Payment Verification & Creation
-router.get('/centers/pending-payment', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getPendingPaymentCenters);
+router.get('/centers/pending-payment', pageAction('pending_payments', 'view', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin']), getPendingPaymentCenters);
 router.post('/centers', authorize('org_admin', 'superadmin'), createStudyCenter);
-router.put('/centers/:id/finance-verify', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), financeVerifyCenter);
+router.put('/centers/:id/finance-verify', pageAction('pending_payments', 'approve', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inOrganization: ownedBy('studyCenter'), inBranch: partnerInBranch }), financeVerifyCenter);
 
 
 
 // Wallet Top-Ups
-router.get('/wallet-topups', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getWalletTopUps);
-router.put('/wallet-topups/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), approveWalletTopUp);
-router.put('/wallet-topups/:id/reject', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), rejectWalletTopUp);
+router.get('/wallet-topups', pageAction('wallet_topups', 'view', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin']), getWalletTopUps);
+router.put('/wallet-topups/:id/approve', pageAction('wallet_topups', 'approve', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inOrganization: ownedBy('walletTopUp'), inBranch: topUpInBranch }), approveWalletTopUp);
+router.put('/wallet-topups/:id/reject', pageAction('wallet_topups', 'approve', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inOrganization: ownedBy('walletTopUp'), inBranch: topUpInBranch }), rejectWalletTopUp);
 
 // Finance Enrollment Review
-router.get('/enrollments/all', authorize('finance_admin', 'finance_sub_admin', 'branch_manager', 'ceo', 'general_manager', 'org_admin', 'superadmin'), getAllEnrollments);
-router.get('/enrollments', authorize('finance_admin', 'finance_sub_admin', 'branch_manager', 'ceo', 'general_manager', 'org_admin', 'superadmin'), getFinanceEnrollments);
-router.put('/enrollments/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), approveFinanceEnrollment);
-router.put('/enrollments/:id/reject', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), rejectFinanceEnrollment);
-router.post('/enrollments/:id/verify-receipt', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), verifyReceipt);
+router.get('/enrollments/all', pageAction('finance_enrollments', 'view', ['finance_admin', 'finance_sub_admin', 'branch_manager', 'ceo', 'general_manager', 'org_admin', 'superadmin']), getAllEnrollments);
+router.get('/enrollments', pageAction('finance_enrollments', 'view', ['finance_admin', 'finance_sub_admin', 'branch_manager', 'ceo', 'general_manager', 'org_admin', 'superadmin']), getFinanceEnrollments);
+router.put('/enrollments/:id/approve', pageAction('finance_enrollments', 'approve', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inOrganization: ownedBy('enrollment'), inBranch: enrollmentInBranch }), approveFinanceEnrollment);
+router.put('/enrollments/:id/reject', pageAction('finance_enrollments', 'approve', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inOrganization: ownedBy('enrollment'), inBranch: enrollmentInBranch }), rejectFinanceEnrollment);
+router.post('/enrollments/:id/verify-receipt', pageAction('finance_enrollments', 'approve', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inOrganization: ownedBy('enrollment'), inBranch: enrollmentInBranch }), verifyReceipt);
 
 // Provisional Enrollment Finance Verification
-router.get('/enrollments/provisional', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getProvisionalEnrollments);
-router.post('/enrollments/:id/provisional-verify', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), verifyProvisionalReceipt);
-router.post('/enrollments/:id/provisional-reject', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), rejectProvisionalReceipt);
+router.get('/enrollments/provisional', pageAction('provisional_verifications', 'view', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin']), getProvisionalEnrollments);
+router.post('/enrollments/:id/provisional-verify', pageAction('provisional_verifications', 'approve', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inOrganization: ownedBy('enrollment'), inBranch: enrollmentInBranch }), verifyProvisionalReceipt);
+router.post('/enrollments/:id/provisional-reject', pageAction('provisional_verifications', 'approve', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inOrganization: ownedBy('enrollment'), inBranch: enrollmentInBranch }), rejectProvisionalReceipt);
 
 // Reports
 router.get('/reports/income-expenditure', authorize('finance_admin', 'finance_sub_admin'), getIncomeExpenditureReport);
@@ -212,24 +215,24 @@ router.get('/old-fees', getOldFees);
 router.post('/old-fees/bulk', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), bulkCreateOldFees);
 
 // Payment Gateway
-router.get('/payment-links', getPaymentLinks);
-router.post('/payment-links', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), generatePaymentLink);
-router.put('/payment-links/:id/status', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), updatePaymentLinkStatus);
+router.get('/payment-links', pageAction('payment_gateway', 'view', null), getPaymentLinks);
+router.post('/payment-links', pageAction('payment_gateway', 'create', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin']), generatePaymentLink);
+router.put('/payment-links/:id/status', pageAction('payment_gateway', 'create', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'], { inOrganization: ownedBy('paymentLink'), inBranch: linkInBranch }), updatePaymentLinkStatus);
 
 // Student Payments Log & Extras
-router.get('/student-payments-log', authorize('finance', 'finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), getStudentPaymentsLog);
-router.post('/student-payments-log/extra-fee', authorize('finance', 'finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), addExtraFee);
+router.get('/student-payments-log', pageAction('student_payment_log', 'view', ['finance', 'finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin']), getStudentPaymentsLog);
+router.post('/student-payments-log/extra-fee', pageAction('student_payment_log', 'create', ['finance', 'finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin']), addExtraFee);
 
 // Commissions from Universities
 router.route('/commissions')
-  .get(getUniversityCommissions)
-  .post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), recordUniversityCommission);
+  .get(pageAction('university_commissions', 'view', null), getUniversityCommissions)
+  .post(pageAction('university_commissions', 'create', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin']), recordUniversityCommission);
 
 
 // Payments to Universities
 router.route('/university-payments')
-  .get(getUniversityPayments)
-  .post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), recordUniversityPayment);
+  .get(pageAction('university_fee', 'view', null), getUniversityPayments)
+  .post(pageAction('university_fee', 'create', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin']), recordUniversityPayment);
 
 // Discounts
 router.route('/discounts')

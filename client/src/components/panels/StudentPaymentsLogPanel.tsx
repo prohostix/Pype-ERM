@@ -12,7 +12,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 
 import { CS, numLocale } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
+import { Allowed } from '@/components/ui/allowed';
 export function StudentPaymentsLogPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayCreate = mayOn(user, 'student_payment_log', 'create', true);
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -288,9 +294,9 @@ export function StudentPaymentsLogPanel() {
                   <div className="border-t border-slate-100 bg-[#f4f6f3] p-4 sm:p-5">
                     <div className="flex flex-wrap justify-between items-center gap-2 mb-4">
                       <h4 className="font-semibold text-sm flex items-center gap-2">Fee breakdown</h4>
-                      <Button variant="outline" size="sm" className="h-9 rounded-full px-4 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]" onClick={() => { setSelectedStudentId(log.studentId); setExtraFeeDialogOpen(true); }}>
+                      <Allowed when={mayCreate}><Button variant="outline" size="sm" className="h-9 rounded-full px-4 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]" onClick={() => { setSelectedStudentId(log.studentId); setExtraFeeDialogOpen(true); }}>
                         <Plus className="w-4 h-4 mr-1" />Add extra fee
-                      </Button>
+                      </Button></Allowed>
                     </div>
                     {log.breakdown && log.breakdown.length > 0 ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -314,9 +320,9 @@ export function StudentPaymentsLogPanel() {
                                 <div><p className="text-muted-foreground">Balance</p><p className="font-semibold text-sm text-amber-600">{inr(b.balance)}</p></div>
                               </div>
                               {b.balance > 0 && (
-                                <Button variant="outline" size="sm" className="w-full text-xs h-9 mt-1 rounded-full border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]" onClick={() => { setSelectedStudentId(log.studentId); setSelectedScheduleId(b.scheduleId || null); setPaymentDialogOpen(true); }}>
+                                <Allowed when={mayCreate}><Button variant="outline" size="sm" className="w-full text-xs h-9 mt-1 rounded-full border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6]" onClick={() => { setSelectedStudentId(log.studentId); setSelectedScheduleId(b.scheduleId || null); setPaymentDialogOpen(true); }}>
                                   <Plus className="w-3 h-3 mr-1" />Record receipt
-                                </Button>
+                                </Button></Allowed>
                               )}
                             </div>
                           );

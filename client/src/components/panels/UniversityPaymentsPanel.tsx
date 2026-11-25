@@ -10,6 +10,9 @@ import { toast } from 'sonner';
 
 import { CS, numLocale } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
+import { Allowed } from '@/components/ui/allowed';
 interface PaymentRecord {
   id: string;
   amountPaid: number;
@@ -44,6 +47,9 @@ interface StudentWithPayments {
 }
 
 export function UniversityPaymentsPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayCreate = mayOn(user, 'university_fee', 'create', true);
   const [students, setStudents] = useState<StudentWithPayments[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -232,14 +238,14 @@ export function UniversityPaymentsPanel() {
                     </div>
                     <div className="flex items-center gap-3 justify-between xl:justify-end">
                       <Badge variant="outline" className={`rounded-full px-3 ${statusColor}`}>{statusLabel}</Badge>
-                      <Button
+                      <Allowed when={mayCreate}><Button
                         variant="outline"
                         className="h-10 rounded-full px-5 bg-white border-[#cfe9c9] text-[#256c1d] hover:bg-[#eaf6e6] font-semibold"
                         onClick={() => handleRecordClick(student)}
                         disabled={balance === 0 && totalUniversityFee > 0}
                       >
                         Log Payout
-                      </Button>
+                      </Button></Allowed>
                     </div>
                   </div>
                 );

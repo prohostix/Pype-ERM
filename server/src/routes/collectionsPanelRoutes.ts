@@ -9,13 +9,21 @@ import {
   getCollectionMetrics,
   getCollectionFollowUps
 } from '../controllers/collectionsPanelController.js';
+import { loadAccess } from '../access/load.js';
 
 const router = express.Router();
 
 // Middleware to check if user is admin OR designated overseer
 const checkCollectionOversightAccess = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const isAdmin = ['ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'collections'].includes(req.user?.role || '');
-  if (isAdmin) {
+  // An Org Admin's setting for this person comes first
+  const managed = await prisma.branch.findFirst({ where: { branchManagerId: req.user.id }, select: { id: true } });
+  const page = (await loadAccess(req.user, Boolean(managed)))?.collections;
+  if (page?.view?.override === 'deny') {
+    res.status(403).json({ success: false, message: 'You do not have permission to do this' });
+    return;
+  }
+  if (isAdmin || (page?.view?.override === 'allow' && page.view.allowed)) {
     return next();
   }
 

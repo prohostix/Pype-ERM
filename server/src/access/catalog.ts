@@ -64,6 +64,18 @@ const hasStudentList = (user: AccessUser): boolean => {
 const isSales = (user: AccessUser): boolean =>
   ['sales_admin', 'sales_sub_admin', 'sales'].includes(user.role) || (user.role === 'employee' && user.departmentType === 'sales');
 
+/** A page on the Finance screens: finance roles see it, and the approver roles may act on it. */
+const financePage = (key: string, label: string, writes: Action[], alsoScreens: Screens[] = []): Feature => ({
+  key,
+  label,
+  group: 'Finance',
+  actions: ['view', ...writes],
+  defaultActions: (user) => {
+    if (!(['superadmin', 'finance', ...alsoScreens] as Screens[]).includes(screensOf(user))) return [];
+    return FINANCE_APPROVER_ROLES.includes(user.role) ? ['view', ...writes] : ['view'];
+  },
+});
+
 export const FEATURES: Feature[] = [
   {
     key: 'students',
@@ -191,6 +203,34 @@ export const FEATURES: Feature[] = [
       if (!['finance', 'superadmin'].includes(screensOf(user))) return [];
       return FINANCE_APPROVER_ROLES.includes(user.role) ? ['view', 'create'] : ['view'];
     },
+  },
+  financePage('pending_payments', 'Pending Payments', ['approve']),
+  financePage('provisional_verifications', 'Provisional Verifications', ['approve']),
+  {
+    key: 'finance_enrollments',
+    label: 'Finance Enrollments',
+    group: 'Finance',
+    actions: ['view', 'approve'],
+    defaultActions: (user) => {
+      if (!['superadmin', 'org_admin', 'executive', 'branch', 'finance'].includes(screensOf(user))) return [];
+      return FINANCE_APPROVER_ROLES.includes(user.role) ? ['view', 'approve'] : ['view'];
+    },
+  },
+  financePage('wallet_topups', 'Wallet Top-up', ['approve']),
+  financePage('student_payment_log', 'Student Payment Log', ['create']),
+  financePage('payment_gateway', 'Payment Gateway', ['create']),
+  financePage('university_fee', 'University Fee', ['create']),
+  financePage('university_commissions', 'University Commissions', ['create'], ['executive']),
+  financePage('sales_targets', 'Finance Sales Target', ['create', 'edit', 'delete']),
+  {
+    key: 'collections',
+    label: 'Collections',
+    group: 'Finance',
+    actions: ['view', 'edit', 'send'],
+    // Overseers also reach this page; their role defaults are left to the screen
+    defaultActions: (user) => (['superadmin', 'org_admin', 'executive', 'finance'].includes(screensOf(user))
+      || ['collections_admin', 'collections'].includes(user.role)
+      || (user.role === 'employee' && user.departmentType === 'collections') ? ['view', 'edit', 'send'] : []),
   },
   {
     key: 'invoices',

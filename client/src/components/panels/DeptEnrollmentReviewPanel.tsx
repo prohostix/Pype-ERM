@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { mayOn } from '@/lib/access';
 
 const getDocUrl = (url: string) => {
   return api.getFileUrl(url);
@@ -89,8 +90,8 @@ export function DeptEnrollmentReviewPanel() {
   // Branch managers, the CEO and the General Manager can look at applications but not approve or reject them.
   const readOnly = ['branch_manager', 'ceo', 'general_manager'].includes(user?.role || '');
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const mayEdit = user?.access?.admission_review?.edit?.allowed ?? !readOnly;
-  const mayApprove = user?.access?.admission_review?.approve?.allowed ?? !readOnly;
+  const mayEdit = mayOn(user, 'admission_review', 'edit', !readOnly);
+  const mayApprove = mayOn(user, 'admission_review', 'approve', !readOnly);
   // Someone given this page checks documents through the review requests, which keep them to their branch
   const granted = user?.access?.admission_review?.view?.byDefault === false;
   const [tab, setTab] = useState<'pending' | 'completed'>('pending');

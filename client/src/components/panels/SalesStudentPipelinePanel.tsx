@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
 import { CS } from '@/lib/currency';
+import { mayOn } from '@/lib/access';
 interface StatusHistoryEntry {
   status: string;
   actorId: string;
@@ -135,7 +136,7 @@ export function SalesStudentPipelinePanel() {
   const [submittingReceipt, setSubmittingReceipt] = useState(false);
 
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const mayEdit = user?.access?.admission_pipeline?.edit?.allowed ?? true;
+  const mayEdit = mayOn(user, 'admission_pipeline', 'edit', true);
   const granted = user?.access?.admission_pipeline?.view?.byDefault === false;
 
   const canReuploadReceipt = (e: Enrollment) =>

@@ -35,7 +35,7 @@ import {
 import { bulkSetStudentFilterValue, setStudentFilterValue, getStudentFilterData } from '../controllers/studentFilterController.js';
 import { protect, authorize, type AuthRequest } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
-import { studentAction, studentContext, studentRead, studentUpdate, type StudentRequest } from '../access/studentGuard.js';
+import { studentAction, studentContext, studentNotify, studentRead, studentUpdate, type StudentRequest } from '../access/studentGuard.js';
 
 const router = express.Router();
 
@@ -70,7 +70,7 @@ router.post('/filters/bulk', studentAction('edit', [...FILTER_EDITORS]), bulkSet
 // Anyone given the Students page may read a student's filter values
 router.get('/:id/filters', studentRead, (req: StudentRequest, res, next) => (req.studentLimits ? next() : authorize(...FILTER_EDITORS, 'ceo', 'general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin')(req, res, next)), getStudentFilterData);
 router.put('/:id/filters/:typeId', studentAction('edit', [...FILTER_EDITORS]), setStudentFilterValue);
-router.post('/:id/notify', studentAction('send', ['org_admin', 'superadmin', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'employee']), notifyStudent);
+router.post('/:id/notify', studentNotify(['org_admin', 'superadmin', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'employee']), notifyStudent);
 router.post('/:id/documents', studentAction('edit', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee']), upload.single('file'), uploadStudentDocument);
 router.put('/:id/documents/:docIndex/status', studentAction('edit', ['org_admin', 'superadmin', 'ops_admin', 'ops_sub_admin', 'employee']), updateDocumentStatus);
 router.put('/:id/photo/status', studentAction('edit', ['org_admin', 'superadmin', 'ops_admin', 'ops_sub_admin', 'employee']), updatePhotoStatus);

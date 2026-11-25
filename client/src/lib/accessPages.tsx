@@ -15,9 +15,19 @@ import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
 import { ExpensesPanel } from '@/components/panels/ExpensesPanel';
 import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
 import { DiscountsPanel } from '@/components/panels/DiscountsPanel';
+import { FinanceCenterVerificationPanel } from '@/components/panels/FinanceCenterVerificationPanel';
+import { ProvisionalFinancePanel } from '@/components/panels/ProvisionalFinancePanel';
+import { FinanceEnrollmentsPanel } from '@/components/panels/FinanceEnrollmentsPanel';
+import { WalletTopUpsPanel } from '@/components/panels/WalletTopUpsPanel';
+import { StudentPaymentsLogPanel } from '@/components/panels/StudentPaymentsLogPanel';
+import { PaymentGatewayPanel } from '@/components/panels/PaymentGatewayPanel';
+import { UniversityPaymentsPanel } from '@/components/panels/UniversityPaymentsPanel';
+import { UniversityCommissionsPanel } from '@/components/panels/UniversityCommissionsPanel';
+import { FinanceSalesTargetsPanel } from '@/components/panels/FinanceSalesTargetsPanel';
+import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { InvoicesPanel } from '@/components/panels/InvoicesPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
-import { canDo, type UserAccess } from '@/lib/access';
+import { isBlocked, type UserAccess } from '@/lib/access';
 
 interface AccessPage { key: string; label: string; menuIds: string[]; render: () => ReactElement }
 
@@ -35,6 +45,16 @@ const PAGES: AccessPage[] = [
   { key: 'expenses', label: 'Expenses', menuIds: ['expenses'], render: () => <ExpensesPanel /> },
   { key: 'fee_structures', label: 'Fee Structures', menuIds: ['fee_structures', 'fees', 'fee_structure', 'fee_structure_res'], render: () => <FeeStructuresPanel /> },
   { key: 'discounts', label: 'Discounts', menuIds: ['discounts'], render: () => <DiscountsPanel /> },
+  { key: 'pending_payments', label: 'Pending Payments', menuIds: ['pending_payments'], render: () => <FinanceCenterVerificationPanel /> },
+  { key: 'provisional_verifications', label: 'Provisional Verifications', menuIds: ['provisional_verifications'], render: () => <ProvisionalFinancePanel /> },
+  { key: 'finance_enrollments', label: 'Finance Enrollments', menuIds: ['enrollments', 'finance_enrollments', 'enrollments_finance'], render: () => <FinanceEnrollmentsPanel /> },
+  { key: 'wallet_topups', label: 'Wallet Top-up', menuIds: ['wallet_topup', 'wallet_topups'], render: () => <WalletTopUpsPanel /> },
+  { key: 'student_payment_log', label: 'Student Payment Log', menuIds: ['student_payment_log'], render: () => <StudentPaymentsLogPanel /> },
+  { key: 'payment_gateway', label: 'Payment Gateway', menuIds: ['payment_gateway'], render: () => <PaymentGatewayPanel /> },
+  { key: 'university_fee', label: 'University Fee', menuIds: ['university_fee'], render: () => <UniversityPaymentsPanel /> },
+  { key: 'university_commissions', label: 'University Commissions', menuIds: ['university_commissions'], render: () => <UniversityCommissionsPanel /> },
+  { key: 'sales_targets', label: 'Finance Sales Target', menuIds: ['sales_target'], render: () => <FinanceSalesTargetsPanel /> },
+  { key: 'collections', label: 'Collections', menuIds: ['collections', 'student_collections'], render: () => <CollectionsPanel /> },
   { key: 'invoices', label: 'Invoices', menuIds: ['invoices'], render: () => <InvoicesPanel /> },
   { key: 'bill_receipts', label: 'Bill & Receipts', menuIds: ['bill_receipts'], render: () => <BillReceiptPanel /> },
 ];
@@ -51,7 +71,7 @@ export const applyAccessToMenu = <T extends MenuItem>(user: AccessHolder, items:
   if (!user?.access || PORTAL_ROLES.includes(user.role)) return items;
   const kept = items.filter((item) => {
     const page = PAGES.find((p) => p.menuIds.includes(item.id));
-    return !page || canDo(user, page.key, 'view');
+    return !page || !isBlocked(user, page.key);
   });
   // A section whose entries were all removed goes too
   const tidy: (T | MenuItem)[] = kept.filter((item, i) => !item.isSection || (kept[i + 1] !== undefined && !kept[i + 1].isSection));
@@ -76,7 +96,8 @@ export const accessScreen = (user: AccessHolder, tab?: string): ReactElement | n
   const added = tab.startsWith(GRANT_PREFIX);
   const page = PAGES.find((p) => (added ? tab === GRANT_PREFIX + p.key : p.menuIds.includes(tab)));
   if (!page) return null;
-  if (!canDo(user, page.key, 'view')) {
+  // A role menu entry is refused only when blocked; an added page needs to be allowed
+  if (added ? !user.access?.[page.key]?.view?.allowed : isBlocked(user, page.key)) {
     return (
       <div className="rounded-3xl bg-white border border-slate-100 text-center py-16 px-6">
         <p className="font-semibold">You don't have access to {page.label}</p>

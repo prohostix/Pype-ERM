@@ -697,7 +697,7 @@ export const getOldFees = asyncHandler(async (req: AuthRequest, res: Response) =
 
 // ── Payment Gateway ───────────────────────────────────────────────────────────
 
-export const generatePaymentLink = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const generatePaymentLink = asyncHandler(async (req: PageRequest, res: Response) => {
   const { studentId, scheduleId, invoiceId, amount, description, expiryDays } = req.body;
 
   if (!studentId || !amount) {
@@ -705,8 +705,21 @@ export const generatePaymentLink = asyncHandler(async (req: AuthRequest, res: Re
     return;
   }
 
-  const student = await prisma.student.findUnique({ where: { id: studentId } });
+  const student = await prisma.student.findFirst({
+    where: {
+      id: studentId,
+      ...(req.user.role !== 'superadmin' && { organizationId: req.user.organizationId }),
+      ...(req.ownBranchOnly && { branchId: req.user.branchId })
+    }
+  });
   if (!student) { res.status(404).json({ success: false, message: 'Student not found' }); return; }
+  // A link may only point at this student's own installment or invoice
+  if (scheduleId && !(await prisma.paymentSchedule.findFirst({ where: { id: scheduleId, studentId }, select: { id: true } }))) {
+    res.status(404).json({ success: false, message: 'Payment schedule not found' }); return;
+  }
+  if (invoiceId && !(await prisma.invoice.findFirst({ where: { id: invoiceId, organizationId: student.organizationId }, select: { id: true } }))) {
+    res.status(404).json({ success: false, message: 'Invoice not found' }); return;
+  }
 
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + (expiryDays || 30));
@@ -731,9 +744,9 @@ export const generatePaymentLink = asyncHandler(async (req: AuthRequest, res: Re
   res.status(201).json({ success: true, data: { ...link, paymentUrl } });
 });
 
-export const getPaymentLinks = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getPaymentLinks = asyncHandler(async (req: PageRequest, res: Response) => {
   const links = await prisma.paymentLink.findMany({
-    where: { organizationId: req.user.organizationId },
+    where: { organizationId: req.user.organizationId, ...(req.ownBranchOnly && { student: { branchId: req.user.branchId } }) },
     include: {
       student: { select: { name: true, email: true, enrollmentNo: true } },
       schedule: { select: { title: true, dueDate: true } }
@@ -761,7 +774,7 @@ export const updatePaymentLinkStatus = asyncHandler(async (req: AuthRequest, res
   res.json({ success: true, data: link });
 });
 
-export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getStudentPaymentsLog = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
 
   // Branch-level isolation for finance users
@@ -1095,7 +1108,7 @@ export const applyDiscount = asyncHandler(async (req: PageRequest, res: Response
   res.status(200).json({ success: true, data: updatedStudent });
 });
 
-export const addExtraFee = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const addExtraFee = asyncHandler(async (req: PageRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   const { studentId, title, amount, dueDate, remarks } = req.body;
 
@@ -1104,8 +1117,8 @@ export const addExtraFee = asyncHandler(async (req: AuthRequest, res: Response) 
   }
 
   try {
-    const student = await prisma.student.findUnique({
-      where: { id: studentId, organizationId }
+    const student = await prisma.student.findFirst({
+      where: { id: studentId, organizationId, ...(req.ownBranchOnly && { branchId: req.user.branchId }) }
     });
 
     if (!student) {

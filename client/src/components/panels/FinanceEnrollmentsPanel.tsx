@@ -11,6 +11,8 @@ import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 
 import { CS } from '@/lib/currency';
+import { mayOn } from '@/lib/access';
+import { Allowed } from '@/components/ui/allowed';
 const getDocUrl = (url: string) => {
   return api.getFileUrl(url);
 };
@@ -73,8 +75,10 @@ const FILTER_TABS = [
 
 export function FinanceEnrollmentsPanel() {
   const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayApprove = mayOn(user, 'finance_enrollments', 'approve', true);
   // Finance and Org/Super Admins can approve, reject or verify; everyone else (CEO, General Manager, Branch Manager) views.
-  const canAct = ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'].includes(user?.role || '');
+  const canAct = mayOn(user, 'finance_enrollments', 'approve', ['finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'].includes(user?.role || ''));
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(false);
@@ -355,12 +359,12 @@ export function FinanceEnrollmentsPanel() {
                         </Button>
                         {canAct && e.status === 'finance_review' && !e.isProvisional && (
                           <>
-                            <Button size="sm" variant="outline" className="h-8 rounded-full px-3.5 text-xs text-[#256c1d] border-[#cfe9c9] bg-[#eaf6e6] hover:bg-[#dff3da]" onClick={() => handleApprove(e.id)}>
+                            <Allowed when={mayApprove}><Button size="sm" variant="outline" className="h-8 rounded-full px-3.5 text-xs text-[#256c1d] border-[#cfe9c9] bg-[#eaf6e6] hover:bg-[#dff3da]" onClick={() => handleApprove(e.id)}>
                               <CheckCircle className="w-3 h-3 mr-1" />Enroll
-                            </Button>
-                            <Button size="sm" variant="outline" className="h-8 rounded-full px-3.5 text-xs text-red-600 border-red-200 bg-white hover:bg-red-50" onClick={() => { setRejectDialog({ open: true, id: e.id }); setRemarks(''); }}>
+                            </Button></Allowed>
+                            <Allowed when={mayApprove}><Button size="sm" variant="outline" className="h-8 rounded-full px-3.5 text-xs text-red-600 border-red-200 bg-white hover:bg-red-50" onClick={() => { setRejectDialog({ open: true, id: e.id }); setRemarks(''); }}>
                               <XCircle className="w-3 h-3 mr-1" />Reject
-                            </Button>
+                            </Button></Allowed>
                           </>
                         )}
                       </div>
@@ -640,17 +644,17 @@ export function FinanceEnrollmentsPanel() {
                               </div>
                             ) : (
                               <div className="flex flex-wrap items-center gap-2 mt-2">
-                                <Button size="sm" className="h-9 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => handleVerifyReceipt(viewStudent.id)}>
+                                <Allowed when={mayApprove}><Button size="sm" className="h-9 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => handleVerifyReceipt(viewStudent.id)}>
                                   <CheckCircle className="w-3.5 h-3.5 mr-1" />
                                   Verify Receipt & Enroll
-                                </Button>
-                                <Button size="sm" variant="outline" className="h-9 rounded-full text-red-600 border-red-200 bg-white hover:bg-red-50" onClick={() => {
+                                </Button></Allowed>
+                                <Allowed when={mayApprove}><Button size="sm" variant="outline" className="h-9 rounded-full text-red-600 border-red-200 bg-white hover:bg-red-50" onClick={() => {
                                   setRejectDialog({ open: true, id: viewStudent.id });
                                   setRemarks('');
                                 }}>
                                   <XCircle className="w-3.5 h-3.5 mr-1" />
                                   Reject Receipt
-                                </Button>
+                                </Button></Allowed>
                               </div>
                             )
                           ) : (

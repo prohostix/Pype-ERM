@@ -9,6 +9,9 @@ import { Input } from '@/components/ui/input';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
+import { Allowed } from '@/components/ui/allowed';
 
 const SERVER_BASE = '';
 
@@ -30,6 +33,9 @@ interface Center {
 interface Credentials { email: string; password: string; }
 
 export function FinanceCenterVerificationPanel() {
+  const { user } = useAuth();
+  // The role decides unless an Org Admin has set something for this user (the server enforces it)
+  const mayApprove = mayOn(user, 'pending_payments', 'approve', true);
   const [centers, setCenters] = useState<Center[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialog, setDialog] = useState<{ center: Center; action: 'approve' | 'reject' } | null>(null);
@@ -156,13 +162,13 @@ export function FinanceCenterVerificationPanel() {
                     )}
                   </div>
                   <div className="flex gap-2 shrink-0">
-                    <Button variant="outline" className="h-10 rounded-full px-5 text-red-600 border-red-200 bg-white hover:bg-red-50"
+                    <Allowed when={mayApprove}><Button variant="outline" className="h-10 rounded-full px-5 text-red-600 border-red-200 bg-white hover:bg-red-50"
                       onClick={() => { setDialog({ center: c, action: 'reject' }); setRemarks(''); }}>
                       Reject
-                    </Button>
-                    <Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => { setDialog({ center: c, action: 'approve' }); setRemarks(''); }}>
+                    </Button></Allowed>
+                    <Allowed when={mayApprove}><Button className="h-10 rounded-full px-5 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold" onClick={() => { setDialog({ center: c, action: 'approve' }); setRemarks(''); }}>
                       Approve
-                    </Button>
+                    </Button></Allowed>
                   </div>
                 </div>
               </div>

@@ -9,12 +9,13 @@ import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { mayOn } from '@/lib/access';
 
 export function FeeStructuresPanel() {
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
-  const mayCreate = user?.access?.fee_structures?.create?.allowed ?? true;
-  const mayEdit = user?.access?.fee_structures?.edit?.allowed ?? true;
+  const mayCreate = mayOn(user, 'fee_structures', 'create', true);
+  const mayEdit = mayOn(user, 'fee_structures', 'edit', true);
   const [step, setStep] = useState<number>(1);
   const [fees, setFees] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
