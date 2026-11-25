@@ -1,7 +1,8 @@
 # Per-user permission override: plan and edge cases
 
-Date: 2026-11-25. Status: step 0 coded, not committed or deployed.
-First case: an HR employee gets **view** access to **Invoices** and **Bill & Receipts**.
+Date: 2026-11-25. Status: steps 0 to 2 coded (per-action model). Table not created, nothing deployed.
+The role gives each user a default. The Org Admin overrides it per user, page and action.
+First case: an HR employee gets to **view** **Invoices** and **Bill & Receipts**.
 
 ## 1. Rules already decided
 
@@ -9,21 +10,26 @@ First case: an HR employee gets **view** access to **Invoices** and **Bill & Rec
 |---|---|
 | Who assigns | Org Admin only |
 | Direction | Add and remove |
-| Levels | View, Manage (includes View) |
+| Granularity | Each action on a page is set separately |
+| Delete and approve | May be allowed to non-finance users, with a warning before saving |
 | Data a granted user sees | Own branch only |
 | Role change | Overrides stop applying |
 | Expiry | Not in the first release |
 
 ## 2. How access is decided
 
-Each user and feature has one setting: **Default** (nothing stored), **No access**, **View** or **Manage**.
+For each user, page and action: **Default** (nothing stored), **Allow** or **Block**.
 
 ```
-result = override if present and valid, otherwise the role and department default
+result = the override if present and valid, otherwise the role and department default
          then limited to what the organization's plan includes
 ```
 
-The server decides. The menu only reflects the decision.
+- Blocking **View** blocks every action on the page.
+- Allowing any action also allows View, unless View is blocked.
+- Existing approval steps still apply: an allowed delete still goes through delete approval.
+
+The server decides. Menus and buttons only reflect the decision.
 
 ## 3. Current state for this case
 
@@ -43,46 +49,50 @@ So adding a menu alone would give a blank screen, then full write buttons, and n
 
 ## 4. Design
 
-### 4.1 Feature keys
+### 4.1 Pages and actions
 
-| Key | View | Manage |
+| Key | Actions | Default |
 |---|---|---|
-| `invoices` | List, search, filters, detail, open and download invoice | Create, edit |
-| `bill_receipts` | List, open and download receipts | (none today) |
+| `invoices` | view, create, edit, delete, approve, download | Users with the Invoices menu view and download. Create and edit follow the invoice write rule. Delete and approve: Superadmin, Org Admin, Finance Admin and Sub Admin |
+| `bill_receipts` | view, download | Org Admin and Finance screens |
 
-Delete, approve, reminders, payment links and discounts stay with finance roles and Org Admin, whatever the override.
+Reminders, payment links and discounts are not part of these pages and stay role only.
 
 ### 4.2 Data
 
 ```
 UserAccessOverride
   id, organizationId, userId, featureKey
-  level            none | view | manage
+  action           view | create | edit | delete | approve | download
+  effect           allow | deny
   roleAtGrant, departmentIdAtGrant
   reason, grantedById, createdAt
   revokedAt, revokedById
 ```
 
-One active row per user and feature. Changes revoke the old row and add a new one, which gives history.
+One active row per user, page and action. Changes revoke the old row and add a new one, which gives history.
 
 ### 4.3 Server
 
 | Item | Work |
 |---|---|
-| `access/catalog.ts` | Features, levels, default roles |
-| `access/resolve.ts` | Pure function returning each feature's level, with tests |
-| `requireFeature(key, level)` | Replaces role guards on that feature's routes |
-| Admin API `/access` | List features and users, read, save, history. Org Admin only |
+| `access/catalog.ts` | Pages, actions, defaults |
+| `access/resolve.ts` | Pure function returning what each user may do, with tests |
+| `requireAccess(page, action)` | Replaces role guards on that page's routes |
+| Admin API `/access` | List pages and users, read, save, history. Org Admin only |
 | `login` and `/auth/me` | Return the user's access |
 
 Endpoints for this case:
 
-| Endpoint | Guard |
+| Endpoint | Needs |
 |---|---|
-| `GET /finance/invoices`, `/invoices/:id` | `invoices` or `bill_receipts` view |
-| `GET /finance/receipt/invoice/:id`, `/receipt/payment/:id` | Same, and check branch and organization |
-| `POST`, `PUT /finance/invoices` | `invoices` manage |
-| `/students`, `/operations/centers`, `universities`, `programs`, `/finance/fees` | Not needed for view if the screen loads them only for the create and edit form |
+| `GET /finance/invoices`, `/invoices/:id` | view on `invoices` or `bill_receipts` |
+| `GET /finance/receipt/invoice/:id`, `/receipt/payment/:id` | download on either, plus branch and organization check |
+| `POST /finance/invoices` | `invoices` create |
+| `PUT /finance/invoices/:id` | `invoices` edit. Changing status to approved must need approve |
+| `DELETE /finance/invoices/:id` | `invoices` delete, then delete approval |
+| `PUT /finance/invoices/:id/approve` | `invoices` approve |
+| `/students`, `/operations/centers`, `universities`, `programs`, `/finance/fees` | Loaded only for the create and edit form |
 
 ### 4.4 Client
 
@@ -90,9 +100,9 @@ Endpoints for this case:
 |---|---|
 | Panel registry | Feature key to menu label and screen, usable from any dashboard |
 | Menu | Add granted items under "Additional Access"; remove blocked ones |
-| `can(key, level)` | Replaces role checks; hides write buttons |
-| Access Control screen | Org Admin: pick user, set each feature, reason, history, reset |
-| Invoices and Bill & Receipts | Server pagination; load form data only for `manage` |
+| `can(page, action)` | Replaces role checks; shows only the buttons allowed |
+| Access Control screen | Org Admin: pick user, set Default, Allow or Block per action, reason, history, reset |
+| Invoices and Bill & Receipts | Server pagination; load form data only with create or edit |
 
 ## 5. Steps
 
@@ -140,14 +150,19 @@ Schema change: the local `.env` is production and `deploy.sh` runs `prisma db pu
 ### Combining
 | Case | Rule |
 |---|---|
-| No access on a role default | Removed from menu and refused by the API |
-| Manage granted | Includes View |
-| Manage reduced to View | Write buttons hidden, writes refused |
+| View blocked on a role default | Removed from menu; every action refused |
+| Action allowed without View | View is added |
+| Action allowed but View blocked | Nothing on the page; warn the admin |
+| One action blocked | Its button hidden, its request refused, others unchanged |
+| Override equals the default | Store nothing |
+| Edit used to approve | Status changes to approved need approve |
+| Edit used to change amounts of an approved invoice | Confirm; recommend refusing without approve |
+| Delete allowed to a non-finance user | Warn before saving; delete approval still applies |
 | `bill_receipts` only | May read invoice data needed for receipts, no Invoices menu |
 | `invoices` blocked but `bill_receipts` allowed | Receipts work; Invoices refused |
 | Other screens that read invoices (student profile, collections, payments) | Each keeps its own permission; blocking Invoices must not break them |
 | New role default added later | Overrides remain differences |
-| Unknown or removed feature key | Ignored and logged |
+| Unknown or removed page or action | Ignored |
 
 ### Data visibility
 | Case | Rule |
@@ -159,7 +174,7 @@ Schema change: the local `.env` is production and `deploy.sh` runs `prisma db pu
 | `studentId`, search or filter parameters | Branch limit always applies |
 | Opening an invoice or receipt by ID | Same check as the list |
 | Totals and counts | Same scope as the rows |
-| Export and download | Allowed with View, same scope; confirm |
+| Export and download | Needs the download action, same scope |
 | Student phone and email on invoices | Shown, as part of the invoice |
 | Receipt file links | Check whether they open without sign-in |
 | Dashboard cards and AI reports | No finance figures unless separately granted |
@@ -195,20 +210,31 @@ Schema change: the local `.env` is production and `deploy.sh` runs `prisma db pu
 | Case | Expected |
 |---|---|
 | HR employee, default | No menu; API 403 |
-| View granted | Both menus; list and receipts open; own branch only |
-| View user creates or edits | 403; no buttons |
+| View allowed | Both menus; lists open; own branch only |
+| View only user creates, edits, deletes or downloads | 403; no buttons |
 | View user opens another branch's invoice ID | 404 |
+| Download allowed | Receipt opens |
 | Back to Default | Next request 403 |
 | Department changed | Override ignored |
 | No branch | Grant refused |
 | Finance admin, no override | Unchanged |
-| Finance admin set to No access | Menu gone; API 403; student profile still works |
+| Finance admin with View blocked | Menu gone; API 403; student profile still works |
+| Finance admin with Delete blocked | Other actions work; delete 403 |
 | Org Admin of another organization | Refused |
 
 ## 8. Decisions (confirmed 2026-11-25)
 
 | Question | Decision |
 |---|---|
-| May a View user download and export? | Yes |
+| May a user given access download and export? | Yes, set with the download action |
+| Per-action switches instead of View and Manage? | Yes |
+| May delete and approve be given to non-finance users? | Yes, with a warning |
 | Partner invoices for a branch user? | Only the branch's partners |
 | Revoke on department change as well as role change? | Yes |
+
+## 9. Open questions
+
+| Question | Recommendation |
+|---|---|
+| Sales reads the invoice list through Payments. Keep that? | Yes, for reading only, without the Invoices menu |
+| Refuse student and faculty logins on all finance requests now? | Yes |

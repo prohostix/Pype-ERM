@@ -144077,7 +144077,8 @@ export namespace Prisma {
     organizationId: string | null
     userId: string | null
     featureKey: string | null
-    level: string | null
+    action: string | null
+    effect: string | null
     roleAtGrant: string | null
     departmentIdAtGrant: string | null
     reason: string | null
@@ -144092,7 +144093,8 @@ export namespace Prisma {
     organizationId: string | null
     userId: string | null
     featureKey: string | null
-    level: string | null
+    action: string | null
+    effect: string | null
     roleAtGrant: string | null
     departmentIdAtGrant: string | null
     reason: string | null
@@ -144107,7 +144109,8 @@ export namespace Prisma {
     organizationId: number
     userId: number
     featureKey: number
-    level: number
+    action: number
+    effect: number
     roleAtGrant: number
     departmentIdAtGrant: number
     reason: number
@@ -144124,7 +144127,8 @@ export namespace Prisma {
     organizationId?: true
     userId?: true
     featureKey?: true
-    level?: true
+    action?: true
+    effect?: true
     roleAtGrant?: true
     departmentIdAtGrant?: true
     reason?: true
@@ -144139,7 +144143,8 @@ export namespace Prisma {
     organizationId?: true
     userId?: true
     featureKey?: true
-    level?: true
+    action?: true
+    effect?: true
     roleAtGrant?: true
     departmentIdAtGrant?: true
     reason?: true
@@ -144154,7 +144159,8 @@ export namespace Prisma {
     organizationId?: true
     userId?: true
     featureKey?: true
-    level?: true
+    action?: true
+    effect?: true
     roleAtGrant?: true
     departmentIdAtGrant?: true
     reason?: true
@@ -144242,7 +144248,8 @@ export namespace Prisma {
     organizationId: string
     userId: string
     featureKey: string
-    level: string
+    action: string
+    effect: string
     roleAtGrant: string
     departmentIdAtGrant: string | null
     reason: string | null
@@ -144274,7 +144281,8 @@ export namespace Prisma {
     organizationId?: boolean
     userId?: boolean
     featureKey?: boolean
-    level?: boolean
+    action?: boolean
+    effect?: boolean
     roleAtGrant?: boolean
     departmentIdAtGrant?: boolean
     reason?: boolean
@@ -144289,7 +144297,8 @@ export namespace Prisma {
     organizationId?: boolean
     userId?: boolean
     featureKey?: boolean
-    level?: boolean
+    action?: boolean
+    effect?: boolean
     roleAtGrant?: boolean
     departmentIdAtGrant?: boolean
     reason?: boolean
@@ -144304,7 +144313,8 @@ export namespace Prisma {
     organizationId?: boolean
     userId?: boolean
     featureKey?: boolean
-    level?: boolean
+    action?: boolean
+    effect?: boolean
     roleAtGrant?: boolean
     departmentIdAtGrant?: boolean
     reason?: boolean
@@ -144319,7 +144329,8 @@ export namespace Prisma {
     organizationId?: boolean
     userId?: boolean
     featureKey?: boolean
-    level?: boolean
+    action?: boolean
+    effect?: boolean
     roleAtGrant?: boolean
     departmentIdAtGrant?: boolean
     reason?: boolean
@@ -144329,7 +144340,7 @@ export namespace Prisma {
     revokedById?: boolean
   }
 
-  export type UserAccessOverrideOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "userId" | "featureKey" | "level" | "roleAtGrant" | "departmentIdAtGrant" | "reason" | "grantedById" | "createdAt" | "revokedAt" | "revokedById", ExtArgs["result"]["userAccessOverride"]>
+  export type UserAccessOverrideOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "userId" | "featureKey" | "action" | "effect" | "roleAtGrant" | "departmentIdAtGrant" | "reason" | "grantedById" | "createdAt" | "revokedAt" | "revokedById", ExtArgs["result"]["userAccessOverride"]>
 
   export type $UserAccessOverridePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "UserAccessOverride"
@@ -144339,7 +144350,8 @@ export namespace Prisma {
       organizationId: string
       userId: string
       featureKey: string
-      level: string
+      action: string
+      effect: string
       roleAtGrant: string
       departmentIdAtGrant: string | null
       reason: string | null
@@ -144774,7 +144786,8 @@ export namespace Prisma {
     readonly organizationId: FieldRef<"UserAccessOverride", 'String'>
     readonly userId: FieldRef<"UserAccessOverride", 'String'>
     readonly featureKey: FieldRef<"UserAccessOverride", 'String'>
-    readonly level: FieldRef<"UserAccessOverride", 'String'>
+    readonly action: FieldRef<"UserAccessOverride", 'String'>
+    readonly effect: FieldRef<"UserAccessOverride", 'String'>
     readonly roleAtGrant: FieldRef<"UserAccessOverride", 'String'>
     readonly departmentIdAtGrant: FieldRef<"UserAccessOverride", 'String'>
     readonly reason: FieldRef<"UserAccessOverride", 'String'>
@@ -147084,7 +147097,8 @@ export namespace Prisma {
     organizationId: 'organizationId',
     userId: 'userId',
     featureKey: 'featureKey',
-    level: 'level',
+    action: 'action',
+    effect: 'effect',
     roleAtGrant: 'roleAtGrant',
     departmentIdAtGrant: 'departmentIdAtGrant',
     reason: 'reason',
@@ -158766,7 +158780,8 @@ export namespace Prisma {
     organizationId?: StringFilter<"UserAccessOverride"> | string
     userId?: StringFilter<"UserAccessOverride"> | string
     featureKey?: StringFilter<"UserAccessOverride"> | string
-    level?: StringFilter<"UserAccessOverride"> | string
+    action?: StringFilter<"UserAccessOverride"> | string
+    effect?: StringFilter<"UserAccessOverride"> | string
     roleAtGrant?: StringFilter<"UserAccessOverride"> | string
     departmentIdAtGrant?: StringNullableFilter<"UserAccessOverride"> | string | null
     reason?: StringNullableFilter<"UserAccessOverride"> | string | null
@@ -158781,7 +158796,8 @@ export namespace Prisma {
     organizationId?: SortOrder
     userId?: SortOrder
     featureKey?: SortOrder
-    level?: SortOrder
+    action?: SortOrder
+    effect?: SortOrder
     roleAtGrant?: SortOrder
     departmentIdAtGrant?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
@@ -158799,7 +158815,8 @@ export namespace Prisma {
     organizationId?: StringFilter<"UserAccessOverride"> | string
     userId?: StringFilter<"UserAccessOverride"> | string
     featureKey?: StringFilter<"UserAccessOverride"> | string
-    level?: StringFilter<"UserAccessOverride"> | string
+    action?: StringFilter<"UserAccessOverride"> | string
+    effect?: StringFilter<"UserAccessOverride"> | string
     roleAtGrant?: StringFilter<"UserAccessOverride"> | string
     departmentIdAtGrant?: StringNullableFilter<"UserAccessOverride"> | string | null
     reason?: StringNullableFilter<"UserAccessOverride"> | string | null
@@ -158814,7 +158831,8 @@ export namespace Prisma {
     organizationId?: SortOrder
     userId?: SortOrder
     featureKey?: SortOrder
-    level?: SortOrder
+    action?: SortOrder
+    effect?: SortOrder
     roleAtGrant?: SortOrder
     departmentIdAtGrant?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
@@ -158835,7 +158853,8 @@ export namespace Prisma {
     organizationId?: StringWithAggregatesFilter<"UserAccessOverride"> | string
     userId?: StringWithAggregatesFilter<"UserAccessOverride"> | string
     featureKey?: StringWithAggregatesFilter<"UserAccessOverride"> | string
-    level?: StringWithAggregatesFilter<"UserAccessOverride"> | string
+    action?: StringWithAggregatesFilter<"UserAccessOverride"> | string
+    effect?: StringWithAggregatesFilter<"UserAccessOverride"> | string
     roleAtGrant?: StringWithAggregatesFilter<"UserAccessOverride"> | string
     departmentIdAtGrant?: StringNullableWithAggregatesFilter<"UserAccessOverride"> | string | null
     reason?: StringNullableWithAggregatesFilter<"UserAccessOverride"> | string | null
@@ -171065,7 +171084,8 @@ export namespace Prisma {
     organizationId: string
     userId: string
     featureKey: string
-    level: string
+    action: string
+    effect: string
     roleAtGrant: string
     departmentIdAtGrant?: string | null
     reason?: string | null
@@ -171080,7 +171100,8 @@ export namespace Prisma {
     organizationId: string
     userId: string
     featureKey: string
-    level: string
+    action: string
+    effect: string
     roleAtGrant: string
     departmentIdAtGrant?: string | null
     reason?: string | null
@@ -171095,7 +171116,8 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     featureKey?: StringFieldUpdateOperationsInput | string
-    level?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    effect?: StringFieldUpdateOperationsInput | string
     roleAtGrant?: StringFieldUpdateOperationsInput | string
     departmentIdAtGrant?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -171110,7 +171132,8 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     featureKey?: StringFieldUpdateOperationsInput | string
-    level?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    effect?: StringFieldUpdateOperationsInput | string
     roleAtGrant?: StringFieldUpdateOperationsInput | string
     departmentIdAtGrant?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -171125,7 +171148,8 @@ export namespace Prisma {
     organizationId: string
     userId: string
     featureKey: string
-    level: string
+    action: string
+    effect: string
     roleAtGrant: string
     departmentIdAtGrant?: string | null
     reason?: string | null
@@ -171140,7 +171164,8 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     featureKey?: StringFieldUpdateOperationsInput | string
-    level?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    effect?: StringFieldUpdateOperationsInput | string
     roleAtGrant?: StringFieldUpdateOperationsInput | string
     departmentIdAtGrant?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -171155,7 +171180,8 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     featureKey?: StringFieldUpdateOperationsInput | string
-    level?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    effect?: StringFieldUpdateOperationsInput | string
     roleAtGrant?: StringFieldUpdateOperationsInput | string
     departmentIdAtGrant?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -178413,7 +178439,8 @@ export namespace Prisma {
     organizationId?: SortOrder
     userId?: SortOrder
     featureKey?: SortOrder
-    level?: SortOrder
+    action?: SortOrder
+    effect?: SortOrder
     roleAtGrant?: SortOrder
     departmentIdAtGrant?: SortOrder
     reason?: SortOrder
@@ -178428,7 +178455,8 @@ export namespace Prisma {
     organizationId?: SortOrder
     userId?: SortOrder
     featureKey?: SortOrder
-    level?: SortOrder
+    action?: SortOrder
+    effect?: SortOrder
     roleAtGrant?: SortOrder
     departmentIdAtGrant?: SortOrder
     reason?: SortOrder
@@ -178443,7 +178471,8 @@ export namespace Prisma {
     organizationId?: SortOrder
     userId?: SortOrder
     featureKey?: SortOrder
-    level?: SortOrder
+    action?: SortOrder
+    effect?: SortOrder
     roleAtGrant?: SortOrder
     departmentIdAtGrant?: SortOrder
     reason?: SortOrder

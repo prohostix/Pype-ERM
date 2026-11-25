@@ -1,9 +1,12 @@
 /**
- * The features an Org Admin can set per user, and who has each one without an override.
- * Defaults mirror the menus built in client/src/App.tsx (getAvailableTables).
+ * The pages and actions an Org Admin can set per user, and what each user has without an override.
+ * Defaults mirror the menus built in client/src/App.tsx (getAvailableTables) and the role guards
+ * on the server routes.
  */
+import { canWriteInvoices } from '../utils/userGuards.js';
 
-export type AccessLevel = 'none' | 'view' | 'manage';
+/** `view` opens the page; every other action needs it. */
+export type Action = 'view' | 'create' | 'edit' | 'delete' | 'approve' | 'download';
 
 /** What the defaults and rules need to know about a user. */
 export interface AccessUser {
@@ -23,11 +26,11 @@ export interface Feature {
   key: string;
   label: string;
   group: string;
-  /** Levels an override may set, besides `none`. */
-  levels: ('view' | 'manage')[];
+  /** The actions this page really has, `view` first. */
+  actions: Action[];
   /** Organization plan feature it depends on, if any. */
   orgFeature?: string;
-  defaultLevel: (user: AccessUser) => AccessLevel;
+  defaultActions: (user: AccessUser) => Action[];
 }
 
 type Screens = 'superadmin' | 'executive' | 'branch' | 'org_admin' | 'finance' | 'other';
@@ -44,20 +47,28 @@ const screensOf = (user: AccessUser): Screens => {
   return 'other';
 };
 
+/** Roles the invoice delete and approve routes accept. */
+const INVOICE_APPROVER_ROLES = ['superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin'];
+
 export const FEATURES: Feature[] = [
   {
     key: 'invoices',
     label: 'Invoices',
     group: 'Finance',
-    levels: ['view', 'manage'],
-    // Everyone whose screens include Invoices can create and edit them
-    defaultLevel: (user) => (screensOf(user) === 'other' ? 'none' : 'manage'),
+    actions: ['view', 'create', 'edit', 'delete', 'approve', 'download'],
+    defaultActions: (user) => {
+      if (screensOf(user) === 'other') return [];
+      const writes: Action[] = canWriteInvoices(user, { managesBranch: !!user.isBranchManager, departmentType: user.departmentType })
+        ? ['create', 'edit'] : [];
+      const approvals: Action[] = INVOICE_APPROVER_ROLES.includes(user.role) ? ['delete', 'approve'] : [];
+      return ['view', ...writes, ...approvals, 'download'];
+    },
   },
   {
     key: 'bill_receipts',
     label: 'Bill & Receipts',
     group: 'Finance',
-    levels: ['view'],
-    defaultLevel: (user) => (['org_admin', 'finance'].includes(screensOf(user)) ? 'view' : 'none'),
+    actions: ['view', 'download'],
+    defaultActions: (user) => (['org_admin', 'finance'].includes(screensOf(user)) ? ['view', 'download'] : []),
   },
 ];

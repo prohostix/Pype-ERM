@@ -7,7 +7,8 @@ CREATE TABLE "UserAccessOverride" (
     "organizationId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "featureKey" TEXT NOT NULL,
-    "level" TEXT NOT NULL,
+    "action" TEXT NOT NULL,
+    "effect" TEXT NOT NULL,
     "roleAtGrant" TEXT NOT NULL,
     "departmentIdAtGrant" TEXT,
     "reason" TEXT,
@@ -23,5 +24,5 @@ CREATE TABLE "UserAccessOverride" (
 CREATE INDEX "UserAccessOverride_organizationId_userId_idx" ON "UserAccessOverride"("organizationId", "userId");
 
 -- CreateIndex
-CREATE INDEX "UserAccessOverride_userId_featureKey_revokedAt_idx" ON "UserAccessOverride"("userId", "featureKey", "revokedAt");
+CREATE INDEX "UserAccessOverride_userId_featureKey_action_revokedAt_idx" ON "UserAccessOverride"("userId", "featureKey", "action", "revokedAt");
 
