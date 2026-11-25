@@ -23,15 +23,15 @@ const USER_SELECT = {
 
 // Roles each creator level is allowed to create
 const CREATABLE_ROLES: Record<string, string[]> = {
-  superadmin: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee'],
-  org_admin: ['ceo', 'general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee'],
-  ceo: ['general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee'],
-  branch_manager: ['finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee'],
-  general_manager: ['finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee'],
+  superadmin: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee', 'sales_entry'],
+  org_admin: ['ceo', 'general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee', 'sales_entry'],
+  ceo: ['general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee', 'sales_entry'],
+  branch_manager: ['finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee', 'sales_entry'],
+  general_manager: ['finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee', 'sales_entry'],
   finance_admin: ['student', 'employee'],
   finance_sub_admin: ['student', 'employee'],
-  hr_admin: ['hr_admin', 'hr_sub_admin', 'general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'ops_sub_admin', 'sales', 'student', 'employee'],
-  hr_sub_admin: ['hr_sub_admin', 'general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'ops_sub_admin', 'sales', 'student', 'employee'],
+  hr_admin: ['hr_admin', 'hr_sub_admin', 'general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'ops_sub_admin', 'sales', 'student', 'employee', 'sales_entry'],
+  hr_sub_admin: ['hr_sub_admin', 'general_manager', 'branch_manager', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'ops_sub_admin', 'sales', 'student', 'employee', 'sales_entry'],
   ops_admin: ['ops_sub_admin', 'student', 'employee'],
   sales_admin: ['sales_sub_admin', 'sales', 'student', 'employee'],
   sales_sub_admin: ['sales', 'student', 'employee'],

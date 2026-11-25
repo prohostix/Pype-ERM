@@ -412,3 +412,21 @@ Also fixed for everyone: tasks, escalations, announcements, polls, meetings and 
 ## Full access pages (25 Nov 2026)
 
 Academic Partners, Academic Centers and Study Abroad Partners: Allow on any action gives every action, for the whole organization. Blocking an action still holds. Includes partner portal logins and status, student video access, and Study Abroad partner create, edit, reset password and suspend. Access Control shows a Full access badge and asks to confirm.
+
+## Sales Entry (25 Nov 2026)
+
+A data-entry role (`sales_entry`) and department type (`data_entry`) for people who work for the sales team. They never enrol themselves: everything is done for a sales employee they choose.
+
+| Step | Behaviour |
+|---|---|
+| 1. What to do | Four cards: Generate link, Provisional enrollment, Direct enrollment, Manage applications |
+| 2. Employee | Required every time. Active sales staff of the entry user's branch (any, with no branch). Nothing continues without one |
+| 3. The work | The chosen method for that employee. A banner shows who they are working for, with Change employee and Change method |
+| New students | The employee gets the credit (`enrolledBy`, `salesUserId`). The entry user is `enteredBy`. The Direct Enrollment form is the sales one, placed in the page |
+| Manage applications | The employee's pipeline with the sales actions: verify, re-upload rejected documents and receipts, complete provisional enrollments, re-submit upgrades |
+| Server | Entry users may act on an application only when its sales employee is an active sales employee they may choose. Everything else is refused |
+| Notices | Rejections and approvals go to the sales employee |
+| Cannot | List students, see fees, payments or logins |
+| Access Control | Page "Sales Entry: Enroll for a Sales Employee" can be given to other staff |
+
+Also fixed: completing a provisional enrollment did not check the organization.

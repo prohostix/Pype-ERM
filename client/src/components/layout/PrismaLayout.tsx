@@ -55,6 +55,7 @@ interface PrismaLayoutProps {
   onTableChange: (table: string) => void;
   onLogout?: () => void;
   userName?: string;
+  userAvatar?: string | null;
   userRole?: string;
   userId?: string;
   organizationId?: string;
@@ -68,6 +69,7 @@ export function PrismaLayout({
   onTableChange,
   onLogout,
   userName,
+  userAvatar,
   userRole,
   userId,
   organizationId,
@@ -343,8 +345,8 @@ export function PrismaLayout({
 
         <div className="p-4 relative z-10">
           <div className="flex items-center gap-3 px-2 py-2 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-[#54b947]/20 border border-[#54b947]/40 flex items-center justify-center text-[#8ae47e] font-bold shrink-0 shadow-sm">
-              {userName?.charAt(0) || 'U'}
+            <div className="w-10 h-10 rounded-xl bg-[#54b947]/20 border border-[#54b947]/40 flex items-center justify-center text-[#8ae47e] font-bold shrink-0 shadow-sm overflow-hidden">
+              {userAvatar ? <img src={api.getFileUrl(userAvatar)} alt={userName || 'User'} className="w-full h-full object-cover" /> : (userName?.charAt(0) || 'U')}
             </div>
             <div className="flex flex-col min-w-0">
               <span className="text-sm font-semibold truncate text-slate-200">{userName || 'User'}</span>
@@ -473,8 +475,8 @@ export function PrismaLayout({
               )}
             </div>
 
-            <div title={userName || 'User'} className="h-11 w-11 shrink-0 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold text-sm flex items-center justify-center shadow-sm transition-colors cursor-default">
-              {(userName?.charAt(0) || 'U').toUpperCase()}
+            <div title={userName || 'User'} className="h-11 w-11 shrink-0 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold text-sm flex items-center justify-center shadow-sm transition-colors cursor-default overflow-hidden">
+              {userAvatar ? <img src={api.getFileUrl(userAvatar)} alt={userName || 'User'} className="h-full w-full object-cover" /> : (userName?.charAt(0) || 'U').toUpperCase()}
             </div>
           </div>
         </header>

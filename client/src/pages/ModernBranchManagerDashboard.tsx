@@ -25,6 +25,7 @@ import { TasksPanel } from '@/components/panels/TasksPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
+import { MyProfilePanel } from '@/components/panels/MyProfilePanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
@@ -66,6 +67,7 @@ export function getBranchManagerNavItems() {
     { id: 'tasks', label: 'Tasks' },
     { id: 'announcements', label: 'Announcements' },
     { id: '__portal_section', label: 'My Portal', isSection: true },
+    { id: 'my_profile', label: 'My Profile' },
     { id: 'my_leaves', label: 'My Leaves' },
     { id: 'my_attendance', label: 'My Attendance' },
     { id: 'my_payslips', label: 'Pay Slips' },
@@ -144,6 +146,7 @@ export function ModernBranchManagerDashboard({ initialTab, onNavigate }: { initi
       case 'tasks': return <TasksPanel />;
       case 'announcements': return <AnnouncementsPanel />;
       // Portal
+      case 'my_profile': return <MyProfilePanel />;
       case 'my_leaves': return <LeavesPanel isMyPortal />; // her own leaves only
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'my_payslips': return <PayrollPanel />;

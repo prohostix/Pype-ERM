@@ -1,3 +1,4 @@
+import { MyProfilePanel } from '@/components/panels/MyProfilePanel';
 import { PageLoader } from '@/components/ui/page-loader';
 import { useState, useEffect, type ReactElement } from 'react';
 import { useAuth } from '@/hooks/useAuth';
@@ -7,6 +8,7 @@ import { ModernFinanceDashboard } from './ModernFinanceDashboard';
 import { ModernOpsDashboard } from './ModernOpsDashboard';
 import { ModernHRDashboard } from './ModernHRDashboard';
 import { ModernSalesDashboard } from './ModernSalesDashboard';
+import { ModernSalesEntryDashboard } from './ModernSalesEntryDashboard';
 import { ModernCollectionsDashboard } from './ModernCollectionsDashboard';
 import { ModernSuperadminDashboard } from './ModernSuperadminDashboard';
 import { ModernOrgAdminDashboard } from './ModernOrgAdminDashboard';
@@ -112,6 +114,9 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
   const accessPage = accessScreen(user, initialTab);
   if (accessPage) return accessPage;
 
+  // Every user type can open their own profile, whatever their dashboard
+  if (initialTab === 'my_profile') return <MyProfilePanel />;
+
   // Branch managers always get the branch dashboard — skip all other routing
   if (isBranchManager) {
     return ai('branch', <ModernBranchManagerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
@@ -131,7 +136,7 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
     // If we have a department type, route accordingly
     if (departmentType) {
       // Regular employees (not sub-dept managers) always get the employee dashboard, except collections and sales
-      if (!isSubDeptManager && departmentType !== 'collections' && departmentType !== 'sales') {
+      if (!isSubDeptManager && departmentType !== 'collections' && departmentType !== 'sales' && departmentType !== 'data_entry') {
         return ai('employee', <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
       }
       // Sub-dept managers and department employees get the department dashboard
@@ -144,6 +149,8 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
           return ai('ops', <ModernOpsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
         case 'sales':
           return ai('sales', <ModernSalesDashboard initialTab={initialTab} isSubDeptManager={isSubDeptManager} onNavigate={onNavigateToTable} />);
+        case 'data_entry':
+          return <ModernSalesEntryDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
         case 'collections':
           return ai('collections', <ModernCollectionsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
         case 'ceo':
@@ -195,6 +202,10 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
 
   if (['sales_admin', 'sales_sub_admin', 'sales'].includes(user?.role || '')) {
     return ai('sales', <ModernSalesDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />);
+  }
+
+  if (user?.role === 'sales_entry') {
+    return <ModernSalesEntryDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (['collections_admin', 'collections'].includes(user?.role || '')) {

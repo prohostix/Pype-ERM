@@ -533,6 +533,7 @@ export type OrganizationStatus = (typeof OrganizationStatus)[keyof typeof Organi
 
 
 export const DepartmentType: {
+  data_entry: 'data_entry',
   operations: 'operations',
   finance: 'finance',
   hr: 'hr',
@@ -570,6 +571,7 @@ export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
 export const UserRole: {
+  sales_entry: 'sales_entry',
   superadmin: 'superadmin',
   org_admin: 'org_admin',
   ceo: 'ceo',
@@ -11363,6 +11365,8 @@ export namespace Prisma {
     fcmTokens: number
     opsSubAdminAllocations: number
     usageDays: number
+    enteredEnrollments: number
+    createdInvites: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11443,6 +11447,8 @@ export namespace Prisma {
     fcmTokens?: boolean | UserCountOutputTypeCountFcmTokensArgs
     opsSubAdminAllocations?: boolean | UserCountOutputTypeCountOpsSubAdminAllocationsArgs
     usageDays?: boolean | UserCountOutputTypeCountUsageDaysArgs
+    enteredEnrollments?: boolean | UserCountOutputTypeCountEnteredEnrollmentsArgs
+    createdInvites?: boolean | UserCountOutputTypeCountCreatedInvitesArgs
   }
 
   // Custom InputTypes
@@ -11993,6 +11999,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountUsageDaysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UsageDayWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEnteredEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EnrollmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedInvitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudyCenterInviteWhereInput
   }
 
 
@@ -20426,6 +20446,8 @@ export namespace Prisma {
     fcmTokens?: boolean | User$fcmTokensArgs<ExtArgs>
     opsSubAdminAllocations?: boolean | User$opsSubAdminAllocationsArgs<ExtArgs>
     usageDays?: boolean | User$usageDaysArgs<ExtArgs>
+    enteredEnrollments?: boolean | User$enteredEnrollmentsArgs<ExtArgs>
+    createdInvites?: boolean | User$createdInvitesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -20636,6 +20658,8 @@ export namespace Prisma {
     fcmTokens?: boolean | User$fcmTokensArgs<ExtArgs>
     opsSubAdminAllocations?: boolean | User$opsSubAdminAllocationsArgs<ExtArgs>
     usageDays?: boolean | User$usageDaysArgs<ExtArgs>
+    enteredEnrollments?: boolean | User$enteredEnrollmentsArgs<ExtArgs>
+    createdInvites?: boolean | User$createdInvitesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20752,6 +20776,8 @@ export namespace Prisma {
       fcmTokens: Prisma.$UserFCMTokenPayload<ExtArgs>[]
       opsSubAdminAllocations: Prisma.$ProgramAllocationPayload<ExtArgs>[]
       usageDays: Prisma.$UsageDayPayload<ExtArgs>[]
+      enteredEnrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
+      createdInvites: Prisma.$StudyCenterInvitePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -21270,6 +21296,8 @@ export namespace Prisma {
     fcmTokens<T extends User$fcmTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$fcmTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     opsSubAdminAllocations<T extends User$opsSubAdminAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, User$opsSubAdminAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     usageDays<T extends User$usageDaysArgs<ExtArgs> = {}>(args?: Subset<T, User$usageDaysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageDayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    enteredEnrollments<T extends User$enteredEnrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$enteredEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdInvites<T extends User$createdInvitesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyCenterInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -23860,6 +23888,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UsageDayScalarFieldEnum | UsageDayScalarFieldEnum[]
+  }
+
+  /**
+   * User.enteredEnrollments
+   */
+  export type User$enteredEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Enrollment
+     */
+    select?: EnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Enrollment
+     */
+    omit?: EnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EnrollmentInclude<ExtArgs> | null
+    where?: EnrollmentWhereInput
+    orderBy?: EnrollmentOrderByWithRelationInput | EnrollmentOrderByWithRelationInput[]
+    cursor?: EnrollmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EnrollmentScalarFieldEnum | EnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdInvites
+   */
+  export type User$createdInvitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudyCenterInvite
+     */
+    select?: StudyCenterInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudyCenterInvite
+     */
+    omit?: StudyCenterInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudyCenterInviteInclude<ExtArgs> | null
+    where?: StudyCenterInviteWhereInput
+    orderBy?: StudyCenterInviteOrderByWithRelationInput | StudyCenterInviteOrderByWithRelationInput[]
+    cursor?: StudyCenterInviteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudyCenterInviteScalarFieldEnum | StudyCenterInviteScalarFieldEnum[]
   }
 
   /**
@@ -56760,6 +56836,7 @@ export namespace Prisma {
     universityReviewedAt: Date | null
     universityReviewedBy: string | null
     salesUserId: string | null
+    enteredBy: string | null
     altPhone: string | null
     dob: Date | null
     fatherName: string | null
@@ -56820,6 +56897,7 @@ export namespace Prisma {
     universityReviewedAt: Date | null
     universityReviewedBy: string | null
     salesUserId: string | null
+    enteredBy: string | null
     altPhone: string | null
     dob: Date | null
     fatherName: string | null
@@ -56881,6 +56959,7 @@ export namespace Prisma {
     universityReviewedAt: number
     universityReviewedBy: number
     salesUserId: number
+    enteredBy: number
     altPhone: number
     dob: number
     fatherName: number
@@ -56956,6 +57035,7 @@ export namespace Prisma {
     universityReviewedAt?: true
     universityReviewedBy?: true
     salesUserId?: true
+    enteredBy?: true
     altPhone?: true
     dob?: true
     fatherName?: true
@@ -57016,6 +57096,7 @@ export namespace Prisma {
     universityReviewedAt?: true
     universityReviewedBy?: true
     salesUserId?: true
+    enteredBy?: true
     altPhone?: true
     dob?: true
     fatherName?: true
@@ -57077,6 +57158,7 @@ export namespace Prisma {
     universityReviewedAt?: true
     universityReviewedBy?: true
     salesUserId?: true
+    enteredBy?: true
     altPhone?: true
     dob?: true
     fatherName?: true
@@ -57228,6 +57310,7 @@ export namespace Prisma {
     universityReviewedAt: Date | null
     universityReviewedBy: string | null
     salesUserId: string | null
+    enteredBy: string | null
     altPhone: string | null
     dob: Date | null
     fatherName: string | null
@@ -57311,6 +57394,7 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    enteredBy?: boolean
     altPhone?: boolean
     dob?: boolean
     fatherName?: boolean
@@ -57351,6 +57435,7 @@ export namespace Prisma {
     program?: boolean | ProgramDefaultArgs<ExtArgs>
     receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
+    enteredByUser?: boolean | Enrollment$enteredByUserArgs<ExtArgs>
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
@@ -57386,6 +57471,7 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    enteredBy?: boolean
     altPhone?: boolean
     dob?: boolean
     fatherName?: boolean
@@ -57426,6 +57512,7 @@ export namespace Prisma {
     program?: boolean | ProgramDefaultArgs<ExtArgs>
     receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
+    enteredByUser?: boolean | Enrollment$enteredByUserArgs<ExtArgs>
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
@@ -57460,6 +57547,7 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    enteredBy?: boolean
     altPhone?: boolean
     dob?: boolean
     fatherName?: boolean
@@ -57500,6 +57588,7 @@ export namespace Prisma {
     program?: boolean | ProgramDefaultArgs<ExtArgs>
     receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
+    enteredByUser?: boolean | Enrollment$enteredByUserArgs<ExtArgs>
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
@@ -57534,6 +57623,7 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    enteredBy?: boolean
     altPhone?: boolean
     dob?: boolean
     fatherName?: boolean
@@ -57570,7 +57660,7 @@ export namespace Prisma {
     serviceFee?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "specialisation" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "isProvisional" | "isUpgrade" | "previousProgramId" | "provisionalReceiptUrl" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "admissionProgress" | "academicProgress" | "photoStatus" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan" | "source" | "studyAbroadPartnerId" | "serviceFee", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "specialisation" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "enteredBy" | "altPhone" | "dob" | "fatherName" | "isProvisional" | "isUpgrade" | "previousProgramId" | "provisionalReceiptUrl" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "admissionProgress" | "academicProgress" | "photoStatus" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan" | "source" | "studyAbroadPartnerId" | "serviceFee", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -57578,6 +57668,7 @@ export namespace Prisma {
     program?: boolean | ProgramDefaultArgs<ExtArgs>
     receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
+    enteredByUser?: boolean | Enrollment$enteredByUserArgs<ExtArgs>
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
@@ -57591,6 +57682,7 @@ export namespace Prisma {
     program?: boolean | ProgramDefaultArgs<ExtArgs>
     receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
+    enteredByUser?: boolean | Enrollment$enteredByUserArgs<ExtArgs>
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
@@ -57603,6 +57695,7 @@ export namespace Prisma {
     program?: boolean | ProgramDefaultArgs<ExtArgs>
     receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
+    enteredByUser?: boolean | Enrollment$enteredByUserArgs<ExtArgs>
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
@@ -57618,6 +57711,7 @@ export namespace Prisma {
       program: Prisma.$ProgramPayload<ExtArgs>
       receiptVerifier: Prisma.$UserPayload<ExtArgs> | null
       salesUser: Prisma.$UserPayload<ExtArgs> | null
+      enteredByUser: Prisma.$UserPayload<ExtArgs> | null
       session: Prisma.$AdmissionSessionPayload<ExtArgs> | null
       student: Prisma.$StudentPayload<ExtArgs> | null
       studyCenter: Prisma.$StudyCenterPayload<ExtArgs> | null
@@ -57652,6 +57746,10 @@ export namespace Prisma {
       universityReviewedAt: Date | null
       universityReviewedBy: string | null
       salesUserId: string | null
+      /**
+       * The data-entry user who typed the application in, when it was not the sales person themselves
+       */
+      enteredBy: string | null
       altPhone: string | null
       dob: Date | null
       fatherName: string | null
@@ -58086,6 +58184,7 @@ export namespace Prisma {
     program<T extends ProgramDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProgramDefaultArgs<ExtArgs>>): Prisma__ProgramClient<$Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     receiptVerifier<T extends Enrollment$receiptVerifierArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$receiptVerifierArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     salesUser<T extends Enrollment$salesUserArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$salesUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    enteredByUser<T extends Enrollment$enteredByUserArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$enteredByUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     session<T extends Enrollment$sessionArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$sessionArgs<ExtArgs>>): Prisma__AdmissionSessionClient<$Result.GetResult<Prisma.$AdmissionSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     student<T extends Enrollment$studentArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     studyCenter<T extends Enrollment$studyCenterArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$studyCenterArgs<ExtArgs>>): Prisma__StudyCenterClient<$Result.GetResult<Prisma.$StudyCenterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -58147,6 +58246,7 @@ export namespace Prisma {
     readonly universityReviewedAt: FieldRef<"Enrollment", 'DateTime'>
     readonly universityReviewedBy: FieldRef<"Enrollment", 'String'>
     readonly salesUserId: FieldRef<"Enrollment", 'String'>
+    readonly enteredBy: FieldRef<"Enrollment", 'String'>
     readonly altPhone: FieldRef<"Enrollment", 'String'>
     readonly dob: FieldRef<"Enrollment", 'DateTime'>
     readonly fatherName: FieldRef<"Enrollment", 'String'>
@@ -58642,6 +58742,25 @@ export namespace Prisma {
    * Enrollment.salesUser
    */
   export type Enrollment$salesUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Enrollment.enteredByUser
+   */
+  export type Enrollment$enteredByUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
@@ -82990,6 +83109,7 @@ export namespace Prisma {
     organizationId: string | null
     token: string | null
     referredBy: string | null
+    createdById: string | null
     branchId: string | null
     status: string | null
     expiresAt: Date | null
@@ -83003,6 +83123,7 @@ export namespace Prisma {
     organizationId: string | null
     token: string | null
     referredBy: string | null
+    createdById: string | null
     branchId: string | null
     status: string | null
     expiresAt: Date | null
@@ -83020,6 +83141,7 @@ export namespace Prisma {
     specializations: number
     sessionIds: number
     referredBy: number
+    createdById: number
     branchId: number
     status: number
     expiresAt: number
@@ -83035,6 +83157,7 @@ export namespace Prisma {
     organizationId?: true
     token?: true
     referredBy?: true
+    createdById?: true
     branchId?: true
     status?: true
     expiresAt?: true
@@ -83048,6 +83171,7 @@ export namespace Prisma {
     organizationId?: true
     token?: true
     referredBy?: true
+    createdById?: true
     branchId?: true
     status?: true
     expiresAt?: true
@@ -83065,6 +83189,7 @@ export namespace Prisma {
     specializations?: true
     sessionIds?: true
     referredBy?: true
+    createdById?: true
     branchId?: true
     status?: true
     expiresAt?: true
@@ -83155,6 +83280,7 @@ export namespace Prisma {
     specializations: JsonValue | null
     sessionIds: string[]
     referredBy: string
+    createdById: string | null
     branchId: string | null
     status: string
     expiresAt: Date
@@ -83189,6 +83315,7 @@ export namespace Prisma {
     specializations?: boolean
     sessionIds?: boolean
     referredBy?: boolean
+    createdById?: boolean
     branchId?: boolean
     status?: boolean
     expiresAt?: boolean
@@ -83198,6 +83325,7 @@ export namespace Prisma {
     branch?: boolean | StudyCenterInvite$branchArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     referrer?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | StudyCenterInvite$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["studyCenterInvite"]>
 
   export type StudyCenterInviteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -83209,6 +83337,7 @@ export namespace Prisma {
     specializations?: boolean
     sessionIds?: boolean
     referredBy?: boolean
+    createdById?: boolean
     branchId?: boolean
     status?: boolean
     expiresAt?: boolean
@@ -83218,6 +83347,7 @@ export namespace Prisma {
     branch?: boolean | StudyCenterInvite$branchArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     referrer?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | StudyCenterInvite$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["studyCenterInvite"]>
 
   export type StudyCenterInviteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -83229,6 +83359,7 @@ export namespace Prisma {
     specializations?: boolean
     sessionIds?: boolean
     referredBy?: boolean
+    createdById?: boolean
     branchId?: boolean
     status?: boolean
     expiresAt?: boolean
@@ -83238,6 +83369,7 @@ export namespace Prisma {
     branch?: boolean | StudyCenterInvite$branchArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     referrer?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | StudyCenterInvite$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["studyCenterInvite"]>
 
   export type StudyCenterInviteSelectScalar = {
@@ -83249,6 +83381,7 @@ export namespace Prisma {
     specializations?: boolean
     sessionIds?: boolean
     referredBy?: boolean
+    createdById?: boolean
     branchId?: boolean
     status?: boolean
     expiresAt?: boolean
@@ -83257,21 +83390,24 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type StudyCenterInviteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "token" | "universityIds" | "programIds" | "specializations" | "sessionIds" | "referredBy" | "branchId" | "status" | "expiresAt" | "usedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["studyCenterInvite"]>
+  export type StudyCenterInviteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "token" | "universityIds" | "programIds" | "specializations" | "sessionIds" | "referredBy" | "createdById" | "branchId" | "status" | "expiresAt" | "usedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["studyCenterInvite"]>
   export type StudyCenterInviteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | StudyCenterInvite$branchArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     referrer?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | StudyCenterInvite$createdByArgs<ExtArgs>
   }
   export type StudyCenterInviteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | StudyCenterInvite$branchArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     referrer?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | StudyCenterInvite$createdByArgs<ExtArgs>
   }
   export type StudyCenterInviteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | StudyCenterInvite$branchArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     referrer?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | StudyCenterInvite$createdByArgs<ExtArgs>
   }
 
   export type $StudyCenterInvitePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -83280,6 +83416,7 @@ export namespace Prisma {
       branch: Prisma.$BranchPayload<ExtArgs> | null
       organization: Prisma.$OrganizationPayload<ExtArgs>
       referrer: Prisma.$UserPayload<ExtArgs>
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -83290,6 +83427,10 @@ export namespace Prisma {
       specializations: Prisma.JsonValue | null
       sessionIds: string[]
       referredBy: string
+      /**
+       * The data-entry user who generated the link for the sales person in referredBy
+       */
+      createdById: string | null
       branchId: string | null
       status: string
       expiresAt: Date
@@ -83693,6 +83834,7 @@ export namespace Prisma {
     branch<T extends StudyCenterInvite$branchArgs<ExtArgs> = {}>(args?: Subset<T, StudyCenterInvite$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     referrer<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends StudyCenterInvite$createdByArgs<ExtArgs> = {}>(args?: Subset<T, StudyCenterInvite$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -83730,6 +83872,7 @@ export namespace Prisma {
     readonly specializations: FieldRef<"StudyCenterInvite", 'Json'>
     readonly sessionIds: FieldRef<"StudyCenterInvite", 'String[]'>
     readonly referredBy: FieldRef<"StudyCenterInvite", 'String'>
+    readonly createdById: FieldRef<"StudyCenterInvite", 'String'>
     readonly branchId: FieldRef<"StudyCenterInvite", 'String'>
     readonly status: FieldRef<"StudyCenterInvite", 'String'>
     readonly expiresAt: FieldRef<"StudyCenterInvite", 'DateTime'>
@@ -84153,6 +84296,25 @@ export namespace Prisma {
      */
     include?: BranchInclude<ExtArgs> | null
     where?: BranchWhereInput
+  }
+
+  /**
+   * StudyCenterInvite.createdBy
+   */
+  export type StudyCenterInvite$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -145848,6 +146010,7 @@ export namespace Prisma {
     universityReviewedAt: 'universityReviewedAt',
     universityReviewedBy: 'universityReviewedBy',
     salesUserId: 'salesUserId',
+    enteredBy: 'enteredBy',
     altPhone: 'altPhone',
     dob: 'dob',
     fatherName: 'fatherName',
@@ -146258,6 +146421,7 @@ export namespace Prisma {
     specializations: 'specializations',
     sessionIds: 'sessionIds',
     referredBy: 'referredBy',
+    createdById: 'createdById',
     branchId: 'branchId',
     status: 'status',
     expiresAt: 'expiresAt',
@@ -148318,6 +148482,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenListRelationFilter
     opsSubAdminAllocations?: ProgramAllocationListRelationFilter
     usageDays?: UsageDayListRelationFilter
+    enteredEnrollments?: EnrollmentListRelationFilter
+    createdInvites?: StudyCenterInviteListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -148443,6 +148609,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenOrderByRelationAggregateInput
     opsSubAdminAllocations?: ProgramAllocationOrderByRelationAggregateInput
     usageDays?: UsageDayOrderByRelationAggregateInput
+    enteredEnrollments?: EnrollmentOrderByRelationAggregateInput
+    createdInvites?: StudyCenterInviteOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -148571,6 +148739,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenListRelationFilter
     opsSubAdminAllocations?: ProgramAllocationListRelationFilter
     usageDays?: UsageDayListRelationFilter
+    enteredEnrollments?: EnrollmentListRelationFilter
+    createdInvites?: StudyCenterInviteListRelationFilter
   }, "id" | "userId" | "email" | "biometricId">
 
   export type UserOrderByWithAggregationInput = {
@@ -151829,6 +151999,7 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableFilter<"Enrollment"> | string | null
+    enteredBy?: StringNullableFilter<"Enrollment"> | string | null
     altPhone?: StringNullableFilter<"Enrollment"> | string | null
     dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableFilter<"Enrollment"> | string | null
@@ -151869,6 +152040,7 @@ export namespace Prisma {
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
     receiptVerifier?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     salesUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    enteredByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     session?: XOR<AdmissionSessionNullableScalarRelationFilter, AdmissionSessionWhereInput> | null
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     studyCenter?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
@@ -151904,6 +152076,7 @@ export namespace Prisma {
     universityReviewedAt?: SortOrderInput | SortOrder
     universityReviewedBy?: SortOrderInput | SortOrder
     salesUserId?: SortOrderInput | SortOrder
+    enteredBy?: SortOrderInput | SortOrder
     altPhone?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     fatherName?: SortOrderInput | SortOrder
@@ -151944,6 +152117,7 @@ export namespace Prisma {
     program?: ProgramOrderByWithRelationInput
     receiptVerifier?: UserOrderByWithRelationInput
     salesUser?: UserOrderByWithRelationInput
+    enteredByUser?: UserOrderByWithRelationInput
     session?: AdmissionSessionOrderByWithRelationInput
     student?: StudentOrderByWithRelationInput
     studyCenter?: StudyCenterOrderByWithRelationInput
@@ -151983,6 +152157,7 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableFilter<"Enrollment"> | string | null
+    enteredBy?: StringNullableFilter<"Enrollment"> | string | null
     altPhone?: StringNullableFilter<"Enrollment"> | string | null
     dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableFilter<"Enrollment"> | string | null
@@ -152023,6 +152198,7 @@ export namespace Prisma {
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
     receiptVerifier?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     salesUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    enteredByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     session?: XOR<AdmissionSessionNullableScalarRelationFilter, AdmissionSessionWhereInput> | null
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     studyCenter?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
@@ -152058,6 +152234,7 @@ export namespace Prisma {
     universityReviewedAt?: SortOrderInput | SortOrder
     universityReviewedBy?: SortOrderInput | SortOrder
     salesUserId?: SortOrderInput | SortOrder
+    enteredBy?: SortOrderInput | SortOrder
     altPhone?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     fatherName?: SortOrderInput | SortOrder
@@ -152130,6 +152307,7 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    enteredBy?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     altPhone?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     dob?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
@@ -154137,6 +154315,7 @@ export namespace Prisma {
     specializations?: JsonNullableFilter<"StudyCenterInvite">
     sessionIds?: StringNullableListFilter<"StudyCenterInvite">
     referredBy?: StringFilter<"StudyCenterInvite"> | string
+    createdById?: StringNullableFilter<"StudyCenterInvite"> | string | null
     branchId?: StringNullableFilter<"StudyCenterInvite"> | string | null
     status?: StringFilter<"StudyCenterInvite"> | string
     expiresAt?: DateTimeFilter<"StudyCenterInvite"> | Date | string
@@ -154146,6 +154325,7 @@ export namespace Prisma {
     branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     referrer?: XOR<UserScalarRelationFilter, UserWhereInput>
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type StudyCenterInviteOrderByWithRelationInput = {
@@ -154157,6 +154337,7 @@ export namespace Prisma {
     specializations?: SortOrderInput | SortOrder
     sessionIds?: SortOrder
     referredBy?: SortOrder
+    createdById?: SortOrderInput | SortOrder
     branchId?: SortOrderInput | SortOrder
     status?: SortOrder
     expiresAt?: SortOrder
@@ -154166,6 +154347,7 @@ export namespace Prisma {
     branch?: BranchOrderByWithRelationInput
     organization?: OrganizationOrderByWithRelationInput
     referrer?: UserOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
   }
 
   export type StudyCenterInviteWhereUniqueInput = Prisma.AtLeast<{
@@ -154180,6 +154362,7 @@ export namespace Prisma {
     specializations?: JsonNullableFilter<"StudyCenterInvite">
     sessionIds?: StringNullableListFilter<"StudyCenterInvite">
     referredBy?: StringFilter<"StudyCenterInvite"> | string
+    createdById?: StringNullableFilter<"StudyCenterInvite"> | string | null
     branchId?: StringNullableFilter<"StudyCenterInvite"> | string | null
     status?: StringFilter<"StudyCenterInvite"> | string
     expiresAt?: DateTimeFilter<"StudyCenterInvite"> | Date | string
@@ -154189,6 +154372,7 @@ export namespace Prisma {
     branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     referrer?: XOR<UserScalarRelationFilter, UserWhereInput>
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id" | "token">
 
   export type StudyCenterInviteOrderByWithAggregationInput = {
@@ -154200,6 +154384,7 @@ export namespace Prisma {
     specializations?: SortOrderInput | SortOrder
     sessionIds?: SortOrder
     referredBy?: SortOrder
+    createdById?: SortOrderInput | SortOrder
     branchId?: SortOrderInput | SortOrder
     status?: SortOrder
     expiresAt?: SortOrder
@@ -154223,6 +154408,7 @@ export namespace Prisma {
     specializations?: JsonNullableWithAggregatesFilter<"StudyCenterInvite">
     sessionIds?: StringNullableListFilter<"StudyCenterInvite">
     referredBy?: StringWithAggregatesFilter<"StudyCenterInvite"> | string
+    createdById?: StringNullableWithAggregatesFilter<"StudyCenterInvite"> | string | null
     branchId?: StringNullableWithAggregatesFilter<"StudyCenterInvite"> | string | null
     status?: StringWithAggregatesFilter<"StudyCenterInvite"> | string
     expiresAt?: DateTimeWithAggregatesFilter<"StudyCenterInvite"> | Date | string
@@ -159704,6 +159890,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -159822,6 +160010,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUpdateInput = {
@@ -159940,6 +160130,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -160058,6 +160250,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -163742,6 +163936,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
@@ -163777,6 +163972,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -163872,6 +164068,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
@@ -163907,6 +164104,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -163972,6 +164170,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -164090,6 +164289,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -166204,6 +166404,7 @@ export namespace Prisma {
     branch?: BranchCreateNestedOneWithoutInvitesInput
     organization: OrganizationCreateNestedOneWithoutStudyCenterInvitesInput
     referrer: UserCreateNestedOneWithoutStudyCenterInvitesInput
+    createdBy?: UserCreateNestedOneWithoutCreatedInvitesInput
   }
 
   export type StudyCenterInviteUncheckedCreateInput = {
@@ -166215,6 +166416,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
+    createdById?: string | null
     branchId?: string | null
     status?: string
     expiresAt: Date | string
@@ -166238,6 +166440,7 @@ export namespace Prisma {
     branch?: BranchUpdateOneWithoutInvitesNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudyCenterInvitesNestedInput
     referrer?: UserUpdateOneRequiredWithoutStudyCenterInvitesNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedInvitesNestedInput
   }
 
   export type StudyCenterInviteUncheckedUpdateInput = {
@@ -166249,6 +166452,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -166266,6 +166470,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
+    createdById?: string | null
     branchId?: string | null
     status?: string
     expiresAt: Date | string
@@ -166297,6 +166502,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -174717,6 +174923,7 @@ export namespace Prisma {
     universityReviewedAt?: SortOrder
     universityReviewedBy?: SortOrder
     salesUserId?: SortOrder
+    enteredBy?: SortOrder
     altPhone?: SortOrder
     dob?: SortOrder
     fatherName?: SortOrder
@@ -174785,6 +174992,7 @@ export namespace Prisma {
     universityReviewedAt?: SortOrder
     universityReviewedBy?: SortOrder
     salesUserId?: SortOrder
+    enteredBy?: SortOrder
     altPhone?: SortOrder
     dob?: SortOrder
     fatherName?: SortOrder
@@ -174845,6 +175053,7 @@ export namespace Prisma {
     universityReviewedAt?: SortOrder
     universityReviewedBy?: SortOrder
     salesUserId?: SortOrder
+    enteredBy?: SortOrder
     altPhone?: SortOrder
     dob?: SortOrder
     fatherName?: SortOrder
@@ -175975,6 +176184,7 @@ export namespace Prisma {
     specializations?: SortOrder
     sessionIds?: SortOrder
     referredBy?: SortOrder
+    createdById?: SortOrder
     branchId?: SortOrder
     status?: SortOrder
     expiresAt?: SortOrder
@@ -175988,6 +176198,7 @@ export namespace Prisma {
     organizationId?: SortOrder
     token?: SortOrder
     referredBy?: SortOrder
+    createdById?: SortOrder
     branchId?: SortOrder
     status?: SortOrder
     expiresAt?: SortOrder
@@ -176001,6 +176212,7 @@ export namespace Prisma {
     organizationId?: SortOrder
     token?: SortOrder
     referredBy?: SortOrder
+    createdById?: SortOrder
     branchId?: SortOrder
     status?: SortOrder
     expiresAt?: SortOrder
@@ -183301,6 +183513,20 @@ export namespace Prisma {
     connect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
   }
 
+  export type EnrollmentCreateNestedManyWithoutEnteredByUserInput = {
+    create?: XOR<EnrollmentCreateWithoutEnteredByUserInput, EnrollmentUncheckedCreateWithoutEnteredByUserInput> | EnrollmentCreateWithoutEnteredByUserInput[] | EnrollmentUncheckedCreateWithoutEnteredByUserInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutEnteredByUserInput | EnrollmentCreateOrConnectWithoutEnteredByUserInput[]
+    createMany?: EnrollmentCreateManyEnteredByUserInputEnvelope
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+  }
+
+  export type StudyCenterInviteCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<StudyCenterInviteCreateWithoutCreatedByInput, StudyCenterInviteUncheckedCreateWithoutCreatedByInput> | StudyCenterInviteCreateWithoutCreatedByInput[] | StudyCenterInviteUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: StudyCenterInviteCreateOrConnectWithoutCreatedByInput | StudyCenterInviteCreateOrConnectWithoutCreatedByInput[]
+    createMany?: StudyCenterInviteCreateManyCreatedByInputEnvelope
+    connect?: StudyCenterInviteWhereUniqueInput | StudyCenterInviteWhereUniqueInput[]
+  }
+
   export type StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput = {
     create?: XOR<StudentBatchTransferCreateWithoutTransferredByInput, StudentBatchTransferUncheckedCreateWithoutTransferredByInput> | StudentBatchTransferCreateWithoutTransferredByInput[] | StudentBatchTransferUncheckedCreateWithoutTransferredByInput[]
     connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutTransferredByInput | StudentBatchTransferCreateOrConnectWithoutTransferredByInput[]
@@ -183884,6 +184110,20 @@ export namespace Prisma {
     connectOrCreate?: UsageDayCreateOrConnectWithoutUserInput | UsageDayCreateOrConnectWithoutUserInput[]
     createMany?: UsageDayCreateManyUserInputEnvelope
     connect?: UsageDayWhereUniqueInput | UsageDayWhereUniqueInput[]
+  }
+
+  export type EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput = {
+    create?: XOR<EnrollmentCreateWithoutEnteredByUserInput, EnrollmentUncheckedCreateWithoutEnteredByUserInput> | EnrollmentCreateWithoutEnteredByUserInput[] | EnrollmentUncheckedCreateWithoutEnteredByUserInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutEnteredByUserInput | EnrollmentCreateOrConnectWithoutEnteredByUserInput[]
+    createMany?: EnrollmentCreateManyEnteredByUserInputEnvelope
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+  }
+
+  export type StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<StudyCenterInviteCreateWithoutCreatedByInput, StudyCenterInviteUncheckedCreateWithoutCreatedByInput> | StudyCenterInviteCreateWithoutCreatedByInput[] | StudyCenterInviteUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: StudyCenterInviteCreateOrConnectWithoutCreatedByInput | StudyCenterInviteCreateOrConnectWithoutCreatedByInput[]
+    createMany?: StudyCenterInviteCreateManyCreatedByInputEnvelope
+    connect?: StudyCenterInviteWhereUniqueInput | StudyCenterInviteWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -185120,6 +185360,34 @@ export namespace Prisma {
     deleteMany?: UsageDayScalarWhereInput | UsageDayScalarWhereInput[]
   }
 
+  export type EnrollmentUpdateManyWithoutEnteredByUserNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutEnteredByUserInput, EnrollmentUncheckedCreateWithoutEnteredByUserInput> | EnrollmentCreateWithoutEnteredByUserInput[] | EnrollmentUncheckedCreateWithoutEnteredByUserInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutEnteredByUserInput | EnrollmentCreateOrConnectWithoutEnteredByUserInput[]
+    upsert?: EnrollmentUpsertWithWhereUniqueWithoutEnteredByUserInput | EnrollmentUpsertWithWhereUniqueWithoutEnteredByUserInput[]
+    createMany?: EnrollmentCreateManyEnteredByUserInputEnvelope
+    set?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    disconnect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    delete?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    update?: EnrollmentUpdateWithWhereUniqueWithoutEnteredByUserInput | EnrollmentUpdateWithWhereUniqueWithoutEnteredByUserInput[]
+    updateMany?: EnrollmentUpdateManyWithWhereWithoutEnteredByUserInput | EnrollmentUpdateManyWithWhereWithoutEnteredByUserInput[]
+    deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
+  }
+
+  export type StudyCenterInviteUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<StudyCenterInviteCreateWithoutCreatedByInput, StudyCenterInviteUncheckedCreateWithoutCreatedByInput> | StudyCenterInviteCreateWithoutCreatedByInput[] | StudyCenterInviteUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: StudyCenterInviteCreateOrConnectWithoutCreatedByInput | StudyCenterInviteCreateOrConnectWithoutCreatedByInput[]
+    upsert?: StudyCenterInviteUpsertWithWhereUniqueWithoutCreatedByInput | StudyCenterInviteUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: StudyCenterInviteCreateManyCreatedByInputEnvelope
+    set?: StudyCenterInviteWhereUniqueInput | StudyCenterInviteWhereUniqueInput[]
+    disconnect?: StudyCenterInviteWhereUniqueInput | StudyCenterInviteWhereUniqueInput[]
+    delete?: StudyCenterInviteWhereUniqueInput | StudyCenterInviteWhereUniqueInput[]
+    connect?: StudyCenterInviteWhereUniqueInput | StudyCenterInviteWhereUniqueInput[]
+    update?: StudyCenterInviteUpdateWithWhereUniqueWithoutCreatedByInput | StudyCenterInviteUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: StudyCenterInviteUpdateManyWithWhereWithoutCreatedByInput | StudyCenterInviteUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: StudyCenterInviteScalarWhereInput | StudyCenterInviteScalarWhereInput[]
+  }
+
   export type StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput = {
     create?: XOR<StudentBatchTransferCreateWithoutTransferredByInput, StudentBatchTransferUncheckedCreateWithoutTransferredByInput> | StudentBatchTransferCreateWithoutTransferredByInput[] | StudentBatchTransferUncheckedCreateWithoutTransferredByInput[]
     connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutTransferredByInput | StudentBatchTransferCreateOrConnectWithoutTransferredByInput[]
@@ -186274,6 +186542,34 @@ export namespace Prisma {
     update?: UsageDayUpdateWithWhereUniqueWithoutUserInput | UsageDayUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UsageDayUpdateManyWithWhereWithoutUserInput | UsageDayUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UsageDayScalarWhereInput | UsageDayScalarWhereInput[]
+  }
+
+  export type EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutEnteredByUserInput, EnrollmentUncheckedCreateWithoutEnteredByUserInput> | EnrollmentCreateWithoutEnteredByUserInput[] | EnrollmentUncheckedCreateWithoutEnteredByUserInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutEnteredByUserInput | EnrollmentCreateOrConnectWithoutEnteredByUserInput[]
+    upsert?: EnrollmentUpsertWithWhereUniqueWithoutEnteredByUserInput | EnrollmentUpsertWithWhereUniqueWithoutEnteredByUserInput[]
+    createMany?: EnrollmentCreateManyEnteredByUserInputEnvelope
+    set?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    disconnect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    delete?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    update?: EnrollmentUpdateWithWhereUniqueWithoutEnteredByUserInput | EnrollmentUpdateWithWhereUniqueWithoutEnteredByUserInput[]
+    updateMany?: EnrollmentUpdateManyWithWhereWithoutEnteredByUserInput | EnrollmentUpdateManyWithWhereWithoutEnteredByUserInput[]
+    deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
+  }
+
+  export type StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<StudyCenterInviteCreateWithoutCreatedByInput, StudyCenterInviteUncheckedCreateWithoutCreatedByInput> | StudyCenterInviteCreateWithoutCreatedByInput[] | StudyCenterInviteUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: StudyCenterInviteCreateOrConnectWithoutCreatedByInput | StudyCenterInviteCreateOrConnectWithoutCreatedByInput[]
+    upsert?: StudyCenterInviteUpsertWithWhereUniqueWithoutCreatedByInput | StudyCenterInviteUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: StudyCenterInviteCreateManyCreatedByInputEnvelope
+    set?: StudyCenterInviteWhereUniqueInput | StudyCenterInviteWhereUniqueInput[]
+    disconnect?: StudyCenterInviteWhereUniqueInput | StudyCenterInviteWhereUniqueInput[]
+    delete?: StudyCenterInviteWhereUniqueInput | StudyCenterInviteWhereUniqueInput[]
+    connect?: StudyCenterInviteWhereUniqueInput | StudyCenterInviteWhereUniqueInput[]
+    update?: StudyCenterInviteUpdateWithWhereUniqueWithoutCreatedByInput | StudyCenterInviteUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: StudyCenterInviteUpdateManyWithWhereWithoutCreatedByInput | StudyCenterInviteUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: StudyCenterInviteScalarWhereInput | StudyCenterInviteScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutEmployeesInput = {
@@ -190618,6 +190914,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutEnteredEnrollmentsInput = {
+    create?: XOR<UserCreateWithoutEnteredEnrollmentsInput, UserUncheckedCreateWithoutEnteredEnrollmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEnteredEnrollmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type AdmissionSessionCreateNestedOneWithoutEnrollmentsInput = {
     create?: XOR<AdmissionSessionCreateWithoutEnrollmentsInput, AdmissionSessionUncheckedCreateWithoutEnrollmentsInput>
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutEnrollmentsInput
@@ -190708,6 +191010,16 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSalesLedEnrollmentsInput, UserUpdateWithoutSalesLedEnrollmentsInput>, UserUncheckedUpdateWithoutSalesLedEnrollmentsInput>
+  }
+
+  export type UserUpdateOneWithoutEnteredEnrollmentsNestedInput = {
+    create?: XOR<UserCreateWithoutEnteredEnrollmentsInput, UserUncheckedCreateWithoutEnteredEnrollmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEnteredEnrollmentsInput
+    upsert?: UserUpsertWithoutEnteredEnrollmentsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEnteredEnrollmentsInput, UserUpdateWithoutEnteredEnrollmentsInput>, UserUncheckedUpdateWithoutEnteredEnrollmentsInput>
   }
 
   export type AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput = {
@@ -191767,6 +192079,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutCreatedInvitesInput = {
+    create?: XOR<UserCreateWithoutCreatedInvitesInput, UserUncheckedCreateWithoutCreatedInvitesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedInvitesInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type StudyCenterInviteUpdateuniversityIdsInput = {
     set?: string[]
     push?: string | string[]
@@ -191806,6 +192124,16 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutStudyCenterInvitesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutStudyCenterInvitesInput, UserUpdateWithoutStudyCenterInvitesInput>, UserUncheckedUpdateWithoutStudyCenterInvitesInput>
+  }
+
+  export type UserUpdateOneWithoutCreatedInvitesNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedInvitesInput, UserUncheckedCreateWithoutCreatedInvitesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedInvitesInput
+    upsert?: UserUpsertWithoutCreatedInvitesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedInvitesInput, UserUpdateWithoutCreatedInvitesInput>, UserUncheckedUpdateWithoutCreatedInvitesInput>
   }
 
   export type StudyCenterCreateNestedOneWithoutTargetsInput = {
@@ -197262,6 +197590,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
@@ -197296,6 +197625,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -199045,6 +199375,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     branch?: BranchCreateNestedOneWithoutInvitesInput
     referrer: UserCreateNestedOneWithoutStudyCenterInvitesInput
+    createdBy?: UserCreateNestedOneWithoutCreatedInvitesInput
   }
 
   export type StudyCenterInviteUncheckedCreateWithoutOrganizationInput = {
@@ -199055,6 +199386,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
+    createdById?: string | null
     branchId?: string | null
     status?: string
     expiresAt: Date | string
@@ -199516,6 +199848,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutOrganizationInput = {
@@ -199633,6 +199967,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutOrganizationInput = {
@@ -201071,6 +201407,7 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableFilter<"Enrollment"> | string | null
+    enteredBy?: StringNullableFilter<"Enrollment"> | string | null
     altPhone?: StringNullableFilter<"Enrollment"> | string | null
     dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableFilter<"Enrollment"> | string | null
@@ -202500,6 +202837,7 @@ export namespace Prisma {
     specializations?: JsonNullableFilter<"StudyCenterInvite">
     sessionIds?: StringNullableListFilter<"StudyCenterInvite">
     referredBy?: StringFilter<"StudyCenterInvite"> | string
+    createdById?: StringNullableFilter<"StudyCenterInvite"> | string | null
     branchId?: StringNullableFilter<"StudyCenterInvite"> | string | null
     status?: StringFilter<"StudyCenterInvite"> | string
     expiresAt?: DateTimeFilter<"StudyCenterInvite"> | Date | string
@@ -203933,6 +204271,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutManagedDepartmentsInput = {
@@ -204050,6 +204390,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutManagedDepartmentsInput = {
@@ -204738,6 +205080,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentInput = {
@@ -204855,6 +205199,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -205014,6 +205360,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAssistantManagedDepartmentsInput = {
@@ -205131,6 +205479,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAssistantManagedDepartmentsInput = {
@@ -205390,6 +205740,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedDepartmentsInput = {
@@ -205507,6 +205859,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutDepartmentsInput = {
@@ -206824,6 +207178,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
@@ -206858,6 +207213,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -206962,6 +207318,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
@@ -206996,6 +207353,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -207100,6 +207458,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
@@ -207135,6 +207494,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -207238,6 +207598,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
@@ -207272,6 +207633,7 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -207377,6 +207739,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
@@ -207410,6 +207773,7 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -209980,6 +210344,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     branch?: BranchCreateNestedOneWithoutInvitesInput
     organization: OrganizationCreateNestedOneWithoutStudyCenterInvitesInput
+    createdBy?: UserCreateNestedOneWithoutCreatedInvitesInput
   }
 
   export type StudyCenterInviteUncheckedCreateWithoutReferrerInput = {
@@ -209990,6 +210355,7 @@ export namespace Prisma {
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
+    createdById?: string | null
     branchId?: string | null
     status?: string
     expiresAt: Date | string
@@ -210720,6 +211086,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSubordinatesInput = {
@@ -210837,6 +211205,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSubordinatesInput = {
@@ -210959,6 +211329,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -211076,6 +211448,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -211659,6 +212033,190 @@ export namespace Prisma {
 
   export type UsageDayCreateManyUserInputEnvelope = {
     data: UsageDayCreateManyUserInput | UsageDayCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EnrollmentCreateWithoutEnteredByUserInput = {
+    id?: string
+    specialisation?: string | null
+    enrollmentNumber?: string | null
+    studentName: string
+    studentEmail: string
+    studentPhone: string
+    studentAddress: string
+    status?: string
+    departmentRemarks?: string | null
+    financeRemarks?: string | null
+    departmentReviewedAt?: Date | string | null
+    financeReviewedAt?: Date | string | null
+    enrolledAt?: Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    universityRemarks?: string | null
+    universityReviewedAt?: Date | string | null
+    altPhone?: string | null
+    dob?: Date | string | null
+    fatherName?: string | null
+    isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
+    provisionalReceiptUrl?: string | null
+    pinCode?: string | null
+    gender?: string | null
+    category?: string | null
+    religion?: string | null
+    maritalStatus?: string | null
+    employmentStatus?: string | null
+    caste?: string | null
+    motherName?: string | null
+    motherPhone?: string | null
+    fatherPhone?: string | null
+    guardianName?: string | null
+    familyPhone?: string | null
+    photo?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
+    paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
+    departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
+    financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
+    organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
+    program: ProgramCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
+    salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
+    student?: StudentCreateNestedOneWithoutEnrollmentsInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
+    payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
+  }
+
+  export type EnrollmentUncheckedCreateWithoutEnteredByUserInput = {
+    id?: string
+    organizationId: string
+    studentId?: string | null
+    programId: string
+    specialisation?: string | null
+    studyCenterId?: string | null
+    sessionId?: string | null
+    enrollmentNumber?: string | null
+    studentName: string
+    studentEmail: string
+    studentPhone: string
+    studentAddress: string
+    status?: string
+    departmentRemarks?: string | null
+    financeRemarks?: string | null
+    departmentReviewedBy?: string | null
+    departmentReviewedAt?: Date | string | null
+    financeReviewedBy?: string | null
+    financeReviewedAt?: Date | string | null
+    enrolledAt?: Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    universityRemarks?: string | null
+    universityReviewedAt?: Date | string | null
+    universityReviewedBy?: string | null
+    salesUserId?: string | null
+    altPhone?: string | null
+    dob?: Date | string | null
+    fatherName?: string | null
+    isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
+    provisionalReceiptUrl?: string | null
+    pinCode?: string | null
+    gender?: string | null
+    category?: string | null
+    religion?: string | null
+    maritalStatus?: string | null
+    employmentStatus?: string | null
+    caste?: string | null
+    motherName?: string | null
+    motherPhone?: string | null
+    fatherPhone?: string | null
+    guardianName?: string | null
+    familyPhone?: string | null
+    photo?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
+    initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
+    paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
+    payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
+  }
+
+  export type EnrollmentCreateOrConnectWithoutEnteredByUserInput = {
+    where: EnrollmentWhereUniqueInput
+    create: XOR<EnrollmentCreateWithoutEnteredByUserInput, EnrollmentUncheckedCreateWithoutEnteredByUserInput>
+  }
+
+  export type EnrollmentCreateManyEnteredByUserInputEnvelope = {
+    data: EnrollmentCreateManyEnteredByUserInput | EnrollmentCreateManyEnteredByUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudyCenterInviteCreateWithoutCreatedByInput = {
+    id?: string
+    token: string
+    universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
+    programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
+    status?: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    branch?: BranchCreateNestedOneWithoutInvitesInput
+    organization: OrganizationCreateNestedOneWithoutStudyCenterInvitesInput
+    referrer: UserCreateNestedOneWithoutStudyCenterInvitesInput
+  }
+
+  export type StudyCenterInviteUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    organizationId: string
+    token: string
+    universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
+    programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
+    referredBy: string
+    branchId?: string | null
+    status?: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudyCenterInviteCreateOrConnectWithoutCreatedByInput = {
+    where: StudyCenterInviteWhereUniqueInput
+    create: XOR<StudyCenterInviteCreateWithoutCreatedByInput, StudyCenterInviteUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type StudyCenterInviteCreateManyCreatedByInputEnvelope = {
+    data: StudyCenterInviteCreateManyCreatedByInput | StudyCenterInviteCreateManyCreatedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -213702,6 +214260,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubordinatesInput = {
@@ -213819,6 +214379,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -214235,6 +214797,38 @@ export namespace Prisma {
     data: XOR<UsageDayUpdateManyMutationInput, UsageDayUncheckedUpdateManyWithoutUserInput>
   }
 
+  export type EnrollmentUpsertWithWhereUniqueWithoutEnteredByUserInput = {
+    where: EnrollmentWhereUniqueInput
+    update: XOR<EnrollmentUpdateWithoutEnteredByUserInput, EnrollmentUncheckedUpdateWithoutEnteredByUserInput>
+    create: XOR<EnrollmentCreateWithoutEnteredByUserInput, EnrollmentUncheckedCreateWithoutEnteredByUserInput>
+  }
+
+  export type EnrollmentUpdateWithWhereUniqueWithoutEnteredByUserInput = {
+    where: EnrollmentWhereUniqueInput
+    data: XOR<EnrollmentUpdateWithoutEnteredByUserInput, EnrollmentUncheckedUpdateWithoutEnteredByUserInput>
+  }
+
+  export type EnrollmentUpdateManyWithWhereWithoutEnteredByUserInput = {
+    where: EnrollmentScalarWhereInput
+    data: XOR<EnrollmentUpdateManyMutationInput, EnrollmentUncheckedUpdateManyWithoutEnteredByUserInput>
+  }
+
+  export type StudyCenterInviteUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: StudyCenterInviteWhereUniqueInput
+    update: XOR<StudyCenterInviteUpdateWithoutCreatedByInput, StudyCenterInviteUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<StudyCenterInviteCreateWithoutCreatedByInput, StudyCenterInviteUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type StudyCenterInviteUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: StudyCenterInviteWhereUniqueInput
+    data: XOR<StudyCenterInviteUpdateWithoutCreatedByInput, StudyCenterInviteUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type StudyCenterInviteUpdateManyWithWhereWithoutCreatedByInput = {
+    where: StudyCenterInviteScalarWhereInput
+    data: XOR<StudyCenterInviteUpdateManyMutationInput, StudyCenterInviteUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
   export type OrganizationCreateWithoutEmployeesInput = {
     id?: string
     name: string
@@ -214557,6 +215151,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileInput = {
@@ -214674,6 +215270,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileInput = {
@@ -215020,6 +215618,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileInput = {
@@ -215137,6 +215737,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type EscalationCreateWithoutTaskInput = {
@@ -215306,6 +215908,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -215423,6 +216027,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -215545,6 +216151,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -215662,6 +216270,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -215841,6 +216451,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEscalatedTasksInput = {
@@ -215958,6 +216570,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEscalatedTasksInput = {
@@ -216314,6 +216928,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -216431,6 +217047,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -216559,6 +217177,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -216676,6 +217296,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DepartmentUpsertWithoutTasksInput = {
@@ -216867,6 +217489,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEscalatedTasksInput = {
@@ -216984,6 +217608,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutTasksInput = {
@@ -217314,6 +217940,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAttendancesInput = {
@@ -217431,6 +218059,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -217771,6 +218401,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendancesInput = {
@@ -217888,6 +218520,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutAttendancesInput = {
@@ -218853,6 +219487,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutUniversityInput = {
@@ -218970,6 +219606,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutUniversityInput = {
@@ -219665,6 +220303,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
@@ -219699,6 +220338,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -220986,6 +221626,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
@@ -221019,6 +221660,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -221517,6 +222159,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedCentersInput = {
@@ -221634,6 +222278,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedCentersInput = {
@@ -221963,6 +222609,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudyCentersInput = {
@@ -222080,6 +222728,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudyCentersInput = {
@@ -222202,6 +222852,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedStudyCentersInput = {
@@ -222319,6 +222971,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedStudyCentersInput = {
@@ -222506,6 +223160,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInput = {
@@ -222623,6 +223279,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInput = {
@@ -223092,6 +223750,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedCentersInput = {
@@ -223209,6 +223869,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutStudyCentersInput = {
@@ -223550,6 +224212,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudyCentersInput = {
@@ -223667,6 +224331,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutVerifiedStudyCentersInput = {
@@ -223795,6 +224461,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedStudyCentersInput = {
@@ -223912,6 +224580,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudyCenterWalletUpsertWithoutStudyCenterInput = {
@@ -224248,6 +224918,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
@@ -224281,6 +224952,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -224795,6 +225467,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutStudentProfileInput = {
@@ -224912,6 +225586,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutStudentProfileInput = {
@@ -225034,6 +225710,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEnrolledStudentsInput = {
@@ -225151,6 +225829,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEnrolledStudentsInput = {
@@ -225533,6 +226213,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudentsInput = {
@@ -225650,6 +226332,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudentsInput = {
@@ -226512,6 +227196,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentProfileInput = {
@@ -226629,6 +227315,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutEnrolledStudentsInput = {
@@ -226757,6 +227445,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrolledStudentsInput = {
@@ -226874,6 +227564,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutStudentsInput = {
@@ -227274,6 +227966,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudentsInput = {
@@ -227391,6 +228085,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type AdmissionSessionUpsertWithoutStudentsInput = {
@@ -229067,6 +229763,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReferredLeadsInput = {
@@ -229184,6 +229882,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReferredLeadsInput = {
@@ -229530,6 +230230,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredLeadsInput = {
@@ -229647,6 +230349,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutComplaintsInput = {
@@ -229764,6 +230468,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutComplaintsInput = {
@@ -229881,6 +230587,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutComplaintsInput = {
@@ -230221,6 +230929,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutComplaintsInput = {
@@ -230338,6 +231048,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutComplaintsInput = {
@@ -230875,6 +231587,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -230992,6 +231706,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -231338,6 +232054,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -231455,6 +232173,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationCreateWithoutAuditLogsInput = {
@@ -231779,6 +232499,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -231896,6 +232618,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -232242,6 +232966,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -232359,6 +233085,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DepartmentCreateWithoutAnnouncementsInput = {
@@ -232740,6 +233468,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPostedAnnouncementsInput = {
@@ -232857,6 +233587,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPostedAnnouncementsInput = {
@@ -233266,6 +233998,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostedAnnouncementsInput = {
@@ -233383,6 +234117,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationCreateWithoutHolidaysInput = {
@@ -233977,6 +234713,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDeptApprovedLeavesInput = {
@@ -234094,6 +234832,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDeptApprovedLeavesInput = {
@@ -234216,6 +234956,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutLeaveRequestsInput = {
@@ -234333,6 +235075,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutLeaveRequestsInput = {
@@ -234455,6 +235199,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutHrApprovedLeavesInput = {
@@ -234572,6 +235318,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutHrApprovedLeavesInput = {
@@ -234975,6 +235723,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptApprovedLeavesInput = {
@@ -235092,6 +235842,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutLeaveRequestsInput = {
@@ -235220,6 +235972,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -235337,6 +236091,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutHrApprovedLeavesInput = {
@@ -235465,6 +236221,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHrApprovedLeavesInput = {
@@ -235582,6 +236340,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveRequestsInput = {
@@ -235912,6 +236672,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSalaryApprovedInput = {
@@ -236029,6 +236791,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSalaryApprovedInput = {
@@ -236151,6 +236915,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSalaryCreatedInput = {
@@ -236268,6 +237034,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSalaryCreatedInput = {
@@ -236597,6 +237365,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSalaryConfigInput = {
@@ -236714,6 +237484,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSalaryConfigInput = {
@@ -236847,6 +237619,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryApprovedInput = {
@@ -236964,6 +237738,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutSalaryCreatedInput = {
@@ -237092,6 +237868,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryCreatedInput = {
@@ -237209,6 +237987,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutSalaryConfigsInput = {
@@ -237550,6 +238330,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryConfigInput = {
@@ -237667,6 +238449,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutConfirmedPayrollsInput = {
@@ -237784,6 +238568,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutConfirmedPayrollsInput = {
@@ -237901,6 +238687,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutConfirmedPayrollsInput = {
@@ -238023,6 +238811,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPayrollsInput = {
@@ -238140,6 +238930,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPayrollsInput = {
@@ -238262,6 +239054,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedPayrollsInput = {
@@ -238379,6 +239173,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedPayrollsInput = {
@@ -238708,6 +239504,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutProcessedPayrollsInput = {
@@ -238825,6 +239623,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutProcessedPayrollsInput = {
@@ -238947,6 +239747,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTransferredPayrollsInput = {
@@ -239064,6 +239866,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTransferredPayrollsInput = {
@@ -239197,6 +240001,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfirmedPayrollsInput = {
@@ -239314,6 +240120,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutPayrollsInput = {
@@ -239442,6 +240250,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayrollsInput = {
@@ -239559,6 +240369,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutFinanceApprovedPayrollsInput = {
@@ -239687,6 +240499,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedPayrollsInput = {
@@ -239804,6 +240618,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollsInput = {
@@ -240145,6 +240961,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProcessedPayrollsInput = {
@@ -240262,6 +241080,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutTransferredPayrollsInput = {
@@ -240390,6 +241210,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransferredPayrollsInput = {
@@ -240507,6 +241329,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutManagedBranchInput = {
@@ -240624,6 +241448,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutManagedBranchInput = {
@@ -240741,6 +241567,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutManagedBranchInput = {
@@ -241283,6 +242111,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutStudyCenterInvitesInput
     referrer: UserCreateNestedOneWithoutStudyCenterInvitesInput
+    createdBy?: UserCreateNestedOneWithoutCreatedInvitesInput
   }
 
   export type StudyCenterInviteUncheckedCreateWithoutBranchInput = {
@@ -241294,6 +242123,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
+    createdById?: string | null
     status?: string
     expiresAt: Date | string
     usedAt?: Date | string | null
@@ -241426,6 +242256,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutBranchInput = {
@@ -241543,6 +242375,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutBranchInput = {
@@ -241770,6 +242604,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedBranchInput = {
@@ -241887,6 +242723,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DepartmentUpsertWithoutOpsBranchInput = {
@@ -242541,6 +243379,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutManagedSubDepartmentsInput = {
@@ -242658,6 +243498,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutManagedSubDepartmentsInput = {
@@ -243044,6 +243886,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSubDepartmentInput = {
@@ -243161,6 +244005,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSubDepartmentInput = {
@@ -243530,6 +244376,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSubDepartmentsInput = {
@@ -243647,6 +244495,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutSubDepartmentsInput = {
@@ -244545,6 +245395,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDesignationsInput = {
@@ -244662,6 +245514,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDesignationsInput = {
@@ -245241,6 +246095,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutHostedMeetingsInput = {
@@ -245358,6 +246214,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutHostedMeetingsInput = {
@@ -245698,6 +246556,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedMeetingsInput = {
@@ -245815,6 +246675,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutMeetingsInput = {
@@ -247105,6 +247967,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSessionsInput = {
@@ -247222,6 +248086,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSessionsInput = {
@@ -247344,6 +248210,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedSessionsInput = {
@@ -247461,6 +248329,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedSessionsInput = {
@@ -247973,6 +248843,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
@@ -248006,6 +248877,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -248397,6 +249269,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSessionsInput = {
@@ -248514,6 +249388,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedSessionsInput = {
@@ -248642,6 +249518,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
@@ -248759,6 +249637,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutSessionsInput = {
@@ -249401,6 +250281,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDeptReviewedEnrollmentsInput = {
@@ -249518,6 +250400,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDeptReviewedEnrollmentsInput = {
@@ -249640,6 +250524,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutFinanceReviewedEnrollmentsInput = {
@@ -249757,6 +250643,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutFinanceReviewedEnrollmentsInput = {
@@ -250139,6 +251027,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedReceiptsInput = {
@@ -250256,6 +251146,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedReceiptsInput = {
@@ -250378,6 +251270,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSalesLedEnrollmentsInput = {
@@ -250495,11 +251389,256 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSalesLedEnrollmentsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutSalesLedEnrollmentsInput, UserUncheckedCreateWithoutSalesLedEnrollmentsInput>
+  }
+
+  export type UserCreateWithoutEnteredEnrollmentsInput = {
+    id?: string
+    userId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
+    approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    assets?: AssetCreateNestedManyWithoutUserInput
+    attendances?: AttendanceCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    managedBranch?: BranchCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestCreateNestedManyWithoutUserInput
+    studentProfile?: StudentCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentCreateNestedManyWithoutManagerUserInput
+    targets?: TargetCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeCreateNestedManyWithoutConfiguredByUserInput
+    branch?: BranchCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
+    manager?: UserCreateNestedOneWithoutSubordinatesInput
+    subordinates?: UserCreateNestedManyWithoutManagerInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
+    university?: UniversityCreateNestedOneWithoutAdminsInput
+    verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutEnteredEnrollmentsInput = {
+    id?: string
+    userId?: string | null
+    organizationId?: string | null
+    departmentId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: string | null
+    subDepartmentId?: string | null
+    ceoPanelId?: string | null
+    studyCenterId?: string | null
+    universityId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    reportingTo?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
+    approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    managedBranch?: BranchUncheckedCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelUncheckedCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestUncheckedCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestUncheckedCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentUncheckedCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestUncheckedCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestUncheckedCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileUncheckedCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureUncheckedCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingUncheckedCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkUncheckedCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadUncheckedCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryUncheckedCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollUncheckedCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollUncheckedCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollUncheckedCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollUncheckedCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchUncheckedCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchUncheckedCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchUncheckedCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollUncheckedCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkUncheckedCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigUncheckedCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigUncheckedCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigUncheckedCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestUncheckedCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestUncheckedCreateNestedManyWithoutUserInput
+    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentUncheckedCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterUncheckedCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutManagerUserInput
+    targets?: TargetUncheckedCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskUncheckedCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
+    subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutEnteredEnrollmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEnteredEnrollmentsInput, UserUncheckedCreateWithoutEnteredEnrollmentsInput>
   }
 
   export type AdmissionSessionCreateWithoutEnrollmentsInput = {
@@ -250908,6 +252047,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutUniversityReviewedEnrollmentsInput = {
@@ -251025,6 +252166,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutUniversityReviewedEnrollmentsInput = {
@@ -251183,6 +252326,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptReviewedEnrollmentsInput = {
@@ -251300,6 +252445,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutFinanceReviewedEnrollmentsInput = {
@@ -251428,6 +252575,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceReviewedEnrollmentsInput = {
@@ -251545,6 +252694,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutEnrollmentsInput = {
@@ -251945,6 +253096,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedReceiptsInput = {
@@ -252062,6 +253215,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutSalesLedEnrollmentsInput = {
@@ -252190,6 +253345,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalesLedEnrollmentsInput = {
@@ -252307,6 +253464,257 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUpsertWithoutEnteredEnrollmentsInput = {
+    update: XOR<UserUpdateWithoutEnteredEnrollmentsInput, UserUncheckedUpdateWithoutEnteredEnrollmentsInput>
+    create: XOR<UserCreateWithoutEnteredEnrollmentsInput, UserUncheckedCreateWithoutEnteredEnrollmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEnteredEnrollmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEnteredEnrollmentsInput, UserUncheckedUpdateWithoutEnteredEnrollmentsInput>
+  }
+
+  export type UserUpdateWithoutEnteredEnrollmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
+    approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUpdateManyWithoutConfiguredByUserNestedInput
+    branch?: BranchUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
+    manager?: UserUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: UserUpdateManyWithoutManagerNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
+    university?: UniversityUpdateOneWithoutAdminsNestedInput
+    verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEnteredEnrollmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
+    approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUncheckedUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUncheckedUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUncheckedUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUncheckedUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUncheckedUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUncheckedUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUncheckedUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUncheckedUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUncheckedUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUncheckedUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUncheckedUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUncheckedUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUncheckedUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUncheckedUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUncheckedUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUncheckedUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUncheckedUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUncheckedUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUncheckedUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUncheckedUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUncheckedUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUncheckedUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUncheckedUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUncheckedUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUncheckedUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUncheckedUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUncheckedUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
+    subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type AdmissionSessionUpsertWithoutEnrollmentsInput = {
@@ -252744,6 +254152,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityReviewedEnrollmentsInput = {
@@ -252861,6 +254271,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type EnrollmentPaymentUpsertWithoutEnrollmentInput = {
@@ -253009,6 +254421,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedExpenseClaimsInput = {
@@ -253126,6 +254540,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedExpenseClaimsInput = {
@@ -253248,6 +254664,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutExpenseClaimsInput = {
@@ -253365,6 +254783,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutExpenseClaimsInput = {
@@ -253705,6 +255125,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedExpenseClaimsInput = {
@@ -253822,6 +255244,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutExpenseClaimsInput = {
@@ -253950,6 +255374,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -254067,6 +255493,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutExpenseClaimsInput = {
@@ -255349,6 +256777,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedWalletTopUpsInput = {
@@ -255466,6 +256896,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedWalletTopUpsInput = {
@@ -255909,6 +257341,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedWalletTopUpsInput = {
@@ -256026,6 +257460,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type InvoiceCreateWithoutPaymentsInput = {
@@ -256393,6 +257829,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivedPaymentsInput = {
@@ -256510,6 +257948,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivedPaymentsInput = {
@@ -256905,6 +258345,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedPaymentsInput = {
@@ -257022,6 +258464,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutCreatedGstSettingsInput = {
@@ -257139,6 +258583,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedGstSettingsInput = {
@@ -257256,6 +258702,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedGstSettingsInput = {
@@ -257596,6 +259044,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedGstSettingsInput = {
@@ -257713,6 +259163,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutGstSettingsInput = {
@@ -258250,6 +259702,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileDetailInput = {
@@ -258367,6 +259821,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileDetailInput = {
@@ -258713,6 +260169,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileDetailInput = {
@@ -258830,6 +260288,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationCreateWithoutHrSettingsInput = {
@@ -259574,6 +261034,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCeoPanelInput = {
@@ -259691,6 +261153,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCeoPanelInput = {
@@ -260037,6 +261501,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCeoPanelInput = {
@@ -260154,6 +261620,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationCreateWithoutCredentialRequestsInput = {
@@ -260478,6 +261946,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCredentialResponderInput = {
@@ -260595,6 +262065,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCredentialResponderInput = {
@@ -260717,6 +262189,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCredentialRequesterInput = {
@@ -260834,6 +262308,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCredentialRequesterInput = {
@@ -261180,6 +262656,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialResponderInput = {
@@ -261297,6 +262775,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutCredentialRequesterInput = {
@@ -261425,6 +262905,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialRequesterInput = {
@@ -261542,6 +263024,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationCreateWithoutEditDeleteRequestsInput = {
@@ -261866,6 +263350,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteResponderInput = {
@@ -261983,6 +263469,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteResponderInput = {
@@ -262105,6 +263593,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteRequesterInput = {
@@ -262222,6 +263712,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteRequesterInput = {
@@ -262623,6 +264115,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteResponderInput = {
@@ -262740,6 +264234,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteRequesterInput = {
@@ -262868,6 +264364,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteRequesterInput = {
@@ -262985,6 +264483,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type FacultyUpsertWithoutEditDeleteRequestsInput = {
@@ -263163,6 +264663,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDeptAdminEscalationsInput = {
@@ -263280,6 +264782,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDeptAdminEscalationsInput = {
@@ -263402,6 +264906,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeEscalationsInput = {
@@ -263519,6 +265025,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeEscalationsInput = {
@@ -263641,6 +265149,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutHandledEscalationsInput = {
@@ -263758,6 +265268,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutHandledEscalationsInput = {
@@ -264087,6 +265599,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedEscalationsInput = {
@@ -264204,6 +265718,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedEscalationsInput = {
@@ -264414,6 +265930,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptAdminEscalationsInput = {
@@ -264531,6 +266049,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutEmployeeEscalationsInput = {
@@ -264659,6 +266179,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeEscalationsInput = {
@@ -264776,6 +266298,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutHandledEscalationsInput = {
@@ -264904,6 +266428,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHandledEscalationsInput = {
@@ -265021,6 +266547,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutEscalationsInput = {
@@ -265362,6 +266890,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedEscalationsInput = {
@@ -265479,6 +267009,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type TaskUpsertWithoutEscalationsInput = {
@@ -266189,6 +267721,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEnteredMarksInput = {
@@ -266306,6 +267840,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEnteredMarksInput = {
@@ -266886,6 +268422,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnteredMarksInput = {
@@ -267003,6 +268541,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutInternalMarksInput = {
@@ -267585,6 +269125,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedLeaveAllocationsInput = {
@@ -267702,6 +269244,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedLeaveAllocationsInput = {
@@ -268031,6 +269575,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -268148,6 +269694,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -268281,6 +269829,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedLeaveAllocationsInput = {
@@ -268398,6 +269948,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveAllocationsInput = {
@@ -268739,6 +270291,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -268856,6 +270410,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutBatchApprovedInput = {
@@ -268973,6 +270529,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchApprovedInput = {
@@ -269090,6 +270648,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchApprovedInput = {
@@ -269419,6 +270979,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchRejectedInput = {
@@ -269536,6 +271098,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchRejectedInput = {
@@ -269658,6 +271222,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchTransferredInput = {
@@ -269775,6 +271341,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchTransferredInput = {
@@ -269908,6 +271476,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchApprovedInput = {
@@ -270025,6 +271595,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollBatchesInput = {
@@ -270366,6 +271938,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchRejectedInput = {
@@ -270483,6 +272057,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutBatchTransferredInput = {
@@ -270611,6 +272187,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchTransferredInput = {
@@ -270728,6 +272306,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutCreatedPollsInput = {
@@ -270845,6 +272425,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPollsInput = {
@@ -270962,6 +272544,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPollsInput = {
@@ -271302,6 +272886,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPollsInput = {
@@ -271419,6 +273005,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutPollsInput = {
@@ -271749,6 +273337,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutProgramAllocationsInput = {
@@ -271866,6 +273456,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutProgramAllocationsInput = {
@@ -271988,6 +273580,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutOpsSubAdminAllocationsInput = {
@@ -272105,6 +273699,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutOpsSubAdminAllocationsInput = {
@@ -272589,6 +274185,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -272706,6 +274304,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutOpsSubAdminAllocationsInput = {
@@ -272834,6 +274434,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOpsSubAdminAllocationsInput = {
@@ -272951,6 +274553,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudyCenterUpsertWithoutProgramAllocationsInput = {
@@ -273644,6 +275248,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReferralLinkInput = {
@@ -273761,6 +275367,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReferralLinkInput = {
@@ -274107,6 +275715,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralLinkInput = {
@@ -274224,6 +275834,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationCreateWithoutReregRulesInput = {
@@ -274873,6 +276485,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedRequestsInput = {
@@ -274990,6 +276604,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedRequestsInput = {
@@ -275410,6 +277026,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSessionRequestsInput = {
@@ -275527,6 +277145,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSessionRequestsInput = {
@@ -275660,6 +277280,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedRequestsInput = {
@@ -275777,6 +277399,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudyCenterUpsertWithoutSessionRequestsInput = {
@@ -276215,6 +277839,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionRequestsInput = {
@@ -276332,6 +277958,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type BranchCreateWithoutInvitesInput = {
@@ -276705,6 +278333,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -276822,11 +278452,256 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInvitesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutStudyCenterInvitesInput, UserUncheckedCreateWithoutStudyCenterInvitesInput>
+  }
+
+  export type UserCreateWithoutCreatedInvitesInput = {
+    id?: string
+    userId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
+    approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    assets?: AssetCreateNestedManyWithoutUserInput
+    attendances?: AttendanceCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    managedBranch?: BranchCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestCreateNestedManyWithoutUserInput
+    studentProfile?: StudentCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentCreateNestedManyWithoutManagerUserInput
+    targets?: TargetCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeCreateNestedManyWithoutConfiguredByUserInput
+    branch?: BranchCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
+    manager?: UserCreateNestedOneWithoutSubordinatesInput
+    subordinates?: UserCreateNestedManyWithoutManagerInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerCreateNestedOneWithoutAdminUserInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerCreateNestedManyWithoutReferrerInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
+    university?: UniversityCreateNestedOneWithoutAdminsInput
+    verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedInvitesInput = {
+    id?: string
+    userId?: string | null
+    organizationId?: string | null
+    departmentId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: string | null
+    subDepartmentId?: string | null
+    ceoPanelId?: string | null
+    studyCenterId?: string | null
+    universityId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    reportingTo?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
+    approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    managedBranch?: BranchUncheckedCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelUncheckedCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestUncheckedCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestUncheckedCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentUncheckedCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestUncheckedCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestUncheckedCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileUncheckedCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureUncheckedCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingUncheckedCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkUncheckedCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadUncheckedCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryUncheckedCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollUncheckedCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollUncheckedCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollUncheckedCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollUncheckedCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchUncheckedCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchUncheckedCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchUncheckedCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollUncheckedCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkUncheckedCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigUncheckedCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigUncheckedCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigUncheckedCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestUncheckedCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestUncheckedCreateNestedManyWithoutUserInput
+    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentUncheckedCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterUncheckedCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutManagerUserInput
+    targets?: TargetUncheckedCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskUncheckedCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
+    subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedCreateNestedOneWithoutAdminUserInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedInvitesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedInvitesInput, UserUncheckedCreateWithoutCreatedInvitesInput>
   }
 
   export type BranchUpsertWithoutInvitesInput = {
@@ -277223,6 +279098,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -277340,6 +279217,257 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUpsertWithoutCreatedInvitesInput = {
+    update: XOR<UserUpdateWithoutCreatedInvitesInput, UserUncheckedUpdateWithoutCreatedInvitesInput>
+    create: XOR<UserCreateWithoutCreatedInvitesInput, UserUncheckedCreateWithoutCreatedInvitesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedInvitesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedInvitesInput, UserUncheckedUpdateWithoutCreatedInvitesInput>
+  }
+
+  export type UserUpdateWithoutCreatedInvitesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
+    approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUpdateManyWithoutConfiguredByUserNestedInput
+    branch?: BranchUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
+    manager?: UserUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: UserUpdateManyWithoutManagerNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUpdateOneWithoutAdminUserNestedInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerUpdateManyWithoutReferrerNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
+    university?: UniversityUpdateOneWithoutAdminsNestedInput
+    verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedInvitesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
+    approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUncheckedUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUncheckedUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUncheckedUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUncheckedUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUncheckedUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUncheckedUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUncheckedUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUncheckedUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUncheckedUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUncheckedUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUncheckedUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUncheckedUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUncheckedUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUncheckedUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUncheckedUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUncheckedUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUncheckedUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUncheckedUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUncheckedUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUncheckedUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUncheckedUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUncheckedUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUncheckedUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUncheckedUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUncheckedUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUncheckedUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUncheckedUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
+    subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    studyAbroadPartnerAdminOf?: StudyAbroadPartnerUncheckedUpdateOneWithoutAdminUserNestedInput
+    studyAbroadPartnersReferred?: StudyAbroadPartnerUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
   }
 
   export type StudyCenterCreateWithoutTargetsInput = {
@@ -277605,6 +279733,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTargetsInput = {
@@ -277722,6 +279852,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTargetsInput = {
@@ -278222,6 +280354,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTargetsInput = {
@@ -278339,6 +280473,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutTargetsInput = {
@@ -278669,6 +280805,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutConfiguredAuthFeesInput = {
@@ -278786,6 +280924,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutConfiguredAuthFeesInput = {
@@ -279181,6 +281321,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfiguredAuthFeesInput = {
@@ -279298,6 +281440,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutAuthFeesInput = {
@@ -279689,6 +281833,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFeesInput = {
@@ -279806,6 +281952,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFeesInput = {
@@ -280305,6 +282453,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFeesInput = {
@@ -280422,6 +282572,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutFeeStructuresInput = {
@@ -281712,6 +283864,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    enteredByUser?: UserCreateNestedOneWithoutEnteredEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
@@ -281746,6 +283899,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -281970,6 +284124,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
@@ -282004,6 +284159,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -282281,6 +284437,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedIncentivesInput = {
@@ -282398,6 +284556,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedIncentivesInput = {
@@ -282520,6 +284680,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedIncentivesInput = {
@@ -282637,6 +284799,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedIncentivesInput = {
@@ -282977,6 +285141,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedIncentivesInput = {
@@ -283094,6 +285260,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedIncentivesInput = {
@@ -283222,6 +285390,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedIncentivesInput = {
@@ -283339,6 +285509,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutIncentiveStructuresInput = {
@@ -283929,6 +286101,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutUploadedMaterialsInput = {
@@ -284046,6 +286220,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutUploadedMaterialsInput = {
@@ -284451,6 +286627,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedMaterialsInput = {
@@ -284568,6 +286746,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type InvoiceCreateWithoutScheduleInput = {
@@ -285531,6 +287711,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPaymentLinksInput = {
@@ -285648,6 +287830,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPaymentLinksInput = {
@@ -286176,6 +288360,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPaymentLinksInput = {
@@ -286293,6 +288479,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationUpsertWithoutPaymentLinksInput = {
@@ -287030,6 +289218,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCollectionOverseersInput = {
@@ -287147,6 +289337,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCollectionOverseersInput = {
@@ -287493,6 +289685,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -287610,6 +289804,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationCreateWithoutUniversityPaymentsInput = {
@@ -288567,6 +290763,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAssetsInput = {
@@ -288684,6 +290882,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAssetsInput = {
@@ -288817,6 +291017,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetsInput = {
@@ -288934,6 +291136,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutDocumentLogsInput = {
@@ -289051,6 +291255,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDocumentLogsInput = {
@@ -289168,6 +291374,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDocumentLogsInput = {
@@ -289450,6 +291658,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDocumentLogsInput = {
@@ -289567,6 +291777,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudentUpsertWithoutDocumentLogsInput = {
@@ -291294,6 +293506,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCommunicationLogsInput = {
@@ -291411,6 +293625,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCommunicationLogsInput = {
@@ -291757,6 +293973,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommunicationLogsInput = {
@@ -291874,6 +294092,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutFcmTokensInput = {
@@ -291991,6 +294211,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutFcmTokensInput = {
@@ -292108,6 +294330,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutFcmTokensInput = {
@@ -292241,6 +294465,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFcmTokensInput = {
@@ -292358,6 +294584,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type OrganizationCreateWithoutFacultiesInput = {
@@ -304425,6 +306653,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutStudentBatchTransfersInput = {
@@ -304542,6 +306772,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutStudentBatchTransfersInput = {
@@ -305020,6 +307252,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentBatchTransfersInput = {
@@ -305137,6 +307371,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type FacultyUpsertWithoutStudentBatchTransfersInput = {
@@ -308100,6 +310336,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutStudyAbroadPartnersReferredInput = {
@@ -308217,6 +310455,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutStudyAbroadPartnersReferredInput = {
@@ -308339,6 +310579,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutStudyAbroadPartnerAdminOfInput = {
@@ -308456,6 +310698,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
     usageDays?: UsageDayUncheckedCreateNestedManyWithoutUserInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutStudyAbroadPartnerAdminOfInput = {
@@ -308896,6 +311140,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyAbroadPartnersReferredInput = {
@@ -309013,6 +311259,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutStudyAbroadPartnerAdminOfInput = {
@@ -309141,6 +311389,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyAbroadPartnerAdminOfInput = {
@@ -309258,6 +311508,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudyAbroadApplicationUpsertWithWhereUniqueWithoutPartnerInput = {
@@ -313022,6 +315274,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
+    enteredEnrollments?: EnrollmentCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutUsageDaysInput = {
@@ -313139,6 +315393,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
+    enteredEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutEnteredByUserInput
+    createdInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutUsageDaysInput = {
@@ -313485,6 +315741,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUsageDaysInput = {
@@ -313602,6 +315860,8 @@ export namespace Prisma {
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type AcademicSessionCreateManyOrganizationInput = {
@@ -313928,6 +316188,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -314559,6 +316820,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
+    createdById?: string | null
     branchId?: string | null
     status?: string
     expiresAt: Date | string
@@ -315951,6 +318213,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
@@ -315985,6 +318248,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -316049,6 +318313,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -317958,6 +320223,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     branch?: BranchUpdateOneWithoutInvitesNestedInput
     referrer?: UserUpdateOneRequiredWithoutStudyCenterInvitesNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedInvitesNestedInput
   }
 
   export type StudyCenterInviteUncheckedUpdateWithoutOrganizationInput = {
@@ -317968,6 +320234,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -317984,6 +320251,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -318460,6 +320728,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrganizationInput = {
@@ -318577,6 +320847,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutOrganizationInput = {
@@ -320242,6 +322514,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -320359,6 +322633,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -320541,6 +322817,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssistantManagedDepartmentsInput = {
@@ -320658,6 +322936,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutAssistantManagedDepartmentsInput = {
@@ -320957,6 +323237,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -321020,6 +323301,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -321084,6 +323366,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -321146,6 +323429,7 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -321209,6 +323493,7 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -322109,6 +324394,7 @@ export namespace Prisma {
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
+    createdById?: string | null
     branchId?: string | null
     status?: string
     expiresAt: Date | string
@@ -322338,6 +324624,87 @@ export namespace Prisma {
     lastState?: string | null
     pages?: JsonNullValueInput | InputJsonValue
     segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+  }
+
+  export type EnrollmentCreateManyEnteredByUserInput = {
+    id?: string
+    organizationId: string
+    studentId?: string | null
+    programId: string
+    specialisation?: string | null
+    studyCenterId?: string | null
+    sessionId?: string | null
+    enrollmentNumber?: string | null
+    studentName: string
+    studentEmail: string
+    studentPhone: string
+    studentAddress: string
+    status?: string
+    departmentRemarks?: string | null
+    financeRemarks?: string | null
+    departmentReviewedBy?: string | null
+    departmentReviewedAt?: Date | string | null
+    financeReviewedBy?: string | null
+    financeReviewedAt?: Date | string | null
+    enrolledAt?: Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    universityRemarks?: string | null
+    universityReviewedAt?: Date | string | null
+    universityReviewedBy?: string | null
+    salesUserId?: string | null
+    altPhone?: string | null
+    dob?: Date | string | null
+    fatherName?: string | null
+    isProvisional?: boolean
+    isUpgrade?: boolean
+    previousProgramId?: string | null
+    provisionalReceiptUrl?: string | null
+    pinCode?: string | null
+    gender?: string | null
+    category?: string | null
+    religion?: string | null
+    maritalStatus?: string | null
+    employmentStatus?: string | null
+    caste?: string | null
+    motherName?: string | null
+    motherPhone?: string | null
+    fatherPhone?: string | null
+    guardianName?: string | null
+    familyPhone?: string | null
+    photo?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
+    initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
+    paymentPlan?: string | null
+    source?: string | null
+    studyAbroadPartnerId?: string | null
+    serviceFee?: number | null
+  }
+
+  export type StudyCenterInviteCreateManyCreatedByInput = {
+    id?: string
+    organizationId: string
+    token: string
+    universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
+    programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
+    referredBy: string
+    branchId?: string | null
+    status?: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    createdAt?: Date | string
     updatedAt?: Date | string
   }
 
@@ -323145,6 +325512,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
@@ -323179,6 +325547,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -323243,6 +325612,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -323336,6 +325706,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
@@ -323370,6 +325741,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -323434,6 +325806,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -323527,6 +325900,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
@@ -323562,6 +325936,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -323626,6 +326001,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -323718,6 +326094,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
@@ -323752,6 +326129,7 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -323816,6 +326194,7 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -323910,6 +326289,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
@@ -323943,6 +326323,7 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -324007,6 +326388,7 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -326795,6 +329177,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     branch?: BranchUpdateOneWithoutInvitesNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudyCenterInvitesNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedInvitesNestedInput
   }
 
   export type StudyCenterInviteUncheckedUpdateWithoutReferrerInput = {
@@ -326805,6 +329188,7 @@ export namespace Prisma {
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -326821,6 +329205,7 @@ export namespace Prisma {
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -327271,6 +329656,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -327388,6 +329775,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -327810,6 +330199,251 @@ export namespace Prisma {
     lastState?: NullableStringFieldUpdateOperationsInput | string | null
     pages?: JsonNullValueInput | InputJsonValue
     segments?: JsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EnrollmentUpdateWithoutEnteredByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    specialisation?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    studentName?: StringFieldUpdateOperationsInput | string
+    studentEmail?: StringFieldUpdateOperationsInput | string
+    studentPhone?: StringFieldUpdateOperationsInput | string
+    studentAddress?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
+    departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
+    financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
+    program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
+    salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
+    student?: StudentUpdateOneWithoutEnrollmentsNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
+    payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
+  }
+
+  export type EnrollmentUncheckedUpdateWithoutEnteredByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    studentId?: NullableStringFieldUpdateOperationsInput | string | null
+    programId?: StringFieldUpdateOperationsInput | string
+    specialisation?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    studentName?: StringFieldUpdateOperationsInput | string
+    studentEmail?: StringFieldUpdateOperationsInput | string
+    studentPhone?: StringFieldUpdateOperationsInput | string
+    studentAddress?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
+    payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
+  }
+
+  export type EnrollmentUncheckedUpdateManyWithoutEnteredByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    studentId?: NullableStringFieldUpdateOperationsInput | string | null
+    programId?: StringFieldUpdateOperationsInput | string
+    specialisation?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    studentName?: StringFieldUpdateOperationsInput | string
+    studentEmail?: StringFieldUpdateOperationsInput | string
+    studentPhone?: StringFieldUpdateOperationsInput | string
+    studentAddress?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    isUpgrade?: BoolFieldUpdateOperationsInput | boolean
+    previousProgramId?: NullableStringFieldUpdateOperationsInput | string | null
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    studyAbroadPartnerId?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceFee?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type StudyCenterInviteUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
+    programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
+    status?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    branch?: BranchUpdateOneWithoutInvitesNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutStudyCenterInvitesNestedInput
+    referrer?: UserUpdateOneRequiredWithoutStudyCenterInvitesNestedInput
+  }
+
+  export type StudyCenterInviteUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
+    programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
+    referredBy?: StringFieldUpdateOperationsInput | string
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudyCenterInviteUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
+    programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
+    referredBy?: StringFieldUpdateOperationsInput | string
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -328698,6 +331332,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityInput = {
@@ -328815,6 +331451,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutUniversityInput = {
@@ -329121,6 +331759,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -329394,6 +332033,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
@@ -329428,6 +332068,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -329492,6 +332133,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -330117,6 +332759,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -330459,6 +333102,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
@@ -330492,6 +333136,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -330556,6 +333201,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -331150,6 +333796,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInput = {
@@ -331267,6 +333915,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutStudyCenterInput = {
@@ -331592,6 +334242,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -331982,6 +334633,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
@@ -332015,6 +334667,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -332079,6 +334732,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -332773,6 +335427,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
+    createdById?: string | null
     status?: string
     expiresAt: Date | string
     usedAt?: Date | string | null
@@ -333088,6 +335743,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutStudyCenterInvitesNestedInput
     referrer?: UserUpdateOneRequiredWithoutStudyCenterInvitesNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedInvitesNestedInput
   }
 
   export type StudyCenterInviteUncheckedUpdateWithoutBranchInput = {
@@ -333099,6 +335755,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -333115,6 +335772,7 @@ export namespace Prisma {
     specializations?: NullableJsonNullValueInput | InputJsonValue
     sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -333237,6 +335895,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBranchInput = {
@@ -333354,6 +336014,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBranchInput = {
@@ -333790,6 +336452,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubDepartmentInput = {
@@ -333907,6 +336571,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutSubDepartmentInput = {
@@ -334368,6 +337034,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDesignationsInput = {
@@ -334485,6 +337153,8 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     usageDays?: UsageDayUncheckedUpdateManyWithoutUserNestedInput
+    enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDesignationsInput = {
@@ -334547,6 +337217,7 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    enteredBy?: string | null
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
@@ -334722,6 +337393,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    enteredByUser?: UserUpdateOneWithoutEnteredEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
@@ -334755,6 +337427,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -334819,6 +337492,7 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    enteredBy?: NullableStringFieldUpdateOperationsInput | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null

@@ -289,6 +289,8 @@ model User {
   @@index([organizationId, role])
   @@index([departmentId])
   usageDays                     UsageDay[]
+  enteredEnrollments Enrollment[]       @relation("EnrollmentEnteredBy")
+  createdInvites     StudyCenterInvite[] @relation("InviteCreatedBy")
 }
 
 model Employee {
@@ -1027,6 +1029,8 @@ model Enrollment {
   universityReviewedAt DateTime?
   universityReviewedBy String?
   salesUserId          String?
+  /// The data-entry user who typed the application in, when it was not the sales person themselves
+  enteredBy            String?
   altPhone             String?
   dob                  DateTime?
   fatherName           String?
@@ -1067,6 +1071,7 @@ model Enrollment {
   program              Program            @relation(fields: [programId], references: [id])
   receiptVerifier      User?              @relation("ReceiptVerifiedBy", fields: [receiptVerifiedBy], references: [id])
   salesUser            User?              @relation("SalesUserEnrollments", fields: [salesUserId], references: [id])
+  enteredByUser        User?              @relation("EnrollmentEnteredBy", fields: [enteredBy], references: [id])
   session              AdmissionSession?  @relation(fields: [sessionId], references: [id])
   student              Student?           @relation(fields: [studentId], references: [id])
   studyCenter          StudyCenter?       @relation(fields: [studyCenterId], references: [id])
@@ -1076,6 +1081,7 @@ model Enrollment {
   @@unique([studentId, programId, sessionId])
   @@index([organizationId, status])
   @@index([studyCenterId])
+  @@index([enteredBy, status])
   @@index([studyAbroadPartnerId])
 }
 
@@ -1473,6 +1479,8 @@ model StudyCenterInvite {
   specializations Json?        @default("{}")
   sessionIds      String[]     @default([])
   referredBy      String
+  /// The data-entry user who generated the link for the sales person in referredBy
+  createdById     String?
   branchId        String?
   status          String       @default("pending")
   expiresAt       DateTime
@@ -1482,8 +1490,10 @@ model StudyCenterInvite {
   branch          Branch?      @relation(fields: [branchId], references: [id])
   organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   referrer        User         @relation("InviteReferredBy", fields: [referredBy], references: [id])
+  createdBy       User?        @relation("InviteCreatedBy", fields: [createdById], references: [id])
 
   @@index([organizationId, referredBy])
+  @@index([createdById])
 }
 
 model Target {
@@ -1775,6 +1785,7 @@ enum OrganizationStatus {
 
 
 enum DepartmentType {
+  data_entry
   operations
   finance
   hr
@@ -1803,6 +1814,7 @@ enum UserStatus {
 }
 
 enum UserRole {
+  sales_entry
   superadmin
   org_admin
   ceo

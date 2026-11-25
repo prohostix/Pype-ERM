@@ -66,6 +66,10 @@ const hasStudentList = (user: AccessUser): boolean => {
   return Boolean(user.subDepartmentId) && ['operations', 'finance'].includes(user.departmentType || '');
 };
 
+/** Sales Entry staff, or an employee in a Data Entry department. */
+const isEntry = (user: AccessUser): boolean =>
+  user.role === 'sales_entry' || (user.role === 'employee' && user.departmentType === 'data_entry');
+
 const isSales = (user: AccessUser): boolean =>
   ['sales_admin', 'sales_sub_admin', 'sales'].includes(user.role) || (user.role === 'employee' && user.departmentType === 'sales');
 
@@ -142,7 +146,7 @@ const GRANTABLE: Feature[] = [
     label: 'Provisional Enrollment',
     group: 'Students and admissions',
     actions: ['view', 'create'],
-    defaultActions: (user) => (isSales(user) || ['superadmin', 'org_admin'].includes(user.role) ? ['view', 'create'] : []),
+    defaultActions: (user) => (isSales(user) || isEntry(user) || ['superadmin', 'org_admin'].includes(user.role) ? ['view', 'create'] : []),
   },
   {
     key: 'admission_pipeline',
@@ -150,6 +154,14 @@ const GRANTABLE: Feature[] = [
     group: 'Students and admissions',
     actions: ['view', 'edit'],
     defaultActions: (user) => (isSales(user) || ['superadmin', 'org_admin'].includes(user.role) ? ['view', 'edit'] : []),
+  },
+  {
+    key: 'sales_entry_enroll',
+    label: 'Sales Entry: Enroll for a Sales Employee',
+    group: 'Students and admissions',
+    actions: ['view', 'create'],
+    // Choose a sales employee, then generate a link or fill the application for them
+    defaultActions: (user) => (isEntry(user) || user.role === 'superadmin' ? ['view', 'create'] : []),
   },
   {
     key: 'admission_approval',

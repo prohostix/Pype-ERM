@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import api from '@/lib/api';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
+import { MyProfilePanel } from '@/components/panels/MyProfilePanel';
 import { VacanciesPanel } from '@/components/panels/VacanciesPanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { EmployeesPanel } from '@/components/panels/EmployeesPanel';
@@ -62,6 +63,7 @@ export function ModernHRDashboard({ initialTab, onNavigate }: { initialTab?: str
       case 'employees': return <EmployeesPanel onManageUsers={() => handleNavigate('users')} />;
       case 'team_permissions': return <TeamPermissionsPanel />;
       case 'leaves': return <LeavesPanel />;
+      case 'my_profile': return <MyProfilePanel />;
       case 'my_leaves': return <LeavesPanel isMyPortal />;
       case 'attendance': return <AttendancePanel initialFilter={tabProps.filter} />;
       case 'my_attendance': return <AttendancePanel isMyPortal />;
@@ -115,6 +117,7 @@ export function getHRNavItems() {
     { id: 'att-settings', label: 'Att. Settings' },
     { id: 'assets', label: 'Assets' },
     { id: '__portal_section', label: 'My Portal', isSection: true },
+    { id: 'my_profile', label: 'My Profile' },
     { id: 'my_leaves', label: 'My Leaves' },
     { id: 'my_attendance', label: 'My Attendance' },
     { id: 'my_payslips', label: 'Pay Slips' },

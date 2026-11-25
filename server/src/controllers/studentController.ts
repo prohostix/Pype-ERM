@@ -13,6 +13,7 @@ import { loadGapStatuses } from '../utils/videoGap.js';
 import { isOwnStudentAccount } from '../utils/userGuards.js';
 import type { StudentRequest } from '../access/studentGuard.js';
 import { restrictEnrollment, restrictStudent, studentBranchWhere } from '../access/studentRules.js';
+import { isEntryUser, salesPersonWhere } from '../access/salesEntry.js';
 const SALES_ROLES = ['sales_admin', 'sales_sub_admin', 'sales', 'employee', 'student'];
 
 export const getStudents = asyncHandler(async (req: StudentRequest, res: Response) => {
@@ -272,6 +273,26 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     specialisation
   } = req.body;
   
+  // Data-entry staff enrol for a sales employee, who gets the credit; the choice is required
+  let creditUserId: string = req.user.id;
+  let creditBranchId: string | null = null;
+  let creditName: string | null = null;
+  let enteredBy: string | null = null;
+  if (isEntryUser(req.user)) {
+    const person = await prisma.user.findFirst({
+      where: { id: String(req.body.salesUserId || ''), ...salesPersonWhere(req.user.organizationId, req.user.branchId) },
+      select: { id: true, name: true, branchId: true },
+    });
+    if (!person) {
+      res.status(400).json({ success: false, message: 'Choose the sales employee this enrollment is for' });
+      return;
+    }
+    creditUserId = person.id;
+    creditBranchId = person.branchId;
+    creditName = person.name;
+    enteredBy = req.user.id;
+  }
+
   const cleanEmail = normalizeEmail(email);
   const cleanPhone = (phone || '').trim();
 
@@ -466,7 +487,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : null,
         universityId: universityId || null,
         centerId: (resolvedCenterId && typeof resolvedCenterId === 'string' && resolvedCenterId.trim() !== '') ? resolvedCenterId : null,
-        branchId: (branchId && branchId.trim() !== '') ? branchId : (req.user.branchId || null),
+        branchId: enteredBy ? creditBranchId : ((branchId && branchId.trim() !== '') ? branchId : (req.user.branchId || null)),
         organizationId: req.user.organizationId,
         credentials: { email, password: studentUser.password ? '(Existing Account)' : defaultPassword },
         admissionProgress: { 
@@ -474,7 +495,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
           initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
           initialPaymentDate: req.body.initialPaymentDate || null
         },
-        enrolledBy: req.user.id
+        enrolledBy: creditUserId
       }
     });
   }
@@ -526,7 +547,8 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         isUpgrade: isUpgrade,
         previousProgramId: isUpgrade ? (existingStudentId ? (await prisma.student.findUnique({ where: { id: existingStudentId }, select: { programId: true } }))?.programId : student.programId) : null,
         receiptUrl: req.body.receiptUrl || null,
-        salesUserId: req.user.role === 'center_admin' ? null : req.user.id,
+        salesUserId: req.user.role === 'center_admin' ? null : creditUserId,
+        enteredBy,
         gender: student.gender,
         category: student.category,
         religion: student.religion,
@@ -551,7 +573,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
               ? `Academic partner enrolled student directly`
               : (isUpgrade 
                   ? `Sales rep ${req.user.name} submitted Program Upgrade for student.`
-                  : `Sales rep ${req.user.name} directly enrolled student via wizard`),
+                  : (enteredBy ? `${req.user.name} (Sales Entry) enrolled the student for ${creditName}` : `Sales rep ${req.user.name} directly enrolled student via wizard`)),
           },
           {
             status: initialStatus,

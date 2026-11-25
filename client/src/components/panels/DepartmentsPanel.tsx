@@ -123,6 +123,12 @@ export const DEPT_TYPE_META: Record<string, { label: string; icon: any; badgeCla
     badgeClass: 'bg-teal-600 text-white',
     desc: 'External study centers, affiliated campus coordination, and partner seats',
   },
+  data_entry: {
+    label: 'Data Entry',
+    icon: Briefcase,
+    badgeClass: 'bg-rose-400 text-white',
+    desc: 'Staff who enter applications on behalf of the sales team',
+  },
   collections: {
     label: 'Collections & Receivables',
     icon: Wallet,

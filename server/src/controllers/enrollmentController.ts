@@ -5,6 +5,7 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { normalizeEmail, normalizePhone, checkStudentOrEnrollmentExists } from '../utils/studentValidation.js';
 import type { PageRequest } from '../access/pageGuard.js';
+import { isEntryUser, salesPersonWhere, entryMayActFor } from '../access/salesEntry.js';
 
 export const getWallet = asyncHandler(async (req: AuthRequest, res: Response) => {
   const wallet = await prisma.studyCenterWallet.findUnique({ where: { studyCenterId: req.user.studyCenterId || '' } });
@@ -46,7 +47,26 @@ export const getEnrollablePrograms = asyncHandler(async (req: AuthRequest, res: 
 });
 
 export const createEnrollment = asyncHandler(async (req: PageRequest, res: Response) => {
-  const { studentId, feeMode, universityId, ...rest } = req.body;
+  const { studentId, feeMode, universityId, salesUserId: chosenSalesUserId, enteredBy: _ignoredEnteredBy, ...rest } = req.body;
+
+  // Data-entry staff enrol for a sales employee, who gets the credit
+  let creditUserId: string = req.user.id;
+  let creditBranchId: string | null = req.user.branchId || null;
+  let enteredBy: string | null = null;
+  if (isEntryUser(req.user)) {
+    const person = await prisma.user.findFirst({
+      where: { id: String(chosenSalesUserId || ''), ...salesPersonWhere(req.user.organizationId, req.user.branchId) },
+      select: { id: true, branchId: true },
+    });
+    if (!person) {
+      res.status(400).json({ success: false, message: 'Choose an active sales employee from your branch' });
+      return;
+    }
+    creditUserId = person.id;
+    creditBranchId = person.branchId;
+    enteredBy = req.user.id;
+  }
+
   // Someone given this page may only enrol existing students of their branch
   if (req.ownBranchOnly) {
     const named = rest.studentId || studentId;
@@ -202,13 +222,13 @@ export const createEnrollment = asyncHandler(async (req: PageRequest, res: Respo
         address: rest.studentAddress || 'Pending',
         organizationId: req.user.organizationId,
         centerId: req.user.studyCenterId || null,
-        branchId: req.user.branchId || null,
+        branchId: creditBranchId,
         universityId: program?.universityId || null,
         programId: rest.programId,
         sessionId: rest.sessionId,
         admissionNo: newAdmissionNo,
         credentials: { email: cleanEmail, password: defaultPassword },
-        enrolledBy: req.user.id,
+        enrolledBy: creditUserId,
         status: rest.isProvisional ? 'provisional' : 'document_review'
       }
     });
@@ -220,8 +240,10 @@ export const createEnrollment = asyncHandler(async (req: PageRequest, res: Respo
 
   // Automatically attach salesUserId if the user is a staff member creating the enrollment
   if (req.user && req.user.role !== 'student') {
-    data.salesUserId = req.user.id;
+    data.salesUserId = creditUserId;
   }
+  // Only the server says who typed it in
+  data.enteredBy = enteredBy;
   
   const enrollment = await prisma.enrollment.create({ data });
 
@@ -291,10 +313,13 @@ export const getMyEnrollments = asyncHandler(async (req: AuthRequest, res: Respo
   if (status) {
     where.status = status;
   }
+  // Data-entry staff see only what they typed in, and never a student's login
+  const entry = isEntryUser(req.user);
+  if (entry) where.salesUserId = (await entryMayActFor(req.user, String(req.query.salesUserId || ''))) ? String(req.query.salesUserId) : '__none__';
 
   const enrollments = await prisma.enrollment.findMany({ 
     where,
-    include: { program: true, student: true, session: true },
+    include: { program: true, student: entry ? { omit: { credentials: true } } : true, session: true },
     orderBy: { createdAt: 'desc' }
   });
   
@@ -323,7 +348,8 @@ export const uploadReceipt = asyncHandler(async (req: AuthRequest, res: Response
     where: { id: enrollmentId }
   });
 
-  if (!enrollment || (req.user.role !== 'superadmin' && enrollment.organizationId !== req.user.organizationId)) {
+  if (!enrollment || (req.user.role !== 'superadmin' && enrollment.organizationId !== req.user.organizationId)
+    || (isEntryUser(req.user) && !(await entryMayActFor(req.user, enrollment.salesUserId)))) {
     res.status(404);
     throw new Error('Enrollment not found');
   }
@@ -366,7 +392,8 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     where: { id: enrollmentId },
     include: { program: true } 
   });
-  if (!enrollment) {
+  if (!enrollment || (req.user.role !== 'superadmin' && enrollment.organizationId !== req.user.organizationId)
+    || (isEntryUser(req.user) && !(await entryMayActFor(req.user, enrollment.salesUserId)))) {
     res.status(404);
     throw new Error('Enrollment not found');
   }
@@ -728,6 +755,7 @@ export const getMyProvisionalEnrollments = asyncHandler(async (req: AuthRequest,
     where: {
       organizationId: req.user.organizationId,
       isProvisional: true,
+      ...(isEntryUser(req.user) && { salesUserId: (await entryMayActFor(req.user, String(req.query.salesUserId || ''))) ? String(req.query.salesUserId) : '__none__' }),
     },
     include: { program: true },
     orderBy: { createdAt: 'desc' }

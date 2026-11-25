@@ -91,6 +91,7 @@ export const ROLE_CONFIG: Record<string, { label: string; category: string; badg
   faculty: { label: 'Faculty / Instructor', category: 'Operations', badgeClass: 'bg-teal-600 text-white' },
   sales_admin: { label: 'Sales Admin', category: 'Sales & Growth', badgeClass: 'bg-pink-600 text-white' },
   sales_sub_admin: { label: 'Sales Sub Admin', category: 'Sales & Growth', badgeClass: 'bg-pink-500 text-white' },
+  sales_entry: { label: 'Sales Entry', category: 'Sales & Growth', badgeClass: 'bg-rose-400 text-white' },
   sales: { label: 'Sales Executive', category: 'Sales & Growth', badgeClass: 'bg-rose-500 text-white' },
   academic_counselor: { label: 'Academic Counselor', category: 'Sales & Growth', badgeClass: 'bg-amber-600 text-white' },
   collections_admin: { label: 'Collections Admin', category: 'Finance', badgeClass: 'bg-lime-600 text-white' },
@@ -821,6 +822,7 @@ export function UsersPanel() {
                       <SelectItem value="sales_admin">Sales Admin</SelectItem>
                       <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
                       <SelectItem value="sales">Sales Executive</SelectItem>
+                      <SelectItem value="sales_entry">Sales Entry</SelectItem>
                       <SelectItem value="collections_admin">Collections Admin</SelectItem>
                       <SelectItem value="employee">Employee</SelectItem>
                       </SelectContent>

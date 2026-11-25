@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { MoreHorizontal, Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, Calendar, ExternalLink, MessageSquare, Key, Download, User, Users, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X, RotateCcw, Filter, ChevronDown, Check, UserCheck, XCircle, AlertCircle, AlertTriangle, CheckCircle2, UserX } from 'lucide-react';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -397,7 +397,7 @@ const matchesState = (student: any, state: string): boolean => {
   return status === wanted || (wanted === 'provisional' && status.startsWith('provisional_'));
 };
 
-export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completingEnrollment, hideList }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean; completingEnrollment?: any; hideList?: boolean } = {}) {
+export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completingEnrollment, hideList, entryEmployee, inline }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean; completingEnrollment?: any; hideList?: boolean; entryEmployee?: { id: string; name: string }; inline?: boolean } = {}) {
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
   const byRole = ['org_admin', 'superadmin', 'center_admin'].includes(user?.role || '');
@@ -440,6 +440,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formStep, setFormStep] = useState(0); // 0=Admission, 1=Personal, 2=Family, 3=Documents
+
+  // Placed in a page, each step starts at the top of the form, whatever the page was scrolled to
+  const formShellRef = useRef<HTMLDivElement | null>(null);
+  const firstStepRender = useRef(true);
+  useEffect(() => {
+    if (firstStepRender.current) { firstStepRender.current = false; return; }
+    if (inline) formShellRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [formStep, inline]);
 
   // Bulk Import State
   const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
@@ -1790,6 +1798,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         const isUpgrade = Boolean(upgradeCheck?.canUpgrade || upgradeCheck?.isCompleted || formData.isUpgrade);
         const payload = {
           ...formData,
+          // Data entry: the sales employee who gets the credit (the server requires it)
+          ...(entryEmployee && { salesUserId: entryEmployee.id }),
           isPipelineApplication: true,
           isUpgrade,
           existingStudentId: upgradeCheck?.studentData?.id || formData.existingStudentId
@@ -3135,15 +3145,19 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const totalPages = Math.max(1, Math.ceil(filteredStudents.length / itemsPerPage));
   const paginatedStudents = filteredStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const renderStudentFormModalContent = () => (
-    <DialogContent className="wizard-form w-full sm:max-w-3xl h-[100dvh] sm:h-auto sm:max-h-[92vh] p-0 gap-0 flex flex-col rounded-none sm:rounded-[2rem] border-0 bg-white overflow-hidden" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
+  const renderStudentFormModalContent = (placeInPage = false) => {
+    // The same form either as a dialog or placed in the page (a dialog title needs its dialog)
+    const Shell: any = placeInPage ? 'div' : DialogContent;
+    const Title: any = placeInPage ? 'h2' : DialogTitle;
+    return (
+    <Shell ref={placeInPage ? formShellRef : undefined} className={placeInPage ? "wizard-form w-full rounded-[2rem] border border-slate-100 bg-white overflow-clip flex flex-col" : "wizard-form w-full sm:max-w-3xl h-[100dvh] sm:h-auto sm:max-h-[92vh] p-0 gap-0 flex flex-col rounded-none sm:rounded-[2rem] border-0 bg-white overflow-hidden"} style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }}>
       <DialogHeader className="px-6 sm:px-8 pt-7 pb-4 space-y-4 text-left shrink-0">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-2xl bg-[#eaf6e6] text-[#256c1d] flex items-center justify-center shrink-0">
             <currentStepInfo.icon className="w-5 h-5" />
           </div>
           <div className="min-w-0">
-            <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground text-left">{editingId || completingEnrollment ? 'Update Student Enrollment' : 'Add New Student Record'}</DialogTitle>
+            <Title className="text-2xl font-semibold tracking-tight text-foreground text-left">{editingId || completingEnrollment ? 'Update Student Enrollment' : (entryEmployee ? 'Direct Enrollment' : 'Add New Student Record')}</Title>
             <p className="text-sm text-muted-foreground mt-0.5">Step {formStep + 1} of {stepsList.length} · {currentStepInfo.label}</p>
           </div>
         </div>
@@ -3198,8 +3212,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         </div>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-        <div className="flex-1 overflow-y-auto px-6 sm:px-8 sm:max-h-[56vh] space-y-4 py-4 border-t border-slate-100">
+      <form onSubmit={handleSubmit} className={placeInPage ? "flex flex-col flex-1" : "flex flex-col flex-1 min-h-0 overflow-hidden"}>
+        <div className={placeInPage ? "flex-1 px-6 sm:px-8 space-y-4 py-6 border-t border-slate-100" : "flex-1 overflow-y-auto px-6 sm:px-8 sm:max-h-[56vh] space-y-4 py-4 border-t border-slate-100"}>
 
           {/* ── STEP 0: STUDENT VERIFICATION (FOR NEW ENROLLMENTS) ── */}
           {currentStepType === 'verify' && (
@@ -4070,7 +4084,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         </div>
 
         {/* Footer buttons */}
-        <div className="flex items-center justify-between gap-3 px-6 sm:px-8 py-5 border-t border-slate-100 shrink-0">
+        <div className={placeInPage ? "sticky bottom-0 z-10 bg-white flex items-center justify-between gap-3 px-6 sm:px-8 py-4 border-t border-slate-100 shadow-[0_-12px_24px_-20px_rgba(11,29,20,0.35)]" : "flex items-center justify-between gap-3 px-6 sm:px-8 py-5 border-t border-slate-100 shrink-0"}>
           <Button type="button" variant="outline" className="h-11 rounded-full px-5 bg-white border-slate-200 font-semibold" onClick={() => setFormStep(Math.max(0, formStep - 1))} disabled={formStep === 0}>
             ← Back
           </Button>
@@ -4098,8 +4112,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
           )}
         </div>
       </form>
-    </DialogContent>
-  );
+    </Shell>
+    );
+  };
+
+  if (inline && triggerOpen !== undefined) {
+    return <div className="mx-auto w-full max-w-3xl">{renderStudentFormModalContent(true)}</div>;
+  }
 
   if (triggerOpen !== undefined) {
     return (

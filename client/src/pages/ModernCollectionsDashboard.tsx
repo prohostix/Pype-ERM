@@ -6,6 +6,7 @@ import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
+import { MyProfilePanel } from '@/components/panels/MyProfilePanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
@@ -28,6 +29,7 @@ export function ModernCollectionsDashboard({ initialTab, onNavigate }: { initial
       case 'students': return <StudentsPanel isSalesMode={true} />; // Read/search view for collection follow-ups
       case 'tasks': return <TasksPanel />;
       case 'leaves': return <LeavesPanel />;
+      case 'my_profile': return <MyProfilePanel />;
       case 'my_leaves': return <LeavesPanel isMyPortal />;
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'holidays': return <HolidaysPanel />;
@@ -51,6 +53,7 @@ export function getCollectionsNavItems() {
     { id: 'students', label: 'Student Follow-up' },
     { id: 'tasks', label: 'Tasks' },
     { id: 'leaves', label: 'Leave Approvals' },
+    { id: 'my_profile', label: 'My Profile' },
     { id: 'my_leaves', label: 'My Leaves' },
     { id: 'my_attendance', label: 'Attendance' },
     { id: 'holidays', label: 'Holiday List' },

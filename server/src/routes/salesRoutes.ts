@@ -12,6 +12,10 @@ import {
   updateTarget,
   deleteTarget,
   generateInvite,
+  getSalesPeople,
+  getMyEntries,
+  getMyEntryLinks,
+  getEntryOverview,
   listMyInvites,
   regenerateInvite,
   getTeamPerformance,
@@ -66,6 +70,10 @@ router.route('/targets/:id').get(getTarget).put(pageAction('targets', 'edit', ['
 router.route('/invites')
   .get(pageAction('invite_links', 'view', null), listMyInvites)
   .post(pageAction('invite_links', 'create', null), generateInvite);
+router.get('/entry/overview', staffAndPartnersOnly, pageAction('sales_entry_enroll', 'view', null), getEntryOverview);
+router.get('/entry/links', staffAndPartnersOnly, pageAction('sales_entry_enroll', 'view', null), getMyEntryLinks);
+router.get('/entry/entries', staffAndPartnersOnly, pageAction('sales_entry_enroll', 'view', null), getMyEntries);
+router.get('/entry/sales-people', staffAndPartnersOnly, pageAction('sales_entry_enroll', 'view', null), getSalesPeople);
 router.patch('/invites/:id/regenerate', pageAction('invite_links', 'edit', null, { inBranch: inviteInBranch }), regenerateInvite);
 
 // Programs by university (for invite creation)

@@ -704,6 +704,7 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   universityReviewedAt: 'universityReviewedAt',
   universityReviewedBy: 'universityReviewedBy',
   salesUserId: 'salesUserId',
+  enteredBy: 'enteredBy',
   altPhone: 'altPhone',
   dob: 'dob',
   fatherName: 'fatherName',
@@ -1051,6 +1052,7 @@ exports.Prisma.StudyCenterInviteScalarFieldEnum = {
   specializations: 'specializations',
   sessionIds: 'sessionIds',
   referredBy: 'referredBy',
+  createdById: 'createdById',
   branchId: 'branchId',
   status: 'status',
   expiresAt: 'expiresAt',
@@ -1784,6 +1786,7 @@ exports.OrganizationStatus = exports.$Enums.OrganizationStatus = {
 };
 
 exports.DepartmentType = exports.$Enums.DepartmentType = {
+  data_entry: 'data_entry',
   operations: 'operations',
   finance: 'finance',
   hr: 'hr',
@@ -1805,6 +1808,7 @@ exports.DepartmentSubType = exports.$Enums.DepartmentSubType = {
 };
 
 exports.UserRole = exports.$Enums.UserRole = {
+  sales_entry: 'sales_entry',
   superadmin: 'superadmin',
   org_admin: 'org_admin',
   ceo: 'ceo',

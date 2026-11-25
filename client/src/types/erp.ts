@@ -18,6 +18,7 @@ export type UserRole =
   | 'university_admin'
   | 'finance'
   | 'sales'
+  | 'sales_entry'
   | 'collections_admin'
   | 'collections'
   | 'employee'

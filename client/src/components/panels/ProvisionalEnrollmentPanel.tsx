@@ -39,8 +39,24 @@ function Section({ icon: Icon, title, children }: { icon: React.ElementType; tit
   );
 }
 
-export function ProvisionalEnrollmentPanel() {
+export function ProvisionalEnrollmentPanel({ entryEmployee }: { entryEmployee?: { id: string; name: string } } = {}) {
   const { user } = useAuth();
+  // Data-entry staff enrol for a sales employee, who gets the credit
+  const entryMode = user?.role === 'sales_entry' || (user as any)?.department?.type === 'data_entry';
+  const employeeKey = `salesEntry:employee:${user?.id}`;
+  const [salesPeople, setSalesPeople] = useState<{ id: string; name: string; designation?: string }[]>([]);
+  const [pickedUserId, setSalesUserId] = useState<string>(() => { try { return localStorage.getItem(employeeKey) || ''; } catch { return ''; } });
+  const salesUserId = entryEmployee?.id ?? pickedUserId;
+  useEffect(() => {
+    if (!entryMode || entryEmployee) return;
+    api.get('/sales/entry/sales-people')
+      .then((res) => {
+        const list = res.data.data || [];
+        setSalesPeople(list);
+        setSalesUserId((current) => (list.some((p: any) => p.id === current) ? current : ''));
+      })
+      .catch(() => toast.error('Could not load the sales employees'));
+  }, [entryMode, entryEmployee]);
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
   const mayCreate = mayOn(user, 'provisional_enrollment', 'create', true);
   const [programs, setPrograms] = useState<any[]>([]);
@@ -241,6 +257,10 @@ export function ProvisionalEnrollmentPanel() {
   };
 
   const handleSubmit = async () => {
+    if (entryMode && !salesUserId) {
+      toast.error('Choose the sales employee first');
+      return;
+    }
     if (!form.studentName || !form.studentPhone || !form.studentEmail || !form.programId || !form.initialPaymentAmount) {
       toast.error('Please fill in all details including the initial payment amount');
       return;
@@ -281,6 +301,7 @@ export function ProvisionalEnrollmentPanel() {
     try {
       // 1. Create Provisional Enrollment
       const res = await api.post('/enrollment/enroll', {
+        ...(entryMode && { salesUserId }),
         ...form,
         specialisation: form.specialisation || undefined,
         sessionId: form.sessionId || undefined,
@@ -328,6 +349,21 @@ export function ProvisionalEnrollmentPanel() {
         <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">Provisional Enrollment</h2>
         <p className="text-muted-foreground text-sm mt-1.5 max-w-2xl">Quickly enroll a student with minimal details and send directly to Finance for receipt verification.</p>
       </div>
+
+      {entryMode && !entryEmployee && (
+        <div className="rounded-3xl bg-white border border-slate-100 p-5 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="flex-1 min-w-0">
+            <label htmlFor="provisional-employee" className="text-sm font-semibold">Sales employee (gets the credit)</label>
+            <p className="text-xs text-muted-foreground">Targets, incentives and reports count for this person.</p>
+          </div>
+          <select id="provisional-employee" value={salesUserId}
+            onChange={(e) => { setSalesUserId(e.target.value); try { localStorage.setItem(employeeKey, e.target.value); } catch { /* not remembered */ } }}
+            className="h-11 w-full sm:w-72 rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            <option value="">Choose an employee</option>
+            {salesPeople.map((p) => <option key={p.id} value={p.id}>{p.name}{p.designation ? ` · ${p.designation}` : ''}</option>)}
+          </select>
+        </div>
+      )}
 
       <div className="grid lg:grid-cols-5 gap-5 sm:gap-6 items-start">
         {/* Left: details */}

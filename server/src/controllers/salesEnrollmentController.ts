@@ -13,6 +13,8 @@ import { emitToUser } from '../config/socket.js';
 import { historyList, appendHistory } from '../utils/statusHistory.js';
 import { enrollmentBranchWhere, type PageRequest } from '../access/pageGuard.js';
 import { restrictEnrollment, restrictStudent } from '../access/studentRules.js';
+import { notifySalesAndEnterer } from '../access/salesEntry.js';
+import { isEntryUser, entryMayActFor } from '../access/salesEntry.js';
 
 // ─── Public: Validate invite token and get form data ─────────────────────────
 
@@ -268,6 +270,8 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
       paymentPlan: req.body.paymentPlan || null,
       status: 'sales_verification_pending',
       salesUserId,
+      // The data-entry user who made the link also handles the paperwork
+      enteredBy: invite.createdById || null,
       statusHistory: [
         {
           status: 'submitted',
@@ -288,16 +292,13 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
 
   // Notify the sales user
   try {
-    await prisma.notification.create({
-      data: {
+    await notifySalesAndEnterer({ salesUserId }, {
         organizationId: orgId,
-        userId: salesUserId,
         title: 'New Student Application',
         message: `${studentName} has submitted an application for ${program.name} via your invite link and is awaiting your verification.`,
         type: 'general',
         priority: 'medium',
         link: 'student-applications',
-      },
     });
   } catch (_) { /* non-critical */ }
 
@@ -344,6 +345,14 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: PageRequest, 
   if (req.ownBranchOnly) {
     // Someone given this page sees everything in their branch
     whereClause.AND = [enrollmentBranchWhere(req.user.branchId)];
+  } else if (isEntryUser(req.user)) {
+    // Data-entry staff work for one sales employee at a time, whom they name
+    const named = String(req.query.salesUserId || '');
+    if (!(await entryMayActFor(req.user, named))) {
+      res.json({ success: true, count: 0, data: [], summary: {} });
+      return;
+    }
+    whereClause.salesUserId = named;
   } else if (!isGlobalAdmin) {
     whereClause.salesUserId = { in: allowedIds };
   }
@@ -421,16 +430,13 @@ export const approveSalesEnrollmentOps = asyncHandler(async (req: AuthRequest, r
   // Notify sales user
   try {
     if ((enrollment as any).salesUserId) {
-      await prisma.notification.create({
-        data: {
+      await notifySalesAndEnterer((enrollment as any), {
           organizationId: req.user.organizationId,
-          userId: (enrollment as any).salesUserId,
           title: 'Application Verified by Operations',
           message: `${enrollment.studentName}'s application has been verified and forwarded to Finance for payment.`,
           type: 'general',
           priority: 'medium',
           link: 'student-applications',
-        },
       });
     }
     // Notify finance admins
@@ -710,16 +716,13 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
         ? `\n\nStudent Portal Access:\nUser ID: ${generatedUid}\nPassword: ${generatedPassword}`
         : `\n\nStudent User ID: ${generatedUid}`;
 
-      await prisma.notification.create({
-        data: {
+      await notifySalesAndEnterer((enrollment as any), {
           organizationId: req.user.organizationId,
-          userId: (enrollment as any).salesUserId,
           title: '🎉 Student Credentials Generated!',
           message: `${enrollment.studentName} has been successfully verified & enrolled.${credsInfo}`,
           type: 'general',
           priority: 'high',
           link: 'student-applications',
-        },
       });
     }
   } catch (_) { /* non-critical */ }
@@ -776,16 +779,13 @@ export const rejectSalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
   // Notify sales user
   try {
     if ((enrollment as any).salesUserId) {
-      await prisma.notification.create({
-        data: {
+      await notifySalesAndEnterer((enrollment as any), {
           organizationId: req.user.organizationId,
-          userId: (enrollment as any).salesUserId,
           title: 'Application Rejected',
           message: `${enrollment.studentName}'s application was rejected by ${req.user.role === 'ops_admin' ? 'Operations' : 'Finance'}. Reason: ${remarks}`,
           type: 'general',
           priority: 'high',
           link: 'student-applications',
-        },
       });
     }
   } catch (_) { /* non-critical */ }
@@ -994,7 +994,8 @@ export const verifySalesEnrollment = asyncHandler(async (req: PageRequest, res: 
 
   // The creating sales user, or Sales Admin / Org Admin / Super Admin
   const isPrivilegedAdmin = ['sales_admin', 'org_admin', 'superadmin'].includes(req.user.role);
-  if (enrollment.organizationId !== orgId || (enrollment.salesUserId !== salesUserId && !isPrivilegedAdmin && !req.ownBranchOnly)) {
+  const handlesIt = enrollment.salesUserId === salesUserId || enrollment.enteredBy === salesUserId || await entryMayActFor(req.user, enrollment.salesUserId);
+  if (enrollment.organizationId !== orgId || (!handlesIt && !isPrivilegedAdmin && !req.ownBranchOnly)) {
     res.status(403).json({ success: false, message: 'Not authorized to verify this enrollment' });
     return;
   }
@@ -1291,7 +1292,7 @@ export const resubmitPaymentReceipt = asyncHandler(async (req: PageRequest, res:
     res.status(404).json({ success: false, message: 'Enrollment not found' });
     return;
   }
-  const canReupload = req.ownBranchOnly || enrollment.salesUserId === req.user.id ||
+  const canReupload = req.ownBranchOnly || enrollment.salesUserId === req.user.id || enrollment.enteredBy === req.user.id || await entryMayActFor(req.user, enrollment.salesUserId) ||
     ['sales_admin', 'superadmin', 'org_admin', 'branch_manager'].includes(req.user.role);
   if (!canReupload) {
     res.status(403).json({ success: false, message: 'You are not authorized to re-upload this payment receipt.' });
@@ -1577,16 +1578,13 @@ export const approveBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Re
       const counselorTitle = '✅ Application Approved by Sales Admin';
       const counselorMessage = `Your student application for ${enrollment.studentName}${programTitle} has been approved by Sales Admin (${req.user.name}) and forwarded to Operations.`;
 
-      const counselorNotif = await prisma.notification.create({
-        data: {
+      const counselorNotif = await notifySalesAndEnterer(enrollment, {
           organizationId: enrollment.organizationId,
-          userId: enrollment.salesUserId,
           title: counselorTitle,
           message: counselorMessage,
           type: 'general',
           priority: 'high',
           link: 'student-applications',
-        }
       });
 
       try {
@@ -1645,16 +1643,13 @@ export const rejectBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Res
       const counselorTitle = '❌ Application Rejected by Sales Admin';
       const counselorMessage = `Application for ${enrollment.studentName}${programTitle} was rejected by Sales Admin (${req.user.name}). Reason: ${remarks || 'No remarks provided.'}`;
 
-      const counselorNotif = await prisma.notification.create({
-        data: {
+      const counselorNotif = await notifySalesAndEnterer(enrollment, {
           organizationId: enrollment.organizationId,
-          userId: enrollment.salesUserId,
           title: counselorTitle,
           message: counselorMessage,
           type: 'general',
           priority: 'high',
           link: 'student-applications',
-        }
       });
 
       try {

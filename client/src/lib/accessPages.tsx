@@ -7,6 +7,7 @@ import { StudentFiltersPanel } from '@/components/panels/StudentFiltersPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
 import { SalesInvitePanel } from '@/components/panels/SalesInvitePanel';
+import { SalesEntryEnrollPanel } from '@/components/panels/SalesEntryEnrollPanel';
 import { ProvisionalEnrollmentPanel } from '@/components/panels/ProvisionalEnrollmentPanel';
 import { SalesStudentPipelinePanel } from '@/components/panels/SalesStudentPipelinePanel';
 import { SalesAdminReviewPanel } from '@/components/panels/SalesAdminReviewPanel';
@@ -106,6 +107,7 @@ const PAGES: AccessPage[] = [
   { key: 'invite_links', label: 'Generate Student Link', menuIds: ['invite_links'], render: () => <SalesInvitePanel /> },
   { key: 'provisional_enrollment', label: 'Provisional Enrollment', menuIds: ['provisional_enrollment'], render: () => <ProvisionalEnrollmentPanel /> },
   { key: 'admission_pipeline', label: 'Admission Pipeline', menuIds: ['admission_pipeline', 'admission_status_overview', 'student_applications', 'pending_admissions'], render: () => <SalesStudentPipelinePanel /> },
+  { key: 'sales_entry_enroll', label: 'Sales Entry: Enroll for a Sales Employee', menuIds: ['enroll', 'sales_entry_enroll'], render: () => <SalesEntryEnrollPanel /> },
   { key: 'admission_approval', label: 'Admission Approval', menuIds: ['admission_approval', 'sales_enrollment_review'], render: () => <SalesAdminReviewPanel /> },
   { key: 'student_portal_management', label: 'Student Portal Management', menuIds: ['student_portal_management'], render: () => <StudentPortalManagementPanel /> },
   { key: 'payments', label: 'Payments', menuIds: ['payments', 'payment_status', 'pending_payment', 'payment'], render: () => <PaymentsPanel /> },

@@ -299,6 +299,7 @@ export function UserFormDialog({ open, onClose, onSaved, editingUser = null, def
                   <SelectItem value="ops_sub_admin">Ops Sub Admin</SelectItem>
                   <SelectItem value="sales_admin">Sales Admin</SelectItem>
                   <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
+                  <SelectItem value="sales_entry">Sales Entry</SelectItem>
                   <SelectItem value="collections_admin">Collections Admin</SelectItem>
                   {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
                   <SelectItem value="general_manager">General Manager</SelectItem>

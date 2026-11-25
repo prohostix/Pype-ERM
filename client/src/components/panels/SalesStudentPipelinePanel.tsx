@@ -39,6 +39,7 @@ interface Enrollment {
   departmentRemarks?: string;
   financeRemarks?: string;
   salesUserId?: string;
+  enteredBy?: string;
   rejectedBySalesAdmin?: boolean;
   receiptUrl?: string;
   statusHistory: StatusHistoryEntry[];
@@ -107,7 +108,7 @@ const ROLE_LABELS: Record<string, string> = {
   system: 'System',
 };
 
-export function SalesStudentPipelinePanel() {
+export function SalesStudentPipelinePanel({ forEmployee }: { forEmployee?: { id: string; name: string } } = {}) {
   const PAGE_SIZE = 10;
   const [page, setPage] = useState(1);
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
@@ -143,7 +144,7 @@ export function SalesStudentPipelinePanel() {
     mayEdit &&
     (e.status === 'provisional_finance_rejected' || (e.status === 'rejected' && !!e.financeRemarks)) &&
     !!user?.id &&
-    (granted || e.salesUserId === user.id || ['sales_admin', 'superadmin', 'org_admin', 'branch_manager'].includes(user?.role || ''));
+    (granted || !!forEmployee || e.salesUserId === user.id || e.enteredBy === user.id || ['sales_admin', 'superadmin', 'org_admin', 'branch_manager'].includes(user?.role || ''));
 
   const openVerifyDialog = (enrollment: Enrollment) => {
     setVerifyingStudent(enrollment);
@@ -153,7 +154,7 @@ export function SalesStudentPipelinePanel() {
   const fetchPipeline = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/sales/student-applications');
+      const res = await api.get('/sales/student-applications', { params: forEmployee ? { salesUserId: forEmployee.id } : undefined });
       setEnrollments(res.data.data || []);
       setSummary(res.data.summary || null);
     } catch (e: any) {
@@ -245,6 +246,7 @@ export function SalesStudentPipelinePanel() {
           <StudentsPanel
             triggerOpen={enrollDialogOpen}
             isSalesMode={true}
+            entryEmployee={forEmployee}
             onOpenChange={(open) => {
               setEnrollDialogOpen(open);
               if (!open) {
@@ -481,7 +483,7 @@ export function SalesStudentPipelinePanel() {
                       )}
 
                       {/* Sales Admin rejected it: the creating sales user or sales admin/manager can edit everything in the same form and re-request */}
-                      {mayEdit && isSalesAdminRejection(e) && !!user?.id && (granted || e.salesUserId === user.id || ['sales_admin', 'superadmin', 'org_admin', 'branch_manager'].includes(user?.role || '')) && (
+                      {mayEdit && isSalesAdminRejection(e) && !!user?.id && (granted || !!forEmployee || e.salesUserId === user.id || e.enteredBy === user.id || ['sales_admin', 'superadmin', 'org_admin', 'branch_manager'].includes(user?.role || '')) && (
                         <div className="mt-4">
                           <Button
                             variant="default"

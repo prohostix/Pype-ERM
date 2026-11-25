@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Copy, Check, RefreshCw, Link, RotateCcw, ChevronRight, ChevronLeft, Calendar, Clock, GraduationCap, BookOpen } from 'lucide-react';
+import { ExternalLink, UserRound, Plus, Copy, Check, RefreshCw, Link, RotateCcw, ChevronRight, ChevronLeft, Calendar, Clock, GraduationCap, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -9,7 +9,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
-import { mayOn } from '@/lib/access';
+import { isGiven, mayOn } from '@/lib/access';
 
 interface University { id: string; name: string; code: string; }
 interface Program { id: string; name: string; code: string; universityId: string; courseType: string; specialisations?: string[]; }
@@ -23,6 +23,7 @@ interface Invite {
   status: 'pending' | 'used' | 'expired';
   expiresAt: string;
   inviteUrl?: string;
+  referrer?: { id: string; name: string };
   createdAt: string;
 }
 
@@ -33,11 +34,19 @@ const STATUS_COLOR: Record<string, string> = {
 };
 const STATUS_DOT: Record<string, string> = { pending: 'bg-[#54b947]', used: 'bg-slate-400', expired: 'bg-rose-500' };
 
-export function SalesInvitePanel() {
+export function SalesInvitePanel({ entryEmployee }: { entryEmployee?: { id: string; name: string } } = {}) {
   const { user } = useAuth();
   // The role decides unless an Org Admin has set something for this user (the server enforces it)
   const mayCreate = mayOn(user, 'invite_links', 'create', true);
   const mayEdit = mayOn(user, 'invite_links', 'edit', true);
+  // Data-entry staff pick the sales employee, who gets the credit
+  const entryMode = user?.role === 'sales_entry' || (user as any)?.department?.type === 'data_entry' || isGiven(user, 'sales_entry_enroll');
+  const lastKey = `salesEntry:employee:${user?.id}`;
+  const [salesPeople, setSalesPeople] = useState<{ id: string; name: string; designation?: string; branch?: { name: string } | null }[]>([]);
+  const [pickedUserId, setSalesUserId] = useState<string>(() => { try { return localStorage.getItem(lastKey) || ''; } catch { return ''; } });
+  // The Sales Entry page chooses the employee for everything below it
+  const fixedEmployee = Boolean(entryEmployee);
+  const salesUserId = entryEmployee?.id ?? pickedUserId;
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'used' | 'expired'>('all');
   const [invites, setInvites] = useState<Invite[]>([]);
   const [universities, setUniversities] = useState<University[]>([]);
@@ -137,7 +146,26 @@ export function SalesInvitePanel() {
   const toggleSession = (id: string) =>
     setSelectedSessions(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
 
+  useEffect(() => {
+    if (!entryMode || fixedEmployee) return;
+    api.get('/sales/entry/sales-people')
+      .then((res) => {
+        const list = res.data.data || [];
+        setSalesPeople(list);
+        // A remembered employee who has since left is no longer offered
+        setSalesUserId((current) => (list.some((p: any) => p.id === current) ? current : ''));
+      })
+      .catch(() => toast.error('Could not load the sales employees'));
+  }, [entryMode, fixedEmployee]);
+
+  const chooseEmployee = (id: string) => {
+    setSalesUserId(id);
+    try { localStorage.setItem(lastKey, id); } catch { /* the choice just is not remembered */ }
+  };
+  const openApplication = (inv: Invite) => window.open(`${window.location.origin}/student-apply?token=${inv.token}`, '_blank', 'noopener');
+
   const handleOpenDialog = async () => {
+    if (entryMode && !salesUserId) { toast.error('Choose the sales employee first'); return; }
     setOpen(true);
     let currentStep: 1 | 2 | 3 | 4 = 1;
     let maxSteps: 2 | 3 | 4 = 2;
@@ -252,7 +280,9 @@ export function SalesInvitePanel() {
   const handleGenerate = async () => {
     setSubmitting(true);
     try {
+      if (entryMode && !salesUserId) { toast.error('Choose the sales employee first'); setSubmitting(false); return; }
       const res = await api.post('/sales/invites', {
+        ...(entryMode && { salesUserId }),
         universityIds: selectedUnis,
         programIds: selectedPrograms,
         specializations: selectedSpecializations,
@@ -265,7 +295,11 @@ export function SalesInvitePanel() {
       if (newToken) {
         const url = `${window.location.origin}/student-apply?token=${newToken}`;
         navigator.clipboard.writeText(url).catch(() => {});
-        toast.info('Link copied to clipboard');
+        if (entryMode) {
+          toast.success('Link ready and copied', { action: { label: 'Fill application', onClick: () => window.open(url, '_blank', 'noopener') } });
+        } else {
+          toast.info('Link copied to clipboard');
+        }
       }
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to generate invite');
@@ -336,7 +370,8 @@ export function SalesInvitePanel() {
     used: invites.filter(i => i.status === 'used').length,
     expired: invites.filter(i => i.status === 'expired').length,
   };
-  const visibleInvites = invites.filter(i => statusFilter === 'all' || i.status === statusFilter);
+  const [allEmployees, setAllEmployees] = useState(false);
+  const visibleInvites = invites.filter(i => (statusFilter === 'all' || i.status === statusFilter) && (!fixedEmployee || allEmployees || i.referrer?.id === entryEmployee!.id));
 
   const ROW = 'flex items-center gap-3 rounded-2xl px-4 py-3 cursor-pointer border transition-colors';
 
@@ -345,8 +380,10 @@ export function SalesInvitePanel() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">Invite Links</h2>
-          <p className="text-muted-foreground text-sm mt-1.5 max-w-2xl">Generate invite links for prospective academic partners.</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">{fixedEmployee ? `Application links for ${entryEmployee!.name}` : entryMode ? 'Enroll a Student' : 'Invite Links'}</h2>
+          <p className="text-muted-foreground text-sm mt-1.5 max-w-2xl">
+            {fixedEmployee ? 'Make a link, then fill the application for the student, or send the link to them.' : entryMode ? 'Choose the sales employee, make a link, then fill the application yourself or send it to the student.' : 'Generate invite links for prospective academic partners.'}
+          </p>
         </div>
         <div className="flex gap-2.5 shrink-0">
           <Button variant="outline" onClick={fetchInvites} disabled={loading} className="h-11 px-5 rounded-full bg-white border-slate-200 text-sm font-medium gap-2 shadow-sm hover:bg-slate-50">
@@ -359,6 +396,21 @@ export function SalesInvitePanel() {
           )}
         </div>
       </div>
+
+      {entryMode && !fixedEmployee && (
+        <div className="rounded-3xl bg-white border border-slate-100 p-5 flex flex-col sm:flex-row sm:items-center gap-3">
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eaf6e6] text-[#256c1d] shrink-0"><UserRound className="w-5 h-5" /></span>
+          <div className="flex-1 min-w-0">
+            <Label htmlFor="sales-employee" className="text-sm font-semibold">Sales employee (gets the credit)</Label>
+            <p className="text-xs text-muted-foreground">Targets, incentives and reports count for this person.</p>
+          </div>
+          <select id="sales-employee" value={salesUserId} onChange={(e) => chooseEmployee(e.target.value)}
+            className="h-11 w-full sm:w-72 rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            <option value="">Choose an employee</option>
+            {salesPeople.map((p) => <option key={p.id} value={p.id}>{p.name}{p.designation ? ` · ${p.designation}` : ''}</option>)}
+          </select>
+        </div>
+      )}
 
       {/* Summary */}
       {invites.length > 0 && (
@@ -382,6 +434,13 @@ export function SalesInvitePanel() {
             </Card>
           ))}
         </div>
+      )}
+
+      {fixedEmployee && (
+        <label className="flex w-fit items-center gap-2 text-sm text-slate-600 cursor-pointer">
+          <Checkbox checked={allEmployees} onCheckedChange={(v) => setAllEmployees(v === true)} />
+          Also show links I made for other employees
+        </label>
       )}
 
       {/* Status filter */}
@@ -433,6 +492,7 @@ export function SalesInvitePanel() {
                       <span className={cn('inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full capitalize', STATUS_COLOR[inv.status])}>
                         <span className={cn('w-1.5 h-1.5 rounded-full', STATUS_DOT[inv.status])} />{inv.status}
                       </span>
+                      {entryMode && inv.referrer && <span className="text-xs font-semibold text-slate-700">For {inv.referrer.name}</span>}
                       <span className="text-xs text-muted-foreground flex items-center gap-1"><Clock className="w-3 h-3" />Expires {new Date(inv.expiresAt).toLocaleDateString()}</span>
                     </div>
                     <p className="text-sm font-mono text-slate-600 truncate mt-2 px-3 py-1.5 rounded-full bg-[#f4f6f3] w-fit max-w-full">{inv.token.substring(0, 24)}...</p>
@@ -450,6 +510,11 @@ export function SalesInvitePanel() {
                   </div>
                 </div>
                 <div className="flex gap-2 shrink-0">
+                  {entryMode && inv.status === 'pending' && (
+                    <Button variant="outline" onClick={() => openApplication(inv)} className="h-11 px-5 rounded-full bg-white border-slate-200 font-semibold gap-2 hover:bg-[#eaf6e6]">
+                      <ExternalLink className="w-4 h-4" />Fill application
+                    </Button>
+                  )}
                   {inv.status === 'pending' && (
                     <Button onClick={() => copyLink(inv)} className="h-11 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold gap-2">
                       {copied === inv.id ? <Check className="w-4 h-4 text-[#8ae47e]" /> : <Copy className="w-4 h-4" />}

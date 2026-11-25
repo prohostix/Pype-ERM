@@ -10,7 +10,7 @@ import { changeError, needsRow, type Change } from '../access/changes.js';
 
 const ELIGIBLE_ROLES = [
   'general_manager', 'branch_manager', 'ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance',
-  'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'employee',
+  'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'sales_entry', 'collections_admin', 'collections', 'employee',
 ].filter((role) => acceptsOverrides({ role }));
 
 const SETUP_MESSAGE = 'Access changes cannot be saved yet: the database table has not been created.';

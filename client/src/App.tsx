@@ -16,6 +16,7 @@ import { getOpsNavItems } from '@/pages/ModernOpsDashboard';
 import { getHRNavItems } from '@/pages/ModernHRDashboard';
 import { getFinanceNavItems } from '@/pages/ModernFinanceDashboard';
 import { getSalesNavItems } from '@/pages/ModernSalesDashboard';
+import { getSalesEntryNavItems } from '@/pages/ModernSalesEntryDashboard';
 import { getBranchManagerNavItems } from '@/pages/ModernBranchManagerDashboard';
 import { getExecutiveNavItems } from '@/pages/ModernCEODashboard';
 import { getCollectionsNavItems } from '@/pages/ModernCollectionsDashboard';
@@ -83,6 +84,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   users: 'users',
   departments: 'departments',
   tasks: 'tasks',
+  my_profile: 'my_profile',
   meetings: 'meetings',
   // HR
   employees: 'employees',
@@ -193,6 +195,7 @@ function App() {
       case 'sales_admin':
       case 'sales_sub_admin':
       case 'sales': return 'overview';
+      case 'sales_entry': return 'overview';
       case 'student':
       case 'center_student': return 'overview';
       case 'academic_counselor': return 'dashboard';
@@ -344,7 +347,7 @@ function App() {
 
   const tables = useMemo(() => {
     // Pages blocked or added for this person are applied on top of the role menu
-    const items = applyAccessToMenu(user, withAIReports(getAvailableTables()));
+    const items = withMyProfile(applyAccessToMenu(user, withAIReports(getAvailableTables())));
     const orgFeatures = getOrgFeatures(user);
     const isSuper = user?.role === 'superadmin';
     // Feature not granted to this organization: drop the menu entry (and its now-empty section header).
@@ -423,6 +426,17 @@ function App() {
     const first = items.findIndex((t) => !t.isSection);
     const at = first === -1 ? items.length : first + 1;
     return [...items.slice(0, at), { id: 'ai_reports', label: '✨ AI Reports' }, ...items.slice(at)];
+  }
+
+  /** Every user type can open My Profile. Menus that already list it keep their own entry. */
+  function withMyProfile(items: TableItem[]): TableItem[] {
+    if (!user || items.length === 0 || items.some((t) => t.id === 'my_profile')) return items;
+    const hasSections = items.some((t) => t.isSection);
+    return [
+      ...items,
+      ...(hasSections ? [{ id: '__account_section', label: 'Account', isSection: true }] : []),
+      { id: 'my_profile', label: 'My Profile' },
+    ];
   }
 
   function getAvailableTables(): TableItem[] {
@@ -537,6 +551,10 @@ function App() {
       return getSalesNavItems(false);
     }
 
+    if (user.role === 'sales_entry') {
+      return getSalesEntryNavItems();
+    }
+
     if (['collections_admin', 'collections'].includes(user.role)) {
       return getCollectionsNavItems();
     }
@@ -599,6 +617,8 @@ function App() {
             }
           } else if (deptType === 'sales') {
             return getSalesNavItems(false);
+          } else if (deptType === 'data_entry') {
+            return getSalesEntryNavItems();
           } else if (deptType === 'collections') {
             return getCollectionsNavItems();
           }
@@ -668,7 +688,7 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['org_admin', 'ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'branch_manager', 'faculty', 'study_abroad_admin'];
+    const roleDashboardRoles = ['org_admin', 'ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'sales_entry', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'branch_manager', 'faculty', 'study_abroad_admin'];
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student' && user?.role !== 'center_student';
@@ -1120,6 +1140,7 @@ function App() {
         logout();
       }}
       userName={user?.name}
+      userAvatar={user?.avatar}
       userRole={user?.role}
       userId={user?.id?.toString()}
       organizationId={

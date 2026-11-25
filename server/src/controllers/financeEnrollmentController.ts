@@ -6,6 +6,7 @@ import { provisionStudentAfterApproval } from '../utils/studentProvisioning.js';
 import { enqueueNotification } from '../utils/notificationQueue.js';
 import { appendHistory } from '../utils/statusHistory.js';
 import { enrollmentBranchWhere, withoutPasswords, type PageRequest } from '../access/pageGuard.js';
+import { notifySalesAndEnterer } from '../access/salesEntry.js';
 
 export const getAllEnrollments = asyncHandler(async (req: PageRequest, res: Response) => {
   const { status, search } = req.query as Record<string, string>;
@@ -260,16 +261,13 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
   // Notify sales user
   try {
     if (enrollment.salesUserId) {
-      await prisma.notification.create({
-        data: {
+      await notifySalesAndEnterer(enrollment, {
           organizationId: enrollment.organizationId,
-          userId: enrollment.salesUserId,
           title: '🎉 Student Enrolled & Credentials Generated!',
           message: `${enrollment.studentName} has been verified by Finance and successfully enrolled.`,
           type: 'general',
           priority: 'high',
           link: 'student-applications',
-        },
       });
     }
   } catch (_) { /* non-critical */ }
@@ -315,16 +313,13 @@ export const rejectFinanceEnrollment = asyncHandler(async (req: AuthRequest, res
   // Notify sales user
   try {
     if (enrollment.salesUserId) {
-      await prisma.notification.create({
-        data: {
+      await notifySalesAndEnterer(enrollment, {
           organizationId: enrollment.organizationId,
-          userId: enrollment.salesUserId,
           title: 'Payment Receipt Rejected',
           message: `${enrollment.studentName}'s payment receipt was rejected by Finance. Reason: ${req.body.remarks || 'Receipt rejected'}. Please re-upload the receipt.`,
           type: 'general',
           priority: 'high',
           link: 'student-applications',
-        },
       });
     }
   } catch (_) { /* non-critical */ }
@@ -528,16 +523,13 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
   // Notify sales user
   try {
     if (updatedEnrollment.salesUserId) {
-      await prisma.notification.create({
-        data: {
+      await notifySalesAndEnterer(updatedEnrollment, {
           organizationId: updatedEnrollment.organizationId,
-          userId: updatedEnrollment.salesUserId,
           title: '🎉 Student Enrolled & Credentials Generated!',
           message: `${updatedEnrollment.studentName}'s payment receipt has been verified by Finance and the student is officially enrolled.`,
           type: 'general',
           priority: 'high',
           link: 'student-applications',
-        },
       });
     }
   } catch (_) { /* non-critical */ }
@@ -698,16 +690,13 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
   // Notify sales user
   try {
     if (enrollment.salesUserId) {
-      await prisma.notification.create({
-        data: {
+      await notifySalesAndEnterer(enrollment, {
           organizationId: enrollment.organizationId,
-          userId: enrollment.salesUserId,
           title: 'Provisional Receipt Verified',
           message: `${enrollment.studentName}'s provisional fee receipt was verified by Finance. Please complete the student application.`,
           type: 'general',
           priority: 'high',
           link: 'student-applications',
-        },
       });
     }
   } catch (_) { /* non-critical */ }
@@ -756,16 +745,13 @@ export const rejectProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
 
   try {
     if (enrollment.salesUserId) {
-      await prisma.notification.create({
-        data: {
+      await notifySalesAndEnterer(enrollment, {
           organizationId: enrollment.organizationId,
-          userId: enrollment.salesUserId,
           title: 'Provisional Receipt Rejected',
           message: `${enrollment.studentName}'s provisional fee receipt was rejected by Finance. Reason: ${remarks}. Please re-upload the receipt.`,
           type: 'general',
           priority: 'high',
           link: 'student-applications',
-        },
       });
     }
   } catch (_) { /* non-critical */ }

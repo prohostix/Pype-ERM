@@ -23,6 +23,7 @@ const ROLE_HIERARCHY: Record<string, number> = {
   student: 4,
   bde: 4,
   sales_agent: 4,
+  sales_entry: 4,
   employee: 4
 };
 import prisma from '../lib/prisma.js';

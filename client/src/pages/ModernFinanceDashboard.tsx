@@ -30,6 +30,7 @@ import { ComingSoonPanel } from '@/components/panels/ComingSoonPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
 import { PaymentGatewayPanel } from '@/components/panels/PaymentGatewayPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
+import { MyProfilePanel } from '@/components/panels/MyProfilePanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { StudentPaymentsLogPanel } from '@/components/panels/StudentPaymentsLogPanel';
 import { CollectionReportPanel } from '@/components/panels/CollectionReportPanel';
@@ -99,6 +100,7 @@ export function ModernFinanceDashboard({ initialTab, onNavigate }: { initialTab?
       case 'incentive_report': return <ComingSoonPanel title="Incentive Report" description="Track incentives earned and paid out to the sales team." note="The incentive report isn't available yet. You'll be able to review earned and paid incentives from this page once it launches." />;
       case 'leaves': return <LeavesPanel />;
       case 'my_leave_request': return <LeavesPanel isMyPortal />;
+      case 'my_profile': return <MyProfilePanel />;
       case 'my_attendance': return <AttendancePanel isMyPortal={true} />;
       case 'notice_board': return <NoticeBoardPanel />;
       case 'pay_slips': return <ComingSoonPanel title="Pay Slips" description="Your monthly salary statements." note="Pay slips aren't available yet. They will appear here once payroll is processed." />;
@@ -163,6 +165,7 @@ export function getFinanceNavItems() {
     { id: 'incentive_report', label: 'Incentive Report' },
     
     { id: '__my_account_section', label: '👤 My Account', isSection: true },
+    { id: 'my_profile', label: 'My Profile' },
     { id: 'my_attendance', label: 'My Attendance' },
     { id: 'my_leave_request', label: 'My Leave Request' },
     { id: 'pay_slips', label: 'Pay Slips' },

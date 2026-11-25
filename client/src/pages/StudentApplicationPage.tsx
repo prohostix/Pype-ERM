@@ -299,6 +299,10 @@ export default function StudentApplicationPage() {
   });
   const [consentChecked, setConsentChecked] = useState(false);
 
+  // A half-filled application is kept in this browser for two weeks, so data entry can stop and carry on
+  const draftKey = `studentApplicationDraft:${token}`;
+  const [draftRestored, setDraftRestored] = useState(false);
+
   useEffect(() => {
     if (!token) {
       setError('Invalid link — no token found.');
@@ -308,6 +312,16 @@ export default function StudentApplicationPage() {
     axios.get(`${API_BASE}/public/student-apply/${token}`)
       .then(res => {
         setInviteData(res.data.data);
+        try {
+          const saved = JSON.parse(localStorage.getItem(draftKey) || 'null');
+          if (saved?.form && Date.now() - saved.at < 14 * 24 * 3600_000) {
+            const data = res.data.data;
+            const validProgram = (data.programs || []).some((p: any) => p.id === saved.form.programId);
+            const validSession = (data.sessions || []).some((x: any) => x.id === saved.form.sessionId);
+            setForm((f) => ({ ...f, ...saved.form, programId: validProgram ? saved.form.programId : f.programId, sessionId: validSession ? saved.form.sessionId : f.sessionId }));
+            setDraftRestored(true);
+          }
+        } catch { /* an unreadable draft is ignored */ }
         if (res.data.data?.programs?.length === 1) {
           setForm(f => ({ ...f, programId: res.data.data.programs[0].id }));
         }
@@ -322,6 +336,14 @@ export default function StudentApplicationPage() {
         setLoading(false);
       });
   }, [token]);
+
+  useEffect(() => {
+    if (!token || !inviteData || submitted) return;
+    const timer = setTimeout(() => {
+      try { localStorage.setItem(draftKey, JSON.stringify({ at: Date.now(), form })); } catch { /* storage may be full or blocked */ }
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [form, inviteData, submitted, token, draftKey]);
 
   useEffect(() => {
     if (form.programId && inviteData) {
@@ -370,6 +392,7 @@ export default function StudentApplicationPage() {
     setError('');
     try {
       await axios.post(`${API_BASE}/public/student-apply/${token}`, form);
+      try { localStorage.removeItem(draftKey); } catch { /* nothing to clear */ }
       setSubmitted(true);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Submission failed. Please try again.');
@@ -471,6 +494,15 @@ export default function StudentApplicationPage() {
               <CardDescription className="text-base mt-3 font-medium text-slate-500">Please fill in your details accurately to apply for enrollment</CardDescription>
             </CardHeader>
             <CardContent className="p-5 sm:p-8 md:p-12">
+              {draftRestored && (
+                <div className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#eaf6e6] px-5 py-3 text-sm text-[#256c1d]">
+                  <span>We brought back what you had already filled in.</span>
+                  <button type="button" className="font-semibold underline"
+                    onClick={() => { try { localStorage.removeItem(draftKey); } catch { /* nothing to clear */ } window.location.reload(); }}>
+                    Start again
+                  </button>
+                </div>
+              )}
               <form onSubmit={handleSubmit} className="space-y-12">
                 {/* Admission Details */}
                 <div className="space-y-6">

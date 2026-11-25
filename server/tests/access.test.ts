@@ -12,6 +12,7 @@ import { leaveVisibilityWhere } from '../src/utils/leaveScope.js';
 import { givenUserError } from '../src/utils/userGuards.js';
 import { withoutPortalLogins } from '../src/access/partnerSecrets.js';
 import { withoutPayDetails } from '../src/access/profileRules.js';
+import { isEntryUser, salesPersonWhere } from '../src/access/salesEntry.js';
 import { studentBranchWhere } from '../src/access/studentRules.js';
 import { partnerBranchWhere, enrollmentBranchWhere } from '../src/access/pageGuard.js';
 import { hasPaymentsScreen, invoiceBranchWhere, isGrantedReader } from '../src/access/invoiceRules.js';
@@ -391,6 +392,29 @@ test('Allow on a full-access page gives every action and the whole organization'
   assert.equal(can(mixed, 'academic_partners', 'delete'), false);
   assert.equal(can(resolveAccess(hr, [row('view', 'allow', { featureKey: 'universities' })]), 'universities', 'edit'), false);
   for (const key of ['academic_centers', 'study_abroad']) assert.equal(FEATURES.find((f) => f.key === key)!.fullAccess, true, key);
+});
+
+test('Sales Entry staff: who they are and what they get', () => {
+  assert.equal(isEntryUser({ role: 'sales_entry' }), true);
+  assert.equal(isEntryUser({ role: 'employee', department: { type: 'data_entry' } }), true);
+  assert.equal(isEntryUser({ role: 'employee', department: { type: 'sales' } }), false);
+  assert.equal(isEntryUser({ role: 'sales' }), false);
+  const entry = { ...hr, role: 'sales_entry', departmentType: null };
+  assert.deepEqual(allowed(entry, [], 'sales_entry_enroll'), ['view', 'create']);
+  assert.deepEqual(allowed(entry, [], 'admission_pipeline'), []);
+  assert.deepEqual(allowed(entry, [], 'provisional_enrollment'), ['view', 'create']);
+  assert.deepEqual(allowed(entry, [], 'students'), []);
+  assert.deepEqual(allowed(entry, [], 'invoices'), []);
+  assert.deepEqual(allowed({ ...hr, role: 'employee', departmentType: 'data_entry' }, [], 'sales_entry_enroll'), ['view', 'create']);
+  assert.deepEqual(allowed(hr, [], 'sales_entry_enroll'), []);
+});
+
+test('only active sales staff can be named, inside the entry user\'s branch', () => {
+  const where: any = salesPersonWhere('o', 'b');
+  assert.equal(where.organizationId, 'o');
+  assert.equal(where.branchId, 'b');
+  assert.deepEqual(where.status.notIn, ['inactive', 'resigned']);
+  assert.equal(salesPersonWhere('o', null).branchId, undefined);
 });
 
 test('requests are matched to the page they belong to', () => {

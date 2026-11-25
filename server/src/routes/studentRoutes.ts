@@ -39,6 +39,10 @@ import { studentAction, studentContext, studentNotify, studentRead, studentUpdat
 import { pageAction } from '../access/pageGuard.js';
 
 const router = express.Router();
+const noEntryList = (req: AuthRequest, res: express.Response, next: express.NextFunction) => {
+  if (req.user.role === 'sales_entry') { res.status(403).json({ success: false, message: 'You do not have permission to do this' }); return; }
+  next();
+};
 
 router.use(protect);
 
@@ -76,7 +80,8 @@ router.post('/:id/documents', studentAction('edit', ['org_admin', 'superadmin', 
 router.put('/:id/documents/:docIndex/status', studentAction('edit', ['org_admin', 'superadmin', 'ops_admin', 'ops_sub_admin', 'employee']), updateDocumentStatus);
 router.put('/:id/photo/status', studentAction('edit', ['org_admin', 'superadmin', 'ops_admin', 'ops_sub_admin', 'employee']), updatePhotoStatus);
 
-router.route('/').get(getStudents).post(studentAction('create', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin', 'general_manager']), createStudent);
+// Data-entry staff enrol through the direct wizard but cannot list students
+router.route('/').get(noEntryList, getStudents).post(studentAction('create', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin', 'general_manager', 'sales_entry']), createStudent);
 router.route('/:id').get(studentRead, getStudent).put(studentUpdate(['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin']), updateStudent).delete(studentAction('delete', ['org_admin', 'superadmin']), deleteStudent);
 router.put('/:id/progress/:stepId', studentAction('edit', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin']), upload.single('proof'), updateAdmissionProgress);
 router.put('/:id/academic-progress', studentAction('edit', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin']), updateStudentAcademicProgress);

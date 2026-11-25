@@ -4,6 +4,8 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { enrollmentBranchWhere, type PageRequest } from '../access/pageGuard.js';
 import { restrictEnrollment, restrictStudent } from '../access/studentRules.js';
+import { notifySalesAndEnterer } from '../access/salesEntry.js';
+import { isEntryUser, entryMayActFor } from '../access/salesEntry.js';
 
 export const getPendingReviews = asyncHandler(async (req: AuthRequest, res: Response) => {
   const enrollments = await prisma.enrollment.findMany({ where: { organizationId: req.user.organizationId, status: 'document_review' }, include: { program: true, studyCenter: true } });
@@ -200,10 +202,8 @@ export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: 
   // Notify sales user
   if (existing.salesUserId) {
     try {
-      await prisma.notification.create({
-        data: {
+      await notifySalesAndEnterer(existing, {
           organizationId: req.user.organizationId,
-          userId: existing.salesUserId,
           title: isUpgrade ? '✅ Upgrade Application Approved by Operations' : '✅ Enrollment Approved by Operations',
           message: isUpgrade
             ? `Operations verified past & current enrollments for ${existing.studentName}. Application forwarded to Finance review.`
@@ -211,7 +211,6 @@ export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: 
           type: 'general',
           priority: 'high',
           link: 'sales_pipeline'
-        }
       });
     } catch (_) {}
   }
@@ -287,16 +286,13 @@ export const rejectDeptEnrollment = asyncHandler(async (req: AuthRequest, res: R
   // Notify sales user
   if (existing.salesUserId) {
     try {
-      await prisma.notification.create({
-        data: {
+      await notifySalesAndEnterer(existing, {
           organizationId: req.user.organizationId,
-          userId: existing.salesUserId,
           title: isUpgrade ? '❌ Upgrade Application Rejected by Operations' : '❌ Enrollment Rejected by Operations',
           message: `Operations rejected application for ${existing.studentName}: ${remarksText}. Please review documents and resubmit.`,
           type: 'general',
           priority: 'high',
           link: 'sales_pipeline'
-        }
       });
     } catch (_) {}
   }
@@ -312,7 +308,7 @@ export const resubmitUpgradeEnrollment = asyncHandler(async (req: AuthRequest, r
     where: { id, organizationId: req.user.organizationId }
   });
 
-  if (!existing) {
+  if (!existing || (isEntryUser(req.user) && !(await entryMayActFor(req.user, existing.salesUserId)))) {
     res.status(404).json({ success: false, message: 'Enrollment not found' });
     return;
   }

@@ -30,6 +30,7 @@ import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { ActivityLogPanel } from '@/components/panels/ActivityLogPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
+import { MyProfilePanel } from '@/components/panels/MyProfilePanel';
 import { BranchHierarchyPanel } from '@/components/panels/BranchHierarchyPanel';
 import { TargetsPanel } from '@/components/panels/TargetsPanel';
 import { SalesInvitePanel } from '@/components/panels/SalesInvitePanel';
@@ -100,6 +101,7 @@ export function getExecutiveNavItems(role?: string) {
     { id: 'announcements', label: 'Announcements' },
     { id: 'assets', label: 'Assets' },
     { id: '__portal_section', label: 'My Portal', isSection: true },
+    { id: 'my_profile', label: 'My Profile' },
     { id: 'my_leaves', label: 'My Leaves' },
     { id: 'my_attendance', label: 'My Attendance' },
     { id: 'my_payslips', label: 'Pay Slips' },
@@ -127,6 +129,7 @@ function renderSharedPanel(tab: string) {
     case 'finance_enrollments': return <FinanceEnrollmentsPanel />;
     case 'announcements': return <AnnouncementsPanel />;
     case 'assets': return <AssetManagementPanel />;
+    case 'my_profile': return <MyProfilePanel />;
     case 'my_leaves': return <LeavesPanel isMyPortal />;
     case 'my_attendance': return <AttendancePanel isMyPortal />;
     case 'my_payslips': return <PayrollPanel />;

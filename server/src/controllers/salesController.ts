@@ -70,6 +70,8 @@ export const convertLead = asyncHandler(async (req: AuthRequest, res: Response) 
 import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
 import { partnerBranchWhere, targetBranchWhere, userInReach, refuseOwnRecord, type PageRequest } from '../access/pageGuard.js';
 import { withoutPortalLogins } from '../access/partnerSecrets.js';
+import { isEntryUser, salesPersonWhere } from '../access/salesEntry.js';
+import { can } from '../access/resolve.js';
 
 // Targets
 export const getTargets = asyncHandler(async (req: PageRequest, res: Response) => {
@@ -151,12 +153,156 @@ export const deleteTarget = asyncHandler(async (req: PageRequest, res: Response)
 });
 
 // Invites
+/** The sales employees someone doing data entry may choose from. */
+export const getSalesPeople = asyncHandler(async (req: PageRequest, res: Response) => {
+  if (!isEntryUser(req.user) && !(req.access && can(req.access, 'sales_entry_enroll', 'view'))) {
+    res.status(403).json({ success: false, message: 'You do not have permission to do this' });
+    return;
+  }
+  const search = String(req.query.search || '').trim();
+  const people = await prisma.user.findMany({
+    where: {
+      ...salesPersonWhere(req.user.organizationId, req.user.branchId),
+      ...(search && { OR: [{ name: { contains: search, mode: 'insensitive' } }, { email: { contains: search, mode: 'insensitive' } }] }),
+    },
+    select: { id: true, name: true, email: true, designation: true, role: true, status: true, branch: { select: { name: true } } },
+    orderBy: { name: 'asc' },
+    take: 200,
+  });
+  res.json({ success: true, count: people.length, data: people });
+});
+
+const REJECTED = ['rejected', 'ops_rejected', 'provisional_finance_rejected'];
+const groupWhere = (group: string): any =>
+  group === 'enrolled' ? { status: 'enrolled' }
+  : group === 'rejected' ? { status: { in: REJECTED } }
+  : group === 'pending' ? { status: { notIn: ['enrolled', ...REJECTED] } }
+  : {};
+
+/** Totals for a data-entry user's overview: what they entered, what is waiting, and for whom. */
+export const getEntryOverview = asyncHandler(async (req: PageRequest, res: Response) => {
+  if (!isEntryUser(req.user) && !(req.access && can(req.access, 'sales_entry_enroll', 'view'))) {
+    res.status(403).json({ success: false, message: 'You do not have permission to do this' });
+    return;
+  }
+  const base = { organizationId: req.user.organizationId, enteredBy: req.user.id };
+  const startOfToday = new Date(); startOfToday.setHours(0, 0, 0, 0);
+  const [total, enrolled, rejected, today, pendingLinks, byEmployee] = await Promise.all([
+    prisma.enrollment.count({ where: base }),
+    prisma.enrollment.count({ where: { ...base, ...groupWhere('enrolled') } }),
+    prisma.enrollment.count({ where: { ...base, ...groupWhere('rejected') } }),
+    prisma.enrollment.count({ where: { ...base, createdAt: { gte: startOfToday } } }),
+    prisma.studyCenterInvite.count({ where: { organizationId: req.user.organizationId, createdById: req.user.id, status: 'pending', expiresAt: { gt: new Date() } } }),
+    prisma.enrollment.groupBy({ by: ['salesUserId', 'status'], where: base, _count: { _all: true } }),
+  ]);
+  const people = new Map<string, { id: string; name: string; total: number; pending: number; rejected: number; enrolled: number }>();
+  const ids = [...new Set(byEmployee.map((r) => r.salesUserId).filter(Boolean) as string[])];
+  const users = ids.length ? await prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, name: true } }) : [];
+  for (const u of users) people.set(u.id, { id: u.id, name: u.name, total: 0, pending: 0, rejected: 0, enrolled: 0 });
+  for (const r of byEmployee) {
+    const p = r.salesUserId && people.get(r.salesUserId);
+    if (!p) continue;
+    const n = r._count._all;
+    p.total += n;
+    if (r.status === 'enrolled') p.enrolled += n; else if (REJECTED.includes(r.status)) p.rejected += n; else p.pending += n;
+  }
+  res.json({
+    success: true,
+    data: {
+      total, enrolled, rejected, today, pendingLinks,
+      pending: total - enrolled - rejected,
+      employees: [...people.values()].sort((a, b) => b.pending + b.rejected - (a.pending + a.rejected) || b.total - a.total),
+    },
+  });
+});
+
+/** The applications a data-entry user entered, newest first, whichever sales employee they were for. */
+export const getMyEntries = asyncHandler(async (req: PageRequest, res: Response) => {
+  if (!isEntryUser(req.user) && !(req.access && can(req.access, 'sales_entry_enroll', 'view'))) {
+    res.status(403).json({ success: false, message: 'You do not have permission to do this' });
+    return;
+  }
+  const page = Math.max(1, parseInt(String(req.query.page || '1'), 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit || '10'), 10) || 10));
+  const search = String(req.query.search || '').trim();
+  const where: any = {
+    organizationId: req.user.organizationId,
+    enteredBy: req.user.id,
+    ...groupWhere(String(req.query.group || '')),
+    ...(String(req.query.salesUserId || '') && { salesUserId: String(req.query.salesUserId) }),
+    ...(search && {
+      OR: [
+        { studentName: { contains: search, mode: 'insensitive' } },
+        { studentPhone: { contains: search } },
+        { studentEmail: { contains: search, mode: 'insensitive' } },
+        { salesUser: { name: { contains: search, mode: 'insensitive' } } },
+      ],
+    }),
+  };
+  const [total, rows] = await Promise.all([
+    prisma.enrollment.count({ where }),
+    prisma.enrollment.findMany({
+      where,
+      select: {
+        id: true, studentName: true, studentPhone: true, status: true, isProvisional: true, createdAt: true,
+        program: { select: { name: true } },
+        salesUser: { select: { id: true, name: true } },
+      },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+  ]);
+  res.json({ success: true, data: rows, total, page, limit });
+});
+
+/** The links a data-entry user generated, newest first, with what became of each. */
+export const getMyEntryLinks = asyncHandler(async (req: PageRequest, res: Response) => {
+  if (!isEntryUser(req.user) && !(req.access && can(req.access, 'sales_entry_enroll', 'view'))) {
+    res.status(403).json({ success: false, message: 'You do not have permission to do this' });
+    return;
+  }
+  const page = Math.max(1, parseInt(String(req.query.page || '1'), 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit || '10'), 10) || 10));
+  const search = String(req.query.search || '').trim();
+  const state = String(req.query.state || '');
+  const now = new Date();
+  const where: any = {
+    organizationId: req.user.organizationId,
+    createdById: req.user.id,
+    ...(state === 'used' && { status: 'used' }),
+    ...(state === 'pending' && { status: 'pending', expiresAt: { gt: now } }),
+    ...(state === 'expired' && { status: { not: 'used' }, expiresAt: { lte: now } }),
+    ...(search && { referrer: { name: { contains: search, mode: 'insensitive' } } }),
+  };
+  const [total, rows] = await Promise.all([
+    prisma.studyCenterInvite.count({ where }),
+    prisma.studyCenterInvite.findMany({
+      where,
+      select: {
+        id: true, token: true, status: true, expiresAt: true, usedAt: true, createdAt: true,
+        programIds: true, referrer: { select: { id: true, name: true } },
+      },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+  ]);
+  res.json({ success: true, data: rows.map(({ programIds, ...r }) => ({ ...r, programCount: programIds.length })), total, page, limit });
+});
+
 export const listMyInvites = asyncHandler(async (req: PageRequest, res: Response) => {
   const where: any = {};
   if (['org_admin', 'superadmin', 'ceo', 'general_manager'].includes(req.user.role)) {
     where.organizationId = req.user.organizationId;
   } else {
     where.referredBy = req.user.id;
+  }
+  // Data-entry staff see the links they made, whoever the employee is
+  if (isEntryUser(req.user)) {
+    delete where.referredBy;
+    where.organizationId = req.user.organizationId;
+    where.createdById = req.user.id;
   }
   // Someone given this page sees their branch's links
   if (req.ownBranchOnly) {
@@ -166,6 +312,7 @@ export const listMyInvites = asyncHandler(async (req: PageRequest, res: Response
   }
   const invites = await prisma.studyCenterInvite.findMany({
     where,
+    include: { referrer: { select: { id: true, name: true } } },
     orderBy: { createdAt: 'desc' },
   });
   // Resolve session names for display
@@ -192,11 +339,32 @@ export const generateInvite = asyncHandler(async (req: AuthRequest, res: Respons
 
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + expiryDays);
+
+  // Data-entry staff make the link for a sales employee, who gets the credit
+  let referredBy = req.user.id;
+  let createdById: string | null = null;
+  let branchId: string | null = null;
+  if (isEntryUser(req.user)) {
+    const person = await prisma.user.findFirst({
+      where: { id: String(req.body.salesUserId || ''), ...salesPersonWhere(req.user.organizationId, req.user.branchId) },
+      select: { id: true, branchId: true },
+    });
+    if (!person) {
+      res.status(400).json({ success: false, message: 'Choose an active sales employee from your branch' });
+      return;
+    }
+    referredBy = person.id;
+    createdById = req.user.id;
+    branchId = person.branchId;
+  }
   const invite = await prisma.studyCenterInvite.create({
     data: {
       ...req.body,
+      salesUserId: undefined,
       organizationId: req.user.organizationId,
-      referredBy: req.user.id,
+      referredBy,
+      createdById,
+      ...(branchId && { branchId }),
       token: Math.random().toString(36).substring(7).toUpperCase(),
       expiresAt: req.body.expiresAt ? new Date(req.body.expiresAt) : expiresAt,
       specializations: req.body.specializations || {}
@@ -206,7 +374,12 @@ export const generateInvite = asyncHandler(async (req: AuthRequest, res: Respons
 });
 export const regenerateInvite = asyncHandler(async (req: AuthRequest, res: Response) => {
   const own = await prisma.studyCenterInvite.findFirst({
-    where: { id: req.params.id, ...(req.user.role !== 'superadmin' && { organizationId: req.user.organizationId }) },
+    where: {
+      id: req.params.id,
+      ...(req.user.role !== 'superadmin' && { organizationId: req.user.organizationId }),
+      // Data-entry staff renew only the links they made
+      ...(isEntryUser(req.user) && { createdById: req.user.id }),
+    },
     select: { id: true }
   });
   if (!own) {

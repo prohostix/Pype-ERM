@@ -15,6 +15,7 @@ import TeamPermissionsPanel from '@/components/panels/TeamPermissionsPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
+import { MyProfilePanel } from '@/components/panels/MyProfilePanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
@@ -100,6 +101,7 @@ export function ModernOpsDashboard({ initialTab, onNavigate }: { initialTab?: st
       case 'university_report': return <UniversityReportPanel />;
       case 're_registration_report': return <ReRegistrationReportPanel />;
 
+      case 'my_profile': return <MyProfilePanel />;
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'my_leaves': return <LeavesPanel isMyPortal />;
       case 'holidays': return <HolidaysPanel />;
@@ -170,6 +172,7 @@ export function getOpsNavItems(role?: string) {
     { id: 're_registration_report', label: 'Re-registration Report' },
 
     { id: '__portal_section', label: 'My Portal', isSection: true },
+    { id: 'my_profile', label: 'My Profile' },
     { id: 'my_attendance', label: 'Attendance' },
     { id: 'my_leaves', label: 'Leave Request' },
     { id: 'holidays', label: 'Holidays' },
