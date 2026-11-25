@@ -4,6 +4,7 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { isHrRole, manageableRoles, userChangeError } from '../utils/userGuards.js';
+import { revokeOverrides } from '../access/load.js';
 
 // Safe user select — never expose password hash
 const USER_SELECT = {
@@ -314,6 +315,11 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
     data: updateData,
     select: USER_SELECT,
   });
+
+  // Feature overrides belong to the role and department they were given for
+  if (user.role !== userExists.role || (user.departmentId || null) !== (userExists.departmentId || null)) {
+    await revokeOverrides(user.id, req.user.id);
+  }
 
   res.status(200).json({ success: true, data: user });
 });

@@ -2716,3 +2716,25 @@ model UsageDay {
   @@unique([userId, date])
   @@index([organizationId, date])
 }
+
+// Per-user feature access set by an Org Admin on top of the role default.
+// A change revokes the old row and adds a new one, so the table is also the history.
+model UserAccessOverride {
+  id                  String    @id @default(uuid())
+  organizationId      String
+  userId              String
+  featureKey          String
+  // none | view | manage
+  level               String
+  // The override stops applying once the user's role or department differs from these
+  roleAtGrant         String
+  departmentIdAtGrant String?
+  reason              String?
+  grantedById         String
+  createdAt           DateTime  @default(now())
+  revokedAt           DateTime?
+  revokedById         String?
+
+  @@index([organizationId, userId])
+  @@index([userId, featureKey, revokedAt])
+}

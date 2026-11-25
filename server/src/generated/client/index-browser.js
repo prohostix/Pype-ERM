@@ -1732,6 +1732,21 @@ exports.Prisma.UsageDayScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.UserAccessOverrideScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  featureKey: 'featureKey',
+  level: 'level',
+  roleAtGrant: 'roleAtGrant',
+  departmentIdAtGrant: 'departmentIdAtGrant',
+  reason: 'reason',
+  grantedById: 'grantedById',
+  createdAt: 'createdAt',
+  revokedAt: 'revokedAt',
+  revokedById: 'revokedById'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2073,7 +2088,8 @@ exports.Prisma.ModelName = {
   StudentFilterOption: 'StudentFilterOption',
   StudentFilterValue: 'StudentFilterValue',
   StudentFilterHistory: 'StudentFilterHistory',
-  UsageDay: 'UsageDay'
+  UsageDay: 'UsageDay',
+  UserAccessOverride: 'UserAccessOverride'
 };
 
 /**

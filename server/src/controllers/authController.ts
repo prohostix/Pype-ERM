@@ -5,6 +5,7 @@ import { generateToken, generateRefreshToken } from '../utils/jwt.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, comparePassword, generateUserId } from '../utils/authUtils.js';
 import { ACCOUNT_DISABLED_MESSAGE, isAccountDisabled } from '../utils/userGuards.js';
+import { loadAccess } from '../access/load.js';
 
 // @desc    Register user
 // @route   POST /api/v1/auth/register
@@ -211,6 +212,8 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
     select: { id: true }
   });
 
+  const access = await loadAccess(user, !!managedBranch);
+
   res.status(200).json({
     success: true,
     data: {
@@ -230,6 +233,7 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
         allowAnywherePunchIn: user.allowAnywherePunchIn,
         requiresAttendance: user.requiresAttendance,
         isBranchManager: !!managedBranch,
+        access,
         organization: user.organization,
         ...(centerStatus !== null && { centerStatus }),
       },
@@ -306,9 +310,12 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
     select: { id: true }
   });
 
+  // Faculty logins are not users, so they have no per-user access
+  const access = req.user.role === 'faculty' ? undefined : await loadAccess(user, !!managedBranch);
+
   res.status(200).json({
     success: true,
-    data: { ...user, isBranchManager: !!managedBranch },
+    data: { ...user, isBranchManager: !!managedBranch, access },
   });
 });
 

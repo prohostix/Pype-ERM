@@ -513,6 +513,11 @@ export type StudentFilterHistory = $Result.DefaultSelection<Prisma.$StudentFilte
  * How long a person actually used the platform on one day (Indian time), built from heartbeats.
  */
 export type UsageDay = $Result.DefaultSelection<Prisma.$UsageDayPayload>
+/**
+ * Model UserAccessOverride
+ * 
+ */
+export type UserAccessOverride = $Result.DefaultSelection<Prisma.$UserAccessOverridePayload>
 
 /**
  * Enums
@@ -2033,6 +2038,16 @@ export class PrismaClient<
     * ```
     */
   get usageDay(): Prisma.UsageDayDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userAccessOverride`: Exposes CRUD operations for the **UserAccessOverride** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserAccessOverrides
+    * const userAccessOverrides = await prisma.userAccessOverride.findMany()
+    * ```
+    */
+  get userAccessOverride(): Prisma.UserAccessOverrideDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2566,7 +2581,8 @@ export namespace Prisma {
     StudentFilterOption: 'StudentFilterOption',
     StudentFilterValue: 'StudentFilterValue',
     StudentFilterHistory: 'StudentFilterHistory',
-    UsageDay: 'UsageDay'
+    UsageDay: 'UsageDay',
+    UserAccessOverride: 'UserAccessOverride'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2582,7 +2598,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "classMeeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadApplication" | "studyAbroadProgramCommission" | "studyAbroadPartnerPayout" | "country" | "studentFilterType" | "studentFilterOption" | "studentFilterValue" | "studentFilterHistory" | "usageDay"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "classMeeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadApplication" | "studyAbroadProgramCommission" | "studyAbroadPartnerPayout" | "country" | "studentFilterType" | "studentFilterOption" | "studentFilterValue" | "studentFilterHistory" | "usageDay" | "userAccessOverride"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -9986,6 +10002,80 @@ export namespace Prisma {
           }
         }
       }
+      UserAccessOverride: {
+        payload: Prisma.$UserAccessOverridePayload<ExtArgs>
+        fields: Prisma.UserAccessOverrideFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserAccessOverrideFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserAccessOverrideFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload>
+          }
+          findFirst: {
+            args: Prisma.UserAccessOverrideFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserAccessOverrideFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload>
+          }
+          findMany: {
+            args: Prisma.UserAccessOverrideFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload>[]
+          }
+          create: {
+            args: Prisma.UserAccessOverrideCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload>
+          }
+          createMany: {
+            args: Prisma.UserAccessOverrideCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserAccessOverrideCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload>[]
+          }
+          delete: {
+            args: Prisma.UserAccessOverrideDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload>
+          }
+          update: {
+            args: Prisma.UserAccessOverrideUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload>
+          }
+          deleteMany: {
+            args: Prisma.UserAccessOverrideDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserAccessOverrideUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserAccessOverrideUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload>[]
+          }
+          upsert: {
+            args: Prisma.UserAccessOverrideUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserAccessOverridePayload>
+          }
+          aggregate: {
+            args: Prisma.UserAccessOverrideAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserAccessOverride>
+          }
+          groupBy: {
+            args: Prisma.UserAccessOverrideGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserAccessOverrideGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserAccessOverrideCountArgs<ExtArgs>
+            result: $Utils.Optional<UserAccessOverrideCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -10194,6 +10284,7 @@ export namespace Prisma {
     studentFilterValue?: StudentFilterValueOmit
     studentFilterHistory?: StudentFilterHistoryOmit
     usageDay?: UsageDayOmit
+    userAccessOverride?: UserAccessOverrideOmit
   }
 
   /* Types for Logging */
@@ -143972,6 +144063,1097 @@ export namespace Prisma {
 
 
   /**
+   * Model UserAccessOverride
+   */
+
+  export type AggregateUserAccessOverride = {
+    _count: UserAccessOverrideCountAggregateOutputType | null
+    _min: UserAccessOverrideMinAggregateOutputType | null
+    _max: UserAccessOverrideMaxAggregateOutputType | null
+  }
+
+  export type UserAccessOverrideMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    userId: string | null
+    featureKey: string | null
+    level: string | null
+    roleAtGrant: string | null
+    departmentIdAtGrant: string | null
+    reason: string | null
+    grantedById: string | null
+    createdAt: Date | null
+    revokedAt: Date | null
+    revokedById: string | null
+  }
+
+  export type UserAccessOverrideMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    userId: string | null
+    featureKey: string | null
+    level: string | null
+    roleAtGrant: string | null
+    departmentIdAtGrant: string | null
+    reason: string | null
+    grantedById: string | null
+    createdAt: Date | null
+    revokedAt: Date | null
+    revokedById: string | null
+  }
+
+  export type UserAccessOverrideCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    userId: number
+    featureKey: number
+    level: number
+    roleAtGrant: number
+    departmentIdAtGrant: number
+    reason: number
+    grantedById: number
+    createdAt: number
+    revokedAt: number
+    revokedById: number
+    _all: number
+  }
+
+
+  export type UserAccessOverrideMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    userId?: true
+    featureKey?: true
+    level?: true
+    roleAtGrant?: true
+    departmentIdAtGrant?: true
+    reason?: true
+    grantedById?: true
+    createdAt?: true
+    revokedAt?: true
+    revokedById?: true
+  }
+
+  export type UserAccessOverrideMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    userId?: true
+    featureKey?: true
+    level?: true
+    roleAtGrant?: true
+    departmentIdAtGrant?: true
+    reason?: true
+    grantedById?: true
+    createdAt?: true
+    revokedAt?: true
+    revokedById?: true
+  }
+
+  export type UserAccessOverrideCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    userId?: true
+    featureKey?: true
+    level?: true
+    roleAtGrant?: true
+    departmentIdAtGrant?: true
+    reason?: true
+    grantedById?: true
+    createdAt?: true
+    revokedAt?: true
+    revokedById?: true
+    _all?: true
+  }
+
+  export type UserAccessOverrideAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserAccessOverride to aggregate.
+     */
+    where?: UserAccessOverrideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserAccessOverrides to fetch.
+     */
+    orderBy?: UserAccessOverrideOrderByWithRelationInput | UserAccessOverrideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserAccessOverrideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserAccessOverrides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserAccessOverrides.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserAccessOverrides
+    **/
+    _count?: true | UserAccessOverrideCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserAccessOverrideMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserAccessOverrideMaxAggregateInputType
+  }
+
+  export type GetUserAccessOverrideAggregateType<T extends UserAccessOverrideAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserAccessOverride]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserAccessOverride[P]>
+      : GetScalarType<T[P], AggregateUserAccessOverride[P]>
+  }
+
+
+
+
+  export type UserAccessOverrideGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserAccessOverrideWhereInput
+    orderBy?: UserAccessOverrideOrderByWithAggregationInput | UserAccessOverrideOrderByWithAggregationInput[]
+    by: UserAccessOverrideScalarFieldEnum[] | UserAccessOverrideScalarFieldEnum
+    having?: UserAccessOverrideScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserAccessOverrideCountAggregateInputType | true
+    _min?: UserAccessOverrideMinAggregateInputType
+    _max?: UserAccessOverrideMaxAggregateInputType
+  }
+
+  export type UserAccessOverrideGroupByOutputType = {
+    id: string
+    organizationId: string
+    userId: string
+    featureKey: string
+    level: string
+    roleAtGrant: string
+    departmentIdAtGrant: string | null
+    reason: string | null
+    grantedById: string
+    createdAt: Date
+    revokedAt: Date | null
+    revokedById: string | null
+    _count: UserAccessOverrideCountAggregateOutputType | null
+    _min: UserAccessOverrideMinAggregateOutputType | null
+    _max: UserAccessOverrideMaxAggregateOutputType | null
+  }
+
+  type GetUserAccessOverrideGroupByPayload<T extends UserAccessOverrideGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserAccessOverrideGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserAccessOverrideGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserAccessOverrideGroupByOutputType[P]>
+            : GetScalarType<T[P], UserAccessOverrideGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserAccessOverrideSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    userId?: boolean
+    featureKey?: boolean
+    level?: boolean
+    roleAtGrant?: boolean
+    departmentIdAtGrant?: boolean
+    reason?: boolean
+    grantedById?: boolean
+    createdAt?: boolean
+    revokedAt?: boolean
+    revokedById?: boolean
+  }, ExtArgs["result"]["userAccessOverride"]>
+
+  export type UserAccessOverrideSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    userId?: boolean
+    featureKey?: boolean
+    level?: boolean
+    roleAtGrant?: boolean
+    departmentIdAtGrant?: boolean
+    reason?: boolean
+    grantedById?: boolean
+    createdAt?: boolean
+    revokedAt?: boolean
+    revokedById?: boolean
+  }, ExtArgs["result"]["userAccessOverride"]>
+
+  export type UserAccessOverrideSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    userId?: boolean
+    featureKey?: boolean
+    level?: boolean
+    roleAtGrant?: boolean
+    departmentIdAtGrant?: boolean
+    reason?: boolean
+    grantedById?: boolean
+    createdAt?: boolean
+    revokedAt?: boolean
+    revokedById?: boolean
+  }, ExtArgs["result"]["userAccessOverride"]>
+
+  export type UserAccessOverrideSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    userId?: boolean
+    featureKey?: boolean
+    level?: boolean
+    roleAtGrant?: boolean
+    departmentIdAtGrant?: boolean
+    reason?: boolean
+    grantedById?: boolean
+    createdAt?: boolean
+    revokedAt?: boolean
+    revokedById?: boolean
+  }
+
+  export type UserAccessOverrideOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "userId" | "featureKey" | "level" | "roleAtGrant" | "departmentIdAtGrant" | "reason" | "grantedById" | "createdAt" | "revokedAt" | "revokedById", ExtArgs["result"]["userAccessOverride"]>
+
+  export type $UserAccessOverridePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserAccessOverride"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      userId: string
+      featureKey: string
+      level: string
+      roleAtGrant: string
+      departmentIdAtGrant: string | null
+      reason: string | null
+      grantedById: string
+      createdAt: Date
+      revokedAt: Date | null
+      revokedById: string | null
+    }, ExtArgs["result"]["userAccessOverride"]>
+    composites: {}
+  }
+
+  type UserAccessOverrideGetPayload<S extends boolean | null | undefined | UserAccessOverrideDefaultArgs> = $Result.GetResult<Prisma.$UserAccessOverridePayload, S>
+
+  type UserAccessOverrideCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserAccessOverrideFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserAccessOverrideCountAggregateInputType | true
+    }
+
+  export interface UserAccessOverrideDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserAccessOverride'], meta: { name: 'UserAccessOverride' } }
+    /**
+     * Find zero or one UserAccessOverride that matches the filter.
+     * @param {UserAccessOverrideFindUniqueArgs} args - Arguments to find a UserAccessOverride
+     * @example
+     * // Get one UserAccessOverride
+     * const userAccessOverride = await prisma.userAccessOverride.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserAccessOverrideFindUniqueArgs>(args: SelectSubset<T, UserAccessOverrideFindUniqueArgs<ExtArgs>>): Prisma__UserAccessOverrideClient<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserAccessOverride that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserAccessOverrideFindUniqueOrThrowArgs} args - Arguments to find a UserAccessOverride
+     * @example
+     * // Get one UserAccessOverride
+     * const userAccessOverride = await prisma.userAccessOverride.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserAccessOverrideFindUniqueOrThrowArgs>(args: SelectSubset<T, UserAccessOverrideFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserAccessOverrideClient<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserAccessOverride that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserAccessOverrideFindFirstArgs} args - Arguments to find a UserAccessOverride
+     * @example
+     * // Get one UserAccessOverride
+     * const userAccessOverride = await prisma.userAccessOverride.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserAccessOverrideFindFirstArgs>(args?: SelectSubset<T, UserAccessOverrideFindFirstArgs<ExtArgs>>): Prisma__UserAccessOverrideClient<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserAccessOverride that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserAccessOverrideFindFirstOrThrowArgs} args - Arguments to find a UserAccessOverride
+     * @example
+     * // Get one UserAccessOverride
+     * const userAccessOverride = await prisma.userAccessOverride.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserAccessOverrideFindFirstOrThrowArgs>(args?: SelectSubset<T, UserAccessOverrideFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserAccessOverrideClient<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserAccessOverrides that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserAccessOverrideFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserAccessOverrides
+     * const userAccessOverrides = await prisma.userAccessOverride.findMany()
+     * 
+     * // Get first 10 UserAccessOverrides
+     * const userAccessOverrides = await prisma.userAccessOverride.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userAccessOverrideWithIdOnly = await prisma.userAccessOverride.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserAccessOverrideFindManyArgs>(args?: SelectSubset<T, UserAccessOverrideFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserAccessOverride.
+     * @param {UserAccessOverrideCreateArgs} args - Arguments to create a UserAccessOverride.
+     * @example
+     * // Create one UserAccessOverride
+     * const UserAccessOverride = await prisma.userAccessOverride.create({
+     *   data: {
+     *     // ... data to create a UserAccessOverride
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserAccessOverrideCreateArgs>(args: SelectSubset<T, UserAccessOverrideCreateArgs<ExtArgs>>): Prisma__UserAccessOverrideClient<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserAccessOverrides.
+     * @param {UserAccessOverrideCreateManyArgs} args - Arguments to create many UserAccessOverrides.
+     * @example
+     * // Create many UserAccessOverrides
+     * const userAccessOverride = await prisma.userAccessOverride.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserAccessOverrideCreateManyArgs>(args?: SelectSubset<T, UserAccessOverrideCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserAccessOverrides and returns the data saved in the database.
+     * @param {UserAccessOverrideCreateManyAndReturnArgs} args - Arguments to create many UserAccessOverrides.
+     * @example
+     * // Create many UserAccessOverrides
+     * const userAccessOverride = await prisma.userAccessOverride.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserAccessOverrides and only return the `id`
+     * const userAccessOverrideWithIdOnly = await prisma.userAccessOverride.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserAccessOverrideCreateManyAndReturnArgs>(args?: SelectSubset<T, UserAccessOverrideCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserAccessOverride.
+     * @param {UserAccessOverrideDeleteArgs} args - Arguments to delete one UserAccessOverride.
+     * @example
+     * // Delete one UserAccessOverride
+     * const UserAccessOverride = await prisma.userAccessOverride.delete({
+     *   where: {
+     *     // ... filter to delete one UserAccessOverride
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserAccessOverrideDeleteArgs>(args: SelectSubset<T, UserAccessOverrideDeleteArgs<ExtArgs>>): Prisma__UserAccessOverrideClient<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserAccessOverride.
+     * @param {UserAccessOverrideUpdateArgs} args - Arguments to update one UserAccessOverride.
+     * @example
+     * // Update one UserAccessOverride
+     * const userAccessOverride = await prisma.userAccessOverride.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserAccessOverrideUpdateArgs>(args: SelectSubset<T, UserAccessOverrideUpdateArgs<ExtArgs>>): Prisma__UserAccessOverrideClient<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserAccessOverrides.
+     * @param {UserAccessOverrideDeleteManyArgs} args - Arguments to filter UserAccessOverrides to delete.
+     * @example
+     * // Delete a few UserAccessOverrides
+     * const { count } = await prisma.userAccessOverride.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserAccessOverrideDeleteManyArgs>(args?: SelectSubset<T, UserAccessOverrideDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserAccessOverrides.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserAccessOverrideUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserAccessOverrides
+     * const userAccessOverride = await prisma.userAccessOverride.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserAccessOverrideUpdateManyArgs>(args: SelectSubset<T, UserAccessOverrideUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserAccessOverrides and returns the data updated in the database.
+     * @param {UserAccessOverrideUpdateManyAndReturnArgs} args - Arguments to update many UserAccessOverrides.
+     * @example
+     * // Update many UserAccessOverrides
+     * const userAccessOverride = await prisma.userAccessOverride.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserAccessOverrides and only return the `id`
+     * const userAccessOverrideWithIdOnly = await prisma.userAccessOverride.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserAccessOverrideUpdateManyAndReturnArgs>(args: SelectSubset<T, UserAccessOverrideUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserAccessOverride.
+     * @param {UserAccessOverrideUpsertArgs} args - Arguments to update or create a UserAccessOverride.
+     * @example
+     * // Update or create a UserAccessOverride
+     * const userAccessOverride = await prisma.userAccessOverride.upsert({
+     *   create: {
+     *     // ... data to create a UserAccessOverride
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserAccessOverride we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserAccessOverrideUpsertArgs>(args: SelectSubset<T, UserAccessOverrideUpsertArgs<ExtArgs>>): Prisma__UserAccessOverrideClient<$Result.GetResult<Prisma.$UserAccessOverridePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserAccessOverrides.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserAccessOverrideCountArgs} args - Arguments to filter UserAccessOverrides to count.
+     * @example
+     * // Count the number of UserAccessOverrides
+     * const count = await prisma.userAccessOverride.count({
+     *   where: {
+     *     // ... the filter for the UserAccessOverrides we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserAccessOverrideCountArgs>(
+      args?: Subset<T, UserAccessOverrideCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserAccessOverrideCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserAccessOverride.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserAccessOverrideAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserAccessOverrideAggregateArgs>(args: Subset<T, UserAccessOverrideAggregateArgs>): Prisma.PrismaPromise<GetUserAccessOverrideAggregateType<T>>
+
+    /**
+     * Group by UserAccessOverride.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserAccessOverrideGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserAccessOverrideGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserAccessOverrideGroupByArgs['orderBy'] }
+        : { orderBy?: UserAccessOverrideGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserAccessOverrideGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserAccessOverrideGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserAccessOverride model
+   */
+  readonly fields: UserAccessOverrideFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserAccessOverride.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserAccessOverrideClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserAccessOverride model
+   */
+  interface UserAccessOverrideFieldRefs {
+    readonly id: FieldRef<"UserAccessOverride", 'String'>
+    readonly organizationId: FieldRef<"UserAccessOverride", 'String'>
+    readonly userId: FieldRef<"UserAccessOverride", 'String'>
+    readonly featureKey: FieldRef<"UserAccessOverride", 'String'>
+    readonly level: FieldRef<"UserAccessOverride", 'String'>
+    readonly roleAtGrant: FieldRef<"UserAccessOverride", 'String'>
+    readonly departmentIdAtGrant: FieldRef<"UserAccessOverride", 'String'>
+    readonly reason: FieldRef<"UserAccessOverride", 'String'>
+    readonly grantedById: FieldRef<"UserAccessOverride", 'String'>
+    readonly createdAt: FieldRef<"UserAccessOverride", 'DateTime'>
+    readonly revokedAt: FieldRef<"UserAccessOverride", 'DateTime'>
+    readonly revokedById: FieldRef<"UserAccessOverride", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserAccessOverride findUnique
+   */
+  export type UserAccessOverrideFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * Filter, which UserAccessOverride to fetch.
+     */
+    where: UserAccessOverrideWhereUniqueInput
+  }
+
+  /**
+   * UserAccessOverride findUniqueOrThrow
+   */
+  export type UserAccessOverrideFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * Filter, which UserAccessOverride to fetch.
+     */
+    where: UserAccessOverrideWhereUniqueInput
+  }
+
+  /**
+   * UserAccessOverride findFirst
+   */
+  export type UserAccessOverrideFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * Filter, which UserAccessOverride to fetch.
+     */
+    where?: UserAccessOverrideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserAccessOverrides to fetch.
+     */
+    orderBy?: UserAccessOverrideOrderByWithRelationInput | UserAccessOverrideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserAccessOverrides.
+     */
+    cursor?: UserAccessOverrideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserAccessOverrides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserAccessOverrides.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserAccessOverrides.
+     */
+    distinct?: UserAccessOverrideScalarFieldEnum | UserAccessOverrideScalarFieldEnum[]
+  }
+
+  /**
+   * UserAccessOverride findFirstOrThrow
+   */
+  export type UserAccessOverrideFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * Filter, which UserAccessOverride to fetch.
+     */
+    where?: UserAccessOverrideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserAccessOverrides to fetch.
+     */
+    orderBy?: UserAccessOverrideOrderByWithRelationInput | UserAccessOverrideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserAccessOverrides.
+     */
+    cursor?: UserAccessOverrideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserAccessOverrides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserAccessOverrides.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserAccessOverrides.
+     */
+    distinct?: UserAccessOverrideScalarFieldEnum | UserAccessOverrideScalarFieldEnum[]
+  }
+
+  /**
+   * UserAccessOverride findMany
+   */
+  export type UserAccessOverrideFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * Filter, which UserAccessOverrides to fetch.
+     */
+    where?: UserAccessOverrideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserAccessOverrides to fetch.
+     */
+    orderBy?: UserAccessOverrideOrderByWithRelationInput | UserAccessOverrideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserAccessOverrides.
+     */
+    cursor?: UserAccessOverrideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserAccessOverrides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserAccessOverrides.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserAccessOverrides.
+     */
+    distinct?: UserAccessOverrideScalarFieldEnum | UserAccessOverrideScalarFieldEnum[]
+  }
+
+  /**
+   * UserAccessOverride create
+   */
+  export type UserAccessOverrideCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * The data needed to create a UserAccessOverride.
+     */
+    data: XOR<UserAccessOverrideCreateInput, UserAccessOverrideUncheckedCreateInput>
+  }
+
+  /**
+   * UserAccessOverride createMany
+   */
+  export type UserAccessOverrideCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserAccessOverrides.
+     */
+    data: UserAccessOverrideCreateManyInput | UserAccessOverrideCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserAccessOverride createManyAndReturn
+   */
+  export type UserAccessOverrideCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserAccessOverrides.
+     */
+    data: UserAccessOverrideCreateManyInput | UserAccessOverrideCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserAccessOverride update
+   */
+  export type UserAccessOverrideUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * The data needed to update a UserAccessOverride.
+     */
+    data: XOR<UserAccessOverrideUpdateInput, UserAccessOverrideUncheckedUpdateInput>
+    /**
+     * Choose, which UserAccessOverride to update.
+     */
+    where: UserAccessOverrideWhereUniqueInput
+  }
+
+  /**
+   * UserAccessOverride updateMany
+   */
+  export type UserAccessOverrideUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserAccessOverrides.
+     */
+    data: XOR<UserAccessOverrideUpdateManyMutationInput, UserAccessOverrideUncheckedUpdateManyInput>
+    /**
+     * Filter which UserAccessOverrides to update
+     */
+    where?: UserAccessOverrideWhereInput
+    /**
+     * Limit how many UserAccessOverrides to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserAccessOverride updateManyAndReturn
+   */
+  export type UserAccessOverrideUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * The data used to update UserAccessOverrides.
+     */
+    data: XOR<UserAccessOverrideUpdateManyMutationInput, UserAccessOverrideUncheckedUpdateManyInput>
+    /**
+     * Filter which UserAccessOverrides to update
+     */
+    where?: UserAccessOverrideWhereInput
+    /**
+     * Limit how many UserAccessOverrides to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserAccessOverride upsert
+   */
+  export type UserAccessOverrideUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * The filter to search for the UserAccessOverride to update in case it exists.
+     */
+    where: UserAccessOverrideWhereUniqueInput
+    /**
+     * In case the UserAccessOverride found by the `where` argument doesn't exist, create a new UserAccessOverride with this data.
+     */
+    create: XOR<UserAccessOverrideCreateInput, UserAccessOverrideUncheckedCreateInput>
+    /**
+     * In case the UserAccessOverride was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserAccessOverrideUpdateInput, UserAccessOverrideUncheckedUpdateInput>
+  }
+
+  /**
+   * UserAccessOverride delete
+   */
+  export type UserAccessOverrideDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+    /**
+     * Filter which UserAccessOverride to delete.
+     */
+    where: UserAccessOverrideWhereUniqueInput
+  }
+
+  /**
+   * UserAccessOverride deleteMany
+   */
+  export type UserAccessOverrideDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserAccessOverrides to delete
+     */
+    where?: UserAccessOverrideWhereInput
+    /**
+     * Limit how many UserAccessOverrides to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserAccessOverride without action
+   */
+  export type UserAccessOverrideDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessOverride
+     */
+    select?: UserAccessOverrideSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessOverride
+     */
+    omit?: UserAccessOverrideOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -145895,6 +147077,24 @@ export namespace Prisma {
   };
 
   export type UsageDayScalarFieldEnum = (typeof UsageDayScalarFieldEnum)[keyof typeof UsageDayScalarFieldEnum]
+
+
+  export const UserAccessOverrideScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    userId: 'userId',
+    featureKey: 'featureKey',
+    level: 'level',
+    roleAtGrant: 'roleAtGrant',
+    departmentIdAtGrant: 'departmentIdAtGrant',
+    reason: 'reason',
+    grantedById: 'grantedById',
+    createdAt: 'createdAt',
+    revokedAt: 'revokedAt',
+    revokedById: 'revokedById'
+  };
+
+  export type UserAccessOverrideScalarFieldEnum = (typeof UserAccessOverrideScalarFieldEnum)[keyof typeof UserAccessOverrideScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -157556,6 +158756,93 @@ export namespace Prisma {
     pages?: JsonWithAggregatesFilter<"UsageDay">
     segments?: JsonWithAggregatesFilter<"UsageDay">
     updatedAt?: DateTimeWithAggregatesFilter<"UsageDay"> | Date | string
+  }
+
+  export type UserAccessOverrideWhereInput = {
+    AND?: UserAccessOverrideWhereInput | UserAccessOverrideWhereInput[]
+    OR?: UserAccessOverrideWhereInput[]
+    NOT?: UserAccessOverrideWhereInput | UserAccessOverrideWhereInput[]
+    id?: StringFilter<"UserAccessOverride"> | string
+    organizationId?: StringFilter<"UserAccessOverride"> | string
+    userId?: StringFilter<"UserAccessOverride"> | string
+    featureKey?: StringFilter<"UserAccessOverride"> | string
+    level?: StringFilter<"UserAccessOverride"> | string
+    roleAtGrant?: StringFilter<"UserAccessOverride"> | string
+    departmentIdAtGrant?: StringNullableFilter<"UserAccessOverride"> | string | null
+    reason?: StringNullableFilter<"UserAccessOverride"> | string | null
+    grantedById?: StringFilter<"UserAccessOverride"> | string
+    createdAt?: DateTimeFilter<"UserAccessOverride"> | Date | string
+    revokedAt?: DateTimeNullableFilter<"UserAccessOverride"> | Date | string | null
+    revokedById?: StringNullableFilter<"UserAccessOverride"> | string | null
+  }
+
+  export type UserAccessOverrideOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    userId?: SortOrder
+    featureKey?: SortOrder
+    level?: SortOrder
+    roleAtGrant?: SortOrder
+    departmentIdAtGrant?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    grantedById?: SortOrder
+    createdAt?: SortOrder
+    revokedAt?: SortOrderInput | SortOrder
+    revokedById?: SortOrderInput | SortOrder
+  }
+
+  export type UserAccessOverrideWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: UserAccessOverrideWhereInput | UserAccessOverrideWhereInput[]
+    OR?: UserAccessOverrideWhereInput[]
+    NOT?: UserAccessOverrideWhereInput | UserAccessOverrideWhereInput[]
+    organizationId?: StringFilter<"UserAccessOverride"> | string
+    userId?: StringFilter<"UserAccessOverride"> | string
+    featureKey?: StringFilter<"UserAccessOverride"> | string
+    level?: StringFilter<"UserAccessOverride"> | string
+    roleAtGrant?: StringFilter<"UserAccessOverride"> | string
+    departmentIdAtGrant?: StringNullableFilter<"UserAccessOverride"> | string | null
+    reason?: StringNullableFilter<"UserAccessOverride"> | string | null
+    grantedById?: StringFilter<"UserAccessOverride"> | string
+    createdAt?: DateTimeFilter<"UserAccessOverride"> | Date | string
+    revokedAt?: DateTimeNullableFilter<"UserAccessOverride"> | Date | string | null
+    revokedById?: StringNullableFilter<"UserAccessOverride"> | string | null
+  }, "id">
+
+  export type UserAccessOverrideOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    userId?: SortOrder
+    featureKey?: SortOrder
+    level?: SortOrder
+    roleAtGrant?: SortOrder
+    departmentIdAtGrant?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    grantedById?: SortOrder
+    createdAt?: SortOrder
+    revokedAt?: SortOrderInput | SortOrder
+    revokedById?: SortOrderInput | SortOrder
+    _count?: UserAccessOverrideCountOrderByAggregateInput
+    _max?: UserAccessOverrideMaxOrderByAggregateInput
+    _min?: UserAccessOverrideMinOrderByAggregateInput
+  }
+
+  export type UserAccessOverrideScalarWhereWithAggregatesInput = {
+    AND?: UserAccessOverrideScalarWhereWithAggregatesInput | UserAccessOverrideScalarWhereWithAggregatesInput[]
+    OR?: UserAccessOverrideScalarWhereWithAggregatesInput[]
+    NOT?: UserAccessOverrideScalarWhereWithAggregatesInput | UserAccessOverrideScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserAccessOverride"> | string
+    organizationId?: StringWithAggregatesFilter<"UserAccessOverride"> | string
+    userId?: StringWithAggregatesFilter<"UserAccessOverride"> | string
+    featureKey?: StringWithAggregatesFilter<"UserAccessOverride"> | string
+    level?: StringWithAggregatesFilter<"UserAccessOverride"> | string
+    roleAtGrant?: StringWithAggregatesFilter<"UserAccessOverride"> | string
+    departmentIdAtGrant?: StringNullableWithAggregatesFilter<"UserAccessOverride"> | string | null
+    reason?: StringNullableWithAggregatesFilter<"UserAccessOverride"> | string | null
+    grantedById?: StringWithAggregatesFilter<"UserAccessOverride"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"UserAccessOverride"> | Date | string
+    revokedAt?: DateTimeNullableWithAggregatesFilter<"UserAccessOverride"> | Date | string | null
+    revokedById?: StringNullableWithAggregatesFilter<"UserAccessOverride"> | string | null
   }
 
   export type OrganizationCreateInput = {
@@ -169773,6 +171060,111 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserAccessOverrideCreateInput = {
+    id?: string
+    organizationId: string
+    userId: string
+    featureKey: string
+    level: string
+    roleAtGrant: string
+    departmentIdAtGrant?: string | null
+    reason?: string | null
+    grantedById: string
+    createdAt?: Date | string
+    revokedAt?: Date | string | null
+    revokedById?: string | null
+  }
+
+  export type UserAccessOverrideUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    userId: string
+    featureKey: string
+    level: string
+    roleAtGrant: string
+    departmentIdAtGrant?: string | null
+    reason?: string | null
+    grantedById: string
+    createdAt?: Date | string
+    revokedAt?: Date | string | null
+    revokedById?: string | null
+  }
+
+  export type UserAccessOverrideUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    featureKey?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+    roleAtGrant?: StringFieldUpdateOperationsInput | string
+    departmentIdAtGrant?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    grantedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedById?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type UserAccessOverrideUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    featureKey?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+    roleAtGrant?: StringFieldUpdateOperationsInput | string
+    departmentIdAtGrant?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    grantedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedById?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type UserAccessOverrideCreateManyInput = {
+    id?: string
+    organizationId: string
+    userId: string
+    featureKey: string
+    level: string
+    roleAtGrant: string
+    departmentIdAtGrant?: string | null
+    reason?: string | null
+    grantedById: string
+    createdAt?: Date | string
+    revokedAt?: Date | string | null
+    revokedById?: string | null
+  }
+
+  export type UserAccessOverrideUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    featureKey?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+    roleAtGrant?: StringFieldUpdateOperationsInput | string
+    departmentIdAtGrant?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    grantedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedById?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type UserAccessOverrideUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    featureKey?: StringFieldUpdateOperationsInput | string
+    level?: StringFieldUpdateOperationsInput | string
+    roleAtGrant?: StringFieldUpdateOperationsInput | string
+    departmentIdAtGrant?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    grantedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    revokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revokedById?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -177014,6 +178406,51 @@ export namespace Prisma {
     idleSec?: SortOrder
     awaySec?: SortOrder
     leaves?: SortOrder
+  }
+
+  export type UserAccessOverrideCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    userId?: SortOrder
+    featureKey?: SortOrder
+    level?: SortOrder
+    roleAtGrant?: SortOrder
+    departmentIdAtGrant?: SortOrder
+    reason?: SortOrder
+    grantedById?: SortOrder
+    createdAt?: SortOrder
+    revokedAt?: SortOrder
+    revokedById?: SortOrder
+  }
+
+  export type UserAccessOverrideMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    userId?: SortOrder
+    featureKey?: SortOrder
+    level?: SortOrder
+    roleAtGrant?: SortOrder
+    departmentIdAtGrant?: SortOrder
+    reason?: SortOrder
+    grantedById?: SortOrder
+    createdAt?: SortOrder
+    revokedAt?: SortOrder
+    revokedById?: SortOrder
+  }
+
+  export type UserAccessOverrideMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    userId?: SortOrder
+    featureKey?: SortOrder
+    level?: SortOrder
+    roleAtGrant?: SortOrder
+    departmentIdAtGrant?: SortOrder
+    reason?: SortOrder
+    grantedById?: SortOrder
+    createdAt?: SortOrder
+    revokedAt?: SortOrder
+    revokedById?: SortOrder
   }
 
   export type AcademicSessionCreateNestedManyWithoutOrganizationInput = {
