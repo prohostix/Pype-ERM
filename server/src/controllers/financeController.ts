@@ -8,25 +8,21 @@ import { sendFeeReceiptWhatsApp } from '../utils/whatsappService.js';
 import { enqueueNotification } from '../utils/notificationQueue.js';
 
 // Invoices
-export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) => {
+/** The invoice named in the URL, only if it is in the caller's organization and branch */
+const invoiceById = (req: AccessRequest): any => {
+  const scope = invoiceScope(req);
+  return { id: req.params.id, organizationId: req.user.organizationId, ...(scope && { AND: [scope] }) };
+};
+
+export const getInvoices = asyncHandler(async (req: AccessRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
   const andConditions: any[] = [];
 
   if (req.query.studentId) where.studentId = req.query.studentId as string;
   if (req.query.status && req.query.status !== 'all') where.status = req.query.status as string;
 
-  // Branch-level isolation for invoices list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
-  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
-    andConditions.push({
-      OR: [
-        { student: { branchId: req.user.branchId } },
-        { student: { enrolledByUser: { branchId: req.user.branchId } } },
-        { centerId: { not: null } },
-        { studentId: null, centerId: null } // Fallback if some invoices are manually created
-      ]
-    });
-  }
+  const scope = invoiceScope(req);
+  if (scope) andConditions.push(scope);
 
   // Filter specifically by admission / enrollment number
   if (req.query.admissionNo) {
@@ -61,6 +57,20 @@ export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) 
     where.AND = andConditions;
   }
 
+  // Payments only needs enough to pick an invoice
+  if (req.summaryOnly) {
+    const summary = await prisma.invoice.findMany({
+      where,
+      select: {
+        id: true, invoiceNo: true, amount: true, total: true, status: true, studentId: true, centerId: true,
+        student: { select: { name: true } }, center: { select: { name: true } }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json({ success: true, count: summary.length, data: summary });
+    return;
+  }
+
   const invoices = await prisma.invoice.findMany({
     where,
     include: {
@@ -72,9 +82,9 @@ export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) 
   });
   res.json({ success: true, count: invoices.length, data: invoices });
 });
-export const getInvoice = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getInvoice = asyncHandler(async (req: AccessRequest, res: Response) => {
   const invoice = await prisma.invoice.findFirst({
-    where: { id: req.params.id, organizationId: req.user.organizationId },
+    where: invoiceById(req),
     include: {
       student: {
         select: {
@@ -99,29 +109,58 @@ export const getInvoice = asyncHandler(async (req: AuthRequest, res: Response) =
     return;
   }
 
-  // Branch-level isolation check
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
-  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
-    const studentBranch = (invoice.student as any)?.branchId;
-    if (studentBranch && studentBranch !== req.user.branchId) {
-      res.status(403).json({ success: false, message: 'Access denied: Invoice belongs to another branch' });
-      return;
-    }
-  }
-
   res.json({ success: true, data: invoice });
 });
-export const createInvoice = asyncHandler(async (req: AuthRequest, res: Response) => {
+
+/** Why a new invoice may not be raised against this student or partner; null when it may. */
+const invoiceTargetError = async (req: AccessRequest): Promise<string | null> => {
+  const { studentId, centerId } = req.body;
+  const organizationId = req.user.organizationId;
+  // Users allowed by an Org Admin may only bill within their own branch
+  const branchId = req.access?.invoices?.create?.byDefault ? null : req.user.branchId;
+  if (studentId) {
+    const student = await prisma.student.findFirst({
+      where: { id: studentId, organizationId, ...(branchId && { OR: [{ branchId }, { enrolledByUser: { branchId } }] }) },
+      select: { id: true }
+    });
+    if (!student) return 'You cannot raise an invoice for this student';
+  }
+  if (centerId) {
+    const center = await prisma.studyCenter.findFirst({
+      where: { id: centerId, organizationId, ...(branchId && { OR: [{ referrer: { branchId } }, { students: { some: { branchId } } }] }) },
+      select: { id: true }
+    });
+    if (!center) return 'You cannot raise an invoice for this academic partner';
+  }
+  if (branchId && !studentId && !centerId) return 'Choose a student or academic partner from your branch';
+  return null;
+};
+
+export const createInvoice = asyncHandler(async (req: AccessRequest, res: Response) => {
+  if (req.body.status === 'approved' && !can(req.access!, 'invoices', 'approve')) {
+    res.status(403).json({ success: false, message: 'You do not have permission to approve invoices' });
+    return;
+  }
+  const denied = await invoiceTargetError(req);
+  if (denied) {
+    res.status(403).json({ success: false, message: denied });
+    return;
+  }
   const invoice = await prisma.invoice.create({ data: { ...req.body, organizationId: req.user.organizationId } });
   res.status(201).json({ success: true, data: invoice });
 });
-export const updateInvoice = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.invoice.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+export const updateInvoice = asyncHandler(async (req: AccessRequest, res: Response) => {
+  const exists = await prisma.invoice.findFirst({ where: invoiceById(req) });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Invoice not found' });
     return;
   }
   const { status, amount, tax, total, items, notes } = req.body;
+  // Editing must not be a way around approval
+  if (status === 'approved' && exists.status !== 'approved' && !can(req.access!, 'invoices', 'approve')) {
+    res.status(403).json({ success: false, message: 'You do not have permission to approve invoices' });
+    return;
+  }
   const updateData: any = {};
   if (status !== undefined) updateData.status = status;
   if (amount !== undefined) updateData.amount = Number(amount);
@@ -132,8 +171,8 @@ export const updateInvoice = asyncHandler(async (req: AuthRequest, res: Response
   const invoice = await prisma.invoice.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: invoice });
 });
-export const deleteInvoice = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.invoice.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+export const deleteInvoice = asyncHandler(async (req: AccessRequest, res: Response) => {
+  const exists = await prisma.invoice.findFirst({ where: invoiceById(req) });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Invoice not found' });
     return;
@@ -141,7 +180,12 @@ export const deleteInvoice = asyncHandler(async (req: AuthRequest, res: Response
   await prisma.invoice.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
-export const approveInvoice = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const approveInvoice = asyncHandler(async (req: AccessRequest, res: Response) => {
+  const exists = await prisma.invoice.findFirst({ where: invoiceById(req), select: { id: true } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Invoice not found' });
+    return;
+  }
   const invoice = await prisma.invoice.update({ where: { id: req.params.id }, data: { status: 'approved' } });
   res.json({ success: true, data: invoice });
 });
@@ -570,6 +614,8 @@ export const approveExpense = asyncHandler(async (req: AuthRequest, res: Respons
 });
 
 import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
+import { invoiceScope, type AccessRequest } from '../access/guard.js';
+import { can } from '../access/resolve.js';
 
 // Targets
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {

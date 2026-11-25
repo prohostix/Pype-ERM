@@ -85,20 +85,31 @@ import {
   markBatchPaymentInProgress,
   completeBatchPayment,
 } from '../controllers/payrollController.js';
-import { protect, authorize } from '../middleware/auth.js';
-import { requireInvoiceWriter } from '../middleware/invoiceAccess.js';
+import { protect, authorize, type AuthRequest } from '../middleware/auth.js';
+import { requireAccess, requireAccessOrPaymentsSummary } from '../access/guard.js';
 
 const router = express.Router();
 
 router.use(protect);
 
-// Invoices
-router.route('/invoices').get(getInvoices).post(requireInvoiceWriter, createInvoice);
+// Staff finance data: students and faculty see their own fees through the portal routes.
+router.use((req: AuthRequest, res, next) => {
+  if (['student', 'faculty'].includes(req.user.role)) {
+    res.status(403).json({ success: false, message: 'Access denied' });
+    return;
+  }
+  next();
+});
+
+// Invoices (permissions: see access/catalog.ts)
+router.route('/invoices')
+  .get(requireAccessOrPaymentsSummary(['invoices', 'view'], ['bill_receipts', 'view']), getInvoices)
+  .post(requireAccess(['invoices', 'create']), createInvoice);
 router.route('/invoices/:id')
-  .get(getInvoice)
-  .put(requireInvoiceWriter, updateInvoice)
-  .delete(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), deleteInvoice);
-router.put('/invoices/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), approveInvoice);
+  .get(requireAccess(['invoices', 'view'], ['bill_receipts', 'view']), getInvoice)
+  .put(requireAccess(['invoices', 'edit']), updateInvoice)
+  .delete(requireAccess(['invoices', 'delete']), deleteInvoice);
+router.put('/invoices/:id/approve', requireAccess(['invoices', 'approve']), approveInvoice);
 
 // Payments
 router.route('/payments').get(getPayments).post(authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), createPayment);
@@ -184,8 +195,8 @@ router.get('/reminders/schedules', getOverdueSchedules);
 router.post('/reminders/send', authorize('finance_admin', 'finance_sub_admin', 'org_admin', 'superadmin'), sendPaymentReminder);
 
 // Receipt Generation
-router.get('/receipt/invoice/:invoiceId', generateReceipt);
-router.get('/receipt/payment/:paymentId', generateReceipt);
+router.get('/receipt/invoice/:invoiceId', requireAccess(['invoices', 'download'], ['bill_receipts', 'download']), generateReceipt);
+router.get('/receipt/payment/:paymentId', requireAccess(['invoices', 'download'], ['bill_receipts', 'download']), generateReceipt);
 
 // Invoice from Schedule
 router.get('/payment-plan/:studentId', getStudentPaymentPlan);

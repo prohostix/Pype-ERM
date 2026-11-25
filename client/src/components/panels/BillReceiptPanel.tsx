@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import api from '@/lib/api';
+import { canDo } from '@/lib/access';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import html2pdf from 'html2pdf.js';
 
@@ -420,6 +422,9 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
 }
 
 export function BillReceiptPanel() {
+  const { user } = useAuth();
+  // Receipts are reached through either page
+  const canDownload = canDo(user, 'bill_receipts', 'download') || canDo(user, 'invoices', 'download');
   const [invoices, setInvoices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -639,9 +644,11 @@ export function BillReceiptPanel() {
                         <div className="font-semibold text-base text-slate-900">{CS()}{(inv.total || inv.amount || 0).toLocaleString(numLocale())}</div>
                         <span className={`inline-block mt-1 rounded-full px-3 py-0.5 text-[11px] font-semibold capitalize ${statusColors[inv.status] || 'bg-slate-100 text-slate-600'}`}>{inv.status}</span>
                       </div>
-                      <Button size="sm" variant="outline" className="gap-1.5 h-9 rounded-full px-4 text-xs font-semibold text-[#256c1d] border-[#cfe9c9] bg-white hover:bg-[#eaf6e6]" onClick={() => openReceipt(inv)}>
-                        <Printer className="w-3.5 h-3.5" /> Receipt
-                      </Button>
+                      {canDownload && (
+                        <Button size="sm" variant="outline" className="gap-1.5 h-9 rounded-full px-4 text-xs font-semibold text-[#256c1d] border-[#cfe9c9] bg-white hover:bg-[#eaf6e6]" onClick={() => openReceipt(inv)}>
+                          <Printer className="w-3.5 h-3.5" /> Receipt
+                        </Button>
+                      )}
                     </div>
                   </div>
                 );

@@ -1,6 +1,14 @@
 # Per-user permission override: plan and edge cases
 
-Date: 2026-11-25. Status: steps 0 to 2 coded (per-action model). Table not created, nothing deployed.
+Date: 2026-11-25. Status: steps 0 to 3 coded, except invoice pagination. Table not created, nothing deployed.
+
+Step 3 notes:
+- Payments users (including Sales) get a short invoice list: number, amounts, status, student and partner name.
+- Because of that, blocking View on Invoices for a Payments user hides the page's data but not the short list.
+- A partner belongs to a branch when its referrer or one of its students does. This now applies to all branch users.
+- Student and faculty logins are refused on all finance requests.
+- Editing cannot approve an invoice without the approve action. Changing amounts of an already approved invoice is still allowed with edit.
+- Menus do not change yet; granted pages appear in step 4.
 The role gives each user a default. The Org Admin overrides it per user, page and action.
 First case: an HR employee gets to **view** **Invoices** and **Bill & Receipts**.
 
@@ -232,9 +240,9 @@ Schema change: the local `.env` is production and `deploy.sh` runs `prisma db pu
 | Partner invoices for a branch user? | Only the branch's partners |
 | Revoke on department change as well as role change? | Yes |
 
-## 9. Open questions
+## 9. Later decisions
 
-| Question | Recommendation |
+| Question | Decision |
 |---|---|
-| Sales reads the invoice list through Payments. Keep that? | Yes, for reading only, without the Invoices menu |
-| Refuse student and faculty logins on all finance requests now? | Yes |
+| Sales reads the invoice list through Payments? | Yes, reading only |
+| Refuse student and faculty logins on all finance requests? | Yes |

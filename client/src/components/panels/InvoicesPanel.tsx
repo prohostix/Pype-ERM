@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
+import { canDo } from '@/lib/access';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import html2pdf from 'html2pdf.js';
 
@@ -337,6 +339,11 @@ function ProformaReceiptDocument({ receipt, orgName }: { receipt: any; orgName: 
 }
 
 export function InvoicesPanel() {
+  const { user } = useAuth();
+  const canCreate = canDo(user, 'invoices', 'create');
+  const canEdit = canDo(user, 'invoices', 'edit');
+  const canDelete = canDo(user, 'invoices', 'delete');
+  const canDownload = canDo(user, 'invoices', 'download');
   const [invoices, setInvoices] = useState<any[]>([]);
   const [centers, setCenters] = useState<any[]>([]);
   const [students, setStudents] = useState<any[]>([]);
@@ -393,11 +400,14 @@ export function InvoicesPanel() {
 
   useEffect(() => {
     fetchInvoices();
-    fetchCenters();
-    fetchStudents();
-    fetchUniversities();
-    fetchPrograms();
-    fetchFees();
+    // The rest only fills the create and edit form
+    if (canCreate || canEdit) {
+      fetchCenters();
+      fetchStudents();
+      fetchUniversities();
+      fetchPrograms();
+      fetchFees();
+    }
     api.get('/auth/me').then(r => setOrgName(r.data?.data?.organization?.name || 'Organisation')).catch(() => {});
   }, []);
 
@@ -832,9 +842,11 @@ export function InvoicesPanel() {
           <p className="text-muted-foreground text-sm mt-1.5">Manage invoices and billing</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Invoice</Button>
-          </DialogTrigger>
+          {canCreate && (
+            <DialogTrigger asChild>
+              <Button className="h-11 px-5 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold"><Plus className="w-4 h-4 mr-2" />Add Invoice</Button>
+            </DialogTrigger>
+          )}
           <DialogContent className={cn("wizard-form rounded-[2rem] border-0 bg-white p-6 sm:p-8 max-h-[92vh] overflow-y-auto transition-all w-full", billingTarget === 'center' ? "sm:max-w-4xl md:max-w-5xl lg:max-w-6xl w-[95vw]" : "sm:max-w-2xl w-[90vw]")}>
             <DialogHeader>
               <DialogTitle className="text-xl font-semibold tracking-tight">{editingId ? 'Edit Invoice' : 'Add New Invoice'}</DialogTitle>
@@ -1330,19 +1342,21 @@ export function InvoicesPanel() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="gap-1.5 h-9 rounded-full px-4 text-xs font-semibold text-[#256c1d] border-[#cfe9c9] bg-white hover:bg-[#eaf6e6]"
-                        onClick={() => openProforma(inv)}
-                        title="Download / View Proforma Invoice"
-                      >
-                        <FileText className="w-3.5 h-3.5" />
-                        Proforma Invoice
-                      </Button>
+                      {canDownload && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-1.5 h-9 rounded-full px-4 text-xs font-semibold text-[#256c1d] border-[#cfe9c9] bg-white hover:bg-[#eaf6e6]"
+                          onClick={() => openProforma(inv)}
+                          title="Download / View Proforma Invoice"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                          Proforma Invoice
+                        </Button>
+                      )}
                       <span className={cn('rounded-full px-3 py-1 text-[11px] font-semibold capitalize', inv.status === 'paid' ? 'bg-[#dff3da] text-[#256c1d]' : inv.status === 'draft' ? 'bg-slate-200/70 text-slate-600' : inv.status === 'overdue' || inv.status === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700')}>{inv.status}</span>
-                      <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(inv)}><Edit className="w-4 h-4" /></Button>
-                      <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(inv.id)}><Trash2 className="w-4 h-4" /></Button>
+                      {canEdit && <Button variant="ghost" size="sm" className="rounded-full hover:bg-white" onClick={() => handleEdit(inv)}><Edit className="w-4 h-4" /></Button>}
+                      {canDelete && <Button variant="ghost" size="sm" className="rounded-full text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(inv.id)}><Trash2 className="w-4 h-4" /></Button>}
                     </div>
                   </div>
                 );

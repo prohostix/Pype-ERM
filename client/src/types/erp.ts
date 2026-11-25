@@ -1,3 +1,4 @@
+import type { UserAccess } from '@/lib/access';
 // ERP System Types
 
 export type UserRole = 
@@ -107,6 +108,7 @@ export interface User {
   createdAt: Date;
   organization?: Organization;
   permissions?: string[];
+  access?: UserAccess;
 }
 
 export interface Employee extends User {

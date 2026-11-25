@@ -7,6 +7,7 @@ import { sendEmail } from '../utils/emailService.js';
 import { enqueueNotification } from '../utils/notificationQueue.js';
 
 import { findCurrency, getOrgCurrencyCode } from '../utils/currency.js';
+import { invoiceScope, type AccessRequest } from '../access/guard.js';
 // ── Payment Reminders ────────────────────────────────────────────────────────
 
 export const getOverdueSchedules = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -128,14 +129,17 @@ export const sendPaymentReminder = asyncHandler(async (req: AuthRequest, res: Re
 
 // ── Receipt Generation ────────────────────────────────────────────────────────
 
-export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const generateReceipt = asyncHandler(async (req: AccessRequest, res: Response) => {
   const { invoiceId, paymentId } = req.params;
 
   let data: any = {};
+  const scope = invoiceScope(req);
+  // Only a Superadmin reaches across organizations
+  const ownOrg = req.user.role === 'superadmin' ? {} : { organizationId: req.user.organizationId };
 
   if (invoiceId) {
-    const invoice = await prisma.invoice.findUnique({
-      where: { id: invoiceId },
+    const invoice = await prisma.invoice.findFirst({
+      where: { id: invoiceId, ...ownOrg, ...(scope && { AND: [scope] }) },
       include: {
         student: { include: { program: { include: { university: true } } } },
         center: true,
@@ -144,16 +148,6 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       }
     });
     if (!invoice) { res.status(404).json({ success: false, message: 'Invoice not found' }); return; }
-
-    // Branch-level isolation check
-    const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
-    if (!globalRoles.includes(req.user.role) && req.user.branchId) {
-      const studentBranch = invoice.student?.branchId;
-      if (invoice.studentId && studentBranch && studentBranch !== req.user.branchId) {
-        res.status(403).json({ success: false, message: 'Access denied: Invoice belongs to another branch' });
-        return;
-      }
-    }
 
     let overallProgramFee = invoice.total;
     let overallPaid = invoice.payments.reduce((sum, p) => sum + p.amount, 0);
@@ -520,7 +514,7 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       universityFee
     };
   } else if (paymentId) {
-    const payment = await prisma.paymentEntry.findUnique({ where: { id: paymentId } });
+    const payment = await prisma.paymentEntry.findFirst({ where: { id: paymentId, ...ownOrg, ...(scope && { invoice: { AND: [scope] } }) } });
     if (!payment) { res.status(404).json({ success: false, message: 'Payment not found' }); return; }
     const paymentDate = payment.receivedAt || payment.createdAt;
     data = { 

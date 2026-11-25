@@ -3,6 +3,20 @@ import prisma from '../lib/prisma.js';
 import { AccessUser } from './catalog.js';
 import { Access, resolveAccess } from './resolve.js';
 
+/** The user with the facts the defaults need: department type and branch manager flag. */
+export const loadSubject = async (user: any, isBranchManager: boolean): Promise<AccessUser> => {
+  let departmentType: string | null = user.department?.type ?? null;
+  if (!departmentType && user.departmentId) {
+    const department = await prisma.department.findUnique({ where: { id: user.departmentId }, select: { type: true } });
+    departmentType = department?.type ?? null;
+  }
+  if (!departmentType && user.subDepartmentId) {
+    const sub = await prisma.subDepartment.findUnique({ where: { id: user.subDepartmentId }, select: { parentDept: { select: { type: true } } } });
+    departmentType = sub?.parentDept.type ?? null;
+  }
+  return { ...user, departmentType, isBranchManager };
+};
+
 /**
  * The signed-in user's access, or undefined when it cannot be worked out (the client then keeps
  * the role defaults). `user` needs id, role, status, organizationId, branchId, departmentId and
@@ -10,16 +24,7 @@ import { Access, resolveAccess } from './resolve.js';
  */
 export const loadAccess = async (user: any, isBranchManager: boolean): Promise<Access | undefined> => {
   try {
-    let departmentType: string | null = user.department?.type ?? null;
-    if (!departmentType && user.departmentId) {
-      const department = await prisma.department.findUnique({ where: { id: user.departmentId }, select: { type: true } });
-      departmentType = department?.type ?? null;
-    }
-    if (!departmentType && user.subDepartmentId) {
-      const sub = await prisma.subDepartment.findUnique({ where: { id: user.subDepartmentId }, select: { parentDept: { select: { type: true } } } });
-      departmentType = sub?.parentDept.type ?? null;
-    }
-    const subject: AccessUser = { ...user, departmentType, isBranchManager };
+    const subject = await loadSubject(user, isBranchManager);
     const overrides = await prisma.userAccessOverride
       .findMany({ where: { userId: user.id, revokedAt: null } })
       .catch((error: any) => {

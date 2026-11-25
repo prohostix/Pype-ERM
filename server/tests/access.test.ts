@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { can, resolveAccess, type Override } from '../src/access/resolve.js';
 import { FEATURES } from '../src/access/catalog.js';
+import { hasPaymentsScreen, invoiceBranchWhere, isGrantedReader } from '../src/access/invoiceRules.js';
 
 const hr = { id: 'u', role: 'employee', status: 'active', organizationId: 'o', branchId: 'b', departmentId: 'd', departmentType: 'hr' };
 const finance = { ...hr, role: 'finance_admin', departmentType: 'finance' };
@@ -102,4 +103,27 @@ test('a page outside the organization plan stays off', () => {
   const gated = [{ ...FEATURES[0], orgFeature: 'billing' }];
   assert.equal(can(resolveAccess(hr, [row('view')], [], gated), 'invoices', 'view'), false);
   assert.equal(can(resolveAccess(hr, [row('view')], ['billing'], gated), 'invoices', 'view'), true);
+});
+
+test('Payments users may read the short invoice list', () => {
+  for (const user of [{ role: 'sales_admin' }, { role: 'sales' }, { role: 'finance_admin' }, { role: 'employee', departmentType: 'sales' }, { role: 'ops_admin', isBranchManager: true }]) {
+    assert.equal(hasPaymentsScreen({ id: 'u', ...user }), true, JSON.stringify(user));
+  }
+  for (const user of [{ role: 'student', isBranchManager: true }, { role: 'faculty' }, { role: 'hr_admin' }, { role: 'employee', departmentType: 'hr' }, { role: 'employee', departmentType: 'finance' }]) {
+    assert.equal(hasPaymentsScreen({ id: 'u', ...user }), false, JSON.stringify(user));
+  }
+});
+
+test('a granted reader is told apart from a default one', () => {
+  assert.equal(isGrantedReader(resolveAccess(hr, [row('view')])), true);
+  assert.equal(isGrantedReader(resolveAccess(finance, [])), false);
+});
+
+test('branch limits on invoices', () => {
+  assert.equal(invoiceBranchWhere({ role: 'org_admin', branchId: 'b' }, false), null);
+  assert.equal(invoiceBranchWhere({ role: 'finance_admin', branchId: null }, false), null);
+  const own = JSON.stringify(invoiceBranchWhere({ role: 'finance_admin', branchId: 'b' }, false));
+  assert.ok(own.includes('"studentId":null'));
+  assert.ok(!own.includes('"not":null'), 'other branches\' partners must not be listed');
+  assert.ok(!JSON.stringify(invoiceBranchWhere({ role: 'employee', branchId: 'b' }, true)).includes('"studentId":null'));
 });
