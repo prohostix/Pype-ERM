@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { confirmDialog } from '@/lib/confirm';
 
 export function StudyCentersPanel() {
   const { user } = useAuth();
@@ -106,7 +107,7 @@ export function StudyCentersPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this academic partner?')) return;
+    if (!(await confirmDialog({ title: 'Delete academic partner?', message: 'Delete this academic partner?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/operations/centers/${id}`);
       fetchCenters();

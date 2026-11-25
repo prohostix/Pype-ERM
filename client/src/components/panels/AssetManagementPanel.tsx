@@ -22,6 +22,7 @@ import { Check, ChevronsUpDown, Search, Plus, Edit2, Trash2, MonitorSmartphone, 
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { confirmDialog } from '@/lib/confirm';
 
 interface User {
   id: string;
@@ -168,7 +169,7 @@ export function AssetManagementPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this asset?')) {
+    if ((await confirmDialog({ title: 'Delete asset?', message: 'Are you sure you want to delete this asset?', confirmText: 'Delete', tone: 'danger' }))) {
       try {
         await api.delete(`/assets/${id}`);
         toast.success('Asset deleted successfully');

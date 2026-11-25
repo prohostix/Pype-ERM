@@ -6,6 +6,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { confirmDialog } from '@/lib/confirm';
 
 interface Device {
   id: string;
@@ -81,7 +82,7 @@ export function BiometricDevicesPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this device?')) return;
+    if (!(await confirmDialog({ title: 'Delete device?', message: 'Are you sure you want to delete this device?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/biometric-devices/${id}`);
       fetchDevices();

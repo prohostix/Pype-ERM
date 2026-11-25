@@ -7,10 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 
 import { CS } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { confirmDialog, promptDialog } from '@/lib/confirm';
 export function ExpensesPanel() {
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -62,7 +64,7 @@ export function ExpensesPanel() {
       fetchExpenses();
     } catch (error: any) {
       console.error('Failed to save expense:', error);
-      alert(error.response?.data?.message || 'Failed to save expense');
+      toast.error(error.response?.data?.message || 'Failed to save expense');
     }
   };
 
@@ -80,7 +82,7 @@ export function ExpensesPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this expense?')) return;
+    if (!(await confirmDialog({ title: 'Delete expense?', message: 'Are you sure you want to delete this expense?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/finance/expenses/${id}`);
       fetchExpenses();
@@ -90,12 +92,22 @@ export function ExpensesPanel() {
   };
 
   const handleApprove = async (id: string, action: 'approve' | 'reject') => {
-    const remarks = prompt(`Enter remarks for ${action}:`);
+    const approving = action === 'approve';
+    const remarks = await promptDialog({
+      title: approving ? 'Approve expense?' : 'Reject expense?',
+      message: approving ? 'The expense will be marked as approved.' : 'The expense will be marked as rejected.',
+      inputLabel: 'Remarks',
+      placeholder: 'Add a note',
+      confirmText: approving ? 'Approve' : 'Reject',
+      tone: approving ? 'default' : 'danger',
+    });
+    if (remarks === null) return; // cancelled
     try {
       await api.put(`/finance/expenses/${id}/approve`, { action, remarks });
       fetchExpenses();
     } catch (error) {
       console.error(`Failed to ${action} expense:`, error);
+      toast.error((error as any).response?.data?.message || `Failed to ${action} expense`);
     }
   };
 

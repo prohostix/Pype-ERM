@@ -10,6 +10,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { uploadFormFile } from '@/lib/uploadFile';
 import { PIPELINE_STAGES, apiError, fileHref, fmtDate, money, stageLabel, stageTone } from './shared';
+import { confirmDialog } from '@/lib/confirm';
 
 const Tracker = ({ stage }: { stage: string }) => {
   const idx = PIPELINE_STAGES.findIndex(s => s.key === stage);
@@ -85,7 +86,7 @@ function Row({ a, onChanged }: { a: any; onChanged: () => void }) {
         <div className="flex gap-2">
           <Button size="sm" disabled={busy} onClick={() => call('offer-response', { accept: true }, 'Offer accepted')}>Accept offer</Button>
           <Button size="sm" variant="outline" className="text-destructive border-destructive/30" disabled={busy}
-            onClick={() => { if (confirm('Decline this offer? The application will be closed.')) call('offer-response', { accept: false }, 'Offer declined'); }}>Decline</Button>
+            onClick={async () => { if ((await confirmDialog({ title: 'Decline offer?', message: 'Decline this offer? The application will be closed.', confirmText: 'Decline Offer', tone: 'danger' }))) call('offer-response', { accept: false }, 'Offer declined'); }}>Decline</Button>
         </div>
       </div>
     ) : <p className="text-sm text-muted-foreground">Waiting for the offer.</p>;
@@ -144,7 +145,7 @@ function Row({ a, onChanged }: { a: any; onChanged: () => void }) {
             <p className="text-xs text-muted-foreground mt-1">Submitted {fmtDate(a.createdAt)}</p>
           </div>
           {closable && <Button size="sm" variant="ghost" className="text-destructive" disabled={busy}
-            onClick={() => { if (confirm('Withdraw this application?')) call('withdraw', {}, 'Application withdrawn'); }}>Withdraw</Button>}
+            onClick={async () => { if ((await confirmDialog({ title: 'Withdraw application?', message: 'Withdraw this application?', confirmText: 'Withdraw', tone: 'danger' }))) call('withdraw', {}, 'Application withdrawn'); }}>Withdraw</Button>}
         </div>
         <Tracker stage={a.stage} />
         {action}

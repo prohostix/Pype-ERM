@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { confirmDialog } from '@/lib/confirm';
 
 interface AttendanceCalendarProps {
   employeeId: string;
@@ -236,7 +237,7 @@ export function AttendanceCalendar({
   };
 
   const handleMarkAllPresent = async () => {
-    if (!confirm(`Mark all weekdays in ${MONTHS[selectedMonth]} ${selectedYear} as Present for ${employeeName}?`)) return;
+    if (!(await confirmDialog({ title: 'Mark attendance?', message: `Mark all weekdays in ${MONTHS[selectedMonth]} ${selectedYear} as Present for ${employeeName}?`, confirmText: 'Mark Present', tone: 'default' }))) return;
     setLoading(true);
     try {
       const promises = [];

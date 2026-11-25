@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { confirmDialog } from '@/lib/confirm';
 
 export function LeadsPanel() {
   const { user } = useAuth();
@@ -111,7 +112,7 @@ export function LeadsPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure?')) return;
+    if (!(await confirmDialog({ title: 'Delete lead?', message: 'Delete this lead?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/sales/leads/${id}`);
       fetchLeads();
@@ -121,7 +122,7 @@ export function LeadsPanel() {
   };
 
   const handleConvert = async (id: string) => {
-    if (!confirm('Convert this lead to a student?')) return;
+    if (!(await confirmDialog({ title: 'Convert lead?', message: 'Convert this lead to a student?', confirmText: 'Convert', tone: 'default' }))) return;
     try {
       await api.put(`/sales/leads/${id}/convert`);
       fetchLeads();

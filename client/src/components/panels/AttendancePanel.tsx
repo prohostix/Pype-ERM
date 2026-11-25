@@ -12,6 +12,7 @@ import api from '@/lib/api';
 import { AttendanceCalendar } from '@/components/attendance/AttendanceCalendar';
 import { toast } from 'sonner';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { confirmDialog } from '@/lib/confirm';
 
 interface AttendancePanelProps {
   isMyPortal?: boolean;
@@ -317,7 +318,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this attendance record?')) return;
+    if (!(await confirmDialog({ title: 'Delete attendance record?', message: 'Are you sure you want to delete this attendance record?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/hr/attendance/${id}`);
       fetchAttendance();

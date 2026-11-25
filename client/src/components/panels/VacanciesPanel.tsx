@@ -7,8 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 import { UserFormDialog } from '@/components/panels/UserFormDialog';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { confirmDialog } from '@/lib/confirm';
 
 export function VacanciesPanel() {
   const [vacancies, setVacancies] = useState<any[]>([]);
@@ -66,7 +68,7 @@ export function VacanciesPanel() {
       fetchVacancies();
     } catch (error: any) {
       console.error('Failed to save vacancy:', error);
-      alert(error.response?.data?.message || 'Failed to save vacancy');
+      toast.error(error.response?.data?.message || 'Failed to save vacancy');
     }
   };
 
@@ -83,7 +85,7 @@ export function VacanciesPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this vacancy?')) return;
+    if (!(await confirmDialog({ title: 'Delete vacancy?', message: 'Are you sure you want to delete this vacancy?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/hr/vacancies/${id}`);
       fetchVacancies();
@@ -93,7 +95,7 @@ export function VacanciesPanel() {
   };
 
   const handleClose = async (id: string) => {
-    if (!confirm('Close this vacancy?')) return;
+    if (!(await confirmDialog({ title: 'Close vacancy?', message: 'Close this vacancy?', confirmText: 'Close Vacancy', tone: 'default' }))) return;
     try {
       await api.put(`/hr/vacancies/${id}/close`);
       fetchVacancies();
@@ -303,7 +305,7 @@ export function VacanciesPanel() {
         defaultDepartmentId={
           (typeof selectedVacancy?.departmentId === 'object' ? selectedVacancy?.departmentId?.id : selectedVacancy?.departmentId) || ''
         }
-        onSaved={(name) => alert(`User ${name} created successfully.`)}
+        onSaved={(name) => toast.success(`User ${name} created successfully.`)}
       />
     </div>
   );

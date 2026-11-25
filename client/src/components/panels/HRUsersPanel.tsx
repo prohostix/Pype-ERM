@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import {
   UserFormDialog,
@@ -29,6 +30,7 @@ import {
   type SubDepartment,
   type DesignationOption,
 } from '@/components/panels/UserFormDialog';
+import { confirmDialog } from '@/lib/confirm';
 
 export function HRUsersPanel() {
   const [users, setUsers] = useState<User[]>([]);
@@ -163,10 +165,10 @@ export function HRUsersPanel() {
       setTransferData({ departmentId: '', subDepartmentId: '', reason: '' });
       setSelectedUser(null);
       fetchUsers();
-      alert('Employee transferred successfully!');
+      toast.success('Employee transferred successfully!');
     } catch (error) {
       console.error('Failed to transfer employee:', error);
-      alert('Failed to transfer employee. Please try again.');
+      toast.error('Failed to transfer employee. Please try again.');
     }
   };
 
@@ -187,10 +189,10 @@ export function HRUsersPanel() {
       setPromotionData({ newDesignation: '', newRole: 'employee', reportingTo: '', type: 'promotion' });
       setSelectedUser(null);
       fetchUsers();
-      alert(`Employee ${promotionData.type === 'promotion' ? 'promoted' : 'demoted'} successfully!`);
+      toast.success(`Employee ${promotionData.type === 'promotion' ? 'promoted' : 'demoted'} successfully!`);
     } catch (error) {
       console.error(`Failed to ${promotionData.type} employee:`, error);
-      alert(`Failed to ${promotionData.type} employee. Please try again.`);
+      toast.error(`Failed to ${promotionData.type} employee. Please try again.`);
     }
   };
 
@@ -198,12 +200,12 @@ export function HRUsersPanel() {
     e.preventDefault();
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert('Passwords do not match!');
+      toast.error('Passwords do not match!');
       return;
     }
 
     if (passwordData.newPassword.length < 6) {
-      alert('Password must be at least 6 characters long!');
+      toast.error('Password must be at least 6 characters long!');
       return;
     }
 
@@ -214,15 +216,15 @@ export function HRUsersPanel() {
       setPasswordDialogOpen(false);
       setPasswordData({ newPassword: '', confirmPassword: '' });
       setSelectedUserId(null);
-      alert('Password updated successfully!');
+      toast.success('Password updated successfully!');
     } catch (error) {
       console.error('Failed to update password:', error);
-      alert('Failed to update password. Please try again.');
+      toast.error('Failed to update password. Please try again.');
     }
   };
 
   const handleDelete = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user?')) return;
+    if (!(await confirmDialog({ title: 'Delete user?', message: 'Are you sure you want to delete this user?', confirmText: 'Delete', tone: 'danger' }))) return;
 
     try {
       await api.delete(`/users/${userId}`);
@@ -232,7 +234,7 @@ export function HRUsersPanel() {
       // and it's pending approval — the toast is already shown, so suppress the alert.
       if (error?.message === 'DELETE_REQUESTED_NOT_COMPLETED' || error?.isDeleteRequest) return;
       console.error('Failed to delete user:', error);
-      alert('Failed to delete user. Please try again.');
+      toast.error('Failed to delete user. Please try again.');
     }
   };
 
@@ -240,14 +242,14 @@ export function HRUsersPanel() {
     try {
       const userId = user.id || user.id;
       const newStatus = user.status === 'active' ? 'inactive' : 'active';
-      if (!window.confirm(`Are you sure you want to ${newStatus === 'active' ? 'activate' : 'suspend'} this user?`)) {
+      if (!(await confirmDialog({ title: newStatus === 'active' ? 'Activate user?' : 'Suspend user?', message: `Are you sure you want to ${newStatus === 'active' ? 'activate' : 'suspend'} this user?`, confirmText: newStatus === 'active' ? 'Activate' : 'Suspend', tone: newStatus === 'active' ? 'default' : 'danger' }))) {
         return;
       }
       await api.put(`/users/${userId}`, { status: newStatus });
       fetchUsers();
     } catch (error) {
       console.error('Failed to toggle user status:', error);
-      alert('Failed to update user status. Please try again.');
+      toast.error('Failed to update user status. Please try again.');
     }
   };
 
@@ -256,14 +258,14 @@ export function HRUsersPanel() {
     const action = newStatus === 'resigned' ? 'resign' : 're-activate';
     try {
       const userId = user.id || user.id;
-      if (!window.confirm(`Are you sure you want to ${action} this employee?`)) {
+      if (!(await confirmDialog({ title: newStatus === 'resigned' ? 'Resign employee?' : 'Re-activate employee?', message: `Are you sure you want to ${action} this employee?`, confirmText: newStatus === 'resigned' ? 'Resign' : 'Re-activate', tone: newStatus === 'resigned' ? 'danger' : 'default' }))) {
         return;
       }
       await api.put(`/users/${userId}`, { status: newStatus });
       fetchUsers();
     } catch (error) {
       console.error(`Failed to ${action} user:`, error);
-      alert('Failed to process action. Please try again.');
+      toast.error('Failed to process action. Please try again.');
     }
   };
 
@@ -289,10 +291,10 @@ export function HRUsersPanel() {
       setManagerUser(null);
       fetchBranches();
       fetchUsers();
-      alert(`${managerUser.name} is now the manager of ${targetBranch.name}.`);
+      toast.success(`${managerUser.name} is now the manager of ${targetBranch.name}.`);
     } catch (error: any) {
       console.error('Failed to assign branch manager:', error);
-      alert(error.response?.data?.message || 'Failed to assign branch manager. Please try again.');
+      toast.error(error.response?.data?.message || 'Failed to assign branch manager. Please try again.');
     } finally {
       setAssigningManager(false);
     }

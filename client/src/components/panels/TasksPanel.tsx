@@ -15,6 +15,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { ListPagination } from '@/components/ui/list-pagination';
 import api from '@/lib/api';
+import { toast } from 'sonner';
+import { confirmDialog } from '@/lib/confirm';
 
 interface Task {
   id?: string;
@@ -110,7 +112,7 @@ export function TasksPanel() {
       resetForm();
       fetchTasks();
     } catch (e: any) {
-      alert(e.response?.data?.message || 'Failed to save task.');
+      toast.error(e.response?.data?.message || 'Failed to save task.');
     }
   };
 
@@ -131,12 +133,12 @@ export function TasksPanel() {
       setCompletingTask(null);
       fetchTasks();
     } catch (e: any) {
-      alert(e.response?.data?.message || 'Failed to complete task.');
+      toast.error(e.response?.data?.message || 'Failed to complete task.');
     }
   };
 
   const handleDelete = async (taskId: string) => {
-    if (!confirm('Delete this task?')) return;
+    if (!(await confirmDialog({ title: 'Delete task?', message: 'Delete this task?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/tasks/${taskId}`);
       fetchTasks();

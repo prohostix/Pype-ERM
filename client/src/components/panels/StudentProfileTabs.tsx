@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 
 import { CS, numLocale } from '@/lib/currency';
+import { confirmDialog } from '@/lib/confirm';
 const inr = (n: number) => `${CS()}${Number(n || 0).toLocaleString(numLocale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const fmtDate = (d?: string | Date | null, withTime = false) => {
   if (!d) return '-';
@@ -222,7 +223,7 @@ export function StudentRemarksTab({ studentId }: { studentId: string }) {
     } finally { setSaving(false); }
   };
   const remove = async (id: string) => {
-    if (!window.confirm('Delete this remark?')) return;
+    if (!(await confirmDialog({ title: 'Delete remark?', message: 'Delete this remark?', confirmText: 'Delete', tone: 'danger' }))) return;
     try { await api.deleteWithoutApproval(`/students/${studentId}/remarks/${id}`); await load(); }
     catch (e: any) { toast.error(e.response?.data?.message || 'Failed to delete remark'); }
   };

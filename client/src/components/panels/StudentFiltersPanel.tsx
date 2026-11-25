@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
+import { confirmDialog } from '@/lib/confirm';
 
 interface FilterOption { id: string; label: string; color?: string | null; isArchived: boolean; studentCount: number }
 interface FilterType { id: string; name: string; isActive: boolean; options: FilterOption[] }
@@ -222,7 +223,7 @@ function FilterDetail({ type, onChanged, onDeleted }: { type: FilterType; onChan
             </label>
             {tagged === 0 && (
               <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-destructive" title="Delete filter"
-                onClick={() => window.confirm(`Delete the filter "${type.name}"?`) && run(() => api.deleteWithoutApproval(`/student-filters/${type.id}`), 'Filter deleted').then((ok) => ok && onDeleted())}>
+                onClick={async () => (await confirmDialog({ title: 'Delete filter?', message: `Delete the filter "${type.name}"?`, confirmText: 'Delete', tone: 'danger' })) && run(() => api.deleteWithoutApproval(`/student-filters/${type.id}`), 'Filter deleted').then((ok) => ok && onDeleted())}>
                 <Trash2 className="w-4 h-4" />
               </Button>
             )}

@@ -7,6 +7,7 @@ import { Building2, Calendar, Plus, Search, Trash2, Edit, BookOpen, Clock, Alert
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { SessionFormDialog } from '../forms/SessionFormDialog';
+import { confirmDialog } from '@/lib/confirm';
 
 interface UniversitySessionsDialogProps {
   university: any | null;
@@ -53,7 +54,7 @@ export function UniversitySessionsDialog({
   };
 
   const handleDeleteSession = async (sessionId: string, sessionName: string) => {
-    if (!confirm(`Are you sure you want to delete session "${sessionName}"?`)) return;
+    if (!(await confirmDialog({ title: 'Delete session?', message: `Are you sure you want to delete session "${sessionName}"?`, confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/operations/sessions/${sessionId}`);
       toast.success('Session deleted successfully');

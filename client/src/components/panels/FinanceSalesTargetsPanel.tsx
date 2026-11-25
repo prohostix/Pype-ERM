@@ -8,6 +8,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 
 import { CS } from '@/lib/currency';
+import { confirmDialog } from '@/lib/confirm';
 interface SalesUser {
   id: string;
   name: string;
@@ -132,7 +133,7 @@ export function FinanceSalesTargetsPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this target?')) return;
+    if (!(await confirmDialog({ title: 'Delete target?', message: 'Delete this target?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/finance/targets/${id}`);
       toast.success('Target deleted');

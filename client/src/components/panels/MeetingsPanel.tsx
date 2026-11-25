@@ -13,6 +13,7 @@ import { format } from 'date-fns';
 import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { confirmDialog } from '@/lib/confirm';
 
 interface Meeting {
   id: string;
@@ -119,7 +120,7 @@ export function MeetingsPanel() {
   };
 
   const handleDeleteMeeting = async (meetingId: string) => {
-    if (!window.confirm('Are you sure you want to delete this meeting?')) return;
+    if (!(await confirmDialog({ title: 'Delete meeting?', message: 'Are you sure you want to delete this meeting?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/meetings/${meetingId}`);
       toast.success('Meeting deleted successfully');

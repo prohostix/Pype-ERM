@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { confirmDialog } from '@/lib/confirm';
 
 interface StudentProgressTabProps {
   student: any;
@@ -193,13 +194,13 @@ export function StudentProgressTab({ student, enrollments: initialEnrollments, o
     setModalOpen(true);
   };
 
-  const handleToggleClick = (step: any) => {
+  const handleToggleClick = async (step: any) => {
     if (step.completed) {
       if (user?.role !== 'org_admin' && user?.role !== 'superadmin') {
         toast.error('Only Organization Admins can revert progress steps.');
         return;
       }
-      if (window.confirm(`Are you sure you want to revert "${step.label}" to pending?`)) {
+      if ((await confirmDialog({ title: 'Revert step?', message: `Are you sure you want to revert "${step.label}" to pending?`, confirmText: 'Revert', tone: 'danger' }))) {
         submitProgressUpdate(step.id, 'pending', null);
       }
     } else {

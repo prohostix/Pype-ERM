@@ -9,6 +9,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { confirmDialog } from '@/lib/confirm';
 
 export function FacultiesPanel() {
   const { user } = useAuth();
@@ -74,7 +75,7 @@ export function FacultiesPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this faculty member?')) return;
+    if (!(await confirmDialog({ title: 'Delete faculty member?', message: 'Are you sure you want to delete this faculty member?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/faculties/${id}`);
       toast.success('Faculty deleted successfully');

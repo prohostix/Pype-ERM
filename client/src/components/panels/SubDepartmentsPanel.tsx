@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { confirmDialog } from '@/lib/confirm';
 
 interface SubDepartment {
   id?: string;
@@ -118,7 +119,7 @@ export function SubDepartmentsPanel() {
   };
 
   const handleDelete = async (subDeptId: string) => {
-    if (!confirm('Delete this sub-department?')) return;
+    if (!(await confirmDialog({ title: 'Delete sub-department?', message: 'Delete this sub-department?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/sub-departments/${subDeptId}`);
       toast.success('Sub-department deleted');

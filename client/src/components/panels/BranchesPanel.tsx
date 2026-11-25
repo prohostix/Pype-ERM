@@ -9,6 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Plus, RefreshCw, Edit2, Trash2, UserPlus, MapPin, Building2, TrendingUp, Settings, Layers, Search, X } from 'lucide-react';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { confirmDialog } from '@/lib/confirm';
 
 interface Dept { id: string; name: string; type: string; }
 
@@ -141,7 +142,7 @@ export function BranchesPanel() {
   };
 
   const handleDelete = async (b: Branch) => {
-    if (!confirm(`Delete branch "${b.name}"? This will also remove its associated departments.`)) return;
+    if (!(await confirmDialog({ title: 'Delete branch?', message: `Delete branch "${b.name}"? This will also remove its associated departments.`, confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/org/branches/${b.id}`);
       toast.success('Branch deleted');

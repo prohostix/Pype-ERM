@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { confirmDialog } from '@/lib/confirm';
 
 export function AttendanceManager({ sessionId, sessionData, onBack }: { sessionId: string, sessionData: any, onBack: () => void }) {
   const [students, setStudents] = useState<any[]>([]);
@@ -94,7 +95,7 @@ export function AttendanceManager({ sessionId, sessionData, onBack }: { sessionI
   };
 
   const handleEndSession = async () => {
-    if (!confirm('Are you sure you want to end this class session? You will no longer be able to edit attendance.')) return;
+    if (!(await confirmDialog({ title: 'End class session?', message: 'Are you sure you want to end this class session? You will no longer be able to edit attendance.', confirmText: 'End Session', tone: 'danger' }))) return;
     
     setEnding(true);
     try {

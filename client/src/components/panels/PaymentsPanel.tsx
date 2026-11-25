@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import api from '@/lib/api';
+import { promptDialog } from '@/lib/confirm';
 import { toast } from 'sonner';
 
 import { CS, numLocale } from '@/lib/currency';
@@ -103,7 +104,15 @@ export function PaymentsPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    const remarks = prompt('Enter deletion remarks (required for audit):');
+    const remarks = await promptDialog({
+      title: 'Delete payment?',
+      message: 'This payment will be deleted. Remarks are kept for audit.',
+      inputLabel: 'Deletion remarks',
+      placeholder: 'Why is it being deleted?',
+      required: true,
+      confirmText: 'Delete',
+      tone: 'danger',
+    });
     if (!remarks) return;
     try {
       await api.delete(`/finance/payments/${id}`, { data: { remarks } });

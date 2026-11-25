@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { confirmDialog } from '@/lib/confirm';
 
 export function InternalMarksPanel() {
   const { user } = useAuth();
@@ -103,7 +104,7 @@ export function InternalMarksPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this marks record?')) return;
+    if (!(await confirmDialog({ title: 'Delete marks record?', message: 'Delete this marks record?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/operations/marks/${id}`);
       toast.success('Marks deleted');

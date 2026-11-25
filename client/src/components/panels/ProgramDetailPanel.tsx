@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 
 
 import { CS } from '@/lib/currency';
+import { confirmDialog } from '@/lib/confirm';
 interface Program {
   id: string; name: string; code: string; courseType: string;
   duration: number; hasSemesters: boolean; semesters: { number: number; name: string; durationMonths: number }[];
@@ -158,7 +159,7 @@ export function ProgramDetailPanel({
   };
 
   const handleDelete = async (materialId: string) => {
-    if (!confirm('Delete this material?')) return;
+    if (!(await confirmDialog({ title: 'Delete material?', message: 'Delete this material?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/operations/programs/${programId}/materials/${materialId}`);
       toast.success('Material deleted');

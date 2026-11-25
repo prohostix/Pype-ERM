@@ -11,6 +11,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { ProgramDetailPanel } from './ProgramDetailPanel';
 import { ProgramFormDialog } from '../forms/ProgramFormDialog';
+import { confirmDialog } from '@/lib/confirm';
 
 type CourseType = 'SkillCourse' | 'OnlineDegree' | 'BVocDegree' | 'CreditTransfer' | 'Yearly' | 'OneSitting';
 
@@ -107,7 +108,7 @@ export function ProgramsPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this program?')) return;
+    if (!(await confirmDialog({ title: 'Delete program?', message: 'Delete this program?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/operations/programs/${id}`);
       fetchPrograms();

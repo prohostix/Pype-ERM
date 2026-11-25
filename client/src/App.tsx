@@ -22,6 +22,7 @@ import { getCollectionsNavItems } from '@/pages/ModernCollectionsDashboard';
 import api from '@/lib/api';
 import { hasStudyAbroadAccess, getOrgFeatures } from '@/lib/orgFeatures';
 import { toast } from 'sonner';
+import { confirmDialog } from '@/lib/confirm';
 
 type ViewMode = 'dashboard' | 'table';
 
@@ -1073,7 +1074,7 @@ function App() {
   };
 
   const handleDelete = async (_id: string) => {
-    if (!confirm('Are you sure you want to delete this record?')) return;
+    if (!(await confirmDialog({ title: 'Delete record?', message: 'Are you sure you want to delete this record?', confirmText: 'Delete', tone: 'danger' }))) return;
     
     try {
       // Implement delete based on table

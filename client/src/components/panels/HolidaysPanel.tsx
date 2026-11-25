@@ -10,6 +10,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { confirmDialog } from '@/lib/confirm';
 
 export function HolidaysPanel() {
   const { user } = useAuth();
@@ -64,7 +65,7 @@ export function HolidaysPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this holiday?')) return;
+    if (!(await confirmDialog({ title: 'Delete holiday?', message: 'Delete this holiday?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/hr/holidays/${id}`);
       toast.success('Holiday deleted');

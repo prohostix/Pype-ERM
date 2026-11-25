@@ -14,6 +14,7 @@ import api from '@/lib/api';
 
 import { CS } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { confirmDialog } from '@/lib/confirm';
 interface SalaryCycle {
   type: 'monthly_day' | 'custom_range';
   startDay: number;
@@ -197,7 +198,7 @@ export function SalaryConfigPanel() {
   };
 
   const handleDelete = async (userId: string) => {
-    if (!confirm('Remove salary config for this employee?')) return;
+    if (!(await confirmDialog({ title: 'Remove salary config?', message: 'Remove salary config for this employee?', confirmText: 'Remove', tone: 'danger' }))) return;
     try {
       await api.delete(`/hr/salary-configs/${userId}`);
       toast.success('Salary config removed');

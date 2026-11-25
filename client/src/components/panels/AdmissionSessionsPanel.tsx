@@ -8,6 +8,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { SessionFormDialog } from '../forms/SessionFormDialog';
+import { confirmDialog } from '@/lib/confirm';
 
 export function AdmissionSessionsPanel() {
   const { user } = useAuth();
@@ -67,7 +68,7 @@ export function AdmissionSessionsPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this session?')) return;
+    if (!(await confirmDialog({ title: 'Delete session?', message: 'Delete this session?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/operations/sessions/${id}`);
       fetchSessions();

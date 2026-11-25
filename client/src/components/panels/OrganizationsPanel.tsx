@@ -89,6 +89,7 @@ import api from '@/lib/api';
 import { featuresOfOrg } from '@/lib/orgFeatures';
 
 import { CS } from '@/lib/currency';
+import { confirmDialog } from '@/lib/confirm';
 // Optional modules Superadmin can switch on per organization (Organizations → ⋮ → Manage Features).
 // To offer another one, add it here AND to TOGGLEABLE_FEATURES in the server's organizationController.
 const ORG_FEATURE_CATALOG: { key: string; label: string; description: string; icon: any }[] = [
@@ -474,7 +475,7 @@ export function OrganizationsPanel() {
   const [togglingFeature, setTogglingFeature] = useState<string | null>(null);
 
   const handleToggleFeature = async (org: Organization, feature: { key: string; label: string }, enabled: boolean) => {
-    if (!enabled && !window.confirm(`Turn OFF ${feature.label} for ${org.name}?\n\nIts admins lose access immediately. Existing data is kept and returns if you turn it back on.`)) return;
+    if (!enabled && !(await confirmDialog({ title: 'Turn off feature?', message: `Turn OFF ${feature.label} for ${org.name}?\n\nIts admins lose access immediately. Existing data is kept and returns if you turn it back on.`, confirmText: 'Turn Off', tone: 'danger' }))) return;
     setTogglingFeature(feature.key);
     try {
       const res = await api.put(`/organizations/${org.id}/features`, { feature: feature.key, enabled });

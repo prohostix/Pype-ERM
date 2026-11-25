@@ -8,7 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { confirmDialog } from '@/lib/confirm';
 
 export function ComplaintsPanel() {
   const [complaints, setComplaints] = useState<any[]>([]);
@@ -51,7 +53,7 @@ export function ComplaintsPanel() {
       resetForm();
       fetchComplaints();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to save complaint');
+      toast.error(err.response?.data?.message || 'Failed to save complaint');
     }
   };
 
@@ -68,7 +70,7 @@ export function ComplaintsPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this complaint?')) return;
+    if (!(await confirmDialog({ title: 'Delete complaint?', message: 'Delete this complaint?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/hr/complaints/${id}`);
       fetchComplaints();
@@ -78,7 +80,7 @@ export function ComplaintsPanel() {
   };
 
   const handleResolve = async (id: string) => {
-    if (!confirm('Mark as resolved?')) return;
+    if (!(await confirmDialog({ title: 'Resolve complaint?', message: 'Mark as resolved?', confirmText: 'Mark Resolved', tone: 'default' }))) return;
     try {
       await api.put(`/hr/complaints/${id}/resolve`);
       fetchComplaints();

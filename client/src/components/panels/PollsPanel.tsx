@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { toast } from 'sonner';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { confirmDialog } from '@/lib/confirm';
 
 interface PollOption {
   text: string;
@@ -76,7 +77,7 @@ export function PollsPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this poll?')) return;
+    if (!(await confirmDialog({ title: 'Delete poll?', message: 'Delete this poll?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/hr/polls/${id}`);
       toast.success('Poll deleted');

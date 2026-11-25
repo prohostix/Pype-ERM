@@ -14,6 +14,7 @@ import html2pdf from 'html2pdf.js';
 
 import { CS, numLocale } from '@/lib/currency';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { promptDialog } from '@/lib/confirm';
 function numberToWords(amount: number): string {
   if (amount === 0) return 'Zero Rs. Only';
   
@@ -721,8 +722,15 @@ export function InvoicesPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this invoice?')) return;
-    const remarks = prompt('Enter deletion remarks (required for audit):');
+    const remarks = await promptDialog({
+      title: 'Delete invoice?',
+      message: 'This invoice will be deleted. Remarks are kept for audit.',
+      inputLabel: 'Deletion remarks',
+      placeholder: 'Why is it being deleted?',
+      required: true,
+      confirmText: 'Delete',
+      tone: 'danger',
+    });
     if (!remarks) return;
     try {
       await api.delete(`/finance/invoices/${id}`, { data: { remarks } });

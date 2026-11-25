@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 
 export interface StaffUser {
@@ -168,7 +169,7 @@ export function UserFormDialog({ open, onClose, onSaved, editingUser = null, def
       onClose();
     } catch (error: any) {
       console.error('Failed to save user:', error);
-      alert(error.response?.data?.message || 'Failed to save user. Please try again.');
+      toast.error(error.response?.data?.message || 'Failed to save user. Please try again.');
     } finally {
       setSaving(false);
     }

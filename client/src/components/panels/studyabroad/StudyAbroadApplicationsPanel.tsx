@@ -14,6 +14,7 @@ import { uploadFormFile } from '@/lib/uploadFile';
 import {
   PIPELINE_STAGES, TERMINAL_LABELS, apiError, fileHref, fmtDate, money, stageLabel, stageTone, waitingFor, COMMISSION_STATUS,
 } from './shared';
+import { confirmDialog } from '@/lib/confirm';
 
 const FILTERS = [{ key: 'all', label: 'All' }, ...PIPELINE_STAGES, ...Object.entries(TERMINAL_LABELS).map(([key, label]) => ({ key, label }))];
 
@@ -298,7 +299,7 @@ export function StudyAbroadApplicationsPanel() {
 
                 {!(['withdrawn', 'interview_failed', 'offer_declined', 'visa_refused', 'enrolled', 'commission_released'].includes(app.stage)) && (
                   <div className="pt-2 border-t"><Button size="sm" variant="ghost" className="text-destructive" disabled={busy}
-                    onClick={() => { if (confirm('Close this application? This cannot be undone.')) act('put', 'withdraw', {}, 'Application closed'); }}>Close application</Button></div>
+                    onClick={async () => { if ((await confirmDialog({ title: 'Close application?', message: 'Close this application? This cannot be undone.', confirmText: 'Close Application', tone: 'danger' }))) act('put', 'withdraw', {}, 'Application closed'); }}>Close application</Button></div>
                 )}
 
                 <section>

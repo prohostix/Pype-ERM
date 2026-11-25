@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import api from '@/lib/api';
+import { confirmDialog } from '@/lib/confirm';
 
 type Filter = 'open' | 'answered' | 'all';
 
@@ -47,7 +48,7 @@ export function FacultyClassDoubtsPanel({ academicClass, onBack }: { academicCla
   };
 
   const handleDelete = async (doubtId: string) => {
-    if (!confirm('Delete this doubt and its replies?')) return;
+    if (!(await confirmDialog({ title: 'Delete doubt?', message: 'Delete this doubt and its replies?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/faculty-portal/doubts/${doubtId}`);
       fetchDoubts();

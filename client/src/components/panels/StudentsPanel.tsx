@@ -23,6 +23,7 @@ import { StudentReportDialog } from './StudentReportDialog';
 import { visibleDocTypes } from '@/lib/enrollmentDocs';
 
 import { CS } from '@/lib/currency';
+import { confirmDialog } from '@/lib/confirm';
 interface MultiSelectFilterOption {
   value: string;
   label: string;
@@ -1883,7 +1884,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this student?')) return;
+    if (!(await confirmDialog({ title: 'Delete student?', message: 'Are you sure you want to delete this student?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/students/${id}`);
       toast.success('Student deleted successfully');
@@ -2804,7 +2805,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   };
 
   const handleDeleteSchedule = async (scheduleId: string) => {
-    if (!confirm('Are you sure you want to remove this schedule milestone?')) return;
+    if (!(await confirmDialog({ title: 'Remove milestone?', message: 'Are you sure you want to remove this schedule milestone?', confirmText: 'Remove', tone: 'danger' }))) return;
     try {
       await api.delete(`/payment-schedules/${scheduleId}`);
       toast.success('Schedule milestone removed');

@@ -13,6 +13,7 @@ import { VideoPreviewDialog } from './VideoPreviewDialog';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { shrinkImage } from '@/lib/uploadFile';
+import { confirmDialog } from '@/lib/confirm';
 
 export function FacultyClassContentPanel({ academicClass, onBack }: { academicClass: any; onBack: () => void }) {
   const [modules, setModules] = useState<any[]>([]);
@@ -214,7 +215,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   };
 
   const handleDeleteTrialVideo = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this trial video?')) return;
+    if (!(await confirmDialog({ title: 'Delete trial video?', message: 'Are you sure you want to delete this trial video?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/faculty-portal/trial-videos/${id}`);
       fetchTrialVideos();
@@ -246,7 +247,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   };
 
   const handleDeleteModule = async (moduleId: string) => {
-    if (!confirm('Delete this module and ALL its sub-modules, lessons and materials?')) return;
+    if (!(await confirmDialog({ title: 'Delete module?', message: 'Delete this module and ALL its sub-modules, lessons and materials?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/faculty-portal/modules/${moduleId}`);
       toast.success('Module deleted');
@@ -278,7 +279,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   };
 
   const handleDeleteSubModule = async (subModuleId: string) => {
-    if (!confirm('Delete this sub-module and all its lessons and materials?')) return;
+    if (!(await confirmDialog({ title: 'Delete sub-module?', message: 'Delete this sub-module and all its lessons and materials?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/faculty-portal/submodules/${subModuleId}`);
       toast.success('Sub-module deleted');
@@ -338,7 +339,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   };
 
   const handleDeleteLesson = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this lesson?')) return;
+    if (!(await confirmDialog({ title: 'Delete lesson?', message: 'Are you sure you want to delete this lesson?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/faculty-portal/lessons/${id}`);
       fetchModules();
@@ -445,7 +446,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   };
 
   const handleDeleteMaterial = async (materialId: string) => {
-    if (!confirm('Delete this material?')) return;
+    if (!(await confirmDialog({ title: 'Delete material?', message: 'Delete this material?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/faculty-portal/materials/${materialId}`);
       toast.success('Material deleted');
@@ -527,7 +528,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
 
   const handleDeleteAssessment = async () => {
     if (!activeLessonId) return;
-    if (!confirm('Are you sure you want to delete this assessment? All associated questions and student attempts will be permanently removed.')) return;
+    if (!(await confirmDialog({ title: 'Delete assessment?', message: 'Are you sure you want to delete this assessment? All associated questions and student attempts will be permanently removed.', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       setLoadingAssessment(true);
       await api.delete(`/faculty-portal/lessons/${activeLessonId}/assessment`);
@@ -1467,8 +1468,8 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
                       variant="ghost" 
                       size="sm" 
                       className="h-6 text-[11px] text-muted-foreground hover:text-red-500"
-                      onClick={() => {
-                        if (confirm('Clear all questions currently in the list?')) {
+                      onClick={async () => {
+                        if ((await confirmDialog({ title: 'Clear questions?', message: 'Clear all questions currently in the list?', confirmText: 'Clear All', tone: 'danger' }))) {
                           setAssessmentForm({ ...assessmentForm, questions: [] });
                         }
                       }}

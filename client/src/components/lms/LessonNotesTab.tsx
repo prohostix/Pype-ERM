@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import type { YouTubePlayerControl } from '@/components/CustomYouTubePlayer';
 import api from '@/lib/api';
+import { confirmDialog } from '@/lib/confirm';
 
 const formatTimestamp = (totalSeconds: number) => {
   const hours = Math.floor(totalSeconds / 3600);
@@ -79,7 +80,7 @@ export function LessonNotesTab({
   };
 
   const handleDelete = async (noteId: string) => {
-    if (!confirm('Delete this note?')) return;
+    if (!(await confirmDialog({ title: 'Delete note?', message: 'Delete this note?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.deleteWithoutApproval(`/student-portal/notes/${noteId}`);
       fetchNotes();

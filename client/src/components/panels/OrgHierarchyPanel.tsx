@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, RefreshCw, UserPlus, Trash2, Edit2, Users, ChevronDown, ChevronUp, Layers, Building2, MapPin } from 'lucide-react';
 import api from '@/lib/api';
+import { confirmDialog } from '@/lib/confirm';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Dept { id: string; name: string; type: string; }
@@ -556,7 +557,7 @@ export function OrgHierarchyPanel() {
   };
 
   const handleDelete = async (node: DesignationNode) => {
-    if (!confirm(`Delete "${node.title}"? This cannot be undone.`)) return;
+    if (!(await confirmDialog({ title: 'Delete position?', message: `Delete "${node.title}"? This cannot be undone.`, confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/org/designations/${node.id}`);
       fetchAll();

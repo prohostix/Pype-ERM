@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 
 import { CS, numLocale } from '@/lib/currency';
+import { confirmDialog } from '@/lib/confirm';
 interface TargetsPanelProps {
   endpoint: string; // '/finance/targets' or '/sales/targets'
   title?: string;
@@ -116,7 +117,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this target?')) return;
+    if (!(await confirmDialog({ title: 'Delete target?', message: 'Delete this target?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`${endpoint}/${id}`);
       fetchTargets();

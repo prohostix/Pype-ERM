@@ -20,6 +20,7 @@ import api from '@/lib/api';
 import { uploadFormFile } from '@/lib/uploadFile';
 
 import { CS } from '@/lib/currency';
+import { confirmDialog } from '@/lib/confirm';
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface KPI {
   id?: string;
@@ -362,9 +363,9 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
   const profile = data?.profile;
 
   return (
-    <Sheet open={open} onOpenChange={v => {
+    <Sheet open={open} onOpenChange={async v => {
       if (v) return;
-      if (kpiKraDirty && !window.confirm('You have unsaved KPI/KRA changes. Close without saving?')) return;
+      if (kpiKraDirty && !(await confirmDialog({ title: 'Discard unsaved changes?', message: 'You have unsaved KPI/KRA changes. Close without saving?', confirmText: 'Close Without Saving', tone: 'danger' }))) return;
       onClose();
     }}>
       <SheetContent side="right" style={{ fontFamily: "Urbanist, ui-sans-serif, system-ui, sans-serif" }} className="w-full sm:max-w-3xl overflow-y-auto p-0 border-0 bg-white sm:rounded-l-[2rem]">

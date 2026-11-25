@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { ListPagination } from '@/components/ui/list-pagination';
+import { confirmDialog } from '@/lib/confirm';
 
 interface LeaveAllocation {
   id?: string;
@@ -112,7 +113,7 @@ export function LeaveAllocationPanel() {
   };
 
   const handleDelete = async (userId: string, userName: string) => {
-    if (!window.confirm(`Are you sure you want to delete the leave allocation for ${userName} (${month}/${year})?`)) {
+    if (!(await confirmDialog({ title: 'Delete leave allocation?', message: `Are you sure you want to delete the leave allocation for ${userName} (${month}/${year})?`, confirmText: 'Delete', tone: 'danger' }))) {
       return;
     }
     try {

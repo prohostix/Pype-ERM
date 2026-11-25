@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { confirmDialog } from '@/lib/confirm';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Dept { id: string; name: string; type: string; }
@@ -234,7 +235,7 @@ export function HROrgChartPanel() {
   };
 
   const handleUnassign = async (node: DesignationNode, userId: string) => {
-    if (!confirm('Remove this person from the position?')) return;
+    if (!(await confirmDialog({ title: 'Remove from position?', message: 'Remove this person from the position?', confirmText: 'Remove', tone: 'danger' }))) return;
     try {
       await api.patch(`/org/designations/${node.id}/unassign`, { userId });
       toast.success('Removed from position');

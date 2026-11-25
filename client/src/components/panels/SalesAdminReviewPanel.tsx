@@ -11,6 +11,7 @@ import { StudentsPanel } from './StudentsPanel';
 import { ListPagination } from '@/components/ui/list-pagination';
 
 import { CS } from '@/lib/currency';
+import { confirmDialog } from '@/lib/confirm';
 export function SalesAdminReviewPanel() {
   const { user } = useAuth();
   const [enrollments, setEnrollments] = useState<any[]>([]);
@@ -45,7 +46,7 @@ export function SalesAdminReviewPanel() {
   };
 
   const handleApprove = async (id: string) => {
-    if (!window.confirm('Are you sure you want to approve this application and forward it to Operations?')) return;
+    if (!(await confirmDialog({ title: 'Approve application?', message: 'Are you sure you want to approve this application and forward it to Operations?', confirmText: 'Approve', tone: 'default' }))) return;
     setProcessing(true);
     try {
       await api.put(`/sales/student-applications/${id}/sales-admin-approve`);

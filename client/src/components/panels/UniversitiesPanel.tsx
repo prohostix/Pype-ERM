@@ -15,6 +15,7 @@ import { UniversitySessionsDialog } from './UniversitySessionsDialog';
 import { UniversityDetailPanel } from './UniversityDetailPanel';
 import { toast } from 'sonner';
 import { uploadFormFile } from '@/lib/uploadFile';
+import { confirmDialog } from '@/lib/confirm';
 
 interface Branch { id: string; name: string; code: string; }
 interface University {
@@ -166,7 +167,7 @@ export function UniversitiesPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this university?')) return;
+    if (!(await confirmDialog({ title: 'Delete university?', message: 'Delete this university?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/operations/universities/${id}`);
       fetchUniversities();

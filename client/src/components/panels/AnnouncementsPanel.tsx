@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import api from '@/lib/api';
 
 import { useAuth } from '@/hooks/useAuth';
+import { confirmDialog } from '@/lib/confirm';
 
 const PRIORITY_COLORS: Record<string, string> = {
   high: 'bg-red-100 text-red-800',
@@ -80,7 +81,7 @@ export function AnnouncementsPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this announcement?')) return;
+    if (!(await confirmDialog({ title: 'Delete announcement?', message: 'Delete this announcement?', confirmText: 'Delete', tone: 'danger' }))) return;
     try {
       await api.delete(`/hr/announcements/${id}`);
       toast.success('Deleted');
