@@ -1199,11 +1199,13 @@ export const getIncomeExpenditureReport = asyncHandler(async (req: PageRequest, 
   });
 });
 
-export const getFinanceSalesUsers = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getFinanceSalesUsers = asyncHandler(async (req: PageRequest, res: Response) => {
   const users = await prisma.user.findMany({
     where: {
       organizationId: req.user.organizationId,
       status: { not: 'resigned' },
+      // Someone given the page picks from their own branch
+      ...(req.ownBranchOnly && req.user.branchId && { branchId: req.user.branchId }),
       OR: [
         { role: { in: ['sales_admin', 'sales_sub_admin', 'sales'] } },
         { department: { type: 'sales' } }

@@ -21,6 +21,8 @@ import { uploadFormFile } from '@/lib/uploadFile';
 
 import { CS } from '@/lib/currency';
 import { confirmDialog } from '@/lib/confirm';
+import { isGiven } from '@/lib/access';
+import { useAuth } from '@/hooks/useAuth';
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface KPI {
   id?: string;
@@ -100,6 +102,13 @@ interface Props {
 }
 
 export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
+  const { user: viewer } = useAuth();
+  // Added by an Org Admin: the profile can be read, not changed
+  const readOnly = isGiven(viewer, 'employees');
+  const hiddenTabs = readOnly ? [
+    ...(viewer?.access?.salary_config?.view?.allowed ? [] : ['salary']),
+    ...(viewer?.access?.payroll_history?.view?.allowed || viewer?.access?.payroll?.view?.allowed ? [] : ['payroll_history']),
+  ] : [];
   const [data, setData] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -406,7 +415,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
         ) : (
           <Tabs value={tab} onValueChange={setTab} className="flex flex-col h-full">
             <TabsList className="flex-wrap h-auto gap-1.5 mx-6 sm:mx-8 mt-1 justify-start bg-transparent p-0">
-              {['overview', 'personal', 'employment', 'salary', 'payroll_history', 'kpi', 'kra', 'review', 'documents'].map(t => (
+              {['overview', 'personal', 'employment', 'salary', 'payroll_history', 'kpi', 'kra', 'review', 'documents'].filter(t => !hiddenTabs.includes(t)).map(t => (
                 <TabsTrigger key={t} value={t} className="capitalize rounded-full px-4 h-9 text-xs font-semibold bg-[#f4f6f3] text-slate-600 hover:bg-[#eaf6e6] data-[state=active]:bg-[#0b1d14] data-[state=active]:text-white data-[state=active]:shadow-none">
                   {t === 'kpi' ? 'KPI' : t === 'kra' ? 'KRA' : t === 'payroll_history' ? 'Payroll History' : t === 'documents' ? 'Documents' : t.charAt(0).toUpperCase() + t.slice(1)}
                 </TabsTrigger>
@@ -414,6 +423,8 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
             </TabsList>
 
             <div className="flex-1 overflow-y-auto px-6 sm:px-8 py-6 space-y-5">
+              {/* A disabled fieldset switches off every field and button inside it */}
+              <fieldset disabled={readOnly} className="contents">
 
               {/* ── OVERVIEW ── */}
               <TabsContent value="overview" className="space-y-4 mt-0">
@@ -829,6 +840,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                 <Button onClick={saveReview} disabled={saving} className="w-full rounded-full h-11 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-none"><Save className="w-4 h-4 mr-2" />Save Review</Button>
               </TabsContent>
 
+              </fieldset>
             </div>
           </Tabs>
         )}

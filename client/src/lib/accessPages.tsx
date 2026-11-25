@@ -94,6 +94,7 @@ import { EscalationsPanel } from '@/components/panels/EscalationsPanel';
 import { EmployeeEscalationsPanel } from '@/components/panels/EmployeeEscalationsPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
+import { SalesCounselorReportPanel } from '@/components/panels/SalesCounselorReportPanel';
 
 interface AccessPage { key: string; label: string; menuIds: string[]; render?: () => ReactElement; exceptRoles?: string[]; onlyRoles?: string[] }
 
@@ -138,6 +139,7 @@ const PAGES: AccessPage[] = [
   { key: 'collection_report', label: 'Collection Report', menuIds: ['collection_report'], render: () => <CollectionReportPanel /> },
   { key: 'sales_team_report', label: 'Sales Team Reports', menuIds: ['team_reports'], render: () => <SalesTeamReportPanel /> },
   { key: 'sales_admission_report', label: 'Sales Admission Reports', menuIds: ['admission_reports', 'counselor_admission_reports'], render: () => <SalesAdmissionReportPanel /> },
+  { key: 'counselor_report', label: 'Counselor Reports', menuIds: ['counselor_reports', 'performance_reports'], render: () => <SalesCounselorReportPanel /> },
   { key: 'conversion_report', label: 'Conversion Report', menuIds: ['conversion_report'], render: () => <SalesConversionReportPanel /> },
   { key: 'performance', label: 'Performance', menuIds: ['performance'], render: () => <PerformancePanel /> },
   { key: 'kpi_report', label: 'KPI / KRA Report', menuIds: ['kpi-kra'], render: () => <CEOKPIReportPanel /> },

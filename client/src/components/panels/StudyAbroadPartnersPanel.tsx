@@ -10,6 +10,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { PARTNER_STATUS, apiError, fmtDate } from './studyabroad/shared';
+import { mayOn } from '@/lib/access';
 
 interface Partner {
   id: string;
@@ -55,11 +56,11 @@ function CountryPicker({ options, value, onChange }: { options: string[]; value:
 export function StudyAbroadPartnersPanel() {
   const { user } = useAuth();
   const role = user?.role || '';
-  const isOrg = ['org_admin', 'superadmin'].includes(role);
-  const canCreate = ['sales_admin', 'sales_sub_admin', 'ops_admin', 'org_admin', 'superadmin'].includes(role);
-  const canEditCountries = ['ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'].includes(role);
-  const canEdit = ['ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'].includes(role);
-  const canReset = ['ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'].includes(role);
+  const isOrg = ['org_admin', 'superadmin'].includes(role) || mayOn(user, 'study_abroad', 'edit', false);
+  const canCreate = mayOn(user, 'study_abroad', 'create', ['sales_admin', 'sales_sub_admin', 'ops_admin', 'org_admin', 'superadmin'].includes(role));
+  const canEditCountries = mayOn(user, 'study_abroad', 'edit', ['ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'].includes(role));
+  const canEdit = mayOn(user, 'study_abroad', 'edit', ['ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'].includes(role));
+  const canReset = mayOn(user, 'study_abroad', 'edit', ['ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'].includes(role));
 
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(false);

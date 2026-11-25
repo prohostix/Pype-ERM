@@ -7,16 +7,22 @@ import {
   getEditDeleteStats,
 } from '../controllers/editDeleteController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { pageAction, type PageRequest } from '../access/pageGuard.js';
 
 const router = express.Router();
 
 // All routes require authentication
 router.use(protect);
 
+const REQUESTERS = ['ops_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'];
+// Asking to remove a program allocation also follows the Program Allocation page
+const removeAllocationRequest = pageAction('program_allocation', 'delete', REQUESTERS);
+const otherRequest = authorize(...REQUESTERS);
+
 // Ops can submit requests, Finance can view all
 router
   .route('/request')
-  .post(authorize('ops_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), submitEditDeleteRequest);
+  .post((req: PageRequest, res, next) => (req.body?.entityType === 'program_allocation' ? removeAllocationRequest : otherRequest)(req, res, next), submitEditDeleteRequest);
 
 router
   .route('/requests')

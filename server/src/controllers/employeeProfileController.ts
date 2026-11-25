@@ -3,6 +3,9 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { isUserInScope } from '../utils/branchScope.js';
+import { can } from '../access/resolve.js';
+import type { PageRequest } from '../access/pageGuard.js';
+import { withoutPayDetails } from '../access/profileRules.js';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -81,7 +84,7 @@ function buildProfileData(body: any): { data?: Record<string, any>; error?: stri
 
 // ─── Handlers ─────────────────────────────────────────────────────────────────
 
-export const getEmployeeProfile = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getEmployeeProfile = asyncHandler(async (req: PageRequest, res: Response) => {
   const userId = req.params.userId || req.user.id;
   if (!(await loadTargetUser(req, res, userId))) return;
 
@@ -94,6 +97,16 @@ export const getEmployeeProfile = asyncHandler(async (req: AuthRequest, res: Res
     prisma.employeeProfile.findUnique({ where: { userId } }),
     prisma.salaryConfig.findUnique({ where: { userId } }),
   ]);
+  if (req.ownBranchOnly) {
+    // The organization record holds settings that are not part of an employee's profile
+    const { organization: _organization, ...person } = user!;
+    const seesPay = can(req.access!, 'salary_config', 'view');
+    res.json({
+      success: true,
+      data: { user: person, profile: seesPay ? profile : withoutPayDetails(profile), salaryConfig: seesPay ? salaryConfig : null },
+    });
+    return;
+  }
   res.json({ success: true, data: { user, profile, salaryConfig } });
 });
 

@@ -94,15 +94,15 @@ router.route('/programs/:id')
 router.put('/programs/:id/activate', pageAction('programs', 'edit', ORG_ADMINS, program), activateProgram);
 
 // Onboarding — document verification (must be before /centers/:id to avoid route conflict)
-router.get('/centers/pending-verification', authorize('ops_admin', 'ops_sub_admin', 'employee'), getPendingVerificationCenters);
+router.get('/centers/pending-verification', partnerContext, authorize('ops_admin', 'ops_sub_admin', 'employee'), getPendingVerificationCenters);
 router.put('/centers/:id/verify', authorize('ops_admin', 'ops_sub_admin', 'employee'), ownPartner, verifyCenter);
 
 // Study Centers
 router.route('/centers')
-  .get(staffAndPartnersOnly, getStudyCenters)
+  .get(staffAndPartnersOnly, partnerContext, getStudyCenters)
   .post(pageAction('academic_partners', 'create', ORG_ADMINS), createStudyCenter);
 router.route('/centers/:id')
-  .get(staffAndPartnersOnly, getStudyCenter)
+  .get(staffAndPartnersOnly, partnerContext, getStudyCenter)
   .put(pageAction('academic_partners', 'edit', ORG_ADMINS, partner), updateStudyCenter)
   .delete(pageAction('academic_partners', 'delete', ORG_ADMINS, partner), deleteStudyCenter);
 router.put('/centers/:id/approve', authorize('ops_admin', 'finance_admin', 'finance_sub_admin'), ownPartner, approveStudyCenter);
@@ -153,7 +153,7 @@ import {
 import { pageAction } from '../access/pageGuard.js';
 import type { Response, NextFunction } from 'express';
 import { ownedBy, partnerInBranch, type PageRequest } from '../access/pageGuard.js';
-import { staffAndPartnersOnly } from '../access/partnerSecrets.js';
+import { staffAndPartnersOnly, partnerContext } from '../access/partnerSecrets.js';
 
 router.get('/reports/admissions', pageAction('admission_report', 'view', ['ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin']), getAdmissionReport);
 router.get('/reports/enrollments', pageAction('enrollment_report', 'view', ['ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin']), getEnrollmentReport);

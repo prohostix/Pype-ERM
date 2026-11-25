@@ -11,6 +11,7 @@ import { payrollTeamAccess } from '../src/access/payrollGuard.js';
 import { leaveVisibilityWhere } from '../src/utils/leaveScope.js';
 import { givenUserError } from '../src/utils/userGuards.js';
 import { withoutPortalLogins } from '../src/access/partnerSecrets.js';
+import { withoutPayDetails } from '../src/access/profileRules.js';
 import { studentBranchWhere } from '../src/access/studentRules.js';
 import { partnerBranchWhere, enrollmentBranchWhere } from '../src/access/pageGuard.js';
 import { hasPaymentsScreen, invoiceBranchWhere, isGrantedReader } from '../src/access/invoiceRules.js';
@@ -366,6 +367,30 @@ test('portal logins are sent only to an Org Admin', () => {
 
 test('every page but Executive Tasks can be given', () => {
   assert.deepEqual(FEATURES.filter((f) => f.blockOnly).map((f) => f.key), ['executive_tasks']);
+});
+
+test('Counselor Reports can be given or blocked', () => {
+  assert.deepEqual(rulesFor('GET', '/api/v1/sales/reports/counselor'), [{ pageKey: 'counselor_report', action: 'view' }]);
+  assert.equal(changeError('admin', hr, [{ featureKey: 'counselor_report', action: 'view', effect: 'allow' }]), null);
+});
+
+test('pay details are left out of a profile', () => {
+  assert.deepEqual(withoutPayDetails({ city: 'c', ctc: 1, basicSalary: 2, bankAccountNo: '3', panNumber: '4' } as any), { city: 'c' });
+  assert.equal(withoutPayDetails(null), null);
+});
+
+test('Allow on a full-access page gives every action and the whole organization', () => {
+  const ops = { ...hr, role: 'ops_admin', branchId: 'b' };
+  const give = (key: string, action: string) => row(action, 'allow', { featureKey: key, userId: ops.id, roleAtGrant: ops.role, departmentIdAtGrant: ops.departmentId });
+  const access = resolveAccess(ops, [give('academic_partners', 'view')]);
+  for (const action of ['view', 'create', 'edit', 'delete']) assert.equal(can(access, 'academic_partners', action as any), true, action);
+  assert.deepEqual(decidePageAction(access, 'academic_partners', 'edit', 'ops_admin', ['org_admin']), { allowed: true, ownBranchOnly: false });
+  assert.equal(needsRow(ops, { featureKey: 'academic_partners', action: 'view', effect: 'allow' }), true);
+  // a blocked action stays blocked, and ordinary pages are not widened
+  const mixed = resolveAccess(ops, [give('academic_partners', 'view'), row('delete', 'deny', { featureKey: 'academic_partners', userId: ops.id, roleAtGrant: ops.role, departmentIdAtGrant: ops.departmentId })]);
+  assert.equal(can(mixed, 'academic_partners', 'delete'), false);
+  assert.equal(can(resolveAccess(hr, [row('view', 'allow', { featureKey: 'universities' })]), 'universities', 'edit'), false);
+  for (const key of ['academic_centers', 'study_abroad']) assert.equal(FEATURES.find((f) => f.key === key)!.fullAccess, true, key);
 });
 
 test('requests are matched to the page they belong to', () => {

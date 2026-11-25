@@ -52,9 +52,11 @@ const resolveFeature = (user: AccessUser, rows: Override[], feature: Feature): P
       .forEach((row) => decided.set(row.action, row.effect as Effect)); // the newest row wins
   }
 
+  // On a full-access page one Allow gives every action that is not itself blocked
+  const fullGrant = Boolean(feature.fullAccess) && feature.actions.some((action) => decided.get(action) === 'allow');
   const allowed = new Set<Action>(feature.actions.filter((action) => {
     const effect = decided.get(action);
-    return effect ? effect === 'allow' : defaults.includes(action);
+    return effect ? effect === 'allow' : fullGrant || defaults.includes(action);
   }));
   // Allowing any action opens the page too, unless view itself is blocked; without view there is nothing
   if (feature.actions.some((action) => decided.get(action) === 'allow') && decided.get('view') !== 'deny') allowed.add('view');

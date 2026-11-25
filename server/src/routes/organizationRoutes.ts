@@ -34,6 +34,7 @@ import {
 } from '../controllers/communicationSettingsController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { auditLog } from '../middleware/auditLog.js';
+import { pageAction } from '../access/pageGuard.js';
 
 const router = express.Router();
 
@@ -53,7 +54,7 @@ router
   .post(authorize('superadmin'), auditLog('create', 'Organization'), createOrganization);
 
 // Enrollment link configuration (must be before /:id to avoid route conflict)
-router.get('/enrollment-link-config', authorize('superadmin', 'org_admin', 'sales_admin', 'sales_sub_admin'), getEnrollmentLinkConfig);
+router.get('/enrollment-link-config', pageAction('invite_links', 'view', ['superadmin', 'org_admin', 'sales_admin', 'sales_sub_admin']), getEnrollmentLinkConfig);
 router.put('/enrollment-link-config', authorize('superadmin', 'org_admin'), updateEnrollmentLinkConfig);
 
 router.get('/student-portal-config', authorize('superadmin', 'org_admin'), getStudentPortalConfig);

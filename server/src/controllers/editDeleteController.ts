@@ -5,8 +5,9 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { createNotification } from './notificationController.js';
 import { NotificationType } from '../generated/client/index.js';
 import { resolveTargetName } from '../utils/resolveEntity.js';
+import { partnerBranchWhere, type PageRequest } from '../access/pageGuard.js';
 
-export const submitEditDeleteRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const submitEditDeleteRequest = asyncHandler(async (req: PageRequest, res: Response) => {
   const requestData: any = {
     ...req.body,
     organization: { connect: { id: req.user.organizationId } },
@@ -17,6 +18,22 @@ export const submitEditDeleteRequest = asyncHandler(async (req: AuthRequest, res
     requestData.faculty = { connect: { id: req.user.id } };
   } else {
     requestData.user = { connect: { id: req.user.id } };
+  }
+
+  // Someone given Program Allocation may only name an allocation of their branch's partners
+  if (req.ownBranchOnly) {
+    const allocation = await prisma.programAllocation.findFirst({
+      where: { id: String(req.body.entityId || ''), organizationId: req.user.organizationId },
+      select: { centerId: true }
+    });
+    const reachable = allocation && (await prisma.studyCenter.findFirst({
+      where: { id: allocation.centerId, ...partnerBranchWhere(req.user.branchId) },
+      select: { id: true }
+    }));
+    if (!reachable) {
+      res.status(404).json({ success: false, message: 'Allocation not found' });
+      return;
+    }
   }
 
   const request = await prisma.editDeleteRequest.create({

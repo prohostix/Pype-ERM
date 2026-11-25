@@ -4,7 +4,7 @@ import prisma from '../lib/prisma.js';
 import { Action } from './catalog.js';
 import { loadAccess } from './load.js';
 import { AccessRequest } from './guard.js';
-import { decideAnyPage, decidePageAction, isGrantedPage } from './pageRules.js';
+import { decideAnyPage, decidePageAction, hasFullGrant, isGrantedPage } from './pageRules.js';
 import { invoiceBranchWhere } from './invoiceRules.js';
 import { BranchId, inOwnBranch } from './branchScope.js';
 
@@ -46,7 +46,7 @@ export const pageAction = (pageKey: string, action: Action, legacyRoles: string[
         return;
       }
       req.access = access;
-      req.ownBranchOnly = decision.ownBranchOnly || isGrantedPage(access, decidedBy);
+      req.ownBranchOnly = hasFullGrant(access, decidedBy) ? false : decision.ownBranchOnly || isGrantedPage(access, decidedBy);
       if (req.params.id && options.inOrganization && req.user.role !== 'superadmin' && !(await options.inOrganization(req))) {
         res.status(404).json({ success: false, message: 'Record not found' });
         return;

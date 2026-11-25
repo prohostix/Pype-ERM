@@ -13,10 +13,16 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { AcademicBatchesPanel } from './AcademicBatchesPanel';
 import { ClassContentViewer } from './ClassContentViewer';
+import { isGiven, mayOn } from '@/lib/access';
 
 export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: () => void }) {
   const { user } = useAuth();
-  const canWrite = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const isOrgAdmin = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const mayCreate = mayOn(user, 'academic_centers', 'create', isOrgAdmin);
+  const mayEdit = mayOn(user, 'academic_centers', 'edit', isOrgAdmin);
+  const mayDelete = mayOn(user, 'academic_centers', 'delete', isOrgAdmin);
+  // Opening a class's batches and content needs only the page itself
+  const canWrite = isOrgAdmin || mayCreate || mayEdit || mayDelete || isGiven(user, 'academic_centers');
   const [classes, setClasses] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
   const [faculties, setFaculties] = useState<any[]>([]);
@@ -199,7 +205,7 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
             </p>
           </div>
         </div>
-        {canWrite && (
+        {mayCreate && (
           <Button onClick={() => setDialogOpen(true)} className="h-11 px-5 rounded-full text-sm font-semibold gap-2 bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] shadow-sm shrink-0 self-start lg:self-auto">
             <Plus className="w-4 h-4" /> Add Class
           </Button>
@@ -222,7 +228,7 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
             <p className="text-muted-foreground text-center max-w-md mb-6 text-sm">
               There are no academic classes created in this center yet.
             </p>
-            {canWrite && (
+            {mayCreate && (
               <Button onClick={() => setDialogOpen(true)} className="h-11 px-6 rounded-full bg-[#8ae47e] hover:bg-[#7bd96f] text-[#0b1d14] font-semibold shadow-none">
                 <Plus className="w-4 h-4 mr-2" /> Create First Class
               </Button>
@@ -253,7 +259,7 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
                         </div>
                       </div>
                     </div>
-                    {canWrite && (
+                    {(mayEdit || mayDelete) && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white border-slate-200 text-slate-600 hover:bg-[#f4f6f3] shrink-0">
@@ -261,12 +267,16 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-52 rounded-2xl p-1.5">
-                          <DropdownMenuItem onClick={() => handleEdit(c)} className="cursor-pointer gap-2.5 py-2.5 rounded-xl">
-                            <Edit className="w-4 h-4" /> Edit Class
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleDeleteClick(c.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2.5 py-2.5 rounded-xl">
-                            <Trash2 className="w-4 h-4" /> Request Deletion
-                          </DropdownMenuItem>
+                          {mayEdit && (
+                            <DropdownMenuItem onClick={() => handleEdit(c)} className="cursor-pointer gap-2.5 py-2.5 rounded-xl">
+                              <Edit className="w-4 h-4" /> Edit Class
+                            </DropdownMenuItem>
+                          )}
+                          {mayDelete && (
+                            <DropdownMenuItem onClick={() => handleDeleteClick(c.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2.5 py-2.5 rounded-xl">
+                              <Trash2 className="w-4 h-4" /> Request Deletion
+                            </DropdownMenuItem>
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     )}
@@ -312,7 +322,7 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
                     <Button variant="outline" onClick={() => setContentClass(c)} className="h-10 px-5 rounded-full bg-white border-slate-200 text-sm font-semibold gap-1.5 hover:bg-[#eaf6e6] hover:text-[#256c1d]">
                       <FolderOpen className="w-4 h-4" /> Faculty Content
                     </Button>
-                    {isOnline && (
+                    {isOnline && mayEdit && (
                       <Button variant="outline" onClick={() => openStudents(c)} className="h-10 px-5 rounded-full bg-white border-slate-200 text-sm font-semibold gap-1.5 hover:bg-[#eaf6e6] hover:text-[#256c1d]">
                         <Users className="w-4 h-4" /> Students &amp; Video Access
                       </Button>

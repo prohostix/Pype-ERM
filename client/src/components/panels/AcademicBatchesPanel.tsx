@@ -13,10 +13,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { mayOn } from '@/lib/access';
 
 export function AcademicBatchesPanel({ academicClass, onBack, isOnline = false }: { academicClass: any; onBack: () => void; isOnline?: boolean }) {
   const { user } = useAuth();
-  const canWrite = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const isOrgAdmin = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const mayCreate = mayOn(user, 'academic_centers', 'create', isOrgAdmin);
+  const mayEdit = mayOn(user, 'academic_centers', 'edit', isOrgAdmin);
+  const mayDelete = mayOn(user, 'academic_centers', 'delete', isOrgAdmin);
   const isPrincipal = user?.role === 'faculty' && !!user?.id && (user.id === academicClass?.inchargeId || (academicClass?.inchargeIds ?? []).includes(user.id));
   const canAllocate = isPrincipal;
   const [batches, setBatches] = useState<any[]>([]);
@@ -279,7 +283,7 @@ export function AcademicBatchesPanel({ academicClass, onBack, isOnline = false }
             <p className="text-muted-foreground text-center max-w-md mb-6">
               There are no batches created for this class yet.
             </p>
-            {canWrite && (
+            {mayCreate && (
               <Button onClick={() => setDialogOpen(true)} variant="outline" className="border-teal-200 text-teal-700 hover:bg-teal-50">
                 <Plus className="w-4 h-4 mr-2" /> Create First Batch
               </Button>
@@ -294,7 +298,7 @@ export function AcademicBatchesPanel({ academicClass, onBack, isOnline = false }
               <div className="relative p-5 border-b border-border/50 bg-gradient-to-br from-teal-50/50 to-transparent dark:from-teal-950/20">
                 <div className="flex justify-between items-start">
                   <h3 className="text-lg font-bold line-clamp-1 flex-1 pr-2">{b.name}</h3>
-                  {(canWrite || canAllocate) && (
+                  {(mayEdit || mayDelete || canAllocate) && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-8 w-8 -mt-1 -mr-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
@@ -302,7 +306,7 @@ export function AcademicBatchesPanel({ academicClass, onBack, isOnline = false }
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-40 rounded-xl">
-                        {canWrite && (
+                        {mayEdit && (
                           <DropdownMenuItem onClick={() => handleEdit(b)} className="cursor-pointer gap-2">
                             <Edit className="w-4 h-4" /> Edit Batch
                           </DropdownMenuItem>
@@ -312,7 +316,7 @@ export function AcademicBatchesPanel({ academicClass, onBack, isOnline = false }
                             <Users className="w-4 h-4" /> Allocate Students
                           </DropdownMenuItem>
                         )}
-                        {canWrite && (
+                        {mayDelete && (
                           <DropdownMenuItem onClick={() => handleDeleteClick(b.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2">
                             <Trash2 className="w-4 h-4" /> Request Deletion
                           </DropdownMenuItem>
@@ -448,7 +452,7 @@ export function AcademicBatchesPanel({ academicClass, onBack, isOnline = false }
                           {student.videoBlocked && (
                             <Badge variant="destructive" className="text-[10px] shrink-0" title={student.videoBlockReason || undefined}>Videos blocked</Badge>
                           )}
-                          {canWrite && isOnline && (
+                          {mayEdit && isOnline && (
                             <Button
                               type="button"
                               variant="ghost"

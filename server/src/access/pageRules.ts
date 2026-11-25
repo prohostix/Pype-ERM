@@ -1,6 +1,7 @@
 /** How an Org Admin's settings combine with a route's old role list. Pure, so it can be tested without a database. */
 import { Action } from './catalog.js';
 import { Access } from './resolve.js';
+import { FEATURES } from './catalog.js';
 
 /**
  * Someone given a page although their role's screens do not include it. Server routes also accept
@@ -17,11 +18,17 @@ export const isGrantedPage = (access: Access, pageKey: string): boolean => {
  * still decides for anyone without a setting. `ownBranchOnly` is set when the permission comes
  * from an Org Admin.
  */
+/** Allowed on a full-access page: everything, for the whole organization. */
+export const hasFullGrant = (access: Access, pageKey: string): boolean =>
+  Boolean(FEATURES.find((f) => f.key === pageKey)?.fullAccess)
+  && Object.values(access[pageKey] || {}).some((action) => action?.override === 'allow');
+
 export const decidePageAction = (access: Access, pageKey: string, action: Action, role: string, legacyRoles: string[] | null): { allowed: boolean; ownBranchOnly: boolean } => {
   const page = access[pageKey];
   const setting = page?.[action];
   const refused = { allowed: false, ownBranchOnly: false };
   if (page?.view?.override === 'deny' || setting?.override === 'deny') return refused;
+  if (hasFullGrant(access, pageKey)) return setting?.allowed ? { allowed: true, ownBranchOnly: false } : refused;
   if (isGrantedPage(access, pageKey)) return setting?.allowed ? { allowed: true, ownBranchOnly: true } : refused;
   if (setting?.override === 'allow' && setting.allowed) return { allowed: true, ownBranchOnly: !setting.byDefault };
   // null: the route accepted any signed-in user

@@ -29,7 +29,9 @@ export const changeError = (actorId: string, target: AccessUser, changes: unknow
  */
 export const needsRow = (target: AccessUser, change: Change, features: Feature[] = FEATURES): boolean => {
   if (change.effect === 'default') return false;
-  const byDefault = features.find((f) => f.key === change.featureKey)!.defaultActions(target).includes(change.action as any);
-  if (change.effect === 'allow') return !byDefault;
+  const feature = features.find((f) => f.key === change.featureKey)!;
+  const byDefault = feature.defaultActions(target).includes(change.action as any);
+  // On a full-access page Allow is stored even when the role has the action: it is what widens the rest
+  if (change.effect === 'allow') return !byDefault || Boolean(feature.fullAccess);
   return byDefault || change.action === 'view';
 };

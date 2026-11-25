@@ -225,7 +225,7 @@ export function StudyCentersPanel() {
                       <span className={`rounded-full px-3 py-1 text-[11px] font-semibold capitalize ${c.status === 'active' ? 'bg-[#dff3da] text-[#256c1d]' : c.status === 'pending' ? 'bg-amber-100 text-amber-700' : c.status === 'suspended' ? 'bg-red-100 text-red-700' : 'bg-slate-200/70 text-slate-600'}`}>{c.status}</span>
                       {(canWrite || mayEdit || mayDelete) && (
                         <>
-                          {canWrite && (
+                          {(canWrite || mayEdit) && (
                             <Button variant="outline" size="sm" className="rounded-full border-[#cfe9c9] bg-white hover:bg-[#eaf6e6]" onClick={() => handleOpenCredentials(c)} title="View/Edit Credentials">
                               <Key className="w-4 h-4 text-[#256c1d]" />
                             </Button>

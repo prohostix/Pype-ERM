@@ -36,6 +36,7 @@ import { bulkSetStudentFilterValue, setStudentFilterValue, getStudentFilterData 
 import { protect, authorize, type AuthRequest } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
 import { studentAction, studentContext, studentNotify, studentRead, studentUpdate, type StudentRequest, enrollmentNumberUpdate } from '../access/studentGuard.js';
+import { pageAction } from '../access/pageGuard.js';
 
 const router = express.Router();
 
@@ -79,7 +80,7 @@ router.route('/').get(getStudents).post(studentAction('create', ['org_admin', 's
 router.route('/:id').get(studentRead, getStudent).put(studentUpdate(['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin']), updateStudent).delete(studentAction('delete', ['org_admin', 'superadmin']), deleteStudent);
 router.put('/:id/progress/:stepId', studentAction('edit', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin']), upload.single('proof'), updateAdmissionProgress);
 router.put('/:id/academic-progress', studentAction('edit', ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin']), updateStudentAcademicProgress);
-router.put('/:id/video-block', authorize('org_admin', 'superadmin'), setStudentVideoBlock);
+router.put('/:id/video-block', pageAction('academic_centers', 'edit', ['org_admin', 'superadmin']), setStudentVideoBlock);
 router.get('/:id/video-unlock', authorize('org_admin', 'superadmin'), getStudentVideoUnlock);
 router.put('/:id/video-unlock', authorize('org_admin', 'superadmin'), unlockStudentNextVideo);
 router.put('/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), approveStudent);

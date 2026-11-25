@@ -101,7 +101,7 @@ export const getAccessUser = asyncHandler(async (req: AuthRequest, res: Response
       user: { id: target.id, name: target.name, email: target.email, role: target.role, branch: target.branch?.name || null, department: target.department?.name || null },
       setupRequired,
       version: versionOf(rows),
-      features: FEATURES.map((f) => ({ key: f.key, label: f.label, group: f.group, blockOnly: Boolean(f.blockOnly), actions: f.actions.map((action) => ({ action, ...access[f.key][action]! })) })),
+      features: FEATURES.map((f) => ({ key: f.key, label: f.label, group: f.group, blockOnly: Boolean(f.blockOnly), fullAccess: Boolean(f.fullAccess), actions: f.actions.map((action) => ({ action, ...access[f.key][action]! })) })),
     },
   });
 });

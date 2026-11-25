@@ -11,6 +11,7 @@ import {
   getReferralLeaderboard,
 } from '../controllers/referralController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { pageAction } from '../access/pageGuard.js';
 
 const router = express.Router();
 
@@ -25,11 +26,11 @@ const ALL_ROLES = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admi
 // Generate and manage own referral links
 router
   .route('/generate')
-  .post(authorize(...ALL_ROLES), generateReferralLink);
+  .post(pageAction('leads', 'create', ALL_ROLES), generateReferralLink);
 
 router
   .route('/my-links')
-  .get(authorize(...ALL_ROLES), getMyReferralLinks);
+  .get(pageAction('leads', 'view', ALL_ROLES), getMyReferralLinks);
 
 // Admin routes for managing all referral links
 router

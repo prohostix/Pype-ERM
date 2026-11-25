@@ -17,6 +17,8 @@ export const mayOn = (user: { access?: UserAccess } | null | undefined, page: st
   if (!feature || !setting) return fallback;
   if (feature.view?.override === 'deny' || setting.override === 'deny') return false;
   if (setting.override === 'allow') return setting.allowed;
+  // Allowed without being a default or a setting of its own: a full-access page, or View implied by another action
+  if (setting.allowed && !setting.byDefault) return true;
   const given = !feature.view?.byDefault && Object.values(feature).some((a) => a?.override === 'allow');
   return given || setting.byDefault ? setting.allowed : fallback;
 };

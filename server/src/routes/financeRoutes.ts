@@ -183,7 +183,7 @@ router.get('/reports/income-expenditure', anyPageAction(['income_expense', 'prof
 router.get('/reports/collections', pageAction('collection_report', 'view', null), getCollectionReport);
 
 // Sales users (for target assignment)
-router.get('/sales-users', authorize('finance_admin', 'finance_sub_admin'), getFinanceSalesUsers);
+router.get('/sales-users', pageAction('sales_targets', 'view', ['finance_admin', 'finance_sub_admin']), getFinanceSalesUsers);
 
 // Salary Config Approval
 router.get('/salary-configs', pageAction('salary_approval', 'view', ['finance_admin', 'finance_sub_admin']), getFinanceSalaryConfigs);

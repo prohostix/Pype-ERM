@@ -143,6 +143,7 @@ Also not listed: dashboards and overview pages, AI Reports, "coming soon" screen
 | Collection Report | view, download | Finance | Connected |
 | Sales Team Reports | view | Sales Admin | Connected |
 | Sales Admission Reports | view | Sales Admin | Connected |
+| Counselor Reports | view | Sales Admin, Sales Sub Admin / Sales / sales-department employee | Connected |
 | Conversion Report | view | Sales Admin | Connected |
 | Performance | view | CEO / General Manager | Connected |
 | KPI / KRA Report | view | CEO / General Manager | Connected |

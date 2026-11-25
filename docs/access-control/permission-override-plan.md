@@ -396,3 +396,19 @@ Every page can now be given except Executive Tasks, which has no screen of its o
 | Pages everyone already has (My Escalations, Notice Board, Important Updates) | Allow adds the menu entry |
 
 Also fixed for everyone: tasks, escalations, announcements, polls, meetings and exam registrations did not check the organization; anyone could list every escalation; document records included student passwords; student and faculty logins could read sales leads; sales targets were filtered by a field that does not exist.
+
+## Gaps found by comparing screen requests with routes (25 Nov 2026)
+
+| Page | Now works for a given user |
+|---|---|
+| Employees | Reading a profile, read only. Pay, bank and tax details only with Salary Config view |
+| Program Allocation | Asking to remove an allocation of their branch's partners |
+| Academic Centers | Classes and batches, with create, edit and delete. Student video access stays with the Org Admin |
+| Finance Sales Target | Choosing a salesperson of their branch |
+| Leads | Their own referral link, for every role |
+| Generate Student Link | Reading the link settings |
+| Counselor Reports | New entry: can be given or blocked |
+
+## Full access pages (25 Nov 2026)
+
+Academic Partners, Academic Centers and Study Abroad Partners: Allow on any action gives every action, for the whole organization. Blocking an action still holds. Includes partner portal logins and status, student video access, and Study Abroad partner create, edit, reset password and suspend. Access Control shows a Full access badge and asks to confirm.

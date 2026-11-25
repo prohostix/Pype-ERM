@@ -53,12 +53,12 @@ router.post('/applications/:id/release-commission', authorize(...ORG), a.release
 
 // ── Partner management (static paths above must stay before /partners/:id) ──
 router.get('/partners', pageAction('study_abroad', 'view', [...ORG]), c.listPartners);
-router.post('/partners', authorize(...ORG), c.createPartner);
+router.post('/partners', pageAction('study_abroad', 'create', [...ORG]), c.createPartner);
 router.get('/partners/:id', pageAction('study_abroad', 'view', [...ORG]), c.getPartner);
-router.put('/partners/:id', authorize(...ORG), c.updatePartner);
-router.put('/partners/:id/countries', authorize(...ORG), c.setPartnerCountries);
-router.put('/partners/:id/reset-password', authorize(...ORG), c.resetPartnerPassword);
-router.put('/partners/:id/suspend', authorize(...ORG), c.suspendPartner);
-router.put('/partners/:id/reactivate', authorize(...ORG), c.reactivatePartner);
+router.put('/partners/:id', pageAction('study_abroad', 'edit', [...ORG]), c.updatePartner);
+router.put('/partners/:id/countries', pageAction('study_abroad', 'edit', [...ORG]), c.setPartnerCountries);
+router.put('/partners/:id/reset-password', pageAction('study_abroad', 'edit', [...ORG]), c.resetPartnerPassword);
+router.put('/partners/:id/suspend', pageAction('study_abroad', 'edit', [...ORG]), c.suspendPartner);
+router.put('/partners/:id/reactivate', pageAction('study_abroad', 'edit', [...ORG]), c.reactivatePartner);
 
 export default router;

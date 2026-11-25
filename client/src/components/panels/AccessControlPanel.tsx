@@ -11,7 +11,7 @@ import api from '@/lib/api';
 
 type Setting = 'default' | 'allow' | 'deny';
 interface ActionRow { action: AccessAction; allowed: boolean; byDefault: boolean; override?: 'allow' | 'deny' }
-interface PageRow { key: string; label: string; group: string; blockOnly: boolean; actions: ActionRow[] }
+interface PageRow { key: string; label: string; group: string; blockOnly: boolean; fullAccess?: boolean; actions: ActionRow[] }
 interface Detail {
   user: { id: string; name: string; email: string; role: string; branch: string | null; department: string | null };
   features: PageRow[];
@@ -32,8 +32,10 @@ const initials = (name?: string) => (name || '?').trim().split(/\s+/).slice(0, 2
 
 /** What each action will be after saving. Mirrors the server rule in access/resolve.ts. */
 const preview = (page: PageRow, settingOf: (action: AccessAction) => Setting) => {
+  // On a full-access page one Allow gives every action that is not blocked
+  const full = Boolean(page.fullAccess) && page.actions.some((a) => settingOf(a.action) === 'allow');
   const allowed = new Set(page.actions
-    .filter((a) => (settingOf(a.action) === 'default' ? a.byDefault : settingOf(a.action) === 'allow'))
+    .filter((a) => (settingOf(a.action) === 'default' ? full || a.byDefault : settingOf(a.action) === 'allow'))
     .map((a) => a.action));
   if (page.actions.some((a) => settingOf(a.action) === 'allow') && settingOf('view') !== 'deny') allowed.add('view');
   return allowed.has('view') ? allowed : new Set<AccessAction>();
@@ -253,6 +255,14 @@ function UserAccess({ userId, onBack, onDirty, onSaved, onFailed }: UserAccessPr
       message: `${detail.user.name} has no branch, so the pages you allow show data from every branch in your organization.`,
       confirmText: 'Allow', tone: 'danger',
     }))) return;
+    const wide = [...new Set(changes
+      .filter((c) => c.effect === 'allow' && detail.features.find((f) => f.key === c.featureKey)?.fullAccess)
+      .map((c) => detail.features.find((f) => f.key === c.featureKey)?.label))];
+    if (wide.length > 0 && !(await confirmDialog({
+      title: 'Give full access?',
+      message: `${detail.user.name} will be able to do everything on ${wide.join(', ')} across your whole organization, including partner logins.`,
+      confirmText: 'Give full access', tone: 'danger',
+    }))) return;
     // These pages control accounts and who is in charge, so they can lead to wider access
     const structure = [...new Set(changes
       .filter((c) => c.effect === 'allow' && c.action !== 'view' && ['users', 'departments', 'branches', 'org_chart', 'managers'].includes(c.featureKey))
@@ -385,6 +395,10 @@ function UserAccess({ userId, onBack, onDirty, onSaved, onFailed }: UserAccessPr
                       <div className="flex flex-wrap items-center gap-2">
                         <h4 className="font-semibold tracking-tight">{page.label}</h4>
                         {query && <span className="text-xs text-muted-foreground">{page.group}</span>}
+                        {page.fullAccess && (
+                          <span title="Allowing any action gives everything on this page, for the whole organization."
+                            className="rounded-full bg-[#eaf6e6] text-[#256c1d] px-2.5 py-0.5 text-[11px] font-semibold">Full access</span>
+                        )}
                         {page.blockOnly && (
                           <span title="This page can be taken away. Who has it is still decided by role."
                             className="rounded-full bg-slate-100 text-slate-600 px-2.5 py-0.5 text-[11px] font-semibold">Block only</span>

@@ -157,7 +157,7 @@ router.route('/leave-allocations/:userId')
 router.post('/payroll/generate-smart', pageAction('payroll', 'create', ['hr_admin', 'hr_sub_admin']), generateSmartPayroll);
 
 // Employee Profiles (KPI / KRA / Salary details / Work Location)
-router.get('/employee-profiles/:userId', authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), getEmployeeProfile);
+router.get('/employee-profiles/:userId', pageAction('employees', 'view', ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin']), getEmployeeProfile);
 router.put('/employee-profiles/:userId', authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), upsertEmployeeProfile);
 router.patch('/employee-profiles/:userId/kpis', authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), updateKPIs);
 router.patch('/employee-profiles/:userId/kras', authorize('hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'), updateKRAs);

@@ -33,6 +33,8 @@ export interface Feature {
   orgFeature?: string;
   /** Can be blocked for a user but not given: the role alone decides who has it. */
   blockOnly?: boolean;
+  /** Allowing any action gives every action, across the whole organization. */
+  fullAccess?: boolean;
   defaultActions: (user: AccessUser) => Action[];
 }
 
@@ -272,6 +274,9 @@ const forRoles = (...grants: [roles: string[], actions: Action[]][]) => (user: A
  * Pages listed in blockPages.ts whose requests are now checked one by one, so they can be given as
  * well as blocked. The value is what each role has without any setting.
  */
+/** Pages where an Org Admin's Allow means everything the page does */
+const FULL_ACCESS = ['academic_partners', 'academic_centers', 'study_abroad'];
+
 const CONNECTED: Record<string, (user: AccessUser) => Action[]> = {
   // Finance confirms nothing by role, so approval can be given to them
   payroll: forRoles([HR_ADMINS, ['view', 'create', 'edit', 'delete', 'approve']], [FINANCE_ADMINS, ['view', 'create', 'edit', 'delete']]),
@@ -289,6 +294,7 @@ const CONNECTED: Record<string, (user: AccessUser) => Action[]> = {
   collection_report: forRoles([[...FINANCE_ADMINS, 'finance'], ['view']]),
   sales_team_report: (user) => (isSales(user) || user.role === 'superadmin' ? ['view'] : []),
   sales_admission_report: (user) => (isSales(user) || user.role === 'superadmin' ? ['view'] : []),
+  counselor_report: (user) => (isSales(user) || user.role === 'superadmin' ? ['view'] : []),
   conversion_report: (user) => (isSales(user) || user.role === 'superadmin' ? ['view'] : []),
   performance: forRoles([EXECUTIVES, ['view']]),
   kpi_report: forRoles([EXECUTIVES, ['view']]),
@@ -346,7 +352,7 @@ const CONNECTED: Record<string, (user: AccessUser) => Action[]> = {
 export const FEATURES: Feature[] = [
   ...GRANTABLE,
   ...BLOCK_PAGES.map(({ key, label, group, actions }): Feature => (CONNECTED[key]
-    ? { key, label, group, actions, defaultActions: (user) => CONNECTED[key](user).filter((a) => actions.includes(a)) }
+    ? { key, label, group, actions, fullAccess: FULL_ACCESS.includes(key) || undefined, defaultActions: (user) => CONNECTED[key](user).filter((a) => actions.includes(a)) }
     : {
       key, label, group, actions, blockOnly: true,
       // "Whatever the role gives": the only thing a setting can do is take it away
