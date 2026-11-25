@@ -89,6 +89,56 @@ export const removeCollectionOverseer = asyncHandler(async (req: AuthRequest, re
   res.status(200).json({ success: true, message: 'User removed from collections overseers' });
 });
 
+const GLOBAL_ROLES = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
+
+/** Branch-restricted users only see students of, or enrolled through, their branch */
+const branchStudentFilter = (req: AuthRequest): any[] | null =>
+  !GLOBAL_ROLES.includes(req.user.role) && req.user.branchId
+    ? [
+        { branchId: req.user.branchId },
+        { enrolledByUser: { branchId: req.user.branchId } },
+        { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
+      ]
+    : null;
+
+// GET /collections/follow-ups?bucket=overdue|today|upcoming&page=&limit=
+export const getCollectionFollowUps = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const page = Math.max(1, parseInt(String(req.query.page || '1'), 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(String(req.query.limit || '10'), 10) || 10));
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+  const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  // The same date ranges as the figures from /collections/metrics
+  const dueDate = req.query.bucket === 'today' ? { gte: startOfToday, lte: endOfToday }
+    : req.query.bucket === 'upcoming' ? { gt: endOfToday, lte: nextWeek }
+    : { lt: startOfToday };
+
+  const branch = branchStudentFilter(req);
+  const where: any = {
+    organizationId: req.user.organizationId,
+    status: { not: 'paid' },
+    dueDate,
+    ...(branch && { student: { OR: branch } })
+  };
+
+  const [rows, total] = await Promise.all([
+    prisma.paymentSchedule.findMany({
+      where,
+      select: {
+        id: true, title: true, amount: true, dueDate: true,
+        student: { select: { id: true, name: true, enrollmentNo: true, phone: true, fatherPhone: true, motherPhone: true } }
+      },
+      orderBy: [{ dueDate: 'asc' }, { id: 'asc' }],
+      skip: (page - 1) * limit,
+      take: limit
+    }),
+    prisma.paymentSchedule.count({ where })
+  ]);
+
+  res.status(200).json({ success: true, data: rows, total });
+});
+
 // GET /collections/metrics
 export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: Response) => {
   const organizationId = req.user.organizationId;
@@ -100,23 +150,13 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
   
   const sevenDaysFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager'];
   const studentWhere: any = { organizationId };
   const scheduleWhere: any = { organizationId };
 
-  if (!globalRoles.includes(req.user.role) && req.user.branchId) {
-    studentWhere.OR = [
-      { branchId: req.user.branchId },
-      { enrolledByUser: { branchId: req.user.branchId } },
-      { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
-    ];
-    scheduleWhere.student = {
-      OR: [
-        { branchId: req.user.branchId },
-        { enrolledByUser: { branchId: req.user.branchId } },
-        { enrollments: { some: { salesUser: { branchId: req.user.branchId } } } }
-      ]
-    };
+  const branch = branchStudentFilter(req);
+  if (branch) {
+    studentWhere.OR = branch;
+    scheduleWhere.student = { OR: branch };
   }
 
   // 1. Fetch Students status
@@ -173,6 +213,9 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
   
   let todayCollectedAmount = 0;
   let todayCollectedCount = 0;
+  let monthCollectedAmount = 0;
+  let monthCollectedCount = 0;
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   let todayDueAmount = 0;
   let todayDueCount = 0;
 
@@ -198,6 +241,10 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
       // Check if paid today
       if (s.paidAt) {
         const paidDate = new Date(s.paidAt);
+        if (paidDate >= startOfMonth && paidDate <= endOfToday) {
+          monthCollectedAmount += s.amount;
+          monthCollectedCount++;
+        }
         if (paidDate >= startOfToday && paidDate <= endOfToday) {
           todayCollectedAmount += s.amount;
           todayCollectedCount++;
@@ -268,6 +315,8 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
       todayCollectingStats: {
         collectedAmount: todayCollectedAmount,
         collectedCount: todayCollectedCount,
+        monthAmount: monthCollectedAmount,
+        monthCount: monthCollectedCount,
         dueAmount: todayDueAmount,
         dueCount: todayDueCount,
         collectedSchedules: todayCollectedSchedules,

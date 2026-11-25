@@ -6,7 +6,8 @@ import {
   getCollectionOverseers,
   addCollectionOverseer,
   removeCollectionOverseer,
-  getCollectionMetrics
+  getCollectionMetrics,
+  getCollectionFollowUps
 } from '../controllers/collectionsPanelController.js';
 
 const router = express.Router();
@@ -40,6 +41,7 @@ router.use(protect);
 
 // Metrics endpoint (accessible by Admins or Overseers)
 router.get('/metrics', checkCollectionOversightAccess, getCollectionMetrics);
+router.get('/follow-ups', checkCollectionOversightAccess, getCollectionFollowUps);
 
 // Overseer management endpoints (Restricted to organization admins)
 router.route('/overseers')

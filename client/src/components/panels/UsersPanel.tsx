@@ -821,6 +821,7 @@ export function UsersPanel() {
                       <SelectItem value="sales_admin">Sales Admin</SelectItem>
                       <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
                       <SelectItem value="sales">Sales Executive</SelectItem>
+                      <SelectItem value="collections_admin">Collections Admin</SelectItem>
                       <SelectItem value="employee">Employee</SelectItem>
                       </SelectContent>
                     </Select>
