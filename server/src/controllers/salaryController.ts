@@ -4,6 +4,7 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { getPayrollBranchId } from '../utils/payrollScope.js';
 import { refuseOwnRecord, type PageRequest } from '../access/pageGuard.js';
+import { loadPayrollRules, calculatePay } from '../services/payrollCalculation.js';
 import { branchUserFilter, getScopedBranchId, isUserInScope, GLOBAL_ROLES as GLOBAL_ROLES_FOR_SCOPE } from '../utils/branchScope.js';
 
 // Only these fields can be written from a request. Identity and approval fields (id, userId,
@@ -275,54 +276,19 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
   
   const organizationId = req.user.organizationId;
 
-  const hrSettings = await prisma.hRSettings.findUnique({ where: { organizationId } });
-  const latePolicy: any = hrSettings?.latePolicy || {};
-  const gracePeriod = Number(latePolicy.gracePeriod) || 0;
-  const maxLateThresholdPerMonth = Number(latePolicy.maxLateThresholdPerMonth) || 0;
+  const rules = await loadPayrollRules(organizationId, month, req.body);
+  const { startDate, endDate } = rules;
 
-  const [yearStr, monthStr] = month.split('-');
-  
-  // Organization salary cycle settings
-  const org = await prisma.organization.findUnique({
-    where: { id: organizationId },
-    select: { metadata: true }
-  });
-  const metadata = (org?.metadata as any) || {};
-  const salaryCycle = metadata.salaryCycle;
-
-  let startDate: Date;
-  let endDate: Date;
-
-  if (req.body.startDate && req.body.endDate) {
-    startDate = new Date(req.body.startDate);
-    startDate.setHours(0, 0, 0, 0);
-    endDate = new Date(req.body.endDate);
-    endDate.setHours(23, 59, 59, 999);
-  } else if (salaryCycle?.type === 'custom_range' && salaryCycle.customStartDate && salaryCycle.customEndDate) {
-    startDate = new Date(salaryCycle.customStartDate);
-    startDate.setHours(0, 0, 0, 0);
-    endDate = new Date(salaryCycle.customEndDate);
-    endDate.setHours(23, 59, 59, 999);
-  } else if (salaryCycle?.startDay && salaryCycle?.endDay) {
-    const targetYear = Number(yearStr);
-    const targetMonth = Number(monthStr); // 1-12
-    const startDay = Number(salaryCycle.startDay);
-    const endDay = Number(salaryCycle.endDay);
-
-    if (salaryCycle.cycleMode === 'previous_to_current' || startDay > endDay) {
-      // e.g. 26th of previous month to 25th of current month
-      startDate = new Date(targetYear, targetMonth - 2, startDay, 0, 0, 0, 0);
-      endDate = new Date(targetYear, targetMonth - 1, endDay, 23, 59, 59, 999);
-    } else {
-      // e.g. 1st to 30th/31st of current month
-      startDate = new Date(targetYear, targetMonth - 1, startDay, 0, 0, 0, 0);
-      endDate = new Date(targetYear, targetMonth - 1, endDay, 23, 59, 59, 999);
-    }
-  } else {
-    startDate = new Date(Number(yearStr), Number(monthStr) - 1, 1, 0, 0, 0, 0);
-    endDate = new Date(Number(yearStr), Number(monthStr), 0, 23, 59, 59, 999);
+  // Late arrivals and leave can still be added until the last day is over
+  if (endDate.getTime() >= Date.now()) {
+    const day = (d: Date) => d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    res.status(400).json({
+      success: false,
+      message: `The salary cycle ${day(startDate)} to ${day(endDate)} has not ended. Generate this payroll after ${day(endDate)}.`
+    });
+    return;
   }
-  
+
   const branchId = getPayrollBranchId(req);
   const configs = await prisma.salaryConfig.findMany({
     where: {
@@ -347,126 +313,18 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
       continue;
     }
 
-    const attendances = await prisma.attendance.findMany({
-      where: {
-        employeeId: config.userId,
-        date: { gte: startDate, lte: endDate },
-        OR: [
-          { isLate: true },
-          { isEarlyExit: true },
-          { lateMinutes: { gt: 0 } },
-          { earlyExitMinutes: { gt: 0 } }
-        ]
-      }
-    });
-
-    let totalBillableLateMinutes = 0;
-    let totalBillableEarlyExitMinutes = 0;
-
-    for (const att of attendances) {
-      let lateM = att.lateMinutes || 0;
-      // Protect from unadjusted half-day morning offset
-      if (att.status === 'half_day' && lateM >= 180) {
-        lateM = Math.max(0, lateM - 270);
-      }
-      const billable = Math.max(0, lateM - gracePeriod);
-      totalBillableLateMinutes += billable;
-
-      // Early exit minutes
-      if (att.isEarlyExit || (att.earlyExitMinutes || 0) > 0) {
-        totalBillableEarlyExitMinutes += (att.earlyExitMinutes || 0);
-      }
-    }
-
-    const chargeableLateMinutes = Math.max(0, totalBillableLateMinutes - maxLateThresholdPerMonth);
-    const lateDeductionAmount = chargeableLateMinutes * (config.lateDeductionPerMinute || 0);
-
-    const earlyExitRate = (config.earlyExitDeductionPerMinute !== null && config.earlyExitDeductionPerMinute !== undefined && config.earlyExitDeductionPerMinute > 0)
-      ? config.earlyExitDeductionPerMinute
-      : (config.lateDeductionPerMinute || 0);
-    const earlyExitDeductionAmount = totalBillableEarlyExitMinutes * earlyExitRate;
-
-    const allowances = config.allowances as Record<string, number> || {};
-    const deductions = config.deductions as Record<string, number> || {};
-
-    const sumAllowances = Object.values(allowances).reduce((acc: number, val: any) => acc + (Number(val) || 0), 0);
-    const grossSalary = config.basicSalary + sumAllowances;
-
-    // Leave Deductions
-    const unpaidLeaves = await prisma.leaveRequest.findMany({
-      where: {
-        employeeId: config.userId,
-        type: 'unpaid',
-        status: { in: ['approved', 'dept_approved'] },
-        startDate: { gte: startDate, lte: endDate }
-      }
-    });
-
-    const unpaidDays = unpaidLeaves.reduce((acc: number, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
-    
-    // WFH Deductions
-    const wfhLeaves = await prisma.leaveRequest.findMany({
-      where: {
-        employeeId: config.userId,
-        type: 'wfh',
-        status: { in: ['approved', 'dept_approved'] },
-        startDate: { gte: startDate, lte: endDate }
-      }
-    });
-
-    const wfhDays = wfhLeaves.reduce((acc: number, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
-    
-    // Fetch WFH limit to only deduct for exceeded days
-    const alloc = await prisma.leaveAllocation.findFirst({
-      where: { userId: config.userId, year: Number(yearStr), month: Number(monthStr) }
-    });
-    const wfhMonthlyLimit = alloc ? (alloc.wfh / 12) : 0;
-    const exceededWfhDays = Math.max(0, wfhDays - wfhMonthlyLimit);
-    
-    const wfhDeductionAmount = exceededWfhDays * ((grossSalary / 30) * ((config.wfhDeductionPerDay || 0) / 100));
-
-    let leaveDeductionAmount = 0;
-    const rule = config.unpaidLeaveRule as any || { type: 'standard' };
-
-    if (rule.type === 'fixed') {
-        leaveDeductionAmount = unpaidDays * (Number(rule.dailyRate) || 0);
-    } else if (rule.type === 'progressive') {
-        const firstXDays = Number(rule.firstXDays) || 0;
-        const firstXRate = Number(rule.firstXRate) || 0;
-        const subsequentRate = Number(rule.subsequentRate) || 0;
-
-        if (unpaidDays <= firstXDays) {
-            leaveDeductionAmount = unpaidDays * firstXRate;
-        } else {
-            leaveDeductionAmount = (firstXDays * firstXRate) + ((unpaidDays - firstXDays) * subsequentRate);
-        }
-    } else {
-        leaveDeductionAmount = (grossSalary / 30) * unpaidDays;
-    }
-
-    const standardDeductions = Object.values(deductions).reduce((acc: number, val: any) => acc + (Number(val) || 0), 0);
-    
-    const finalDeductions = { 
-      ...deductions, 
-      lateDeduction: lateDeductionAmount, 
-      earlyExitDeduction: earlyExitDeductionAmount,
-      leaveDeduction: leaveDeductionAmount, 
-      wfhDeduction: wfhDeductionAmount 
-    };
-    const totalDeductions = standardDeductions + lateDeductionAmount + earlyExitDeductionAmount + leaveDeductionAmount + wfhDeductionAmount;
-    
-    const netSalary = grossSalary - totalDeductions;
+    const pay = await calculatePay(config, rules);
 
     await prisma.payroll.create({
       data: {
         organizationId,
         employeeId: config.userId,
         month,
-        basicSalary: config.basicSalary,
-        allowances,
-        deductions: finalDeductions,
-        grossSalary,
-        netSalary,
+        basicSalary: pay.basicSalary,
+        allowances: pay.allowances,
+        deductions: pay.deductions,
+        grossSalary: pay.grossSalary,
+        netSalary: pay.netSalary,
         status: 'draft'
       }
     });
@@ -478,6 +336,76 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
     data: [], 
     message: `Generated ${createdCount} payroll records. Skipped ${skippedCount}.` 
   });
+});
+
+/**
+ * GET /hr/payroll/deductions-report?month=YYYY-MM&employeeId= — what each person's pay loses, for the
+ * attendance export. A generated payroll is shown as saved; otherwise it is worked out as of now.
+ */
+export const getDeductionsReport = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const month = String(req.query.month || '');
+  if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) {
+    res.status(400).json({ success: false, message: 'month is required (YYYY-MM)' });
+    return;
+  }
+  const organizationId = req.user.organizationId;
+  const branchId = getPayrollBranchId(req);
+  const employeeId = req.query.employeeId && req.query.employeeId !== 'all' ? String(req.query.employeeId) : undefined;
+  const userWhere = branchId ? { branchId } : {};
+  const employee = { select: { name: true, email: true } };
+
+  const [rules, saved, configs] = await Promise.all([
+    loadPayrollRules(organizationId, month),
+    prisma.payroll.findMany({
+      where: { organizationId, month, user: userWhere, ...(employeeId && { employeeId }) },
+      include: { user: employee }
+    }),
+    prisma.salaryConfig.findMany({
+      where: { organizationId, approvalStatus: 'approved', user: { status: { not: 'resigned' }, ...userWhere }, ...(employeeId && { userId: employeeId }) },
+      include: { user: employee }
+    })
+  ]);
+
+  const total = (values: unknown) => Object.values((values || {}) as Record<string, unknown>).reduce<number>((sum, v) => sum + (Number(v) || 0), 0);
+  const money = (n: number) => Math.round(n * 100) / 100;
+  const row = (person: { name: string; email: string }, pay: { basicSalary: number; allowances: unknown; deductions: unknown; grossSalary: number; netSalary: number }) => {
+    const { lateDeduction = 0, earlyExitDeduction = 0, leaveDeduction = 0, absentDeduction = 0, wfhDeduction = 0, ...fixed } = (pay.deductions || {}) as Record<string, number>;
+    return {
+      name: person.name,
+      email: person.email,
+      basicSalary: money(pay.basicSalary),
+      allowances: money(total(pay.allowances)),
+      grossSalary: money(pay.grossSalary),
+      fixedDeductions: money(total(fixed)),
+      lateDeduction: money(lateDeduction),
+      earlyExitDeduction: money(earlyExitDeduction),
+      leaveDeduction: money(leaveDeduction),
+      absentDeduction: money(absentDeduction),
+      wfhDeduction: money(wfhDeduction),
+      totalDeductions: money(pay.grossSalary - pay.netSalary),
+      netSalary: money(pay.netSalary)
+    };
+  };
+
+  const generated = new Set(saved.map(p => p.employeeId));
+  const rows: object[] = saved.map(p => ({ userId: p.employeeId, ...row(p.user, p), source: `Payroll (${p.status.replace(/_/g, ' ')})` }));
+  const ended = rules.endDate.getTime() < Date.now();
+  for (const config of configs) {
+    if (generated.has(config.userId)) continue;
+    const pay = await calculatePay(config, rules);
+    rows.push({
+      userId: config.userId,
+      ...row(config.user, pay),
+      source: ended ? 'Estimate (not generated)' : 'Estimate (cycle not ended)',
+      lateMinutes: pay.lateMinutes,
+      earlyExitMinutes: pay.earlyExitMinutes,
+      unpaidDays: pay.unpaidDays,
+      absentDays: pay.absentDays
+    });
+  }
+
+  const day = (d: Date) => d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  res.json({ success: true, data: { periodFrom: day(rules.startDate), periodTo: day(rules.endDate), rows } });
 });
 
 export const approveSalaryConfig = asyncHandler(async (req: PageRequest, res: Response) => {
@@ -514,9 +442,9 @@ export const getSalaryCycle = asyncHandler(async (req: AuthRequest, res: Respons
   const metadata = (org?.metadata as any) || {};
   const salaryCycle = metadata.salaryCycle || {
     type: 'monthly_day',
-    startDay: 26,
-    endDay: 25,
-    cycleMode: 'previous_to_current',
+    startDay: 1,
+    endDay: 31,
+    cycleMode: 'same_month',
     customStartDate: '',
     customEndDate: ''
   };
@@ -524,12 +452,7 @@ export const getSalaryCycle = asyncHandler(async (req: AuthRequest, res: Respons
   res.json({ success: true, data: salaryCycle });
 });
 
-export const updateSalaryCycle = asyncHandler(async (req: PageRequest, res: Response) => {
-  // The cycle applies to every branch
-  if (req.ownBranchOnly && req.user.branchId) {
-    res.status(403).json({ success: false, message: 'The salary cycle applies to the whole organization, so a branch user cannot change it' });
-    return;
-  }
+export const updateSalaryCycle = asyncHandler(async (req: AuthRequest, res: Response) => {
   const organizationId = req.user.organizationId;
   const { type, startDay, endDay, cycleMode, customStartDate, customEndDate } = req.body;
 
@@ -541,8 +464,8 @@ export const updateSalaryCycle = asyncHandler(async (req: PageRequest, res: Resp
   const metadata = (org?.metadata as any) || {};
   const updatedCycle = {
     type: type || 'monthly_day',
-    startDay: Number(startDay) || 26,
-    endDay: Number(endDay) || 25,
+    startDay: Number(startDay) || 1,
+    endDay: Number(endDay) || 31,
     cycleMode: cycleMode || (Number(startDay) > Number(endDay) ? 'previous_to_current' : 'same_month'),
     customStartDate: customStartDate || '',
     customEndDate: customEndDate || ''

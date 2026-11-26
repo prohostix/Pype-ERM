@@ -12,6 +12,8 @@ import csv from 'csv-parser';
 import { Readable } from 'stream';
 import dotenv from 'dotenv';
 import { refuseOwnRecord, type PageRequest } from '../access/pageGuard.js';
+import { cancelAutoPunchOutLeave } from '../utils/autoPunchOutLeave.js';
+import { cancelAbsenceLeaves } from '../utils/absenceLeave.js';
 
 dotenv.config();
 
@@ -921,6 +923,12 @@ export const getAttendanceById = asyncHandler(async (req: AuthRequest, res: Resp
   res.json({ success: true, data: attendance });
 });
 
+/** HR correcting a day takes back the leave that was recorded automatically for it. */
+const clearAutoLeaveIfWorked = async (record: { employeeId: string; date: Date; status: string }) => {
+  if (record.status === 'present' || record.status === 'late') await cancelAutoPunchOutLeave(record.employeeId, record.date);
+  if (record.status !== 'absent') await cancelAbsenceLeaves(record.employeeId, record.date);
+};
+
 export const createAttendance = asyncHandler(async (req: PageRequest, res: Response) => {
   const orgId = req.user.organizationId || req.body.organizationId;
   if (!orgId) {
@@ -1003,6 +1011,7 @@ export const createAttendance = asyncHandler(async (req: PageRequest, res: Respo
         date: existing.date
       }
     });
+    await clearAutoLeaveIfWorked(attendance);
     res.status(200).json({ success: true, data: attendance, message: 'Existing attendance record updated.' });
     return;
   }
@@ -1026,6 +1035,7 @@ export const createAttendance = asyncHandler(async (req: PageRequest, res: Respo
             date: fallbackExisting.date
           }
         });
+        await clearAutoLeaveIfWorked(attendance);
         res.status(200).json({ success: true, data: attendance, message: 'Existing attendance record updated.' });
         return;
       }
@@ -1080,6 +1090,7 @@ export const updateAttendance = asyncHandler(async (req: PageRequest, res: Respo
   }
 
   const updatedAttendance = await prisma.attendance.update({ where: { id: req.params.id }, data: updateData });
+  await clearAutoLeaveIfWorked(updatedAttendance);
   res.json({ success: true, data: updatedAttendance });
 });
 
@@ -1091,6 +1102,7 @@ export const deleteAttendance = asyncHandler(async (req: PageRequest, res: Respo
   }
   if (refuseOwnRecord(req, res, attendance.employeeId, 'attendance')) return;
   await prisma.attendance.delete({ where: { id: req.params.id } });
+  await cancelAbsenceLeaves(attendance.employeeId, attendance.date);
   res.json({ success: true, data: {} });
 });
 
@@ -1717,45 +1729,7 @@ export const syncOfflinePunches = asyncHandler(async (req: AuthRequest, res: Res
             updatedStatus = existing.isLate ? 'late' : 'present';
 
             try {
-              const punchStart = new Date(punchTime);
-              punchStart.setHours(0, 0, 0, 0);
-              const punchEnd = new Date(punchTime);
-              punchEnd.setHours(23, 59, 59, 999);
-
-              const autoLeave = await prisma.leaveRequest.findFirst({
-                where: {
-                  employeeId: req.user.id,
-                  startDate: { gte: punchStart, lte: punchEnd },
-                  reason: { contains: 'Auto Punch-Out' }
-                }
-              });
-
-              if (autoLeave) {
-                const year = punchTime.getFullYear();
-                const month = punchTime.getMonth() + 1;
-                const alloc = await prisma.leaveAllocation.findUnique({
-                  where: { userId_year_month: { userId: req.user.id, year, month } }
-                });
-                if (alloc) {
-                  if (autoLeave.type === 'casual') {
-                    await prisma.leaveAllocation.update({
-                      where: { id: alloc.id },
-                      data: { casualLeave: Number((alloc.casualLeave + 0.5).toFixed(2)) }
-                    });
-                  } else if (autoLeave.type === 'sick') {
-                    await prisma.leaveAllocation.update({
-                      where: { id: alloc.id },
-                      data: { sickLeave: Number((alloc.sickLeave + 0.5).toFixed(2)) }
-                    });
-                  } else if (autoLeave.type === 'earned') {
-                    await prisma.leaveAllocation.update({
-                      where: { id: alloc.id },
-                      data: { earnedLeave: Number((alloc.earnedLeave + 0.5).toFixed(2)) }
-                    });
-                  }
-                }
-                await prisma.leaveRequest.delete({ where: { id: autoLeave.id } });
-              }
+              await cancelAutoPunchOutLeave(req.user.id, existing.date);
             } catch (leaveRefundErr) {
               console.error('Failed to refund auto-deducted leave on offline sync:', leaveRefundErr);
             }

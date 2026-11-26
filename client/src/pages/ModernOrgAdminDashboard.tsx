@@ -60,6 +60,7 @@ import { BiometricDevicesPanel } from '@/components/panels/BiometricDevicesPanel
 import { EnrollmentLinkConfigPanel } from '@/components/panels/EnrollmentLinkConfigPanel';
 import { AcademicCentersPanel } from '@/components/panels/AcademicCentersPanel';
 import { FacultiesPanel } from '@/components/panels/FacultiesPanel';
+import { SalaryCyclePanel } from '@/components/panels/SalaryCyclePanel';
 import { FlowSettingsPanel } from '@/components/panels/FlowSettingsPanel';
 import { StudentPortalContentPanel } from '@/components/panels/StudentPortalContentPanel';
 import { CommunicationSettingsPanel } from '@/components/panels/CommunicationSettingsPanel';
@@ -726,6 +727,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="communication_settings"><CommunicationSettingsPanel /></TabsContent>
         <TabsContent value="student_portal_content"><StudentPortalContentPanel /></TabsContent>
         <TabsContent value="login_branding"><LoginCustomizationPanel /></TabsContent>
+        <TabsContent value="salary_cycle"><SalaryCyclePanel /></TabsContent>
         <TabsContent value="flow_settings"><FlowSettingsPanel /></TabsContent>
         <TabsContent value="enrollment_link_config"><EnrollmentLinkConfigPanel /></TabsContent>
         <TabsContent value="biometric-devices"><BiometricDevicesPanel /></TabsContent>

@@ -5,6 +5,7 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { leaveVisibilityWhere, hrAdminsFor, executivesFor, isGeneralManagerLeaveLocked } from '../utils/leaveScope.js';
 import { refuseOwnRecord, type PageRequest } from '../access/pageGuard.js';
+import { cancelAbsenceLeaves } from '../utils/absenceLeave.js';
 
 // --- Leave Requests ---
 export const getLeaveRequests = asyncHandler(async (req: PageRequest, res: Response) => {
@@ -368,6 +369,11 @@ export const deptApproveLeave = asyncHandler(async (req: PageRequest, res: Respo
     }
   });
 
+  // Payroll counts department-approved leave, so the automatic unpaid leave must not stay beside it
+  if (leave.status === 'dept_approved' && leave.type !== 'late_coming' && leave.type !== 'early_exit') {
+    await cancelAbsenceLeaves(leave.employeeId, leave.startDate, leave.endDate);
+  }
+
   try {
     const employee = await prisma.user.findUnique({ where: { id: leave.employeeId }});
     const typeLabel = leave.type === 'late_coming' ? 'late coming request' : leave.type === 'early_exit' ? 'early exit request' : 'leave request';
@@ -442,6 +448,11 @@ export const hrApproveLeave = asyncHandler(async (req: PageRequest, res: Respons
     }
   } catch (err) {
     console.error(err);
+  }
+
+  // Approved leave replaces the unpaid leave recorded for a missed punch-in
+  if (newStatus === 'approved' && leave.type !== 'late_coming' && leave.type !== 'early_exit') {
+    await cancelAbsenceLeaves(leave.employeeId, leave.startDate, leave.endDate);
   }
 
   if (newStatus === 'withdrawn') {

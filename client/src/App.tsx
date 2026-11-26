@@ -517,6 +517,7 @@ function App() {
         { id: 'student_portal_content', label: 'Student Portal Content' },
         { id: 'login_branding', label: 'Login Branding' },
         { id: 'enrollment_link_config', label: 'Enrollment Link Config' },
+        { id: 'salary_cycle', label: 'Salary Cycle' },
         { id: 'flow_settings', label: 'Flow Settings' },
         { id: 'access_control', label: 'Access Control' },
       ];

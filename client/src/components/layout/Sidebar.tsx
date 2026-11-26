@@ -347,6 +347,12 @@ const navItems: NavItem[] = [
     roles: ['org_admin'],
   },
   {
+    id: 'salary_cycle',
+    label: 'Salary Cycle',
+    icon: Settings,
+    roles: ['org_admin'],
+  },
+  {
     id: 'flow_settings',
     label: 'Flow Settings',
     icon: Workflow,

@@ -31,6 +31,7 @@ const DEFAULT_SETTINGS = {
     breakStartTime: '13:00', breakEndTime: '14:00', breakDurationMinutes: 60,
     dayOverrides: [] as any[],
     autoPunchOutAsHalfDay: false,
+    absentAsUnpaidLeave: false,
   },
   latePolicy: { maxLateMinutesPerMonth: 60, warningThreshold: 45, deductionPerExtraMinute: 0 },
   location: { officeLatitude: 28.6139, officeLongitude: 77.2090, allowedRadius: 100, requireLocationForCheckIn: true },
@@ -425,7 +426,7 @@ export function HRSettingsPanel() {
                 </div>
               </div>
 
-              {/* Auto Punch-Out Half Day Rule */}
+              {/* Missed punch-out and missed punch-in rules */}
               <div className="pt-3 border-t border-slate-100">
                 <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-[#f4f6f3]">
                   <div className="space-y-0.5 pr-2">
@@ -433,13 +434,28 @@ export function HRSettingsPanel() {
                       Mark Missing Punch-Out as Half Day
                     </Label>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      When enabled, employees who forget to punch out will be automatically marked as Half Day, and a 0.5-day pre-approved leave will be deducted from their leave allocation. When disabled, checkout is marked at the regular shift punch-out time.
+                      When enabled, employees who forget to punch out will be automatically marked as Half Day, and half a day is taken from casual, sick or earned leave (unpaid only if none is left). HR can cancel it by marking the day Present or Late. When disabled, checkout is marked at the regular shift punch-out time.
                     </p>
                   </div>
                   <Switch
                     id="autoPunchOutHalfDay"
                     checked={Boolean(settings.officeHours.autoPunchOutAsHalfDay)}
                     onCheckedChange={(checked) => setHours({ autoPunchOutAsHalfDay: checked })}
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-[#f4f6f3] mt-3">
+                  <div className="space-y-0.5 pr-2">
+                    <Label className="text-sm font-semibold cursor-pointer" htmlFor="absentUnpaid">
+                      Mark Missing Punch-In as Unpaid Leave
+                    </Label>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      When enabled, an employee with no punch-in on a working day is marked Absent with one day of unpaid leave, which reduces pay. Approved leave or an HR correction cancels it. Starts from salary cycles beginning after 26 November 2026.
+                    </p>
+                  </div>
+                  <Switch
+                    id="absentUnpaid"
+                    checked={Boolean(settings.officeHours.absentAsUnpaidLeave)}
+                    onCheckedChange={(checked) => setHours({ absentAsUnpaidLeave: checked })}
                   />
                 </div>
               </div>

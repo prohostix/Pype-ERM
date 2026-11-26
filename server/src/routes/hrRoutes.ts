@@ -74,6 +74,7 @@ import {
   upsertLeaveAllocation,
   bulkInitLeaveAllocations,
   generateSmartPayroll,
+  getDeductionsReport,
 } from '../controllers/salaryController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
@@ -143,7 +144,7 @@ router.route('/salary-configs/:userId')
 // Salary Cycle / Period (Organization-wide Date From to Date To)
 router.route('/salary-cycle')
   .get(pageAction('salary_config', 'view', ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin']), getSalaryCycle)
-  .put(pageAction('salary_config', 'edit', ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin']), updateSalaryCycle);
+  .put(authorize('org_admin', 'superadmin'), updateSalaryCycle);
 
 // Leave Allocations
 router.get('/leave-allocations', pageAction('leave_allocation', 'view', ['hr_admin', 'hr_sub_admin']), getLeaveAllocations);
@@ -155,6 +156,9 @@ router.route('/leave-allocations/:userId')
 
 // Smart Payroll Generation (uses salary configs + late deductions)
 router.post('/payroll/generate-smart', pageAction('payroll', 'create', ['hr_admin', 'hr_sub_admin']), generateSmartPayroll);
+
+// Pay figures, so this needs payroll access and not just attendance access
+router.get('/payroll/deductions-report', pageAction('payroll', 'view', ['hr_admin', 'hr_sub_admin', 'superadmin']), getDeductionsReport);
 
 // Employee Profiles (KPI / KRA / Salary details / Work Location)
 router.get('/employee-profiles/:userId', pageAction('employees', 'view', ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin']), getEmployeeProfile);

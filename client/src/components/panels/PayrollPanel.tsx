@@ -295,6 +295,7 @@ export function PayrollPanel() {
                                      key === 'lateDeduction' ? 'Late Deduction' :
                                      key === 'earlyExitDeduction' ? 'Early Exit Deduction' :
                                      key === 'leaveDeduction' ? 'Leave / LOP' :
+                                     key === 'absentDeduction' ? 'Absent Days' :
                                      key.replace(/([A-Z])/g, ' $1')}
                                   </span>
                                   <span className="font-medium text-slate-900 tabular-nums">{CS()}{Number(val).toLocaleString()}</span>

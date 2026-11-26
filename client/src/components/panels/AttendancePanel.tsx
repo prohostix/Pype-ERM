@@ -28,6 +28,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
   const mayCreate = !isMyPortal && mayOn(user, 'team_attendance', 'create', hrRole);
   const mayEdit = !isMyPortal && mayOn(user, 'team_attendance', 'edit', hrRole);
   const mayDelete = !isMyPortal && mayOn(user, 'team_attendance', 'delete', hrRole);
+  const mayViewPayroll = !isMyPortal && mayOn(user, 'payroll', 'view', ['hr_admin', 'hr_sub_admin', 'superadmin'].includes(user?.role || ''));
   const canViewAll = given || !isMyPortal && ['hr_admin', 'hr_sub_admin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'branch_manager', 'center_admin'].includes(user?.role || '');
   const [attendance, setAttendance] = useState<any[]>([]);
   const [calendarAttendance, setCalendarAttendance] = useState<any[]>([]);
@@ -213,10 +214,42 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
         worksheet['!cols'] = [22, 28, 14, 14, 12, 12, 16, 14, 14, 18, 14, 26].map(w => ({ wch: w }));
       }
       
+      // Salary figures are monthly, and only for people who may see payroll
+      let salaryFailed = false;
+      if (mayViewPayroll && exportPeriod === 'month') {
+        try {
+          const res = await api.get('/hr/payroll/deductions-report', { params: { month: exportMonth, employeeId: exportEmployeeId } });
+          const { rows } = res.data.data;
+          const salaryColumns = (r?: any) => ({
+            'Total Deducted': r?.totalDeductions ?? '',
+            'Total Salary': r?.netSalary ?? ''
+          });
+          if (exportEmployeeId === 'all') {
+            // One row per employee; anyone paid but without attendance gets a row too
+            const byEmail = new Map<string, any>(rows.map((r: any) => [r.email, r]));
+            const listed = new Set(exportData.map((e: any) => e['Email']));
+            exportData = [
+              ...exportData.map((e: any) => ({ ...e, ...salaryColumns(byEmail.get(e['Email'])) })),
+              ...rows.filter((r: any) => !listed.has(r.email)).map((r: any) => ({ 'Employee Name': r.name, 'Email': r.email, ...salaryColumns(r) }))
+            ];
+          } else {
+            // One row per day, so the month's figures go on the first row only and are not added up twice
+            exportData = exportData.map((e: any, i: number) => ({ ...e, ...salaryColumns(i === 0 ? rows[0] : undefined) }));
+          }
+          const widths = worksheet['!cols'] || [];
+          worksheet = XLSX.utils.json_to_sheet(exportData);
+          worksheet['!cols'] = Object.keys(exportData[0]).map((key, i) => widths[i] || { wch: Math.max(16, key.length + 2) });
+        } catch (error) {
+          console.error('Failed to load salary deductions:', error);
+          salaryFailed = true;
+        }
+      }
+
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Attendance');
       XLSX.writeFile(workbook, `${reportName}.xlsx`);
-      toast.success('Attendance report exported successfully!');
+      if (salaryFailed) toast.warning('Report downloaded without salary deductions, which could not be loaded.');
+      else toast.success('Attendance report exported successfully!');
       setExportDialogOpen(false);
     } catch (error) {
       console.error('Failed to export excel:', error);
@@ -455,6 +488,13 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
                   </div>
                 )}
 
+                {mayViewPayroll && (
+                  <p className="text-xs text-muted-foreground">
+                    {exportPeriod === 'month'
+                      ? 'Includes Total Deducted and Total Salary, worked out over the salary cycle for this month.'
+                      : 'Salary deductions are included only in a monthly report.'}
+                  </p>
+                )}
                 <div className="pt-2 flex justify-end gap-2">
                   <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setExportDialogOpen(false)}>Cancel</Button>
                   <Button onClick={executeExport} disabled={exporting} className="rounded-xl px-6 gap-2">

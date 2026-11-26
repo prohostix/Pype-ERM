@@ -1,6 +1,9 @@
 import cron from 'node-cron';
 import prisma from '../lib/prisma.js';
 import { startEscalationCron } from './escalationService.js';
+import { halfDayLeaveType } from '../utils/autoPunchOutLeave.js';
+import { createAbsenceLeave } from '../utils/absenceLeave.js';
+import { absentRuleApplies } from '../utils/absentDays.js';
 
 export const startAllCronJobs = () => {
   startInviteExpiryCron();
@@ -80,7 +83,7 @@ export const runAutoPunchOut = async () => {
       const isHalfDayRule = officeHours.autoPunchOutAsHalfDay === true;
 
       if (isHalfDayRule) {
-        // Rule: Mark as half day, assign 4.0 working hours, and deduct 0.5 from leave allocation
+        // Rule: Mark as half day, assign 4.0 working hours, and record half a day of leave
         const checkOutTime = new Date(checkInDate.getTime() + (4 * 3600000));
         const workingHours = 4.0;
 
@@ -92,13 +95,9 @@ export const runAutoPunchOut = async () => {
             workingHours,
             isEarlyExit: false,
             earlyExitMinutes: 0,
-            notes: existingNotes + 'Auto-punched out as Half Day by system (No punch-out detected). Deducted 0.5 leave from allocation.'
+            notes: existingNotes + 'Auto-punched out as Half Day by system (No punch-out detected). Half-day leave applied.'
           }
         });
-
-        // Leave deduction & approved LeaveRequest creation
-        const allocYear = istCheckIn.getUTCFullYear();
-        const allocMonth = istCheckIn.getUTCMonth() + 1;
 
         const recordDateStart = new Date(record.date);
         recordDateStart.setHours(0, 0, 0, 0);
@@ -115,43 +114,7 @@ export const runAutoPunchOut = async () => {
         });
 
         if (!existingAutoLeave) {
-          const alloc = await prisma.leaveAllocation.findUnique({
-            where: {
-              userId_year_month: {
-                userId: record.employeeId,
-                year: allocYear,
-                month: allocMonth
-              }
-            }
-          });
-
-          let leaveType: 'casual' | 'sick' | 'earned' | 'unpaid' = 'unpaid';
-
-          if (alloc) {
-            if (alloc.casualLeave >= 0.5) {
-              leaveType = 'casual';
-              await prisma.leaveAllocation.update({
-                where: { id: alloc.id },
-                data: { casualLeave: Number((alloc.casualLeave - 0.5).toFixed(2)) }
-              });
-            } else if (alloc.sickLeave >= 0.5) {
-              leaveType = 'sick';
-              await prisma.leaveAllocation.update({
-                where: { id: alloc.id },
-                data: { sickLeave: Number((alloc.sickLeave - 0.5).toFixed(2)) }
-              });
-            } else if (alloc.earnedLeave >= 0.5) {
-              leaveType = 'earned';
-              await prisma.leaveAllocation.update({
-                where: { id: alloc.id },
-                data: { earnedLeave: Number((alloc.earnedLeave - 0.5).toFixed(2)) }
-              });
-            } else {
-              leaveType = 'unpaid';
-            }
-          } else {
-            leaveType = 'unpaid';
-          }
+          const leaveType = await halfDayLeaveType(record.employeeId, record.date);
 
           const emp = await prisma.user.findUnique({
             where: { id: record.employeeId },
@@ -169,7 +132,7 @@ export const runAutoPunchOut = async () => {
               halfDayType: 'second_half',
               startDate: record.date,
               endDate: record.date,
-              reason: `Auto Punch-Out: Half-day ${leaveType} leave applied due to missing punch-out`,
+              reason: `Auto Punch-Out: Half-day ${leaveType} leave (no punch-out)`,
               hrRemarks: 'System auto-approved half-day leave (Auto punch-out policy)',
               appliedAt: new Date()
             }
@@ -287,7 +250,10 @@ const startAutoAbsentCron = () => {
               }
             }
           }
-          orgSettingsCache[emp.organizationId] = { workingDays, stdHours };
+          const org = await prisma.organization.findUnique({ where: { id: emp.organizationId }, select: { metadata: true } });
+          const absentUnpaid = (settings?.officeHours as any)?.absentAsUnpaidLeave === true
+            && absentRuleApplies(todayStart, (org?.metadata as any)?.salaryCycle);
+          orgSettingsCache[emp.organizationId] = { workingDays, stdHours, absentUnpaid };
         }
 
         const orgSettings = orgSettingsCache[emp.organizationId];
@@ -328,6 +294,9 @@ const startAutoAbsentCron = () => {
               }
             });
             insertedCount++;
+            if (orgSettings.absentUnpaid && !['student', 'center_student', 'center_admin'].includes(emp.role)) {
+              await createAbsenceLeave(emp, todayStart);
+            }
           } else {
             await prisma.attendance.create({
               data: {
