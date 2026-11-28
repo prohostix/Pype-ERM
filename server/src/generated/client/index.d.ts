@@ -518,6 +518,11 @@ export type UsageDay = $Result.DefaultSelection<Prisma.$UsageDayPayload>
  * 
  */
 export type UserAccessOverride = $Result.DefaultSelection<Prisma.$UserAccessOverridePayload>
+/**
+ * Model OrgBankAccount
+ * 
+ */
+export type OrgBankAccount = $Result.DefaultSelection<Prisma.$OrgBankAccountPayload>
 
 /**
  * Enums
@@ -2050,6 +2055,16 @@ export class PrismaClient<
     * ```
     */
   get userAccessOverride(): Prisma.UserAccessOverrideDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.orgBankAccount`: Exposes CRUD operations for the **OrgBankAccount** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrgBankAccounts
+    * const orgBankAccounts = await prisma.orgBankAccount.findMany()
+    * ```
+    */
+  get orgBankAccount(): Prisma.OrgBankAccountDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2584,7 +2599,8 @@ export namespace Prisma {
     StudentFilterValue: 'StudentFilterValue',
     StudentFilterHistory: 'StudentFilterHistory',
     UsageDay: 'UsageDay',
-    UserAccessOverride: 'UserAccessOverride'
+    UserAccessOverride: 'UserAccessOverride',
+    OrgBankAccount: 'OrgBankAccount'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2600,7 +2616,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "classMeeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadApplication" | "studyAbroadProgramCommission" | "studyAbroadPartnerPayout" | "country" | "studentFilterType" | "studentFilterOption" | "studentFilterValue" | "studentFilterHistory" | "usageDay" | "userAccessOverride"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "classMeeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting" | "faculty" | "academicCenter" | "academicClass" | "classTrialVideo" | "classModule" | "classSubModule" | "moduleLesson" | "assessment" | "assessmentQuestion" | "studentAssessmentAttempt" | "studentVideoLog" | "lessonDoubt" | "lessonDoubtReply" | "lessonNote" | "lessonFacultyHistory" | "classMaterial" | "academicBatch" | "studentBatchTransfer" | "batchLessonAssignment" | "academicSession" | "studentAcademicAttendance" | "studyAbroadPartner" | "studyAbroadApplication" | "studyAbroadProgramCommission" | "studyAbroadPartnerPayout" | "country" | "studentFilterType" | "studentFilterOption" | "studentFilterValue" | "studentFilterHistory" | "usageDay" | "userAccessOverride" | "orgBankAccount"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -10078,6 +10094,80 @@ export namespace Prisma {
           }
         }
       }
+      OrgBankAccount: {
+        payload: Prisma.$OrgBankAccountPayload<ExtArgs>
+        fields: Prisma.OrgBankAccountFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrgBankAccountFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrgBankAccountFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload>
+          }
+          findFirst: {
+            args: Prisma.OrgBankAccountFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrgBankAccountFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload>
+          }
+          findMany: {
+            args: Prisma.OrgBankAccountFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload>[]
+          }
+          create: {
+            args: Prisma.OrgBankAccountCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload>
+          }
+          createMany: {
+            args: Prisma.OrgBankAccountCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OrgBankAccountCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload>[]
+          }
+          delete: {
+            args: Prisma.OrgBankAccountDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload>
+          }
+          update: {
+            args: Prisma.OrgBankAccountUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload>
+          }
+          deleteMany: {
+            args: Prisma.OrgBankAccountDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrgBankAccountUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OrgBankAccountUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload>[]
+          }
+          upsert: {
+            args: Prisma.OrgBankAccountUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrgBankAccountPayload>
+          }
+          aggregate: {
+            args: Prisma.OrgBankAccountAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrgBankAccount>
+          }
+          groupBy: {
+            args: Prisma.OrgBankAccountGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrgBankAccountGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrgBankAccountCountArgs<ExtArgs>
+            result: $Utils.Optional<OrgBankAccountCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -10287,6 +10377,7 @@ export namespace Prisma {
     studentFilterHistory?: StudentFilterHistoryOmit
     usageDay?: UsageDayOmit
     userAccessOverride?: UserAccessOverrideOmit
+    orgBankAccount?: OrgBankAccountOmit
   }
 
   /* Types for Logging */
@@ -10432,6 +10523,7 @@ export namespace Prisma {
     commissions: number
     universityPayments: number
     users: number
+    bankAccounts: number
     vacancies: number
     walletTopUps: number
     biometricDevices: number
@@ -10519,6 +10611,7 @@ export namespace Prisma {
     commissions?: boolean | OrganizationCountOutputTypeCountCommissionsArgs
     universityPayments?: boolean | OrganizationCountOutputTypeCountUniversityPaymentsArgs
     users?: boolean | OrganizationCountOutputTypeCountUsersArgs
+    bankAccounts?: boolean | OrganizationCountOutputTypeCountBankAccountsArgs
     vacancies?: boolean | OrganizationCountOutputTypeCountVacanciesArgs
     walletTopUps?: boolean | OrganizationCountOutputTypeCountWalletTopUpsArgs
     biometricDevices?: boolean | OrganizationCountOutputTypeCountBiometricDevicesArgs
@@ -11004,6 +11097,13 @@ export namespace Prisma {
    */
   export type OrganizationCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountBankAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrgBankAccountWhereInput
   }
 
   /**
@@ -13980,6 +14080,7 @@ export namespace Prisma {
     commissions?: boolean | Organization$commissionsArgs<ExtArgs>
     universityPayments?: boolean | Organization$universityPaymentsArgs<ExtArgs>
     users?: boolean | Organization$usersArgs<ExtArgs>
+    bankAccounts?: boolean | Organization$bankAccountsArgs<ExtArgs>
     vacancies?: boolean | Organization$vacanciesArgs<ExtArgs>
     walletTopUps?: boolean | Organization$walletTopUpsArgs<ExtArgs>
     biometricDevices?: boolean | Organization$biometricDevicesArgs<ExtArgs>
@@ -14124,6 +14225,7 @@ export namespace Prisma {
     commissions?: boolean | Organization$commissionsArgs<ExtArgs>
     universityPayments?: boolean | Organization$universityPaymentsArgs<ExtArgs>
     users?: boolean | Organization$usersArgs<ExtArgs>
+    bankAccounts?: boolean | Organization$bankAccountsArgs<ExtArgs>
     vacancies?: boolean | Organization$vacanciesArgs<ExtArgs>
     walletTopUps?: boolean | Organization$walletTopUpsArgs<ExtArgs>
     biometricDevices?: boolean | Organization$biometricDevicesArgs<ExtArgs>
@@ -14222,6 +14324,7 @@ export namespace Prisma {
       commissions: Prisma.$UniversityCommissionPayload<ExtArgs>[]
       universityPayments: Prisma.$UniversityPaymentPayload<ExtArgs>[]
       users: Prisma.$UserPayload<ExtArgs>[]
+      bankAccounts: Prisma.$OrgBankAccountPayload<ExtArgs>[]
       vacancies: Prisma.$VacancyPayload<ExtArgs>[]
       walletTopUps: Prisma.$WalletTopUpPayload<ExtArgs>[]
       biometricDevices: Prisma.$BiometricDevicePayload<ExtArgs>[]
@@ -14718,6 +14821,7 @@ export namespace Prisma {
     commissions<T extends Organization$commissionsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$commissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UniversityCommissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     universityPayments<T extends Organization$universityPaymentsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$universityPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UniversityPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends Organization$usersArgs<ExtArgs> = {}>(args?: Subset<T, Organization$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bankAccounts<T extends Organization$bankAccountsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$bankAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     vacancies<T extends Organization$vacanciesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$vacanciesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     walletTopUps<T extends Organization$walletTopUpsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$walletTopUpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTopUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     biometricDevices<T extends Organization$biometricDevicesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$biometricDevicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -16776,6 +16880,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.bankAccounts
+   */
+  export type Organization$bankAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+    where?: OrgBankAccountWhereInput
+    orderBy?: OrgBankAccountOrderByWithRelationInput | OrgBankAccountOrderByWithRelationInput[]
+    cursor?: OrgBankAccountWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrgBankAccountScalarFieldEnum | OrgBankAccountScalarFieldEnum[]
   }
 
   /**
@@ -145329,6 +145457,1173 @@ export namespace Prisma {
 
 
   /**
+   * Model OrgBankAccount
+   */
+
+  export type AggregateOrgBankAccount = {
+    _count: OrgBankAccountCountAggregateOutputType | null
+    _min: OrgBankAccountMinAggregateOutputType | null
+    _max: OrgBankAccountMaxAggregateOutputType | null
+  }
+
+  export type OrgBankAccountMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    accountName: string | null
+    bankName: string | null
+    accountNumber: string | null
+    ifscCode: string | null
+    branchName: string | null
+    accountType: string | null
+    upiId: string | null
+    isPrimary: boolean | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OrgBankAccountMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    accountName: string | null
+    bankName: string | null
+    accountNumber: string | null
+    ifscCode: string | null
+    branchName: string | null
+    accountType: string | null
+    upiId: string | null
+    isPrimary: boolean | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OrgBankAccountCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    accountName: number
+    bankName: number
+    accountNumber: number
+    ifscCode: number
+    branchName: number
+    accountType: number
+    upiId: number
+    isPrimary: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OrgBankAccountMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    accountName?: true
+    bankName?: true
+    accountNumber?: true
+    ifscCode?: true
+    branchName?: true
+    accountType?: true
+    upiId?: true
+    isPrimary?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrgBankAccountMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    accountName?: true
+    bankName?: true
+    accountNumber?: true
+    ifscCode?: true
+    branchName?: true
+    accountType?: true
+    upiId?: true
+    isPrimary?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrgBankAccountCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    accountName?: true
+    bankName?: true
+    accountNumber?: true
+    ifscCode?: true
+    branchName?: true
+    accountType?: true
+    upiId?: true
+    isPrimary?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OrgBankAccountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrgBankAccount to aggregate.
+     */
+    where?: OrgBankAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgBankAccounts to fetch.
+     */
+    orderBy?: OrgBankAccountOrderByWithRelationInput | OrgBankAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrgBankAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgBankAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgBankAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OrgBankAccounts
+    **/
+    _count?: true | OrgBankAccountCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrgBankAccountMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrgBankAccountMaxAggregateInputType
+  }
+
+  export type GetOrgBankAccountAggregateType<T extends OrgBankAccountAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrgBankAccount]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrgBankAccount[P]>
+      : GetScalarType<T[P], AggregateOrgBankAccount[P]>
+  }
+
+
+
+
+  export type OrgBankAccountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrgBankAccountWhereInput
+    orderBy?: OrgBankAccountOrderByWithAggregationInput | OrgBankAccountOrderByWithAggregationInput[]
+    by: OrgBankAccountScalarFieldEnum[] | OrgBankAccountScalarFieldEnum
+    having?: OrgBankAccountScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrgBankAccountCountAggregateInputType | true
+    _min?: OrgBankAccountMinAggregateInputType
+    _max?: OrgBankAccountMaxAggregateInputType
+  }
+
+  export type OrgBankAccountGroupByOutputType = {
+    id: string
+    organizationId: string
+    accountName: string
+    bankName: string
+    accountNumber: string
+    ifscCode: string | null
+    branchName: string | null
+    accountType: string
+    upiId: string | null
+    isPrimary: boolean
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: OrgBankAccountCountAggregateOutputType | null
+    _min: OrgBankAccountMinAggregateOutputType | null
+    _max: OrgBankAccountMaxAggregateOutputType | null
+  }
+
+  type GetOrgBankAccountGroupByPayload<T extends OrgBankAccountGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrgBankAccountGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrgBankAccountGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrgBankAccountGroupByOutputType[P]>
+            : GetScalarType<T[P], OrgBankAccountGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrgBankAccountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    accountName?: boolean
+    bankName?: boolean
+    accountNumber?: boolean
+    ifscCode?: boolean
+    branchName?: boolean
+    accountType?: boolean
+    upiId?: boolean
+    isPrimary?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orgBankAccount"]>
+
+  export type OrgBankAccountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    accountName?: boolean
+    bankName?: boolean
+    accountNumber?: boolean
+    ifscCode?: boolean
+    branchName?: boolean
+    accountType?: boolean
+    upiId?: boolean
+    isPrimary?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orgBankAccount"]>
+
+  export type OrgBankAccountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    accountName?: boolean
+    bankName?: boolean
+    accountNumber?: boolean
+    ifscCode?: boolean
+    branchName?: boolean
+    accountType?: boolean
+    upiId?: boolean
+    isPrimary?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orgBankAccount"]>
+
+  export type OrgBankAccountSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    accountName?: boolean
+    bankName?: boolean
+    accountNumber?: boolean
+    ifscCode?: boolean
+    branchName?: boolean
+    accountType?: boolean
+    upiId?: boolean
+    isPrimary?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OrgBankAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "accountName" | "bankName" | "accountNumber" | "ifscCode" | "branchName" | "accountType" | "upiId" | "isPrimary" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["orgBankAccount"]>
+  export type OrgBankAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+  export type OrgBankAccountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+  export type OrgBankAccountIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+
+  export type $OrgBankAccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OrgBankAccount"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      accountName: string
+      bankName: string
+      accountNumber: string
+      ifscCode: string | null
+      branchName: string | null
+      accountType: string
+      upiId: string | null
+      isPrimary: boolean
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["orgBankAccount"]>
+    composites: {}
+  }
+
+  type OrgBankAccountGetPayload<S extends boolean | null | undefined | OrgBankAccountDefaultArgs> = $Result.GetResult<Prisma.$OrgBankAccountPayload, S>
+
+  type OrgBankAccountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrgBankAccountFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrgBankAccountCountAggregateInputType | true
+    }
+
+  export interface OrgBankAccountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OrgBankAccount'], meta: { name: 'OrgBankAccount' } }
+    /**
+     * Find zero or one OrgBankAccount that matches the filter.
+     * @param {OrgBankAccountFindUniqueArgs} args - Arguments to find a OrgBankAccount
+     * @example
+     * // Get one OrgBankAccount
+     * const orgBankAccount = await prisma.orgBankAccount.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrgBankAccountFindUniqueArgs>(args: SelectSubset<T, OrgBankAccountFindUniqueArgs<ExtArgs>>): Prisma__OrgBankAccountClient<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OrgBankAccount that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OrgBankAccountFindUniqueOrThrowArgs} args - Arguments to find a OrgBankAccount
+     * @example
+     * // Get one OrgBankAccount
+     * const orgBankAccount = await prisma.orgBankAccount.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrgBankAccountFindUniqueOrThrowArgs>(args: SelectSubset<T, OrgBankAccountFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrgBankAccountClient<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrgBankAccount that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgBankAccountFindFirstArgs} args - Arguments to find a OrgBankAccount
+     * @example
+     * // Get one OrgBankAccount
+     * const orgBankAccount = await prisma.orgBankAccount.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrgBankAccountFindFirstArgs>(args?: SelectSubset<T, OrgBankAccountFindFirstArgs<ExtArgs>>): Prisma__OrgBankAccountClient<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrgBankAccount that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgBankAccountFindFirstOrThrowArgs} args - Arguments to find a OrgBankAccount
+     * @example
+     * // Get one OrgBankAccount
+     * const orgBankAccount = await prisma.orgBankAccount.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrgBankAccountFindFirstOrThrowArgs>(args?: SelectSubset<T, OrgBankAccountFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrgBankAccountClient<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OrgBankAccounts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgBankAccountFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OrgBankAccounts
+     * const orgBankAccounts = await prisma.orgBankAccount.findMany()
+     * 
+     * // Get first 10 OrgBankAccounts
+     * const orgBankAccounts = await prisma.orgBankAccount.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orgBankAccountWithIdOnly = await prisma.orgBankAccount.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrgBankAccountFindManyArgs>(args?: SelectSubset<T, OrgBankAccountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OrgBankAccount.
+     * @param {OrgBankAccountCreateArgs} args - Arguments to create a OrgBankAccount.
+     * @example
+     * // Create one OrgBankAccount
+     * const OrgBankAccount = await prisma.orgBankAccount.create({
+     *   data: {
+     *     // ... data to create a OrgBankAccount
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrgBankAccountCreateArgs>(args: SelectSubset<T, OrgBankAccountCreateArgs<ExtArgs>>): Prisma__OrgBankAccountClient<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OrgBankAccounts.
+     * @param {OrgBankAccountCreateManyArgs} args - Arguments to create many OrgBankAccounts.
+     * @example
+     * // Create many OrgBankAccounts
+     * const orgBankAccount = await prisma.orgBankAccount.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrgBankAccountCreateManyArgs>(args?: SelectSubset<T, OrgBankAccountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OrgBankAccounts and returns the data saved in the database.
+     * @param {OrgBankAccountCreateManyAndReturnArgs} args - Arguments to create many OrgBankAccounts.
+     * @example
+     * // Create many OrgBankAccounts
+     * const orgBankAccount = await prisma.orgBankAccount.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OrgBankAccounts and only return the `id`
+     * const orgBankAccountWithIdOnly = await prisma.orgBankAccount.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrgBankAccountCreateManyAndReturnArgs>(args?: SelectSubset<T, OrgBankAccountCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OrgBankAccount.
+     * @param {OrgBankAccountDeleteArgs} args - Arguments to delete one OrgBankAccount.
+     * @example
+     * // Delete one OrgBankAccount
+     * const OrgBankAccount = await prisma.orgBankAccount.delete({
+     *   where: {
+     *     // ... filter to delete one OrgBankAccount
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrgBankAccountDeleteArgs>(args: SelectSubset<T, OrgBankAccountDeleteArgs<ExtArgs>>): Prisma__OrgBankAccountClient<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OrgBankAccount.
+     * @param {OrgBankAccountUpdateArgs} args - Arguments to update one OrgBankAccount.
+     * @example
+     * // Update one OrgBankAccount
+     * const orgBankAccount = await prisma.orgBankAccount.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrgBankAccountUpdateArgs>(args: SelectSubset<T, OrgBankAccountUpdateArgs<ExtArgs>>): Prisma__OrgBankAccountClient<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OrgBankAccounts.
+     * @param {OrgBankAccountDeleteManyArgs} args - Arguments to filter OrgBankAccounts to delete.
+     * @example
+     * // Delete a few OrgBankAccounts
+     * const { count } = await prisma.orgBankAccount.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrgBankAccountDeleteManyArgs>(args?: SelectSubset<T, OrgBankAccountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrgBankAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgBankAccountUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OrgBankAccounts
+     * const orgBankAccount = await prisma.orgBankAccount.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrgBankAccountUpdateManyArgs>(args: SelectSubset<T, OrgBankAccountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrgBankAccounts and returns the data updated in the database.
+     * @param {OrgBankAccountUpdateManyAndReturnArgs} args - Arguments to update many OrgBankAccounts.
+     * @example
+     * // Update many OrgBankAccounts
+     * const orgBankAccount = await prisma.orgBankAccount.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OrgBankAccounts and only return the `id`
+     * const orgBankAccountWithIdOnly = await prisma.orgBankAccount.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OrgBankAccountUpdateManyAndReturnArgs>(args: SelectSubset<T, OrgBankAccountUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OrgBankAccount.
+     * @param {OrgBankAccountUpsertArgs} args - Arguments to update or create a OrgBankAccount.
+     * @example
+     * // Update or create a OrgBankAccount
+     * const orgBankAccount = await prisma.orgBankAccount.upsert({
+     *   create: {
+     *     // ... data to create a OrgBankAccount
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OrgBankAccount we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrgBankAccountUpsertArgs>(args: SelectSubset<T, OrgBankAccountUpsertArgs<ExtArgs>>): Prisma__OrgBankAccountClient<$Result.GetResult<Prisma.$OrgBankAccountPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OrgBankAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgBankAccountCountArgs} args - Arguments to filter OrgBankAccounts to count.
+     * @example
+     * // Count the number of OrgBankAccounts
+     * const count = await prisma.orgBankAccount.count({
+     *   where: {
+     *     // ... the filter for the OrgBankAccounts we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrgBankAccountCountArgs>(
+      args?: Subset<T, OrgBankAccountCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrgBankAccountCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OrgBankAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgBankAccountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrgBankAccountAggregateArgs>(args: Subset<T, OrgBankAccountAggregateArgs>): Prisma.PrismaPromise<GetOrgBankAccountAggregateType<T>>
+
+    /**
+     * Group by OrgBankAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrgBankAccountGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrgBankAccountGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrgBankAccountGroupByArgs['orderBy'] }
+        : { orderBy?: OrgBankAccountGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrgBankAccountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrgBankAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OrgBankAccount model
+   */
+  readonly fields: OrgBankAccountFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OrgBankAccount.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrgBankAccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OrgBankAccount model
+   */
+  interface OrgBankAccountFieldRefs {
+    readonly id: FieldRef<"OrgBankAccount", 'String'>
+    readonly organizationId: FieldRef<"OrgBankAccount", 'String'>
+    readonly accountName: FieldRef<"OrgBankAccount", 'String'>
+    readonly bankName: FieldRef<"OrgBankAccount", 'String'>
+    readonly accountNumber: FieldRef<"OrgBankAccount", 'String'>
+    readonly ifscCode: FieldRef<"OrgBankAccount", 'String'>
+    readonly branchName: FieldRef<"OrgBankAccount", 'String'>
+    readonly accountType: FieldRef<"OrgBankAccount", 'String'>
+    readonly upiId: FieldRef<"OrgBankAccount", 'String'>
+    readonly isPrimary: FieldRef<"OrgBankAccount", 'Boolean'>
+    readonly isActive: FieldRef<"OrgBankAccount", 'Boolean'>
+    readonly createdAt: FieldRef<"OrgBankAccount", 'DateTime'>
+    readonly updatedAt: FieldRef<"OrgBankAccount", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OrgBankAccount findUnique
+   */
+  export type OrgBankAccountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgBankAccount to fetch.
+     */
+    where: OrgBankAccountWhereUniqueInput
+  }
+
+  /**
+   * OrgBankAccount findUniqueOrThrow
+   */
+  export type OrgBankAccountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgBankAccount to fetch.
+     */
+    where: OrgBankAccountWhereUniqueInput
+  }
+
+  /**
+   * OrgBankAccount findFirst
+   */
+  export type OrgBankAccountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgBankAccount to fetch.
+     */
+    where?: OrgBankAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgBankAccounts to fetch.
+     */
+    orderBy?: OrgBankAccountOrderByWithRelationInput | OrgBankAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrgBankAccounts.
+     */
+    cursor?: OrgBankAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgBankAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgBankAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrgBankAccounts.
+     */
+    distinct?: OrgBankAccountScalarFieldEnum | OrgBankAccountScalarFieldEnum[]
+  }
+
+  /**
+   * OrgBankAccount findFirstOrThrow
+   */
+  export type OrgBankAccountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgBankAccount to fetch.
+     */
+    where?: OrgBankAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgBankAccounts to fetch.
+     */
+    orderBy?: OrgBankAccountOrderByWithRelationInput | OrgBankAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrgBankAccounts.
+     */
+    cursor?: OrgBankAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgBankAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgBankAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrgBankAccounts.
+     */
+    distinct?: OrgBankAccountScalarFieldEnum | OrgBankAccountScalarFieldEnum[]
+  }
+
+  /**
+   * OrgBankAccount findMany
+   */
+  export type OrgBankAccountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which OrgBankAccounts to fetch.
+     */
+    where?: OrgBankAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrgBankAccounts to fetch.
+     */
+    orderBy?: OrgBankAccountOrderByWithRelationInput | OrgBankAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OrgBankAccounts.
+     */
+    cursor?: OrgBankAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrgBankAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrgBankAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrgBankAccounts.
+     */
+    distinct?: OrgBankAccountScalarFieldEnum | OrgBankAccountScalarFieldEnum[]
+  }
+
+  /**
+   * OrgBankAccount create
+   */
+  export type OrgBankAccountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OrgBankAccount.
+     */
+    data: XOR<OrgBankAccountCreateInput, OrgBankAccountUncheckedCreateInput>
+  }
+
+  /**
+   * OrgBankAccount createMany
+   */
+  export type OrgBankAccountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OrgBankAccounts.
+     */
+    data: OrgBankAccountCreateManyInput | OrgBankAccountCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OrgBankAccount createManyAndReturn
+   */
+  export type OrgBankAccountCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * The data used to create many OrgBankAccounts.
+     */
+    data: OrgBankAccountCreateManyInput | OrgBankAccountCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrgBankAccount update
+   */
+  export type OrgBankAccountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OrgBankAccount.
+     */
+    data: XOR<OrgBankAccountUpdateInput, OrgBankAccountUncheckedUpdateInput>
+    /**
+     * Choose, which OrgBankAccount to update.
+     */
+    where: OrgBankAccountWhereUniqueInput
+  }
+
+  /**
+   * OrgBankAccount updateMany
+   */
+  export type OrgBankAccountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OrgBankAccounts.
+     */
+    data: XOR<OrgBankAccountUpdateManyMutationInput, OrgBankAccountUncheckedUpdateManyInput>
+    /**
+     * Filter which OrgBankAccounts to update
+     */
+    where?: OrgBankAccountWhereInput
+    /**
+     * Limit how many OrgBankAccounts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrgBankAccount updateManyAndReturn
+   */
+  export type OrgBankAccountUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * The data used to update OrgBankAccounts.
+     */
+    data: XOR<OrgBankAccountUpdateManyMutationInput, OrgBankAccountUncheckedUpdateManyInput>
+    /**
+     * Filter which OrgBankAccounts to update
+     */
+    where?: OrgBankAccountWhereInput
+    /**
+     * Limit how many OrgBankAccounts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrgBankAccount upsert
+   */
+  export type OrgBankAccountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OrgBankAccount to update in case it exists.
+     */
+    where: OrgBankAccountWhereUniqueInput
+    /**
+     * In case the OrgBankAccount found by the `where` argument doesn't exist, create a new OrgBankAccount with this data.
+     */
+    create: XOR<OrgBankAccountCreateInput, OrgBankAccountUncheckedCreateInput>
+    /**
+     * In case the OrgBankAccount was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrgBankAccountUpdateInput, OrgBankAccountUncheckedUpdateInput>
+  }
+
+  /**
+   * OrgBankAccount delete
+   */
+  export type OrgBankAccountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+    /**
+     * Filter which OrgBankAccount to delete.
+     */
+    where: OrgBankAccountWhereUniqueInput
+  }
+
+  /**
+   * OrgBankAccount deleteMany
+   */
+  export type OrgBankAccountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrgBankAccounts to delete
+     */
+    where?: OrgBankAccountWhereInput
+    /**
+     * Limit how many OrgBankAccounts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrgBankAccount without action
+   */
+  export type OrgBankAccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrgBankAccount
+     */
+    select?: OrgBankAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrgBankAccount
+     */
+    omit?: OrgBankAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrgBankAccountInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -147275,6 +148570,25 @@ export namespace Prisma {
   export type UserAccessOverrideScalarFieldEnum = (typeof UserAccessOverrideScalarFieldEnum)[keyof typeof UserAccessOverrideScalarFieldEnum]
 
 
+  export const OrgBankAccountScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    accountName: 'accountName',
+    bankName: 'bankName',
+    accountNumber: 'accountNumber',
+    ifscCode: 'ifscCode',
+    branchName: 'branchName',
+    accountType: 'accountType',
+    upiId: 'upiId',
+    isPrimary: 'isPrimary',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OrgBankAccountScalarFieldEnum = (typeof OrgBankAccountScalarFieldEnum)[keyof typeof OrgBankAccountScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -147857,6 +149171,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionListRelationFilter
     universityPayments?: UniversityPaymentListRelationFilter
     users?: UserListRelationFilter
+    bankAccounts?: OrgBankAccountListRelationFilter
     vacancies?: VacancyListRelationFilter
     walletTopUps?: WalletTopUpListRelationFilter
     biometricDevices?: BiometricDeviceListRelationFilter
@@ -147960,6 +149275,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionOrderByRelationAggregateInput
     universityPayments?: UniversityPaymentOrderByRelationAggregateInput
     users?: UserOrderByRelationAggregateInput
+    bankAccounts?: OrgBankAccountOrderByRelationAggregateInput
     vacancies?: VacancyOrderByRelationAggregateInput
     walletTopUps?: WalletTopUpOrderByRelationAggregateInput
     biometricDevices?: BiometricDeviceOrderByRelationAggregateInput
@@ -148066,6 +149382,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionListRelationFilter
     universityPayments?: UniversityPaymentListRelationFilter
     users?: UserListRelationFilter
+    bankAccounts?: OrgBankAccountListRelationFilter
     vacancies?: VacancyListRelationFilter
     walletTopUps?: WalletTopUpListRelationFilter
     biometricDevices?: BiometricDeviceListRelationFilter
@@ -159050,6 +160367,102 @@ export namespace Prisma {
     revokedById?: StringNullableWithAggregatesFilter<"UserAccessOverride"> | string | null
   }
 
+  export type OrgBankAccountWhereInput = {
+    AND?: OrgBankAccountWhereInput | OrgBankAccountWhereInput[]
+    OR?: OrgBankAccountWhereInput[]
+    NOT?: OrgBankAccountWhereInput | OrgBankAccountWhereInput[]
+    id?: StringFilter<"OrgBankAccount"> | string
+    organizationId?: StringFilter<"OrgBankAccount"> | string
+    accountName?: StringFilter<"OrgBankAccount"> | string
+    bankName?: StringFilter<"OrgBankAccount"> | string
+    accountNumber?: StringFilter<"OrgBankAccount"> | string
+    ifscCode?: StringNullableFilter<"OrgBankAccount"> | string | null
+    branchName?: StringNullableFilter<"OrgBankAccount"> | string | null
+    accountType?: StringFilter<"OrgBankAccount"> | string
+    upiId?: StringNullableFilter<"OrgBankAccount"> | string | null
+    isPrimary?: BoolFilter<"OrgBankAccount"> | boolean
+    isActive?: BoolFilter<"OrgBankAccount"> | boolean
+    createdAt?: DateTimeFilter<"OrgBankAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"OrgBankAccount"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+  }
+
+  export type OrgBankAccountOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    accountName?: SortOrder
+    bankName?: SortOrder
+    accountNumber?: SortOrder
+    ifscCode?: SortOrderInput | SortOrder
+    branchName?: SortOrderInput | SortOrder
+    accountType?: SortOrder
+    upiId?: SortOrderInput | SortOrder
+    isPrimary?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+  }
+
+  export type OrgBankAccountWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    organizationId_accountNumber?: OrgBankAccountOrganizationIdAccountNumberCompoundUniqueInput
+    AND?: OrgBankAccountWhereInput | OrgBankAccountWhereInput[]
+    OR?: OrgBankAccountWhereInput[]
+    NOT?: OrgBankAccountWhereInput | OrgBankAccountWhereInput[]
+    organizationId?: StringFilter<"OrgBankAccount"> | string
+    accountName?: StringFilter<"OrgBankAccount"> | string
+    bankName?: StringFilter<"OrgBankAccount"> | string
+    accountNumber?: StringFilter<"OrgBankAccount"> | string
+    ifscCode?: StringNullableFilter<"OrgBankAccount"> | string | null
+    branchName?: StringNullableFilter<"OrgBankAccount"> | string | null
+    accountType?: StringFilter<"OrgBankAccount"> | string
+    upiId?: StringNullableFilter<"OrgBankAccount"> | string | null
+    isPrimary?: BoolFilter<"OrgBankAccount"> | boolean
+    isActive?: BoolFilter<"OrgBankAccount"> | boolean
+    createdAt?: DateTimeFilter<"OrgBankAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"OrgBankAccount"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+  }, "id" | "organizationId_accountNumber">
+
+  export type OrgBankAccountOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    accountName?: SortOrder
+    bankName?: SortOrder
+    accountNumber?: SortOrder
+    ifscCode?: SortOrderInput | SortOrder
+    branchName?: SortOrderInput | SortOrder
+    accountType?: SortOrder
+    upiId?: SortOrderInput | SortOrder
+    isPrimary?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OrgBankAccountCountOrderByAggregateInput
+    _max?: OrgBankAccountMaxOrderByAggregateInput
+    _min?: OrgBankAccountMinOrderByAggregateInput
+  }
+
+  export type OrgBankAccountScalarWhereWithAggregatesInput = {
+    AND?: OrgBankAccountScalarWhereWithAggregatesInput | OrgBankAccountScalarWhereWithAggregatesInput[]
+    OR?: OrgBankAccountScalarWhereWithAggregatesInput[]
+    NOT?: OrgBankAccountScalarWhereWithAggregatesInput | OrgBankAccountScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"OrgBankAccount"> | string
+    organizationId?: StringWithAggregatesFilter<"OrgBankAccount"> | string
+    accountName?: StringWithAggregatesFilter<"OrgBankAccount"> | string
+    bankName?: StringWithAggregatesFilter<"OrgBankAccount"> | string
+    accountNumber?: StringWithAggregatesFilter<"OrgBankAccount"> | string
+    ifscCode?: StringNullableWithAggregatesFilter<"OrgBankAccount"> | string | null
+    branchName?: StringNullableWithAggregatesFilter<"OrgBankAccount"> | string | null
+    accountType?: StringWithAggregatesFilter<"OrgBankAccount"> | string
+    upiId?: StringNullableWithAggregatesFilter<"OrgBankAccount"> | string | null
+    isPrimary?: BoolWithAggregatesFilter<"OrgBankAccount"> | boolean
+    isActive?: BoolWithAggregatesFilter<"OrgBankAccount"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"OrgBankAccount"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OrgBankAccount"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -159131,6 +160544,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -159233,6 +160647,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -159335,6 +160750,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -159437,6 +160853,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -171397,6 +172814,117 @@ export namespace Prisma {
     revokedById?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type OrgBankAccountCreateInput = {
+    id?: string
+    accountName: string
+    bankName: string
+    accountNumber: string
+    ifscCode?: string | null
+    branchName?: string | null
+    accountType?: string
+    upiId?: string | null
+    isPrimary?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutBankAccountsInput
+  }
+
+  export type OrgBankAccountUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    accountName: string
+    bankName: string
+    accountNumber: string
+    ifscCode?: string | null
+    branchName?: string | null
+    accountType?: string
+    upiId?: string | null
+    isPrimary?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrgBankAccountUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    ifscCode?: NullableStringFieldUpdateOperationsInput | string | null
+    branchName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: StringFieldUpdateOperationsInput | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutBankAccountsNestedInput
+  }
+
+  export type OrgBankAccountUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    ifscCode?: NullableStringFieldUpdateOperationsInput | string | null
+    branchName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: StringFieldUpdateOperationsInput | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgBankAccountCreateManyInput = {
+    id?: string
+    organizationId: string
+    accountName: string
+    bankName: string
+    accountNumber: string
+    ifscCode?: string | null
+    branchName?: string | null
+    accountType?: string
+    upiId?: string | null
+    isPrimary?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrgBankAccountUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    ifscCode?: NullableStringFieldUpdateOperationsInput | string | null
+    branchName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: StringFieldUpdateOperationsInput | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgBankAccountUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    ifscCode?: NullableStringFieldUpdateOperationsInput | string | null
+    branchName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: StringFieldUpdateOperationsInput | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -171879,6 +173407,12 @@ export namespace Prisma {
     none?: UserWhereInput
   }
 
+  export type OrgBankAccountListRelationFilter = {
+    every?: OrgBankAccountWhereInput
+    some?: OrgBankAccountWhereInput
+    none?: OrgBankAccountWhereInput
+  }
+
   export type VacancyListRelationFilter = {
     every?: VacancyWhereInput
     some?: VacancyWhereInput
@@ -172255,6 +173789,10 @@ export namespace Prisma {
   }
 
   export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrgBankAccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -178694,6 +180232,59 @@ export namespace Prisma {
     revokedById?: SortOrder
   }
 
+  export type OrgBankAccountOrganizationIdAccountNumberCompoundUniqueInput = {
+    organizationId: string
+    accountNumber: string
+  }
+
+  export type OrgBankAccountCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    accountName?: SortOrder
+    bankName?: SortOrder
+    accountNumber?: SortOrder
+    ifscCode?: SortOrder
+    branchName?: SortOrder
+    accountType?: SortOrder
+    upiId?: SortOrder
+    isPrimary?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrgBankAccountMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    accountName?: SortOrder
+    bankName?: SortOrder
+    accountNumber?: SortOrder
+    ifscCode?: SortOrder
+    branchName?: SortOrder
+    accountType?: SortOrder
+    upiId?: SortOrder
+    isPrimary?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrgBankAccountMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    accountName?: SortOrder
+    bankName?: SortOrder
+    accountNumber?: SortOrder
+    ifscCode?: SortOrder
+    branchName?: SortOrder
+    accountType?: SortOrder
+    upiId?: SortOrder
+    isPrimary?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type AcademicSessionCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AcademicSessionCreateWithoutOrganizationInput, AcademicSessionUncheckedCreateWithoutOrganizationInput> | AcademicSessionCreateWithoutOrganizationInput[] | AcademicSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AcademicSessionCreateOrConnectWithoutOrganizationInput | AcademicSessionCreateOrConnectWithoutOrganizationInput[]
@@ -179159,6 +180750,13 @@ export namespace Prisma {
     connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
     createMany?: UserCreateManyOrganizationInputEnvelope
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type OrgBankAccountCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<OrgBankAccountCreateWithoutOrganizationInput, OrgBankAccountUncheckedCreateWithoutOrganizationInput> | OrgBankAccountCreateWithoutOrganizationInput[] | OrgBankAccountUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: OrgBankAccountCreateOrConnectWithoutOrganizationInput | OrgBankAccountCreateOrConnectWithoutOrganizationInput[]
+    createMany?: OrgBankAccountCreateManyOrganizationInputEnvelope
+    connect?: OrgBankAccountWhereUniqueInput | OrgBankAccountWhereUniqueInput[]
   }
 
   export type VacancyCreateNestedManyWithoutOrganizationInput = {
@@ -179753,6 +181351,13 @@ export namespace Prisma {
     connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
     createMany?: UserCreateManyOrganizationInputEnvelope
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<OrgBankAccountCreateWithoutOrganizationInput, OrgBankAccountUncheckedCreateWithoutOrganizationInput> | OrgBankAccountCreateWithoutOrganizationInput[] | OrgBankAccountUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: OrgBankAccountCreateOrConnectWithoutOrganizationInput | OrgBankAccountCreateOrConnectWithoutOrganizationInput[]
+    createMany?: OrgBankAccountCreateManyOrganizationInputEnvelope
+    connect?: OrgBankAccountWhereUniqueInput | OrgBankAccountWhereUniqueInput[]
   }
 
   export type VacancyUncheckedCreateNestedManyWithoutOrganizationInput = {
@@ -180836,6 +182441,20 @@ export namespace Prisma {
     update?: UserUpdateWithWhereUniqueWithoutOrganizationInput | UserUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: UserUpdateManyWithWhereWithoutOrganizationInput | UserUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type OrgBankAccountUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<OrgBankAccountCreateWithoutOrganizationInput, OrgBankAccountUncheckedCreateWithoutOrganizationInput> | OrgBankAccountCreateWithoutOrganizationInput[] | OrgBankAccountUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: OrgBankAccountCreateOrConnectWithoutOrganizationInput | OrgBankAccountCreateOrConnectWithoutOrganizationInput[]
+    upsert?: OrgBankAccountUpsertWithWhereUniqueWithoutOrganizationInput | OrgBankAccountUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: OrgBankAccountCreateManyOrganizationInputEnvelope
+    set?: OrgBankAccountWhereUniqueInput | OrgBankAccountWhereUniqueInput[]
+    disconnect?: OrgBankAccountWhereUniqueInput | OrgBankAccountWhereUniqueInput[]
+    delete?: OrgBankAccountWhereUniqueInput | OrgBankAccountWhereUniqueInput[]
+    connect?: OrgBankAccountWhereUniqueInput | OrgBankAccountWhereUniqueInput[]
+    update?: OrgBankAccountUpdateWithWhereUniqueWithoutOrganizationInput | OrgBankAccountUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: OrgBankAccountUpdateManyWithWhereWithoutOrganizationInput | OrgBankAccountUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: OrgBankAccountScalarWhereInput | OrgBankAccountScalarWhereInput[]
   }
 
   export type VacancyUpdateManyWithoutOrganizationNestedInput = {
@@ -182022,6 +183641,20 @@ export namespace Prisma {
     update?: UserUpdateWithWhereUniqueWithoutOrganizationInput | UserUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: UserUpdateManyWithWhereWithoutOrganizationInput | UserUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<OrgBankAccountCreateWithoutOrganizationInput, OrgBankAccountUncheckedCreateWithoutOrganizationInput> | OrgBankAccountCreateWithoutOrganizationInput[] | OrgBankAccountUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: OrgBankAccountCreateOrConnectWithoutOrganizationInput | OrgBankAccountCreateOrConnectWithoutOrganizationInput[]
+    upsert?: OrgBankAccountUpsertWithWhereUniqueWithoutOrganizationInput | OrgBankAccountUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: OrgBankAccountCreateManyOrganizationInputEnvelope
+    set?: OrgBankAccountWhereUniqueInput | OrgBankAccountWhereUniqueInput[]
+    disconnect?: OrgBankAccountWhereUniqueInput | OrgBankAccountWhereUniqueInput[]
+    delete?: OrgBankAccountWhereUniqueInput | OrgBankAccountWhereUniqueInput[]
+    connect?: OrgBankAccountWhereUniqueInput | OrgBankAccountWhereUniqueInput[]
+    update?: OrgBankAccountUpdateWithWhereUniqueWithoutOrganizationInput | OrgBankAccountUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: OrgBankAccountUpdateManyWithWhereWithoutOrganizationInput | OrgBankAccountUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: OrgBankAccountScalarWhereInput | OrgBankAccountScalarWhereInput[]
   }
 
   export type VacancyUncheckedUpdateManyWithoutOrganizationNestedInput = {
@@ -195958,6 +197591,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUsageDaysInput, UserUpdateWithoutUsageDaysInput>, UserUncheckedUpdateWithoutUsageDaysInput>
   }
 
+  export type OrganizationCreateNestedOneWithoutBankAccountsInput = {
+    create?: XOR<OrganizationCreateWithoutBankAccountsInput, OrganizationUncheckedCreateWithoutBankAccountsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutBankAccountsInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutBankAccountsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutBankAccountsInput, OrganizationUncheckedCreateWithoutBankAccountsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutBankAccountsInput
+    upsert?: OrganizationUpsertWithoutBankAccountsInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutBankAccountsInput, OrganizationUpdateWithoutBankAccountsInput>, OrganizationUncheckedUpdateWithoutBankAccountsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -199981,6 +201628,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OrgBankAccountCreateWithoutOrganizationInput = {
+    id?: string
+    accountName: string
+    bankName: string
+    accountNumber: string
+    ifscCode?: string | null
+    branchName?: string | null
+    accountType?: string
+    upiId?: string | null
+    isPrimary?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrgBankAccountUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    accountName: string
+    bankName: string
+    accountNumber: string
+    ifscCode?: string | null
+    branchName?: string | null
+    accountType?: string
+    upiId?: string | null
+    isPrimary?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrgBankAccountCreateOrConnectWithoutOrganizationInput = {
+    where: OrgBankAccountWhereUniqueInput
+    create: XOR<OrgBankAccountCreateWithoutOrganizationInput, OrgBankAccountUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type OrgBankAccountCreateManyOrganizationInputEnvelope = {
+    data: OrgBankAccountCreateManyOrganizationInput | OrgBankAccountCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type VacancyCreateWithoutOrganizationInput = {
     id?: string
     designation: string
@@ -203163,6 +204850,41 @@ export namespace Prisma {
     assignedOpsUsers?: JsonNullableFilter<"User">
   }
 
+  export type OrgBankAccountUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: OrgBankAccountWhereUniqueInput
+    update: XOR<OrgBankAccountUpdateWithoutOrganizationInput, OrgBankAccountUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<OrgBankAccountCreateWithoutOrganizationInput, OrgBankAccountUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type OrgBankAccountUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: OrgBankAccountWhereUniqueInput
+    data: XOR<OrgBankAccountUpdateWithoutOrganizationInput, OrgBankAccountUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type OrgBankAccountUpdateManyWithWhereWithoutOrganizationInput = {
+    where: OrgBankAccountScalarWhereInput
+    data: XOR<OrgBankAccountUpdateManyMutationInput, OrgBankAccountUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type OrgBankAccountScalarWhereInput = {
+    AND?: OrgBankAccountScalarWhereInput | OrgBankAccountScalarWhereInput[]
+    OR?: OrgBankAccountScalarWhereInput[]
+    NOT?: OrgBankAccountScalarWhereInput | OrgBankAccountScalarWhereInput[]
+    id?: StringFilter<"OrgBankAccount"> | string
+    organizationId?: StringFilter<"OrgBankAccount"> | string
+    accountName?: StringFilter<"OrgBankAccount"> | string
+    bankName?: StringFilter<"OrgBankAccount"> | string
+    accountNumber?: StringFilter<"OrgBankAccount"> | string
+    ifscCode?: StringNullableFilter<"OrgBankAccount"> | string | null
+    branchName?: StringNullableFilter<"OrgBankAccount"> | string | null
+    accountType?: StringFilter<"OrgBankAccount"> | string
+    upiId?: StringNullableFilter<"OrgBankAccount"> | string | null
+    isPrimary?: BoolFilter<"OrgBankAccount"> | boolean
+    isActive?: BoolFilter<"OrgBankAccount"> | boolean
+    createdAt?: DateTimeFilter<"OrgBankAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"OrgBankAccount"> | Date | string
+  }
+
   export type VacancyUpsertWithWhereUniqueWithoutOrganizationInput = {
     where: VacancyWhereUniqueInput
     update: XOR<VacancyUpdateWithoutOrganizationInput, VacancyUncheckedUpdateWithoutOrganizationInput>
@@ -203852,6 +205574,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -203953,6 +205676,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -204479,6 +206203,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -204580,6 +206305,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -205954,6 +207680,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -206055,6 +207782,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -210844,6 +212572,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -210945,6 +212674,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -214012,6 +215742,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -214113,6 +215844,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -214909,6 +216641,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -215010,6 +216743,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -215370,6 +217104,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -215471,6 +217206,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -216659,6 +218395,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -216760,6 +218497,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -217703,6 +219441,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -217804,6 +219543,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -218148,6 +219888,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -218249,6 +219990,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -218615,6 +220357,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -218716,6 +220459,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -219149,6 +220893,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -219250,6 +220995,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -219956,6 +221702,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -220057,6 +221804,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -220530,6 +222278,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -220631,6 +222380,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -221233,6 +222983,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -221334,6 +223085,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -222367,6 +224119,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -222468,6 +224221,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -223964,6 +225718,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -224065,6 +225820,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -225918,6 +227674,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -226019,6 +227776,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -227659,6 +229417,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -227760,6 +229519,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -228564,6 +230324,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -228665,6 +230426,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -229103,6 +230865,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -229204,6 +230967,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -229521,6 +231285,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -229622,6 +231387,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -229982,6 +231748,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -230083,6 +231850,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -230676,6 +232444,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -230777,6 +232546,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -231143,6 +232913,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -231244,6 +233015,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -231345,6 +233117,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -231446,6 +233219,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -231806,6 +233580,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -231907,6 +233682,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -232257,6 +234033,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -232358,6 +234135,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -232718,6 +234496,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -232819,6 +234598,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -233226,6 +235006,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -233327,6 +235108,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -233750,6 +235532,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -233851,6 +235634,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -234201,6 +235985,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -234302,6 +236087,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -234419,6 +236205,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -234520,6 +236307,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -235407,6 +237195,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -235508,6 +237297,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -236435,6 +238225,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -236536,6 +238327,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -237123,6 +238915,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -237224,6 +239017,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -238082,6 +239876,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -238183,6 +239978,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -239262,6 +241058,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -239363,6 +241160,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -240713,6 +242511,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -240814,6 +242613,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -241713,6 +243513,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -241814,6 +243615,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -242881,6 +244683,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -242982,6 +244785,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -243587,6 +245391,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -243688,6 +245493,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -244590,6 +246396,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -244691,6 +246498,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -245025,6 +246833,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -245126,6 +246935,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -245732,6 +247542,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -245833,6 +247644,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -246303,6 +248115,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -246404,6 +248217,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -246770,6 +248584,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -246871,6 +248686,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -246972,6 +248788,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -247073,6 +248890,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -247190,6 +249008,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -247291,6 +249110,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -247450,6 +249270,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
     examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
@@ -247551,6 +249372,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
     examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -247731,6 +249553,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
     examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
@@ -247832,6 +249655,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
     examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -248418,6 +250242,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -248519,6 +250344,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -249732,6 +251558,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -249833,6 +251660,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -250732,6 +252560,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -250833,6 +252662,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -252789,6 +254619,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -252890,6 +254721,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -254872,6 +256704,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -254973,6 +256806,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -255588,6 +257422,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -255689,6 +257524,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -255820,6 +257656,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -255921,6 +257758,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -256145,6 +257983,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -256246,6 +258085,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -256445,6 +258285,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
     examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
@@ -256546,6 +258387,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
     examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -256997,6 +258839,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
     examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
@@ -257098,6 +258941,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
     examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -257587,6 +259431,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -257688,6 +259533,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -258097,6 +259943,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -258198,6 +260045,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -258791,6 +260639,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -258892,6 +260741,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -259258,6 +261108,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -259359,6 +261210,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -259460,6 +261312,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -259561,6 +261414,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -259921,6 +261775,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -260022,6 +261877,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -260372,6 +262228,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -260473,6 +262330,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -260590,6 +262448,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -260691,6 +262550,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -260792,6 +262652,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -260893,6 +262754,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -261253,6 +263115,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -261354,6 +263217,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -261704,6 +263568,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -261805,6 +263670,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -262408,6 +264274,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -262509,6 +264376,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -263108,6 +264976,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -263209,6 +265078,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -263867,6 +265737,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -263968,6 +265839,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -265357,6 +267229,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -265458,6 +267331,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -266642,6 +268516,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -266743,6 +268618,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -267213,6 +269089,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -267314,6 +269191,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -267484,6 +269362,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -267585,6 +269464,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -267929,6 +269809,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -268030,6 +269911,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -268636,6 +270518,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -268737,6 +270620,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -269333,6 +271217,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -269434,6 +271319,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -270043,6 +271929,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -270144,6 +272031,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -270737,6 +272625,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -270838,6 +272727,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -271690,6 +273580,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -271791,6 +273682,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -272633,6 +274525,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -272734,6 +274627,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -273100,6 +274994,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -273201,6 +275096,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -273879,6 +275775,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -273980,6 +275877,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -274745,6 +276643,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -274846,6 +276745,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -275006,6 +276906,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -275107,6 +277008,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -275467,6 +277369,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -275568,6 +277471,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -275918,6 +277822,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -276019,6 +277924,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -276189,6 +278095,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -276290,6 +278197,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -276784,6 +278692,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -276885,6 +278794,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -277591,6 +279501,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -277692,6 +279603,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -278091,6 +280003,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -278192,6 +280105,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -278850,6 +280764,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -278951,6 +280866,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -279941,6 +281857,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -280042,6 +281959,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -280568,6 +282486,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -280669,6 +282588,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -281013,6 +282933,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -281114,6 +283035,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -281535,6 +283457,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -281636,6 +283559,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -282041,6 +283965,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -282142,6 +284067,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -282667,6 +284593,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -282768,6 +284695,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -283046,6 +284974,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -283147,6 +285076,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -283468,6 +285398,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -283569,6 +285500,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -284888,6 +286820,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -284989,6 +286922,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -285604,6 +287538,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -285705,6 +287640,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -285806,6 +287742,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -285907,6 +287844,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -286320,6 +288258,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -286421,6 +288360,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -286920,6 +288860,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -287021,6 +288962,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -287319,6 +289261,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -287420,6 +289363,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -287919,6 +289863,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -288020,6 +289965,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -288574,6 +290520,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -288675,6 +290622,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -288976,6 +290924,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -289077,6 +291026,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -289437,6 +291387,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -289538,6 +291489,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -289888,6 +291840,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -289989,6 +291942,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -290310,6 +292264,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -290411,6 +292366,7 @@ export namespace Prisma {
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -292017,6 +293973,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
@@ -292118,6 +294075,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
@@ -292284,6 +294242,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
@@ -292385,6 +294344,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -292541,6 +294501,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -292642,6 +294603,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -292908,6 +294870,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -293009,6 +294972,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -293265,6 +295229,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -293366,6 +295331,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -293726,6 +295692,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -293827,6 +295794,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -294669,6 +296637,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -294770,6 +296739,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -295341,6 +297311,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -295442,6 +297413,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -295734,6 +297706,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -295835,6 +297808,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -295996,6 +297970,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -296097,6 +298072,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -296332,6 +298308,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -296433,6 +298410,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -296824,6 +298802,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -296925,6 +298904,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -297130,6 +299110,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -297231,6 +299212,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -297393,6 +299375,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -297494,6 +299477,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -297634,6 +299618,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -297735,6 +299720,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -298031,6 +300017,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -298132,6 +300119,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -298312,6 +300300,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -298413,6 +300402,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -298619,6 +300609,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -298720,6 +300711,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -298950,6 +300942,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -299051,6 +301044,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -299574,6 +301568,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -299675,6 +301670,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -300745,6 +302741,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -300846,6 +302843,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -301171,6 +303169,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -301272,6 +303271,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -301569,6 +303569,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -301670,6 +303671,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -302023,6 +304025,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -302124,6 +304127,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -302472,6 +304476,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -302573,6 +304578,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -302939,6 +304945,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -303040,6 +305047,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -303337,6 +305345,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -303438,6 +305447,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -303763,6 +305773,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -303864,6 +305875,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -304177,6 +306189,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -304278,6 +306291,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -304631,6 +306645,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -304732,6 +306747,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -304935,6 +306951,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -305036,6 +307053,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -305267,6 +307285,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -305368,6 +307387,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -305575,6 +307595,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -305676,6 +307697,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -306102,6 +308124,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -306203,6 +308226,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -307658,6 +309682,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -307759,6 +309784,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -308035,6 +310061,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -308136,6 +310163,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -308502,6 +310530,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -308603,6 +310632,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -309056,6 +311086,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -309157,6 +311188,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -309468,6 +311500,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -309569,6 +311602,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -309892,6 +311926,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -309993,6 +312028,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -310094,6 +312130,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -310195,6 +312232,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -310892,6 +312930,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -310993,6 +313032,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -311624,6 +313664,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -311725,6 +313766,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -311923,6 +313965,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -312024,6 +314067,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -312194,6 +314238,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -312295,6 +314340,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -312412,6 +314458,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -312513,6 +314560,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -312614,6 +314662,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -312715,6 +314764,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -312934,6 +314984,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -313035,6 +315086,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -313250,6 +315302,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -313351,6 +315404,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -313468,6 +315522,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -313569,6 +315624,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -313671,6 +315727,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -313772,6 +315829,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -313947,6 +316005,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -314048,6 +316107,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -315033,6 +317093,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
@@ -315134,6 +317195,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    bankAccounts?: OrgBankAccountUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -315494,6 +317556,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -315595,6 +317658,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -315862,6 +317926,430 @@ export namespace Prisma {
     opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
     enteredEnrollments?: EnrollmentUncheckedUpdateManyWithoutEnteredByUserNestedInput
     createdInvites?: StudyCenterInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type OrganizationCreateWithoutBankAccountsInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.OrganizationStatus
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionCreateNestedManyWithoutOrganizationInput
+    studentAcademicAttendances?: StudentAcademicAttendanceCreateNestedManyWithoutOrganizationInput
+    academicCenters?: AcademicCenterCreateNestedManyWithoutOrganizationInput
+    academicClasses?: AcademicClassCreateNestedManyWithoutOrganizationInput
+    academicBatches?: AcademicBatchCreateNestedManyWithoutOrganizationInput
+    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+    branches?: BranchCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
+    leads?: LeadCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
+    license?: LicenseCreateNestedOneWithoutOrganizationsInput
+    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
+    studyAbroadPartners?: StudyAbroadPartnerCreateNestedManyWithoutOrganizationInput
+    studyAbroadApplications?: StudyAbroadApplicationCreateNestedManyWithoutOrganizationInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutCreateNestedManyWithoutOrganizationInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionCreateNestedManyWithoutOrganizationInput
+    countries?: CountryCreateNestedManyWithoutOrganizationInput
+    polls?: PollCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
+    students?: StudentCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
+    targets?: TargetCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
+    faculties?: FacultyCreateNestedManyWithoutOrganizationInput
+    classModules?: ClassModuleCreateNestedManyWithoutOrganizationInput
+    classTrialVideos?: ClassTrialVideoCreateNestedManyWithoutOrganizationInput
+    lessonDoubts?: LessonDoubtCreateNestedManyWithoutOrganizationInput
+    lessonDoubtReplies?: LessonDoubtReplyCreateNestedManyWithoutOrganizationInput
+    lessonNotes?: LessonNoteCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleCreateNestedManyWithoutOrganizationInput
+    classMaterials?: ClassMaterialCreateNestedManyWithoutOrganizationInput
+    moduleLessons?: ModuleLessonCreateNestedManyWithoutOrganizationInput
+    lessonFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutOrganizationInput
+    batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutOrganizationInput
+    studentVideoLogs?: StudentVideoLogCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutBankAccountsInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.OrganizationStatus
+    licenseId?: string | null
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    academicSessions?: AcademicSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    academicCenters?: AcademicCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    academicClasses?: AcademicClassUncheckedCreateNestedManyWithoutOrganizationInput
+    academicBatches?: AcademicBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    classMeetings?: ClassMeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadPartners?: StudyAbroadPartnerUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadApplications?: StudyAbroadApplicationUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUncheckedCreateNestedManyWithoutOrganizationInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    countries?: CountryUncheckedCreateNestedManyWithoutOrganizationInput
+    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    faculties?: FacultyUncheckedCreateNestedManyWithoutOrganizationInput
+    classModules?: ClassModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classTrialVideos?: ClassTrialVideoUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonDoubts?: LessonDoubtUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonNotes?: LessonNoteUncheckedCreateNestedManyWithoutOrganizationInput
+    classSubModules?: ClassSubModuleUncheckedCreateNestedManyWithoutOrganizationInput
+    classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutOrganizationInput
+    lessonFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutOrganizationInput
+    studentVideoLogs?: StudentVideoLogUncheckedCreateNestedManyWithoutOrganizationInput
+    studentFilterTypes?: StudentFilterTypeUncheckedCreateNestedManyWithoutOrganizationInput
+    usageDays?: UsageDayUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutBankAccountsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutBankAccountsInput, OrganizationUncheckedCreateWithoutBankAccountsInput>
+  }
+
+  export type OrganizationUpsertWithoutBankAccountsInput = {
+    update: XOR<OrganizationUpdateWithoutBankAccountsInput, OrganizationUncheckedUpdateWithoutBankAccountsInput>
+    create: XOR<OrganizationCreateWithoutBankAccountsInput, OrganizationUncheckedCreateWithoutBankAccountsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutBankAccountsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutBankAccountsInput, OrganizationUncheckedUpdateWithoutBankAccountsInput>
+  }
+
+  export type OrganizationUpdateWithoutBankAccountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUpdateManyWithoutOrganizationNestedInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUpdateManyWithoutOrganizationNestedInput
+    academicCenters?: AcademicCenterUpdateManyWithoutOrganizationNestedInput
+    academicClasses?: AcademicClassUpdateManyWithoutOrganizationNestedInput
+    academicBatches?: AcademicBatchUpdateManyWithoutOrganizationNestedInput
+    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
+    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
+    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPartners?: StudyAbroadPartnerUpdateManyWithoutOrganizationNestedInput
+    studyAbroadApplications?: StudyAbroadApplicationUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUpdateManyWithoutOrganizationNestedInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUpdateManyWithoutOrganizationNestedInput
+    countries?: CountryUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
+    faculties?: FacultyUpdateManyWithoutOrganizationNestedInput
+    classModules?: ClassModuleUpdateManyWithoutOrganizationNestedInput
+    classTrialVideos?: ClassTrialVideoUpdateManyWithoutOrganizationNestedInput
+    lessonDoubts?: LessonDoubtUpdateManyWithoutOrganizationNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUpdateManyWithoutOrganizationNestedInput
+    lessonNotes?: LessonNoteUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUpdateManyWithoutOrganizationNestedInput
+    classMaterials?: ClassMaterialUpdateManyWithoutOrganizationNestedInput
+    moduleLessons?: ModuleLessonUpdateManyWithoutOrganizationNestedInput
+    lessonFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutOrganizationNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutOrganizationNestedInput
+    studentVideoLogs?: StudentVideoLogUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutBankAccountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSessions?: AcademicSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentAcademicAttendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicCenters?: AcademicCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicClasses?: AcademicClassUncheckedUpdateManyWithoutOrganizationNestedInput
+    academicBatches?: AcademicBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMeetings?: ClassMeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPartners?: StudyAbroadPartnerUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadApplications?: StudyAbroadApplicationUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadPayouts?: StudyAbroadPartnerPayoutUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyAbroadProgramCommissions?: StudyAbroadProgramCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    countries?: CountryUncheckedUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    faculties?: FacultyUncheckedUpdateManyWithoutOrganizationNestedInput
+    classModules?: ClassModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classTrialVideos?: ClassTrialVideoUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonDoubts?: LessonDoubtUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonDoubtReplies?: LessonDoubtReplyUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonNotes?: LessonNoteUncheckedUpdateManyWithoutOrganizationNestedInput
+    classSubModules?: ClassSubModuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    classMaterials?: ClassMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutOrganizationNestedInput
+    lessonFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentVideoLogs?: StudentVideoLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    studentFilterTypes?: StudentFilterTypeUncheckedUpdateManyWithoutOrganizationNestedInput
+    usageDays?: UsageDayUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AcademicSessionCreateManyOrganizationInput = {
@@ -316964,6 +319452,21 @@ export namespace Prisma {
     permissions?: NullableJsonNullValueInput | InputJsonValue
     assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
     assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type OrgBankAccountCreateManyOrganizationInput = {
+    id?: string
+    accountName: string
+    bankName: string
+    accountNumber: string
+    ifscCode?: string | null
+    branchName?: string | null
+    accountType?: string
+    upiId?: string | null
+    isPrimary?: boolean
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type VacancyCreateManyOrganizationInput = {
@@ -320883,6 +323386,51 @@ export namespace Prisma {
     assignedOpsUsers?: NullableJsonNullValueInput | InputJsonValue
   }
 
+  export type OrgBankAccountUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    ifscCode?: NullableStringFieldUpdateOperationsInput | string | null
+    branchName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: StringFieldUpdateOperationsInput | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgBankAccountUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    ifscCode?: NullableStringFieldUpdateOperationsInput | string | null
+    branchName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: StringFieldUpdateOperationsInput | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrgBankAccountUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accountName?: StringFieldUpdateOperationsInput | string
+    bankName?: StringFieldUpdateOperationsInput | string
+    accountNumber?: StringFieldUpdateOperationsInput | string
+    ifscCode?: NullableStringFieldUpdateOperationsInput | string | null
+    branchName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: StringFieldUpdateOperationsInput | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type VacancyUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     designation?: StringFieldUpdateOperationsInput | string
@@ -321720,6 +324268,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
@@ -321821,6 +324370,7 @@ export namespace Prisma {
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    bankAccounts?: OrgBankAccountUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput

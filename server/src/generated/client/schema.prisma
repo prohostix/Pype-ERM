@@ -90,6 +90,7 @@ model Organization {
   commissions                   UniversityCommission[]
   universityPayments            UniversityPayment[]
   users                         User[]
+  bankAccounts                  OrgBankAccount[]
   vacancies                     Vacancy[]
   walletTopUps                  WalletTopUp[]
   biometricDevices              BiometricDevice[]
@@ -2747,4 +2748,26 @@ model UserAccessOverride {
 
   @@index([organizationId, userId])
   @@index([userId, featureKey, action, revokedAt])
+}
+
+// The organization's own bank accounts, managed by the Org Admin
+model OrgBankAccount {
+  id             String       @id @default(uuid())
+  organizationId String
+  accountName    String
+  bankName       String
+  accountNumber  String
+  // IFSC, SWIFT or routing code, depending on the country
+  ifscCode       String?
+  branchName     String?
+  // savings | current | other
+  accountType    String       @default("current")
+  upiId          String?
+  isPrimary      Boolean      @default(false)
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, accountNumber])
 }

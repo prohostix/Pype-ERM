@@ -1750,6 +1750,22 @@ exports.Prisma.UserAccessOverrideScalarFieldEnum = {
   revokedById: 'revokedById'
 };
 
+exports.Prisma.OrgBankAccountScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  accountName: 'accountName',
+  bankName: 'bankName',
+  accountNumber: 'accountNumber',
+  ifscCode: 'ifscCode',
+  branchName: 'branchName',
+  accountType: 'accountType',
+  upiId: 'upiId',
+  isPrimary: 'isPrimary',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2094,7 +2110,8 @@ exports.Prisma.ModelName = {
   StudentFilterValue: 'StudentFilterValue',
   StudentFilterHistory: 'StudentFilterHistory',
   UsageDay: 'UsageDay',
-  UserAccessOverride: 'UserAccessOverride'
+  UserAccessOverride: 'UserAccessOverride',
+  OrgBankAccount: 'OrgBankAccount'
 };
 
 /**

@@ -32,6 +32,7 @@ import {
   getOrgCommunicationLogs,
   resendOrgCommunicationLog,
 } from '../controllers/communicationSettingsController.js';
+import { getBankAccounts, createBankAccount, updateBankAccount, deleteBankAccount } from '../controllers/bankAccountController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { auditLog } from '../middleware/auditLog.js';
 import { pageAction } from '../access/pageGuard.js';
@@ -74,6 +75,14 @@ router.post('/communication-logs/:id/resend', authorize('superadmin', 'org_admin
 // Login Branding
 router.post('/login-branding/init', authorize('org_admin', 'superadmin'), initLoginBranding);
 router.put('/login-branding', authorize('org_admin', 'superadmin'), updateLoginBranding);
+
+// Organization's own bank accounts (must be before /:id)
+router.route('/bank-accounts')
+  .get(authorize('org_admin'), getBankAccounts)
+  .post(authorize('org_admin'), createBankAccount);
+router.route('/bank-accounts/:id')
+  .put(authorize('org_admin'), updateBankAccount)
+  .delete(authorize('org_admin'), deleteBankAccount);
 
 // Organization Bill History (must be before /:id)
 router.get('/bills/history', authorize('superadmin', 'org_admin'), getBillHistory);

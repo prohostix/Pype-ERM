@@ -104,10 +104,10 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
           style={{ background: 'radial-gradient(55% 45% at 50% 35%, rgba(255,255,255,.85), transparent 75%)' }} />
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-3/5 -z-10 pointer-events-none bg-gradient-to-b from-transparent via-white/70 to-white" />
 
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[88px] font-semibold tracking-tight text-slate-900 mb-6 mt-6 leading-[1.05] max-w-5xl relative z-10">
-          <span className="hero-word block" style={{ animationDelay: '0ms' }}>One app to</span>
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[76px] font-semibold tracking-tight text-slate-900 mb-6 mt-6 leading-[1.05] max-w-5xl relative z-10">
+          <span className="hero-word block" style={{ animationDelay: '0ms' }}>Many software hassles.</span>{' '}
           <span className="hero-word block" style={{ animationDelay: '140ms' }}>
-            <span className="bg-gradient-to-r from-[#256c1d] via-[#54b947] to-[#2c7722] bg-clip-text text-transparent pb-[0.08em] inline-block">replace them all.</span>
+            <span className="bg-gradient-to-r from-[#256c1d] via-[#54b947] to-[#2c7722] bg-clip-text text-transparent pb-[0.08em] inline-block">One simple solution.</span>
           </span>
         </h1>
 

@@ -505,6 +505,7 @@ function App() {
         { id: 'payments', label: 'Payments' },
         { id: 'expenses', label: 'Expenses' },
         { id: 'collections', label: 'Collections' },
+        { id: 'bank_accounts', label: 'Bank Accounts' },
 
         { id: '__sales_hr_section', label: 'Sales & HR', isSection: true },
         { id: 'leads', label: 'Leads' },

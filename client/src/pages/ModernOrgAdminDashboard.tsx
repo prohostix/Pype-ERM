@@ -64,6 +64,7 @@ import { SalaryCyclePanel } from '@/components/panels/SalaryCyclePanel';
 import { FlowSettingsPanel } from '@/components/panels/FlowSettingsPanel';
 import { StudentPortalContentPanel } from '@/components/panels/StudentPortalContentPanel';
 import { CommunicationSettingsPanel } from '@/components/panels/CommunicationSettingsPanel';
+import { BankAccountsPanel } from '@/components/panels/BankAccountsPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
 import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
 import { FinanceEnrollmentsPanel } from '@/components/panels/FinanceEnrollmentsPanel';
@@ -698,6 +699,8 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="leads"><LeadsPanel /></TabsContent>
         <TabsContent value="sessions"><AdmissionSessionsPanel /></TabsContent>
         <TabsContent value="admission_review"><DeptEnrollmentReviewPanel /></TabsContent>
+
+        <TabsContent value="bank_accounts"><BankAccountsPanel /></TabsContent>
 
         {/* Bill & Receipts */}
         <TabsContent value="bill_receipts"><BillReceiptPanel /></TabsContent>
