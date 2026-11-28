@@ -187,6 +187,16 @@ export function isVideoLogWatched(log: any): boolean {
   return log.isCompleted || (log.videoDuration === 0 && log.watchDuration > 0);
 }
 
+/**
+ * True when the video was already watched on an earlier day: playing it again does not use the
+ * daily quota. completedAt keeps that first date, because lastWatchedAt moves on every replay.
+ */
+export function isDailyQuotaFree(log: any, now: Date = new Date()): boolean {
+  if (!log) return false;
+  const watchedAt = log.completedAt || (isVideoLogWatched(log) ? log.lastWatchedAt : null);
+  return !!watchedAt && new Date(watchedAt) < getStartOfIstDay(now);
+}
+
 export function getResumePosition(log: any): number {
   if (!log?.lastPosition) return 0;
   // Near the end, start over rather than resume into the last few seconds.

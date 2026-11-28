@@ -9,6 +9,7 @@ import {
   getDailyLimit,
   getResumePosition,
   getStartOfIstDay,
+  isDailyQuotaFree,
   getWatchedPercent,
   isVideoLogWatched,
   rankVideoLessons,
@@ -113,8 +114,9 @@ const ONLINE_LESSON_FILTER = {
   classModule: { academicClass: { academicCenter: { type: 'online' } } }
 };
 
-function getTodayOnlineVideoLogs(studentId: string) {
-  return prisma.studentVideoLog.findMany({
+// Videos that use up today's quota. Replays of videos watched on an earlier day are left out.
+async function getTodayOnlineVideoLogs(studentId: string) {
+  const logs = await prisma.studentVideoLog.findMany({
     where: {
       studentId,
       lastWatchedAt: { gte: getStartOfIstDay() },
@@ -122,6 +124,12 @@ function getTodayOnlineVideoLogs(studentId: string) {
       moduleLesson: ONLINE_LESSON_FILTER
     }
   });
+  return logs.filter(log => !isDailyQuotaFree(log));
+}
+
+// For logs with no completedAt: save the earlier watch date before a replay moves lastWatchedAt.
+function keepFirstWatchedDate(log: any) {
+  return !log.completedAt && isDailyQuotaFree(log) ? { completedAt: log.lastWatchedAt } : {};
 }
 
 function getStudentFeeRecords(student: any) {
@@ -210,6 +218,11 @@ async function checkLessonAccessForStudent(student: any, moduleLessonId: string)
 
   const dailyLimit = getDailyLimit(activeConfig);
   if (dailyLimit !== null) {
+    const log = await prisma.studentVideoLog.findUnique({
+      where: { studentId_moduleLessonId: { studentId: student.id, moduleLessonId } }
+    });
+    if (isDailyQuotaFree(log)) return { allowed: true };
+
     const watchedTodayIds = new Set((await getTodayOnlineVideoLogs(student.id)).map(l => l.moduleLessonId));
     if (!watchedTodayIds.has(moduleLessonId) && watchedTodayIds.size >= dailyLimit) {
       return {
@@ -427,7 +440,8 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
       const assessmentPassed = hasAssessment ? attempts.some((att: any) => att.passed) : true;
       const lastScore = attempts.length > 0 ? attempts[0].score : null;
       const isCompleted = isVideoWatched && assessmentPassed;
-      const watchedToday = watchedLessonsToday.has(lesson.id);
+      // Also true for replays, which stay open when the limit is reached
+      const watchedToday = watchedLessonsToday.has(lesson.id) || isDailyQuotaFree(log);
 
       let isFeeLocked = false;
       let isDailyLimitLocked = false;
@@ -824,6 +838,7 @@ export const videoHeartbeat = asyncHandler(async (req: AuthRequest, res: Respons
           ...progress,
           // The unlock-gap countdown starts at the first completion; rewatching never moves it.
           ...(progress.isCompleted && !existingLog.completedAt ? { completedAt: existingLog.isCompleted ? existingLog.lastWatchedAt : new Date() } : {}),
+          ...keepFirstWatchedDate(existingLog),
           watchDuration: { increment: playedSeconds },
           lastWatchedAt: new Date()
         }
@@ -871,6 +886,7 @@ export const recordVideoView = asyncHandler(async (req: AuthRequest, res: Respon
     const log = await prisma.studentVideoLog.update({
       where: { id: existingLog.id },
       data: {
+        ...keepFirstWatchedDate(existingLog),
         viewCount: { increment: 1 },
         lastWatchedAt: new Date()
       }

@@ -1,7 +1,7 @@
 // Unlock gap for online-center videos: the next video opens N days after the previous one was
 // completed. The day count restarts at 12:00 AM IST, like the daily quota.
 import prisma from '../lib/prisma.js';
-import { getStartOfIstDay, rankVideoLessons } from './videoAccess.js';
+import { getStartOfIstDay, isVideoLogWatched, rankVideoLessons } from './videoAccess.js';
 
 const DAY_MS = 86_400_000;
 
@@ -14,6 +14,7 @@ export function getUnlockGapDays(config: any): number | null {
 export interface GapLogInfo {
   watchDuration?: number | null;
   isCompleted?: boolean | null;
+  videoDuration?: number | null;
   completedAt?: Date | string | null;
   lastWatchedAt?: Date | string | null;
   unlockedAt?: Date | string | null;
@@ -27,7 +28,8 @@ export type GapStatus =
  * Gap status for every video, in course order.
  *  - the first video is always open
  *  - a video the student already started or completed, or that an admin unlocked, is never locked
- *  - otherwise the previous video must be completed, then the gap must have passed
+ *  - otherwise the previous video must count as watched (the same rule as the "Passed" label),
+ *    then the gap must have passed
  */
 export function computeGapStatuses(orderedLessonIds: string[], logs: Map<string, GapLogInfo>, gapDays: number, now: Date = new Date()) {
   const result = new Map<string, GapStatus>();
@@ -36,7 +38,7 @@ export function computeGapStatuses(orderedLessonIds: string[], logs: Map<string,
     if (i === 0 || log?.unlockedAt || log?.isCompleted || (log?.watchDuration ?? 0) > 0) { result.set(id, { locked: false }); return; }
     const previousId = orderedLessonIds[i - 1];
     const prev = logs.get(previousId);
-    if (!prev?.isCompleted) { result.set(id, { locked: true, reason: 'previous_incomplete', unlockAt: null, previousLessonId: previousId }); return; }
+    if (!prev || !isVideoLogWatched(prev)) { result.set(id, { locked: true, reason: 'previous_incomplete', unlockAt: null, previousLessonId: previousId }); return; }
     const doneAt = new Date((prev.completedAt || prev.lastWatchedAt) as any);
     if (isNaN(doneAt.getTime())) { result.set(id, { locked: false }); return; }
     const unlockAt = new Date(getStartOfIstDay(doneAt).getTime() + gapDays * DAY_MS);
