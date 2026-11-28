@@ -9,6 +9,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { uploadFormFile } from '@/lib/uploadFile';
 import { getCurrencyCode, type CurrencyOption } from '@/lib/currency';
+import { AttendanceRulesCard } from './AttendanceRulesCard';
 
 export function OrganizationSettingsPanel() {
   const { user } = useAuth();
@@ -305,6 +306,8 @@ export function OrganizationSettingsPanel() {
             </Button>
           </div>
       </form>
+
+      <AttendanceRulesCard />
     </div>
   );
 }

@@ -1132,6 +1132,17 @@ export const createOrUpdateHRSettings = asyncHandler(async (req: AuthRequest, re
   if (requireLocationForCheckIn !== undefined) {
     updateData.requireLocation = requireLocationForCheckIn;
   }
+  if (updateData.officeHours) {
+    const current = await prisma.hRSettings.findUnique({ where: { organizationId: orgId }, select: { officeHours: true } });
+    const saved = (current?.officeHours as Record<string, unknown>) || {};
+    const officeHours = { ...saved, ...updateData.officeHours };
+    // The missed punch rules belong to the organisation admin; anyone else's save keeps what is stored
+    if (!['org_admin', 'superadmin'].includes(req.user.role)) {
+      officeHours.autoPunchOutAsHalfDay = saved.autoPunchOutAsHalfDay === true;
+      officeHours.absentAsUnpaidLeave = saved.absentAsUnpaidLeave === true;
+    }
+    updateData.officeHours = officeHours;
+  }
   const settings = await prisma.hRSettings.upsert({
     where: { organizationId: orgId },
     update: updateData,
